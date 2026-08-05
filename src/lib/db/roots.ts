@@ -1,4 +1,5 @@
 import { getDb } from '@/lib/db/client'
+import { kstToday } from '@/lib/daily/date'
 
 export type RootSummary = {
   id: string
@@ -35,7 +36,13 @@ export async function listRoots(): Promise<RootSummary[]> {
             split_part(body, E'\n\n', 1) as excerpt
      from qnode
      where origin = 'batch' and status = 'ready'
+       and not exists (
+         select 1 from tree t
+          where t.root_node_id = qnode.id
+            and t.publish_date > $1::date
+       )
      order by created_at asc, normalized_question asc`,
+    [kstToday()],
   )
 
   return rows.map((r) => ({

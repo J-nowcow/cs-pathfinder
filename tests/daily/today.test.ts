@@ -40,6 +40,25 @@ describe('getTodayTree', () => {
     expect(tree!.publishDate).toBe('2026-08-05')
   })
 
+  /**
+   * 자동 발행이 막힐 때를 대비해 다음 날 것을 미리 뽑아둔다. 그것이 후보에
+   * 남아 있으면 오늘 발행이 없는 날 홈의 주인공 자리를 내일 질문이 차지한다.
+   * 하루 하나라는 약속이 그 자리에서 깨진다.
+   */
+  it('never features a question published for a later date', async () => {
+    const past = await seedAndPublish('2026-08-05', 'a', '네트워크')
+    await seedAndPublish('2026-08-07', 'b', '운영체제')
+
+    const tree = await getTodayTree(TODAY)
+    expect(tree!.id).toBe(past.id)
+    expect(tree!.publishDate).toBe('2026-08-05')
+  })
+
+  it('shows nothing when only future publishes exist', async () => {
+    await seedAndPublish('2026-08-07', 'a', '네트워크')
+    expect(await getTodayTree(TODAY)).toBeNull()
+  })
+
   it('prefers today over a newer-looking past row', async () => {
     await seedAndPublish('2026-08-05', 'a', '네트워크')
     const today = await seedAndPublish(TODAY, 'b', '운영체제')

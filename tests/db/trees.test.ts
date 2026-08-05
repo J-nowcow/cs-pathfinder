@@ -298,3 +298,46 @@ describe('listTrees', () => {
     expect(next.trees).toHaveLength(slugs.length - 1)
   })
 })
+
+/**
+ * 아직 오지 않은 발행분은 감춘다.
+ *
+ * 매일 하나씩 낸다는 것이 이 서비스의 약속이다. 미리 뽑아둔 내일 질문이
+ * 게시판에 보이면 그 약속이 깨진다. 실제로 8월 7일 질문이 6일 아침에
+ * 게시판과 홈 목록 양쪽에 떠 있었다.
+ */
+describe('listTrees — 미래 발행분', () => {
+  beforeEach(truncateAll)
+
+  /** 발행분 트리를 직접 넣는다. 발행 경로를 통째로 돌리지 않아도 되는 검사다 */
+  async function daily(date: string, question: string) {
+    const db = await getDb()
+    const root = await node(question)
+    await db.query(
+      `insert into tree (slug, title, kind, category, summary, root_node_id, publish_date)
+       values ($1, $2, 'daily', '네트워크', $3, $4, $5::date)`,
+      [`daily-${date}`, question, question, root, date],
+    )
+  }
+
+  it('hides a daily published for a later date', async () => {
+    await daily('2099-12-31', '먼 미래의 질문은?')
+    await daily('2020-01-01', '지난 질문은?')
+
+    const { trees } = await listTrees({ sort: 'recent' })
+    const titles = trees.map((t) => t.title)
+
+    expect(titles).toContain('지난 질문은?')
+    expect(titles).not.toContain('먼 미래의 질문은?')
+  })
+
+  /** 공유 트리 slug는 daily- 모양이 아니라 이 필터에 걸리면 안 된다 */
+  it('leaves shared trees alone', async () => {
+    const { snapshot } = await sampleSnapshot()
+    await createSharedTree({ snapshot })
+
+    const { trees } = await listTrees({ sort: 'recent' })
+    expect(trees.length).toBe(1)
+    expect(isShareSlug(trees[0].slug)).toBe(true)
+  })
+})

@@ -92,13 +92,17 @@ async function hydrate(row: TreeRow | undefined, today: string): Promise<DailyTr
  * 오늘 발행분이 있으면 그것, 없으면 가장 최근 것을 준다. 발행이 하루 밀렸다고
  * 홈이 비면 안 된다. 어느 쪽인지는 `isToday`로 구분한다.
  *
+ * **미래 발행분은 후보에서 뺀다.** 자동 발행이 막힐 때를 대비해 다음 날 것을
+ * 미리 뽑아두는데, 그것이 후보에 남아 있으면 오늘 발행이 없는 날 홈의 주인공
+ * 자리를 내일 질문이 차지한다. 하루 하나라는 약속이 그 자리에서 깨진다.
+ *
  * @param today 기준 날짜 'YYYY-MM-DD'. 기본은 KST 오늘. 테스트에서만 넘긴다
  */
 export async function getTodayTree(today: string = kstToday()): Promise<DailyTree | null> {
   const db = await getDb()
   const rows = await db.query<TreeRow>(
-    `${SELECT}
-     order by (t.publish_date = $1::date) desc, t.publish_date desc
+    `${SELECT} and t.publish_date <= $1::date
+     order by t.publish_date desc
      limit 1`,
     [today],
   )

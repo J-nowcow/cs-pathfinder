@@ -3,6 +3,7 @@ import { newSlug } from '@/lib/tree/slug'
 import { normalizeTitle, deriveSummary } from '@/lib/tree/title'
 import { decodeCursor, encodeCursor, cursorPredicate, orderClause, type SortMode } from '@/lib/tree/cursor'
 import type { Snapshot } from '@/lib/tree/snapshot'
+import { kstToday } from '@/lib/daily/date'
 
 /**
  * 게시판과 공유 트리 상세의 데이터 접근층.
@@ -196,6 +197,18 @@ const TREE_COLUMNS = `t.id, t.slug, t.title, t.kind, t.category, t.summary,
                       t.upvotes, t.views, t.published_at, t.root_node_id`
 
 /**
+ * 아직 오지 않은 발행분을 가린다.
+ *
+ * 매일 하나씩 낸다는 것이 이 서비스의 약속인데, 미리 뽑아둔 내일 것이 게시판에
+ * 보이면 그 약속이 깨진다. 실제로 8월 7일 질문이 6일 아침에 노출되고 있었다.
+ *
+ * publish_date는 발행분에만 있다(제약 tree_daily_needs_date). 공유 트리는
+ * null이라 이 조건을 그냥 통과한다.
+ */
+const NOT_FUTURE_DAILY = (n: number) =>
+  `(t.publish_date is null or t.publish_date <= $${n}::date)`
+
+/**
  * 공유 트리 상세.
  *
  * occurrence를 그대로 돌려준다. 전역 qedge를 다시 걷지 않는 게 핵심이다.
@@ -273,6 +286,9 @@ export async function listTrees(opts: {
 
   const where: string[] = []
   const params: unknown[] = []
+
+  params.push(kstToday())
+  where.push(NOT_FUTURE_DAILY(params.length))
 
   if (opts.category) {
     params.push(opts.category)
