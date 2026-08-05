@@ -177,7 +177,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
                     type="button"
                     onClick={() => void create()}
                     disabled={phase.kind === 'creating'}
-                    className="rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     {phase.kind === 'creating' ? '만드는 중' : '링크 만들기'}
                   </button>
@@ -246,7 +246,7 @@ function Done({
         <button
           type="button"
           onClick={onCopy}
-          className="rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           {copied ? '복사했어요' : '주소 복사'}
         </button>

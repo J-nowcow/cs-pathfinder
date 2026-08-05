@@ -116,7 +116,7 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
         <div className="mt-5 flex flex-wrap gap-2.5">
           <Link
             href={`/q/${rootNodeId}`}
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-[15px] font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-[15px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             나도 여기서 파보기
             <span aria-hidden>→</span>

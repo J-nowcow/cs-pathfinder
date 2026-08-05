@@ -82,7 +82,7 @@ export function Board({ initial }: Props) {
   const chip = (active: boolean) =>
     `shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
       active
-        ? 'bg-accent text-white'
+        ? 'bg-accent text-on-accent'
         : 'border border-line bg-raised text-muted hover:border-faint hover:text-ink'
     }`
 

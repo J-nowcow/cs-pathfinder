@@ -67,7 +67,7 @@ export function FreeInput({
           <button
             type="submit"
             disabled={!canSend}
-            className="rounded-md bg-accent px-3.5 py-1.5 text-[13px] font-medium text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="rounded-md bg-accent px-3.5 py-1.5 text-[13px] font-medium text-on-accent transition-opacity disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             {pending ? '파는 중' : '파고들기'}
           </button>
