@@ -34,10 +34,17 @@ function toJourney(nodes: TreeNode[]) {
   }
 }
 
-/** 한눈에 모양을 보여주는 단면 */
+/**
+ * 한눈에 모양을 보여주는 단면.
+ *
+ * 점이 셋은 돼야 그린다. 둘이면 선분 하나라 바로 아래 목록이 이미 말한 것을
+ * 그림으로 반복할 뿐이고, 빈 상자처럼 보이는 자리만 늘어난다.
+ */
+const SHAPE_WORTH_DRAWING = 3
+
 function TreeShape({ nodes }: Props) {
   const layout = layoutJourney(toJourney(nodes))
-  if (layout.nodes.length < 2) return null
+  if (layout.nodes.length < SHAPE_WORTH_DRAWING) return null
 
   const width = layout.bounds.width * SX + PAD * 2
   const height = layout.bounds.height * SY + PAD * 2
@@ -74,13 +81,12 @@ function TreeShape({ nodes }: Props) {
           )
         })}
 
+        {/* 점마다 <title>을 달지 않는다. 링크 미리보기 크롤러 중에는 og:title이 없을 때
+            문서에서 처음 나오는 <title>을 집는 것이 있어서, SVG 안의 툴팁이 문서 제목을
+            가로챌 수 있다. 어차피 바로 아래 목록이 질문을 전부 글자로 보여준다 */}
         {layout.nodes.map((n) => {
           const { cx, cy } = pos(n.x, n.y)
-          return (
-            <circle key={n.occurrenceId} cx={cx} cy={cy} r={3.4} fill={depthColor(n.depth)}>
-              <title>{n.label}</title>
-            </circle>
-          )
+          return <circle key={n.occurrenceId} cx={cx} cy={cy} r={3.4} fill={depthColor(n.depth)} />
         })}
       </svg>
     </div>
