@@ -5,3 +5,5 @@ node_modules/
 supabase/.temp/
 .pgdata/
 tsconfig.tsbuildinfo
+.vercel
+.env*

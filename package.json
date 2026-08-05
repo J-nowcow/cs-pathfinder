@@ -10,11 +10,12 @@
     "test": "vitest run",
     "test:unit": "vitest run tests/expand tests/llm",
     "test:watch": "vitest",
-    "db:start": "supabase start",
-    "db:reset": "supabase db reset",
     "seed": "tsx scripts/seed.ts",
     "verify:match": "tsx scripts/verify-gate-match.ts",
-    "verify:scale": "tsx scripts/verify-match-scale.ts"
+    "verify:scale": "tsx scripts/verify-match-scale.ts",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:status": "tsx scripts/db-status.ts",
+    "db:dedupe": "tsx scripts/dedupe-roots.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
@@ -23,6 +24,7 @@
     "@xyflow/react": "^12.11.2",
     "ai": "^6.0.191",
     "next": "16.2.6",
+    "pg": "^8.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "tailwindcss": "^4.3.3",
@@ -31,6 +33,7 @@
   "devDependencies": {
     "@electric-sql/pglite": "^0.2.17",
     "@types/node": "^20",
+    "@types/pg": "^8.20.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tsx": "^4.19.2",

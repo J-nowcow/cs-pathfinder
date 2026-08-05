@@ -1,18 +1,20 @@
+import { loadEnvLocal } from '../src/lib/load-env'
+
+loadEnvLocal()
+
 import { getDb } from '../src/lib/db/client'
-import { insertNode, insertSuggestions, bindAlias } from '../src/lib/expand/nodes'
-import { questionHash } from '../src/lib/expand/hash'
-import { NORMALIZER_VERSION } from '../src/lib/llm/gate'
+import { seedExampleNodes, rootNodeId } from '../src/lib/db/bootstrap'
 import { TOPIC_SEEDS, CATEGORIES } from '../data/topic-seeds'
 import { EXAMPLE_NODES } from '../data/example-nodes'
 
 /**
- * 주제어 시드와 예시 루트 노드를 넣는다.
+ * 주제어 시드와 예시 루트를 넣는다.
+ *
+ * 루트 삽입은 앱 부팅 경로(seedExampleNodes)를 그대로 쓴다. 예전에는 이 스크립트가
+ * 따로 랜덤 UUID로 넣었는데, 그러면 부팅 시드가 파생 UUID로 같은 질문을 또 만들어
+ * 노드가 두 벌이 됐다. Neon에서 8개가 16개로 늘어나는 것을 실제로 확인했다.
  *
  * 실행: npm run seed
- *
- * PGlite는 인메모리라 프로세스가 끝나면 사라진다.
- * 지금은 시드 내용과 카테고리 분포를 확인하는 용도다.
- * 영속 DB가 붙으면 그대로 재사용한다.
  */
 async function main() {
   const db = await getDb()
@@ -25,18 +27,10 @@ async function main() {
     )
   }
 
+  const { inserted } = await seedExampleNodes()
+  console.log(`루트 노드: 신규 ${inserted}개 / 전체 ${EXAMPLE_NODES.length}개`)
   for (const ex of EXAMPLE_NODES) {
-    const id = await insertNode({
-      identityScope: ex.identityScope,
-      normalizedQuestion: ex.question,
-      body: ex.body,
-      primaryCategory: ex.category,
-      status: 'ready',
-      origin: 'batch',
-    })
-    await insertSuggestions(id, ex.suggestions)
-    await bindAlias(NORMALIZER_VERSION, questionHash(ex.identityScope, ex.question), id)
-    console.log(`  root  ${ex.category.padEnd(16)} ${id}  ${ex.question}`)
+    console.log(`  ${ex.category.padEnd(16)} ${rootNodeId(ex)}  ${ex.question}`)
   }
 
   console.log('\n주제어 시드 분포')
@@ -52,7 +46,9 @@ async function main() {
   console.log(`  ${'합계'.padEnd(18)} ${String(total[0].n).padStart(3)}개`)
 }
 
-main().catch((e) => {
-  console.error(e)
-  process.exit(1)
-})
+main()
+  .then(() => process.exit(0))
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })

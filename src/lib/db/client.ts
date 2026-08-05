@@ -9,12 +9,17 @@ export interface Db {
 }
 
 /**
- * PGlite는 Postgres를 WASM으로 컴파일한 것이라 plpgsql까지 그대로 돈다.
- * Docker 없이 실제 Postgres 의미론으로 테스트할 수 있다.
+ * DB는 두 갈래다.
  *
- * DATABASE_URL이 주어지면 그쪽을 쓰도록 어댑터를 추가할 자리다.
- * 지금은 PGlite 단일 경로다.
+ * `DATABASE_URL`이 있으면 실제 Postgres(Neon)를 쓴다. 배포와 영속이 필요한 경로다.
+ * 없으면 PGlite로 떨어진다. Postgres를 WASM으로 컴파일한 것이라 plpgsql까지
+ * 그대로 돌아서 Docker 없이 실제 의미론으로 테스트할 수 있다.
+ *
+ * 테스트는 PGlite 경로로 돈다. 격리가 쉽고 빠르며 외부 의존이 없다.
+ * 다만 PGlite는 단일 연결이라 진짜 동시성은 재현되지 않는다.
+ * `for update` 행 잠금과 `on conflict` 경합은 실제 Postgres에서 따로 확인해야 한다.
  */
+
 /**
  * 인스턴스를 globalThis에 둔다.
  *
@@ -29,6 +34,13 @@ const holder = globalThis as unknown as Holder
 
 const here = dirname(fileURLToPath(import.meta.url))
 const migrationsDir = resolve(here, '../../../supabase/migrations')
+
+/** 테스트는 실제 DB를 건드리면 안 된다. 명시적으로 켤 때만 Postgres를 쓴다. */
+function postgresUrl(): string | null {
+  if (process.env.NODE_ENV === 'test' && process.env.USE_REAL_DB !== '1') return null
+  const url = process.env.DATABASE_URL?.trim()
+  return url && url.length > 0 ? url : null
+}
 
 async function createPglite(): Promise<Db> {
   const { PGlite } = await import('@electric-sql/pglite')
@@ -46,6 +58,35 @@ async function createPglite(): Promise<Db> {
   }
 }
 
+/**
+ * Neon 연결.
+ *
+ * HTTP 드라이버가 아니라 TCP 풀을 쓴다. 마이그레이션이 plpgsql 함수 본문을 담고
+ * 있어서 세미콜론으로 문장을 쪼갤 수 없고, 다중 문장을 한 번에 보낼 수 있어야 한다.
+ * HTTP 드라이버는 그걸 못 한다.
+ */
+async function createPostgres(connectionString: string): Promise<Db> {
+  const { Pool } = await import('pg')
+  const pool = new Pool({
+    connectionString,
+    max: 5,
+    idleTimeoutMillis: 30_000,
+    // Neon은 TLS를 요구하는데 사내망 프록시가 인증서를 가로채면 검증이 깨진다.
+    ssl: { rejectUnauthorized: false },
+  })
+
+  return {
+    async query<T>(sql: string, params?: unknown[]): Promise<T[]> {
+      const res = await pool.query(sql, params as unknown[])
+      return res.rows as T[]
+    },
+    async exec(sql: string): Promise<void> {
+      // params 없이 보내면 다중 문장이 허용된다
+      await pool.query(sql)
+    },
+  }
+}
+
 export function readMigrations(): Array<{ name: string; sql: string }> {
   return readdirSync(migrationsDir)
     .filter((f) => f.endsWith('.sql'))
@@ -54,7 +95,14 @@ export function readMigrations(): Array<{ name: string; sql: string }> {
 }
 
 export async function getDb(): Promise<Db> {
-  if (!holder.__csqtDb) holder.__csqtDb = await createPglite()
+  if (!holder.__csqtDb) {
+    const url = postgresUrl()
+    holder.__csqtDb = url ? await createPostgres(url) : await createPglite()
+
+    // 실제 Postgres는 스키마가 이미 서 있다. 마이그레이션은 배포 시 한 번만 돌린다.
+    // 매 요청마다 create table을 다시 던지면 느리고 위험하다.
+    if (url) holder.__csqtMigrated = true
+  }
 
   if (!holder.__csqtMigrated) {
     for (const { sql } of readMigrations()) {
@@ -77,7 +125,7 @@ export async function resetDb(): Promise<Db> {
 export async function truncateAll(): Promise<void> {
   const db = await getDb()
   await db.query(`
-    truncate qedge, qnode_alias, qnode_suggestion, expansion_event,
+    truncate qedge, qnode_alias, qnode_suggestion, qnode_equivalence, expansion_event,
              generation_job, usage_quota, topic_seed, qnode restart identity cascade
   `)
 }

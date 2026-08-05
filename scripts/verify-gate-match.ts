@@ -1,5 +1,4 @@
-import { readFileSync, existsSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { loadEnvLocal } from '../src/lib/load-env'
 import { z } from 'zod'
 import { callWithFallback, MODEL_GATE } from '../src/lib/llm/client'
 
@@ -12,13 +11,7 @@ import { callWithFallback, MODEL_GATE } from '../src/lib/llm/client'
  *
  * 실행: npm run verify:match
  */
-const envPath = resolve(process.cwd(), '.env.local')
-if (existsSync(envPath)) {
-  for (const line of readFileSync(envPath, 'utf8').split('\n')) {
-    const m = line.match(/^([A-Z0-9_]+)=(.*)$/)
-    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim()
-  }
-}
+loadEnvLocal()
 
 const PARENT = 'DB 커넥션을 매번 새로 맺는 비용이 큰 이유는?'
 
