@@ -13,7 +13,7 @@ import {
   findOccurrenceByNode,
 } from '@/lib/journey/path'
 import { layoutJourney } from '@/lib/journey/graph'
-import { deserializeJourney, serializeJourney, JOURNEY_STORAGE_KEY } from '@/lib/journey/storage'
+import { loadJourney, saveJourney } from '@/lib/journey/storage'
 import type { JourneyState } from '@/lib/journey/types'
 import { requestExpand, type PublicNode, type PublicSuggestion } from '@/lib/api/expand-client'
 import { PathChips } from '@/components/PathChips'
@@ -56,7 +56,7 @@ export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
     if (restored.current) return
     restored.current = true
 
-    const saved = deserializeJourney(sessionStorage.getItem(JOURNEY_STORAGE_KEY))
+    const saved = loadJourney()
     if (!saved) return
 
     // URL의 노드가 저장된 여정 안에 있으면 이어서 판다. 없으면 새 여정이다.
@@ -65,9 +65,7 @@ export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
   }, [initialNode.id])
 
   useEffect(() => {
-    if (journey.occurrences.length > 0) {
-      sessionStorage.setItem(JOURNEY_STORAGE_KEY, serializeJourney(journey))
-    }
+    saveJourney(journey)
   }, [journey])
 
   // ── 뒤로가기 ─────────────────────────────────────────────
