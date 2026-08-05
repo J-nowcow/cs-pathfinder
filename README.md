@@ -153,6 +153,7 @@ npx tsc --noEmit
 | `npm run publish:daily [날짜]` | 오늘의 질문 수동 발행 |
 | `npm run db:republish -- [날짜]` | 잘못 뽑힌 발행분을 버리고 다시 뽑기 |
 | `npm run db:purge-stubs` | 키 없는 배포가 남긴 가짜 해설 정리 |
+| `npm run db:enrich` | 도식 없는 옛 해설을 제자리에서 다시 쓰기 (`--yes`로 반영) |
 | `npm run db:status` | 발행 이력과 남은 시드 일수 |
 | `npm run db:backfill-links` | 이미 판 꼬리질문을 결과 노드와 잇기 |
 | `npm run verify:concurrency` | 실제 Postgres에 동시 요청을 던져 잠금이 도는지 확인 |
