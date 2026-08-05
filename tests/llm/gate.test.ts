@@ -171,6 +171,11 @@ describe('runGate — 기타', () => {
 
   it('exposes a gate version for decision records', () => {
     // v1은 자유 생성 방식이었고 수렴에 실패했다. v2는 후보 선택이다.
-    expect(NORMALIZER_VERSION).toBe('gate-v2-match')
+    // v3은 거절 기준을 좁혔다 — 주제가 부모에서 멀어졌다는 이유로 거절하지 않는다.
+    //
+    // 값을 그대로 박아둔다. 프롬프트를 고치면 여기가 깨지는데, 그게 목적이다.
+    // 판단 기준을 바꿔놓고 버전을 안 올리면 기록만 보고는 어느 규칙이 그 결정을
+    // 내렸는지 알 수 없다.
+    expect(NORMALIZER_VERSION).toBe('gate-v3-match')
   })
 })
