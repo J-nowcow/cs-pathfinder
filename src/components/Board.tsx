@@ -30,7 +30,7 @@ type Props = {
 }
 
 export function Board({ initial }: Props) {
-  const [sort, setSort] = useState<SortMode>('recent')
+  const [sort, setSort] = useState<SortMode>('popular')
   const [category, setCategory] = useState<string | null>(null)
   const [trees, setTrees] = useState(initial.trees)
   const [cursor, setCursor] = useState(initial.nextCursor)
@@ -173,8 +173,14 @@ function Empty({ category }: { category: string | null }) {
     <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
       {category ? (
         <>
-          <p className="text-[15px] text-muted">{category} 쪽은 아직 비어 있어요.</p>
-          <p className="mt-2 text-[13px] text-faint">첫 트리를 남기면 여기 걸려요.</p>
+          <p className="text-[15px] text-muted">{category} 쪽은 아직 판 사람이 없어요.</p>
+          <p className="mt-2 text-[13px] text-faint">
+            여기는 사람이 공유한 트리만 걸려요. 질문 자체를 찾는 거라면{' '}
+            <Link href="/questions" className="text-accent hover:underline">
+              카테고리별 질문
+            </Link>
+            에 있어요.
+          </p>
         </>
       ) : (
         <>

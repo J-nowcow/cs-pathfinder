@@ -5,6 +5,7 @@ import { getTodayTree } from '@/lib/daily/today'
 import { RootCard } from '@/components/RootCard'
 import { HeroBackdrop } from '@/components/HeroBackdrop'
 import { TodayCard, type TodayFeature } from '@/components/TodayCard'
+import Link from 'next/link'
 import { Board } from '@/components/Board'
 
 // PGlite가 인메모리라 매 요청 실제 DB를 읽는다. 정적 생성 대상이 아니다.
@@ -73,7 +74,7 @@ export default async function HomePage() {
 
   const [{ feature, roots }, board] = await Promise.all([
     loadFeature(),
-    listTrees({ sort: 'recent', limit: BOARD_PAGE_SIZE }),
+    listTrees({ sort: 'popular', limit: BOARD_PAGE_SIZE }),
   ])
 
   // 주인공 카드가 이미 맡은 질문은 목록에서 뺀다. 같은 화면에 두 번 나오면
@@ -105,9 +106,19 @@ export default async function HomePage() {
         </div>
       )}
 
+
+      <section className="mt-14">
+        <Board initial={board} />
+      </section>
+
       {rest.length > 0 && (
         <section className="mt-14">
-          <h2 className="mb-4 text-[13px] font-medium text-faint">지난 질문 {rest.length}개</h2>
+          <div className="mb-4 flex items-baseline justify-between gap-3">
+            <h2 className="text-[13px] font-medium text-faint">지난 질문 {rest.length}개</h2>
+            <Link href="/questions" className="text-[13px] text-accent hover:underline">
+              카테고리별로 보기 →
+            </Link>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {rest.slice(0, FIRST_PAINT).map((r) => (
               <RootCard key={r.id} root={r} />
@@ -137,10 +148,6 @@ export default async function HomePage() {
           )}
         </section>
       )}
-
-      <div className="mt-14">
-        <Board initial={board} />
-      </div>
     </main>
   )
 }
