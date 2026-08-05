@@ -1,0 +1,35 @@
+{
+  "name": "cs-question-tree",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/expand tests/llm",
+    "test:watch": "vitest",
+    "db:start": "supabase start",
+    "db:reset": "supabase db reset",
+    "seed": "tsx scripts/seed-node.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^2.0.0",
+    "@supabase/supabase-js": "^2.105.1",
+    "ai": "^6.0.191",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tsx": "^4.19.2",
+    "typescript": "^5",
+    "vitest": "^3.0.0"
+  }
+}
