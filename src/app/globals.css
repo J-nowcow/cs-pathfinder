@@ -1,0 +1,75 @@
+@import 'tailwindcss';
+
+/*
+ * 읽기가 본체인 서비스라 본문 가독성 기준으로 토큰을 잡았다.
+ * 순백 대신 살짝 따뜻한 표면을 쓴다. 긴 해설을 연달아 읽을 때 눈이 덜 피로하다.
+ *
+ * @theme 값은 빌드 타임에 고정된다. 다크 모드를 유틸 하나로 처리하려면
+ * 토큰이 런타임 변수를 참조해야 한다. 그래서 var() 한 겹을 둔다.
+ */
+@theme {
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+
+  --font-sans:
+    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    'Segoe UI', sans-serif;
+}
+
+:root {
+  --surface: #faf8f5;
+  --raised: #ffffff;
+  --ink: #221f1c;
+  --muted: #5c554d;
+  --faint: #8d857b;
+  --line: #e4ded5;
+  --accent: #0d7268;
+  --accent-soft: #e2f0ed;
+  --accent-ink: #0a544d;
+  --warn: #a5502a;
+  --warn-soft: #fbeee6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #14151a;
+    --raised: #1c1e24;
+    --ink: #e9e6e1;
+    --muted: #a29b92;
+    --faint: #7b746b;
+    --line: #2c2f37;
+    --accent: #4fbfb0;
+    --accent-soft: #14322e;
+    --accent-ink: #7fd4c7;
+    --warn: #d98a5f;
+    --warn-soft: #33231a;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--surface);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 미니맵과 경로 칩은 가로 스크롤이 전제다. 스크롤바가 콘텐츠를 밀지 않게 한다. */
+.scroll-x {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.scroll-x::-webkit-scrollbar {
+  display: none;
+}
