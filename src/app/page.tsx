@@ -1,21 +1,80 @@
-import Link from 'next/link'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { listRoots } from '@/lib/db/roots'
+import { listTrees, BOARD_PAGE_SIZE } from '@/lib/db/trees'
+import { getTodayTree } from '@/lib/daily/today'
 import { RootCard } from '@/components/RootCard'
 import { HeroBackdrop } from '@/components/HeroBackdrop'
+import { TodayCard, type TodayFeature } from '@/components/TodayCard'
+import { Board } from '@/components/Board'
 
 // PGlite가 인메모리라 매 요청 실제 DB를 읽는다. 정적 생성 대상이 아니다.
 export const dynamic = 'force-dynamic'
 
+/**
+ * 홈.
+ *
+ * 위에서부터 히어로, 오늘의 질문, 게시판이다. 설계 §7의 순서 그대로다.
+ *
+ * 히어로에 있던 "오늘 치 질문" 버튼은 뺐다. 바로 아래 주인공 카드가 같은 자리로
+ * 보내는데 버튼을 남기면 같은 것을 두 번 권하게 된다. 카드가 질문 문장과 해설 첫
+ * 줄까지 보여주므로 버튼보다 나은 CTA이기도 하다.
+ */
+
+/**
+ * 매일 발행이 아직 없을 때의 대비.
+ *
+ * getTodayTree는 발행분이 하나도 없으면 null을 준다. 그때 홈의 주인공 자리가
+ * 비면 서비스가 통째로 비어 보이므로 예시 루트의 첫 질문이 그 자리를 맡는다.
+ * `isToday: false`라 화면은 "가장 최근 질문"이라고 부른다. 없는 발행을 있는 척하지 않는다.
+ */
+async function loadFeature(): Promise<{ feature: TodayFeature | null; roots: Awaited<ReturnType<typeof listRoots>> }> {
+  const [today, roots] = await Promise.all([getTodayTree(), listRoots()])
+
+  if (today) {
+    return {
+      roots,
+      feature: {
+        nodeId: today.root.id,
+        question: today.root.question,
+        category: today.category,
+        excerpt: today.root.body.split('\n\n')[0] ?? '',
+        isToday: today.isToday,
+        treeSlug: today.slug,
+      },
+    }
+  }
+
+  const [first] = roots
+  if (!first) return { feature: null, roots }
+
+  return {
+    roots,
+    feature: {
+      nodeId: first.id,
+      question: first.question,
+      category: first.category,
+      excerpt: first.excerpt,
+      isToday: false,
+      treeSlug: null,
+    },
+  }
+}
+
 export default async function HomePage() {
   await ensureSeeded()
-  const roots = await listRoots()
 
-  const [hero] = roots
+  const [{ feature, roots }, board] = await Promise.all([
+    loadFeature(),
+    listTrees({ sort: 'recent', limit: BOARD_PAGE_SIZE }),
+  ])
+
+  // 주인공 카드가 이미 맡은 질문은 목록에서 뺀다. 같은 화면에 두 번 나오면
+  // 목록이 아니라 중복으로 읽힌다
+  const rest = roots.filter((r) => r.id !== feature?.nodeId)
 
   return (
     <main className="mx-auto max-w-3xl px-5 pb-24 pt-10 sm:px-8 sm:pt-16">
-      <header className="relative mb-10 overflow-hidden sm:mb-14">
+      <header className="relative mb-10 overflow-hidden sm:mb-12">
         <HeroBackdrop />
         <h1 className="relative text-[30px] font-extrabold leading-[1.32] tracking-[-0.025em] sm:text-[34px]">
           꼬리에 꼬리를 무는
@@ -27,36 +86,31 @@ export default async function HomePage() {
           <br />
           판 만큼 지도가 그려지고요.
         </p>
-
-        {/* 매일 발행은 계획 3이다. 그때까지는 첫 루트가 "오늘 치" 자리를 맡는다 */}
-        {hero && (
-          <Link
-            href={`/q/${hero.id}`}
-            className="relative mt-7 inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-[15px] font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          >
-            오늘 치 질문
-            <span aria-hidden>→</span>
-          </Link>
-        )}
       </header>
 
-      {roots.length === 0 ? (
+      {feature ? (
+        <TodayCard feature={feature} />
+      ) : (
         <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
           <p className="text-[15px] text-muted">아직 올라온 질문이 없어요.</p>
           <p className="mt-2 text-[13px] text-faint">서버를 다시 켜면 예시 질문이 채워져요.</p>
         </div>
-      ) : (
-        // 히어로 CTA가 이미 첫 질문으로 보낸다. 바로 아래 같은 질문을 큰 카드로 또 놓으면
-        // 같은 것을 두 번 권하는 꼴이라 목록으로 균일하게 잇는다.
-        <section>
-          <h2 className="mb-4 text-[13px] font-medium text-faint">질문 {roots.length}개</h2>
+      )}
+
+      {rest.length > 0 && (
+        <section className="mt-14">
+          <h2 className="mb-4 text-[13px] font-medium text-faint">지난 질문 {rest.length}개</h2>
           <div className="grid gap-3 sm:grid-cols-2">
-            {roots.map((r) => (
+            {rest.map((r) => (
               <RootCard key={r.id} root={r} />
             ))}
           </div>
         </section>
       )}
+
+      <div className="mt-14">
+        <Board initial={board} />
+      </div>
     </main>
   )
 }
