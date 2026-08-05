@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 /**
  * 설계 §7 상태 표를 화면으로 옮긴 것.
  *
@@ -90,10 +92,36 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
 }
 
 /** 생성 대기. 질문은 이미 화면에 있고 해설 자리만 비어 있는 상태다 */
+/**
+ * 기다리는 동안 하는 말.
+ *
+ * "몇 초만요"는 약속이다. 무료 한도에 걸려 폴백 사슬을 타면 실제로 20초가
+ * 걸리는데, 그때까지 같은 문구가 떠 있으면 거짓말이 된다. 한 번 어긋나면
+ * 다음부터 안 기다린다.
+ *
+ * 시간이 지나면 말을 바꾼다. 마지막 문구는 원인을 그대로 말한다 — 숨기는 것보다
+ * 왜 느린지 아는 편이 기다리기 쉽다.
+ */
+const WAITING_COPY: Array<{ after: number; text: string }> = [
+  { after: 0, text: '해설 만드는 중이에요. 몇 초만요.' },
+  { after: 8, text: '조금 더 걸리고 있어요. 그대로 두셔도 돼요.' },
+  { after: 18, text: '오래 걸리네요. 무료 한도에 걸려 다른 모델로 넘어가는 중일 수 있어요.' },
+]
+
 export function GeneratingBody() {
+  const [elapsed, setElapsed] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => setElapsed((s) => s + 1), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  // 지난 시간에 해당하는 마지막 문구를 고른다
+  const copy = [...WAITING_COPY].reverse().find((c) => elapsed >= c.after) ?? WAITING_COPY[0]
+
   return (
     <div aria-live="polite" className="space-y-3">
-      <p className="text-[14px] text-muted">해설 만드는 중이에요. 몇 초만요.</p>
+      <p className="text-[14px] text-muted">{copy.text}</p>
       <div className="space-y-2.5" aria-hidden>
         {[100, 96, 88, 94, 62].map((w, i) => (
           <div
