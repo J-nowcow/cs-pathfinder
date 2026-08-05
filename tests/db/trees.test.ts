@@ -341,3 +341,32 @@ describe('listTrees — 미래 발행분', () => {
     expect(isShareSlug(trees[0].slug)).toBe(true)
   })
 })
+
+/**
+ * 목록에서만 빼면 반쪽이다. 발행분 slug가 `daily-YYYY-MM-DD`라 내일 날짜를
+ * 넣어보면 그대로 열린다. 링크를 미리 퍼뜨릴 수도 있다.
+ */
+describe('loadTreeBySlug — 미래 발행분', () => {
+  beforeEach(truncateAll)
+
+  async function daily(date: string, question: string) {
+    const db = await getDb()
+    const root = await node(question)
+    await db.query(
+      `insert into tree (slug, title, kind, category, summary, root_node_id, publish_date)
+       values ($1, $2, 'daily', '네트워크', $3, $4, $5::date)`,
+      [`daily-${date}`, question, question, root, date],
+    )
+  }
+
+  it('does not open a daily published for a later date', async () => {
+    await daily('2099-12-31', '먼 미래의 질문은?')
+    expect(await loadTreeBySlug('daily-2099-12-31')).toBeNull()
+  })
+
+  it('opens a past daily as usual', async () => {
+    await daily('2020-01-01', '지난 질문은?')
+    const tree = await loadTreeBySlug('daily-2020-01-01')
+    expect(tree?.title).toBe('지난 질문은?')
+  })
+})

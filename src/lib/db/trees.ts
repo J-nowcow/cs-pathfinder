@@ -221,9 +221,17 @@ const NOT_FUTURE_DAILY = (n: number) =>
 export async function loadTreeBySlug(slug: string): Promise<TreeDetail | null> {
   const db = await getDb()
 
+  /*
+   * 미래 발행분은 여기서도 없는 것으로 친다.
+   *
+   * 목록에서만 빼면 반쪽이다. 발행분 slug가 `daily-YYYY-MM-DD`라 내일 날짜를
+   * 넣어보면 그대로 열린다. 하루에 하나라는 약속은 URL을 찍어보는 사람에게도
+   * 지켜져야 한다.
+   */
   const rows = await db.query<TreeRow>(
-    `select ${TREE_COLUMNS} from tree t where t.slug = $1`,
-    [slug],
+    `select ${TREE_COLUMNS} from tree t
+      where t.slug = $1 and ${NOT_FUTURE_DAILY(2)}`,
+    [slug, kstToday()],
   )
   if (rows.length === 0) return null
   const t = rows[0]
