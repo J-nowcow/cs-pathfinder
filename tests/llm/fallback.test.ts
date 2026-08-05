@@ -204,3 +204,59 @@ describe('callWithFallback', () => {
     )
   })
 })
+
+/**
+ * 시도 하나가 영영 안 끝나면.
+ *
+ * 제한이 없으면 폴백이 첫 시도에 갇힌다. 다음 모델로 못 넘어가고, 이 요청이
+ * 쥔 단일 실행 잠금 때문에 같은 질문을 누른 다른 사람까지 함께 막힌다.
+ * 실제로 측정 중 한 호출이 25분을 매달렸다.
+ */
+describe('callWithFallback — 매달린 시도', () => {
+  it('hands the attempt a deadline that actually fires', async () => {
+    let given: AbortSignal | undefined
+    const invoke = asInvoke(
+      async (
+        _key: string,
+        _a: StructuredCallArgs<{ ok: boolean }>,
+        signal?: AbortSignal,
+      ): Promise<{ ok: boolean }> => {
+        given = signal
+        // 응답이 안 오는 호출을 흉내낸다. 신호가 끊어줘야 폴백이 다음으로 간다
+        return new Promise((_resolve, reject) => {
+          signal?.addEventListener('abort', () => reject(new Error('operation timed out')), {
+            once: true,
+          })
+        })
+      },
+    )
+
+    await expect(
+      callWithFallback(args, { keys: ['k1'], invoke, attemptTimeoutMs: 10 }),
+    ).rejects.toThrow(/timed out/)
+
+    expect(given?.aborted).toBe(true)
+  })
+
+  /** 중단 신호는 시도마다 새로 만들어야 한다. 하나를 돌려쓰면 첫 만료 뒤 전부 즉사한다 */
+  it('hands each attempt its own deadline', async () => {
+    const signals: (AbortSignal | undefined)[] = []
+    const invoke = asInvoke(
+      async (
+        _key: string,
+        a: StructuredCallArgs<{ ok: boolean }>,
+        signal?: AbortSignal,
+      ): Promise<{ ok: boolean }> => {
+        signals.push(signal)
+        if (signals.length < 3) throw new Error('503 unavailable')
+        return { ok: true }
+      },
+    )
+
+    await callWithFallback(args, { keys: ['k1'], invoke, attemptTimeoutMs: 5_000 })
+
+    expect(signals.length).toBeGreaterThanOrEqual(3)
+    expect(new Set(signals).size).toBe(signals.length)
+    for (const s of signals) expect(s?.aborted).toBe(false)
+  })
+})

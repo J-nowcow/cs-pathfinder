@@ -87,6 +87,7 @@ export function stripCodeFence(text: string): string {
 export async function callOnce<T>(
   apiKey: string,
   { model, schema, system, prompt }: StructuredCallArgs<T>,
+  abortSignal?: AbortSignal,
 ): Promise<T> {
   const [{ createGoogleGenerativeAI }, { generateObject }] = await Promise.all([
     import('@ai-sdk/google'),
@@ -108,6 +109,7 @@ export async function callOnce<T>(
     schema,
     system,
     prompt,
+    abortSignal,
     experimental_repairText: async ({ text }: { text: string }) => stripCodeFence(text),
   })
 
@@ -129,11 +131,25 @@ export function buildAttempts(model: string, keys: string[]): Attempt[] {
 
 export type FallbackDeps = {
   keys?: string[]
-  invoke?: <T>(apiKey: string, args: StructuredCallArgs<T>) => Promise<T>
+  invoke?: <T>(apiKey: string, args: StructuredCallArgs<T>, abortSignal?: AbortSignal) => Promise<T>
+  /** 시도 하나에 허용할 시간. 시험에서 줄여 쓴다 */
+  attemptTimeoutMs?: number
   onRetry?: (info: { model: string; keyIndex: number; kind: string }) => void
 }
 
 const TRANSIENT_RETRY_MS = 600
+
+/**
+ * 시도 하나에 허용하는 시간.
+ *
+ * 제한이 없으면 응답이 영영 안 오는 호출에 매달린다. 그러면 폴백도 못 넘어가고,
+ * 이 요청이 쥔 단일 실행 잠금 때문에 같은 질문을 누른 다른 사람까지 함께 막힌다.
+ * 실제로 측정 중 한 호출이 25분을 매달린 적이 있다.
+ *
+ * 정상 생성이 5~20초라 20초로 끊는다. 끊긴 시도는 transient로 분류되어
+ * (AbortSignal.timeout의 메시지에 timeout이 들어간다) 다음 모델로 넘어간다.
+ */
+const ATTEMPT_TIMEOUT_MS = 20_000
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
 /**
@@ -161,7 +177,11 @@ export async function callWithFallback<T>(
 
     for (let tries = 0; tries < 2; tries += 1) {
       try {
-        return await invoke<T>(attempt.apiKey, { ...args, model: attempt.model })
+        return await invoke<T>(
+          attempt.apiKey,
+          { ...args, model: attempt.model },
+          AbortSignal.timeout(deps.attemptTimeoutMs ?? ATTEMPT_TIMEOUT_MS),
+        )
       } catch (error) {
         lastError = error
         const kind = classifyFailure(error)
