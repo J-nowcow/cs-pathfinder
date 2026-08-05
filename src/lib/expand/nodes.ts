@@ -82,6 +82,25 @@ export async function resolveSuggestion(
 }
 
 /**
+ * 꼬리질문과 그것이 실제로 닿은 노드를 잇는다.
+ *
+ * 이 링크가 있어야 두 번째 클릭이 공짜가 된다. 없으면 이미 판 꼬리를 다시 눌러도
+ * 매칭 게이트를 또 태우고, 화면은 어디를 이미 팠는지 표시하지 못한다.
+ * `suggestion_resolved` 경로가 통째로 죽어 있던 이유가 이 갱신이 없어서였다.
+ *
+ * 이미 이어져 있으면 덮지 않는다. 먼저 닿은 노드가 임자다. 덮으면 같은 꼬리가
+ * 누를 때마다 다른 곳으로 가고, 미니맵에 그려진 과거 경로와도 어긋난다.
+ */
+export async function linkSuggestion(suggestionId: string, nodeId: string): Promise<void> {
+  const db = await getDb()
+  await db.query(
+    `update qnode_suggestion set target_node_id = $2
+     where id = $1 and target_node_id is null`,
+    [suggestionId, nodeId],
+  )
+}
+
+/**
  * 게이트에 보여줄 후보를 모은다.
  *
  * 부모의 자식이 1순위다. 여기에 조부모의 다른 자식(1-hop)을 더한다.

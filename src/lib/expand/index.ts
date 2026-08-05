@@ -11,6 +11,7 @@ import {
   resolveSuggestion,
   recordEvent,
   collectCandidates,
+  linkSuggestion,
 } from '@/lib/expand/nodes'
 import { runGate, NORMALIZER_VERSION } from '@/lib/llm/gate'
 import { generateNodeContent } from '@/lib/llm/generate'
@@ -54,7 +55,33 @@ async function snapshot(key: string, limit: number) {
   return { used: q.used, limit }
 }
 
+/**
+ * 확장 뒤에 꼬리질문과 결과 노드를 잇는다.
+ *
+ * 성공 경로가 여섯이다 — 해소된 추천, 매칭, 해시 캐시, 리스 완료, 새 생성,
+ * 그리고 각각의 조상 점프. 안쪽에서 하나씩 이으면 새 경로가 생길 때 또 빠뜨린다.
+ * 실제로 빠뜨려서 `suggestion_resolved` 경로가 통째로 죽어 있었다.
+ *
+ * 바깥에서 한 번 이으면 경로가 늘어도 자동으로 걸린다.
+ */
 export async function expand(input: ExpandInput): Promise<ExpandOutcome> {
+  const outcome = await runExpand(input)
+
+  if (input.mode === 'suggestion' && input.suggestionId) {
+    const nodeId =
+      outcome.kind === 'ok'
+        ? outcome.node.id
+        : outcome.kind === 'ancestor_jump'
+          ? outcome.nodeId
+          : null
+
+    if (nodeId) await linkSuggestion(input.suggestionId, nodeId)
+  }
+
+  return outcome
+}
+
+async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
   const parent = await loadNode(input.parentNodeId)
   if (!parent) return { kind: 'not_found', what: 'parent' }
 
