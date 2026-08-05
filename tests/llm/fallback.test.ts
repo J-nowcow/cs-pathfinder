@@ -260,3 +260,102 @@ describe('callWithFallback — 매달린 시도', () => {
     for (const s of signals) expect(s?.aborted).toBe(false)
   })
 })
+
+/**
+ * 사슬 전체 예산.
+ *
+ * 서버리스 함수에는 자체 예산이 있다(발행 라우트 60초). 시도마다 45초씩 무는
+ * 사슬은 최악 270초라, 첫 모델이 멈추면 두 번째 모델을 시도해 보지도 못하고
+ * 함수가 죽는다. 실제로 발행이 그렇게 계속 실패했다.
+ */
+describe('callWithFallback — 전체 예산', () => {
+  it('shrinks each attempt to what is left of the budget', async () => {
+    const budgets: number[] = []
+    const invoke = asInvoke(
+      async (
+        _key: string,
+        _a: StructuredCallArgs<{ ok: boolean }>,
+        signal?: AbortSignal,
+      ): Promise<{ ok: boolean }> => {
+        // 신호가 언제 끊기는지 재는 대신, 끊길 때까지 기다렸다 실패로 돌린다
+        await new Promise<void>((r) => signal?.addEventListener('abort', () => r(), { once: true }))
+        budgets.push(1)
+        throw new Error('operation timed out')
+      },
+    )
+
+    const t0 = Date.now()
+    await expect(
+      callWithFallback(args, {
+        keys: ['k1'],
+        invoke,
+        attemptTimeoutMs: 10_000,
+        totalTimeoutMs: 120,
+      }),
+    ).rejects.toThrow()
+
+    // 시도당 10초씩 물었으면 사슬이 몇 분 걸린다. 예산이 그것을 잘라야 한다
+    expect(Date.now() - t0).toBeLessThan(3_000)
+    expect(budgets.length).toBeGreaterThan(0)
+  })
+
+  it('does not bound anything when no budget is given', async () => {
+    const invoke = asInvoke(async (): Promise<{ ok: boolean }> => ({ ok: true }))
+    await expect(callWithFallback(args, { keys: ['k1'], invoke })).resolves.toEqual({ ok: true })
+  })
+})
+
+/**
+ * 우리가 끊은 시도는 같은 조합으로 다시 두드리지 않는다.
+ *
+ * 문자열로 보면 timeout이라 transient로 분류되고 transient는 재시도를 부른다.
+ * 서버가 잠깐 흔들린 경우에는 맞지만 제한 시간을 넘긴 경우에는 아니다.
+ * 방금 안 끝난 조합이 곧바로 끝날 이유가 없고, 그 한 번이 남은 예산을 먹어
+ * 다음 모델을 아예 못 쓰게 만든다.
+ */
+describe('callWithFallback — 끊긴 시도의 재시도', () => {
+  it('moves to the next model instead of retrying the one that timed out', async () => {
+    const seen: string[] = []
+    const invoke = asInvoke(
+      async (
+        _key: string,
+        a: StructuredCallArgs<{ ok: boolean }>,
+        signal?: AbortSignal,
+      ): Promise<{ ok: boolean }> => {
+        seen.push(a.model)
+        if (a.model === MODEL_GENERATE) {
+          await new Promise<void>((r) =>
+            signal?.addEventListener('abort', () => r(), { once: true }),
+          )
+          throw new Error('operation timed out')
+        }
+        return { ok: true }
+      },
+    )
+
+    await callWithFallback(args, { keys: ['k1'], invoke, attemptTimeoutMs: 20 })
+
+    // 첫 모델은 딱 한 번만 두드린다. 두 번이면 예산을 두 배로 먹는다
+    expect(seen.filter((m) => m === MODEL_GENERATE).length).toBe(1)
+    expect(seen.at(-1)).not.toBe(MODEL_GENERATE)
+  })
+
+  /** 서버 쪽 일시 오류는 여전히 한 번 더 친다 */
+  it('still retries the same combination on a server blip', async () => {
+    const seen: string[] = []
+    let first = true
+    const invoke = asInvoke(
+      async (_key: string, a: StructuredCallArgs<{ ok: boolean }>): Promise<{ ok: boolean }> => {
+        seen.push(a.model)
+        if (first) {
+          first = false
+          throw new Error('503 unavailable')
+        }
+        return { ok: true }
+      },
+    )
+
+    await callWithFallback(args, { keys: ['k1'], invoke })
+    expect(seen).toEqual([MODEL_GENERATE, MODEL_GENERATE])
+  })
+})

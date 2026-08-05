@@ -134,6 +134,17 @@ export type FallbackDeps = {
   invoke?: <T>(apiKey: string, args: StructuredCallArgs<T>, abortSignal?: AbortSignal) => Promise<T>
   /** 시도 하나에 허용할 시간. 시험에서 줄여 쓴다 */
   attemptTimeoutMs?: number
+  /**
+   * 사슬 전체에 허용할 시간.
+   *
+   * 서버리스 함수에는 자체 예산이 있다(발행 라우트는 60초). 시도마다 45초씩
+   * 무는 사슬은 최악 270초라 그 안에 못 끝난다. 첫 모델이 멈추면 두 번째
+   * 모델을 시도해 보지도 못하고 함수가 죽는다.
+   *
+   * 이 값을 주면 남은 예산에 맞춰 각 시도의 제한을 줄인다. 예산이 다 하면
+   * 더 시도하지 않고 마지막 오류를 던진다.
+   */
+  totalTimeoutMs?: number
   onRetry?: (info: { model: string; keyIndex: number; kind: string }) => void
 }
 
@@ -180,19 +191,39 @@ export async function callWithFallback<T>(
   const deadKeys = new Set<string>()
   let lastError: unknown = new Error('no attempt was made')
 
+  const attemptCap = deps.attemptTimeoutMs ?? ATTEMPT_TIMEOUT_MS
+  const deadline = deps.totalTimeoutMs ? Date.now() + deps.totalTimeoutMs : Infinity
+
   for (const attempt of attempts) {
     if (deadKeys.has(attempt.apiKey)) continue
+    if (Date.now() >= deadline) break
 
+    let signal: AbortSignal | undefined
     for (let tries = 0; tries < 2; tries += 1) {
       try {
-        return await invoke<T>(
-          attempt.apiKey,
-          { ...args, model: attempt.model },
-          AbortSignal.timeout(deps.attemptTimeoutMs ?? ATTEMPT_TIMEOUT_MS),
-        )
+        // 남은 예산보다 긴 제한은 의미가 없다. 예산이 다 하면 그만둔다
+        const budget = Math.min(attemptCap, deadline - Date.now())
+        if (budget <= 0) break
+
+        signal = AbortSignal.timeout(budget)
+        return await invoke<T>(attempt.apiKey, { ...args, model: attempt.model }, signal)
       } catch (error) {
         lastError = error
         const kind = classifyFailure(error)
+
+        /*
+         * 우리가 끊은 시도는 같은 조합으로 다시 두드리지 않는다.
+         *
+         * 문자열로 보면 timeout이라 transient로 분류되고, transient는 같은
+         * 조합을 한 번 더 친다. 서버가 잠깐 흔들린 경우에는 맞는 처방이지만
+         * 제한 시간을 넘긴 경우에는 아니다 — 방금 안 끝난 조합이 곧바로
+         * 끝날 이유가 없고, 그 한 번이 남은 예산을 다 먹어 다음 모델을 아예
+         * 시도하지 못하게 만든다. 발행이 계속 실패한 원인이 이것이었다.
+         */
+        if (signal?.aborted) {
+          deps.onRetry?.({ model: attempt.model, keyIndex: keys.indexOf(attempt.apiKey), kind })
+          break
+        }
 
         deps.onRetry?.({
           model: attempt.model,
@@ -220,3 +251,24 @@ export async function callWithFallback<T>(
 /** 프로덕션 경로. 폴백을 포함한다. */
 export const realCaller: StructuredCaller = <T>(args: StructuredCallArgs<T>): Promise<T> =>
   callWithFallback(args)
+
+/**
+ * 발행 전용 호출.
+ *
+ * 발행 라우트의 예산이 60초다(maxDuration). 사슬을 다 도는 데 그보다 오래
+ * 걸리면 두 번째 모델을 시도해 보지도 못하고 함수가 죽는다. 실제로 3.5-flash
+ * 버킷이 마른 날 발행이 계속 실패했다.
+ *
+ * 예산 배분은 실측에서 나왔다. 한도가 마른 날 사슬을 재보니 상위 모델은
+ * 전부 quota로 1초 안에 떨어지고 실제로 답하는 것은 사슬 끝의 Gemma였다.
+ * Gemma는 눈에 띄게 느려서 짧은 프롬프트에도 18~25초가 걸린다.
+ *
+ * 그래서 시도 제한을 짧게 잡으면 안 된다. 20초로 뒀더니 빠른 실패 몇 번을
+ * 지난 뒤 정작 답하는 모델을 잘라서 발행이 계속 실패했다.
+ *
+ * 시도 40초 · 전체 55초. quota 실패는 1초씩이라 사슬을 지나는 값이 거의 없고,
+ * 남은 예산 대부분이 실제로 답하는 모델에게 간다. 라우트 예산 60초 안에서
+ * 끝나므로 함수가 죽는 대신 오류를 제대로 돌려준다.
+ */
+export const dailyCaller: StructuredCaller = <T>(args: StructuredCallArgs<T>): Promise<T> =>
+  callWithFallback(args, { attemptTimeoutMs: 40_000, totalTimeoutMs: 55_000 })

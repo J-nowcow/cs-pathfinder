@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { IDENTITY_SCOPES, isIdentityScope } from '@/lib/expand/scopes'
-import { realCaller, MODEL_DAILY, type StructuredCaller } from '@/lib/llm/client'
+import { dailyCaller, MODEL_DAILY, type StructuredCaller } from '@/lib/llm/client'
 
 const dailySchema = z.object({
   question: z.string(),
@@ -131,7 +131,7 @@ export async function generateDailyRoot(args: {
   category: string
   call?: StructuredCaller
 }): Promise<DailyRootContent> {
-  const call = args.call ?? realCaller
+  const call = args.call ?? dailyCaller
 
   const prompt = [`주제어: ${args.term}`, `대분류: ${args.category}`].join('\n')
 
