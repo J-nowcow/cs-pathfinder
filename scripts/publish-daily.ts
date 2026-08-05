@@ -5,6 +5,7 @@ loadEnvLocal()
 import { publishDaily, countUnconsumedSeeds } from '../src/lib/daily/publish'
 import { getTodayTree } from '../src/lib/daily/today'
 import { resolveCaller } from '../src/lib/llm/resolve'
+import { callWithFallback, type StructuredCaller } from '../src/lib/llm/client'
 import { kstToday } from '../src/lib/daily/date'
 
 /**
@@ -16,6 +17,17 @@ import { kstToday } from '../src/lib/daily/date'
  *
  * 실행: npm run publish:daily [YYYY-MM-DD]
  */
+
+/**
+ * 손발행은 서버리스 예산에 묶이지 않는다.
+ *
+ * 라우트용 dailyCaller는 시도 40초·전체 55초다. 함수가 죽기 전에 끝내려는
+ * 값이라 여기서는 필요 없다. 한도가 마른 날 사슬 끝의 Gemma가 답하는 데
+ * 25초 안팎이 걸리고 회차마다 크게 흔들려서, 그 예산을 그대로 물려받으면
+ * 복구용 스크립트가 정작 복구가 필요한 날에 실패한다.
+ */
+const patientCaller: StructuredCaller = (a) =>
+  callWithFallback(a, { attemptTimeoutMs: 150_000 })
 async function main() {
   const date = process.argv[2] ?? kstToday()
   const usingStub = resolveCaller() !== undefined
@@ -24,7 +36,7 @@ async function main() {
   console.log(`모델   ${usingStub ? '개발 스텁 (API 키 없음)' : '실제 Gemini'}`)
   console.log(`시드   남음 ${await countUnconsumedSeeds()}개\n`)
 
-  const out = await publishDaily({ date, call: resolveCaller() })
+  const out = await publishDaily({ date, call: resolveCaller() ?? patientCaller })
 
   switch (out.kind) {
     case 'published':
