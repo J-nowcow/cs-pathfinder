@@ -1,5 +1,7 @@
 import { z } from 'zod'
 import { expand } from '@/lib/expand'
+import { ensureSeeded } from '@/lib/db/bootstrap'
+import { resolveCaller } from '@/lib/llm/resolve'
 
 const bodySchema = z.object({
   idempotency_key: z.string().min(1),
@@ -33,6 +35,9 @@ function quotaKeyFrom(request: Request): string {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  // PGlite가 인메모리라 프로세스가 뜰 때마다 DB가 비어 있다.
+  await ensureSeeded()
+
   let raw: unknown
   try {
     raw = await request.json()
@@ -55,6 +60,8 @@ export async function POST(request: Request): Promise<Response> {
     mode: body.mode,
     suggestionId: body.suggestion_id,
     rawInput: body.raw_input,
+    // 키가 있으면 undefined가 넘어가 expand()가 realCaller를 쓴다.
+    call: resolveCaller(),
   })
 
   switch (outcome.kind) {
