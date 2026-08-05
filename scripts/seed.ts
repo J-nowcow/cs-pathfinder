@@ -19,13 +19,19 @@ import { EXAMPLE_NODES } from '../data/example-nodes'
 async function main() {
   const db = await getDb()
 
-  for (const seed of TOPIC_SEEDS) {
-    await db.query(
-      `insert into topic_seed (term, category) values ($1, $2)
-       on conflict (term, category) do nothing`,
-      [seed.term, seed.category],
-    )
-  }
+  // 한 건씩 넣으면 시드 수만큼 왕복한다. 400개가 넘어가면 원격 DB에서 체감된다.
+  // unnest로 배열 두 개를 행으로 펴서 한 문장에 끝낸다.
+  const before = await db.query<{ n: string }>('select count(*) as n from topic_seed')
+  await db.query(
+    `insert into topic_seed (term, category)
+     select * from unnest($1::text[], $2::text[])
+     on conflict (term, category) do nothing`,
+    [TOPIC_SEEDS.map((s) => s.term), TOPIC_SEEDS.map((s) => s.category)],
+  )
+  const after = await db.query<{ n: string }>('select count(*) as n from topic_seed')
+  console.log(
+    `주제어 시드: 신규 ${Number(after[0].n) - Number(before[0].n)}개 / 정의 ${TOPIC_SEEDS.length}개`,
+  )
 
   const { inserted } = await seedExampleNodes()
   console.log(`루트 노드: 신규 ${inserted}개 / 전체 ${EXAMPLE_NODES.length}개`)
