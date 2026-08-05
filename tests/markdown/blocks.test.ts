@@ -251,3 +251,34 @@ describe('example nodes carry diagrams', () => {
     }
   })
 })
+
+describe('parseBlocks — 문장 끝에 붙은 울타리', () => {
+  /**
+   * 실제 생성물에서 나온 모양이다. "…나뉜다. :::stack" 처럼 한 줄에 이어 쓴다.
+   * 못 알아보면 도식이 통째로 문단이 된다.
+   */
+  it('splits a fence that trails a sentence', () => {
+    const out = parseBlocks(
+      ['JVM 메모리는 세 영역으로 나뉜다. :::stack', '힙 | 객체', '스택 | 지역 변수', ':::'].join('\n'),
+    )
+
+    expect(out.map((b) => b.type)).toEqual(['paragraph', 'stack'])
+    if (out[0].type === 'paragraph') {
+      expect(out[0].text).toBe('JVM 메모리는 세 영역으로 나뉜다.')
+      expect(out[0].text).not.toContain(':::')
+    }
+    if (out[1].type === 'stack') expect(out[1].layers).toHaveLength(2)
+  })
+
+  it('does the same for a flow fence', () => {
+    const out = parseBlocks(['순서는 이렇다. :::flow', 'A -> B: 하나', ':::'].join('\n'))
+    expect(out.map((b) => b.type)).toEqual(['paragraph', 'flow'])
+  })
+
+  /** 문장 안에 지나가듯 나온 것까지 울타리로 보면 본문이 잘린다 */
+  it('leaves a fence-looking word inside a sentence alone', () => {
+    const out = parseBlocks('구분자로 :::stack 같은 표기를 쓴다고 설명하는 문장이다. 뒤가 더 있다.')
+    expect(out).toHaveLength(1)
+    expect(out[0].type).toBe('paragraph')
+  })
+})

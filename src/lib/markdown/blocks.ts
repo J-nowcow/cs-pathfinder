@@ -122,8 +122,31 @@ function parseTable(lines: string[]): Block | null {
  * 빈 줄로 먼저 자르고, 조각마다 어떤 블록인지 본다. `:::` 울타리는 안에 빈 줄이
  * 들어갈 수 있어서 먼저 훑어 통째로 떼어낸다.
  */
+/**
+ * 문장 끝에 붙은 울타리를 떼어낸다.
+ *
+ * 모델이 "…나뉜다. :::stack" 처럼 한 줄에 이어 쓰는 경우가 실제로 나왔다.
+ * 그대로 두면 여는 줄로 못 알아보고 도식이 통째로 문단이 된다. 앞의 문장과
+ * 울타리를 두 줄로 갈라 주면 되살아난다.
+ */
+function splitTrailingFence(lines: string[]): string[] {
+  const out: string[] = []
+
+  for (const line of lines) {
+    const m = /^(.*\S)\s+(:::\s*(?:flow|stack)\b.*)$/.exec(line)
+    if (m) {
+      out.push(m[1])
+      out.push(m[2])
+    } else {
+      out.push(line)
+    }
+  }
+
+  return out
+}
+
 export function parseBlocks(body: string): Block[] {
-  const lines = body.split('\n')
+  const lines = splitTrailingFence(body.split('\n'))
   const blocks: Block[] = []
 
   let buffer: string[] = []
