@@ -79,14 +79,26 @@ function gateResponse(prompt: string) {
   }
 }
 
-/** 질문에서 파생하는 꼬리질문 틀. 5개가 서로 다른 방향으로 뻗게 한다. */
+/**
+ * 꼬리질문 틀. 5개가 서로 다른 방향으로 뻗는다.
+ *
+ * 부모 질문을 통째로 앞에 붙이면 화면에서 한 줄을 넘겨 읽기 어렵다.
+ * 앞 두 어절만 따 붙인다. 짧으면서 어느 질문에서 뻗었는지도 남는다.
+ *
+ * 조사는 붙이지 않고 대시로 잇는다. 뽑아온 어절이 이미 조사를 달고 있어
+ * 깊이가 쌓이면 "TCP 3-way은에" 같은 겹침이 생긴다.
+ */
 const SUGGESTION_FRAMES = [
-  (q: string) => `${q.replace(/\?$/, '')} — 이 판단의 근거는 무엇인가?`,
-  (q: string) => `${q.replace(/\?$/, '')} — 반대 선택을 하면 무엇을 잃는가?`,
-  (q: string) => `${q.replace(/\?$/, '')} — 실무에서 어떻게 측정하는가?`,
-  (q: string) => `${q.replace(/\?$/, '')} — 규모가 커지면 무엇이 달라지는가?`,
-  (q: string) => `${q.replace(/\?$/, '')} — 흔한 오해는 무엇인가?`,
+  (k: string) => `${k} — 판단 근거는?`,
+  (k: string) => `${k} — 반대로 선택하면?`,
+  (k: string) => `${k} — 실무 측정 방법은?`,
+  (k: string) => `${k} — 규모가 커지면?`,
+  (k: string) => `${k} — 흔한 오해는?`,
 ]
+
+function topic(question: string): string {
+  return question.replace(/\?$/, '').split(/\s+/).slice(0, 2).join(' ')
+}
 
 function generateResponse(prompt: string) {
   const question = field(prompt, '질문') || '질문'
@@ -100,9 +112,10 @@ function generateResponse(prompt: string) {
     `아래 꼬리질문을 눌러 더 파고들 수 있다. 같은 질문을 다시 물으면 캐시에 걸려 새로 생성하지 않는다.`,
   ].join('\n\n')
 
+  const key = topic(question)
   return {
     body,
-    suggestions: SUGGESTION_FRAMES.map((f) => ({ text: f(question) })),
+    suggestions: SUGGESTION_FRAMES.map((f) => ({ text: f(key) })),
   }
 }
 
