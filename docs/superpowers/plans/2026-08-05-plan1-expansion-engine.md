@@ -10,6 +10,44 @@
 
 **Spec:** `docs/superpowers/specs/2026-08-05-cs-question-tree-design.md` §5 §6 §8 §9 §10
 
+---
+
+## 실행 결과 (2026-08-05 완료)
+
+이 계획은 실행되었다. **아래 두 가지가 계획과 다르게 구현되었으니 계획 본문보다 이 절을 우선한다.**
+
+**1. 데이터 접근이 Supabase 클라이언트가 아니라 raw SQL이다.**
+
+실행 환경에 Docker가 없어 로컬 Supabase를 띄울 수 없었다. PGlite(Postgres를 WASM으로 컴파일한 것)로 대체했다. 실제 Postgres라 plpgsql 함수가 그대로 돌고 Docker가 필요 없다.
+
+바뀐 파일이다. `src/lib/db/client.ts`가 `Db` 인터페이스(`query` / `exec`)를 노출하고, 데이터 접근은 `src/lib/expand/nodes.ts`·`cache.ts`·`quota/index.ts`가 SQL로 한다. 계획의 `getServiceClient()`와 `db.from(...)` 호출은 존재하지 않는다.
+
+부수 효과가 하나 있다. **PGlite는 단일 연결이라 진짜 동시성이 재현되지 않는다.** 통과한 quota·single-flight 동시성 테스트는 순차 정합성만 증명한다. 실제 Postgres에서 재검증이 필요하다.
+
+RLS 마이그레이션(Task 14의 `0004_rls.sql`)은 작성하지 않았다. service role 전용 서버 접근이라 현 단계에서 검증할 대상이 없고, 인증이 붙는 계획 3에서 함께 넣는 것이 맞다.
+
+**2. AI SDK v6의 `generateObject` 시그니처 대응이 필요했다.**
+
+`OUTPUT` 타입이 스키마로 추론되는데 제네릭 `ZodType<T>`로는 `'object'` 분기가 확정되지 않는다. `output: 'object'`를 명시하고 호출부만 좁게 캐스팅했다. 공개 타입 `StructuredCaller`는 그대로 안전하다.
+
+### 검증 상태
+
+| 항목 | 결과 |
+|---|---|
+| 테스트 | 90개 통과 |
+| 타입체크 | 통과 |
+| Task 14 Step 8 수동 E2E | **미실행** — `GOOGLE_GENERATIVE_AI_API_KEY` 없음 |
+
+LLM 실호출은 검증되지 않았다. 게이트와 생성은 주입한 스텁으로만 테스트했으므로 **프롬프트 품질과 구조화 출력 준수는 미확인이다.** 키를 받으면 Task 14 Step 8의 miss → hit 전환을 먼저 확인해야 한다.
+
+### 추가 산출물
+
+계획에 없던 것이다.
+
+- `data/topic-seeds.ts` — 10개 카테고리 주제어 206개 (목표 400개)
+- `data/example-nodes.ts` — 예시 루트 3개. 매일 발행 생성 프롬프트의 기준선
+- `scripts/seed.ts` — 시드 삽입 및 분포 출력
+
 ## Global Constraints
 
 - Node.js 20 이상. 패키지 매니저는 npm
