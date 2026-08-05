@@ -17,6 +17,8 @@ const TABLES = [
   'qnode_equivalence',
   'qedge',
   'topic_seed',
+  'tree',
+  'tree_occurrence',
   'expansion_event',
   'usage_quota',
 ]
@@ -46,6 +48,27 @@ async function main() {
   )
   console.log('\n루트 노드')
   for (const r of roots.rows) console.log(`  [${r.c}] ${r.q}`)
+
+  // 매일 발행 상태. 하루 하나가 지켜지는지, 시드가 며칠치 남았는지 본다.
+  const daily = await pool.query<{ d: string; c: string; slug: string; q: string }>(
+    `select to_char(t.publish_date, 'YYYY-MM-DD') as d, t.category as c, t.slug,
+            n.normalized_question as q
+     from tree t join qnode n on n.id = t.root_node_id
+     where t.kind = 'daily'
+     order by t.publish_date desc
+     limit 7`,
+  )
+  console.log('\n오늘의 질문 (최근 7건)')
+  if (daily.rows.length === 0) console.log('  (아직 발행 없음)')
+  for (const r of daily.rows) console.log(`  ${r.d}  [${r.c}] ${r.q}`)
+
+  const seeds = await pool.query<{ left: number; used: number }>(
+    `select count(*) filter (where consumed_at is null)::int as left,
+            count(*) filter (where consumed_at is not null)::int as used
+     from topic_seed`,
+  )
+  const s = seeds.rows[0]
+  console.log(`\n주제어 시드  남음 ${s.left} / 소비 ${s.used}  (하루 하나면 ${s.left}일치)`)
 
   await pool.end()
 }

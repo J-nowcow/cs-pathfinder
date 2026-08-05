@@ -1,0 +1,46 @@
+name: 오늘의 질문 발행
+
+on:
+  schedule:
+    # UTC 23:07 = KST 다음 날 08:07.
+    # 정각을 피한 것은 GitHub Actions의 스케줄 큐가 매시 정각에 몰려
+    # 수십 분씩 밀리기 때문이다.
+    - cron: '7 23 * * *'
+  # 수동 실행. 발행이 밀렸거나 시드를 보충한 뒤 즉시 돌릴 때 쓴다.
+  workflow_dispatch:
+
+# 앞 실행이 아직 돌고 있으면 겹치지 않게 한다.
+# 발행 자체는 하루 하나가 DB에서 보장되지만 LLM 호출을 두 번 태울 이유가 없다.
+concurrency:
+  group: publish-daily
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: POST /api/publish-daily
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 발행 요청
+        env:
+          DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+
+          # 시크릿이 비어 있으면 여기서 멈춘다.
+          # 없는 채로 요청하면 401이 오고 원인이 인증인지 배포인지 안 보인다.
+          : "${DEPLOY_URL:?DEPLOY_URL secret이 설정되지 않았다}"
+          : "${CRON_SECRET:?CRON_SECRET secret이 설정되지 않았다}"
+
+          # --fail-with-body: 2xx가 아니면 본문을 찍고 종료 코드를 세운다.
+          # set -e와 묶여 워크플로가 빨간불로 끝난다. 조용히 넘어가면
+          # 시드 소진도 생성 장애도 며칠 뒤에나 발견된다.
+          curl --fail-with-body -sS -X POST \
+            --max-time 180 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "content-type: application/json" \
+            "${DEPLOY_URL%/}/api/publish-daily"
+
+          echo

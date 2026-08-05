@@ -1,4 +1,4 @@
-import { MODEL_GATE, MODEL_GENERATE, type StructuredCaller } from '@/lib/llm/client'
+import { MODEL_GATE, MODEL_GENERATE, MODEL_DAILY, type StructuredCaller } from '@/lib/llm/client'
 
 /**
  * API 키 없이 화면을 만들고 검증하기 위한 가짜 LLM.
@@ -158,6 +158,31 @@ function generateResponse(prompt: string) {
   }
 }
 
+/**
+ * 매일 발행용 응답.
+ *
+ * 주제어 하나에서 루트 질문·해설·꼬리 5개를 만든다. 키 없이도 발행 경로를
+ * 끝까지 돌려볼 수 있어야 워크플로와 화면을 검증할 수 있다.
+ */
+function dailyResponse(prompt: string) {
+  const term = field(prompt, '주제어') || '주제'
+  const category = field(prompt, '대분류') || '기타'
+  const question = `${term}를 실무에서 쓸 때 무엇을 먼저 따져야 하는가?`
+
+  return {
+    question,
+    identity_scope: pickScope(`${term} ${category}`),
+    body: [
+      `**개발용 예시 해설이다.** \`GOOGLE_GENERATIVE_AI_API_KEY\`가 없어 실제 모델 대신 스텁이 답했다. 내용은 검증되지 않았다.`,
+      `오늘의 주제어는 "${term}"이고 대분류는 ${category}다. 실제 해설은 결론을 먼저 말하고 근거를 뒤에 붙인다.`,
+      `두 번째 문단에서는 이 개념이 어디서 비용이나 제약을 만드는지 단계로 나눠 설명한다.`,
+      `세 번째 문단에서는 면접에서 한 단계 더 들어오는 지점을 짚는다. 트레이드오프가 있으면 양면을 함께 말한다.`,
+    ].join('\n\n'),
+    summary: `${term}를 고를 때의 판단 기준을 짚는다.`,
+    suggestions: SUGGESTION_FRAMES.map((f) => ({ text: f(term) })),
+  }
+}
+
 export const stubCaller: StructuredCaller = async <T>({
   model,
   prompt,
@@ -167,6 +192,7 @@ export const stubCaller: StructuredCaller = async <T>({
 }): Promise<T> => {
   if (model === MODEL_GATE) return gateResponse(prompt) as T
   if (model === MODEL_GENERATE) return generateResponse(prompt) as T
+  if (model === MODEL_DAILY) return dailyResponse(prompt) as T
 
   // 모르는 모델에 그럴듯한 껍데기를 돌려주면 호출부가 조용히 잘못된 값을 쓴다.
   throw new Error(`dev stub has no response shape for model: ${model}`)

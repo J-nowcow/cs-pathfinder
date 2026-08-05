@@ -11,6 +11,7 @@
     "test:unit": "vitest run tests/expand tests/llm",
     "test:watch": "vitest",
     "seed": "tsx scripts/seed.ts",
+    "publish:daily": "tsx scripts/publish-daily.ts",
     "verify:match": "tsx scripts/verify-gate-match.ts",
     "verify:scale": "tsx scripts/verify-match-scale.ts",
     "db:migrate": "tsx scripts/migrate.ts",
