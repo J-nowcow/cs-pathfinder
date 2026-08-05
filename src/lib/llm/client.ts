@@ -211,25 +211,22 @@ export async function callWithFallback<T>(
         lastError = error
         const kind = classifyFailure(error)
 
+        deps.onRetry?.({
+          model: attempt.model,
+          keyIndex: keys.indexOf(attempt.apiKey),
+          kind,
+        })
+
         /*
          * 우리가 끊은 시도는 같은 조합으로 다시 두드리지 않는다.
          *
          * 문자열로 보면 timeout이라 transient로 분류되고, transient는 같은
          * 조합을 한 번 더 친다. 서버가 잠깐 흔들린 경우에는 맞는 처방이지만
          * 제한 시간을 넘긴 경우에는 아니다 — 방금 안 끝난 조합이 곧바로
-         * 끝날 이유가 없고, 그 한 번이 남은 예산을 다 먹어 다음 모델을 아예
-         * 시도하지 못하게 만든다. 발행이 계속 실패한 원인이 이것이었다.
+         * 끝날 이유가 없고, 그 한 번이 남은 예산을 먹어 다음 모델을 시도할
+         * 여지를 없앤다.
          */
-        if (signal?.aborted) {
-          deps.onRetry?.({ model: attempt.model, keyIndex: keys.indexOf(attempt.apiKey), kind })
-          break
-        }
-
-        deps.onRetry?.({
-          model: attempt.model,
-          keyIndex: keys.indexOf(attempt.apiKey),
-          kind,
-        })
+        if (signal?.aborted) break
 
         if (kind === 'fatal') throw error
         if (kind === 'auth') {
