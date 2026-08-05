@@ -25,8 +25,26 @@ export type Block =
 export type FlowStep = { from: string; to: string; label: string }
 export type StackLayer = { name: string; note: string }
 
-const FENCE_OPEN = /^:::(flow|stack)\s*$/
-const FENCE_CLOSE = /^:::\s*$/
+/**
+ * 울타리 인식은 넉넉하게 잡는다.
+ *
+ * 모델은 매번 조금씩 다르게 쓴다. `:::flow` 뒤에 설명을 붙이거나 `::: flow`로
+ * 띄우거나 닫을 때 `:::end`라고 적는다. 엄격하게 보면 그때마다 도식이 통째로
+ * 문단이 되고, 사용자 화면에 `:::` 기호가 그대로 뜬다.
+ *
+ * 실측에서 세 번 중 두 번은 정확했고 한 번은 이런 변형이었다.
+ */
+const FENCE_OPEN = /^:::\s*(flow|stack)\b/
+const FENCE_CLOSE = /^:::\s*(end)?\s*$/
+
+/**
+ * 도식 기호가 본문에 새는 것을 막는 마지막 그물.
+ *
+ * 어떤 이유로든 못 알아본 울타리가 문단에 남으면 `:::`가 화면에 그대로 보인다.
+ * 도식을 못 그린 것은 아쉬운 정도지만 기호가 보이는 것은 고장으로 읽힌다.
+ * 코드 울타리도 같이 턴다 — 모델이 도식을 ``` 로 감싸는 경우가 있다.
+ */
+const STRAY_FENCE = /^\s*(:::|```)/
 
 /** `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN` */
 const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
@@ -114,8 +132,18 @@ export function parseBlocks(body: string): Block[] {
       if (trimmed.length === 0) continue
 
       const table = parseTable(trimmed.split('\n'))
-      if (table) blocks.push(table)
-      else blocks.push({ type: 'paragraph', text: trimmed })
+      if (table) {
+        blocks.push(table)
+        continue
+      }
+
+      const cleaned = trimmed
+        .split('\n')
+        .filter((l) => !STRAY_FENCE.test(l))
+        .join('\n')
+        .trim()
+
+      if (cleaned.length > 0) blocks.push({ type: 'paragraph', text: cleaned })
     }
   }
 

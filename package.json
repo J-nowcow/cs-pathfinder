@@ -14,6 +14,7 @@
     "publish:daily": "tsx scripts/publish-daily.ts",
     "verify:match": "tsx scripts/verify-gate-match.ts",
     "measure:match": "tsx scripts/measure-match.ts",
+    "measure:diagrams": "tsx scripts/measure-diagrams.ts",
     "verify:scale": "tsx scripts/verify-match-scale.ts",
     "verify:concurrency": "tsx scripts/verify-concurrency.ts",
     "db:migrate": "tsx scripts/migrate.ts",

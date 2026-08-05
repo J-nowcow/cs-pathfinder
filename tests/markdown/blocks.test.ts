@@ -185,3 +185,44 @@ describe('parseBlocks — 섞였을 때', () => {
     for (const j of junk) expect(() => parseBlocks(j)).not.toThrow()
   })
 })
+
+describe('parseBlocks — 모델이 조금씩 다르게 쓸 때', () => {
+  /**
+   * 실측에서 나온 변형들이다. 엄격하게 보면 그때마다 도식이 통째로 문단이 되고
+   * 화면에 `:::` 기호가 그대로 뜬다.
+   */
+  it('accepts a space after the fence marker', () => {
+    const out = parseBlocks([':::  flow', 'A -> B: 하나', ':::'].join('\n'))
+    expect(out[0].type).toBe('flow')
+  })
+
+  it('accepts trailing words after the type', () => {
+    const out = parseBlocks([':::flow 핸드셰이크 순서', 'A -> B: 하나', ':::'].join('\n'))
+    expect(out[0].type).toBe('flow')
+  })
+
+  it('accepts :::end as a close', () => {
+    const out = parseBlocks([':::stack', '위 | 설명', ':::end'].join('\n'))
+    expect(out[0].type).toBe('stack')
+  })
+
+  /**
+   * 도식을 못 그리는 것은 아쉬운 정도지만, `:::`가 화면에 보이는 것은
+   * 고장으로 읽힌다. 마지막 그물이 있어야 한다.
+   */
+  it('never leaks a fence marker into the text', () => {
+    const bodies = [
+      '앞 문단.\n\n::::flow\n이상한 것\n::::\n\n뒤 문단.',
+      '앞 문단.\n\n```\n:::flow\nA -> B: 하나\n```\n\n뒤 문단.',
+      ':::flowchart\nA -> B\n:::',
+    ]
+    for (const body of bodies) {
+      for (const b of parseBlocks(body)) {
+        if (b.type === 'paragraph') {
+          expect(b.text).not.toContain(':::')
+          expect(b.text).not.toContain('```')
+        }
+      }
+    }
+  })
+})
