@@ -5,7 +5,7 @@ import type { StructuredCaller } from '@/lib/llm/client'
 import { kstToday, kstDateKey, dailySlug } from '@/lib/daily/date'
 import { claimSeed, unclaimSeed, countUnconsumedSeeds, type ClaimedSeed } from '@/lib/daily/seed'
 import { generateDailyRoot, type DailyRootContent } from '@/lib/daily/generate'
-import { findDailyTree, type DailyTree } from '@/lib/daily/today'
+import { findDailyTree, dailyTreeExists, type DailyTree } from '@/lib/daily/today'
 
 export type PublishOutcome =
   | { kind: 'published'; tree: DailyTree; seed: { term: string; category: string } }
@@ -137,8 +137,13 @@ async function commitPublish(args: {
 export async function publishDaily(input: PublishInput = {}): Promise<PublishOutcome> {
   const date = input.date ?? kstToday()
 
-  const already = await findDailyTree(date)
-  if (already) return { kind: 'already_published', tree: already }
+  if (await dailyTreeExists(date)) {
+    const already = await findDailyTree(date)
+    if (already) return { kind: 'already_published', tree: already }
+    // 트리는 있는데 루트를 못 읽는다. 다시 발행해봐야 유니크 인덱스에 막히므로
+    // LLM만 태운다. 사람이 봐야 하는 상태다
+    return { kind: 'generation_failed', detail: `${date} 트리는 있으나 루트가 ready가 아니다` }
+  }
 
   const seed = await claimSeed()
   if (!seed) return { kind: 'seed_exhausted' }

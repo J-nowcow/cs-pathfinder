@@ -105,6 +105,22 @@ export async function getTodayTree(today: string = kstToday()): Promise<DailyTre
   return hydrate(rows[0], today)
 }
 
+/**
+ * 그날 트리 행이 있는지만 본다.
+ *
+ * findDailyTree는 루트가 ready가 아니면 null을 낸다. 그걸 "미발행"으로 읽으면
+ * 발행을 다시 시도하게 되고 매번 LLM만 태우다 유니크 인덱스에 막힌다.
+ * 발행 여부는 트리 행의 존재로만 판단한다.
+ */
+export async function dailyTreeExists(date: string): Promise<boolean> {
+  const db = await getDb()
+  const rows = await db.query<{ one: number }>(
+    `select 1 as one from tree where kind = 'daily' and publish_date = $1::date limit 1`,
+    [date],
+  )
+  return rows.length > 0
+}
+
 /** 특정 날짜의 발행분. 발행 로직이 중복 발행을 막을 때 쓴다 */
 export async function findDailyTree(
   date: string,

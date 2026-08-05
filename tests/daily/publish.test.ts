@@ -134,6 +134,25 @@ describe('publishDaily', () => {
     expect(await countRows('qnode')).toBe(1)
   })
 
+  it('stops instead of burning the model when the root is not ready', async () => {
+    await insertSeeds([
+      { term: 'a', category: '네트워크' },
+      { term: 'b', category: '운영체제' },
+    ])
+    const call = makeCaller()
+    const first = await publishDaily({ date: DATE, call })
+    if (first.kind !== 'published') throw new Error(first.kind)
+
+    // 루트를 못 읽는다고 미발행으로 판단하면 매일 LLM만 태우다 인덱스에 막힌다
+    const db = await getDb()
+    await db.query("update qnode set status = 'failed' where id = $1", [first.tree.root.id])
+
+    const retry = await publishDaily({ date: DATE, call })
+    expect(retry.kind).toBe('generation_failed')
+    expect(call.calls).toHaveLength(1)
+    expect(await countRows('topic_seed', 'consumed_at is not null')).toBe(1)
+  })
+
   it('publishes a separate tree on a different day', async () => {
     await insertSeeds([
       { term: 'a', category: '네트워크' },
