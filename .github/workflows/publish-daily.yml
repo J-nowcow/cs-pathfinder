@@ -34,13 +34,36 @@ jobs:
           : "${DEPLOY_URL:?DEPLOY_URL secret이 설정되지 않았다}"
           : "${CRON_SECRET:?CRON_SECRET secret이 설정되지 않았다}"
 
+          # 실패하면 다시 던진다.
+          #
+          # 무료 한도가 마른 날에는 사슬 끝의 Gemma가 답하는데, 이 모델의
+          # 응답 시간이 회차마다 10초와 120초 초과를 오간다. 실측에서 같은
+          # 요청이 어떤 회차는 25초에 끝나고 어떤 회차는 시간 초과였다.
+          # 한 번 던지고 마는 것과 세 번 던지는 것의 차이가 그날 질문이
+          # 올라오느냐 마느냐다.
+          #
+          # 하루 하나는 DB가 보장하므로 재시도가 중복 발행을 만들지 않는다.
+          # 이미 있으면 already_published로 즉시 돌아온다.
+          #
           # --fail-with-body: 2xx가 아니면 본문을 찍고 종료 코드를 세운다.
-          # set -e와 묶여 워크플로가 빨간불로 끝난다. 조용히 넘어가면
+          # 세 번 다 실패하면 워크플로가 빨간불로 끝난다. 조용히 넘어가면
           # 시드 소진도 생성 장애도 며칠 뒤에나 발견된다.
-          curl --fail-with-body -sS -X POST \
-            --max-time 180 \
-            -H "Authorization: Bearer ${CRON_SECRET}" \
-            -H "content-type: application/json" \
-            "${DEPLOY_URL%/}/api/publish-daily"
+          for attempt in 1 2 3; do
+            echo "시도 ${attempt}/3"
+            if curl --fail-with-body -sS -X POST \
+              --max-time 90 \
+              -H "Authorization: Bearer ${CRON_SECRET}" \
+              -H "content-type: application/json" \
+              "${DEPLOY_URL%/}/api/publish-daily"; then
+              echo
+              echo "발행 요청 성공 (시도 ${attempt})"
+              exit 0
+            fi
+            echo
+            # set -e 아래서는 `[ ... ] && sleep`이 마지막 회차에 거짓이 되어
+            # 스크립트를 그 자리에서 끊는다. 아래 실패 메시지가 안 찍힌다
+            if [ "${attempt}" -lt 3 ]; then sleep 30; fi
+          done
 
-          echo
+          echo "세 번 모두 실패했다"
+          exit 1
