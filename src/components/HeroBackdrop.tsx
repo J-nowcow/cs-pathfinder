@@ -38,7 +38,7 @@ export function HeroBackdrop() {
     <svg
       viewBox="0 0 400 160"
       aria-hidden
-      className="pointer-events-none absolute right-0 top-0 h-[160px] w-[400px] max-w-full opacity-[0.13]"
+      className="pointer-events-none absolute right-0 top-0 h-[160px] w-[400px] max-w-full opacity-[0.16]"
     >
       {EDGES.map(([a, b]) => (
         <line
