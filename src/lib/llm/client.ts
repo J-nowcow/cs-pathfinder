@@ -146,10 +146,14 @@ const TRANSIENT_RETRY_MS = 600
  * 이 요청이 쥔 단일 실행 잠금 때문에 같은 질문을 누른 다른 사람까지 함께 막힌다.
  * 실제로 측정 중 한 호출이 25분을 매달린 적이 있다.
  *
- * 정상 생성이 5~20초라 20초로 끊는다. 끊긴 시도는 transient로 분류되어
- * (AbortSignal.timeout의 메시지에 timeout이 들어간다) 다음 모델로 넘어간다.
+ * 20초로 잡았더니 6건 중 1건이 잘렸다. 정상인데 느렸을 뿐인 호출까지 죽인
+ * 것이라 30초로 늦췄다. 막으려는 것은 느린 호출이 아니라 영영 안 끝나는
+ * 호출이다.
+ *
+ * 끊긴 시도는 transient로 분류되어(AbortSignal.timeout의 메시지에 timeout이
+ * 들어간다) 다음 모델로 넘어간다.
  */
-const ATTEMPT_TIMEOUT_MS = 20_000
+const ATTEMPT_TIMEOUT_MS = 30_000
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
 /**
