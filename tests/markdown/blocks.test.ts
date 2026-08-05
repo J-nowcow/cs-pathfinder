@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { parseBlocks } from '@/lib/markdown/blocks'
+import { EXAMPLE_NODES } from '../../data/example-nodes'
 
 /**
  * 파서의 가장 중요한 성질은 **절대 본문을 먹지 않는 것**이다.
@@ -222,6 +223,27 @@ describe('parseBlocks — 모델이 조금씩 다르게 쓸 때', () => {
           expect(b.text).not.toContain(':::')
           expect(b.text).not.toContain('```')
         }
+      }
+    }
+  })
+})
+
+describe('example nodes carry diagrams', () => {
+  /**
+   * 도식 없는 예시가 섞이면 모델에게 그것이 허용 신호가 된다.
+   * 기준선은 규칙을 어기면 안 된다.
+   */
+  it('every example has at least one diagram', () => {
+    const flat = EXAMPLE_NODES.filter(
+      (e) => parseBlocks(e.body).every((b) => b.type === 'paragraph'),
+    ).map((e) => e.question)
+    expect(flat).toEqual([])
+  })
+
+  it('no example leaks a fence marker', () => {
+    for (const e of EXAMPLE_NODES) {
+      for (const b of parseBlocks(e.body)) {
+        if (b.type === 'paragraph') expect(b.text).not.toContain(':::')
       }
     }
   })

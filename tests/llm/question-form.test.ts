@@ -83,3 +83,29 @@ describe('example nodes as the reference form', () => {
     expect(bad).toEqual([])
   })
 })
+
+/**
+ * 예시는 생성 프롬프트의 기준선이다.
+ *
+ * 프롬프트에 "꼬리질문은 35자를 넘기지 않는다"고 적어놓고 예시가 그것을 어기면
+ * 모델은 규칙이 아니라 예시를 따른다. 도식도 마찬가지다 — 도식 없는 예시가
+ * 섞이면 그것이 허용 신호가 된다.
+ */
+describe('example nodes follow their own rules', () => {
+  it('keeps every follow-up short enough for a button', () => {
+    const long = EXAMPLE_NODES.flatMap((e) => e.suggestions).filter((s) => s.length > 35)
+    expect(long).toEqual([])
+  })
+
+  it('gives every category at least two entries', () => {
+    const count = new Map<string, number>()
+    for (const e of EXAMPLE_NODES) count.set(e.category, (count.get(e.category) ?? 0) + 1)
+    const thin = [...count].filter(([, n]) => n < 2).map(([c]) => c)
+    expect(thin).toEqual([])
+  })
+
+  it('gives every example exactly five follow-ups', () => {
+    const off = EXAMPLE_NODES.filter((e) => e.suggestions.length !== 5).map((e) => e.question)
+    expect(off).toEqual([])
+  })
+})
