@@ -504,12 +504,16 @@ PK `(key, date)`
 
 Gemini 무료 티어를 쓴다.
 
-| 용도 | 모델 |
+| 용도 | 모델 ID |
 |---|---|
-| 정규화 게이트 | Gemini Flash-Lite |
-| 해설 + 추천 생성 | Gemini Flash |
-| 매일 루트 질문 | Gemini Pro |
-| 트리 요약 | Gemini Flash-Lite |
+| 정규화 게이트 | `gemini-3.1-flash-lite` |
+| 해설 + 추천 생성 | `gemini-3.6-flash` |
+| 매일 루트 질문 | `gemini-3.5-flash` |
+| 트리 요약 | `gemini-3.1-flash-lite` |
+
+**Gemini 2.5 계열은 쓰지 않는다.** 2026년 10월 종료 예정이다.
+
+매일 루트 질문에 Pro를 쓰려 했으나 `gemini-3.1-pro-preview`가 preview뿐이다. **cron이 preview 모델에 의존하면 안 되므로** GA인 `gemini-3.5-flash`로 간다. Pro가 GA가 되면 그때 올린다.
 
 ### 약관 리스크
 
@@ -557,13 +561,16 @@ RPM도 따로 본다. 15 RPM 버킷에 500건이 몰리면 **큐를 써도 33분
 // 요청
 {
   "idempotency_key": "uuid",
-  "parent_occurrence_id": "uuid | null",   // null이면 새 journey 시작
+  "parent_occurrence_id": "uuid | null",   // 로그인 시. null이면 새 journey 시작
   "parent_node_id": "uuid",
+  "ancestor_node_ids": ["uuid"],           // 비로그인 시 조상 중복 검사용
   "mode": "suggestion" | "free",
   "suggestion_id": "uuid",                 // mode=suggestion
   "raw_input": "string"                    // mode=free, 최대 300자
 }
 ```
+
+`ancestor_node_ids`가 필요한 이유가 있다. 비로그인 사용자의 경로는 서버에 없고 클라이언트 상태로만 존재한다. 조상 중복을 서버가 판정하려면 경로를 함께 받아야 한다. 로그인 상태면 `parent_occurrence_id`로 서버가 직접 거슬러 올라가고 이 필드는 무시한다.
 
 ```jsonc
 // 200
@@ -653,6 +660,14 @@ RPM도 따로 본다. 15 RPM 버킷에 500건이 몰리면 **큐를 써도 33분
 
 Next.js 16 App Router + React 19 + Tailwind v4 + Supabase(Postgres/Auth) + **Vercel Hobby**. 기존 프로젝트 관례를 그대로 따른다.
 
+### 데이터 접근 계층
+
+서버 코드는 Supabase 클라이언트가 아니라 **raw SQL**을 쓴다. service role로 도는 서버에서는 RLS 우회가 기본이라 클라이언트 SDK의 이점이 없고, plpgsql 함수 호출과 다중 문장 실행이 직접적이다.
+
+개발과 테스트는 **PGlite**(Postgres를 WASM으로 컴파일한 것)로 돈다. Docker 없이 실제 Postgres 의미론이 그대로 재현되므로 plpgsql 함수까지 테스트된다. 배포 환경에서는 같은 `Db` 인터페이스 뒤에 실제 Postgres 어댑터를 끼운다.
+
+한계를 분명히 해둔다. **PGlite는 단일 연결이라 진짜 동시성이 재현되지 않는다.** `for update` 행 잠금과 `on conflict` 경합은 실제 Postgres에서 별도로 검증해야 한다. 현재 통과한 동시성 테스트는 순차 호출 기준의 정합성만 증명한다.
+
 Hobby는 비상업 개인 이용 한정이다. 광고·후원·결제를 붙이는 순간 저촉되고, ksundong 레포의 CC BY-NC 조건도 함께 깨진다(§4). 수익화는 두 제약을 동시에 건드린다.
 
 지도 모드 캔버스는 React Flow를 쓴다.
@@ -701,7 +716,7 @@ Supabase 무료 티어는 7일 무활동 시 프로젝트가 일시정지된다.
 |---|---|---|
 | 1 | **Gemini 실제 RPM/RPD를 AI Studio 콘솔에서 확인.** 공식 문서에 표가 없다. §8 계산의 전제 | 높음 |
 | 2 | 서비스명과 도메인 | 높음 |
-| 3 | `identity_scope` 값 집합 정의. 자유 문자열인지 열거형인지 | 높음 |
+| 3 | ~~`identity_scope` 값 집합 정의~~ → 확정. 22개 열거형 (`src/lib/expand/scopes.ts`) | 완료 |
 | 4 | 시드 400개 소진(약 13개월) 후 발행 정책. 시드 재사용 / LLM 자동 생성 / 인기 노드 승격 | 중간 |
 | 5 | DopplerHQ 레포 라이선스 확인 (CC0 추정, 미확인) | 중간 |
 | 6 | 꼬꼬면 인터뷰 플로우 직접 확인. 차별점 서술의 근거 | 중간 |

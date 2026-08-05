@@ -44,12 +44,20 @@ export const realCaller: StructuredCaller = async <T>({
     import('ai'),
   ])
 
-  const { object } = await generateObject({
+  // generateObject의 OUTPUT 분기는 스키마 타입으로 추론된다.
+  // 제네릭 ZodType<T>로는 'object' 분기가 확정되지 않아 호출부만 좁게 캐스팅한다.
+  // 공개 타입(StructuredCaller)은 그대로 안전하다.
+  const call = generateObject as unknown as (
+    options: Record<string, unknown>,
+  ) => Promise<{ object: T }>
+
+  const { object } = await call({
     model: google(model),
-    schema: schema as never,
+    output: 'object',
+    schema,
     system,
     prompt,
   })
 
-  return object as T
+  return object
 }
