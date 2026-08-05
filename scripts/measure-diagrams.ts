@@ -18,6 +18,10 @@ import { parseBlocks } from '../src/lib/markdown/blocks'
  *   가능성이 높지만 길다고 틀린 것은 아니다 — "어떤 순서로 진행되는가?"의 답은
  *   원래 긴 문장이다. 길이만으로 거르면 멀쩡한 것을 잡는다. 손으로 쓴 예시가
  *   20~45자이므로 그보다 크게 벌어지면 사람이 읽어볼 신호로 쓴다
+ * - 도식이 놓인 자리. 줄글 세 문단 뒤에 있으면 거기까지 읽고 가는 사람이 적다.
+ *   답 → 도식 → 근거 순이라 첫 도식이 두 번째 블록이면 제일 좋다
+ * - 문단 길이. 폰에서 한 줄이 24자쯤이라 150자를 넘으면 여섯 줄이 넘어간다.
+ *   손으로 쓴 예시가 중앙 103자에 최대 150자이므로 그 선을 그대로 쓴다
  * - 꼬리질문 길이. 버튼과 게시판 제목에 그대로 나가서 길면 줄이 접힌다
  *
  * 실행: npm run measure:diagrams
@@ -30,6 +34,14 @@ const LEAD_WATCH = 80
 
 /** 버튼과 게시판 제목에 그대로 나간다 */
 const SUGGESTION_LIMIT = 35
+
+/**
+ * 한 문단이 이보다 길면 폰에서 벽으로 보인다.
+ *
+ * 390px에서 한 줄이 24자쯤이니 150자면 여섯 줄이다. 손으로 쓴 예시가
+ * 중앙 103자에 최대 150자라 그 선을 그대로 가져왔다.
+ */
+const PARAGRAPH_LIMIT = 150
 
 const CASES = [
   { q: 'HTTPS 핸드셰이크는 어떤 순서로 진행되는가?', scope: 'network', parent: 'HTTPS는 무엇을 보장하는가?' },
@@ -51,6 +63,9 @@ async function main() {
   let allSuggestions = 0
   const longLeadSamples: string[] = []
   const leakSamples: string[] = []
+  const firstDiagramAt: number[] = []
+  let fatParagraphs = 0
+  let allParagraphs = 0
 
   for (let r = 0; r < runs; r += 1) {
     for (const c of CASES) {
@@ -81,6 +96,19 @@ async function main() {
               }
             }
           }
+        }
+
+        /*
+         * 첫 도식이 몇 번째 블록인가. 0은 도식으로 시작한 것(답이 없다),
+         * 1이면 답 한 문단 뒤라 목표대로다. 커질수록 줄글 벽이 앞에 쌓인다.
+         */
+        const at = blocks.findIndex((b) => b.type !== 'paragraph')
+        if (at >= 0) firstDiagramAt.push(at)
+
+        for (const b of blocks) {
+          if (b.type !== 'paragraph') continue
+          allParagraphs += 1
+          if (b.text.length > PARAGRAPH_LIMIT) fatParagraphs += 1
         }
 
         // 첫 문단의 첫 문장. 마침표까지 자른다
@@ -123,6 +151,15 @@ async function main() {
     }
   }
 
+  if (firstDiagramAt.length > 0) {
+    const good = firstDiagramAt.filter((n) => n === 1).length
+    const late = firstDiagramAt.filter((n) => n >= 3).length
+    const dist = [...firstDiagramAt].sort((a, b) => a - b).join(',')
+    console.log(`\n첫 도식 자리  1번째 블록 뒤 ${good}/${firstDiagramAt.length} · 3칸 넘게 밀림 ${late}`)
+    console.log(`  분포 ${dist}   (1이 목표: 답 한 문단 → 도식 → 근거)`)
+  }
+
+  console.log(`문단 길이  ${PARAGRAPH_LIMIT}자 초과 ${fatParagraphs}/${allParagraphs}`)
   console.log(`꼬리질문  ${SUGGESTION_LIMIT}자 초과 ${longSuggestions}/${allSuggestions}`)
 }
 

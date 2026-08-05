@@ -5,6 +5,7 @@ import {
   questionFormIssues,
 } from '@/lib/llm/question-form'
 import { EXAMPLE_NODES } from '../../data/example-nodes'
+import { parseBlocks } from '@/lib/markdown/blocks'
 
 describe('hasPoliteEnding', () => {
   it('catches the shapes that actually showed up', () => {
@@ -102,6 +103,33 @@ describe('example nodes follow their own rules', () => {
     for (const e of EXAMPLE_NODES) count.set(e.category, (count.get(e.category) ?? 0) + 1)
     const thin = [...count].filter(([, n]) => n < 2).map(([c]) => c)
     expect(thin).toEqual([])
+  })
+
+  /**
+   * 문단 길이는 프롬프트에 "150자를 넘기지 않는다"로 적혀 있다. 예시가 그것을
+   * 어기면 모델은 규칙이 아니라 예시를 따른다. 실제로 생성된 해설의 문단이
+   * 190~210자였던 것이 이 어긋남에서 왔다.
+   */
+  it('keeps every paragraph short enough to read on a phone', () => {
+    const long = EXAMPLE_NODES.flatMap((e) =>
+      parseBlocks(e.body)
+        .filter((b) => b.type === 'paragraph')
+        .map((b) => (b as { text: string }).text)
+        .filter((t) => t.length > 150),
+    )
+    expect(long).toEqual([])
+  })
+
+  /**
+   * 도식은 답 바로 뒤에 와야 한다. 줄글을 세 문단 쌓은 뒤에 놓으면 거기까지
+   * 가기 전에 읽기를 그만둔다. 예시가 그렇게 되어 있으면 모델도 따라 한다.
+   */
+  it('puts the diagram right after the answer, not behind a wall of text', () => {
+    const late = EXAMPLE_NODES.filter((e) => {
+      const at = parseBlocks(e.body).findIndex((b) => b.type !== 'paragraph')
+      return at >= 3
+    }).map((e) => e.question)
+    expect(late).toEqual([])
   })
 
   it('gives every example exactly five follow-ups', () => {
