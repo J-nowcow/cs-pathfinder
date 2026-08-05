@@ -2,10 +2,22 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-export interface Db {
+/** 트랜잭션 안에서 쓸 수 있는 최소 인터페이스. 중첩 트랜잭션은 열지 않는다 */
+export interface Tx {
   query<T = Record<string, unknown>>(sql: string, params?: unknown[]): Promise<T[]>
+}
+
+export interface Db extends Tx {
   /** 여러 문장을 한 번에 실행한다. 마이그레이션 전용 */
   exec(sql: string): Promise<void>
+  /**
+   * 콜백 전체를 한 커넥션에서 begin/commit으로 묶는다.
+   *
+   * pool.query로 begin을 던지면 뒤따르는 문장이 다른 커넥션에 실릴 수 있다.
+   * 그러면 트랜잭션은 열린 채 방치되고 나머지는 자동 커밋된다.
+   * 트랜잭션은 반드시 전용 커넥션에서 돌아야 한다.
+   */
+  transaction<T>(fn: (tx: Tx) => Promise<T>): Promise<T>
 }
 
 /**
@@ -55,6 +67,17 @@ async function createPglite(): Promise<Db> {
     async exec(sql: string): Promise<void> {
       await pg.exec(sql)
     },
+    async transaction<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {
+      return pg.transaction(async (tx) => {
+        const res = await fn({
+          async query<R>(sql: string, params?: unknown[]): Promise<R[]> {
+            const out = await tx.query<R>(sql, params as never[])
+            return out.rows
+          },
+        })
+        return res
+      }) as Promise<T>
+    },
   }
 }
 
@@ -83,6 +106,26 @@ async function createPostgres(connectionString: string): Promise<Db> {
     async exec(sql: string): Promise<void> {
       // params 없이 보내면 다중 문장이 허용된다
       await pool.query(sql)
+    },
+    async transaction<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {
+      const client = await pool.connect()
+      try {
+        await client.query('begin')
+        const out = await fn({
+          async query<R>(sql: string, params?: unknown[]): Promise<R[]> {
+            const res = await client.query(sql, params as unknown[])
+            return res.rows as R[]
+          },
+        })
+        await client.query('commit')
+        return out
+      } catch (e) {
+        // 롤백까지 실패해도 원래 예외를 던져야 원인이 보인다
+        await client.query('rollback').catch(() => undefined)
+        throw e
+      } finally {
+        client.release()
+      }
     },
   }
 }
@@ -125,7 +168,7 @@ export async function resetDb(): Promise<Db> {
 export async function truncateAll(): Promise<void> {
   const db = await getDb()
   await db.query(`
-    truncate qedge, qnode_alias, qnode_suggestion, qnode_equivalence, expansion_event,
-             generation_job, usage_quota, topic_seed, qnode restart identity cascade
+    truncate tree_occurrence, tree, qedge, qnode_alias, qnode_suggestion, qnode_equivalence,
+             expansion_event, generation_job, usage_quota, topic_seed, qnode restart identity cascade
   `)
 }
