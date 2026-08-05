@@ -1,8 +1,12 @@
 @import 'tailwindcss';
 
 /*
- * 읽기가 본체인 서비스라 본문 가독성 기준으로 토큰을 잡았다.
- * 순백 대신 살짝 따뜻한 표면을 쓴다. 긴 해설을 연달아 읽을 때 눈이 덜 피로하다.
+ * 이 서비스의 동사는 "파고들기"다. 질문 하나에서 아래로 계속 판다.
+ * 그래서 깊이를 색으로 인코딩한다. 얕은 곳은 서늘한 청록, 깊어질수록 뜨거워진다.
+ * 장식이 아니라 정보다 — 경로 칩과 미니맵에서 "얼마나 팠는지"가 색으로 읽힌다.
+ *
+ * 읽는 영역은 밝고 미니맵 스트립만 어둡다. 지표면과 단면의 대비다.
+ * 미니맵이 항상 눈에 띄어야 하는데, 설계 §7이 그걸 핵심으로 잡았기 때문이다.
  *
  * @theme 값은 빌드 타임에 고정된다. 다크 모드를 유틸 하나로 처리하려면
  * 토큰이 런타임 변수를 참조해야 한다. 그래서 var() 한 겹을 둔다.
@@ -14,44 +18,72 @@
   --color-muted: var(--muted);
   --color-faint: var(--faint);
   --color-line: var(--line);
-  --color-accent: var(--accent);
+  --color-accent: var(--d0);
   --color-accent-soft: var(--accent-soft);
-  --color-accent-ink: var(--accent-ink);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
 
+  /* 지하 단면. 미니맵과 지도 모드가 쓴다 */
+  --color-strata: var(--strata);
+  --color-strata-line: var(--strata-line);
+  --color-strata-ink: var(--strata-ink);
+
   --font-sans:
-    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
-    'Segoe UI', sans-serif;
+    Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui,
+    'Segoe UI', 'Malgun Gothic', sans-serif;
+
+  /* 깊이 번호·카테고리·좌표 같은 측량값에만 쓴다 */
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
 }
 
 :root {
-  --surface: #faf8f5;
+  --surface: #f3f5f6;
   --raised: #ffffff;
-  --ink: #221f1c;
-  --muted: #5c554d;
-  --faint: #8d857b;
-  --line: #e4ded5;
-  --accent: #0d7268;
-  --accent-soft: #e2f0ed;
-  --accent-ink: #0a544d;
-  --warn: #a5502a;
-  --warn-soft: #fbeee6;
+  --ink: #191c20;
+  --muted: #565d66;
+  --faint: #8a919a;
+  --line: #dde1e5;
+
+  --accent-soft: #e0efec;
+  --warn: #a8452f;
+  --warn-soft: #f8ebe7;
+
+  /* 깊이 램프. 5단을 넘으면 마지막 색으로 고정한다 */
+  --d0: #0f7a6c;
+  --d1: #3d7d52;
+  --d2: #6f7936;
+  --d3: #996d2c;
+  --d4: #b35c33;
+  --d5: #b5433d;
+
+  --strata: #191d23;
+  --strata-line: #313842;
+  --strata-ink: #aeb6c0;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --surface: #14151a;
-    --raised: #1c1e24;
-    --ink: #e9e6e1;
-    --muted: #a29b92;
-    --faint: #7b746b;
-    --line: #2c2f37;
-    --accent: #4fbfb0;
-    --accent-soft: #14322e;
-    --accent-ink: #7fd4c7;
-    --warn: #d98a5f;
-    --warn-soft: #33231a;
+    --surface: #101317;
+    --raised: #191d22;
+    --ink: #e5e8ec;
+    --muted: #9aa2ac;
+    --faint: #6f7883;
+    --line: #272c33;
+
+    --accent-soft: #10302c;
+    --warn: #d5836a;
+    --warn-soft: #2e1d18;
+
+    --d0: #34c0ac;
+    --d1: #6cbe7c;
+    --d2: #a8bb5c;
+    --d3: #d0a24d;
+    --d4: #e08a56;
+    --d5: #e2695f;
+
+    --strata: #0b0e12;
+    --strata-line: #262d36;
+    --strata-ink: #939ba6;
   }
 }
 
@@ -63,13 +95,42 @@ body {
   background: var(--surface);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* 미니맵과 경로 칩은 가로 스크롤이 전제다. 스크롤바가 콘텐츠를 밀지 않게 한다. */
+/* 경로 칩과 미니맵은 가로 스크롤이 전제다. 스크롤바가 콘텐츠를 밀지 않게 한다 */
 .scroll-x {
   overflow-x: auto;
   scrollbar-width: none;
 }
 .scroll-x::-webkit-scrollbar {
   display: none;
+}
+
+/* 해설 본문. 긴 글을 연달아 읽는 자리라 행간을 넉넉히 준다 */
+.prose-body p {
+  margin-bottom: 1.15em;
+  line-height: 1.8;
+}
+.prose-body p:last-child {
+  margin-bottom: 0;
+}
+.prose-body code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--accent-soft);
+  padding: 0.1em 0.36em;
+  border-radius: 3px;
+}
+.prose-body strong {
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
