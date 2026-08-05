@@ -50,3 +50,38 @@ export function siteUrl(): URL {
  * 한 장으로 간다. 카톡 카드는 제목을 따로 보여주므로 어느 질문인지는 거기서 읽힌다.
  */
 export const OG_IMAGE_PATH = '/opengraph-image.png'
+
+/**
+ * 공유 태그 한 벌.
+ *
+ * **generateMetadata가 openGraph를 반환하면 Next가 파일 규약(app/opengraph-image.png)을
+ * 합쳐주지 않는다.** 그래서 페이지마다 이미지를 직접 넣어야 하는데, 이걸 두 번
+ * 빠뜨렸다. 하필 공유 링크에만 썸네일이 없어지는 형태라 눈에도 잘 안 띈다.
+ *
+ * 페이지가 늘 때마다 같은 실수가 나므로 한 자리에 모은다. 절대 주소는
+ * metadataBase가 펴준다.
+ */
+export function socialMeta(args: {
+  title: string
+  description: string
+  /** 질문·트리처럼 내용이 있는 문서면 article. 기본은 website */
+  type?: 'article' | 'website'
+}) {
+  const images = [OG_IMAGE_PATH]
+
+  return {
+    openGraph: {
+      title: args.title,
+      description: args.description,
+      type: args.type ?? 'website',
+      locale: 'ko_KR',
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title: args.title,
+      description: args.description,
+      images,
+    },
+  }
+}
