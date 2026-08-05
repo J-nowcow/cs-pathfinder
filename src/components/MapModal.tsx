@@ -52,12 +52,30 @@ function FocusHere({ id }: { id: string }) {
     if (!id) return
 
     const center = () => {
+      const pane = document.querySelector('.react-flow')
+      if (!(pane instanceof HTMLElement)) return
+
+      /*
+       * 전체가 읽을 수 있는 크기로 들어가면 그대로 둔다.
+       *
+       * 넓은 화면에서 그래프가 작으면 fitView가 이미 잘 맞춘다. 그때까지
+       * 현재 노드를 가운데로 끌어오면 뿌리에 서 있을 때 화면 절반이 빈다.
+       *
+       * 안 들어갈 때만 현재 자리로 옮긴다. 폰에서 전체를 넣으려다 0.25배까지
+       * 줄어 글자를 못 읽던 경우가 여기 해당한다.
+       */
+      const bounds = flow.getNodesBounds(flow.getNodes())
+      const fits =
+        bounds.width * MIN_READABLE_ZOOM <= pane.clientWidth * 0.92 &&
+        bounds.height * MIN_READABLE_ZOOM <= pane.clientHeight * 0.92
+      if (fits) return
+
       const node = flow.getNode(id)
       if (!node) return
       const w = node.measured?.width ?? NODE_W
       const h = node.measured?.height ?? 56
       flow.setCenter(node.position.x + w / 2, node.position.y + h / 2, {
-        zoom: Math.max(MIN_READABLE_ZOOM, flow.getZoom()),
+        zoom: MIN_READABLE_ZOOM,
         duration: 0,
       })
     }

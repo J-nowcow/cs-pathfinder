@@ -24,6 +24,8 @@ Mermaid를 쓰지 않았다. SVG 문자열을 `innerHTML`로 넣어야 하는데
 
 색이 곧 깊이다. 얕은 곳은 서늘한 청록이고 파고들수록 뜨거워진다. 장식이 아니라 경로 칩과 미니맵에서 "얼마나 팠는지"를 읽는 정보다.
 
+판 경로는 지도로 볼 수 있다. 지금 서 있는 자리를 가운데 놓고 어디서 왔는지와 어디로 갈 수 있는지를 함께 보여준다. 폰에서는 전체를 넣으려 하면 글자가 뭉개지므로 읽을 수 있는 배율을 지키고 나머지는 밀어서 본다.
+
 다 판 경로는 링크 하나로 공유한다. 링크를 받은 사람은 그 트리를 그대로 보고, 같은 자리에서 자기 탐험을 시작할 수 있다.
 
 <img src="docs/screenshots/shared.png" width="820" alt="공유된 트리. 단면 그래프와 들여쓰기 트리, 추천 버튼, 이어서 파보라는 유도" />
@@ -123,7 +125,7 @@ npm run verify:concurrency
 ```bash
 npm install
 npm run dev          # http://localhost:3000
-npm test             # 498 tests
+npm test             # 515 tests
 npx tsc --noEmit
 ```
 
