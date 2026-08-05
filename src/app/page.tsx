@@ -60,6 +60,14 @@ async function loadFeature(): Promise<{ feature: TodayFeature | null; roots: Awa
   }
 }
 
+/**
+ * 지난 질문 중 처음에 펼쳐 보여줄 개수.
+ *
+ * 예시가 서른 개라 다 펼치면 폰에서 마흔 화면이 넘는다. 그 아래 게시판이
+ * 있어서 안 접으면 게시판까지 내려가는 사람이 없다.
+ */
+const FIRST_PAINT = 12
+
 export default async function HomePage() {
   await ensureSeeded()
 
@@ -101,10 +109,32 @@ export default async function HomePage() {
         <section className="mt-14">
           <h2 className="mb-4 text-[13px] font-medium text-faint">지난 질문 {rest.length}개</h2>
           <div className="grid gap-3 sm:grid-cols-2">
-            {rest.map((r) => (
+            {rest.slice(0, FIRST_PAINT).map((r) => (
               <RootCard key={r.id} root={r} />
             ))}
           </div>
+
+          {/*
+            나머지는 접어둔다.
+
+            질문이 늘수록 홈이 길어진다. 서른 개면 폰에서 마흔 화면이 넘는데
+            그 아래 게시판이 있어서, 안 접으면 게시판까지 아무도 못 내려간다.
+
+            details라 자바스크립트가 필요 없고 열어둔 상태로 검색에도 잡힌다.
+          */}
+          {rest.length > FIRST_PAINT && (
+            <details className="group mt-3">
+              <summary className="cursor-pointer list-none rounded-lg border border-line px-4 py-3 text-center text-[13px] text-muted hover:text-ink">
+                <span className="group-open:hidden">나머지 {rest.length - FIRST_PAINT}개 보기</span>
+                <span className="hidden group-open:inline">접기</span>
+              </summary>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                {rest.slice(FIRST_PAINT).map((r) => (
+                  <RootCard key={r.id} root={r} />
+                ))}
+              </div>
+            </details>
+          )}
         </section>
       )}
 
