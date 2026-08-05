@@ -176,6 +176,6 @@ describe('runGate — 기타', () => {
     // 값을 그대로 박아둔다. 프롬프트를 고치면 여기가 깨지는데, 그게 목적이다.
     // 판단 기준을 바꿔놓고 버전을 안 올리면 기록만 보고는 어느 규칙이 그 결정을
     // 내렸는지 알 수 없다.
-    expect(NORMALIZER_VERSION).toBe('gate-v3-match')
+    expect(NORMALIZER_VERSION).toBe('gate-v4-match')
   })
 })
