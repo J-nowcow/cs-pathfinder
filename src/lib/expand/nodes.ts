@@ -81,24 +81,104 @@ export async function resolveSuggestion(
   return { text: rows[0].text, targetNodeId: rows[0].target_node_id }
 }
 
+/**
+ * 게이트에 보여줄 후보를 모은다.
+ *
+ * 부모의 자식이 1순위다. 여기에 조부모의 다른 자식(1-hop)을 더한다.
+ * `qedge`가 인접 리스트라 조회 한 번이면 되고, 근처에서 이미 만들어진
+ * 같은 개념을 잡을 확률이 올라간다.
+ *
+ * 전역 재사용까지는 못 간다. 그건 임베딩 검색을 켤 때의 일이다(스펙 §5).
+ *
+ * 상한을 두는 이유는 프롬프트 길이와 판정 정확도 때문이다. 후보 50개까지는
+ * 정확도가 유지되는 것을 실측했다(스펙 부록 D).
+ */
+export const MAX_CANDIDATES = 50
+
+export async function collectCandidates(
+  parentNodeId: string,
+): Promise<Array<{ id: string; question: string }>> {
+  const db = await getDb()
+
+  const rows = await db.query<{ id: string; normalized_question: string }>(
+    `with siblings as (
+       select e.child_id as id, 0 as rank
+       from qedge e
+       where e.parent_id = $1
+     ),
+     uncles as (
+       select e2.child_id as id, 1 as rank
+       from qedge g
+       join qedge e2 on e2.parent_id = g.parent_id
+       where g.child_id = $1 and e2.child_id <> $1
+     ),
+     merged as (
+       select id, min(rank) as rank from (
+         select * from siblings union all select * from uncles
+       ) u group by id
+     )
+     select n.id, n.normalized_question
+     from merged m
+     join qnode n on n.id = m.id
+     where n.status = 'ready' and n.id <> $1
+     order by m.rank asc, n.created_at asc
+     limit $2`,
+    [parentNodeId, MAX_CANDIDATES],
+  )
+
+  return rows.map((r) => ({ id: r.id, question: r.normalized_question }))
+}
+
+/**
+ * 등가 관계를 기록한다.
+ *
+ * 노드를 물리적으로 합치지 않는다. 잘못 이었으면 active만 내리면 되고
+ * occurrence는 원래 노드를 계속 붙들고 있어서 되돌릴 것이 없다.
+ */
+export async function linkEquivalent(
+  a: string,
+  b: string,
+  decidedBy: 'gate' | 'human',
+  decisionId?: string,
+): Promise<void> {
+  if (a === b) return
+  const [lo, hi] = a < b ? [a, b] : [b, a]
+  const db = await getDb()
+  await db.query(
+    `insert into qnode_equivalence (node_a, node_b, decided_by, decision_id)
+     values ($1, $2, $3, $4)
+     on conflict (node_a, node_b) do nothing`,
+    [lo, hi, decidedBy, decisionId ?? null],
+  )
+}
+
 export async function recordEvent(args: {
   parentNodeId: string | null
   rawInput: string
   verdict: 'accepted' | 'rejected' | 'error'
   rejectReason?: string
   resultingNodeId?: string
-}): Promise<void> {
+  candidateIds?: string[]
+  matchedNodeId?: string
+  gateVersion?: string
+}): Promise<string> {
   const db = await getDb()
-  await db.query(
+  const rows = await db.query<{ id: string }>(
     `insert into expansion_event
-       (parent_qnode_id, raw_input, verdict, reject_reason, resulting_qnode_id)
-     values ($1, $2, $3, $4, $5)`,
+       (parent_qnode_id, raw_input, verdict, reject_reason, resulting_qnode_id,
+        candidate_ids, matched_node_id, gate_version)
+     values ($1, $2, $3, $4, $5, $6, $7, $8)
+     returning id`,
     [
       args.parentNodeId,
       args.rawInput,
       args.verdict,
       args.rejectReason ?? null,
       args.resultingNodeId ?? null,
+      args.candidateIds ?? null,
+      args.matchedNodeId ?? null,
+      args.gateVersion ?? null,
     ],
   )
+  return rows[0].id
 }

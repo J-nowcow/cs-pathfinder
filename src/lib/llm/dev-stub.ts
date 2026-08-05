@@ -58,6 +58,27 @@ function field(prompt: string, label: string): string {
   return m ? m[1].trim() : ''
 }
 
+/**
+ * 후보 목록을 프롬프트에서 다시 읽는다.
+ *
+ * 게이트가 "- id: 질문" 형태로 넣으므로 같은 형태로 되판다.
+ */
+function parseCandidates(prompt: string): Array<{ id: string; question: string }> {
+  const out: Array<{ id: string; question: string }> = []
+  for (const line of prompt.split('\n')) {
+    const m = line.match(/^- ([0-9a-fA-F-]{8,}): (.+)$/)
+    if (m) out.push({ id: m[1], question: m[2].trim() })
+  }
+  return out
+}
+
+/**
+ * 스텁의 매칭 규칙.
+ *
+ * 실제 게이트는 의미로 판단하지만 스텁은 그럴 수 없다. 정규화한 문장이
+ * 정확히 같을 때만 고른다. 화면에서 "같은 질문을 다시 물으면 재생성 안 된다"를
+ * 재현하는 데는 이걸로 충분하고, 애매하면 안 고른다는 원칙과도 방향이 같다.
+ */
 function gateResponse(prompt: string) {
   const rawInput = field(prompt, '사용자 입력')
   const lower = rawInput.toLowerCase()
@@ -67,7 +88,23 @@ function gateResponse(prompt: string) {
       relevant: false,
       // 이 문장은 배너에 그대로 나간다. 화면 카피 톤에 맞춘다.
       reason: 'CS 학습이랑 관련 없는 요청 같아요.',
+      matched_id: '',
       identity_scope: 'generic',
+      normalized_question: '',
+    }
+  }
+
+  const normalized = normalizeQuestion(rawInput)
+  const hit = parseCandidates(prompt).find(
+    (c) => c.question.trim().toLowerCase() === normalized.toLowerCase(),
+  )
+
+  if (hit) {
+    return {
+      relevant: true,
+      reason: '',
+      matched_id: hit.id,
+      identity_scope: '',
       normalized_question: '',
     }
   }
@@ -75,8 +112,9 @@ function gateResponse(prompt: string) {
   return {
     relevant: true,
     reason: '',
+    matched_id: '',
     identity_scope: pickScope(`${rawInput} ${field(prompt, '부모 질문')}`),
-    normalized_question: normalizeQuestion(rawInput),
+    normalized_question: normalized,
   }
 }
 

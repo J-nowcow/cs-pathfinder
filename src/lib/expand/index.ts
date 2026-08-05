@@ -10,6 +10,7 @@ import {
   ensureEdge,
   resolveSuggestion,
   recordEvent,
+  collectCandidates,
 } from '@/lib/expand/nodes'
 import { runGate, NORMALIZER_VERSION } from '@/lib/llm/gate'
 import { generateNodeContent } from '@/lib/llm/generate'
@@ -27,6 +28,10 @@ export type ExpandInput = {
   call?: StructuredCaller
 }
 
+/**
+ * `hit`은 게이트가 기존 노드를 골랐다는 뜻이다.
+ * 초판에서는 해시 조회 적중을 뜻했는데 그 경로는 보조로 밀렸다(스펙 부록 D).
+ */
 export type CacheStatus = 'hit' | 'miss' | 'suggestion_resolved'
 
 export type ExpandOutcome =
@@ -90,11 +95,17 @@ export async function expand(input: ExpandInput): Promise<ExpandOutcome> {
 
   const rawInput = questionText
 
-  // ── 2. 정규화 게이트 ──────────────────────────────────────
-  // 캐시 히트에도 이 호출은 발생한다.
-  // "히트 = 생성 LLM 0회"이지 "LLM 0회"가 아니다.
+  // ── 2. 후보 수집 ──────────────────────────────────────────
+  // DB 조회다. LLM을 태우지 않는다.
+  const candidates = await collectCandidates(input.parentNodeId)
+  const candidateIds = candidates.map((c) => c.id)
+
+  // ── 3. 매칭 게이트 ────────────────────────────────────────
+  // 매칭에 성공해도 이 호출은 발생한다.
+  // "매칭은 LLM 0회"가 아니라 "매칭은 생성 LLM 0회"가 정확하다.
   const gate = await runGate({
     parentQuestion: parent.question,
+    candidates,
     rawInput: questionText,
     call: input.call,
   })
@@ -105,28 +116,64 @@ export async function expand(input: ExpandInput): Promise<ExpandOutcome> {
       rawInput,
       verdict: 'rejected',
       rejectReason: gate.reason,
+      candidateIds,
+      gateVersion: NORMALIZER_VERSION,
     })
     return { kind: 'rejected', reason: gate.reason }
   }
 
-  const hash = questionHash(gate.identityScope, gate.normalizedQuestion)
+  // ── 4. 매칭됨 — 생성 없이 그 노드로 ───────────────────────
+  if (gate.matchedId !== null) {
+    const hit = findAncestorHit(input.ancestorNodeIds, gate.matchedId)
+    if (hit !== null) {
+      return { kind: 'ancestor_jump', ancestorIndex: hit, nodeId: gate.matchedId }
+    }
 
-  // ── 3. 캐시 조회 ──────────────────────────────────────────
+    const node = await loadNode(gate.matchedId)
+    if (node) {
+      await ensureEdge(input.parentNodeId, node.id)
+      await recordEvent({
+        parentNodeId: input.parentNodeId,
+        rawInput,
+        verdict: 'accepted',
+        resultingNodeId: node.id,
+        candidateIds,
+        matchedNodeId: node.id,
+        gateVersion: NORMALIZER_VERSION,
+      })
+      return {
+        kind: 'ok',
+        node,
+        cache: 'hit',
+        quota: await snapshot(input.quotaKey, input.dailyLimit),
+      }
+    }
+    // 매칭된 노드가 사라졌으면 새로 만드는 경로로 떨어진다.
+  }
+
+  // 여기부터는 새 노드를 만드는 경로다.
+  const identityScope = gate.matchedId === null ? gate.identityScope : parent.identityScope
+  const normalizedQuestion = gate.matchedId === null ? gate.normalizedQuestion : questionText
+  const hash = questionHash(identityScope, normalizedQuestion)
+
+  // ── 5. 보조 조회 ──────────────────────────────────────────
+  // 정확히 같은 문장이 다시 들어온 경우만 잡는다. 적중을 기대하지 않는다.
   const cached = await lookupByHash(hash)
   if (cached) {
     const hit = findAncestorHit(input.ancestorNodeIds, cached.id)
     if (hit !== null) {
       return { kind: 'ancestor_jump', ancestorIndex: hit, nodeId: cached.id }
     }
-
     await ensureEdge(input.parentNodeId, cached.id)
     await recordEvent({
       parentNodeId: input.parentNodeId,
       rawInput,
       verdict: 'accepted',
       resultingNodeId: cached.id,
+      candidateIds,
+      matchedNodeId: cached.id,
+      gateVersion: NORMALIZER_VERSION,
     })
-
     return {
       kind: 'ok',
       node: cached,
@@ -135,12 +182,12 @@ export async function expand(input: ExpandInput): Promise<ExpandOutcome> {
     }
   }
 
-  // ── 4. 할당량 예약 ────────────────────────────────────────
+  // ── 6. 할당량 예약 ────────────────────────────────────────
   if (!(await reserveQuota(input.quotaKey, input.dailyLimit))) {
     return { kind: 'quota_exceeded' }
   }
 
-  // ── 5. single-flight 선점 ────────────────────────────────
+  // ── 7. single-flight 선점 ────────────────────────────────
   let lease = await acquireLease(hash)
   for (let i = 0; i < BUSY_RETRIES && lease.result === 'busy'; i += 1) {
     await sleep(BUSY_WAIT_MS)
@@ -166,28 +213,34 @@ export async function expand(input: ExpandInput): Promise<ExpandOutcome> {
     return { kind: 'busy' }
   }
 
-  // ── 6. 생성 (DB 트랜잭션 밖) ──────────────────────────────
+  // ── 8. 생성 (DB 트랜잭션 밖) ──────────────────────────────
   let content: { body: string; suggestions: string[] }
   try {
     content = await generateNodeContent({
-      question: gate.normalizedQuestion,
-      identityScope: gate.identityScope,
+      question: normalizedQuestion,
+      identityScope,
       parentQuestion: parent.question,
       call: input.call,
     })
   } catch {
     await failLease(hash)
     await releaseQuota(input.quotaKey)
-    await recordEvent({ parentNodeId: input.parentNodeId, rawInput, verdict: 'error' })
+    await recordEvent({
+      parentNodeId: input.parentNodeId,
+      rawInput,
+      verdict: 'error',
+      candidateIds,
+      gateVersion: NORMALIZER_VERSION,
+    })
     return { kind: 'generation_failed' }
   }
 
-  // ── 7. 확정 ──────────────────────────────────────────────
+  // ── 9. 확정 ──────────────────────────────────────────────
   let nodeId: string
   try {
     nodeId = await insertNode({
-      identityScope: gate.identityScope,
-      normalizedQuestion: gate.normalizedQuestion,
+      identityScope,
+      normalizedQuestion,
       body: content.body,
       primaryCategory: parent.primaryCategory,
       status: 'ready',
@@ -209,6 +262,8 @@ export async function expand(input: ExpandInput): Promise<ExpandOutcome> {
     rawInput,
     verdict: 'accepted',
     resultingNodeId: nodeId,
+    candidateIds,
+    gateVersion: NORMALIZER_VERSION,
   })
 
   const node = await loadNode(nodeId)

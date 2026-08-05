@@ -13,7 +13,6 @@
     "db:start": "supabase start",
     "db:reset": "supabase db reset",
     "seed": "tsx scripts/seed.ts",
-    "verify:gate": "tsx scripts/verify-gate.ts",
     "verify:match": "tsx scripts/verify-gate-match.ts",
     "verify:scale": "tsx scripts/verify-match-scale.ts"
   },

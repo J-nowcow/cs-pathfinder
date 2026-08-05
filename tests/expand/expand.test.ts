@@ -20,13 +20,19 @@ async function makeParent(): Promise<string> {
   })
 }
 
-/** 게이트와 생성을 모델별로 분기하는 스텁 */
-function makeCall(over?: { scope?: string; question?: string }): StructuredCaller {
+/**
+ * 게이트와 생성을 모델별로 분기하는 스텁.
+ *
+ * `matchId`를 주면 게이트가 그 후보를 고른 것으로 흉내 낸다.
+ * 안 주면 미매칭이라 새 노드를 만드는 경로로 간다.
+ */
+function makeCall(over?: { scope?: string; question?: string; matchId?: string }): StructuredCaller {
   return vi.fn(async (args: { model: string }) => {
     if (args.model === MODEL_GATE) {
       return {
         relevant: true,
         reason: '',
+        matched_id: over?.matchId ?? '',
         identity_scope: over?.scope ?? 'postgres',
         normalized_question: over?.question ?? CANON,
       }
@@ -154,6 +160,7 @@ describe('expand', () => {
     const call = vi.fn(async () => ({
       relevant: false,
       reason: 'CS 학습과 무관합니다.',
+      matched_id: '',
       identity_scope: 'generic',
       normalized_question: '',
     })) as unknown as StructuredCaller
@@ -212,6 +219,7 @@ describe('expand', () => {
         return {
           relevant: true,
           reason: '',
+          matched_id: '',
           identity_scope: 'postgres',
           normalized_question: '생성이 실패하는 질문은?',
         }
@@ -235,7 +243,7 @@ describe('expand', () => {
     const parent = await makeParent()
     const failing = vi.fn(async (args: { model: string }) => {
       if (args.model === MODEL_GATE) {
-        return { relevant: true, reason: '', identity_scope: 'postgres', normalized_question: CANON }
+        return { relevant: true, reason: '', matched_id: '', identity_scope: 'postgres', normalized_question: CANON }
       }
       throw new Error('boom')
     }) as unknown as StructuredCaller
