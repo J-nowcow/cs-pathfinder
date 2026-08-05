@@ -16,7 +16,9 @@
     "verify:scale": "tsx scripts/verify-match-scale.ts",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:status": "tsx scripts/db-status.ts",
-    "db:dedupe": "tsx scripts/dedupe-roots.ts"
+    "db:dedupe": "tsx scripts/dedupe-roots.ts",
+    "db:purge-stubs": "tsx scripts/purge-stubs.ts",
+    "db:republish": "tsx scripts/republish-daily.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
