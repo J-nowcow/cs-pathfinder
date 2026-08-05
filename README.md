@@ -123,7 +123,7 @@ npm run verify:concurrency
 ```bash
 npm install
 npm run dev          # http://localhost:3000
-npm test             # 457 tests
+npm test             # 498 tests
 npx tsc --noEmit
 ```
 
@@ -158,7 +158,6 @@ Gemini 무료 티어 안에서 굴러가게 짰다.
 
 ## 알려진 한계
 
-- **화면 렌더링에 자동 테스트가 없다.** 로직에는 테스트가 있지만 컴포넌트는 브라우저 수동 검증만 했다
 - **해설 스트리밍이 없다.** `POST /api/expand`가 JSON 통짜 응답이라 대기가 그대로 대기다. 지금은 진행 표시로 대체한다
 - **인증이 없다.** 경로는 브라우저 `localStorage`에만 있어서 기기를 옮기면 사라진다. 추천도 쿠키로만 식별한다
 - **익명 하루 한도가 5회다.** 캐시에 걸리면 차감이 안 되지만 그래프가 작을수록 새 생성이 많다. 서비스가 가장 비어 있을 때 사용자가 가장 빨리 막힌다
