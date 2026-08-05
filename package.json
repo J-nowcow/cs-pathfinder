@@ -17,10 +17,13 @@
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
     "@supabase/supabase-js": "^2.105.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@xyflow/react": "^12.11.2",
     "ai": "^6.0.191",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "tailwindcss": "^4.3.3",
     "zod": "^3.24.1"
   },
   "devDependencies": {
