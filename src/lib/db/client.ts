@@ -168,7 +168,8 @@ export async function resetDb(): Promise<Db> {
 export async function truncateAll(): Promise<void> {
   const db = await getDb()
   await db.query(`
-    truncate tree_occurrence, tree, qedge, qnode_alias, qnode_suggestion, qnode_equivalence,
-             expansion_event, generation_job, usage_quota, topic_seed, qnode restart identity cascade
+    truncate tree_vote, tree_occurrence, tree, qedge, qnode_alias, qnode_suggestion,
+             qnode_equivalence, expansion_event, generation_job, usage_quota, topic_seed,
+             qnode restart identity cascade
   `)
 }

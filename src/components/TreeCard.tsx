@@ -8,11 +8,9 @@ import type { BoardTree } from '@/lib/db/trees'
  * 이 카드가 링크 목록이 아니라 트리 목록이라는 걸 보여주는 유일한 자리다. 제목만
  * 늘어놓으면 질문 게시판과 구별되지 않는다.
  *
- * **질문 개수는 남기고 추천 수는 뺐다.** 개수는 얼마나 팠는지를 한 숫자로 말한다.
- * 추천은 아직 누를 화면이 없어서 전부 0인데, 0이 카드마다 박히면 죽은 서비스로 보인다.
- * 투표 UI가 붙는 날 같이 넣는다.
- *
- * 조회수는 세 자리부터 보여준다. "조회 1"은 정보가 아니라 아무도 안 왔다는 신호다.
+ * **숫자는 있을 때만 보여준다.** 0이 카드마다 박히면 죽은 서비스로 보인다.
+ * 추천은 1표부터 의미가 있다 — 누군가 이 트리를 남에게 권했다는 뜻이라서.
+ * 조회수는 세 자리부터다. "조회 1"은 정보가 아니라 아무도 안 왔다는 신호다.
  */
 const VIEWS_WORTH_SHOWING = 100
 
@@ -41,6 +39,7 @@ export function TreeCard({ tree }: { tree: BoardTree }) {
 
       <p className="mt-3.5 font-mono text-[11px] text-faint">
         질문 {tree.nodeCount}개
+        {tree.upvotes > 0 && <> · 추천 {tree.upvotes}</>}
         {tree.views >= VIEWS_WORTH_SHOWING && <> · 조회 {tree.views}</>}
       </p>
     </Link>

@@ -1,12 +1,16 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { after } from 'next/server'
+import { cookies } from 'next/headers'
 import type { Metadata } from 'next'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { loadTreeBySlug, bumpTreeViews } from '@/lib/db/trees'
 import { isValidSlug } from '@/lib/tree/slug'
 import { OG_IMAGE_PATH } from '@/lib/site'
 import { SharedTree } from '@/components/SharedTree'
+import { VoteButton } from '@/components/VoteButton'
+import { hasVoted } from '@/lib/db/votes'
+import { VOTER_COOKIE, isVoterId, voterKey } from '@/lib/vote/identity'
 
 /**
  * 공유 트리 상세.
@@ -76,6 +80,12 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
   // 조회수는 정렬에 쓰지 않아(인기 탭은 upvotes 기준) 부풀어도 순서를 흔들지 않는다.
   after(() => bumpTreeViews(slug))
 
+  // 식별자가 없으면 아직 아무것도 안 누른 사람이다. 여기서 발급하지 않는다 —
+  // 서버 컴포넌트는 쿠키를 못 쓰고, 안 누를 사람에게까지 식별자를 심을 이유도 없다.
+  // 처음 누르는 순간 라우트 핸들러가 발급한다.
+  const cookieId = (await cookies()).get(VOTER_COOKIE)?.value
+  const voted = isVoterId(cookieId) ? await hasVoted(slug, voterKey(cookieId)) : false
+
   const rootNodeId = tree.nodes.find((n) => n.parentOccurrenceId === null)?.nodeId ?? tree.rootNodeId
 
   return (
@@ -95,6 +105,10 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
         <p className="mt-2.5 font-mono text-[11px] text-faint">
           질문 {tree.nodes.length}개 · 조회 {tree.views}
         </p>
+
+        <div className="mt-4">
+          <VoteButton slug={tree.slug} initialCount={tree.upvotes} initialVoted={voted} />
+        </div>
       </header>
 
       <div className="mt-8">
