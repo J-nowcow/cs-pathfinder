@@ -1,0 +1,160 @@
+/**
+ * 해설 본문의 블록 분해.
+ *
+ * 통짜 문단만 있으면 순서도 구조도 비교도 전부 줄글로 읽어야 한다. 3-way
+ * handshake처럼 순서가 본질인 내용이 특히 손해다.
+ *
+ * **HTML을 만들지 않는다.** 구조만 돌려주고 렌더러가 React 요소로 바꾼다.
+ * Mermaid 같은 도구는 SVG 문자열을 innerHTML로 넣어야 하는데, 자유 입력이 전역
+ * 자산이 되는 구조라 그 경로를 아예 두지 않는 편이 정화보다 확실하다.
+ * 덤으로 도식이 사이트 디자인과 같은 색·같은 글꼴로 그려진다.
+ *
+ * **깨진 블록은 문단으로 떨어뜨린다.** 모델이 문법을 조금 틀렸다고 해설이
+ * 빈 화면이 되면 안 된다. 파서는 절대 던지지 않는다.
+ */
+
+export type Block =
+  | { type: 'paragraph'; text: string }
+  /** 행위자 사이의 순서. 3-way handshake 같은 것 */
+  | { type: 'flow'; steps: FlowStep[] }
+  /** 위에서 아래로 쌓이는 계층. OSI, 메모리 영역 같은 것 */
+  | { type: 'stack'; layers: StackLayer[] }
+  /** 열 비교. 낙관적 락 대 비관적 락 같은 것 */
+  | { type: 'table'; head: string[]; rows: string[][] }
+
+export type FlowStep = { from: string; to: string; label: string }
+export type StackLayer = { name: string; note: string }
+
+const FENCE_OPEN = /^:::(flow|stack)\s*$/
+const FENCE_CLOSE = /^:::\s*$/
+
+/** `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN` */
+const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
+
+/** `전송 계층 | TCP, UDP` — 오른쪽 설명은 없어도 된다 */
+const STACK_LINE = /^(.+?)(?:\s*\|\s*(.*))?$/
+
+function parseFlow(lines: string[]): Block | null {
+  const steps: FlowStep[] = []
+  for (const line of lines) {
+    const m = FLOW_LINE.exec(line.trim())
+    if (!m) return null
+    steps.push({ from: m[1].trim(), to: m[2].trim(), label: m[3].trim() })
+  }
+  return steps.length > 0 ? { type: 'flow', steps } : null
+}
+
+function parseStack(lines: string[]): Block | null {
+  const layers: StackLayer[] = []
+  for (const line of lines) {
+    const m = STACK_LINE.exec(line.trim())
+    if (!m || m[1].trim().length === 0) return null
+    layers.push({ name: m[1].trim(), note: (m[2] ?? '').trim() })
+  }
+  return layers.length > 0 ? { type: 'stack', layers } : null
+}
+
+/** `|` 로 나뉜 칸. 앞뒤 파이프는 있어도 없어도 된다 */
+function cells(line: string): string[] {
+  return line
+    .trim()
+    .replace(/^\||\|$/g, '')
+    .split('|')
+    .map((c) => c.trim())
+}
+
+/** `|---|---|` 구분줄인가 */
+function isDivider(line: string): boolean {
+  const parts = cells(line)
+  return parts.length > 0 && parts.every((c) => /^:?-{2,}:?$/.test(c))
+}
+
+/**
+ * 마크다운 표.
+ *
+ * 모델이 가장 안정적으로 쓰는 형식이라 따로 문법을 만들지 않고 그대로 받는다.
+ * 머리글과 구분줄이 둘 다 있어야 표로 본다. 파이프 하나 들어간 문장을 표로
+ * 오인하면 본문이 깨진다.
+ */
+function parseTable(lines: string[]): Block | null {
+  if (lines.length < 3) return null
+  if (!lines[0].includes('|') || !isDivider(lines[1])) return null
+
+  const head = cells(lines[0])
+  const rows: string[][] = []
+
+  for (const line of lines.slice(2)) {
+    if (!line.includes('|')) return null
+    const row = cells(line)
+    // 칸 수가 어긋나면 표가 아니다. 억지로 맞추면 엉뚱한 칸에 값이 들어간다
+    if (row.length !== head.length) return null
+    rows.push(row)
+  }
+
+  return rows.length > 0 ? { type: 'table', head, rows } : null
+}
+
+/**
+ * 본문을 블록으로 나눈다.
+ *
+ * 빈 줄로 먼저 자르고, 조각마다 어떤 블록인지 본다. `:::` 울타리는 안에 빈 줄이
+ * 들어갈 수 있어서 먼저 훑어 통째로 떼어낸다.
+ */
+export function parseBlocks(body: string): Block[] {
+  const lines = body.split('\n')
+  const blocks: Block[] = []
+
+  let buffer: string[] = []
+
+  const flushParagraphs = () => {
+    const text = buffer.join('\n')
+    buffer = []
+    for (const chunk of text.split(/\n{2,}/)) {
+      const trimmed = chunk.trim()
+      if (trimmed.length === 0) continue
+
+      const table = parseTable(trimmed.split('\n'))
+      if (table) blocks.push(table)
+      else blocks.push({ type: 'paragraph', text: trimmed })
+    }
+  }
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const open = FENCE_OPEN.exec(lines[i].trim())
+    if (!open) {
+      buffer.push(lines[i])
+      continue
+    }
+
+    // 닫는 울타리를 찾는다. 없으면 여는 줄도 그냥 글자다
+    let close = -1
+    for (let j = i + 1; j < lines.length; j += 1) {
+      if (FENCE_CLOSE.test(lines[j].trim())) {
+        close = j
+        break
+      }
+    }
+    if (close === -1) {
+      buffer.push(lines[i])
+      continue
+    }
+
+    const inner = lines.slice(i + 1, close).filter((l) => l.trim().length > 0)
+    const parsed = open[1] === 'flow' ? parseFlow(inner) : parseStack(inner)
+
+    flushParagraphs()
+
+    if (parsed) {
+      blocks.push(parsed)
+    } else {
+      // 문법이 틀렸으면 내용만 문단으로 살린다. 울타리 기호는 보여줄 이유가 없다
+      const text = inner.join(' ').trim()
+      if (text.length > 0) blocks.push({ type: 'paragraph', text })
+    }
+
+    i = close
+  }
+
+  flushParagraphs()
+  return blocks
+}

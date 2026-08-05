@@ -16,26 +16,42 @@ function suggestionId(nodeId: string, position: number): string {
  * 예시 루트를 삽입한다. 멱등이다.
  *
  * 계획 3의 매일 발행이 붙기 전까지 홈에 보여줄 콘텐츠이자 확장의 출발점이다.
- * 이미 있으면 건드리지 않는다. 부팅마다 도는 코드라 덮어쓰면 사용자가 파던
- * 노드의 추천 ID가 갈아엎어진다.
+ *
+ * **본문은 갱신하고 추천은 건드리지 않는다.** 둘의 성격이 다르다.
+ * 본문은 이 파일이 단일 출처인 저작 콘텐츠라 고치면 화면에 반영돼야 한다.
+ * 실제로 도식을 넣었을 때 이미 시드된 노드가 옛 글을 계속 보여줬다.
+ * 추천은 파생 ID를 갖고 사용자가 판 노드와 이어져 있어서, 덮으면 그 연결이
+ * 가리키던 자리가 어긋난다.
+ *
+ * 내용이 같으면 아무것도 쓰지 않는다. 부팅마다 도는 코드라 매번 쓰면
+ * 콜드 스타트에 쓸모없는 왕복이 붙는다.
  */
-export async function seedExampleNodes(): Promise<{ inserted: number }> {
+export async function seedExampleNodes(): Promise<{ inserted: number; refreshed: number }> {
   const db = await getDb()
   let inserted = 0
+  let refreshed = 0
 
   for (const ex of EXAMPLE_NODES) {
     const id = rootNodeId(ex)
 
-    const rows = await db.query<{ id: string }>(
+    // xmax = 0 이면 방금 넣은 행이다. 갱신된 행과 구별하는 표준 수법이다.
+    const rows = await db.query<{ id: string; created: boolean }>(
       `insert into qnode
          (id, identity_scope, normalized_question, body, primary_category, status, origin)
        values ($1, $2, $3, $4, $5, 'ready', 'batch')
-       on conflict (id) do nothing
-       returning id`,
+       on conflict (id) do update set body = excluded.body
+         where qnode.body is distinct from excluded.body
+       returning id, (xmax = 0) as created`,
       [id, ex.identityScope, ex.question, ex.body, ex.category],
     )
 
     if (rows.length === 0) continue
+
+    if (!rows[0].created) {
+      refreshed += 1
+      continue
+    }
+
     inserted += 1
 
     for (const [position, text] of ex.suggestions.entries()) {
@@ -56,7 +72,7 @@ export async function seedExampleNodes(): Promise<{ inserted: number }> {
     )
   }
 
-  return { inserted }
+  return { inserted, refreshed }
 }
 
 let seeding: Promise<void> | null = null

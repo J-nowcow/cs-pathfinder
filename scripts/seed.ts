@@ -33,8 +33,8 @@ async function main() {
     `주제어 시드: 신규 ${Number(after[0].n) - Number(before[0].n)}개 / 정의 ${TOPIC_SEEDS.length}개`,
   )
 
-  const { inserted } = await seedExampleNodes()
-  console.log(`루트 노드: 신규 ${inserted}개 / 전체 ${EXAMPLE_NODES.length}개`)
+  const { inserted, refreshed } = await seedExampleNodes()
+  console.log(`루트 노드: 신규 ${inserted}개 / 본문 갱신 ${refreshed}개 / 전체 ${EXAMPLE_NODES.length}개`)
   for (const ex of EXAMPLE_NODES) {
     console.log(`  ${ex.category.padEnd(16)} ${rootNodeId(ex)}  ${ex.question}`)
   }
