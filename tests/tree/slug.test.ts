@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { newSlug, SLUG_LENGTH, SLUG_ALPHABET, isValidSlug } from '@/lib/tree/slug'
+import { dailySlug } from '@/lib/daily/date'
 
 describe('slug', () => {
   it('has the declared length', () => {
@@ -46,6 +47,18 @@ describe('slug', () => {
     for (let i = 0; i < 50; i += 1) expect(isValidSlug(newSlug())).toBe(true)
   })
 
+  /**
+   * 주소로 쓰이는 slug는 두 벌이다.
+   *
+   * 공유 트리는 newSlug의 무작위 토큰이고, 오늘의 질문은 dailySlug의 날짜 주소다.
+   * 검증이 앞의 형태만 알면 발행분 페이지가 통째로 404가 된다. 실제로 그랬다.
+   */
+  it('accepts what dailySlug generates', () => {
+    expect(isValidSlug(dailySlug('2026-08-06'))).toBe(true)
+    expect(isValidSlug(dailySlug('2026-01-01'))).toBe(true)
+    expect(isValidSlug('daily-2026-08-06')).toBe(true)
+  })
+
   it('rejects wrong length, wrong alphabet, and junk', () => {
     expect(isValidSlug('')).toBe(false)
     expect(isValidSlug('abc')).toBe(false)
@@ -53,5 +66,13 @@ describe('slug', () => {
     expect(isValidSlug('0'.repeat(SLUG_LENGTH))).toBe(false)
     expect(isValidSlug('../etc/passw')).toBe(false)
     expect(isValidSlug('가'.repeat(SLUG_LENGTH))).toBe(false)
+  })
+
+  it('rejects daily-looking slugs that are not dates', () => {
+    expect(isValidSlug('daily-2026-8-6')).toBe(false)
+    expect(isValidSlug('daily-abcd-ef-gh')).toBe(false)
+    expect(isValidSlug('daily-2026-08-06-x')).toBe(false)
+    expect(isValidSlug('daily-')).toBe(false)
+    expect(isValidSlug('daily-2026-08-06/../secret')).toBe(false)
   })
 })

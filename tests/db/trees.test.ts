@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { getDb, truncateAll } from '@/lib/db/client'
 import { insertNode, ensureEdge } from '@/lib/expand/nodes'
 import { createSharedTree, listTrees, loadTreeBySlug, bumpTreeViews } from '@/lib/db/trees'
-import { isValidSlug } from '@/lib/tree/slug'
+import { isShareSlug } from '@/lib/tree/slug'
 import { encodeCursor } from '@/lib/tree/cursor'
 import type { Snapshot } from '@/lib/tree/snapshot'
 
@@ -46,7 +46,7 @@ describe('createSharedTree', () => {
 
     expect(res.ok).toBe(true)
     if (!res.ok) return
-    expect(isValidSlug(res.slug)).toBe(true)
+    expect(isShareSlug(res.slug)).toBe(true)
   })
 
   it('inherits the category from the root node rather than trusting the client', async () => {

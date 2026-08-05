@@ -45,11 +45,34 @@ export function newSlug(): string {
 }
 
 /**
+ * 오늘의 질문은 다른 규칙을 쓴다.
+ *
+ * 발행분 주소는 `daily-YYYY-MM-DD`다(daily/date.ts의 dailySlug). 무작위 토큰이
+ * 아닌 이유는 성격이 반대이기 때문이다. 공유 트리는 링크를 받은 사람만 보는 게
+ * 전제라 열거 불가능해야 하지만, 오늘의 질문은 누구나 보라고 내놓는 것이고
+ * 주소만 봐도 언제 것인지 읽히는 편이 낫다.
+ *
+ * 형태가 둘이면 검증도 둘을 알아야 한다. 한쪽만 알면 그쪽 페이지가 통째로
+ * 404가 된다. 실제로 그랬다.
+ */
+const DAILY_SLUG_RE = /^daily-\d{4}-\d{2}-\d{2}$/
+
+/** 공유 트리 주소인가 */
+export function isShareSlug(value: string): boolean {
+  return SLUG_RE.test(value)
+}
+
+/** 오늘의 질문 주소인가 */
+export function isDailySlug(value: string): boolean {
+  return DAILY_SLUG_RE.test(value)
+}
+
+/**
  * 주소에서 받은 값을 DB에 던지기 전에 거른다.
  *
  * 형식이 틀린 건 존재할 수 없는 slug라 조회 자체가 낭비다. 봇이 주소를 훑을 때
  * DB까지 가지 않게 막는다.
  */
 export function isValidSlug(value: string): boolean {
-  return SLUG_RE.test(value)
+  return isShareSlug(value) || isDailySlug(value)
 }

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { truncateAll } from '@/lib/db/client'
 import { insertNode } from '@/lib/expand/nodes'
 import { loadTreeBySlug } from '@/lib/db/trees'
-import { isValidSlug } from '@/lib/tree/slug'
+import { isShareSlug } from '@/lib/tree/slug'
 import { MAX_SNAPSHOT_NODES } from '@/lib/tree/snapshot'
 
 const { POST } = await import('@/app/api/share/route')
@@ -44,7 +44,7 @@ describe('POST /api/share', () => {
 
     expect(res.status).toBe(201)
     const body = await res.json()
-    expect(isValidSlug(body.slug)).toBe(true)
+    expect(isShareSlug(body.slug)).toBe(true)
     expect(body.url).toBe(`/t/${body.slug}`)
 
     const tree = await loadTreeBySlug(body.slug)
