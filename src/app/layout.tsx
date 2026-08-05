@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { siteUrl } from '@/lib/site'
 import './globals.css'
 
 const TITLE = '꼬리에 꼬리를 무는 CS 공부'
@@ -11,6 +12,9 @@ const DESCRIPTION = '하루에 질문 하나. 어디로 파고들지는 직접 �
  * 제목·설명이 안 뜨면 아무도 안 누른다. Streamlit을 배제한 결정적 이유가 이거였다.
  */
 export const metadata: Metadata = {
+  // 상대 경로로 쓴 OG 이미지를 절대 주소로 펴는 기준. 없으면 Next가 추론하는데
+  // 프로덕션에서 배포마다 바뀌는 임시 주소가 박힌다(lib/site.ts)
+  metadataBase: siteUrl(),
   title: { default: TITLE, template: `%s · ${TITLE}` },
   description: DESCRIPTION,
   openGraph: {

@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { loadTreeBySlug, bumpTreeViews } from '@/lib/db/trees'
 import { isValidSlug } from '@/lib/tree/slug'
+import { OG_IMAGE_PATH } from '@/lib/site'
 import { SharedTree } from '@/components/SharedTree'
 
 /**
@@ -44,6 +45,11 @@ export async function generateMetadata({
 
   const description = tree.summary || `${tree.category} 질문 ${tree.nodes.length}개`
 
+  // 이미지를 직접 넣어야 한다. generateMetadata가 openGraph를 반환하면 Next가
+  // 파일 규약(app/opengraph-image.png)을 합쳐주지 않아서, 안 넣으면 하필
+  // 공유 링크에만 썸네일이 빠진다. 절대 주소는 metadataBase가 펴준다
+  const images = [OG_IMAGE_PATH]
+
   return {
     title: tree.title,
     description,
@@ -52,8 +58,9 @@ export async function generateMetadata({
       description,
       type: 'article',
       locale: 'ko_KR',
+      images,
     },
-    twitter: { card: 'summary_large_image', title: tree.title, description },
+    twitter: { card: 'summary_large_image', title: tree.title, description, images },
   }
 }
 
