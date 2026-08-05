@@ -1,6 +1,7 @@
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { listRoots } from '@/lib/db/roots'
 import { RootCard } from '@/components/RootCard'
+import { HeroBackdrop } from '@/components/HeroBackdrop'
 
 // PGlite가 인메모리라 매 요청 실제 DB를 읽는다. 정적 생성 대상이 아니다.
 export const dynamic = 'force-dynamic'
@@ -13,18 +14,25 @@ export default async function HomePage() {
 
   return (
     <main className="mx-auto max-w-3xl px-5 pb-24 pt-10 sm:px-8 sm:pt-16">
-      <header className="mb-10 sm:mb-14">
-        <h1 className="text-[15px] font-semibold tracking-[-0.01em] text-accent">CS 질문 트리</h1>
-        <p className="mt-3 max-w-lg text-[15px] leading-[1.7] text-muted">
-          질문 하나에서 꼬리질문을 파고든다. 판 자국은 지도로 남는다.
+      <header className="relative mb-10 overflow-hidden sm:mb-14">
+        <HeroBackdrop />
+        <h1 className="relative text-[30px] font-extrabold leading-[1.32] tracking-[-0.025em] sm:text-[34px]">
+          꼬리에 꼬리를 무는
+          <br />
+          CS 공부
+        </h1>
+        <p className="relative mt-4 max-w-lg text-[15px] leading-[1.72] text-muted">
+          하루에 질문 하나. 어디로 파고들지는 직접 고르면 돼요.
+          <br />
+          판 만큼 지도가 그려지고요.
         </p>
       </header>
 
       {roots.length === 0 ? (
         <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
-          <p className="text-[15px] text-muted">아직 발행된 질문이 없습니다.</p>
+          <p className="text-[15px] text-muted">아직 올라온 질문이 없어요.</p>
           <p className="mt-2 text-[13px] text-faint">
-            서버를 다시 시작하면 예시 질문이 시드됩니다.
+            서버를 다시 띄우면 예시 질문이 들어갑니다.
           </p>
         </div>
       ) : (
