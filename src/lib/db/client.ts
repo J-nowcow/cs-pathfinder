@@ -15,8 +15,17 @@ export interface Db {
  * DATABASE_URL이 주어지면 그쪽을 쓰도록 어댑터를 추가할 자리다.
  * 지금은 PGlite 단일 경로다.
  */
-let instance: Db | null = null
-let migrated = false
+/**
+ * 인스턴스를 globalThis에 둔다.
+ *
+ * dev 서버가 HMR로 모듈을 갈아끼우면 모듈 스코프 변수가 초기화된다. 그러면
+ * 인메모리 DB가 통째로 새로 생겨 파던 노드가 사라지고 열어둔 URL이 404가 된다.
+ * 코드 한 줄 고칠 때마다 이러면 화면 작업이 불가능하다.
+ *
+ * 테스트는 파일마다 환경이 분리되므로 영향이 없다. resetDb가 여기도 비운다.
+ */
+type Holder = { __csqtDb?: Db | null; __csqtMigrated?: boolean }
+const holder = globalThis as unknown as Holder
 
 const here = dirname(fileURLToPath(import.meta.url))
 const migrationsDir = resolve(here, '../../../supabase/migrations')
@@ -45,22 +54,22 @@ export function readMigrations(): Array<{ name: string; sql: string }> {
 }
 
 export async function getDb(): Promise<Db> {
-  if (!instance) instance = await createPglite()
+  if (!holder.__csqtDb) holder.__csqtDb = await createPglite()
 
-  if (!migrated) {
+  if (!holder.__csqtMigrated) {
     for (const { sql } of readMigrations()) {
-      await instance.exec(sql)
+      await holder.__csqtDb.exec(sql)
     }
-    migrated = true
+    holder.__csqtMigrated = true
   }
 
-  return instance
+  return holder.__csqtDb
 }
 
 /** 테스트 격리용. 스키마를 통째로 다시 만든다. */
 export async function resetDb(): Promise<Db> {
-  instance = null
-  migrated = false
+  holder.__csqtDb = null
+  holder.__csqtMigrated = false
   return getDb()
 }
 

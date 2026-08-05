@@ -9,7 +9,8 @@
 export type BannerState =
   | { kind: 'none' }
   | { kind: 'rejected'; reason: string }
-  | { kind: 'quota_exceeded'; used: number; limit: number }
+  // 서버는 429에 사용량 수치를 싣지 않는다. 숫자를 지어내지 않고 사실만 말한다.
+  | { kind: 'quota_exceeded' }
   | { kind: 'rate_limited'; retryAfter: number }
   | { kind: 'gate_unavailable' }
   | { kind: 'error'; message: string }
@@ -34,9 +35,7 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
 
       {state.kind === 'quota_exceeded' && (
         <>
-          <strong className="font-medium">
-            오늘 확장 한도를 다 썼습니다 ({state.used}/{state.limit}).
-          </strong>
+          <strong className="font-medium">오늘 확장 한도를 다 썼습니다.</strong>
           <span className="mt-1 block text-muted">
             이미 파인 길로 표시된 추천은 계속 누를 수 있습니다. 한도는 자정에 초기화됩니다.
           </span>

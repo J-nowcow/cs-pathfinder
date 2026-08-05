@@ -199,7 +199,7 @@ export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
 
         case 'quota_exceeded':
           setQuotaExceeded(true)
-          setBanner({ kind: 'quota_exceeded', used: 0, limit: 0 })
+          setBanner({ kind: 'quota_exceeded' })
           return
 
         case 'rate_limited':
