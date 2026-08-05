@@ -86,11 +86,12 @@ describe('example nodes as the reference form', () => {
 })
 
 /**
- * 예시는 생성 프롬프트의 기준선이다.
+ * 예시는 사용자가 실제로 읽는 콘텐츠다.
  *
- * 프롬프트에 "꼬리질문은 35자를 넘기지 않는다"고 적어놓고 예시가 그것을 어기면
- * 모델은 규칙이 아니라 예시를 따른다. 도식도 마찬가지다 — 도식 없는 예시가
- * 섞이면 그것이 허용 신호가 된다.
+ * 프롬프트에는 안 들어간다(시드 전용). 그래서 여기가 깨져도 모델 출력이
+ * 나빠지지는 않는다. 대신 사이트가 두 사람이 쓴 것처럼 읽힌다 — 생성분은
+ * 꼬리질문이 짧고 도식이 답 바로 뒤에 오는데 손으로 쓴 것만 다르면
+ * 그 차이가 그대로 보인다.
  */
 describe('example nodes follow their own rules', () => {
   it('keeps every follow-up short enough for a button', () => {
@@ -106,9 +107,9 @@ describe('example nodes follow their own rules', () => {
   })
 
   /**
-   * 문단 길이는 프롬프트에 "150자를 넘기지 않는다"로 적혀 있다. 예시가 그것을
-   * 어기면 모델은 규칙이 아니라 예시를 따른다. 실제로 생성된 해설의 문단이
-   * 190~210자였던 것이 이 어긋남에서 왔다.
+   * 생성 쪽 규칙과 같은 선이다. 폰에서 한 줄이 24자쯤이라 150자면 여섯 줄이고,
+   * 그보다 길면 읽다가 눈이 미끄러진다. 손으로 쓴 것이라고 예외를 두면
+   * 예시만 벽이 된다.
    */
   it('keeps every paragraph short enough to read on a phone', () => {
     const long = EXAMPLE_NODES.flatMap((e) =>
@@ -122,7 +123,7 @@ describe('example nodes follow their own rules', () => {
 
   /**
    * 도식은 답 바로 뒤에 와야 한다. 줄글을 세 문단 쌓은 뒤에 놓으면 거기까지
-   * 가기 전에 읽기를 그만둔다. 예시가 그렇게 되어 있으면 모델도 따라 한다.
+   * 가기 전에 읽기를 그만둔다. 생성분이 지키는 것을 예시가 안 지킬 이유가 없다.
    */
   it('puts the diagram right after the answer, not behind a wall of text', () => {
     const late = EXAMPLE_NODES.filter((e) => {
