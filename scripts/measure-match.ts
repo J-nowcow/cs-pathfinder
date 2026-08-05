@@ -4,7 +4,13 @@ loadEnvLocal()
 
 import { writeFileSync } from 'node:fs'
 import { runGate } from '../src/lib/llm/gate'
-import { MATCH_CLUSTERS, type MatchCase, type MatchCluster } from '../data/match-cases'
+import { questionFormIssues, type FormIssue } from '../src/lib/llm/question-form'
+import {
+  MATCH_CLUSTERS,
+  HELDOUT_CLUSTERS,
+  type MatchCase,
+  type MatchCluster,
+} from '../data/match-cases'
 
 /**
  * 매칭 게이트 정확도 측정.
@@ -19,8 +25,14 @@ import { MATCH_CLUSTERS, type MatchCase, type MatchCluster } from '../data/match
  * 같은 입력에도 모델 출력이 흔들린다. --runs로 여러 번 돌려 흔들림의 폭까지 본다.
  * 한 번 돌린 숫자를 단정적으로 쓰면 안 된다.
  *
+ * 세트가 둘이다. tuning은 프롬프트를 고치면서 본 세트고, heldout은 한 번도 안 본
+ * 세트다. 같은 세트를 보며 세 번 고친 뒤 나온 만점은 일반화가 아니다.
+ * **heldout 숫자를 보고 프롬프트를 고치면 그 순간 heldout도 튜닝 세트가 된다.**
+ *
  * 실행: npm run measure:match
  *       npm run measure:match -- --runs 3
+ *       npm run measure:match -- --set heldout
+ *       npm run measure:match -- --set all --runs 2
  *       npm run measure:match -- --cluster jwt
  */
 
@@ -39,6 +51,8 @@ type Row = {
   /** 게이트가 매칭을 만들었나. precision 분모다 */
   producedMatch: boolean
   correct: boolean
+  /** 새로 만든 문장의 어투 위반. 매칭·거절이면 빈 배열이다 */
+  formIssues: FormIssue[]
 }
 
 function label(o: Outcome): string {
@@ -85,6 +99,8 @@ async function runOne(cluster: MatchCluster, c: MatchCase): Promise<Row> {
     got,
     producedMatch: got.kind === 'match',
     correct: label(got) === expectedLabel(c),
+    // 새 문장을 만든 경우에만 어투를 본다. 후보를 고른 경우 문장은 이미 우리 것이다
+    formIssues: got.kind === 'new' ? questionFormIssues(got.question) : [],
   }
 }
 
@@ -103,6 +119,9 @@ type Summary = {
   errors: number
   falseMerges: Row[]
   missed: Row[]
+  /** 새로 만든 문장 수와 그중 어투가 어긋난 것 */
+  newQuestions: number
+  malformed: Row[]
 }
 
 function summarize(rows: Row[], run: number): Summary {
@@ -133,6 +152,8 @@ function summarize(rows: Row[], run: number): Summary {
     // 있어서는 안 되는 실패다. 고르지 말았어야 할 것을 골랐거나 엉뚱한 것을 골랐다
     falseMerges: matchesMade.filter((r) => !r.correct),
     missed: shouldMatch.filter((r) => !r.correct),
+    newQuestions: rows.filter((r) => r.got.kind === 'new').length,
+    malformed: rows.filter((r) => r.formIssues.length > 0),
   }
 }
 
@@ -147,14 +168,30 @@ async function main() {
   const clusterArg = args.indexOf('--cluster')
   const only = clusterArg >= 0 ? args[clusterArg + 1] : null
 
-  const clusters = only ? MATCH_CLUSTERS.filter((c) => c.id === only) : MATCH_CLUSTERS
+  const setArg = args.indexOf('--set')
+  const setName = setArg >= 0 ? args[setArg + 1] : 'tuning'
+
+  const pool =
+    setName === 'heldout'
+      ? HELDOUT_CLUSTERS
+      : setName === 'all'
+        ? [...MATCH_CLUSTERS, ...HELDOUT_CLUSTERS]
+        : MATCH_CLUSTERS
+
+  const clusters = only ? pool.filter((c) => c.id === only) : pool
   if (clusters.length === 0) {
-    console.error(`그런 군집이 없다: ${only}`)
+    console.error(only ? `그런 군집이 없다: ${only}` : `그런 세트가 없다: ${setName}`)
     process.exit(1)
   }
 
   const total = clusters.reduce((n, c) => n + c.cases.length, 0)
-  console.log(`군집 ${clusters.length}개 · 케이스 ${total}건 · ${runs}회 반복 = 호출 ${total * runs}건\n`)
+  console.log(
+    `세트 ${setName} · 군집 ${clusters.length}개 · 케이스 ${total}건 · ${runs}회 반복 = 호출 ${total * runs}건`,
+  )
+  if (setName === 'heldout') {
+    console.log('(이 숫자를 보고 프롬프트를 고치면 홀드아웃이 아니게 된다)')
+  }
+  console.log()
 
   const summaries: Summary[] = []
   const allRows: Row[][] = []
@@ -178,15 +215,35 @@ async function main() {
   console.log('\n(· 정답  △ 놓침  ✗ 잘못 골랐음)\n')
 
   console.log('회차별')
-  console.log('  run  precision       recall          거절 적중  잘못 거절  오류')
+  console.log('  run  precision       recall          거절 적중  잘못 거절  어투 위반  오류')
   for (const s of summaries) {
     console.log(
       `  ${String(s.run).padStart(3)}  ` +
         `${String(s.matchesCorrect).padStart(2)}/${String(s.matchesMade).padEnd(2)} ${pct(s.matchesCorrect, s.matchesMade)}  ` +
         `${String(s.recalled).padStart(2)}/${String(s.shouldMatch).padEnd(2)} ${pct(s.recalled, s.shouldMatch)}  ` +
         `${s.rejectHit}/${s.rejectTotal}       ` +
-        `${String(s.falseRejects.length).padStart(2)}/${String(s.keepTotal).padEnd(2)}      ${s.errors}`,
+        `${String(s.falseRejects.length).padStart(2)}/${String(s.keepTotal).padEnd(2)}      ` +
+        `${String(s.malformed.length).padStart(2)}/${String(s.newQuestions).padEnd(2)}      ${s.errors}`,
     )
+  }
+
+  /**
+   * 새로 만든 문장의 어투.
+   *
+   * 판정은 맞았는데 문장이 "~인가요?"로 나오는 경우다. 매칭 정확도와는 다른 축이고
+   * 화면에 그대로 나가므로 따로 본다. 노드는 여러 경로에서 도달하는데 한 트리 안에서
+   * 어투가 갈리면 같은 서비스가 쓴 문장으로 안 읽힌다.
+   */
+  const malformed = summaries.flatMap((s) => s.malformed)
+  if (malformed.length > 0) {
+    console.log('\n어투가 어긋난 새 문장')
+    for (const r of malformed) {
+      const q = r.got.kind === 'new' ? r.got.question : ''
+      console.log(`  [${r.cluster}] ${r.formIssues.join(', ')}`)
+      console.log(`    "${q}"`)
+    }
+  } else {
+    console.log('\n어투가 어긋난 새 문장 없음')
   }
 
   // 멀쩡한 질문을 문전에서 막은 것. 사용자가 겪는 실패 중 가장 나쁘다
@@ -243,7 +300,7 @@ async function main() {
     }
   }
 
-  const out = { runs, clusters: clusters.map((c) => c.id), summaries, rows: allRows }
+  const out = { set: setName, runs, clusters: clusters.map((c) => c.id), summaries, rows: allRows }
   writeFileSync('/tmp/match-measure.json', JSON.stringify(out, null, 2))
   console.log('\n전체 결과: /tmp/match-measure.json')
 }

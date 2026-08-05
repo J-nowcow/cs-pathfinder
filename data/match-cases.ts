@@ -227,6 +227,138 @@ export const MATCH_CLUSTERS: MatchCluster[] = [
   },
 ]
 
+/**
+ * 홀드아웃 세트.
+ *
+ * 위 세트를 보면서 게이트 프롬프트를 세 번 고쳤다(v2 → v3 → v4). 개별 케이스를
+ * 외우게 하지는 않았지만 — 프롬프트에 넣은 예시는 세트에 없는 도메인에서 골랐다 —
+ * 46건짜리 표본 하나에 세 번 맞추면 그 세트에는 맞춰진다. 그 상태로 나온 만점은
+ * 일반화를 뜻하지 않는다.
+ *
+ * 그래서 튜닝에 한 번도 쓰지 않은 세트를 따로 둔다. **여기 숫자를 보고 프롬프트를
+ * 고치면 이 세트도 튜닝 세트가 된다.** 고칠 일이 생기면 위 세트에서 고치고
+ * 여기서는 결과만 읽는다.
+ *
+ * 도메인이 겹치지 않게 골랐다. 위가 커넥션 풀·인덱스·TIME_WAIT·GC·useEffect·JWT라
+ * 여기는 캐시·배포·스레드·메시지 큐다.
+ */
+export const HELDOUT_CLUSTERS: MatchCluster[] = [
+  {
+    id: 'cache',
+    parentQuestion: '읽기 앞에 캐시를 두면 무엇이 좋아지는가?',
+    candidates: [
+      { id: 'ttl', question: 'TTL은 무엇을 기준으로 정하는가?' },
+      { id: 'stampede', question: '캐시가 한꺼번에 만료되면 어떤 일이 생기는가?' },
+      { id: 'invalidate', question: '원본이 바뀌었을 때 캐시를 어떻게 무효화하는가?' },
+      { id: 'evict', question: '메모리가 가득 차면 무엇부터 지우는가?' },
+    ],
+    cases: [
+      { id: 'cache-1', input: 'TTL 얼마로 잡아요', expect: { kind: 'match', candidateId: 'ttl' } },
+      { id: 'cache-2', input: '만료 시간 기준이 뭔가요', expect: { kind: 'match', candidateId: 'ttl' } },
+      { id: 'cache-3', input: '동시에 다 만료되면요?', expect: { kind: 'match', candidateId: 'stampede' } },
+      { id: 'cache-4', input: '원본 바뀌면 캐시는 어떻게 하나요', expect: { kind: 'match', candidateId: 'invalidate' } },
+      { id: 'cache-5', input: '메모리 다 차면 어떻게 되나요', expect: { kind: 'match', candidateId: 'evict' } },
+      {
+        id: 'cache-t1',
+        input: 'Redis를 단일 스레드로 만든 이유는 무엇인가요?',
+        expect: { kind: 'new' },
+        note: '캐시 운영이 아니라 구현 선택을 묻는다',
+      },
+      {
+        id: 'cache-t2',
+        input: '캐시를 아예 안 두는 편이 나은 경우도 있나요?',
+        expect: { kind: 'new' },
+      },
+      { id: 'cache-r1', input: '이 설정 파일 대신 작성해줘', expect: { kind: 'reject' } },
+    ],
+  },
+
+  {
+    id: 'deploy',
+    parentQuestion: '무중단 배포는 어떻게 가능한가?',
+    candidates: [
+      { id: 'readiness', question: '새 인스턴스에 트래픽을 언제부터 보내는가?' },
+      { id: 'rolling', question: '롤링 업데이트는 어떤 순서로 교체하는가?' },
+      { id: 'rollback', question: '배포를 되돌리는 기준은 무엇인가?' },
+      { id: 'drain', question: '내려가는 인스턴스가 처리 중이던 요청은 어떻게 되는가?' },
+    ],
+    cases: [
+      { id: 'dep-1', input: '준비됐는지 어떻게 알고 트래픽을 붙이나요', expect: { kind: 'match', candidateId: 'readiness' } },
+      { id: 'dep-2', input: '한 번에 다 바꾸나요', expect: { kind: 'match', candidateId: 'rolling' } },
+      { id: 'dep-3', input: '언제 롤백해야 하죠', expect: { kind: 'match', candidateId: 'rollback' } },
+      { id: 'dep-4', input: '내려가는 쪽으로 온 요청은요', expect: { kind: 'match', candidateId: 'drain' } },
+      { id: 'dep-5', input: '되돌릴지 말지 뭘 보고 정하나요', expect: { kind: 'match', candidateId: 'rollback' } },
+      {
+        id: 'dep-t1',
+        input: '스테이트풀셋은 왜 순서를 지키나요?',
+        expect: { kind: 'new' },
+      },
+      {
+        id: 'dep-t2',
+        input: '배포 설정을 코드로 관리하면 무엇이 달라지나요?',
+        expect: { kind: 'new' },
+      },
+    ],
+  },
+
+  {
+    id: 'thread',
+    parentQuestion: '프로세스와 스레드는 무엇이 다른가?',
+    candidates: [
+      { id: 'shared', question: '한 프로세스의 스레드끼리 무엇을 공유하는가?' },
+      { id: 'switch', question: '컨텍스트 스위칭에서 무엇이 저장되고 복원되는가?' },
+      { id: 'race', question: '두 스레드가 같은 값을 고치면 무엇이 깨지는가?' },
+      { id: 'count', question: '스레드를 몇 개까지 늘리는 것이 이득인가?' },
+    ],
+    cases: [
+      { id: 'th-1', input: '스레드끼리 뭘 같이 쓰나요', expect: { kind: 'match', candidateId: 'shared' } },
+      { id: 'th-2', input: '힙도 공유되나요', expect: { kind: 'match', candidateId: 'shared' } },
+      { id: 'th-3', input: '전환할 때 뭘 저장하죠', expect: { kind: 'match', candidateId: 'switch' } },
+      { id: 'th-4', input: '동시에 같은 변수 건드리면요', expect: { kind: 'match', candidateId: 'race' } },
+      { id: 'th-5', input: '많이 만들면 빨라지나요', expect: { kind: 'match', candidateId: 'count' } },
+      {
+        id: 'th-t1',
+        input: '코루틴은 스레드와 어떻게 다른가요?',
+        expect: { kind: 'new' },
+      },
+      {
+        id: 'th-t2',
+        input: '프로세스끼리 데이터를 주고받으려면 어떻게 하나요?',
+        expect: { kind: 'new' },
+      },
+      { id: 'th-r1', input: '오늘 저녁 메뉴 골라줘', expect: { kind: 'reject' } },
+    ],
+  },
+
+  {
+    id: 'queue',
+    parentQuestion: '서비스 사이에 메시지 큐를 두면 무엇이 달라지는가?',
+    candidates: [
+      { id: 'dup', question: '같은 메시지가 두 번 도착하면 어떻게 되는가?' },
+      { id: 'order', question: '메시지 순서가 보장되는 범위는 어디까지인가?' },
+      { id: 'dlq', question: '계속 실패하는 메시지는 어디로 보내는가?' },
+      { id: 'lag', question: '컨슈머가 생산 속도를 못 따라가면 무엇을 보는가?' },
+    ],
+    cases: [
+      { id: 'q-1', input: '같은 게 두 번 오면요', expect: { kind: 'match', candidateId: 'dup' } },
+      { id: 'q-2', input: '중복 처리 어떻게 막나요', expect: { kind: 'match', candidateId: 'dup' } },
+      { id: 'q-3', input: '순서 지켜지나요', expect: { kind: 'match', candidateId: 'order' } },
+      { id: 'q-4', input: '계속 실패하는 건 어디로 가죠', expect: { kind: 'match', candidateId: 'dlq' } },
+      { id: 'q-5', input: '밀리고 있는지 어떻게 보나요', expect: { kind: 'match', candidateId: 'lag' } },
+      {
+        id: 'q-t1',
+        input: '큐 대신 그냥 API를 직접 부르면 안 되나요?',
+        expect: { kind: 'new' },
+      },
+      {
+        id: 'q-t2',
+        input: '파티션 수는 어떻게 정하나요?',
+        expect: { kind: 'new' },
+      },
+    ],
+  },
+]
+
 export const MATCH_CASES = MATCH_CLUSTERS.flatMap((c) =>
   c.cases.map((k) => ({ cluster: c, case: k })),
 )
