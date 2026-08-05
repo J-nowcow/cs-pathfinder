@@ -3,6 +3,9 @@ import type { Metadata } from 'next'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { loadNode } from '@/lib/expand/cache'
 import { socialMeta } from '@/lib/site'
+import { headers } from 'next/headers'
+import { getQuota } from '@/lib/quota'
+import { quotaKeyFromHeaders, anonDailyLimit } from '@/lib/quota/key'
 import { ReadingView, type ReadingNode } from '@/components/ReadingView'
 
 export const dynamic = 'force-dynamic'
@@ -45,6 +48,13 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
   const node = await loadNode(nodeId)
   if (!node) notFound()
 
+  // 남은 횟수를 첫 화면부터 보여준다. 클라이언트가 따로 물으면 한 번 더 왕복하고
+  // 그 사이에 숫자가 없는 순간이 생긴다. 확장 API와 같은 키로 조회해야
+  // 화면이 말하는 값과 실제로 차감되는 값이 어긋나지 않는다.
+  const quotaKey = quotaKeyFromHeaders(await headers())
+  const limit = anonDailyLimit()
+  const used = (await getQuota(quotaKey)).used
+
   const initial: ReadingNode = {
     id: node.id,
     question: node.question,
@@ -58,5 +68,5 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
     })),
   }
 
-  return <ReadingView initialNode={initial} />
+  return <ReadingView initialNode={initial} initialQuota={{ used, limit }} />
 }

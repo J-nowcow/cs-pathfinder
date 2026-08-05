@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { expand } from '@/lib/expand'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { resolveCaller } from '@/lib/llm/resolve'
+import { quotaKeyFromHeaders, anonDailyLimit } from '@/lib/quota/key'
 
 const bodySchema = z.object({
   idempotency_key: z.string().min(1),
@@ -12,7 +13,6 @@ const bodySchema = z.object({
   raw_input: z.string().optional(),
 })
 
-const ANON_DAILY_LIMIT = Number(process.env.QUOTA_ANON_DAILY ?? 5)
 const BUSY_RETRY_SECONDS = 3
 
 function json(payload: unknown, status: number) {
@@ -20,18 +20,6 @@ function json(payload: unknown, status: number) {
     status,
     headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' },
   })
-}
-
-/**
- * 익명 사용자 식별 키.
- *
- * 계획 3에서 인증이 붙으면 검증된 세션 UID를 우선한다.
- * 요청 body의 사용자 식별자는 절대 신뢰하지 않는다.
- */
-function quotaKeyFrom(request: Request): string {
-  const forwarded = request.headers.get('x-forwarded-for') ?? ''
-  const ip = forwarded.split(',')[0]?.trim() || 'unknown'
-  return `anon:${ip}`
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -53,8 +41,8 @@ export async function POST(request: Request): Promise<Response> {
   const body = parsed.data
 
   const outcome = await expand({
-    quotaKey: quotaKeyFrom(request),
-    dailyLimit: ANON_DAILY_LIMIT,
+    quotaKey: quotaKeyFromHeaders(request.headers),
+    dailyLimit: anonDailyLimit(),
     parentNodeId: body.parent_node_id,
     ancestorNodeIds: body.ancestor_node_ids,
     mode: body.mode,

@@ -16,11 +16,14 @@ export function FreeInput({
   disabled,
   pending,
   quotaExceeded,
+  remaining,
   onSubmit,
 }: {
   disabled: boolean
   pending: boolean
   quotaExceeded: boolean
+  /** 오늘 새로 팔 수 있는 횟수 */
+  remaining: number
   onSubmit: (text: string) => void
 }) {
   const [text, setText] = useState('')
@@ -60,8 +63,15 @@ export function FreeInput({
         />
 
         <div className="flex items-center justify-between px-4 pb-2.5">
+          {/*
+            남은 횟수를 상시 보여준다. 다 쓰고 나서야 알려주면 그때는 이미 늦다.
+            글자 수와 같은 줄에 두는 것은 둘 다 "지금 쓸 수 있는 여유"를 말해서다.
+
+            이미 파인 길은 차감되지 않는다. 이 숫자가 세는 것은 새로 만드는 질문이다.
+          */}
           <span className={`font-mono text-[11px] ${over ? 'text-warn' : 'text-faint'}`}>
             {text.length}/{MAX}
+            {!quotaExceeded && <span className="ml-2">오늘 {remaining}번 남음</span>}
           </span>
 
           <button

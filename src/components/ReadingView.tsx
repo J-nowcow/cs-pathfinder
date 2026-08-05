@@ -35,14 +35,29 @@ type Attempt =
   | { mode: 'suggestion'; suggestion: PublicSuggestion }
   | { mode: 'free'; rawInput: string }
 
-export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
+export type QuotaSnapshot = { used: number; limit: number }
+
+export function ReadingView({
+  initialNode,
+  initialQuota,
+}: {
+  initialNode: ReadingNode
+  initialQuota: QuotaSnapshot
+}) {
   const [journey, setJourney] = useState<JourneyState>(() => startJourney(toVisited(initialNode)))
   const [node, setNode] = useState<ReadingNode>(initialNode)
   const [pendingId, setPendingId] = useState<string | null>(null)
   const [expanding, setExpanding] = useState(false)
   const [loadingNode, setLoadingNode] = useState(false)
   const [banner, setBanner] = useState<BannerState>({ kind: 'none' })
-  const [quotaExceeded, setQuotaExceeded] = useState(false)
+  /**
+   * 남은 횟수는 서버가 준 값에서 시작한다.
+   *
+   * 클라이언트가 따로 물으면 한 번 더 왕복하고 그 사이에 숫자가 없는 순간이 생긴다.
+   * 이후로는 확장 응답이 실제 값을 실어 오므로 그것으로 갱신한다.
+   */
+  const [quota, setQuota] = useState<QuotaSnapshot>(initialQuota)
+  const quotaExceeded = quota.limit > 0 && quota.used >= quota.limit
   const [justAddedId, setJustAddedId] = useState<string | null>(null)
   const [mapOpen, setMapOpen] = useState(false)
 
@@ -178,7 +193,7 @@ export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
           setJourney(state)
           setNode(next)
           setJustAddedId(occurrenceId)
-          setQuotaExceeded(res.quota.limit > 0 && res.quota.used >= res.quota.limit)
+          setQuota(res.quota)
           pushUrl(next.id, occurrenceId, true)
           return
         }
@@ -197,7 +212,8 @@ export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
           return
 
         case 'quota_exceeded':
-          setQuotaExceeded(true)
+          // 서버가 막았으면 실제로 다 쓴 것이다. 화면 숫자를 그 사실에 맞춘다
+          setQuota((q) => ({ ...q, used: q.limit }))
           setBanner({ kind: 'quota_exceeded' })
           return
 
@@ -272,6 +288,7 @@ export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
               disabled={busy}
               pending={expanding && pendingId === null}
               quotaExceeded={quotaExceeded}
+              remaining={Math.max(0, quota.limit - quota.used)}
               onSubmit={(text) => void run({ mode: 'free', rawInput: text })}
             />
           </div>
