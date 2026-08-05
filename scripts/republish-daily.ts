@@ -32,13 +32,31 @@ type Existing = {
   rootId: string
   question: string
   children: number
+  /** 이 노드를 뿌리로 삼은 다른 트리. 노드를 지우면 그 트리가 통째로 사라진다 */
+  rootOfOthers: number
+  /** 이 노드를 품고 있는 다른 트리. 노드를 지우면 그 트리에 구멍이 난다 */
+  insideOthers: number
 }
 
+/**
+ * 지우기 전에 이 노드에 매달린 것을 전부 센다.
+ *
+ * 처음에는 자식 간선만 봤다. 그것으로는 부족했다 — 공유 트리의 root_node_id가
+ * qnode를 on delete cascade로 참조해서, 누군가 이 질문을 뿌리로 공유했으면
+ * 그 트리가 통째로 사라진다. 실제로 재발행 한 번에 공유 트리 두 개가 없어졌다.
+ *
+ * tree_occurrence도 같은 이유로 본다. 그쪽은 트리가 살아남는 대신 노드 하나가
+ * 빠져서, 공유한 사람이 남긴 그때 그 모양이 아니게 된다.
+ */
 async function findExisting(tx: Tx, date: string): Promise<Existing | null> {
   const rows = await tx.query<Existing>(
     `select t.id as "treeId", t.seed_id as "seedId", n.id as "rootId",
             n.normalized_question as question,
-            (select count(*)::int from qedge e where e.parent_id = n.id) as children
+            (select count(*)::int from qedge e where e.parent_id = n.id) as children,
+            (select count(*)::int from tree o
+              where o.root_node_id = n.id and o.id <> t.id) as "rootOfOthers",
+            (select count(distinct o.tree_id)::int from tree_occurrence o
+              where o.qnode_id = n.id and o.tree_id <> t.id) as "insideOthers"
      from tree t join qnode n on n.id = t.root_node_id
      where t.kind = 'daily' and t.publish_date = $1::date`,
     [date],
@@ -53,45 +71,53 @@ async function main() {
 
   const db = await getDb()
 
-  const removed = await db.transaction(async (tx) => {
-    const existing = await findExisting(tx, date)
-    if (!existing) return null
+  const existing = await db.transaction((tx) => findExisting(tx, date))
 
-    if (existing.children > 0 && !force) {
-      throw new Error(
-        `${date} 루트 아래로 이미 ${existing.children}개가 뻗어 있다. ` +
-          '지우면 그 경로도 함께 사라진다. 정말 버리려면 --force 를 붙인다.',
-      )
+  if (existing) {
+    const damage: string[] = []
+    if (existing.children > 0) {
+      damage.push(`아래로 뻗은 질문 ${existing.children}개의 연결이 끊어진다`)
+    }
+    if (existing.rootOfOthers > 0) {
+      damage.push(`이 질문을 뿌리로 삼은 공유 트리 ${existing.rootOfOthers}개가 통째로 사라진다`)
+    }
+    if (existing.insideOthers > 0) {
+      damage.push(`이 질문을 품은 공유 트리 ${existing.insideOthers}개에 구멍이 난다`)
     }
 
-    // 시드 id를 먼저 읽어둔다. tree.seed_id는 on delete set null이라
-    // 트리가 사라지는 순간 어느 주제어였는지 알 길이 없어진다.
-    const seedId = existing.seedId
+    console.log(`${date} 현재 발행분`)
+    console.log(`  ${existing.question}\n`)
 
-    // 루트를 지우면 tree가 on delete cascade로 함께 사라지고,
-    // tree_occurrence·qnode_suggestion·qnode_alias도 따라 정리된다.
-    await tx.query('delete from qnode where id = $1', [existing.rootId])
-
-    if (seedId) {
-      await tx.query('update topic_seed set consumed_at = null where id = $1', [seedId])
+    if (damage.length > 0) {
+      if (!force) {
+        console.error('버리면 이런 일이 벌어진다.')
+        for (const d of damage) console.error(`  - ${d}`)
+        console.error('\n정말 버리려면 --force 를 붙인다.')
+        process.exit(1)
+      }
+      // --force로 넘어가도 무엇을 부수는지는 적어둔다. 조용히 지우면
+      // 나중에 왜 없어졌는지 아무도 모른다
+      console.log('--force로 넘어간다. 함께 사라지는 것:')
+      for (const d of damage) console.log(`  - ${d}`)
+      console.log()
     }
-
-    return existing
-  })
-
-  if (removed) {
-    console.log(`${date} 발행분을 버렸다.`)
-    console.log(`  질문 ${removed.question}`)
-    console.log(`  시드 ${removed.seedId ? '되돌림' : '(연결된 시드 없음)'}\n`)
   } else {
     console.log(`${date}에 발행분이 없다. 새로 발행한다.\n`)
   }
 
-  const out = await publishDaily({ date, call: resolveCaller() })
+  /*
+   * 지우는 것은 publishDaily 안에서, 생성이 끝난 뒤에 일어난다.
+   *
+   * 예전에는 이 스크립트가 먼저 지우고 그 다음에 발행을 불렀다. 생성이 한도에
+   * 걸려 실패하자 그날 질문이 통째로 사라졌다. 새 내용을 손에 쥔 뒤에 옛것을
+   * 지워야 실패해도 어제 것이 그대로 남는다.
+   */
+  const out = await publishDaily({ date, replace: true, call: resolveCaller() })
 
   if (out.kind !== 'published') {
     console.error(`재발행 실패: ${out.kind}`)
     if (out.kind === 'generation_failed') console.error(`  ${out.detail}`)
+    console.error('기존 발행분은 그대로 남아 있다.')
     process.exit(1)
     return
   }

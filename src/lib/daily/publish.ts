@@ -17,6 +17,17 @@ export type PublishInput = {
   /** 발행일 'YYYY-MM-DD' (KST). 기본은 오늘 */
   date?: string
   call?: StructuredCaller
+  /**
+   * 이미 발행된 날짜를 갈아엎는다.
+   *
+   * 평소에는 하루 하나가 절대 규칙이라 이미 있으면 아무것도 안 한다. 다만 뽑힌
+   * 질문이 나쁠 때 빠져나갈 구멍이 필요하다.
+   *
+   * **교체는 생성이 끝난 뒤에 일어난다.** 먼저 지우고 나중에 만들면 생성이
+   * 실패했을 때 그날이 빈 채로 남는다. 실제로 그렇게 만들었다가 오늘 치 질문이
+   * 사라진 적이 있다. 지금은 새 내용을 손에 쥔 뒤에야 옛것을 지운다.
+   */
+  replace?: boolean
 }
 
 /**
@@ -43,6 +54,7 @@ async function commitPublish(args: {
   date: string
   seed: ClaimedSeed
   content: DailyRootContent
+  replace?: boolean
 }): Promise<CommitResult> {
   const db = await getDb()
 
@@ -52,11 +64,22 @@ async function commitPublish(args: {
       kstDateKey(args.date),
     ])
 
-    const dup = await tx.query<{ id: string }>(
-      `select id from tree where kind = 'daily' and publish_date = $1::date`,
+    const dup = await tx.query<{ id: string; seed_id: string | null; root_node_id: string }>(
+      `select id, seed_id, root_node_id from tree
+       where kind = 'daily' and publish_date = $1::date`,
       [args.date],
     )
-    if (dup.length > 0) return { kind: 'lost', treeId: dup[0].id }
+
+    if (dup.length > 0) {
+      if (!args.replace) return { kind: 'lost', treeId: dup[0].id }
+
+      // 옛 시드를 먼저 되돌린다. 트리가 사라지면 어느 주제어였는지 알 길이 없다
+      if (dup[0].seed_id) {
+        await tx.query('update topic_seed set consumed_at = null where id = $1', [dup[0].seed_id])
+      }
+      // 루트를 지우면 tree가 on delete cascade로 따라 사라진다
+      await tx.query('delete from qnode where id = $1', [dup[0].root_node_id])
+    }
 
     const inserted = await tx.query<{ id: string }>(
       `insert into qnode
@@ -137,7 +160,7 @@ async function commitPublish(args: {
 export async function publishDaily(input: PublishInput = {}): Promise<PublishOutcome> {
   const date = input.date ?? kstToday()
 
-  if (await dailyTreeExists(date)) {
+  if (!input.replace && (await dailyTreeExists(date))) {
     const already = await findDailyTree(date)
     if (already) return { kind: 'already_published', tree: already }
     // 트리는 있는데 루트를 못 읽는다. 다시 발행해봐야 유니크 인덱스에 막히므로
@@ -162,7 +185,7 @@ export async function publishDaily(input: PublishInput = {}): Promise<PublishOut
 
   let result: CommitResult
   try {
-    result = await commitPublish({ date, seed, content })
+    result = await commitPublish({ date, seed, content, replace: input.replace })
   } catch (e) {
     await unclaimSeed(seed.id)
     return { kind: 'generation_failed', detail: e instanceof Error ? e.message : String(e) }
