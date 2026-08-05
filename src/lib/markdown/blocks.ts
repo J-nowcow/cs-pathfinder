@@ -43,8 +43,12 @@ const FENCE_CLOSE = /^:::\s*(end)?\s*$/
  * 어떤 이유로든 못 알아본 울타리가 문단에 남으면 `:::`가 화면에 그대로 보인다.
  * 도식을 못 그린 것은 아쉬운 정도지만 기호가 보이는 것은 고장으로 읽힌다.
  * 코드 울타리도 같이 턴다 — 모델이 도식을 ``` 로 감싸는 경우가 있다.
+ *
+ * 그물이 둘이다. 울타리만 있는 줄은 통째로 버리고, 문장 중간에 섞인 기호는
+ * 그 자리만 지운다. 줄 시작만 보면 "…이다. :::flow" 같은 모양이 빠져나간다.
  */
-const STRAY_FENCE = /^\s*(:::|```)/
+const FENCE_ONLY_LINE = /^\s*(:::|```)/
+const INLINE_FENCE = /:::\s*(flow|stack|end)?|```+[a-z]*/g
 
 /** `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN` */
 const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
@@ -139,8 +143,10 @@ export function parseBlocks(body: string): Block[] {
 
       const cleaned = trimmed
         .split('\n')
-        .filter((l) => !STRAY_FENCE.test(l))
+        .filter((l) => !FENCE_ONLY_LINE.test(l))
         .join('\n')
+        .replace(INLINE_FENCE, '')
+        .replace(/[ \t]{2,}/g, ' ')
         .trim()
 
       if (cleaned.length > 0) blocks.push({ type: 'paragraph', text: cleaned })

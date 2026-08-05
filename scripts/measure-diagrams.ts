@@ -14,14 +14,19 @@ import { parseBlocks } from '../src/lib/markdown/blocks'
  * - 도식이 붙는 비율. 안 붙으면 통짜 글로 돌아간 것이다
  * - 기호가 새는 비율. 파서가 못 알아본 울타리는 화면에 `:::`로 보인다.
  *   도식을 못 그린 것보다 이쪽이 나쁘다
- * - 첫 문장 길이. 질문에 바로 답하는 문장은 짧다. 배경으로 시작하면 길어진다.
- *   손으로 쓴 예시의 첫 문장은 20~45자다
+ * - 첫 문장 길이. **판정이 아니라 관찰값이다.** 짧을수록 질문에 바로 답했을
+ *   가능성이 높지만 길다고 틀린 것은 아니다 — "어떤 순서로 진행되는가?"의 답은
+ *   원래 긴 문장이다. 길이만으로 거르면 멀쩡한 것을 잡는다. 손으로 쓴 예시가
+ *   20~45자이므로 그보다 크게 벌어지면 사람이 읽어볼 신호로 쓴다
  * - 꼬리질문 길이. 버튼과 게시판 제목에 그대로 나가서 길면 줄이 접힌다
  *
  * 실행: npm run measure:diagrams
  */
-/** 질문에 바로 답하는 첫 문장은 짧다. 손으로 쓴 예시가 20~45자다 */
-const LEAD_LIMIT = 60
+/**
+ * 첫 문장이 이보다 길면 사람이 한 번 읽어볼 신호다. 합격선이 아니다.
+ * 손으로 쓴 예시가 20~45자이고, 배경으로 시작하는 문장은 대개 그보다 훨씬 길다.
+ */
+const LEAD_WATCH = 80
 
 /** 버튼과 게시판 제목에 그대로 나간다 */
 const SUGGESTION_LIMIT = 35
@@ -45,6 +50,7 @@ async function main() {
   let longSuggestions = 0
   let allSuggestions = 0
   const longLeadSamples: string[] = []
+  const leakSamples: string[] = []
 
   for (let r = 0; r < runs; r += 1) {
     for (const c of CASES) {
@@ -64,14 +70,25 @@ async function main() {
           (b) => b.type === 'paragraph' && (b.text.includes(':::') || b.text.includes('```')),
         )
         if (diagrams.length > 0) withDiagram += 1
-        if (leak) leaked += 1
+        if (leak) {
+          leaked += 1
+          // 어떤 모양을 못 알아봤는지 봐야 고칠 수 있다
+          for (const b of blocks) {
+            if (b.type !== 'paragraph') continue
+            for (const line of b.text.split('\n')) {
+              if (line.includes(':::') || line.includes('```')) {
+                leakSamples.push(line.trim().slice(0, 90))
+              }
+            }
+          }
+        }
 
         // 첫 문단의 첫 문장. 마침표까지 자른다
         const firstPara = blocks.find((b) => b.type === 'paragraph')
         const lead = firstPara?.type === 'paragraph' ? (firstPara.text.split(/(?<=\.)\s/)[0] ?? '') : ''
         if (lead) {
           leads.push(lead.length)
-          if (lead.length > LEAD_LIMIT) longLeadSamples.push(lead)
+          if (lead.length > LEAD_WATCH) longLeadSamples.push(lead)
         }
 
         for (const sg of out.suggestions) {
@@ -89,13 +106,18 @@ async function main() {
   process.stdout.write('\n\n(· 도식 있음  _ 통짜 글  ! 기호 샘  x 실패)\n\n')
   console.log(`도식이 붙은 해설  ${withDiagram}/${total}`)
   console.log(`기호가 샌 해설    ${leaked}/${total}   (0이어야 한다)`)
+  for (const sample of [...new Set(leakSamples)].slice(0, 6)) {
+    console.log(`  샌 줄: ${sample}`)
+  }
   console.log(`종류별  ${[...kinds].map(([k, n]) => `${k} ${n}`).join(' · ') || '없음'}`)
 
   if (leads.length > 0) {
     const sorted = [...leads].sort((a, b) => a - b)
     const median = sorted[Math.floor(sorted.length / 2)]
-    const long = leads.filter((n) => n > LEAD_LIMIT).length
-    console.log(`\n첫 문장  중앙값 ${median}자 · ${LEAD_LIMIT}자 초과 ${long}/${leads.length}`)
+    const long = leads.filter((n) => n > LEAD_WATCH).length
+    console.log(
+      `\n첫 문장  중앙값 ${median}자 · ${LEAD_WATCH}자 초과 ${long}/${leads.length}  (판정 아님, 눈으로 볼 신호)`,
+    )
     for (const sample of longLeadSamples.slice(0, 3)) {
       console.log(`  긴 예: ${sample.slice(0, 80)}`)
     }

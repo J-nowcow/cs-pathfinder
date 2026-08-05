@@ -216,6 +216,9 @@ describe('parseBlocks — 모델이 조금씩 다르게 쓸 때', () => {
       '앞 문단.\n\n::::flow\n이상한 것\n::::\n\n뒤 문단.',
       '앞 문단.\n\n```\n:::flow\nA -> B: 하나\n```\n\n뒤 문단.',
       ':::flowchart\nA -> B\n:::',
+      // 줄 중간에 섞인 경우. 줄 시작만 보는 그물은 이걸 놓친다
+      '설명이 이어진다. :::flow 클라이언트 -> 서버: SYN :::',
+      '앞 문단.\n\n```mermaid\nsequenceDiagram\n```\n\n뒤 문단.',
     ]
     for (const body of bodies) {
       for (const b of parseBlocks(body)) {
