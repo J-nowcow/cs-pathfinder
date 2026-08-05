@@ -130,6 +130,57 @@ body {
   display: none;
 }
 
+/*
+ * 비교표를 좁은 화면에서 줄 단위 카드로 접는다.
+ *
+ * 세 칸짜리 표를 390px에 밀어 넣으면 어느 칸이든 잘린다. 가로 스크롤로
+ * 두면 비교하려고 만든 표를 좌우로 오가며 봐야 해서 표의 목적이 사라진다.
+ *
+ * 접힌 뒤에는 첫 칸이 제목, 나머지 칸은 머리글을 이름표로 달고 값이 온다.
+ * 머리글 줄 자체는 이름표로 옮겨갔으니 감춘다.
+ *
+ * display를 바꾸면 표 의미가 사라지므로 마크업 쪽에서 role을 붙여 둔다.
+ */
+@media (max-width: 639.98px) {
+  .rtable,
+  .rtable tbody,
+  .rtable tr,
+  .rtable td {
+    display: block;
+  }
+
+  .rtable thead {
+    display: none;
+  }
+
+  .rtable tr {
+    padding: 0.875rem 1rem;
+  }
+
+  .rtable td {
+    padding: 0;
+  }
+
+  /* 기준 칸이 카드 제목이다 */
+  .rtable td:first-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .rtable td + td {
+    display: grid;
+    grid-template-columns: minmax(3.5rem, max-content) 1fr;
+    gap: 0.75rem;
+    margin-top: 0.375rem;
+  }
+
+  .rtable td + td::before {
+    content: attr(data-label);
+    color: var(--faint);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+}
+
 /* 해설 본문. 긴 글을 연달아 읽는 자리라 행간을 넉넉히 준다 */
 .prose-body p {
   margin-bottom: 1.15em;

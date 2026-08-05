@@ -22,7 +22,8 @@
     "db:dedupe": "tsx scripts/dedupe-roots.ts",
     "db:purge-stubs": "tsx scripts/purge-stubs.ts",
     "db:republish": "tsx scripts/republish-daily.ts",
-    "db:backfill-links": "tsx scripts/backfill-suggestion-links.ts"
+    "db:backfill-links": "tsx scripts/backfill-suggestion-links.ts",
+    "db:enrich": "tsx scripts/enrich-bodies.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",

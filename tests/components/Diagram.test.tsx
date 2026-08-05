@@ -104,6 +104,38 @@ describe('Prose — 비교표', () => {
     expect(screen.getByText('드물다')).toBeTruthy()
   })
 
+  /**
+   * 좁은 화면에서 표는 줄 단위 카드로 접힌다(globals.css). 접히면 머리글 줄이
+   * 사라지므로 각 칸이 자기 머리글을 이름표로 들고 있어야 한다. 이게 빠지면
+   * 폰에서 "다양한 조인 순서 선택"이 무슨 칸의 값인지 알 수 없다.
+   */
+  it('carries its column name on every cell for the folded layout', () => {
+    const { container } = render(
+      <Prose
+        body={['| 기준 | 낙관적 | 비관적 |', '| --- | --- | --- |', '| 충돌 | 드물다 | 잦다 |'].join(
+          '\n',
+        )}
+      />,
+    )
+
+    const cells = [...container.querySelectorAll('tbody td')]
+    expect(cells.map((c) => c.getAttribute('data-label'))).toEqual(['기준', '낙관적', '비관적'])
+  })
+
+  /**
+   * display를 바꿔 접으면 브라우저가 표 의미를 잃는다. role을 손으로 붙여야
+   * 카드로 접힌 뒤에도 스크린 리더가 표로 읽는다.
+   */
+  it('keeps table semantics explicit so folding cannot strip them', () => {
+    const { container } = render(
+      <Prose body={['| 기준 | 값 |', '| --- | --- |', '| 하나 | 둘 |'].join('\n')} />,
+    )
+
+    expect(container.querySelector('table')?.getAttribute('role')).toBe('table')
+    expect(container.querySelector('tbody tr')?.getAttribute('role')).toBe('row')
+    expect(container.querySelector('tbody td')?.getAttribute('role')).toBe('cell')
+  })
+
   /** scope가 없으면 스크린 리더가 어느 열의 값인지 못 읽는다 */
   it('marks header cells with a scope', () => {
     const { container } = render(

@@ -108,50 +108,56 @@ export function StackDiagram({ layers }: { layers: StackLayer[] }) {
  */
 export function TableDiagram({ head, rows }: { head: string[]; rows: string[][] }) {
   return (
-    /*
-      오른쪽 끝을 배경색으로 흐린다. 잘린 것과 밀 수 있는 것은 눈에 같아 보여서,
-      힌트가 없으면 표가 그냥 깨진 줄 안다. 스크롤이 끝까지 가도 흐림은 남지만
-      그건 잘못 읽힐 여지가 없다.
-    */
-    <div className="relative my-6">
-      <figure className="scroll-x -mx-5 px-5 sm:mx-0 sm:px-0">
-        <table className="w-full min-w-[26rem] border-collapse overflow-hidden rounded-lg border border-line bg-raised text-left">
-          <thead>
-            <tr className="border-b border-line">
-              {head.map((h, i) => (
-                <th
-                  key={i}
-                  scope="col"
-                  className="px-4 py-2.5 text-[12px] font-medium text-faint sm:px-5"
+    <figure className="my-6">
+      {/*
+        좁은 화면에서는 표를 줄 단위 카드로 접는다 (rtable, globals.css).
+
+        비교표는 기준 한 칸에 비교 대상 두 칸이라 최소 세 칸이다. 390px에서
+        세 칸이면 칸당 100px 남짓이라 어느 쪽이든 잘린다. 가로로 밀게 두면
+        읽는 사람이 표를 오간다 — 비교하려고 만든 것이 비교를 방해한다.
+
+        접으면 한 줄씩 세로로 읽힌다. 첫 칸이 제목, 나머지는 머리글을 이름표로
+        달고 값이 따라온다.
+
+        display를 바꾸면 브라우저가 표 의미를 잃으므로 role을 손으로 붙인다.
+        그래야 스크린 리더가 카드로 접힌 뒤에도 표로 읽는다.
+      */}
+      <table
+        role="table"
+        className="rtable w-full border-collapse overflow-hidden rounded-lg border border-line bg-raised text-left"
+      >
+        <thead>
+          <tr className="border-b border-line">
+            {head.map((h, i) => (
+              <th
+                key={i}
+                scope="col"
+                className="px-4 py-2.5 text-[12px] font-medium text-faint sm:px-5"
+              >
+                <Inline text={h} />
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-line">
+          {rows.map((row, i) => (
+            <tr key={i} role="row">
+              {row.map((c, j) => (
+                <td
+                  key={j}
+                  role="cell"
+                  data-label={head[j] ?? ''}
+                  className={`px-4 py-3 align-top text-[14px] leading-[1.6] sm:px-5 ${
+                    j === 0 ? 'font-medium text-ink' : 'text-muted'
+                  }`}
                 >
-                  <Inline text={h} />
-                </th>
+                  <Inline text={c} />
+                </td>
               ))}
             </tr>
-          </thead>
-          <tbody className="divide-y divide-line">
-            {rows.map((row, i) => (
-              <tr key={i}>
-                {row.map((c, j) => (
-                  <td
-                    key={j}
-                    className={`px-4 py-3 align-top text-[14px] leading-[1.6] sm:px-5 ${
-                      j === 0 ? 'font-medium text-ink' : 'text-muted'
-                    }`}
-                  >
-                    <Inline text={c} />
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </figure>
-
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-surface to-transparent sm:hidden"
-      />
-    </div>
+          ))}
+        </tbody>
+      </table>
+    </figure>
   )
 }
