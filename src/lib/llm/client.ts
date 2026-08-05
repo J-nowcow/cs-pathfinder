@@ -15,18 +15,34 @@ export const MODEL_GENERATE = 'gemini-3.6-flash'
 export const MODEL_DAILY = 'gemini-3.5-flash'
 
 /**
+ * Gemma 4. Gemini API에서 서빙되고 입력·출력·캐싱이 전부 무료다.
+ * 유료 티어가 없는 무료 전용 모델이라 한도를 넘어도 과금되지 않는다.
+ *
+ * 후보 매칭 정확도는 Flash-Lite와 동률로 실측됐다(후보 3·10·25·50개에서 각 7/7).
+ * 대신 눈에 띄게 느려서 1순위로 두지 않는다. 게이트는 모든 확장의 임계 경로다.
+ *
+ * 네이티브 구조화 출력을 지원하지 않아 응답을 코드펜스로 감싼다.
+ * stripCodeFence가 그걸 복구한다.
+ */
+export const MODEL_GEMMA = 'gemma-4-31b-it'
+
+/**
  * 모델 폴백 사슬.
  *
  * 한도(RPM·RPD)는 모델마다 따로 잡히므로 다른 모델로 넘어가면 살아난다.
- * 품질이 높은 쪽을 앞에 두고 뒤로 갈수록 가볍게 떨어뜨린다.
+ * 앞은 빠르고 뒤는 무료다. 평소엔 빠른 쪽을 쓰고 한도가 떨어지면 무료로 버틴다.
  *
- * 정규화 게이트는 사슬을 짧게 둔다. 모델이 바뀌면 canonical 문장이 흔들려
- * 같은 질문이 다른 해시로 갈라질 수 있다. 캐시가 갈라지느니 잠깐 실패하는 편이 낫다.
+ * 게이트가 "생성"이 아니라 "후보 선택"이라 모델이 바뀌어도 출력이 id다.
+ * 그래서 게이트도 사슬을 길게 가져갈 수 있다. 생성 방식이었다면 모델을 바꾸는 순간
+ * canonical 문장이 흔들려 캐시가 갈라졌을 것이다.
+ *
+ * 사슬 끝을 Gemma로 닫는 이유는 그 뒤가 없기 때문이다. Gemma는 무료 전용이라
+ * 여기까지 왔는데도 실패하면 서비스가 응답을 못 준다.
  */
 export const MODEL_CHAIN: Record<string, string[]> = {
-  [MODEL_GATE]: [MODEL_GATE, 'gemini-3.5-flash-lite'],
-  [MODEL_GENERATE]: [MODEL_GENERATE, MODEL_DAILY, MODEL_GATE],
-  [MODEL_DAILY]: [MODEL_DAILY, MODEL_GENERATE],
+  [MODEL_GATE]: [MODEL_GATE, 'gemini-3.5-flash-lite', MODEL_GEMMA],
+  [MODEL_GENERATE]: [MODEL_GENERATE, MODEL_DAILY, MODEL_GATE, MODEL_GEMMA],
+  [MODEL_DAILY]: [MODEL_DAILY, MODEL_GENERATE, MODEL_GEMMA],
 }
 
 export type StructuredCallArgs<T> = {
@@ -43,6 +59,29 @@ export type StructuredCallArgs<T> = {
  * AI SDK + Google 조합에서 z.union과 z.record는 동작하지 않으므로 스키마에서 쓰지 않는다.
  */
 export type StructuredCaller = <T>(args: StructuredCallArgs<T>) => Promise<T>
+
+/**
+ * 마크다운 코드펜스를 벗긴다.
+ *
+ * Gemma는 네이티브 구조화 출력을 지원하지 않아 SDK가 프롬프트 기반 JSON으로 떨어진다.
+ * 그때 Gemma는 응답을 ```json ... ``` 로 감싸서 파서가 깨진다.
+ * 내용은 멀쩡한데 형식만 어긋나는 것이라 여기서 되살린다.
+ */
+export function stripCodeFence(text: string): string {
+  const withoutFence = text
+    .trim()
+    .replace(/^```[a-zA-Z]*\s*\n?/, '')
+    .replace(/\n?```[.\s]*$/, '')
+    .trim()
+
+  // 여는 펜스 없이 닫는 펜스만 붙거나 앞뒤에 설명이 섞이는 경우가 있다.
+  // 가장 바깥 중괄호 구간만 잘라낸다.
+  const start = withoutFence.indexOf('{')
+  const end = withoutFence.lastIndexOf('}')
+  if (start === -1 || end === -1 || end < start) return withoutFence
+
+  return withoutFence.slice(start, end + 1)
+}
 
 /** 폴백 없이 한 번만 호출한다. 폴백 로직 테스트에서 이 함수를 대체한다. */
 export async function callOnce<T>(
@@ -69,6 +108,7 @@ export async function callOnce<T>(
     schema,
     system,
     prompt,
+    experimental_repairText: async ({ text }: { text: string }) => stripCodeFence(text),
   })
 
   return object

@@ -4,6 +4,8 @@ import {
   callWithFallback,
   MODEL_GATE,
   MODEL_GENERATE,
+  MODEL_GEMMA,
+  stripCodeFence,
   type FallbackDeps,
   type StructuredCallArgs,
 } from '@/lib/llm/client'
@@ -53,6 +55,36 @@ describe('classifyFailure', () => {
   })
 })
 
+describe('stripCodeFence', () => {
+  const body = '{"relevant": true, "matched_id": "n01"}'
+
+  it('leaves clean json alone', () => {
+    expect(stripCodeFence(body)).toBe(body)
+  })
+
+  it('strips a full fence', () => {
+    expect(stripCodeFence('```json\n' + body + '\n```')).toBe(body)
+  })
+
+  it('strips a closing fence with no opener', () => {
+    // Gemma가 실제로 낸 형태다. 여는 펜스 없이 닫는 것만 붙는다.
+    expect(stripCodeFence('  ' + body + '\n  ```.')).toBe(body)
+  })
+
+  it('drops prose around the object', () => {
+    expect(stripCodeFence('여기 결과입니다:\n' + body + '\n도움이 되었길 바랍니다.')).toBe(body)
+  })
+
+  it('returns the text unchanged when there is no object', () => {
+    expect(stripCodeFence('  not json at all  ')).toBe('not json at all')
+  })
+
+  it('keeps nested braces intact', () => {
+    const nested = '{"a": {"b": 1}}'
+    expect(stripCodeFence('```\n' + nested + '\n```')).toBe(nested)
+  })
+})
+
 describe('buildAttempts', () => {
   it('exhausts every key on the best model before dropping a tier', () => {
     const attempts = buildAttempts(MODEL_GENERATE, ['k1', 'k2'])
@@ -63,9 +95,12 @@ describe('buildAttempts', () => {
     expect(attempts[2].model).not.toBe(MODEL_GENERATE)
   })
 
-  it('keeps the gate chain short so the cache does not split', () => {
-    const models = new Set(buildAttempts(MODEL_GATE, ['k1']).map((a) => a.model))
-    expect(models.size).toBeLessThanOrEqual(2)
+  it('ends every chain with the free model', () => {
+    // Gemma 뒤에는 폴백이 없다. 여기까지 와서 실패하면 응답을 못 준다.
+    for (const model of [MODEL_GATE, MODEL_GENERATE]) {
+      const attempts = buildAttempts(model, ['k1'])
+      expect(attempts[attempts.length - 1].model).toBe(MODEL_GEMMA)
+    }
   })
 
   it('falls back to the single model when no chain is defined', () => {
