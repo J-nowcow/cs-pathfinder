@@ -90,9 +90,11 @@ function deepestTrail(snapshot: Snapshot, questionOf: Map<string, string>): stri
   const nodeOf = new Map(snapshot.rows.map((r) => [r.tempId, r.nodeId]))
   const chain: string[] = []
 
-  for (let cur = deepest; cur !== null && cur !== undefined; cur = parentOf.get(cur) ?? null) {
+  let cur: string | null = deepest
+  while (cur !== null) {
     const q = questionOf.get(nodeOf.get(cur) ?? '')
     if (q) chain.push(q)
+    cur = parentOf.get(cur) ?? null
   }
 
   return chain.reverse()
