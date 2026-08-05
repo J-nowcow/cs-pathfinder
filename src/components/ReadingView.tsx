@@ -22,6 +22,7 @@ import { FreeInput } from '@/components/FreeInput'
 import { Prose } from '@/components/Prose'
 import { Banner, GeneratingBody, type BannerState } from '@/components/Banners'
 import { MinimapStrip } from '@/components/MinimapStrip'
+import { ShareSheet } from '@/components/ShareSheet'
 
 // React Flow는 무겁고 서버 렌더가 필요 없다. 지도를 열 때만 가져온다.
 const MapModal = dynamic(() => import('@/components/MapModal').then((m) => m.MapModal), {
@@ -229,7 +230,11 @@ export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
           >
             ← 질문 목록
           </Link>
-          <span className="font-mono text-[11px] text-faint">깊이 {path.length - 1}</span>
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[11px] text-faint">깊이 {path.length - 1}</span>
+            {/* 파고든 다음에야 공유할 게 생긴다. 버튼은 스스로 그때 나타난다 */}
+            <ShareSheet journey={journey} />
+          </div>
         </div>
 
         <PathChips path={path} onJump={(id) => void goTo(id)} />
