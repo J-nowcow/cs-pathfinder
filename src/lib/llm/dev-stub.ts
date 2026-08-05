@@ -65,7 +65,8 @@ function gateResponse(prompt: string) {
   if (REJECT_HINTS.some((h) => lower.includes(h))) {
     return {
       relevant: false,
-      reason: 'CS 학습과 관련 없는 요청입니다.',
+      // 이 문장은 배너에 그대로 나간다. 화면 카피 톤에 맞춘다.
+      reason: 'CS 학습이랑 관련 없는 요청 같아요.',
       identity_scope: 'generic',
       normalized_question: '',
     }

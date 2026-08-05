@@ -140,7 +140,7 @@ export function ReadingView({ initialNode }: { initialNode: ReadingNode }) {
         cache.current.set(loaded.id, loaded)
         setNode(loaded)
       } catch {
-        setBanner({ kind: 'error', message: '질문을 불러오지 못했습니다.' })
+        setBanner({ kind: 'error', message: '질문을 불러오지 못했어요.' })
       } finally {
         setLoadingNode(false)
       }

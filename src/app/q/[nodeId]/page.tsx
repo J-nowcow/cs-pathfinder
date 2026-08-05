@@ -24,11 +24,15 @@ export async function generateMetadata({
   const { nodeId } = await params
   const node = await loadNode(nodeId)
 
-  if (!node) return { title: '질문을 찾을 수 없습니다 · CS 질문 트리' }
+  // 접미는 layout의 title template이 붙인다. 여기서 또 붙이면 두 번 나온다.
+  if (!node) return { title: '없는 질문이에요' }
+
+  const lead = node.body.split('\n\n')[0]?.slice(0, 140)
 
   return {
-    title: `${node.question} · CS 질문 트리`,
-    description: node.body.split('\n\n')[0]?.slice(0, 140),
+    title: node.question,
+    description: lead,
+    openGraph: { title: node.question, description: lead },
   }
 }
 

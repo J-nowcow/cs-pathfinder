@@ -47,7 +47,7 @@ export function FreeInput({
           value={text}
           disabled={blocked}
           placeholder={
-            quotaExceeded ? '오늘 확장 한도를 다 썼습니다' : '이 질문에서 더 궁금한 것을 적어보세요'
+            quotaExceeded ? '오늘 몫은 다 쓰셨어요' : '이 질문에서 더 궁금한 걸 적어보세요'
           }
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
@@ -77,8 +77,8 @@ export function FreeInput({
       {/* 입력란만 흐려두면 왜 막혔는지 알 수 없다. 남은 길이 있다는 것도 함께 알린다 */}
       <p className="mt-2 text-[12px] leading-[1.6] text-faint">
         {quotaExceeded
-          ? '오늘 확장 한도를 다 썼습니다. 이미 파인 길로 표시된 추천은 계속 누를 수 있고, 한도는 자정에 초기화됩니다.'
-          : '입력한 내용은 AI 학습에 사용될 수 있습니다. 이름·연락처 같은 개인정보는 넣지 마세요.'}
+          ? '오늘 몫은 다 쓰셨어요. 이미 파인 길은 그대로 누를 수 있고요. 자정에 초기화돼요.'
+          : '적은 내용은 AI 학습에 쓰일 수 있어요. 이름이나 연락처는 넣지 말아주세요.'}
       </p>
     </form>
   )

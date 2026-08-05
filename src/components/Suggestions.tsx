@@ -22,7 +22,7 @@ export function Suggestions({
   if (suggestions.length === 0) {
     return (
       <p className="rounded-lg border border-dashed border-line px-4 py-8 text-center text-[14px] text-faint">
-        이 질문에는 추천 꼬리질문이 없습니다. 아래에 직접 물어보세요.
+        여긴 추천 꼬리질문이 없네요. 아래에 직접 물어보세요.
       </p>
     )
   }
@@ -50,7 +50,7 @@ export function Suggestions({
               <span className="min-w-0 flex-1">
                 <span className="block text-[15px] leading-[1.55] text-ink">{s.text}</span>
                 {s.resolved && (
-                  <span className="mt-1 block text-[12px] text-accent">이미 파인 길 · 즉시 이동</span>
+                  <span className="mt-1 block text-[12px] text-accent">이미 파인 길 · 바로 이동</span>
                 )}
               </span>
 

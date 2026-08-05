@@ -99,7 +99,7 @@ export function MapModal({
           <h2 className="text-[14px] font-semibold text-white">파고든 지도</h2>
           <p className="mt-0.5 text-[12px] text-strata-ink">
             질문 {layout.nodes.length}개
-            {view.hiddenCount > 0 && ` · 현재 위치에서 먼 ${view.hiddenCount}개는 숨김`}
+            {view.hiddenCount > 0 && ` · 먼 ${view.hiddenCount}개는 숨겼어요`}
           </p>
         </div>
 
