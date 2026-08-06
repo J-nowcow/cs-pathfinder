@@ -210,6 +210,39 @@ summary::-webkit-details-marker {
   font-weight: 600;
 }
 
+/*
+ * 지도의 확대·축소 버튼.
+ *
+ * React Flow 기본이 26×26이다. 재보니 그대로였고, 손끝이 닿는 자리로는 작다.
+ * 폰에서 이 버튼을 누르려다 지도를 끌어버린다. 실제로 "있는 줄도 몰랐다"는
+ * 말이 나왔다 — 배경과 대비도 낮았다.
+ *
+ * 44px까지 키우고 테두리를 준다. 지도 위에 떠 있는 물건이라 배경만으로는
+ * 경계가 안 보인다.
+ */
+.react-flow__controls .react-flow__controls-button {
+  width: 44px;
+  height: 44px;
+  background: var(--raised);
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+.react-flow__controls .react-flow__controls-button:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.react-flow__controls .react-flow__controls-button svg {
+  max-width: 14px;
+  max-height: 14px;
+  fill: currentColor;
+}
+.react-flow__controls {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

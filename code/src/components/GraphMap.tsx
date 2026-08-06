@@ -162,7 +162,10 @@ function Canvas({
       proOptions={{ hideAttribution: true }}
     >
       <Background gap={44} size={1} color="var(--line)" />
-      <Controls showInteractive={false} />
+      {/* 기본 Fit View는 끈다. 아는 노드가 0개라 눌러도 아무 일이 없었다 */}
+      <Controls showInteractive={false} showFitView={false}>
+        <FitAllButton placed={placed} />
+      </Controls>
       <FitOnMount placed={placed} />
       <Layers placed={placed} summary={summary} edges={edges} onOpen={onOpen} />
     </ReactFlow>
@@ -178,18 +181,22 @@ function Canvas({
  * 카테고리 이름이 노드 위쪽 330px에 서 있으므로 그만큼 위를 더 잡는다.
  * 안 그러면 이름이 화면 밖으로 잘린다.
  */
-function FitOnMount({ placed }: { placed: Array<Placed<MapNode>> }) {
+/**
+ * 전체가 화면에 들어오게 맞춘다.
+ *
+ * 처음 열 때와 "전체 보기"를 누를 때가 같은 계산이라 한 곳에 둔다.
+ */
+function useFitAll(placed: Array<Placed<MapNode>>) {
   const flow = useReactFlow()
-  const done = useRef(false)
 
-  useEffect(() => {
-    if (done.current || placed.length === 0) return
-    done.current = true
+  return useCallback(
+    (duration: number) => {
+      if (placed.length === 0) return
 
-    const pane = document.querySelector('.react-flow')
-    if (!(pane instanceof HTMLElement)) return
+      const pane = document.querySelector('.react-flow')
+      if (!(pane instanceof HTMLElement)) return
 
-    /*
+      /*
      * 삐져나오는 것은 전부 화면 고정 크기다.
      *
      * 가장 긴 이름("아키텍처 · 분산시스템")이 139px이라 절반인 70px이 바깥으로
@@ -204,19 +211,61 @@ function FitOnMount({ placed }: { placed: Array<Placed<MapNode>> }) {
      * 배율이 정해지기 전이라 좌표로는 얼마를 비울지 알 수 없는데 그렇게 잡으니
      * 폰에서 가로가 102%로 넘치고 세로는 46%만 찼다.
      */
-    const fit = fitToPane({
-      xs: placed.map((p) => p.x),
-      ys: placed.map((p) => p.y),
-      paneWidth: pane.clientWidth,
-      paneHeight: pane.clientHeight,
-      overhang: { left: 24, right: 24, top: 62, bottom: 12 },
-    })
-    if (!fit) return
+      const fit = fitToPane({
+        xs: placed.map((p) => p.x),
+        ys: placed.map((p) => p.y),
+        paneWidth: pane.clientWidth,
+        paneHeight: pane.clientHeight,
+        overhang: { left: 24, right: 24, top: 62, bottom: 12 },
+      })
+      if (!fit) return
 
-    flow.setCenter(fit.centerX, fit.centerY, { zoom: fit.zoom, duration: 0 })
-  }, [flow, placed])
+      flow.setCenter(fit.centerX, fit.centerY, { zoom: fit.zoom, duration })
+    },
+    [flow, placed],
+  )
+}
+
+function FitOnMount({ placed }: { placed: Array<Placed<MapNode>> }) {
+  const fitAll = useFitAll(placed)
+  const done = useRef(false)
+
+  useEffect(() => {
+    if (done.current || placed.length === 0) return
+    done.current = true
+    fitAll(0)
+  }, [fitAll, placed])
 
   return null
+}
+
+/**
+ * 전체 보기.
+ *
+ * React Flow가 주는 Fit View는 **아무 일도 안 했다.** 자기 `nodes`를 기준으로
+ * 맞추는데 여기서는 그림을 직접 그려서 React Flow가 아는 노드가 0개다. 분야
+ * 하나로 확대한 뒤 눌러도 transform이 글자 그대로 그대로였다
+ * (`scale(0.194788)` → `scale(0.194788)`).
+ *
+ * 그래서 한 덩어리로 들어가면 전체로 돌아올 길이 없었다. 축소 버튼을 예닐곱
+ * 번 누르거나 새로고침해야 했다. 버튼이 멀쩡히 있는데 안 듣는 쪽이 없는 것보다
+ * 나쁘다 — 사용자는 자기가 잘못 눌렀다고 생각한다.
+ */
+function FitAllButton({ placed }: { placed: Array<Placed<MapNode>> }) {
+  const fitAll = useFitAll(placed)
+  return (
+    <button
+      type="button"
+      className="react-flow__controls-button"
+      onClick={() => fitAll(260)}
+      title="전체 보기"
+      aria-label="전체 보기"
+    >
+      <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" aria-hidden>
+        <path d="M1.5 1.5h5v1.5h-3.5v3.5H1.5v-5Zm8 0h5v5H13V3h-3.5V1.5ZM1.5 9.5H3V13h3.5v1.5h-5v-5Zm11.5 0h1.5v5h-5V13H13V9.5Z" />
+      </svg>
+    </button>
+  )
 }
 
 /**
