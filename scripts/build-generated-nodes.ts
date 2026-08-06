@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, readdirSync } from 'node:fs'
 import { parseBlocks } from '../src/lib/markdown/blocks'
 import { questionFormIssues } from '../src/lib/llm/question-form'
 import { CATEGORIES } from '../src/lib/tree/categories'
@@ -28,10 +28,17 @@ type Made = {
   issues: string[]
 }
 
-const IN = '/tmp/cs-harvest/generated.json'
 const OUT = 'data/generated-nodes.ts'
 
-const made: Made[] = JSON.parse(readFileSync(IN, 'utf8'))
+/*
+ * 조각 파일을 다 모은다.
+ *
+ * 생성은 나눠서 동시에 돌린다(한도가 마르면 건당 2분까지 가서 201건이면
+ * 여섯 시간이다). 조각마다 파일을 따로 쓰므로 여기서 합친다.
+ */
+const made: Made[] = readdirSync('/tmp/cs-harvest')
+  .filter((f) => /^generated(-\d+)?\.json$/.test(f))
+  .flatMap((f) => JSON.parse(readFileSync(`/tmp/cs-harvest/${f}`, 'utf8')) as Made[])
 
 /**
  * 담을지 정한다.

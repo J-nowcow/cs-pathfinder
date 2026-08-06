@@ -39,7 +39,28 @@ type Made = Topic & {
 }
 
 const IN = '/tmp/cs-harvest/topics.json'
-const OUT = '/tmp/cs-harvest/generated.json'
+
+/**
+ * 조각 나눠 돌리기.
+ *
+ * 한도가 마르면 사슬 끝의 느린 모델이 답해서 건당 2분까지 간다. 201건이면
+ * 여섯 시간이다. 기다리는 시간이 대부분 네트워크라 나눠서 동시에 돌리면
+ * 그만큼 줄어든다.
+ *
+ * 조각마다 파일을 따로 쓴다. 한 파일에 여럿이 쓰면 나중에 쓴 쪽이 앞의 것을
+ * 덮어서 조용히 사라진다.
+ *
+ * 실행: npm run gen:examples -- --shard 0/4
+ */
+const arg = (name: string) => {
+  const i = process.argv.indexOf(name)
+  return i >= 0 ? (process.argv[i + 1] ?? null) : null
+}
+const shard = arg('--shard')
+const [part, of] = shard ? shard.split('/').map(Number) : [0, 1]
+const OUT = shard
+  ? `/tmp/cs-harvest/generated-${part}.json`
+  : '/tmp/cs-harvest/generated.json'
 
 /**
  * 만들어진 것이 규칙을 지키는지 본다.
@@ -80,8 +101,9 @@ const topics: Topic[] = JSON.parse(readFileSync(IN, 'utf8'))
 const made: Made[] = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : []
 const done = new Set(made.map((m) => m.topic))
 
-const limit = Number(process.argv[2] ?? topics.length)
-const todo = topics.filter((t) => !done.has(t.topic)).slice(0, limit)
+const mine = topics.filter((_, i) => i % of === part)
+const limit = Number(arg('--limit') ?? mine.length)
+const todo = mine.filter((t) => !done.has(t.topic)).slice(0, limit)
 
 console.log(`주제 ${topics.length}개 · 이미 만든 것 ${made.length}개 · 이번에 ${todo.length}개`)
 
