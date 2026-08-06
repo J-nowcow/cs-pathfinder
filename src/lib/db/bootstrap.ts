@@ -2,6 +2,7 @@ import { getDb } from '@/lib/db/client'
 import { derivedUuid } from '@/lib/db/uuid'
 import { questionHash } from '@/lib/expand/hash'
 import { NORMALIZER_VERSION } from '@/lib/llm/gate'
+import { isIdentityScope } from '@/lib/expand/scopes'
 import { EXAMPLE_NODES, type ExampleNode } from '../../../data/example-nodes'
 import { GENERATED_NODES } from '../../../data/generated-nodes'
 import { SEED_RELATIONS, type SeedRelation } from '../../../data/relations'
@@ -75,13 +76,35 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
       )
     }
 
-    // alias가 있어야 같은 질문이 자유 입력으로 들어왔을 때 캐시에 걸린다.
-    await db.query(
-      `insert into qnode_alias (normalizer_version, normalized_hash, qnode_id)
-       values ($1, $2, $3)
-       on conflict (normalizer_version, normalized_hash) do nothing`,
-      [NORMALIZER_VERSION, questionHash(ex.identityScope, ex.question), id],
-    )
+    /*
+     * alias가 있어야 같은 질문이 자유 입력으로 들어왔을 때 캐시에 걸린다.
+     *
+     * **스코프가 스키마 밖이면 두 벌을 단다.** 시드 249개 중 53개(21%)가
+     * `distributed`·`css`·`jpa` 같은 목록 밖 값을 쓴다. 그런데 게이트는
+     * (`llm/gate.ts`) 목록 밖 값을 받으면 `generic`으로 강제한다. 해시가
+     * 스코프를 포함하므로 시드가 단 해시와 게이트가 찾을 해시가 영영 다르다.
+     *
+     * 실제로 재현했다. "분산 시스템에서 CAP 중 무엇을 포기하게 되는가?"는
+     * 시드 해시가 31fc5e35…, 게이트 해시가 5b0c0310…이다. 사용자가 같은 질문을
+     * 입력하면 캐시를 못 타고 새 노드가 생긴다 — 같은 질문을 두 번 만들지
+     * 않는다는 이 서비스의 비용 급소가 그 21%에 대해 깨져 있었다.
+     *
+     * 데이터의 스코프를 고치는 쪽이 근본이지만 그러면 노드 id가 바뀐다.
+     * id는 (스코프 + 질문)에서 파생하므로 53개의 URL이 통째로 갈리고, 이미
+     * 공유된 링크가 죽는다. alias를 하나 더 다는 것은 URL을 안 건드리면서
+     * 게이트가 찾을 자리를 채운다. 별칭 표는 원래 그러라고 있는 것이다.
+     */
+    const hashes = new Set([questionHash(ex.identityScope, ex.question)])
+    if (!isIdentityScope(ex.identityScope)) hashes.add(questionHash('generic', ex.question))
+
+    for (const hash of hashes) {
+      await db.query(
+        `insert into qnode_alias (normalizer_version, normalized_hash, qnode_id)
+         values ($1, $2, $3)
+         on conflict (normalizer_version, normalized_hash) do nothing`,
+        [NORMALIZER_VERSION, hash, id],
+      )
+    }
   }
 
   return { inserted, refreshed }
