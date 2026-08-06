@@ -1,4 +1,4 @@
-import { authorizedCron } from '@/lib/api/cron-auth'
+import { cronAuth } from '@/lib/api/cron-auth'
 import { loadCatalog, renderCatalog } from '@/lib/db/catalog'
 import { SITE_URL } from '@/lib/site'
 
@@ -17,8 +17,10 @@ export const dynamic = 'force-dynamic'
  * 엔드포인트가 그것을 그대로 내보낸다.
  */
 export async function GET(request: Request) {
-  if (!authorizedCron(request)) {
-    return new Response('unauthorized', { status: 401 })
+  const auth = cronAuth(request)
+  if (auth !== 'ok') {
+    /* 발행 라우트와 같은 이유를 적는다. 둘이 같은 시크릿을 쓴다 */
+    return new Response(`unauthorized: ${auth}`, { status: 401 })
   }
 
   const catalog = await loadCatalog()

@@ -1,7 +1,7 @@
 import { publishDaily, type PublishOutcome } from '@/lib/daily/publish'
 import { resolveCaller } from '@/lib/llm/resolve'
 import type { DailyTree } from '@/lib/daily/today'
-import { authorizedCron } from '@/lib/api/cron-auth'
+import { cronAuth } from '@/lib/api/cron-auth'
 
 // 발행은 매번 새로 판단해야 한다. 정적 최적화 대상이 아니다.
 export const dynamic = 'force-dynamic'
@@ -66,8 +66,13 @@ function respond(outcome: PublishOutcome): Response {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  if (!authorizedCron(request)) {
-    return json({ error: 'unauthorized' }, 401)
+  /*
+   * 왜 막혔는지까지 적는다. 사람 없는 새벽에 도는 자리라 로그에 남는 한 줄이
+   * 유일한 단서다. `unauthorized`만으로는 값이 없는 것인지 다른 것인지 못 가린다.
+   */
+  const auth = cronAuth(request)
+  if (auth !== 'ok') {
+    return json({ error: 'unauthorized', reason: auth }, 401)
   }
 
   try {
