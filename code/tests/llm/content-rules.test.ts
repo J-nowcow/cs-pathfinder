@@ -186,16 +186,35 @@ describe('contentIssues · 도식 오용', () => {
    * 이건 지금 화면에서 실제로 깨지고 있다. `--- | ---`이 이름이 `---`이고
    * 설명이 `---`인 층으로 그대로 그려진다. 생성분에 2건 있다.
    */
-  it('계층 안에 표 구분줄이 있으면 막는다', () => {
-    const issues = contentIssues(
-      withDiagram(':::stack\n상태 코드 | 분류\n--- | ---\n1xx | 정보 제공\n:::'),
-    )
+  /*
+   * 계층 안에 넣은 표는 여러 모양으로 온다. 프롬프트의 표 예시가 바깥
+   * 파이프를 쓰므로(`| --- | --- |`) 그것을 그대로 계층에 넣는 경우를
+   * 놓치면 안 된다. `parseStack`이 이름 `| ---`·설명 `--- |`로 쪼갠다.
+   */
+  it.each([
+    ['--- | ---', '가운데 파이프'],
+    ['| --- | --- |', '바깥 파이프'],
+    [':--- | ---:', '정렬 표시'],
+    ['---', '한 칸짜리'],
+  ])('계층 안의 구분줄 %s (%s)을 막는다', (rule) => {
+    const issues = contentIssues(withDiagram(`:::stack\n상태 코드 | 분류\n${rule}\n1xx | 정보\n:::`))
     expect(blocking(issues).map((i) => i.rule)).toContain('표를계층에')
   })
 
-  it('표가 네 열이면 막는다', () => {
+  /*
+   * **막지 않는다.** 좁은 화면에서 표는 줄 단위 카드로 접히므로 열이 늘어도
+   * 뭉개지지 않는다(`Diagram.tsx`·`globals.css`). 처음에 막았던 근거가
+   * 렌더러를 다시 보니 사라졌다.
+   *
+   * 막으면 오히려 나쁘다 — 다시 부른 결과는 **지적 수가 줄기만 하면**
+   * 채택되므로, 비교 대상 하나를 빼고 3열로 만든 답이 이긴다. 읽기
+   * 편해지자고 견줄 것을 잃는다.
+   */
+  it('표가 네 열이면 적어만 둔다', () => {
     const t = '| 기준 | A | B | C |\n| --- | --- | --- | --- |\n| 값 | 1 | 2 | 3 |\n| 값2 | 4 | 5 | 6 |'
-    expect(blocking(contentIssues(withDiagram(t))).map((i) => i.rule)).toContain('표열수')
+    const issues = contentIssues(withDiagram(t))
+    expect(issues.map((i) => i.rule)).toContain('표열수')
+    expect(blocking(issues)).toEqual([])
   })
 
   it('세 열까지는 통과한다', () => {
