@@ -25,6 +25,8 @@ import { readFileSync, readdirSync } from 'node:fs'
  * 실행: npx tsx scripts/tally-factcheck.ts [묶음디렉터리]
  */
 const DIR = process.argv[2] ?? '/tmp/fc-out'
+/** 원본 묶음. 분모를 여기서 센다 */
+const SRC = process.argv[3] ?? '/tmp/corpus-slices'
 
 type Slice = {
   file: string
@@ -72,10 +74,28 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.md')).sort()) {
     if (HARD.includes(kind) && current > 0) hard.add(current)
   }
 
+  /*
+   * **분모는 원본 묶음에서 센다.** 대조한 쪽이 적어 준 수를 그대로 믿었더니
+   * 합이 278이 나왔다 — 코퍼스는 276이다. 한 묶음이 자기가 본 편수를 28이
+   * 아니라 30으로 적었고(별표까지 붙여서), 그것을 그대로 더한 결과다.
+   *
+   * 판정은 대조 모델이 하지만 **몇 편이었는지는 우리가 안다.** 아는 것을
+   * 물어보지 않는다.
+   */
+  const size = (readFileSync(`${SRC}/${file}`, 'utf8').match(/^## \d+\./gm) ?? []).length
+  if (size === 0) {
+    console.error(`${file}: 원본 묶음을 못 찾았다 (${SRC})`)
+    continue
+  }
+  if (size !== Number(sum[2])) {
+    console.error(`  ${file}: 대조 쪽은 ${sum[2]}편이라 했지만 실제로는 ${size}편이다`)
+  }
+
   slices.push({
     file,
-    clean: Number(sum[1]),
-    total: Number(sum[2]),
+    /* 깨끗한 편 수도 분모를 넘을 수 없다 */
+    clean: Math.min(Number(sum[1]), size),
+    total: size,
     hard,
     byKind,
   })
