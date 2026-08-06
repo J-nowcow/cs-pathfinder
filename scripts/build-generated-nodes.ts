@@ -47,7 +47,7 @@ const OUT = 'data/generated-nodes.ts'
  * 여섯 시간이다). 조각마다 파일을 따로 쓰므로 여기서 합친다.
  */
 const made: Made[] = readdirSync('/tmp/cs-harvest')
-  .filter((f) => /^(generated(-\d+)?|codex-out|claude-out)\.json$/.test(f))
+  .filter((f) => /^(generated(-\d+)?|codex-out(-\d+)?|claude-out)\.json$/.test(f))
   .flatMap((f) => {
     try {
       const parsed = JSON.parse(readFileSync(`/tmp/cs-harvest/${f}`, 'utf8'))
