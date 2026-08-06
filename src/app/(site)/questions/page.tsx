@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { listRoots } from '@/lib/db/roots'
-import { CATEGORIES } from '@/lib/tree/categories'
+import { CATEGORIES, categoryAnchor } from '@/lib/tree/categories'
 import { socialMeta } from '@/lib/site'
 
 // 매 요청 실제 DB를 읽는다. 발행이 하나 늘면 여기도 같이 늘어야 한다
@@ -35,7 +35,7 @@ export default async function QuestionsPage() {
   })).filter((g) => g.items.length > 0)
 
   return (
-    <main className="mx-auto max-w-3xl px-5 pb-24 pt-10 sm:px-8 sm:pt-16">
+    <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
       <Link href="/" className="text-[13px] text-faint hover:text-ink">
         ← 꼬리에 꼬리를 무는 CS 공부
       </Link>
@@ -55,7 +55,7 @@ export default async function QuestionsPage() {
         {grouped.map((g) => (
           <a
             key={g.category}
-            href={`#${slugOf(g.category)}`}
+            href={`#${categoryAnchor(g.category)}`}
             className="rounded-full border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-accent hover:text-ink"
           >
             {g.category} {g.items.length}
@@ -64,7 +64,7 @@ export default async function QuestionsPage() {
       </nav>
 
       {grouped.map((g) => (
-        <section key={g.category} id={slugOf(g.category)} className="mt-12 scroll-mt-6">
+        <section key={g.category} id={categoryAnchor(g.category)} className="mt-12 scroll-mt-16">
           <h2 className="mb-4 flex items-baseline gap-2 border-b border-line pb-2">
             <span className="text-[17px] font-bold tracking-[-0.01em]">{g.category}</span>
             <span className="text-[13px] text-faint">{g.items.length}개</span>
@@ -106,13 +106,3 @@ export default async function QuestionsPage() {
   )
 }
 
-/**
- * 앵커용 id.
- *
- * 카테고리 이름에 공백과 가운뎃점이 있어서 그대로 쓰면 CSS 선택자와 URL 양쪽에서
- * 깨진다. 한글은 그대로 둔다 — 브라우저가 인코딩해 주고, 링크를 눌러본 사람이
- * 주소창에서 어디인지 알아볼 수 있다.
- */
-function slugOf(category: string): string {
-  return `c-${category.replace(/\s*·\s*/g, '-').replace(/\s+/g, '-')}`
-}

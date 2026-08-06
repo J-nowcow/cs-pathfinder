@@ -32,6 +32,20 @@ export type Category = (typeof CATEGORIES)[number]
  * 빈 게시판을 보여주느니 전체를 보여주는 편이 낫고, 임의 문자열이 그대로
  * 질의로 들어가는 것도 막는다.
  */
+/**
+ * 앵커용 id.
+ *
+ * 카테고리 이름에 공백과 가운뎃점이 있어서 그대로 쓰면 CSS 선택자와 URL 양쪽에서
+ * 깨진다. 한글은 그대로 둔다 — 브라우저가 인코딩해 주고, 링크를 눌러본 사람이
+ * 주소창에서 어디인지 알아볼 수 있다.
+ *
+ * 목록 화면이 이 id를 붙이고 푸터가 이 id로 보낸다. 두 곳이 각자 만들면 한쪽만
+ * 바뀌었을 때 링크가 조용히 아무 데도 안 가게 된다.
+ */
+export function categoryAnchor(category: string): string {
+  return `c-${category.replace(/\s*·\s*/g, '-').replace(/\s+/g, '-')}`
+}
+
 export function asCategory(value: string | null | undefined): Category | null {
   if (!value) return null
   return (CATEGORIES as readonly string[]).includes(value) ? (value as Category) : null

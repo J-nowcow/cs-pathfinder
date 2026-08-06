@@ -77,7 +77,7 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
   const rootNodeId = tree.nodes.find((n) => n.parentOccurrenceId === null)?.nodeId ?? tree.rootNodeId
 
   return (
-    <main className="mx-auto max-w-3xl px-5 pb-24 pt-5 sm:px-8 sm:pt-8">
+    <main className="mx-auto max-w-3xl px-5 pb-4 pt-5 sm:px-8 sm:pt-8">
       <Link
         href="/"
         className="text-[13px] font-medium text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"

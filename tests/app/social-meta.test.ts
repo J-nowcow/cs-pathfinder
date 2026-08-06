@@ -58,7 +58,7 @@ describe('page metadata', () => {
   }
 
   it('gives the reading view a share image', async () => {
-    const { generateMetadata } = await import('@/app/q/[nodeId]/page')
+    const { generateMetadata } = await import('@/app/(site)/q/[nodeId]/page')
     const nodeId = await makeNode()
 
     const meta = await generateMetadata({ params: Promise.resolve({ nodeId }) })
@@ -71,7 +71,7 @@ describe('page metadata', () => {
   })
 
   it('gives the shared tree a share image', async () => {
-    const { generateMetadata } = await import('@/app/t/[slug]/page')
+    const { generateMetadata } = await import('@/app/(site)/t/[slug]/page')
     const nodeId = await makeNode()
 
     const snapshot: Snapshot = {
@@ -90,7 +90,7 @@ describe('page metadata', () => {
 
   /** 없는 것에는 제목만 준다. 이미지를 붙이면 없는 페이지가 그럴듯해 보인다 */
   it('does not dress up a missing page', async () => {
-    const { generateMetadata } = await import('@/app/t/[slug]/page')
+    const { generateMetadata } = await import('@/app/(site)/t/[slug]/page')
     const meta = await generateMetadata({ params: Promise.resolve({ slug: 'zzzzzzzzzzzz' }) })
     expect(meta.openGraph).toBeUndefined()
   })

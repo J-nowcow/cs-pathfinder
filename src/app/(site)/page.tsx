@@ -83,7 +83,7 @@ export default async function HomePage() {
   const rest = roots.filter((r) => r.id !== feature?.nodeId)
 
   return (
-    <main className="mx-auto max-w-3xl px-5 pb-24 pt-10 sm:px-8 sm:pt-16">
+    <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
       <header className="relative mb-10 overflow-hidden sm:mb-12">
         <HeroBackdrop />
         <h1 className="relative text-[30px] font-extrabold leading-[1.32] tracking-[-0.025em] sm:text-[34px]">
