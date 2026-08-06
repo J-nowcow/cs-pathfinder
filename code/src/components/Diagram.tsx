@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { parseInline } from '@/lib/markdown/inline'
-import type { FlowStep, StackLayer, TreeNode } from '@/lib/markdown/blocks'
+import type { FlowStep, StackLayer, TreeNode, MemoryArea } from '@/lib/markdown/blocks'
 
 /**
  * 해설 안의 도식.
@@ -195,6 +195,67 @@ export function TreeDiagram({ nodes }: { nodes: TreeNode[] }) {
   return (
     <figure className="my-6 rounded-lg border border-line bg-raised px-4 py-3.5 sm:px-5">
       <List items={roots} depth={0} />
+    </figure>
+  )
+}
+
+/**
+ * 어디에 놓이고 어느 쪽으로 자라는가.
+ *
+ * 계층과 **붙어 있는 것**으로 구별한다. 계층은 층마다 떠 있는데 메모리는
+ * 연속한 공간이라는 것이 뜻이라 칸을 붙여 그린다.
+ *
+ * **마주 자라는 것이 이 도식의 존재 이유다.** 스택은 아래로, 힙은 위로
+ * 자라고 그 사이가 빈 공간이다. 계층으로 그리면 그 사실이 통째로 사라진다.
+ * 방향이 반대인 두 칸이 붙어 있으면 사이를 점선으로 끊어 그것을 말한다.
+ *
+ * 화살표는 그림이라 낭독기에 안 잡힌다. 뜻은 숨긴 글자로 따로 둔다.
+ */
+export function MemoryDiagram({ areas }: { areas: MemoryArea[] }) {
+  /* 위아래가 서로 반대로 자라면 그 사이가 빈 공간이다 */
+  const facing = (i: number) =>
+    i > 0 && areas[i - 1].grow === 'down' && areas[i].grow === 'up'
+
+  return (
+    <figure className="my-6 grid grid-cols-[auto_1fr] items-stretch gap-x-2">
+      <div className="flex flex-col justify-between py-1 text-[11px] text-faint">
+        <span>높은 주소</span>
+        <span>낮은 주소</span>
+      </div>
+
+      <ol className="overflow-hidden rounded-lg border border-line bg-raised">
+        {areas.map((a, i) => (
+          <li
+            key={i}
+            className={
+              i === 0
+                ? 'px-4 py-3 sm:px-5'
+                : facing(i)
+                  ? 'border-t border-dashed border-line px-4 py-3 sm:px-5'
+                  : 'border-t border-line px-4 py-3 sm:px-5'
+            }
+          >
+            <p className="flex items-baseline justify-between gap-3 text-[15px] text-ink">
+              <span className="font-medium">
+                <Inline text={a.name} />
+              </span>
+              {a.grow && (
+                <span className="shrink-0 text-[13px] text-accent">
+                  <span aria-hidden>{a.grow === 'down' ? '↓' : '↑'}</span>
+                  <span className="sr-only">
+                    {a.grow === 'down' ? '아래로 자란다' : '위로 자란다'}
+                  </span>
+                </span>
+              )}
+            </p>
+            {a.note.length > 0 && (
+              <p className="mt-0.5 text-[13px] leading-[1.55] text-muted">
+                <Inline text={a.note} />
+              </p>
+            )}
+          </li>
+        ))}
+      </ol>
     </figure>
   )
 }

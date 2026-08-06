@@ -21,6 +21,8 @@ export type Block =
   | { type: 'state'; steps: FlowStep[] }
   /** 무엇이 무엇에 속하는가. B-tree·상속·참조 사슬 같은 것 */
   | { type: 'tree'; nodes: TreeNode[] }
+  /** 어디에 놓이고 어느 쪽으로 자라는가. 주소 공간·스택과 힙 같은 것 */
+  | { type: 'memory'; areas: MemoryArea[] }
   /** 위에서 아래로 쌓이는 계층. OSI, 메모리 영역 같은 것 */
   | { type: 'stack'; layers: StackLayer[] }
   /** 열 비교. 낙관적 락 대 비관적 락 같은 것 */
@@ -29,6 +31,7 @@ export type Block =
 export type FlowStep = { from: string; to: string; label: string }
 export type StackLayer = { name: string; note: string }
 export type TreeNode = { depth: number; name: string; note: string }
+export type MemoryArea = { name: string; note: string; grow: 'up' | 'down' | null }
 
 /**
  * 울타리 인식은 넉넉하게 잡는다.
@@ -39,7 +42,7 @@ export type TreeNode = { depth: number; name: string; note: string }
  *
  * 실측에서 세 번 중 두 번은 정확했고 한 번은 이런 변형이었다.
  */
-const FENCE_OPEN = /^:::\s*(flow|state|tree|stack)\b/
+const FENCE_OPEN = /^:::\s*(flow|state|tree|memory|stack)\b/
 const FENCE_CLOSE = /^:::\s*(end)?\s*$/
 
 /**
@@ -53,7 +56,7 @@ const FENCE_CLOSE = /^:::\s*(end)?\s*$/
  * 그 자리만 지운다. 줄 시작만 보면 "…이다. :::flow" 같은 모양이 빠져나간다.
  */
 const FENCE_ONLY_LINE = /^\s*(:::|```)/
-const INLINE_FENCE = /:::\s*(flow|state|tree|stack|end)?|```+[a-z]*/g
+const INLINE_FENCE = /:::\s*(flow|state|tree|memory|stack|end)?|```+[a-z]*/g
 
 /** `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN` */
 const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
@@ -183,6 +186,49 @@ function parseTree(lines: string[]): Block | null {
   return { type: 'tree', nodes }
 }
 
+/** 자라는 방향. 이 둘 말고는 안 받는다 */
+const GROW = ['위로', '아래로'] as const
+
+/**
+ * 어디에 놓이고 어느 쪽으로 자라는가.
+ *
+ * 계층과 붙어 있는 것으로 구별한다. 계층은 층마다 떠 있지만 메모리는
+ * **연속한 공간**이라는 것이 뜻이라 칸을 붙여 그린다.
+ *
+ * `stack`의 `이름 | 설명`에 선택 칸 하나를 더한다. 세 번째 칸은 `위로`나
+ * `아래로`만 받는다. 그 외 값이면 `null`이라 stack과 갈린다 — 이 조건이
+ * 없으면 `parseStack`처럼 무엇이든 받아 도피처가 된다.
+ *
+ * **마주 자라는 것이 이 도식의 존재 이유다.** 스택은 아래로, 힙은 위로
+ * 자라고 그 사이가 빈 공간이다. 계층으로 그리면 그 사실이 통째로 사라진다.
+ */
+function parseMemory(lines: string[]): Block | null {
+  const areas: MemoryArea[] = []
+
+  for (const line of lines) {
+    const cells = line
+      .trim()
+      .replace(/^\||\|$/g, '')
+      .split('|')
+      .map((c) => c.trim())
+
+    if (cells.length > 3) return null
+    if (cells[0].length === 0) return null
+
+    const grow = cells[2] ?? ''
+    if (grow.length > 0 && !GROW.includes(grow as (typeof GROW)[number])) return null
+
+    areas.push({
+      name: cells[0],
+      note: cells[1] ?? '',
+      grow: grow === '위로' ? 'up' : grow === '아래로' ? 'down' : null,
+    })
+  }
+
+  // 칸이 하나뿐이면 공간을 나눈 것이 아니다
+  return areas.length >= 2 ? { type: 'memory', areas } : null
+}
+
 function parseStack(lines: string[]): Block | null {
   const layers: StackLayer[] = []
   for (const line of lines) {
@@ -250,7 +296,7 @@ function splitTrailingFence(lines: string[]): string[] {
   const out: string[] = []
 
   for (const line of lines) {
-    const m = /^(.*\S)\s+(:::\s*(?:flow|state|tree|stack)\b.*)$/.exec(line)
+    const m = /^(.*\S)\s+(:::\s*(?:flow|state|tree|memory|stack)\b.*)$/.exec(line)
     if (m) {
       out.push(m[1])
       out.push(m[2])
@@ -321,7 +367,9 @@ export function parseBlocks(body: string): Block[] {
           ? parseState(inner)
           : open[1] === 'tree'
             ? parseTree(inner)
-            : parseStack(inner)
+            : open[1] === 'memory'
+              ? parseMemory(inner)
+              : parseStack(inner)
 
     flushParagraphs()
 

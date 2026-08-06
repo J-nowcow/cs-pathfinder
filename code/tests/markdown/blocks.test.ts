@@ -463,3 +463,65 @@ describe('parseBlocks · tree', () => {
     expect(b.text).toContain('이름이 없다')
   })
 })
+
+/**
+ * 어디에 놓이고 어느 쪽으로 자라는가.
+ *
+ * 계층과 붙어 있는 것으로 구별한다. 계층은 층마다 떠 있는데 메모리는 연속한
+ * 공간이라는 것이 뜻이다.
+ *
+ * **마주 자라는 것이 이 도식의 존재 이유다.** 스택은 아래로 힙은 위로 자라고
+ * 그 사이가 빈 공간이다. 계층으로 그리면 그 사실이 통째로 사라진다.
+ */
+describe('parseBlocks · memory', () => {
+  const mem = (inner: string) => parseBlocks(`:::memory\n${inner}\n:::`)[0]
+
+  it('이름·설명·방향 세 칸을 읽는다', () => {
+    const b = mem('스택 | 지역 변수 | 아래로\n힙 | new로 잡은 것 | 위로\n코드 | 기계어')
+    if (b.type !== 'memory') throw new Error('memory가 아니다')
+    expect(b.areas).toEqual([
+      { name: '스택', note: '지역 변수', grow: 'down' },
+      { name: '힙', note: 'new로 잡은 것', grow: 'up' },
+      { name: '코드', note: '기계어', grow: null },
+    ])
+  })
+
+  /*
+   * 이 조건이 없으면 `parseStack`처럼 무엇이든 받아 또 하나의 도피처가 된다.
+   * stack이 그렇게 되어 56개 중 23개가 오형이었다.
+   */
+  it('방향에 다른 말이 오면 문단으로 떨어뜨린다', () => {
+    expect(mem('스택 | 지역 변수 | 옆으로\n힙 | 객체 | 위로').type).toBe('paragraph')
+  })
+
+  it('칸이 넷이면 문단으로 떨어뜨린다', () => {
+    expect(mem('스택 | 가 | 나 | 아래로\n힙 | 다').type).toBe('paragraph')
+  })
+
+  it('칸이 하나뿐이면 공간을 나눈 것이 아니다', () => {
+    expect(mem('스택 | 지역 변수 | 아래로').type).toBe('paragraph')
+  })
+
+  it('방향이 없어도 된다', () => {
+    const b = mem('데이터 | 전역 변수\n코드 | 기계어')
+    if (b.type !== 'memory') throw new Error('memory가 아니다')
+    expect(b.areas.every((a) => a.grow === null)).toBe(true)
+  })
+
+  it('띄어 쓴 울타리와 :::end를 살린다', () => {
+    expect(parseBlocks('::: memory\n스택 | 가 | 아래로\n힙 | 나 | 위로\n:::end')[0].type).toBe(
+      'memory',
+    )
+  })
+
+  /* 파서는 본문을 절대 먹지 않는다 */
+  it('못 알아봐도 내용을 잃지 않는다', () => {
+    const b = mem('스택 | 지역 변수 | 옆으로\n힙 | 객체 | 위로')
+    if (b.type !== 'paragraph') throw new Error('paragraph가 아니다')
+    expect(b.text).toContain('지역 변수')
+  })
+
+  it('stack은 그대로 stack이다', () => {
+    expect(parseBlocks(':::stack\n전송 | TCP\n네트워크 | IP\n:::')[0].type).toBe('stack')
+  })
+})
