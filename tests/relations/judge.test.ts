@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { judgeRelations, buildJudgePrompt, RELATION_JUDGE_VERSION } from '@/lib/relations/judge'
+import { judgeRelations, buildJudgePrompt, RELATION_JUDGE_VERSION, cleanReason } from '@/lib/relations/judge'
 import type { StructuredCaller } from '@/lib/llm/client'
 
 /**
@@ -170,5 +170,39 @@ describe('buildJudgePrompt', () => {
 describe('RELATION_JUDGE_VERSION', () => {
   it('is recorded so a judgment can be traced to its prompt', () => {
     expect(RELATION_JUDGE_VERSION).toMatch(/^relation-v\d/)
+  })
+})
+
+/**
+ * 근거에서 후보 번호 걷어내기.
+ *
+ * 번호는 판정할 때만 쓰는 임시표인데 배열 위치로 만들어져서, 질문이 하나
+ * 추가되면 같은 번호가 다른 질문을 가리킨다. 그게 근거 문장에 섞여 지도에
+ * 그대로 나왔다 — 330개 중 5건이었다.
+ */
+describe('cleanReason', () => {
+  it('removes a candidate number with its particle', () => {
+    expect(cleanReason('HTTP 메서드를 다루며, q146은 메서드 선택 기준을 다룬다.')).toBe(
+      'HTTP 메서드를 다루며, 메서드 선택 기준을 다룬다.',
+    )
+  })
+
+  it('handles several numbers in one sentence', () => {
+    expect(cleanReason('q8의 상황과 q125 또한 같다.')).toBe('상황과 또한 같다.')
+  })
+
+  /* 멀쩡한 문장은 손대지 않는다 */
+  it('leaves a clean reason alone', () => {
+    const ok = '둘 다 커넥션을 미리 만들어 두는 비용 구조를 공유한다.'
+    expect(cleanReason(ok)).toBe(ok)
+  })
+
+  /*
+   * 사람이 쓴 낱말은 지우지 않는다. 번호가 아니면 남는다.
+   * "q"로 시작하는 CS 용어가 실제로 있다 — 큐 관련 표기가 그렇다.
+   */
+  it('keeps words that merely start with q', () => {
+    const s = 'queue의 동작을 다룬다. Q1 분기 이야기는 아니다.'
+    expect(cleanReason(s)).toBe(s)
   })
 })

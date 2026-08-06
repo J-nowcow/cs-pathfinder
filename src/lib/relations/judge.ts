@@ -85,12 +85,38 @@ ${list}
 규칙
 - 후보 목록에 있는 id만 쓴다. 없는 id를 지어내지 않는다.
 - 관계마다 근거를 한 문장으로 적는다. 무엇을 공유하는지 구체적으로 쓴다.
+- **근거에 후보 번호를 쓰지 않는다.** 번호는 고를 때만 쓰는 것이고 근거는
+  사람이 읽는다. "q146은 메서드 선택 기준을 다룬다" 대신 "메서드 선택 기준을
+  다룬다"라고 쓴다.
 - 근거가 "둘 다 컴퓨터 이야기다" 수준이면 관계가 아니다. 고르지 않는다.
 - 카테고리가 달라도 관련 있으면 고른다. 네트워크와 모바일은 자주 이어진다.
 - 관련 있는 것이 없으면 빈 목록을 준다. 억지로 채우지 않는다.
 - 많아야 다섯 개까지 고른다.
 
 형식: {"relations":[{"id":"...","kind":"...","reason":"..."}]}`
+}
+
+/**
+ * 근거에서 후보 번호를 걷어낸다.
+ *
+ * 번호는 판정할 때만 쓰는 임시표다. `build-relations.ts`가 배열 위치로 만들기
+ * 때문에 질문이 하나 추가되면 같은 번호가 다른 질문을 가리킨다. 그런데 그것이
+ * 근거 문장에 섞여 나왔다 — 330개 중 5건이다.
+ *
+ *   "…q146은 메서드 선택 기준을 다룬다."
+ *
+ * 근거는 지도에서 사람이 읽는 문장이다. 프롬프트로도 막지만 모델이 안 지킬 수
+ * 있으니 저장 전에 한 번 더 턴다. 문장이 어색해지더라도 뜻 없는 번호가 화면에
+ * 보이는 것보다 낫다.
+ *
+ * 조사가 붙은 형태(`q146은`, `q8의`)까지 함께 지운다. 번호만 지우면 조사가
+ * 홀로 남아 더 이상해진다.
+ */
+export function cleanReason(reason: string): string {
+  return reason
+    .replace(/\bq\d{1,4}(?:은|는|이|가|을|를|의|와|과|도|만|에)?\s*/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
 }
 
 export type JudgeDeps = {
@@ -172,7 +198,7 @@ export async function judgeRelations(
 
       const cur = tally.get(key)
       if (cur) cur.n += 1
-      else tally.set(key, { toId: r.id, kind: r.kind as RelationKind, reason: r.reason, n: 1 })
+      else tally.set(key, { toId: r.id, kind: r.kind as RelationKind, reason: cleanReason(r.reason), n: 1 })
     }
   }
 
