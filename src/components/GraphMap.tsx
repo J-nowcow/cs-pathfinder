@@ -8,6 +8,7 @@ import { layoutGlobal, categorySummary, type Placed } from '@/lib/graph/layout'
 import { analyzeConnectivity, mapStatus } from '@/lib/graph/connectivity'
 import { strokeWidthAt } from '@/lib/graph/stroke'
 import { rankByCategory, quotaAt, pickVisible } from '@/lib/graph/representatives'
+import { fitToPane } from '@/lib/graph/fit'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
 /**
@@ -175,18 +176,27 @@ function FitOnMount({ placed }: { placed: Array<Placed<MapNode>> }) {
     const pane = document.querySelector('.react-flow')
     if (!(pane instanceof HTMLElement)) return
 
-    const xs = placed.map((p) => p.x)
-    const ys = placed.map((p) => p.y)
-    const minX = Math.min(...xs) - NODE_W
-    const maxX = Math.max(...xs) + NODE_W
-    const minY = Math.min(...ys) - 420
-    const maxY = Math.max(...ys) + 120
+    /*
+     * 삐져나오는 것은 전부 화면 고정 크기다.
+     *
+     * 분야 이름이 17px이고 그중 가장 긴 것("아키텍처 · 분산시스템")이 열두 자라
+     * 대략 140px, 반이 70px이다. 이름은 노드 위쪽 41px에 서므로 위로 58px쯤
+     * 삐져나온다. 아래는 점 반지름뿐이다.
+     *
+     * 예전에는 이 자리에 좌표 고정값(가로 210, 위 420·아래 120)이 있었다.
+     * 배율이 정해지기 전이라 좌표로는 얼마를 비울지 알 수 없는데 그렇게 잡으니
+     * 폰에서 가로가 102%로 넘치고 세로는 46%만 찼다.
+     */
+    const fit = fitToPane({
+      xs: placed.map((p) => p.x),
+      ys: placed.map((p) => p.y),
+      paneWidth: pane.clientWidth,
+      paneHeight: pane.clientHeight,
+      overhang: { left: 24, right: 24, top: 34, bottom: 10 },
+    })
+    if (!fit) return
 
-    const zoom = Math.min(
-      (pane.clientWidth * 0.94) / (maxX - minX),
-      (pane.clientHeight * 0.94) / (maxY - minY),
-    )
-    flow.setCenter((minX + maxX) / 2, (minY + maxY) / 2, { zoom, duration: 0 })
+    flow.setCenter(fit.centerX, fit.centerY, { zoom: fit.zoom, duration: 0 })
   }, [flow, placed])
 
   return null
