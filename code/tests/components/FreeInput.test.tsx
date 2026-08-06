@@ -134,3 +134,28 @@ describe('FreeInput — 제출', () => {
     expect((box as HTMLTextAreaElement).value).toBe('남아 있어야 한다')
   })
 })
+
+/**
+ * 남은 횟수는 "이제 곧 못 쓴다"를 알리려고 있다.
+ *
+ * 한도를 임시로 9999까지 열어 두면서 처음 온 사람에게 **"오늘 9990번 남음"**이
+ * 그대로 보였다. 정보가 아니라 내부 설정이 새는 것이고, 읽는 쪽에서는 뜻을
+ * 잡을 수도 없다.
+ */
+describe('FreeInput · 남은 횟수', () => {
+  it('실제로 걸리기 시작할 때만 센다', () => {
+    render(<FreeInput {...base} remaining={3} />)
+    expect(screen.getByText(/오늘 3번 남음/)).toBeTruthy()
+  })
+
+  it('사실상 제한이 없으면 숫자를 안 보여준다', () => {
+    render(<FreeInput {...base} remaining={9990} />)
+    expect(screen.queryByText(/남음/)).toBeNull()
+  })
+
+  /* 경계에서 갑자기 사라지면 안 된다 */
+  it('스물까지는 보여준다', () => {
+    render(<FreeInput {...base} remaining={20} />)
+    expect(screen.getByText(/오늘 20번 남음/)).toBeTruthy()
+  })
+})

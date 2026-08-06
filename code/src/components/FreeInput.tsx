@@ -5,6 +5,18 @@ import { useState } from 'react'
 const MAX = 300
 
 /**
+ * 남은 횟수를 언제 보여줄지.
+ *
+ * 이 숫자는 "이제 곧 못 쓴다"를 알리려고 있다. 그런데 한도를 임시로 9999까지
+ * 열어 두면서 처음 온 사람에게 **"오늘 9990번 남음"**이 그대로 보였다. 정보가
+ * 아니라 내부 설정이 새는 것이고, 읽는 쪽에서는 뜻을 잡을 수도 없다.
+ *
+ * 기본 한도가 5회다. 스물을 넘게 남았으면 사실상 제한이 없는 상태라 굳이
+ * 셀 이유가 없다. 줄어들어 실제로 걸리기 시작할 때만 말한다.
+ */
+const SHOW_REMAINING_AT = 20
+
+/**
  * 자유 질문 입력.
  *
  * 고지가 필수다. 무료 티어는 입력이 모델 학습에 쓰이고 약관이 개인정보 제출을 금지한다.
@@ -71,7 +83,9 @@ export function FreeInput({
           */}
           <span className={`font-mono text-[11px] ${over ? 'text-warn' : 'text-faint'}`}>
             {text.length}/{MAX}
-            {!quotaExceeded && <span className="ml-2">오늘 {remaining}번 남음</span>}
+            {!quotaExceeded && remaining <= SHOW_REMAINING_AT && (
+              <span className="ml-2">오늘 {remaining}번 남음</span>
+            )}
           </span>
 
           <button
