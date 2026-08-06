@@ -52,7 +52,12 @@ export function TodayCard({ feature }: { feature: TodayFeature }) {
         <p className="mt-2.5 text-right text-[13px]">
           <Link
             href={`/t/${feature.treeSlug}`}
-            className="text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            /*
+              혼자 서 있는 줄이라 위아래로 늘려도 겹칠 것이 없다. 폰에서
+              재보니 16px이었다 — 손끝으로는 못 누른다. 보이는 글자는 그대로
+              두고 판정 영역만 44px로 만든다.
+            */
+            className="-my-[14px] inline-block py-[14px] text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             이 질문의 트리 보기 →
           </Link>

@@ -116,7 +116,11 @@ export default async function HomePage() {
         <section className="mt-14">
           <div className="mb-4 flex items-baseline justify-between gap-3">
             <h2 className="text-[13px] font-medium text-faint">지난 질문 {total}개</h2>
-            <Link href="/questions" className="text-[13px] text-accent hover:underline">
+            {/* 폰에서 20px이었다. 보이는 글자는 그대로 두고 누르는 자리만 44px로 */}
+            <Link
+              href="/questions"
+              className="-my-[13px] inline-block py-[13px] text-[13px] text-accent hover:underline"
+            >
               카테고리별로 보기 →
             </Link>
           </div>

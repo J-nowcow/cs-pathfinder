@@ -72,7 +72,7 @@ export function SiteHeader() {
         안 보였다. 화면을 찍어야 알 수 있는 종류다.
       */}
       <nav className="mx-auto flex max-w-3xl flex-nowrap items-center gap-0.5 whitespace-nowrap px-5 py-3 sm:gap-1 sm:px-8">
-        <Link href="/" className="mr-auto text-[14px] font-bold tracking-[-0.01em]">
+        <Link href="/" className="-my-3 mr-auto py-3 text-[14px] font-bold tracking-[-0.01em]">
           CS 길라잡이
         </Link>
 
@@ -96,7 +96,7 @@ export function SiteHeader() {
                 옆 항목이 눌린다. `py`를 키우고 같은 만큼 `-my`로 당기면 글자
                 위치와 헤더 높이는 그대로인 채 판정 영역만 44px가 된다.
               */
-              className={`-my-1.5 rounded-lg px-1.5 py-3 text-[12.5px] transition-colors sm:px-2.5 sm:text-[13px] ${
+              className={`-my-2 rounded-lg px-1.5 py-[13px] text-[12.5px] transition-colors sm:px-2.5 sm:text-[13px] ${
                 here ? 'font-medium text-ink' : 'text-muted hover:text-ink'
               }`}
             >

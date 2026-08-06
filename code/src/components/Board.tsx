@@ -79,8 +79,18 @@ export function Board({ initial }: Props) {
     void fetchPage(sort, category, null)
   }, [sort, category, fetchPage])
 
+  /*
+    누르는 자리를 손끝 크기로 키운다.
+
+    폰에서 재보니 높이가 34px이었다. 칩이 열세 개 붙어 있는 줄이라 옆 칩이
+    눌리기 쉽다. 보이는 알약 모양은 그대로 두고 위아래 여백만 늘려 44px로
+    만든다 — `py`를 키우고 같은 만큼 `-my`로 당기면 줄 높이는 안 변한다.
+
+    가로로 늘어선 줄이라 이 방식이 안전하다. 세로로 쌓인 푸터 링크에는 못
+    쓴다. 거기서는 위아래 항목의 판정 영역이 서로 겹친다.
+  */
   const chip = (active: boolean) =>
-    `shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+    `shrink-0 -my-[7px] rounded-full px-3.5 py-[12px] text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
       active
         ? 'bg-accent text-on-accent'
         : 'border border-line bg-raised text-muted hover:border-faint hover:text-ink'
@@ -209,7 +219,8 @@ function Empty({ category }: { category: string | null }) {
 
       <Link
         href="#today"
-        className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        /* 혼자 서 있는 줄이라 위아래로 늘려도 겹칠 것이 없다. 20px → 44px */
+        className="mt-[9px] inline-flex items-center gap-1.5 py-[13px] text-[13px] font-medium text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         오늘 치 질문 보러 가기
         <span aria-hidden>↑</span>
