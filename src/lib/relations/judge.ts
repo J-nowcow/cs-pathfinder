@@ -125,13 +125,15 @@ export async function judgeRelations(
   // 키는 "어느 후보를 어떤 종류로 이었나". 종류가 갈리면 각자 표를 센다
   const tally = new Map<string, { toId: string; kind: RelationKind; reason: string; n: number }>()
   let done = 0
+  let lastError = ''
 
   for (let i = 0; i < rounds; i += 1) {
     let out: z.infer<typeof judgeSchema>
     try {
       out = await call({ model: MODEL_GATE, system: SYSTEM, schema: judgeSchema, prompt })
-    } catch {
+    } catch (e) {
       // 이 회차는 없던 것으로 친다. 분모에서도 빠진다
+      lastError = (e as Error).message
       continue
     }
     done += 1
@@ -151,7 +153,13 @@ export async function judgeRelations(
     }
   }
 
-  if (done === 0) return []
+  /*
+   * 전부 터졌으면 알린다. 빈 목록으로 돌려주면 "관계가 없다"와 구별되지 않는다.
+   *
+   * 실제로 겪었다. 스크립트가 환경변수를 안 읽어 세 회차가 다 터졌는데 화면에는
+   * "관계 0개"로 찍혔다. 조용한 실패를 성공처럼 세는 것이 제일 나쁘다.
+   */
+  if (done === 0) throw new Error(`판정 ${rounds}회가 모두 실패했다 (${focus.question}): ${lastError}`)
   const need = Math.floor(done / 2) + 1
 
   const kept = [...tally.values()].filter((t) => t.n >= need)

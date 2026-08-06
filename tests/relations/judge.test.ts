@@ -116,6 +116,18 @@ describe('judgeRelations', () => {
   })
 
   /*
+   * 전부 터지면 알린다. 빈 목록으로 돌려주면 "관계가 없다"와 구별되지 않는다.
+   * 실제로 환경변수를 안 읽어 전부 터진 것을 "관계 0개"로 읽은 적이 있다.
+   */
+  it('throws when every round fails', async () => {
+    const call = (async () => {
+      throw new Error('quota')
+    }) as unknown as StructuredCaller
+
+    await expect(judgeRelations(FOCUS, CANDIDATES, { call, rounds: 3 })).rejects.toThrow(/실패/)
+  })
+
+  /*
    * 한 회차가 터져도 남은 회차로 판정한다. 무료 한도가 마르면 실제로 터진다.
    * 다만 성립한 회차만 표의 분모가 된다.
    */
