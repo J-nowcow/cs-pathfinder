@@ -11,6 +11,7 @@ import {
 } from '../src/lib/llm/client'
 import { parseBlocks } from '../src/lib/markdown/blocks'
 import { questionFormIssues } from '../src/lib/llm/question-form'
+import { proseIssues } from '../src/lib/llm/prose'
 
 /**
  * 주제 목록에서 예시 노드를 만든다.
@@ -83,6 +84,15 @@ function check(m: Omit<Made, 'issues'>): string[] {
     if (b.type !== 'paragraph') continue
     if (b.text.includes(':::') || b.text.includes('```')) out.push('울타리누출')
     if (b.text.length > 150) out.push(`긴문단:${b.text.length}`)
+    /*
+     * 문체도 검사한다.
+     *
+     * 프롬프트가 이미 금지하던 것들인데 재보니 생성된 219개 중 18%가
+     * `~를 통해`를 쓰고 있었다. 손으로 쓴 30개는 0%였다. 다른 규칙에는 전부
+     * 검사기가 있었고 문체 규칙만 프롬프트에만 적혀 있었다. 검사하지 않는
+     * 규칙은 규칙이 아니라 바람이다.
+     */
+    out.push(...proseIssues(b.text).map((i) => `문체:${i}`))
   }
 
   if (m.suggestions.length !== 5) out.push(`꼬리질문수:${m.suggestions.length}`)
