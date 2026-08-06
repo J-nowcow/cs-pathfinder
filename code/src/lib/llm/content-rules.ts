@@ -169,6 +169,44 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
   return out
 }
 
+/** 질문 문장은 제목으로 나간다. 길면 카드와 목록에서 두 줄이 된다 */
+export const MAX_QUESTION = 40
+
+/**
+ * 새로 만들어질 질문 문장을 본다.
+ *
+ * 배치 게이트는 이걸 검사하고 있었는데 **운영 경로는 비었는지만 봤다.**
+ * 그래서 사용자가 42자짜리 꼬리질문을 눌렀더니 57자짜리 제목에 도착했다 —
+ * 자기가 고른 것과 다른 질문에 온 것처럼 보인다.
+ *
+ * 이 문장은 노드의 신원이라 한 번 저장되면 URL과 제목에 그대로 박힌다.
+ * 나중에 고치면 같은 질문이 두 개가 된다.
+ */
+export function questionIssues(question: string): ContentIssue[] {
+  const out: ContentIssue[] = []
+
+  if (question.length > MAX_QUESTION) {
+    out.push({
+      rule: '질문길이',
+      detail: `질문이 ${question.length}자다. ${MAX_QUESTION}자 아래로 줄여라. 수식어를 덜어내고 핵심 명사와 동사만 남긴다`,
+      severity: 'block',
+    })
+  }
+
+  for (const i of questionFormIssues(question)) {
+    out.push({
+      rule: `질문형식:${i}`,
+      detail:
+        i === 'polite'
+          ? '질문이 경어체다. 평어체로 써라'
+          : '질문이 의문문이 아니다. 물음표로 끝나는 한 문장으로 써라',
+      severity: 'block',
+    })
+  }
+
+  return out
+}
+
 /** 다시 부를 만한 것만 */
 export function blocking(issues: ContentIssue[]): ContentIssue[] {
   return issues.filter((i) => i.severity === 'block')

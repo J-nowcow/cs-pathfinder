@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { IDENTITY_SCOPES, isIdentityScope } from '@/lib/expand/scopes'
 import { realCaller, MODEL_GATE, type StructuredCaller } from '@/lib/llm/client'
+import { questionIssues, complaint } from '@/lib/llm/content-rules'
 
 export { MODEL_GATE }
 
@@ -116,7 +117,15 @@ export async function runGate(args: {
     `사용자 입력: ${args.rawInput}`,
   ].join('\n\n')
 
-  const out = await call({ model: MODEL_GATE, schema: gateSchema, system: SYSTEM, prompt })
+  const once = (extra?: string) =>
+    call({
+      model: MODEL_GATE,
+      schema: gateSchema,
+      system: SYSTEM,
+      prompt: extra ? `${prompt}\n\n${extra}` : prompt,
+    })
+
+  const out = await once()
 
   if (!out.relevant) {
     return { relevant: false, reason: out.reason || FALLBACK_REASON }
@@ -128,12 +137,39 @@ export async function runGate(args: {
     return { relevant: true, matchedId: matched }
   }
 
-  const normalized = out.normalized_question.trim()
+  let normalized = out.normalized_question.trim()
   if (normalized.length === 0) {
     return { relevant: false, reason: FALLBACK_REASON }
   }
+  let scope = isIdentityScope(out.identity_scope) ? out.identity_scope : 'generic'
 
-  const scope = isIdentityScope(out.identity_scope) ? out.identity_scope : 'generic'
+  /*
+   * 새로 만들 질문 문장이 규칙을 지키는지 본다.
+   *
+   * 여기는 **비었는지만** 보고 있었다. 그래서 사용자가 42자짜리 꼬리질문을
+   * 눌렀는데 57자짜리 제목에 도착했다. 자기가 고른 것과 다른 질문에 온 것처럼
+   * 보인다. 배치 게이트는 이 검사를 하고 있었는데 운영 경로만 없었다.
+   *
+   * 이 문장은 노드의 신원이다. 한 번 저장되면 URL과 제목에 그대로 박히고,
+   * 나중에 고치면 같은 질문이 두 개가 된다. 그래서 저장 전에 잡아야 한다.
+   *
+   * **거절하지 않는다.** 멀쩡한 질문을 문전에서 막는 것이 사용자가 겪는 실패
+   * 중 가장 나쁘다. 한 번 더 물어보고, 그래도 어긋나면 짧은 쪽을 쓴다.
+   */
+  const bad = questionIssues(normalized)
+  if (bad.length > 0) {
+    try {
+      const retry = await once(complaint(bad))
+      const better = retry.normalized_question.trim()
+      // 다시 부른 쪽이 실제로 나을 때만 바꾼다. 고치려다 악화시키면 안 된다
+      if (better.length > 0 && questionIssues(better).length < bad.length) {
+        normalized = better
+        scope = isIdentityScope(retry.identity_scope) ? retry.identity_scope : scope
+      }
+    } catch {
+      // 한도나 과부하로 실패하면 처음 것을 쓴다. 검사 때문에 못 파면 안 된다
+    }
+  }
 
   return { relevant: true, matchedId: null, identityScope: scope, normalizedQuestion: normalized }
 }
