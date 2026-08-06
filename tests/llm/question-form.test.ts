@@ -190,3 +190,47 @@ describe('generated nodes meet the same bar', () => {
     expect(clash).toEqual([])
   })
 })
+
+/**
+ * 쉼표로 이어 붙인 긴 문장은 못 쓴 글이다.
+ *
+ * 처음에는 이 패턴을 "우리 문체에서는 AI 티가 아니다"라고 넘겼다. 생성분보다
+ * 손으로 쓴 글에 더 많았기 때문이다(만자당 21.2 대 9.8). 그 판단의 전제가
+ * 내 글이 기준이라는 것이었고, 전제가 틀리면 결론도 틀린다.
+ *
+ * 다시 재보니 손으로 쓴 것에도 60자를 넘으며 쉼표로 두 절을 이은 문장이
+ * 12개였다. 아홉 개를 두 문장으로 끊었다.
+ *
+ * 병렬 열거("로그아웃, 권한 변경, 탈취 대응이 …")는 남긴다. 그건 쉼표가
+ * 꼭 필요한 자리다.
+ */
+function sentencesOf(body: string): string[] {
+  return parseBlocks(body)
+    .filter((b) => b.type === 'paragraph')
+    .flatMap((b) => (b as { text: string }).text.split(/(?<=[.!?])\s+/))
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0)
+}
+
+/** 쉼표가 두 절을 잇는가, 아니면 열거인가. 열거는 쉼표 사이가 짧다 */
+function joinsTwoClauses(sentence: string): boolean {
+  const parts = sentence.split(',')
+  if (parts.length !== 2) return false
+  return parts.every((p) => p.trim().length >= 20)
+}
+
+describe('문장이 쉼표로 늘어지지 않는가', () => {
+  it('does not join two long clauses with a comma', () => {
+    const bad = EXAMPLE_NODES.flatMap((e) =>
+      sentencesOf(e.body).filter((s) => s.length > 60 && joinsTwoClauses(s)),
+    )
+    expect(bad).toEqual([])
+  })
+
+  it('keeps sentences short enough to read in one breath', () => {
+    const tooLong = EXAMPLE_NODES.flatMap((e) =>
+      sentencesOf(e.body).filter((s) => s.length > 100),
+    )
+    expect(tooLong).toEqual([])
+  })
+})
