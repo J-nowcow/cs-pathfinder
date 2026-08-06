@@ -10,6 +10,7 @@ import { strokeWidthAt } from '@/lib/graph/stroke'
 import { rankByCategory, quotaAt, pickVisible } from '@/lib/graph/representatives'
 import { fitToPane } from '@/lib/graph/fit'
 import { MAP_OVERLAY_Z } from '@/lib/graph/stacking'
+import { nearestGaps, hitSizeFor } from '@/lib/graph/hit'
 import { Prose } from '@/components/Prose'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
@@ -277,12 +278,21 @@ function Layers({
   const dotSize = Math.min(900, Math.max(6, 7 / zoom))
 
   /*
-   * 손가락이 닿는 자리는 점보다 크다.
+   * 손가락이 닿는 자리.
    *
    * 점은 작아야 개요가 지저분하지 않은데, 누르는 자리까지 작으면 못 누른다.
-   * 화면상 44px를 목표로 잡는다 — 그보다 작으면 옆 점이 눌린다.
+   * 화면상 44px를 목표로 잡는다.
+   *
+   * 그런데 그것만으로는 **반대쪽으로 무너진다.** 44px를 개요 배율의 좌표로
+   * 옮기면 1400 단위가 넘어서, 그보다 촘촘한 자리에서는 앞 점이 뒷 점을 통째로
+   * 덮는다. 보이는 A를 눌러도 B가 열렸다 — 화면 안 259개 중 자기 자신이
+   * 최상단인 것이 15개뿐이었다.
+   *
+   * 그래서 점마다 이웃까지 거리로 상한을 따로 둔다. 자리는 배율과 무관하므로
+   * 한 번만 잰다.
    */
-  const hitSize = Math.min(2400, Math.max(dotSize, 44 / zoom))
+  const wantedHit = Math.min(2400, Math.max(dotSize, 44 / zoom))
+  const gaps = useMemo(() => nearestGaps(placed), [placed])
 
   /*
    * 실제로 이름을 띄울 것.
@@ -442,6 +452,9 @@ function Layers({
                * 손가락이 닿는 크기를 따로 잡는다. 점 자체는 작아야 개요가
                * 지저분해지지 않지만, 누르는 자리는 44px는 돼야 한다.
                */
+              // 이웃까지 거리로 상한을 둔다. 안 그러면 이 점이 옆 점을 삼킨다
+              const hit = hitSizeFor(gaps.get(p.id) ?? Infinity, dotSize, wantedHit)
+
               return (
                 <button
                   key={p.id}
@@ -449,7 +462,7 @@ function Layers({
                   aria-label={p.question}
                   onClick={() => focus(p.id)}
                   className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 grid place-items-center"
-                  style={{ left: p.x, top: p.y, width: hitSize, height: hitSize }}
+                  style={{ left: p.x, top: p.y, width: hit, height: hit }}
                 >
                   <span
                     aria-hidden
@@ -496,21 +509,34 @@ function Layers({
             이름이 읽히는 것이 이 원리다.
           */}
           {summary.map((g) => (
+            /*
+              누르는 자리를 글자에만 준다.
+
+              이 단추의 상자는 가장 긴 이름만큼 넓다. 개요 배율에서는 글자
+              하나가 좌표 500단위를 넘어서 상자가 5,000단위가 되는데, 그
+              빈 여백이 아래 점들을 통째로 덮었다 — 재보니 화면 안 249개 중
+              **109개**가 이 상자에 가려 안 눌렸다.
+              (`{g.count}개` 줄이 블록이라 상자 폭을 그대로 차지한다.)
+
+              상자는 통과시키고 글자만 받는다. 클릭은 글자에서 단추로
+              올라오므로 여는 동작은 그대로다.
+            */
             <button
               key={g.category}
               type="button"
               onClick={() => enter(g.category)}
-              className="pointer-events-auto absolute -translate-x-1/2 text-center hover:text-accent"
+              className="pointer-events-none absolute -translate-x-1/2 text-center hover:text-accent"
               style={{ left: g.x, top: g.y - labelGap }}
             >
+              {/* 바깥 <p>는 줄을 쌓기 위한 것이라 블록으로 두고, 받는 것은 안쪽 글자다 */}
               <p
                 className="whitespace-nowrap font-extrabold tracking-[-0.02em]"
                 style={{ fontSize: labelSize, lineHeight: 1.2 }}
               >
-                {g.category}
+                <span className="pointer-events-auto">{g.category}</span>
               </p>
               <p className="text-faint" style={{ fontSize: labelSize * 0.62 }}>
-                {g.count}개
+                <span className="pointer-events-auto">{g.count}개</span>
               </p>
             </button>
           ))}
