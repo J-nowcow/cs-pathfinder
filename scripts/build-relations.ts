@@ -9,7 +9,7 @@ import { GENERATED_NODES } from '../data/generated-nodes'
 import { shortlist } from '../src/lib/relations/shortlist'
 import { judgeRelations, type JudgeNode } from '../src/lib/relations/judge'
 import type { RelationKind } from '../src/lib/db/relations'
-import { MODEL_GENERATE } from '../src/lib/llm/client'
+import { MODEL_GEMMA } from '../src/lib/llm/client'
 
 /**
  * 질문 사이의 의미 관계를 만든다.
@@ -80,7 +80,6 @@ const [shard, shards] = process.argv.includes('--shard')
  */
 const CACHE = cachePath(shard)
 const done: Row[] = existsSync(CACHE) ? JSON.parse(readFileSync(CACHE, 'utf8')) : []
-const judged = new Set(done.map((r) => `${r.fromScope}::${r.fromQuestion}`))
 
 /** 조각을 다 모은다. 마지막에 데이터 파일로 쓸 것 */
 function mergeAll(): Row[] {
@@ -111,6 +110,19 @@ function mergeAll(): Row[] {
   return [...best.values()]
 }
 
+/*
+ * 이미 판정한 질문은 **어느 조각에서 했든** 건너뛴다.
+ *
+ * 자기 파일만 보면 조각 수를 바꿀 때마다 남이 한 것을 다시 한다. 4조각으로
+ * 돌리다 2조각으로 줄이면 절반이 재판정 대상이 된다. 판정은 세 번 호출이라
+ * 그 낭비가 그대로 한도로 나간다.
+ *
+ * 관계가 하나도 안 나온 질문은 여기서 안 잡힌다. 흔적을 안 남기기 때문이다.
+ * 그건 감수한다 — 안 나온 질문을 따로 기록하면 "아직 안 함"과 "해봤는데 없음"을
+ * 가르는 파일이 하나 더 생기고, 다시 물어 봐야 대개 또 빈손이라 손해가 작다.
+ */
+const judged = new Set(mergeAll().map((r) => `${r.fromScope}::${r.fromQuestion}`))
+
 const from = arg('--from') ?? 0
 const limit = arg('--limit') ?? nodes.length
 const targets = nodes.slice(from, from + limit).filter((_, i) => (i + from) % shards === shard)
@@ -131,16 +143,15 @@ for (const focus of targets) {
   let rels
   try {
     /*
-     * 게이트 모델 말고 큰 모델로 묻는다.
+     * gemma로 묻는다.
      *
-     * 한도는 모델마다 따로 찬다. 게이트 사슬(3.1-flash-lite → 3.5-flash-lite →
-     * gemma)이 셋 다 마른 날 재보니 3.6-flash와 3.5-flash는 멀쩡했다. 같은 날
-     * 질문 219개를 생성하면서 lite 버킷만 다 썼기 때문이다.
+     * 무료 티어 하루 한도가 모델마다 자릿수가 다르다. gemini-3.6-flash는
+     * 하루 20건이라 판정 일곱 번이면 마른다(limit: 20을 오류 본문에서 확인).
+     * gemma는 그보다 훨씬 넉넉하다.
      *
-     * 이쪽 사슬은 3.6-flash → 3.5-flash → 게이트 → gemma라, 마른 것들이
-     * 뒤에 있고 살아 있는 것이 앞에 있다.
+     * 대신 gemma는 분당 제한에 잘 걸린다. 조각을 적게 나누는 이유가 그것이다.
      */
-    rels = await judgeRelations(focus, cands, { model: MODEL_GENERATE })
+    rels = await judgeRelations(focus, cands, { model: MODEL_GEMMA })
   } catch (e) {
     console.log(`  ! ${focus.question} — ${(e as Error).message}`)
     continue
