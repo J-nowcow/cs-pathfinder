@@ -5,6 +5,27 @@
 사용 설명은 [레포 루트의 README](../../README.md)에 있다.
 
 ---
+## 직접 돌려보기
+
+```bash
+cd code
+npm install
+npm run dev     # http://localhost:3000
+npm test
+npm run typecheck
+```
+
+**Docker도 API 키도 필요 없다.** `DATABASE_URL`이 없으면 인메모리 Postgres(PGlite)로 돌고, AI 키가 없으면 결정론적 스텁이 대신 답한다. 부팅할 때 질문 249개와 그 사이 관계 330개가 자동으로 들어간다. 노드 ID는 질문 텍스트에서 파생하므로 서버를 다시 띄워도 같은 URL이 살아 있다.
+
+## 폴더
+
+```
+cs/       질문 전문. 코드를 안 열어도 무엇이 담겼는지 보인다
+code/     앱 전부 — src·data·scripts·tests·설정
+```
+
+`cs/questions.md`는 발행 워크플로가 매일 다시 쓴다. 손으로 고치지 않는다. **사용자가 자유 입력으로 판 질문은 담지 않는다** — `ready`는 생성이 끝났다는 뜻이지 공개해도 된다는 뜻이 아니고, 레포에 박히면 되돌릴 수 없다.
+
 ## 설계에서 중요한 것
 
 **노드는 개념이고 경로는 개인의 것이다.** `qnode`의 유일키는 (의미 범위 + 질문 문장) 해시이고 부모와 무관하다. "TCP 3-way handshake란?"은 하나만 존재하고 DB 경로와 네트워크 경로 양쪽에서 도달한다. 부모-자식 관계는 `qedge`에 따로 있다.
