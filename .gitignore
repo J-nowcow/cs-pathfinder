@@ -19,3 +19,6 @@ tsconfig.tsbuildinfo
 # 레포에는 README가 설계 요지를 담는다.
 code/docs/superpowers/
 code/docs/brand.md
+
+# 대조용으로 잘라 둔 코퍼스 묶음. scripts/slice-corpus.ts가 다시 만든다
+code/docs/audit/slices/
