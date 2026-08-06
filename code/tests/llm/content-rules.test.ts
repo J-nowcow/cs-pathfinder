@@ -315,3 +315,46 @@ describe('contentIssues · 타임라인 겹침', () => {
     expect(blocking(contentIssues(c)).map((i) => i.rule)).not.toContain('겹침없음')
   })
 })
+
+/**
+ * 붙어서 겹친 조사.
+ *
+ * **오탐이 이 규칙의 전부다.** `block`이라 잘못 걸면 멀쩡한 답을 다시 부른다.
+ * 명사 끝 글자와 조사가 우연히 같은 것(`대가가`·`의도도`·`임의의`)과
+ * 진짜 겹침(`속도가가`)은 **모양이 같아서** 사전 없이는 못 가른다.
+ * 그래서 `를·을·는·와·과` 다섯만 본다 — 이것으로 끝나는 명사가 사실상 없다.
+ */
+describe('contentIssues · 조사겹침', () => {
+  const body = (s: string) => ({ body: `${s}\n\n:::stack\n가 | 나\n다 | 라\n마 | 바\n:::`, suggestions: [] })
+  const rules = (s: string) => contentIssues(body(s)).map((i) => i.rule)
+
+  it.each([
+    ['신호를를 보낸다', '를를'],
+    ['조건에 맞는 행을을 찾는다', '을을'],
+    ['메모리를를 나누는 방식이다', '를를'],
+  ])('%s 를 잡는다', (text) => {
+    expect(rules(text)).toContain('조사겹침')
+  })
+
+  /* 명사 끝과 조사가 같은 것. 전부 멀쩡한 말이라 걸면 안 된다 */
+  it.each([
+    ['대가가 분명하다'],
+    ['코드의 의도도 흐려진다'],
+    ['임의의 위치에 삽입한다'],
+    ['각 문자를 경로로 인식한다'],
+    ['접근 속도가 느리다'],
+  ])('%s 는 안 잡는다', (text) => {
+    expect(rules(text)).not.toContain('조사겹침')
+  })
+
+  it('막는다 — 읽는 사람이 고장으로 받아들인다', () => {
+    const issues = contentIssues(body('포트 번호를를 확인한다'))
+    expect(blocking(issues).map((i) => i.rule)).toContain('조사겹침')
+  })
+
+  /* 도식 이름표 안에서 깨져도 화면에 그대로 나간다 */
+  it('도식 안도 본다', () => {
+    const c = { body: '답이다.\n\n:::stack\n계층 | 데이터를를 나른다\n둘째 | 설명\n셋째 | 설명\n:::', suggestions: [] }
+    expect(contentIssues(c).map((i) => i.rule)).toContain('조사겹침')
+  })
+})
