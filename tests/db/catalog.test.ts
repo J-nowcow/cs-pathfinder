@@ -113,3 +113,21 @@ describe('renderCatalog', () => {
     expect(removed).toEqual([])
   })
 })
+
+/**
+ * 빈 목록이 나가면 워크플로가 그것으로 docs/questions.md를 덮어쓰고 커밋한다.
+ * 새벽에 무인으로 도는 자리라 아무도 못 보는 사이에 목록이 지워진다.
+ *
+ * 라우트가 503으로 떨어뜨리는지는 여기서 못 본다. 여기서 지키는 것은
+ * "0개일 때 0개라고 정확히 말한다"는 것 — 그 판단이 라우트의 근거다.
+ */
+describe('빈 목록', () => {
+  beforeEach(truncateAll)
+
+  it('reports zero when nothing qualifies', async () => {
+    await node('사용자가 판 질문은?', { origin: 'on_demand' })
+    const c = await loadCatalog(TODAY)
+    expect(c.entries.length).toBe(0)
+    expect(c.byCategory).toEqual([])
+  })
+})

@@ -22,6 +22,22 @@ export async function GET(request: Request) {
   }
 
   const catalog = await loadCatalog()
+
+  /*
+   * 빈 목록은 내보내지 않는다.
+   *
+   * 부팅 때 예시 서른 개가 심기므로 0개는 정상 상태가 아니다. DB가 잠깐
+   * 흔들렸거나 배포가 어긋난 것이다.
+   *
+   * 그대로 200으로 내보내면 워크플로가 그것을 받아 docs/questions.md를
+   * 덮어쓰고 커밋한다. 새벽에 무인으로 도는 자리라 아무도 못 보는 사이에
+   * 목록이 통째로 지워진다. 503으로 떨어뜨리면 워크플로가 --fail-with-body로
+   * 멈추고 파일은 그대로 남는다.
+   */
+  if (catalog.entries.length === 0) {
+    return new Response('catalog is empty — refusing to serve', { status: 503 })
+  }
+
   const markdown = renderCatalog(catalog, SITE_URL)
 
   return new Response(markdown, {
