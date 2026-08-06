@@ -100,10 +100,26 @@ export function Board({ initial }: Props) {
         ))}
       </div>
 
-      {/* 카테고리가 10개라 폰에서 한 줄에 안 들어간다. 접거나 더보기로 감추면
-          뒤쪽 분류는 아무도 못 찾는다. 가로로 미는 편이 낫다 */}
-      <div className="scroll-x -mx-5 mt-2.5 sm:mx-0">
-        <div className="flex w-max gap-1.5 px-5 sm:px-0">
+      {/*
+        카테고리가 10개다. 접거나 더보기로 감추면 뒤쪽 분류는 아무도 못 찾는다.
+
+        **넓은 화면에서는 줄을 바꿔 전부 보여준다.** 전에는 어느 폭에서든
+        가로로 밀게 해뒀는데, 1280px에서 재보니 칩 줄이 1062px인데 담는 자리가
+        704px이라 **358px이 잘려 있었다**(프론트엔드·인프라 · 보안·모바일 셋).
+        `.scroll-x`가 스크롤바를 감추므로 더 있다는 표시가 아무것도 없었다.
+        좌우로 288px씩 비어 있는 화면에서 셋을 숨기고 있던 셈이다.
+
+        질문 목록 화면은 원래 줄을 바꿔 다 보여준다. 그쪽에 맞춘다.
+
+        폰에서는 가로로 민다. 줄을 바꾸면 칩만 세 줄이 되어 정작 트리 카드가
+        화면 밖으로 밀린다. 대신 오른쪽 끝을 흐리게 해서 더 있다고 알린다.
+      */}
+      <div className="scroll-x relative -mx-5 mt-2.5 sm:mx-0 sm:overflow-visible">
+        <div
+          aria-hidden
+          className="pointer-events-none sticky right-0 top-0 float-right h-8 w-10 bg-gradient-to-l from-surface to-transparent sm:hidden"
+        />
+        <div className="flex w-max gap-1.5 px-5 sm:w-auto sm:flex-wrap sm:gap-y-2 sm:px-0">
           <button type="button" onClick={() => setCategory(null)} className={chip(category === null)}>
             전체
           </button>
