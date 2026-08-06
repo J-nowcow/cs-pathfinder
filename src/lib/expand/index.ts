@@ -222,9 +222,25 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
   }
 
   if (lease.result === 'done' && lease.qnodeId) {
-    await releaseQuota(input.quotaKey)
     const node = await loadNode(lease.qnodeId)
+
+    /*
+     * 노드가 사라진 캐시는 캐시가 아니다.
+     *
+     * 원래는 `releaseQuota`를 먼저 하고 `loadNode`가 null이면 아래 생성 구간으로
+     * 흘러들었다. 예약을 반납한 채로 LLM을 태우는 길이다. 그리고 리스를 잡은
+     * 적이 없는데도 `completeLease`가 남의 job을 덮고, 생성이 실패하면
+     * `failLease`가 **정상으로 캐시된 done job을 failed로 바꾼다** — 그 해시를
+     * 기다리던 사람 전원이 캐시를 잃는다.
+     *
+     * 도달 가능한 경로다. `publish.ts`의 재발행이 `delete from qnode`를 하고
+     * `purge-stubs`·`dedupe-roots`도 노드를 지운다. 리스는 남고 노드만 없어진다.
+     *
+     * 예약은 성공했을 때만 반납한다. 흘러들 때는 그대로 들고 가야 생성 구간의
+     * `commitQuota`와 짝이 맞는다.
+     */
     if (node) {
+      await releaseQuota(input.quotaKey)
       await ensureEdge(input.parentNodeId, node.id)
       return {
         kind: 'ok',
@@ -232,6 +248,14 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
         cache: 'hit',
         quota: await snapshot(input.quotaKey, input.dailyLimit),
       }
+    }
+
+    // 죽은 리스를 비워 다음 사람이 새로 잡게 한다. 안 비우면 여기 계속 걸린다
+    await failLease(hash)
+    lease = await acquireLease(hash)
+    if (lease.result === 'busy') {
+      await releaseQuota(input.quotaKey)
+      return { kind: 'busy' }
     }
   }
 
