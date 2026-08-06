@@ -5,6 +5,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import {
   startJourney,
+  enterAsRoot,
   visit,
   moveTo,
   pathTo,
@@ -74,10 +75,25 @@ export function ReadingView({
     const saved = loadJourney()
     if (!saved) return
 
-    // URL의 노드가 저장된 여정 안에 있으면 이어서 판다. 없으면 새 여정이다.
+    // 이미 판 자리면 그리로 돌아간다
     const hit = saved.occurrences.find((o) => o.nodeId === initialNode.id)
-    if (hit) setJourney(moveTo(saved, hit.id))
-  }, [initialNode.id])
+    if (hit) {
+      setJourney(moveTo(saved, hit.id))
+      return
+    }
+
+    /*
+     * 저장된 여정에 없는 질문이면 **새 뿌리로 붙인다.**
+     *
+     * 전에는 여기서 그냥 넘어갔다. 그러면 아래 저장 훅이 곧바로 1개짜리 새
+     * 여정으로 저장소를 덮어써서, **판 것이 통째로 날아갔다.** 새 탭으로 질문을
+     * 열거나 공유 링크를 타고 들어오면 그렇게 됐다.
+     *
+     * 재현: 두 노드를 판 상태에서 여정에 없는 `/q/...`를 새 탭에 열면 지도가
+     * 2에서 1로, 깊이가 1에서 0으로 떨어졌다.
+     */
+    setJourney(enterAsRoot(saved, toVisited(initialNode)).state)
+  }, [initialNode])
 
   useEffect(() => {
     saveJourney(journey)

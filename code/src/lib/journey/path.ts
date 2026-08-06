@@ -104,6 +104,45 @@ export function findOccurrenceByNode(
   return hit?.id ?? null
 }
 
+/**
+ * 저장된 여정에 없는 질문으로 들어왔을 때.
+ *
+ * **전에는 여기서 판 것이 통째로 날아갔다.** 그 노드가 저장된 여정에 없으면
+ * 아무것도 안 하고 넘어갔는데, 화면이 이미 1개짜리 새 여정을 들고 있어서
+ * 곧바로 그것이 저장소를 덮었다.
+ *
+ * 새 탭으로 질문을 열거나 공유 링크를 타고 들어오면 그렇게 된다. 홈이
+ * "판 만큼 지도가 그려지고요"라고 약속하는데 그 자리에서 무너졌다.
+ *
+ * 버리지 않고 **새 뿌리로 붙인다.** 여정은 나무 하나가 아니라 숲이어도 된다 —
+ * `layoutJourney`가 이미 뿌리를 전부 훑는다. 서로 안 이어진 갈래로 남는 것이
+ * 맞다. 실제로 안 이어진 경로이고, 억지로 이으면 가지 않은 길을 그린 것이 된다.
+ *
+ * 이미 뿌리로 있는 질문이면 그리로 옮기기만 한다. 안 그러면 그 질문을 열
+ * 때마다 쌍둥이 뿌리가 하나씩 늘어난다.
+ */
+export function enterAsRoot(
+  state: JourneyState,
+  node: VisitedNode,
+): { state: JourneyState; occurrenceId: string } {
+  const existing = state.occurrences.find((o) => o.parentId === null && o.nodeId === node.id)
+  if (existing) {
+    return { state: { ...state, currentId: existing.id }, occurrenceId: existing.id }
+  }
+
+  const root: Occurrence = {
+    id: newId(),
+    nodeId: node.id,
+    parentId: null,
+    question: node.question,
+    category: node.category,
+  }
+  return {
+    state: { occurrences: [...state.occurrences, root], currentId: root.id },
+    occurrenceId: root.id,
+  }
+}
+
 export function moveTo(state: JourneyState, occurrenceId: string): JourneyState {
   if (!state.occurrences.some((o) => o.id === occurrenceId)) return state
   return { ...state, currentId: occurrenceId }
