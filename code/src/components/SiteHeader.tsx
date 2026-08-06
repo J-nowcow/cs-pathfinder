@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ContactMenu } from '@/components/ContactMenu'
 
 /**
  * 화면 맨 위의 길잡이.
@@ -23,7 +24,6 @@ const LINKS = [
 ]
 
 const REPO = 'https://github.com/J-nowcow/cs-pathfinder'
-const CONTACT = 'wkdgusdn0321@naver.com'
 
 /**
  * 바깥으로 나가는 두 곳.
@@ -115,26 +115,16 @@ export function SiteHeader() {
         </OutLink>
 
         {/*
-          문의는 메일로 받는다.
+          문의는 글자로 둔다.
 
-          처음에는 GitHub 이슈로 걸었다. 기록이 남고 주소가 안 새서 좋지만
-          **GitHub 계정이 없으면 아예 못 쓴다.** 이 서비스를 읽는 사람이 전부
-          개발자 계정을 가졌다고 볼 수 없다.
+          봉투 그림이었을 때 "눌러도 안 먹는다"는 말이 나왔다. 링크는 멀쩡했다 —
+          `mailto:`는 기본 메일 앱이 없으면 브라우저가 조용히 아무것도 안 한다.
+          사용자에게는 고장으로 보인다.
 
-          `mailto:`는 주소가 HTML에 그대로 들어가 수집 봇에 긁힌다. 그 대가를
-          알고 고른 것이다 — 문의하려는 사람이 문턱에서 돌아서는 쪽이 더 나쁘다.
-
-          제목을 미리 채워 둔다. 어디서 온 메일인지 받는 쪽이 바로 안다.
+          이제 누르면 두 갈래(GitHub 이슈 · 메일 주소)를 펼쳐 보인다. 그림으로는
+          "누르면 무언가 열린다"가 안 읽혀서 글자로 바꿨다.
         */}
-        <OutLink
-          href={`mailto:${CONTACT}?subject=${encodeURIComponent('[CS 길라잡이] 문의')}`}
-          label="문의하기 (메일)"
-        >
-          <svg viewBox="0 0 16 16" width="17" height="17" fill="currentColor" aria-hidden>
-            {/* 봉투. 말풍선을 쓰면 채팅으로 읽혀서 메일이라는 것이 안 보인다 */}
-            <path d="M2 3.5h12c.55 0 1 .45 1 1v7c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1v-7c0-.55.45-1 1-1Zm.6 1.25L8 8.36l5.4-3.61H2.6ZM13.75 6.1 8.35 9.7a.63.63 0 0 1-.7 0L2.25 6.1v5.15h11.5V6.1Z" />
-          </svg>
-        </OutLink>
+        <ContactMenu />
       </nav>
     </header>
   )

@@ -104,11 +104,21 @@ export function GraphMap({ data }: Props) {
           */}
           {status && <p className="mt-0.5 text-[12px] text-accent">{status}</p>}
         </div>
+        {/*
+          지도의 유일한 출구다.
+
+          이 화면은 `fixed inset-0`이라 사이트 헤더가 안 보인다. 그래서 여기가
+          막히면 뒤로 가기 말고는 나갈 길이 없다.
+
+          전에는 `/questions`로 보냈다. 목록은 지도와 성격이 비슷한 옆 화면이라
+          "돌아간다"는 느낌이 아니었다. 홈으로 보내면 오늘의 질문과 목록·지도로
+          가는 길이 다 거기 있다.
+        */}
         <Link
-          href="/questions"
+          href="/"
           className="rounded-lg border border-line px-3 py-1.5 text-[13px] text-muted hover:text-ink"
         >
-          목록으로
+          홈으로
         </Link>
       </header>
 

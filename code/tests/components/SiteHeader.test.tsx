@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, afterEach, vi } from 'vitest'
 import { render, screen, cleanup } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { SiteHeader } from '@/components/SiteHeader'
 
 /**
@@ -15,18 +16,52 @@ vi.mock('next/navigation', () => ({ usePathname: () => pathname }))
 afterEach(cleanup)
 
 describe('SiteHeader · 바깥 링크', () => {
-  it('문의는 메일로 보낸다', () => {
+  /*
+   * 문의는 글자다.
+   *
+   * 봉투 그림이었을 때 "눌러도 안 먹는다"는 말이 나왔다. 링크는 멀쩡했고,
+   * 기본 메일 앱이 없으면 브라우저가 조용히 아무것도 안 하는 것이었다.
+   * 그림으로는 "누르면 무언가 열린다"가 안 읽힌다.
+   */
+  it('문의는 글자로 보이고 눌러야 열린다', () => {
     render(<SiteHeader />)
-    const contact = screen.getByLabelText('문의하기 (메일)')
-    expect(contact.getAttribute('href')).toContain('mailto:wkdgusdn0321@naver.com')
+    const btn = screen.getByRole('button', { name: '문의' })
+    expect(btn.getAttribute('aria-expanded')).toBe('false')
+    expect(screen.queryByRole('menu')).toBeNull()
   })
 
   /*
-   * 메일 주소로 새 탭을 열면 그 탭이 빈 화면으로 남는다. 사람이 직접 닫아야 한다.
+   * 두 갈래를 다 준다. GitHub 계정이 없는 사람도, 메일 앱이 없는 사람도
+   * 막히지 않아야 한다. **주소는 글자로 보여준다** — mailto:만 걸어두면
+   * 메일 앱이 없는 사람에게는 아무 일도 안 일어난다.
    */
-  it('메일은 새 탭을 열지 않는다', () => {
+  it('열면 GitHub 이슈와 메일 주소가 함께 나온다', async () => {
     render(<SiteHeader />)
-    expect(screen.getByLabelText('문의하기 (메일)').getAttribute('target')).toBeNull()
+    await userEvent.click(screen.getByRole('button', { name: '문의' }))
+
+    expect(screen.getByRole('menuitem', { name: /GitHub/ }).getAttribute('href')).toContain(
+      '/issues/new',
+    )
+    expect(screen.getByText('wkdgusdn0321@naver.com')).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: /메일 앱/ }).getAttribute('href')).toContain(
+      'mailto:wkdgusdn0321@naver.com',
+    )
+  })
+
+  /* 메일 주소로 새 탭을 열면 그 탭이 빈 화면으로 남아 사람이 직접 닫아야 한다 */
+  it('메일은 새 탭을 열지 않는다', async () => {
+    render(<SiteHeader />)
+    await userEvent.click(screen.getByRole('button', { name: '문의' }))
+    expect(screen.getByRole('menuitem', { name: /메일 앱/ }).getAttribute('target')).toBeNull()
+  })
+
+  /* 닫는 길이 없으면 한 번 연 사람이 갇힌다 */
+  it('Esc로 닫힌다', async () => {
+    render(<SiteHeader />)
+    await userEvent.click(screen.getByRole('button', { name: '문의' }))
+    expect(screen.getByRole('menu')).toBeTruthy()
+    await userEvent.keyboard('{Escape}')
+    expect(screen.queryByRole('menu')).toBeNull()
   })
 
   /*
