@@ -65,6 +65,32 @@ export function GraphMap({ data }: Props) {
   const summary = useMemo(() => categorySummary(data.nodes), [data.nodes])
   const byId = useMemo(() => new Map(data.nodes.map((n) => [n.id, n])), [data.nodes])
 
+  /*
+   * 노드마다 이웃을 미리 모은다.
+   *
+   * 선에는 방향이 있지만 시트에서는 방향을 안 따진다. "TCP를 알아야 handshake가
+   * 읽힌다"의 반대편에 서 있어도 사용자가 보고 싶은 것은 이어진 질문 그 자체다.
+   *
+   * 시트를 열 때마다 훑으면 249개 × 선 수를 매번 돈다. 지도는 열어놓고 여러
+   * 노드를 눌러보는 화면이라 그 비용이 반복된다.
+   */
+  const neighbors = useMemo(() => {
+    const m = new Map<string, Array<{ id: string; question: string; reason?: string }>>()
+    const add = (from: string, to: string, reason?: string) => {
+      const node = byId.get(to)
+      if (!node) return
+      const list = m.get(from) ?? []
+      if (list.some((l) => l.id === to)) return
+      list.push({ id: to, question: node.question, reason })
+      m.set(from, list)
+    }
+    for (const e of data.edges) {
+      add(e.parentId, e.childId, e.reason)
+      add(e.childId, e.parentId, e.reason)
+    }
+    return m
+  }, [data.edges, byId])
+
   return (
     <div className="fixed inset-0 flex flex-col bg-surface">
       <header className="flex items-center justify-between gap-3 border-b border-line px-5 py-3">
@@ -86,7 +112,14 @@ export function GraphMap({ data }: Props) {
         <Canvas placed={placed} summary={summary} edges={data.edges} onOpen={setOpenId} />
       </div>
 
-      {openId && <Sheet node={byId.get(openId) ?? null} onClose={() => setOpenId(null)} />}
+      {openId && (
+        <Sheet
+          node={byId.get(openId) ?? null}
+          links={neighbors.get(openId) ?? []}
+          onOpen={setOpenId}
+          onClose={() => setOpenId(null)}
+        />
+      )}
     </div>
   )
 }
@@ -364,7 +397,18 @@ function Viewport({ children }: { children: React.ReactNode }) {
  *
  * 제목은 즉시 띄우고 본문만 받아온다. 누른 것이 맞는지부터 보여야 기다릴 수 있다.
  */
-function Sheet({ node, onClose }: { node: { id: string; question: string } | null; onClose: () => void }) {
+function Sheet({
+  node,
+  links,
+  onClose,
+  onOpen,
+}: {
+  node: { id: string; question: string } | null
+  /** 이 질문과 이어진 것들. 어느 방향이든 한 목록으로 본다 */
+  links: Array<{ id: string; question: string; reason?: string }>
+  onClose: () => void
+  onOpen: (id: string) => void
+}) {
   if (!node) return null
 
   return (
@@ -381,15 +425,41 @@ function Sheet({ node, onClose }: { node: { id: string; question: string } | nul
       </div>
 
       <div className="px-5 py-4">
-        <p className="text-[14px] leading-[1.75] text-muted">
-          해설은 읽기 화면에서 봅니다. 여기서는 무엇이 있는지만 보여줍니다.
-        </p>
         <Link
           href={`/q/${node.id}`}
-          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent"
+          className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent"
         >
           이 질문에서 파고들기 →
         </Link>
+
+        {/*
+          이어진 질문을 근거와 함께 보여준다.
+
+          지도에서 선은 "이어져 있다"까지만 말한다. 왜 이어졌는지는 선을 봐서
+          알 수 없고, 그것을 못 보면 사용자는 선을 믿을 근거가 없다. 판정할 때
+          근거를 반드시 적게 한 이유가 여기서 쓰인다.
+        */}
+        {links.length > 0 && (
+          <section className="mt-6">
+            <h3 className="text-[12px] font-medium text-faint">이어진 질문 {links.length}개</h3>
+            <ul className="mt-2 space-y-1">
+              {links.map((l) => (
+                <li key={l.id}>
+                  <button
+                    type="button"
+                    onClick={() => onOpen(l.id)}
+                    className="w-full rounded-lg border border-line px-3 py-2.5 text-left transition-colors hover:border-accent"
+                  >
+                    <span className="block text-[13px] leading-[1.5]">{l.question}</span>
+                    {l.reason && (
+                      <span className="mt-1 block text-[12px] leading-[1.55] text-faint">{l.reason}</span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </div>
   )

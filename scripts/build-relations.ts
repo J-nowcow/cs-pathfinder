@@ -95,7 +95,20 @@ function mergeAll(): Row[] {
       console.log(`  (${p} 읽는 중 — 건너뜀)`)
     }
   }
-  return all
+
+  /*
+   * 같은 쌍이 두 번 나오면 표를 많이 받은 쪽만 남긴다.
+   *
+   * 조각 경계를 바꿔 다시 돌리면 생긴다 — 예전 조각이 이미 한 질문을 새 조각이
+   * 다시 맡는다. 저장 쪽에서도 걸러내지만 데이터 파일에 두 줄로 남을 이유가 없다.
+   */
+  const best = new Map<string, Row>()
+  for (const r of all) {
+    const key = `${r.fromScope}::${r.fromQuestion}::${r.toScope}::${r.toQuestion}::${r.kind}`
+    const cur = best.get(key)
+    if (!cur || r.votes > cur.votes) best.set(key, r)
+  }
+  return [...best.values()]
 }
 
 const from = arg('--from') ?? 0

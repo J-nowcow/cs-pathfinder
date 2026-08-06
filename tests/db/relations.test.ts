@@ -73,6 +73,26 @@ describe('saveRelations', () => {
     expect(rel.reason).toBe('센 판정')
   })
 
+  /*
+   * 한 묶음 안에 같은 쌍이 두 번 있어도 터지지 않는다.
+   *
+   * `on conflict do update`는 같은 문장에서 같은 행을 두 번 건드리면 거부한다.
+   * 조각으로 나눠 만든 관계를 합칠 때 실제로 겪었다.
+   */
+  it('handles duplicates inside one batch', async () => {
+    const a = await node('TCP는 무엇을 보장하는가?')
+    const b = await node('3-way handshake는 왜 세 번인가?')
+
+    await saveRelations([
+      { fromId: a, toId: b, kind: 'prerequisite', source: 'llm', reason: '약한 쪽', votes: 1 },
+      { fromId: a, toId: b, kind: 'prerequisite', source: 'llm', reason: '센 쪽', votes: 3 },
+    ])
+
+    const [rel] = await loadRelations()
+    expect(rel.votes).toBe(3)
+    expect(rel.reason).toBe('센 쪽')
+  })
+
   /* 종류가 다르면 같은 쌍이어도 따로 담는다. 선행 지식이면서 같은 개념일 수 있다 */
   it('allows different kinds on the same pair', async () => {
     const a = await node('TCP는 무엇을 보장하는가?')

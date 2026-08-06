@@ -37,7 +37,28 @@ export type Relation = NewRelation & { id: string }
  * 걸러내는 것인데 마지막 회차만 남기면 돌린 의미가 없다.
  */
 export async function saveRelations(rels: NewRelation[]): Promise<void> {
-  const rows = rels.filter((r) => r.fromId !== r.toId)
+  /*
+   * 한 묶음 안의 중복을 먼저 걷어낸다.
+   *
+   * `on conflict do update`는 같은 문장 안에서 같은 행을 두 번 건드리면
+   * 거부한다. 우리 쪽에서 정하지 않으면 어느 값이 남는지도 알 수 없다.
+   *
+   * 실제로 겪었다. 관계를 조각으로 나눠 만들다가 조각 경계를 바꿨더니 같은
+   * 질문이 두 조각에서 판정돼 같은 쌍이 두 줄이 됐다. 데이터를 고쳐도 되지만
+   * 저장이 입력 모양에 따라 터지는 것은 그 자체로 고칠 일이다.
+   *
+   * 표를 많이 받은 쪽을 남긴다. 아래 `on conflict`가 하는 것과 같은 규칙이라
+   * 묶음 안이든 밖이든 결과가 같다.
+   */
+  const best = new Map<string, NewRelation>()
+  for (const r of rels) {
+    if (r.fromId === r.toId) continue
+    const key = `${r.fromId}::${r.toId}::${r.kind}`
+    const cur = best.get(key)
+    if (!cur || r.votes > cur.votes) best.set(key, r)
+  }
+
+  const rows = [...best.values()]
   if (rows.length === 0) return
 
   const db = await getDb()
