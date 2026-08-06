@@ -102,10 +102,28 @@ export function analyzeConnectivity(nodeIds: string[], edges: Edge[]): Connectiv
  */
 export function mapStatus(c: Connectivity): string | null {
   if (c.nodes === 0) return null
-  if (c.isolatedRatio <= 0.25) return null
 
   const linked = c.nodes - c.isolated
-  return `아직 ${linked}개만 이어져 있어요. 관계를 채우는 중이에요.`
+  if (c.isolatedRatio > 0.25) return `아직 ${linked}개만 이어져 있어요. 관계를 채우는 중이에요.`
+
+  /*
+   * 고립이 적어도 조각나 있으면 말한다.
+   *
+   * 처음에는 고립률만 봤는데 그게 구멍이었다. 관계를 330개까지 채우자 고립이
+   * 20%로 떨어져 이 함수가 침묵했다. 그런데 같은 시점의 덩어리 수는 79개였고
+   * 가장 큰 것이 17%였다. 하나의 그물이 아니라 섬 여럿이다.
+   *
+   * 그 화면을 아무 말 없이 보여주면 사용자는 흩어진 조각을 보고 "이게 전부인가"
+   * 하게 된다. 이어져 있지만 아직 하나로 안 묶였다고 말하는 편이 맞다.
+   *
+   * 기준을 3할로 잡은 것은 `verdict`와 같다. 두 함수가 다른 선을 쓰면 화면은
+   * 조용한데 내부 판정은 "아직"인 상태가 또 생긴다.
+   */
+  if (c.largestRatio < 0.3) {
+    return `${c.components.length}개 무리로 나뉘어 있어요. 무리끼리 잇는 중이에요.`
+  }
+
+  return null
 }
 
 export function verdict(c: Connectivity): { ready: boolean; reason: string } {

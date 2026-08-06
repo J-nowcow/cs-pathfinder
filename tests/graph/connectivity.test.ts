@@ -93,13 +93,13 @@ describe('verdict', () => {
 })
 
 describe('mapStatus', () => {
-  const c = (nodes: number, isolated: number) => ({
+  const c = (nodes: number, isolated: number, largestRatio = 1, componentCount = 1) => ({
     nodes,
     edges: 0,
     isolated,
     isolatedRatio: nodes === 0 ? 0 : isolated / nodes,
-    components: [],
-    largestRatio: 0,
+    components: Array.from({ length: componentCount }, () => 1),
+    largestRatio,
     medianDegree: 0,
   })
 
@@ -111,9 +111,24 @@ describe('mapStatus', () => {
     expect(mapStatus(c(249, 135))).toContain('114')
   })
 
-  /* 촘촘해지면 아무 말도 안 한다. 잘 될 때 상태를 알리는 것은 소음이다 */
-  it('stays quiet once most nodes are linked', () => {
-    expect(mapStatus(c(249, 20))).toBeNull()
+  /* 촘촘해지고 하나로 묶였으면 아무 말도 안 한다. 잘 될 때 알리는 것은 소음이다 */
+  it('stays quiet once the graph is linked and whole', () => {
+    expect(mapStatus(c(249, 20, 0.7, 3))).toBeNull()
+  })
+
+  /*
+   * 고립이 적어도 조각나 있으면 말한다.
+   *
+   * 처음에는 고립률만 봐서 여기가 뚫려 있었다. 관계 330개 시점에 고립이 20%로
+   * 떨어져 침묵했는데, 같은 시점의 덩어리는 79개였고 가장 큰 것이 17%였다.
+   */
+  it('speaks up when the graph splits into islands', () => {
+    expect(mapStatus(c(249, 49, 0.17, 79))).toContain('79')
+  })
+
+  /* 고립이 많으면 그쪽을 먼저 말한다. 둘 다 말하면 한 줄에 안 들어간다 */
+  it('leads with isolation when both are bad', () => {
+    expect(mapStatus(c(249, 135, 0.06, 120))).toContain('114')
   })
 
   /* 빈 지도는 따로 안내한다. 여기서 "0개만 이어져 있어요"는 헛말이다 */
