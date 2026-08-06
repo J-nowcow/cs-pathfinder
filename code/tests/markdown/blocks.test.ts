@@ -394,3 +394,72 @@ describe('parseBlocks · state', () => {
     expect(b[0].type).toBe('flow')
   })
 })
+
+/**
+ * 무엇이 무엇에 속하는가.
+ *
+ * 계층과 다르다 — 계층은 위아래로 쌓인 것이고 트리는 속한 것이다. 지금은
+ * B-tree·상속·참조 사슬이 전부 계층으로 그려져 있어 "자식"이 "아래층"으로
+ * 읽힌다.
+ *
+ * **들여쓰기 관용이 이 문법의 전부다.** 모델은 2칸·4칸·탭·불릿을 섞어 쓴다.
+ * 그래서 깊이를 절대값으로 읽지 않고 나온 폭을 모아 정렬해 다시 매긴다.
+ */
+describe('parseBlocks · tree', () => {
+  const tree = (inner: string) => parseBlocks(`:::tree\n${inner}\n:::`)[0]
+
+  it('들여쓰기를 깊이로 읽는다', () => {
+    const b = tree('50 | 루트\n  30 | 작은 쪽\n    20\n  70 | 큰 쪽')
+    if (b.type !== 'tree') throw new Error('tree가 아니다')
+    expect(b.nodes.map((n) => n.depth)).toEqual([0, 1, 2, 1])
+    expect(b.nodes[0]).toEqual({ depth: 0, name: '50', note: '루트' })
+    expect(b.nodes[2]).toEqual({ depth: 2, name: '20', note: '' })
+  })
+
+  /* 2칸이든 4칸이든 탭이든 같은 트리가 나와야 한다 */
+  it.each([
+    ['두 칸', 'A\n  B\n    C'],
+    ['네 칸', 'A\n    B\n        C'],
+    ['탭', 'A\n\tB\n\t\tC'],
+    ['불릿', '- A\n  - B\n    - C'],
+  ])('%s 들여쓰기를 같게 읽는다', (_name, inner) => {
+    const b = tree(inner)
+    if (b.type !== 'tree') throw new Error('tree가 아니다')
+    expect(b.nodes.map((n) => n.depth)).toEqual([0, 1, 2])
+    expect(b.nodes.map((n) => n.name)).toEqual(['A', 'B', 'C'])
+  })
+
+  /* 뿌리가 없으면 무엇에 속하는지 알 수 없다 */
+  it('첫 줄이 들여쓰기되어 있으면 문단으로 떨어뜨린다', () => {
+    expect(tree('  A\n  B').type).toBe('paragraph')
+  })
+
+  it('한 번에 두 단계를 뛰면 문단으로 떨어뜨린다', () => {
+    expect(tree('A\n    B\n  C').type).toBe('paragraph')
+  })
+
+  it('줄이 하나뿐이면 트리가 아니다', () => {
+    expect(tree('A | 혼자').type).toBe('paragraph')
+  })
+
+  /*
+   * 깊이가 넘쳐도 버리지 않는다. 눌린 자리는 형제로 보이지만 도식을 통째로
+   * 잃는 것보다 낫다.
+   */
+  it('네 단계는 세 단계로 눌러 그린다', () => {
+    const b = tree('A\n  B\n    C\n      D')
+    if (b.type !== 'tree') throw new Error('tree가 아니다')
+    expect(b.nodes.map((n) => n.depth)).toEqual([0, 1, 2, 2])
+  })
+
+  it('띄어 쓴 울타리와 :::end를 살린다', () => {
+    expect(parseBlocks('::: tree\nA\n  B\n:::end')[0].type).toBe('tree')
+  })
+
+  /* 파서는 본문을 절대 먹지 않는다 */
+  it('못 알아봐도 내용을 잃지 않는다', () => {
+    const b = tree('  이름이 없다\n  이것도')
+    if (b.type !== 'paragraph') throw new Error('paragraph가 아니다')
+    expect(b.text).toContain('이름이 없다')
+  })
+})

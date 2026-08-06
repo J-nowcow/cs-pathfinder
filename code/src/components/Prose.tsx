@@ -1,7 +1,13 @@
 import { Fragment } from 'react'
 import { parseInline } from '@/lib/markdown/inline'
 import { parseBlocks } from '@/lib/markdown/blocks'
-import { FlowDiagram, StateDiagram, StackDiagram, TableDiagram } from '@/components/Diagram'
+import {
+  FlowDiagram,
+  StateDiagram,
+  TreeDiagram,
+  StackDiagram,
+  TableDiagram,
+} from '@/components/Diagram'
 
 /**
  * 해설 본문 렌더러.
@@ -22,6 +28,8 @@ export function Prose({ body }: { body: string }) {
             return <FlowDiagram key={i} steps={block.steps} />
           case 'state':
             return <StateDiagram key={i} steps={block.steps} />
+          case 'tree':
+            return <TreeDiagram key={i} nodes={block.nodes} />
           case 'stack':
             return <StackDiagram key={i} layers={block.layers} />
           case 'table':

@@ -19,6 +19,8 @@ export type Block =
   | { type: 'flow'; steps: FlowStep[] }
   /** 같은 것이 상태를 바꾸며 돌아오거나 갈라질 때. 문법은 flow와 같다 */
   | { type: 'state'; steps: FlowStep[] }
+  /** 무엇이 무엇에 속하는가. B-tree·상속·참조 사슬 같은 것 */
+  | { type: 'tree'; nodes: TreeNode[] }
   /** 위에서 아래로 쌓이는 계층. OSI, 메모리 영역 같은 것 */
   | { type: 'stack'; layers: StackLayer[] }
   /** 열 비교. 낙관적 락 대 비관적 락 같은 것 */
@@ -26,6 +28,7 @@ export type Block =
 
 export type FlowStep = { from: string; to: string; label: string }
 export type StackLayer = { name: string; note: string }
+export type TreeNode = { depth: number; name: string; note: string }
 
 /**
  * 울타리 인식은 넉넉하게 잡는다.
@@ -36,7 +39,7 @@ export type StackLayer = { name: string; note: string }
  *
  * 실측에서 세 번 중 두 번은 정확했고 한 번은 이런 변형이었다.
  */
-const FENCE_OPEN = /^:::\s*(flow|state|stack)\b/
+const FENCE_OPEN = /^:::\s*(flow|state|tree|stack)\b/
 const FENCE_CLOSE = /^:::\s*(end)?\s*$/
 
 /**
@@ -50,7 +53,7 @@ const FENCE_CLOSE = /^:::\s*(end)?\s*$/
  * 그 자리만 지운다. 줄 시작만 보면 "…이다. :::flow" 같은 모양이 빠져나간다.
  */
 const FENCE_ONLY_LINE = /^\s*(:::|```)/
-const INLINE_FENCE = /:::\s*(flow|state|stack|end)?|```+[a-z]*/g
+const INLINE_FENCE = /:::\s*(flow|state|tree|stack|end)?|```+[a-z]*/g
 
 /** `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN` */
 const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
@@ -120,6 +123,66 @@ function parseState(lines: string[]): Block | null {
   return { type: 'state', steps: flow.steps }
 }
 
+/** 깊이가 이보다 깊어지면 눌러 그린다. 폰에서 왼쪽 여백만 늘고 이름 칸이 사라진다 */
+const MAX_TREE_DEPTH = 3
+
+/**
+ * 무엇이 무엇에 속하는가.
+ *
+ * `stack`의 `이름 | 설명`에 들여쓰기를 더한 것이다. 계층과 다르다 — 계층은
+ * 위아래로 쌓인 것이고 트리는 **속한 것**이다. B-tree·상속·참조 사슬·인증서
+ * 체인이 여기 온다. 지금은 그런 것들이 전부 stack으로 그려져 있다.
+ *
+ * **들여쓰기 관용이 이 문법의 전부다.** 모델은 2칸·4칸·탭·`-` 불릿을 섞어
+ * 쓴다. 그래서 깊이를 절대값으로 읽지 않는다. 나온 들여쓰기 폭을 모아
+ * 정렬한 뒤 0·1·2로 다시 매긴다. 2칸이든 4칸이든 탭이든 같은 트리가 나온다.
+ */
+function parseTree(lines: string[]): Block | null {
+  type Raw = { indent: number; name: string; note: string }
+  const raws: Raw[] = []
+
+  for (const line of lines) {
+    // 탭은 두 칸으로 친다. 불릿은 떼되 그 자리도 들여쓰기로 센다
+    const expanded = line.replace(/\t/g, '  ')
+    const m = /^(\s*)(?:[-*]\s+)?(.*)$/.exec(expanded)
+    if (!m) return null
+
+    const rest = m[2].trim()
+    if (rest.length === 0) return null
+
+    const cut = rest.indexOf('|')
+    raws.push({
+      indent: expanded.length - expanded.trimStart().length,
+      name: (cut < 0 ? rest : rest.slice(0, cut)).trim(),
+      note: cut < 0 ? '' : rest.slice(cut + 1).trim(),
+    })
+  }
+
+  // 줄이 하나뿐이면 트리가 아니다
+  if (raws.length < 2) return null
+  // 첫 줄이 들여쓰기되어 있으면 뿌리가 없다
+  if (raws[0].indent !== 0) return null
+  if (raws.some((r) => r.name.length === 0)) return null
+
+  const widths = [...new Set(raws.map((r) => r.indent))].sort((a, b) => a - b)
+  const nodes: TreeNode[] = []
+  let prev = 0
+
+  for (const r of raws) {
+    const level = widths.indexOf(r.indent)
+    // 한 번에 두 단계를 뛰면 어디에 속하는지 알 수 없다
+    if (level > prev + 1) return null
+    prev = level
+    /*
+     * 깊이가 넘치면 눌러 그린다. `null`을 돌리지 않는다 — 눌린 자리는
+     * 형제로 보이지만 도식을 통째로 잃는 것보다 낫다.
+     */
+    nodes.push({ depth: Math.min(level, MAX_TREE_DEPTH - 1), name: r.name, note: r.note })
+  }
+
+  return { type: 'tree', nodes }
+}
+
 function parseStack(lines: string[]): Block | null {
   const layers: StackLayer[] = []
   for (const line of lines) {
@@ -187,7 +250,7 @@ function splitTrailingFence(lines: string[]): string[] {
   const out: string[] = []
 
   for (const line of lines) {
-    const m = /^(.*\S)\s+(:::\s*(?:flow|state|stack)\b.*)$/.exec(line)
+    const m = /^(.*\S)\s+(:::\s*(?:flow|state|tree|stack)\b.*)$/.exec(line)
     if (m) {
       out.push(m[1])
       out.push(m[2])
@@ -256,7 +319,9 @@ export function parseBlocks(body: string): Block[] {
         ? parseFlow(inner)
         : open[1] === 'state'
           ? parseState(inner)
-          : parseStack(inner)
+          : open[1] === 'tree'
+            ? parseTree(inner)
+            : parseStack(inner)
 
     flushParagraphs()
 

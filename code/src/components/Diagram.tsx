@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { parseInline } from '@/lib/markdown/inline'
-import type { FlowStep, StackLayer } from '@/lib/markdown/blocks'
+import type { FlowStep, StackLayer, TreeNode } from '@/lib/markdown/blocks'
 
 /**
  * 해설 안의 도식.
@@ -137,6 +137,64 @@ export function StateDiagram({ steps }: { steps: FlowStep[] }) {
           </li>
         ))}
       </ul>
+    </figure>
+  )
+}
+
+/**
+ * 무엇이 무엇에 속하는가.
+ *
+ * 계층과 헷갈리기 쉬운데 다르다. 계층은 **위아래로 쌓인 것**이고 트리는
+ * **속한 것**이다. B-tree·상속·참조 사슬·인증서 체인이 여기 온다. 지금은
+ * 그런 것들이 전부 계층으로 그려져 있고, 그러면 "자식"이 "아래층"으로
+ * 읽힌다.
+ *
+ * 중첩 목록으로 그린다. 깊이가 곧 중첩이라 **낭독기가 소속을 그대로 읽는다** —
+ * 여기는 따로 이름표를 붙일 필요가 없다.
+ *
+ * 설명은 이름 **아래 줄**에 둔다. 계층처럼 오른쪽에 붙이면 깊이 2에서
+ * 이름 칸이 좁아진다.
+ */
+export function TreeDiagram({ nodes }: { nodes: TreeNode[] }) {
+  /* 평평한 목록을 중첩으로 되돌린다. 깊이가 줄면 그만큼 위로 올라간다 */
+  type Item = { name: string; note: string; children: Item[] }
+  const roots: Item[] = []
+  const stack: Item[] = []
+
+  for (const n of nodes) {
+    const item: Item = { name: n.name, note: n.note, children: [] }
+    stack.length = n.depth
+    const parent = stack[n.depth - 1]
+    if (parent) parent.children.push(item)
+    else roots.push(item)
+    stack[n.depth] = item
+  }
+
+  const List = ({ items, depth }: { items: Item[]; depth: number }) => (
+    <ul
+      className={
+        depth === 0 ? 'space-y-2.5' : 'mt-2 space-y-2 border-l border-line pl-3.5'
+      }
+    >
+      {items.map((it, i) => (
+        <li key={i}>
+          <p className="text-[15px] leading-[1.5] text-ink">
+            <Inline text={it.name} />
+          </p>
+          {it.note.length > 0 && (
+            <p className="mt-0.5 text-[13px] leading-[1.55] text-muted">
+              <Inline text={it.note} />
+            </p>
+          )}
+          {it.children.length > 0 && <List items={it.children} depth={depth + 1} />}
+        </li>
+      ))}
+    </ul>
+  )
+
+  return (
+    <figure className="my-6 rounded-lg border border-line bg-raised px-4 py-3.5 sm:px-5">
+      <List items={roots} depth={0} />
     </figure>
   )
 }
