@@ -94,17 +94,43 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p docs
+
+          # 임시 파일에 받고 성공했을 때만 옮긴다.
+          #
+          # 전에는 -o로 목적지에 바로 받았다. --fail-with-body는 실패해도 본문을
+          # 내놓으므로, 401이나 503이 오면 그 에러 문자열이 질문 목록 파일을
+          # 덮어썼다. 새벽에 사람 없이 도는 자리라 "unauthorized" 한 줄이 그대로
+          # 커밋될 수 있었다.
           curl --fail-with-body -sS \
             --max-time 60 \
             -H "Authorization: Bearer ${CRON_SECRET}" \
-            "${DEPLOY_URL%/}/api/catalog" -o docs/questions.md
+            "${DEPLOY_URL%/}/api/catalog" -o /tmp/questions.md
+
+          # 빈 응답도 막는다. 200인데 내용이 없으면 목록을 지우는 것과 같다
+          if [ ! -s /tmp/questions.md ]; then
+            echo "목록이 비어 있다. 갱신하지 않는다"
+            exit 1
+          fi
+
+          mv /tmp/questions.md docs/questions.md
           wc -l docs/questions.md
 
+      # 앞 스텝이 실패했으면 여기는 안 돈다.
+      #
+      # 전에는 여기도 `if: always()`였다. 목록 받기가 실패해도 커밋을 시도했다는
+      # 뜻이고, 위의 -o 문제와 겹치면 에러 본문이 커밋되는 길이 열려 있었다.
+      # 받는 데 실패했으면 커밋할 것도 없다.
       - name: 바뀌었으면 커밋
-        if: always()
         run: |
           set -euo pipefail
-          if git diff --quiet -- docs/questions.md; then
+
+          # `git diff`가 아니라 `git status`를 본다.
+          #
+          # diff는 **추적되는** 파일의 변경만 본다. docs/questions.md는 한 번도
+          # 커밋된 적이 없어 미추적이었고, 그래서 diff가 늘 "변화 없음"으로
+          # 통과했다. 매 실행이 여기서 exit 0으로 빠져 git add에 닿은 적이 없다.
+          # README가 링크하는 그 파일이 레포에 없는 이유가 이것이다.
+          if [ -z "$(git status --porcelain -- docs/questions.md)" ]; then
             echo "목록에 변화 없음"
             exit 0
           fi

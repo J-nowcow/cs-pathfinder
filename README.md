@@ -141,17 +141,17 @@ npm run verify:concurrency
 ```bash
 npm install
 npm run dev          # http://localhost:3000
-npm test             # 521 tests
-npx tsc --noEmit
+npm test             # 659 tests
+npm run typecheck    # tsc --noEmit (Next의 옛 dev 타입 캐시를 먼저 지운다)
 ```
 
 **Docker가 필요 없다.** `DATABASE_URL`이 없으면 PGlite(WASM Postgres)로 인메모리에서 돈다. plpgsql까지 그대로 돌아서 실제 의미론으로 테스트할 수 있다. 있으면 그 Postgres를 쓴다.
 
 `GOOGLE_GENERATIVE_AI_API_KEY`가 없으면 결정론적 스텁이 대신 답한다. 해설 첫 문단에 개발용임이 박혀 있어 진짜와 헷갈리지 않는다. 키가 있으면 스텁은 아예 로드되지 않는다.
 
-부팅 시 예시 루트 30개가 자동으로 시드된다. 노드 ID는 질문 텍스트에서 파생하므로 서버를 다시 띄워도 같은 URL이 살아 있다.
+부팅 시 질문 249개(손으로 쓴 30개 + 생성된 219개)와 그 사이의 의미 관계 330개가 자동으로 시드된다. 노드 ID는 질문 텍스트에서 파생하므로 서버를 다시 띄워도 같은 URL이 살아 있다.
 
-지금까지 올라온 질문은 [`docs/questions.md`](docs/questions.md)에 있다. 발행 워크플로가 매일 다시 쓴다 — 레포만 보러 온 사람에게도 이 서비스가 무엇을 담고 있는지 보이게 하려는 것이다. `data/topic-seeds.ts`의 412개는 "언젠가 질문을 만들 대기열"이지 질문이 아니다.
+지금까지 올라온 질문은 [`docs/questions.md`](docs/questions.md)에 있다. 발행 워크플로가 매일 다시 쓴다 — 다만 2026-08-06까지 한 번도 안 됐다. 변경 감지가 `git diff`였는데 그 파일이 한 번도 커밋된 적 없는 미추적 파일이라 diff가 늘 "변화 없음"으로 통과했다. `git status --porcelain`으로 고쳤다. 목적은 — 레포만 보러 온 사람에게도 이 서비스가 무엇을 담고 있는지 보이게 하려는 것이다. `data/topic-seeds.ts`의 412개는 "언젠가 질문을 만들 대기열"이지 질문이 아니다.
 
 **사용자가 자유 입력으로 판 질문은 담지 않는다.** `ready`는 생성이 끝났다는 뜻이지 공개해도 된다는 뜻이 아니고, 레포에 박히면 되돌릴 수 없다.
 
@@ -160,7 +160,8 @@ npx tsc --noEmit
 | 명령 | 하는 일 |
 |---|---|
 | `npm run db:migrate` | 실제 Postgres에 스키마 적용 (이력을 남겨 두 번 돌려도 안전) |
-| `npm run seed` | 주제어 412개와 예시 루트 30개 삽입 |
+| `npm run seed` | 주제어 412개와 질문 249개·의미 관계 330개 삽입 |
+| `npm run build:relations` | 질문 사이의 의미 관계를 판정해 `data/relations.ts`로 (`--shard 0/2`로 나눠 돌린다) |
 | `npm run publish:daily [날짜]` | 오늘의 질문 수동 발행 |
 | `npm run db:republish -- [날짜]` | 잘못 뽑힌 발행분을 버리고 다시 뽑기 |
 | `npm run db:purge-stubs` | 키 없는 배포가 남긴 가짜 해설 정리 |
