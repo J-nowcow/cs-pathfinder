@@ -21,7 +21,7 @@ import { PathChips } from '@/components/PathChips'
 import { Suggestions } from '@/components/Suggestions'
 import { FreeInput } from '@/components/FreeInput'
 import { Prose } from '@/components/Prose'
-import { Banner, GeneratingBody, type BannerState } from '@/components/Banners'
+import { Banner, GeneratingBody, ExpandingNote, type BannerState } from '@/components/Banners'
 import { MinimapStrip } from '@/components/MinimapStrip'
 import { ShareSheet } from '@/components/ShareSheet'
 
@@ -289,7 +289,11 @@ export function ReadingView({
             }
           />
 
-          <section>
+          {/*
+            `aria-busy`가 있어야 화면 낭독기가 "지금 바뀌는 중"을 안다.
+            버튼이 안 눌리는 이유를 눈으로만 알 수 있으면 안 된다.
+          */}
+          <section aria-busy={expanding || undefined}>
             <h2 className="mb-3 text-[13px] font-medium text-muted">더 파고들기</h2>
             <Suggestions
               suggestions={node.suggestions}
@@ -297,6 +301,13 @@ export function ReadingView({
               disabled={busy}
               onPick={(s) => void run({ mode: 'suggestion', suggestion: s })}
             />
+            {/*
+              35초를 말없이 두지 않는다.
+
+              재보니 누르고 새 화면까지 35초였고 그동안 바뀌는 것은 화살표가
+              `···`이 되는 것뿐이었다. 그 정도로는 멈춘 것과 구별이 안 된다.
+            */}
+            {expanding && pendingId !== null && <ExpandingNote />}
           </section>
 
           <div className="pt-2">

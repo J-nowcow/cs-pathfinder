@@ -108,7 +108,8 @@ const WAITING_COPY: Array<{ after: number; text: string }> = [
   { after: 18, text: '오래 걸리네요. 무료 한도에 걸려 다른 모델로 넘어가는 중일 수 있어요.' },
 ]
 
-export function GeneratingBody() {
+/** 기다린 시간에 맞는 문구를 고른다 */
+function useWaitingCopy(): string {
   const [elapsed, setElapsed] = useState(0)
 
   useEffect(() => {
@@ -116,12 +117,41 @@ export function GeneratingBody() {
     return () => clearInterval(id)
   }, [])
 
-  // 지난 시간에 해당하는 마지막 문구를 고른다
-  const copy = [...WAITING_COPY].reverse().find((c) => elapsed >= c.after) ?? WAITING_COPY[0]
+  return ([...WAITING_COPY].reverse().find((c) => elapsed >= c.after) ?? WAITING_COPY[0]).text
+}
+
+/**
+ * 파고드는 동안 누르는 자리 옆에 붙는 한 줄.
+ *
+ * 재보니 꼬리질문을 누르고 새 화면이 뜰 때까지 **35초**가 걸렸다. 그동안
+ * 화면에 바뀌는 것은 화살표 `→`가 `···`이 되는 것뿐이었고, `role="status"`도
+ * `aria-busy`도 없어서 화면 낭독기에는 아무것도 안 알려줬다.
+ *
+ * 35초면 사람은 고장 났다고 판단한다.
+ *
+ * 여기서는 본문을 스켈레톤으로 갈아끼우지 않는다. 읽던 글을 지우는 셈이라
+ * 기다리는 동안 읽을 것마저 없어진다. 대신 누른 자리 바로 아래에 말을 붙인다.
+ */
+export function ExpandingNote() {
+  const copy = useWaitingCopy()
 
   return (
-    <div aria-live="polite" className="space-y-3">
-      <p className="text-[14px] text-muted">{copy.text}</p>
+    <p role="status" aria-live="polite" className="mt-3 text-[13px] leading-[1.6] text-muted">
+      <span
+        aria-hidden
+        className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-accent align-middle"
+      />
+      {copy}
+    </p>
+  )
+}
+
+export function GeneratingBody() {
+  const copy = useWaitingCopy()
+
+  return (
+    <div role="status" aria-live="polite" className="space-y-3">
+      <p className="text-[14px] text-muted">{copy}</p>
       <div className="space-y-2.5" aria-hidden>
         {[100, 96, 88, 94, 62].map((w, i) => (
           <div

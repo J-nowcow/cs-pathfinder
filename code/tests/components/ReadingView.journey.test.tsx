@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
 import { render, cleanup, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { ReadingView } from '@/components/ReadingView'
 import { startJourney, visit } from '@/lib/journey/path'
 import { serializeJourney, deserializeJourney, JOURNEY_STORAGE_KEY } from '@/lib/journey/storage'
@@ -89,5 +90,41 @@ describe('여정에 있는 질문으로 들어왔을 때', () => {
       expect(stored()!.currentId).toBe(b.id)
     })
     expect(stored()!.occurrences).toHaveLength(2)
+  })
+})
+
+/**
+ * 35초를 말없이 두지 않는가.
+ *
+ * 문구 자체(`ExpandingNote`)는 따로 시험한다. 여기서는 **화면이 그것을 실제로
+ * 붙이는지**를 본다 — 원래 결함이 딱 그것이었다. 기다림 문구가 이미 있었는데
+ * 빠른 쪽에만 붙어 있고 정작 35초 걸리는 생성에는 없었다.
+ */
+describe('파고드는 동안', () => {
+  it('안내를 띄우고 화면 낭독기에 알린다', async () => {
+    // 응답을 붙잡아 둔다. 그 사이가 사용자가 기다리는 시간이다
+    let release: (v: Response) => void = () => {}
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => new Promise<Response>((res) => (release = res))),
+    )
+
+    const withSuggestion = {
+      ...NODE,
+      suggestions: [{ id: 's1', text: '더 궁금한 것은?' }],
+    }
+    const { getByText, queryByRole, findByRole } = render(
+      <ReadingView initialNode={withSuggestion} initialQuota={{ used: 0, limit: 5 }} />,
+    )
+
+    expect(queryByRole('status')).toBeNull()
+
+    await userEvent.click(getByText('더 궁금한 것은?'))
+
+    const note = await findByRole('status')
+    expect(note.textContent).toContain('만드는 중')
+
+    // 뒤처리. 붙잡아 둔 응답을 풀어준다
+    release(new Response('{}', { status: 500 }))
   })
 })
