@@ -88,6 +88,26 @@ export function analyzeConnectivity(nodeIds: string[], edges: Edge[]): Connectiv
  *
  * 숫자를 보고 사람이 정하는 것이 맞고, 이건 그 판단을 돕는 요약이다.
  */
+/**
+ * 지도 화면에 띄울 한 줄.
+ *
+ * `verdict`와 읽는 사람이 다르다. 그쪽은 "이걸 만들 값이 있나"를 정하려고
+ * 내가 보는 숫자고, 이쪽은 지도를 연 사람이 읽는다. "흩어진 카드다" 같은 말을
+ * 화면에 그대로 내보낼 수는 없다.
+ *
+ * 그렇다고 감출 것도 아니다. 지금 고립이 54%인데 아무 말이 없으면 사용자는
+ * 선이 거의 없는 화면을 보고 고장인 줄 안다. 채우는 중이라고 말하는 편이 낫다.
+ *
+ * 촘촘해지면 아무 말도 안 한다. 잘 되고 있을 때 상태를 알리는 것은 소음이다.
+ */
+export function mapStatus(c: Connectivity): string | null {
+  if (c.nodes === 0) return null
+  if (c.isolatedRatio <= 0.25) return null
+
+  const linked = c.nodes - c.isolated
+  return `아직 ${linked}개만 이어져 있어요. 관계를 채우는 중이에요.`
+}
+
 export function verdict(c: Connectivity): { ready: boolean; reason: string } {
   if (c.nodes === 0) return { ready: false, reason: '노드가 없다' }
   if (c.isolatedRatio > 0.5) {

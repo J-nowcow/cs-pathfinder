@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ReactFlow, Background, Controls, useReactFlow, useStore } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { layoutGlobal, categorySummary, type Placed } from '@/lib/graph/layout'
+import { analyzeConnectivity, mapStatus } from '@/lib/graph/connectivity'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
 /**
@@ -62,6 +63,10 @@ export function GraphMap({ data }: Props) {
   const [openId, setOpenId] = useState<string | null>(null)
 
   const placed = useMemo(() => layoutGlobal(data.nodes), [data.nodes])
+  const status = useMemo(
+    () => mapStatus(analyzeConnectivity(data.nodes.map((n) => n.id), data.edges)),
+    [data.nodes, data.edges],
+  )
   const summary = useMemo(() => categorySummary(data.nodes), [data.nodes])
   const byId = useMemo(() => new Map(data.nodes.map((n) => [n.id, n])), [data.nodes])
 
@@ -99,6 +104,14 @@ export function GraphMap({ data }: Props) {
           <p className="text-[12px] text-faint">
             질문 {data.nodes.length}개 · 이어진 선 {data.edges.length}개
           </p>
+          {/*
+            선이 성긴 동안에는 그렇다고 말한다.
+
+            잰 값으로 249개 중 54%가 아직 선이 하나도 없다. 아무 말이 없으면
+            사용자는 거의 빈 화면을 보고 고장인 줄 안다. 촘촘해지면 이 줄은
+            저절로 사라진다.
+          */}
+          {status && <p className="mt-0.5 text-[12px] text-accent">{status}</p>}
         </div>
         <Link
           href="/questions"

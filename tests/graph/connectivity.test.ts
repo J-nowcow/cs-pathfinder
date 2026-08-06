@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { analyzeConnectivity, verdict } from '@/lib/graph/connectivity'
+import { analyzeConnectivity, verdict, mapStatus } from '@/lib/graph/connectivity'
 
 /**
  * 지도를 만들기 전에 봐야 하는 숫자다.
@@ -89,5 +89,35 @@ describe('verdict', () => {
       { parentId: 'n4', childId: 'n5' },
     ])
     expect(verdict(c).ready).toBe(true)
+  })
+})
+
+describe('mapStatus', () => {
+  const c = (nodes: number, isolated: number) => ({
+    nodes,
+    edges: 0,
+    isolated,
+    isolatedRatio: nodes === 0 ? 0 : isolated / nodes,
+    components: [],
+    largestRatio: 0,
+    medianDegree: 0,
+  })
+
+  /*
+   * 선이 거의 없는 화면에 아무 말이 없으면 사용자는 고장인 줄 안다.
+   * 실측에서 고립이 54%였다.
+   */
+  it('says the map is still filling up when most nodes stand alone', () => {
+    expect(mapStatus(c(249, 135))).toContain('114')
+  })
+
+  /* 촘촘해지면 아무 말도 안 한다. 잘 될 때 상태를 알리는 것은 소음이다 */
+  it('stays quiet once most nodes are linked', () => {
+    expect(mapStatus(c(249, 20))).toBeNull()
+  })
+
+  /* 빈 지도는 따로 안내한다. 여기서 "0개만 이어져 있어요"는 헛말이다 */
+  it('says nothing for an empty map', () => {
+    expect(mapStatus(c(0, 0))).toBeNull()
   })
 })
