@@ -48,10 +48,19 @@ export default async function QuestionsPage() {
       </p>
 
       {/*
-        목차를 위에 둔다. 카테고리가 열 개라 폰에서는 스크롤이 길다.
-        앵커 링크라 자바스크립트가 필요 없다.
+        목차를 위에 두고 **따라다니게** 한다.
+
+        카테고리가 열 개라 폰에서는 스크롤이 길다. 재보니 249행 × 49px로
+        14,906px, 폰에서 19.6화면이다. 목차가 맨 위에 고정돼 있으면 다른
+        카테고리로 가려고 그 19화면을 되감아야 한다.
+
+        `sticky`면 되감기가 사라진다. 어디에 있든 손 닿는 곳에 목차가 있다.
+        스크롤 총량은 그대로지만 사용자가 겪는 비용은 그 되감기였다.
+
+        헤더가 이미 위에 붙어 있으므로 그 아래에 선다(top-14). 배경을 깔지
+        않으면 아래 글이 비쳐 읽힌다.
       */}
-      <nav className="mt-8 flex flex-wrap gap-2">
+      <nav className="sticky top-14 z-10 -mx-5 mt-8 flex flex-wrap gap-2 bg-surface/95 px-5 py-3 backdrop-blur sm:-mx-8 sm:px-8">
         {grouped.map((g) => (
           <a
             key={g.category}
@@ -75,10 +84,14 @@ export default async function QuestionsPage() {
             카드로 그리면 발췌까지 실려 한 줄이 300px가 되고, 마흔여덟 개면
             폰에서 열여섯 화면이 넘는다. 접어봐야 카테고리당 하나씩만 접혀서
             줄지도 않는다. 여기서 하는 일은 훑기지 읽기가 아니다.
+
+            넓은 화면에서는 두 줄로 세운다. 재보니 데스크톱에서 본문이 768px인데
+            한 줄에 28자만 들어가 좌우 672px가 놀고 있었다. 폰은 한 줄 그대로다 —
+            350px를 반으로 가르면 열두 자라 제목이 세 줄로 접혀 오히려 길어진다.
           */}
-          <ul className="divide-y divide-line border-y border-line">
+          <ul className="border-t border-line sm:grid sm:grid-cols-2 sm:gap-x-8">
             {g.items.map((r) => (
-              <li key={r.id}>
+              <li key={r.id} className="border-b border-line last:border-b-0 sm:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
                 <Link
                   href={`/q/${r.id}`}
                   className="group flex items-center gap-3 py-3 transition-colors hover:text-accent"
