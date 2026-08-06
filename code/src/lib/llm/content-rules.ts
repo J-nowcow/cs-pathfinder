@@ -47,6 +47,25 @@ export const MAX_SUGGESTION = 35
 export const DIAGRAM_BY = 3
 
 /**
+ * 같은 낱말이 그대로 붙어 나오는 자리.
+ *
+ * 실제로 나갔다. 공유받은 사람이 첫 화면에서 `스핀 락은 계속해서 **락 락**
+ * 획득을 시도하는`, `전체적인 시스템 **성능이 성능이** 향상된다`를 봤다.
+ * 뜻은 통하지만 읽는 사람은 고장으로 받아들인다.
+ *
+ * **줄바꿈을 넘지 않는다.** 넘게 했더니 stack 도식에서 오탐이 났다 —
+ * `코드 | 정적 데이터` 다음 줄이 `데이터 | 전역 변수`라 `데이터\n데이터`가
+ * 걸렸다. 멀쩡한 도식이다. 도식 블록 자체도 이 검사를 안 받는다.
+ *
+ * 음절 단위로 잡으려던 적이 있는데(`(.{1,3})\1`) 손으로 쓴 30개의 33%가
+ * 걸렸다 — `사이사이`, `스스로`, `질의의`. 낱말 경계를 쓰면 기준선이 0이다.
+ *
+ * **한 글자짜리도 잡는다.** 처음에 두 글자 이상만 봤는데 그러면 실제로 나간
+ * `락 락`을 놓친다. 한 글자까지 넓혀도 손으로 쓴 30개는 그대로 0건이었다.
+ */
+const REPEATED_WORD = /(?<![가-힣])([가-힣]+)[^\S\n]+\1(?![가-힣])/
+
+/**
  * 해설 하나를 검사한다.
  *
  * 부르는 쪽이 문단을 다시 쪼갤 필요가 없게 `parseBlocks`를 여기서 돌린다.
@@ -96,6 +115,15 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
 
   for (const b of blocks) {
     if (b.type !== 'paragraph') continue
+
+    const stutter = b.text.match(REPEATED_WORD)
+    if (stutter) {
+      out.push({
+        rule: '낱말반복',
+        detail: `"${stutter[0]}"처럼 같은 낱말이 붙어 있다. 문장을 다시 써라`,
+        severity: 'block',
+      })
+    }
 
     if (b.text.length > MAX_PARAGRAPH) {
       out.push({
