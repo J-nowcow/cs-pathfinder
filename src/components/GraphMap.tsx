@@ -6,6 +6,7 @@ import { ReactFlow, Background, Controls, useReactFlow, useStore } from '@xyflow
 import '@xyflow/react/dist/style.css'
 import { layoutGlobal, categorySummary, type Placed } from '@/lib/graph/layout'
 import { analyzeConnectivity, mapStatus } from '@/lib/graph/connectivity'
+import { strokeWidthAt } from '@/lib/graph/stroke'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
 /**
@@ -313,8 +314,13 @@ function Layers({
                   x2={b.x}
                   y2={b.y}
                   stroke="var(--line)"
-                  strokeWidth={walked ? 2 : 1.5}
-                  strokeDasharray={walked ? undefined : '6 5'}
+                  strokeWidth={strokeWidthAt(zoom, walked ? 2 : 1.5)}
+                  /*
+                    점선 간격도 배율을 따라간다. 굵기만 고치면 축소 배율에서
+                    점 하나가 0.2px 간격으로 붙어 실선처럼 보인다. 걸어간 길과
+                    이어준 관계를 갈라 놓은 것이 무의미해진다.
+                  */
+                  strokeDasharray={walked ? undefined : `${6 / zoom} ${5 / zoom}`}
                   opacity={walked ? 1 : 0.55}
                 />
               )
