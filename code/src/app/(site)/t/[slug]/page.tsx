@@ -78,9 +78,19 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
 
   return (
     <main className="mx-auto max-w-3xl px-5 pb-4 pt-5 sm:px-8 sm:pt-8">
+      {/*
+        누르는 자리를 손끝 크기로 키운다.
+
+        폰 390px에서 16px이었다. 이 화면에서 본문 영역의 유일한 출구인데
+        가장 얇은 판정 영역이다. 위로는 아무것도 없고 아래로 413px이 비어 있어
+        판정만 늘려도 겹칠 것이 없다.
+
+        `py`를 키우고 같은 만큼 `-my`로 당기면 줄 높이는 안 변한다 —
+        질문 화면의 `← 질문 목록`과 게시판 칩에 쓴 것과 같은 방식이다.
+      */}
       <Link
         href="/"
-        className="text-[13px] font-medium text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="-my-[14px] py-[14px] text-[13px] font-medium text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         ← CS 길라잡이
       </Link>
