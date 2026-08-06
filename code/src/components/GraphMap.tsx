@@ -9,6 +9,7 @@ import { analyzeConnectivity, mapStatus } from '@/lib/graph/connectivity'
 import { strokeWidthAt } from '@/lib/graph/stroke'
 import { rankByCategory, quotaAt, pickVisible } from '@/lib/graph/representatives'
 import { fitToPane } from '@/lib/graph/fit'
+import { MAP_OVERLAY_Z } from '@/lib/graph/stacking'
 import { Prose } from '@/components/Prose'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
@@ -347,7 +348,25 @@ function Layers({
   )
 
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-visible">
+    /*
+     * `z-10`이 없으면 **점을 눌러도 아무 일이 안 일어난다.**
+     *
+     * React Flow의 `.react-flow__renderer`가 `z-index: 4`다. 이 겹은 그
+     * 뒤에 오지만 `z-index: auto`라, DOM 순서가 뒤여도 양수 z-index를 가진
+     * 형제에게 진다. 그래서 점 위에서 `elementFromPoint`가 잡는 것은 우리
+     * 버튼이 아니라 `.react-flow__pane`이었다 — 클릭이 전부 팬(드래그)
+     * 레이어에 먹혔다.
+     *
+     * 화면에는 점이 멀쩡히 보이고 커서도 바뀌니 눈으로는 멀쩡했다. 실제로
+     * `elementFromPoint`를 찍어보기 전까지 안 보이는 종류다.
+     *
+     * 이 겹 자체는 `pointer-events-none`이라 위로 올려도 지도 드래그를
+     * 막지 않는다. 통과시키고, 점과 카드만 `pointer-events-auto`로 받는다.
+     */
+    <div
+      className="pointer-events-none absolute inset-0 overflow-visible"
+      style={{ zIndex: MAP_OVERLAY_Z }}
+    >
       <div
         className="absolute left-0 top-0 origin-top-left"
         style={{ transform: 'translate(0,0)' }}
