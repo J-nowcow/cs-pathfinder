@@ -3,6 +3,7 @@ import { derivedUuid } from '@/lib/db/uuid'
 import { questionHash } from '@/lib/expand/hash'
 import { NORMALIZER_VERSION } from '@/lib/llm/gate'
 import { isIdentityScope } from '@/lib/expand/scopes'
+import { isMissingTable } from '@/lib/db/missing-table'
 import { EXAMPLE_NODES, type ExampleNode } from '../../../data/example-nodes'
 import { GENERATED_NODES } from '../../../data/generated-nodes'
 import { SEED_RELATIONS, type SeedRelation } from '../../../data/relations'
@@ -168,6 +169,19 @@ export function ensureSeeded(): Promise<void> {
       .then(({ missing }) => {
         // 질문 문장을 고치면 여기가 어긋난다. 화면은 멀쩡해 보이고 선만 사라진다
         if (missing > 0) console.warn(`[seed] 관계 ${missing}개가 가리키는 질문을 못 찾았다`)
+      })
+      /*
+       * 관계 표가 없어도 부팅은 끝난다.
+       *
+       * 관계는 질문 위에 얹는 덤이다. 그런데 이 단계가 터지면서 `ensureSeeded`가
+       * 실패했고, 그것을 await하는 화면 전부가 500이 됐다 — 마이그레이션 0009를
+       * 프로덕션에 적용하지 않은 채 배포한 날 실제로 그랬다.
+       *
+       * 덤이 본체를 죽이면 안 된다. 다른 실패는 그대로 던진다.
+       */
+      .catch((e: unknown) => {
+        if (!isMissingTable(e)) throw e
+        console.warn('[seed] semantic_relation이 없다. 관계 없이 띄운다 — npm run db:migrate')
       })
       .catch((e) => {
         // 실패를 캐싱하면 다음 요청이 영영 빈 화면을 본다.

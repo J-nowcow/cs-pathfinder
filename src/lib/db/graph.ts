@@ -1,5 +1,6 @@
 import { getDb } from '@/lib/db/client'
 import { kstToday } from '@/lib/daily/date'
+import { isMissingTable } from '@/lib/db/missing-table'
 
 /**
  * 전역 질문 지도에 실을 것.
@@ -89,15 +90,31 @@ export async function loadMapData(today: string = kstToday()): Promise<MapData> 
           and child_id  = any($1::uuid[])`,
       [ids],
     ),
-    db.query<MapEdge>(
-      `select from_id as "parentId", to_id as "childId", 'related' as kind, reason
-         from semantic_relation
-        where active
-          and votes >= 2
-          and from_id = any($1::uuid[])
-          and to_id   = any($1::uuid[])`,
-      [ids],
-    ),
+    /*
+     * 관계 표가 없어도 지도는 뜬다.
+     *
+     * 선은 덤이고 질문 목록이 본체다. 그런데 이 질의가 그대로 터지면서 지도만이
+     * 아니라 홈과 목록까지 500이 됐다 — 마이그레이션 0009를 프로덕션에 적용하지
+     * 않은 채 배포한 날 실제로 그랬다.
+     *
+     * 표가 없는 것은 배포 순서 문제이지 사용자가 알 일이 아니다. 선 없이 그리고
+     * 로그에 무엇을 해야 하는지 남긴다.
+     */
+    db
+      .query<MapEdge>(
+        `select from_id as "parentId", to_id as "childId", 'related' as kind, reason
+           from semantic_relation
+          where active
+            and votes >= 2
+            and from_id = any($1::uuid[])
+            and to_id   = any($1::uuid[])`,
+        [ids],
+      )
+      .catch((e: unknown) => {
+        if (!isMissingTable(e)) throw e
+        console.warn('[map] semantic_relation이 없다. 선 없이 그린다 — npm run db:migrate')
+        return [] as MapEdge[]
+      }),
   ])
 
   /*
