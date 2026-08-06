@@ -193,14 +193,34 @@ describe('contentIssues · 도식 오용', () => {
    * 파이프를 쓰므로(`| --- | --- |`) 그것을 그대로 계층에 넣는 경우를
    * 놓치면 안 된다. `parseStack`이 이름 `| ---`·설명 `--- |`로 쪼갠다.
    */
+  /*
+   * **적어만 둔다.** 전에는 막았다. 그때는 `--- | ---`이 이름이 `---`이고
+   * 설명이 `---`인 층으로 화면에 그대로 그려졌기 때문이다.
+   *
+   * 이제 파서가 구분줄을 보면 표로 다시 읽는다(`parseStack`). 그리는 모습이
+   * 옳아졌으니 이것 하나로 14초를 더 쓸 이유가 없다. 그래도 지우지는 않는다 —
+   * 모델이 형태를 잘못 고른 것은 그대로고, 그 신호를 잃으면 프롬프트를 언제
+   * 고쳐야 할지 모른다.
+   *
+   * 검사가 원문을 보는 것도 그래서다. 파싱된 블록에는 이제 그런 `stack`이
+   * 없으므로 블록을 보면 **참이 될 수 없는 검사**가 된다.
+   */
   it.each([
     ['--- | ---', '가운데 파이프'],
     ['| --- | --- |', '바깥 파이프'],
     [':--- | ---:', '정렬 표시'],
     ['---', '한 칸짜리'],
-  ])('계층 안의 구분줄 %s (%s)을 막는다', (rule) => {
+  ])('계층 안의 구분줄 %s (%s)을 적어 둔다', (rule) => {
     const issues = contentIssues(withDiagram(`:::stack\n상태 코드 | 분류\n${rule}\n1xx | 정보\n:::`))
-    expect(blocking(issues).map((i) => i.rule)).toContain('표를계층에')
+    expect(issues.map((i) => i.rule)).toContain('표를계층에')
+    expect(blocking(issues).map((i) => i.rule)).not.toContain('표를계층에')
+  })
+
+  it('구분줄이 없는 멀쩡한 계층은 걸지 않는다', () => {
+    const issues = contentIssues(
+      withDiagram(':::stack\n응용 | HTTP\n전송 | TCP\n망 | IP\n:::'),
+    )
+    expect(issues.map((i) => i.rule)).not.toContain('표를계층에')
   })
 
   /*

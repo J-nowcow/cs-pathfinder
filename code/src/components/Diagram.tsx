@@ -59,9 +59,12 @@ export function FlowDiagram({ steps }: { steps: FlowStep[] }) {
                 </span>
                 <span className="font-medium text-muted">{s.to}</span>
               </p>
-              <p className="mt-1 text-[15px] leading-[1.6] text-ink">
-                <Inline text={s.label} />
-              </p>
+              {/* 화살표만 있고 설명이 없는 걸음도 있다. 빈 문단을 남기면 칸만 벌어진다 */}
+              {s.label.length > 0 && (
+                <p className="mt-1 text-[15px] leading-[1.6] text-ink">
+                  <Inline text={s.label} />
+                </p>
+              )}
             </div>
           </li>
         ))}

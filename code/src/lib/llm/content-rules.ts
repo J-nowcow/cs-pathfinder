@@ -1,4 +1,4 @@
-import { parseBlocks } from '@/lib/markdown/blocks'
+import { parseBlocks, isDivider } from '@/lib/markdown/blocks'
 import { questionFormIssues } from '@/lib/llm/question-form'
 import { proseIssues } from '@/lib/llm/prose'
 
@@ -61,16 +61,6 @@ export const MIN_STACK_LAYERS = 3
  * 읽기 편해지자고 견줄 것을 잃는다.
  */
 export const MAX_TABLE_COLS = 3
-
-/**
- * 표 구분줄. 계층 도식 안에 들어오면 그대로 층으로 그려진다.
- *
- * 파이프와 정렬 표시까지 받는다. 처음에는 순수 하이픈만 봤는데 그러면
- * 프롬프트의 표 예시(`| --- | --- |`)를 그대로 계층에 넣은 경우를 놓친다.
- * `parseStack`이 그것을 이름 `| ---`·설명 `--- |`로 쪼개기 때문이다.
- * 정렬 표시(`:---`, `---:`)도 마크다운 표에서 정상이라 같이 본다.
- */
-const RULE_LINE = /^[\s|]*:?-{2,}:?[\s|]*$/
 
 /**
  * 같은 낱말이 그대로 붙어 나오는 자리.
@@ -139,6 +129,28 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
     })
   }
 
+  /*
+   * 계층 울타리에 표를 넣은 것.
+   *
+   * **파싱된 블록에서는 이제 볼 수 없다.** 파서가 구분줄을 보면 표로 다시
+   * 읽으므로 그런 `stack` 블록은 만들어지지 않는다. 블록을 보는 검사는 참이
+   * 될 수 없는 죽은 코드가 된다 — `usable()`로 한 번 겪은 그 함정이다.
+   *
+   * 그래서 원문을 본다. 화면은 파서가 고쳐 주지만 모델이 형태를 잘못 고른
+   * 것은 그대로다. 그 신호까지 잃으면 프롬프트를 언제 고쳐야 할지 모른다.
+   *
+   * **막지는 않는다.** 그려지는 모습이 이제 옳으므로 이것 하나로 14초를 더
+   * 쓰게 할 이유가 없다. 적어만 둔다.
+   */
+  const stackFence = /^:::\s*stack\b([\s\S]*?)^:::/m.exec(c.body)
+  if (stackFence && stackFence[1].split('\n').some((l) => isDivider(l))) {
+    out.push({
+      rule: '표를계층에',
+      detail: '계층 울타리 안에 표를 넣었다. 표는 울타리 없이 그대로 써라',
+      severity: 'note',
+    })
+  }
+
   for (const b of blocks) {
     /*
      * 도식이 제 뜻에 맞게 쓰였는가.
@@ -146,13 +158,13 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
      * 실측에서 도피처가 표가 아니라 **stack**이었다. 표 127개 중 형태가 틀린
      * 것이 30개(24%)인데 stack 56개 중에서는 23개(41%)다.
      *
-     * 파서가 이유를 설명한다 — `parseStack`은 **절대 실패하지 않는다.**
-     * 비어 있지 않은 모든 줄을 층으로 받는다. flow는 화살표가 없으면 `null`,
-     * 표는 구분줄이 없으면 `null`인데 stack만 무엇이든 삼킨다. 그래서 모델이
-     * 형태를 못 고를 때 stack 울타리에 아무거나 넣는다.
+     * 파서가 이유를 설명한다 — `parseStack`은 거의 실패하지 않는다. 비어 있지
+     * 않은 모든 줄을 층으로 받는다. flow는 화살표가 없으면 `null`, 표는
+     * 구분줄이 없으면 `null`인데 stack은 대부분을 삼킨다. 그래서 모델이 형태를
+     * 못 고를 때 stack 울타리에 아무거나 넣는다.
      *
-     * 실제로 표를 stack에 넣은 노드가 둘 있고, `--- | ---`이 **이름이
-     * `---`이고 설명이 `---`인 층으로 화면에 그려지고 있다.**
+     * 표를 넣은 경우는 이제 파서가 표로 되돌린다. 남은 것은 **계층이 아닌 것을
+     * 계층으로 그린 경우** — 그건 문법으로는 알 수 없고 층 수로만 짐작한다.
      */
     if (b.type === 'stack') {
       if (b.layers.length < MIN_STACK_LAYERS) {
@@ -167,13 +179,6 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
           rule: '얕은계층',
           detail: `계층 도식이 ${b.layers.length}층뿐이다. 위아래로 쌓인 것이 아니면 표로 견줘라`,
           severity: 'note',
-        })
-      }
-      if (b.layers.some((l) => RULE_LINE.test(l.name) || RULE_LINE.test(l.note))) {
-        out.push({
-          rule: '표를계층에',
-          detail: '계층 도식 안에 표 구분줄(`---`)이 있다. 표는 울타리 없이 그대로 써라',
-          severity: 'block',
         })
       }
     }

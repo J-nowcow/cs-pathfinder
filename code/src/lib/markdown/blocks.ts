@@ -61,8 +61,17 @@ const FENCE_CLOSE = /^:::\s*(end)?\s*$/
 const FENCE_ONLY_LINE = /^\s*(:::|```)/
 const INLINE_FENCE = /:::\s*(flow|state|tree|memory|timeline|stack|end)?|```+[a-z]*/g
 
-/** `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN` */
-const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
+/**
+ * `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN`
+ *
+ * **설명은 없어도 된다.** 전에는 `: 설명`을 반드시 요구했는데, 그 탓에
+ * `데이터 분할 -> 런 생성 -> 병합`처럼 화살표만 있는 줄이 통째로 문단이 됐다.
+ * 화살표는 그것 하나로 이미 "이 다음 저것"을 말한다 — 설명이 없다고 순서가
+ * 아닌 것은 아니다. 운영 중인 해설 하나가 이 이유로 도식을 잃고 있었다.
+ *
+ * 콜론이 이름 안에 있는 경우와 헷갈리지 않게 **화살표 뒤쪽에서만** 자른다.
+ */
+const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)(?:\s*:\s*(.+))?$/
 
 /** `전송 계층 | TCP, UDP` — 오른쪽 설명은 없어도 된다 */
 const STACK_LINE = /^(.+?)(?:\s*\|\s*(.*))?$/
@@ -107,7 +116,7 @@ function parseFlow(lines: string[]): Block | null {
   for (const line of lines) {
     const m = FLOW_LINE.exec(line.trim())
     if (!m) return null
-    steps.push(...expandChain(m[1], m[2], m[3].trim()))
+    steps.push(...expandChain(m[1], m[2], (m[3] ?? '').trim()))
   }
   return steps.length > 0 ? { type: 'flow', steps } : null
 }
@@ -280,8 +289,32 @@ function parseMemory(lines: string[]): Block | null {
 }
 
 function parseStack(lines: string[]): Block | null {
+  /*
+   * 울타리 안에 표가 들어온 경우.
+   *
+   * `stack`은 무엇이든 받는다 — 그것이 이 도식의 쓸모이자 함정이다. 모델이
+   * 형태를 못 고르면 stack 울타리에 표를 통째로 넣는데, 그러면 구분줄
+   * `--- | ---`이 **이름이 `---`이고 설명이 `---`인 층으로 화면에 그려진다.**
+   * 운영 중인 해설 276편 가운데 둘이 지금 그 모습으로 나가 있다.
+   *
+   * 검사기에 `표를계층에` 규칙이 이미 있지만 그것은 **앞으로 만들** 것만
+   * 막는다. 이미 저장된 본문은 다시 부르지 않으므로 영원히 깨진 채 남는다.
+   * 파서가 알아보면 글은 그대로 두고 화면만 고쳐진다.
+   *
+   * 구분줄이 보이면 표로 다시 읽는다. 표로도 안 되면 **구분줄만 버리고** 층으로
+   * 읽는다. 문단으로 떨어뜨리면 `상태 코드 | 분류` 같은 파이프가 줄글에 그대로
+   * 새어 나와 `---` 층보다 더 나쁘다. 구분줄은 계층에서 아무 뜻이 없으니
+   * 버리는 것이 맞다.
+   */
+  let body = lines
+  if (lines.some((l) => isDivider(l))) {
+    const asTable = parseTable(lines)
+    if (asTable) return asTable
+    body = lines.filter((l) => !isDivider(l))
+  }
+
   const layers: StackLayer[] = []
-  for (const line of lines) {
+  for (const line of body) {
     const m = STACK_LINE.exec(line.trim())
     if (!m || m[1].trim().length === 0) return null
     layers.push({ name: m[1].trim(), note: (m[2] ?? '').trim() })
@@ -299,7 +332,13 @@ function cells(line: string): string[] {
 }
 
 /** `|---|---|` 구분줄인가 */
-function isDivider(line: string): boolean {
+/**
+ * 마크다운 표의 구분줄인가.
+ *
+ * 파서와 검사기가 같은 정의를 써야 한다. 검사기가 따로 정규식을 들면
+ * `--- | ---`처럼 칸이 여럿인 줄에서 판정이 갈린다(실제로 갈렸다).
+ */
+export function isDivider(line: string): boolean {
   const parts = cells(line)
   return parts.length > 0 && parts.every((c) => /^:?-{2,}:?$/.test(c))
 }
