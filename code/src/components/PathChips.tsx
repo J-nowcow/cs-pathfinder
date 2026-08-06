@@ -38,6 +38,21 @@ export function PathChips({
 
   if (path.length === 0) return null
 
+  /*
+   * 아직 한 칸도 안 팠으면 그리지 않는다.
+   *
+   * 칩이 하나뿐일 때 그 칩은 바로 아래 제목과 **글자 그대로 같은 문장**이다.
+   * 같은 말을 두 번 쌓아 놓고 위쪽은 잘라서 보여주는 꼴이다. 누르면 지금 있는
+   * 자리로 가므로 하는 일도 없다.
+   *
+   * 경로는 "어디를 거쳐 왔는지"를 말하는 줄이다. 거쳐 온 곳이 없으면 할 말이
+   * 없다. 깊이 1부터 부모가 생겨 그때부터 뜻이 산다.
+   *
+   * 공유 링크와 오늘의 질문이 전부 이 상태로 열리므로 첫 화면에서 늘 보이던
+   * 중복이다.
+   */
+  if (path.length === 1) return null
+
   const folded = path.length > HEAD + TAIL + 1
   const shown = folded
     ? [...path.slice(0, HEAD), null, ...path.slice(-TAIL)]
