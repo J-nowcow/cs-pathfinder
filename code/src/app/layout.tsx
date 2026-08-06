@@ -42,6 +42,19 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  /*
+   * 폰 브라우저의 주소창 색.
+   *
+   * 지금까지 아무 값도 안 줘서 사이트는 어두운데 주소창만 흰 띠로 남았다.
+   * `globals.css`가 `prefers-color-scheme`로 갈리므로 여기도 둘로 준다 —
+   * 하나만 주면 반대 테마에서 오히려 더 튄다.
+   *
+   * 값은 `--surface`와 같아야 한다. 다르면 화면 위쪽에 경계선이 생긴다.
+   */
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f3f5f6' },
+    { media: '(prefers-color-scheme: dark)', color: '#101317' },
+  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
