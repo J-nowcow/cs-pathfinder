@@ -39,6 +39,18 @@ export function classifyFailure(error: unknown): FailureKind {
   if (
     text.includes('unavailable') ||
     text.includes('overloaded') ||
+    /*
+     * "This model is currently experiencing high demand."
+     *
+     * 실측에서 잡았다. 매일 발행을 세 번 돌려 한 번이 이 문장으로 죽었는데,
+     * 위 목록에 걸리는 낱말이 하나도 없어 fatal로 떨어졌다. fatal은 폴백을
+     * 통째로 건너뛰고 즉시 던진다 — 다른 모델은 멀쩡했는데 시도조차 안 했다.
+     *
+     * 과부하는 프롬프트 문제가 아니라 저쪽 사정이다. 잠깐 뒤에, 또는 다른
+     * 모델에서 된다. transient가 맞다.
+     */
+    text.includes('high demand') ||
+    text.includes('try again') ||
     text.includes('deadline') ||
     text.includes('timeout') ||
     text.includes('econnreset') ||

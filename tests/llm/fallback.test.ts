@@ -45,6 +45,22 @@ describe('classifyFailure', () => {
     expect(classifyFailure(err('503 Service Unavailable'))).toBe('transient')
   })
 
+  /*
+   * 과부하는 저쪽 사정이다. 실측에서 매일 발행 세 번 중 한 번이 이 문장으로
+   * 죽었는데, fatal로 분류돼 폴백을 통째로 건너뛰었다. 다른 모델은 멀쩡했다.
+   */
+  it('reads an overload notice as transient', () => {
+    expect(classifyFailure(err('This model is currently experiencing high demand. Spikes in demand are common'))).toBe(
+      'transient',
+    )
+  })
+
+  /* "잠시 후 다시 시도하세요"류도 마찬가지다. 다시 하라는 말이 곧 transient다 */
+  it('reads a try-again notice as transient', () => {
+    expect(classifyFailure(err('Please try again later'))).toBe('transient')
+  })
+
+  /* 과부하를 넓게 잡되 스키마 불일치까지 삼키면 안 된다. 그건 다시 해도 같다 */
   it('reads a schema complaint as fatal', () => {
     expect(classifyFailure(err('response did not match schema'))).toBe('fatal')
   })
