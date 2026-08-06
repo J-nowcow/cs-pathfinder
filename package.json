@@ -27,7 +27,8 @@
     "docs:questions": "tsx scripts/dump-questions.ts",
     "check:graph": "tsx scripts/check-graph.ts",
     "gen:examples": "tsx scripts/generate-examples.ts",
-    "build:generated": "tsx scripts/build-generated-nodes.ts"
+    "build:generated": "tsx scripts/build-generated-nodes.ts",
+    "repair:generated": "tsx scripts/repair-generated.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",

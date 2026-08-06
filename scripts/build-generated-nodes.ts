@@ -16,8 +16,18 @@ import { CATEGORIES } from '../src/lib/tree/categories'
  *
  * 실행: npm run build:generated
  */
+/**
+ * 만들어진 노드.
+ *
+ * 세 곳에서 온다 — Gemini 조각(`generated-*.json`), Codex(`codex-out.json`),
+ * 손으로 쓴 것(`claude-out.json`). Gemini 쪽에만 `issues`가 있는데 어차피
+ * 여기서 다시 검사하므로 있으면 참고만 하고 없어도 된다.
+ *
+ * 한 모델에 몰지 않는 이유는 속도다. Gemini 무료 한도가 마르면 건당 2분까지
+ * 가는데, 다른 곳은 그 한도와 무관하다.
+ */
 type Made = {
-  src: string
+  src?: string
   category: string
   topic: string
   question: string
@@ -25,7 +35,7 @@ type Made = {
   body: string
   summary: string
   suggestions: string[]
-  issues: string[]
+  issues?: string[]
 }
 
 const OUT = 'data/generated-nodes.ts'
@@ -37,8 +47,17 @@ const OUT = 'data/generated-nodes.ts'
  * 여섯 시간이다). 조각마다 파일을 따로 쓰므로 여기서 합친다.
  */
 const made: Made[] = readdirSync('/tmp/cs-harvest')
-  .filter((f) => /^generated(-\d+)?\.json$/.test(f))
-  .flatMap((f) => JSON.parse(readFileSync(`/tmp/cs-harvest/${f}`, 'utf8')) as Made[])
+  .filter((f) => /^(generated(-\d+)?|codex-out|claude-out)\.json$/.test(f))
+  .flatMap((f) => {
+    try {
+      const parsed = JSON.parse(readFileSync(`/tmp/cs-harvest/${f}`, 'utf8'))
+      return Array.isArray(parsed) ? (parsed as Made[]) : []
+    } catch {
+      // 아직 쓰는 중이면 반쪽 JSON일 수 있다. 그 조각만 건너뛴다
+      console.log(`  (${f} 읽기 실패 — 건너뜀)`)
+      return []
+    }
+  })
 
 /**
  * 담을지 정한다.

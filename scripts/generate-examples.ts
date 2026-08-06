@@ -101,7 +101,16 @@ const topics: Topic[] = JSON.parse(readFileSync(IN, 'utf8'))
 const made: Made[] = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : []
 const done = new Set(made.map((m) => m.topic))
 
-const mine = topics.filter((_, i) => i % of === part)
+/*
+ * Codex가 맡은 카테고리는 건너뛴다.
+ *
+ * Gemini 무료 한도가 말라 건당 2분씩 걸린다. 같은 주제를 두 곳에서 만들면
+ * 그 시간이 그대로 낭비다. 언어·런타임과 모바일은 Codex가 만든다.
+ */
+const CODEX_OWNS = new Set(['언어 · 런타임', '모바일'])
+const mine = topics
+  .filter((t) => !CODEX_OWNS.has(t.category))
+  .filter((_, i) => i % of === part)
 const limit = Number(arg('--limit') ?? mine.length)
 const todo = mine.filter((t) => !done.has(t.topic)).slice(0, limit)
 

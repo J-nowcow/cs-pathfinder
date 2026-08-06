@@ -180,8 +180,19 @@ function Layers({
   const zoom = useStore((st) => st.transform[2])
   const flow = useReactFlow()
 
-  // 화면상 크기를 고정한다. 너무 크면 지도를 덮으므로 위아래로 묶는다
-  const labelSize = Math.min(56, Math.max(15, 17 / zoom))
+  /*
+   * 화면상 크기를 고정한다.
+   *
+   * 좌표계가 통째로 축소되므로 배율의 역수를 곱한다. 17을 곱하면 배율과
+   * 무관하게 화면에서 17px로 보인다.
+   *
+   * 처음에는 여기에 상한 56을 뒀는데 그게 문제였다. 질문이 200개가 되어
+   * 전체 배율이 0.03까지 내려가자 상한에 걸려 화면에서 1.7px로 찍혔다.
+   * 멀리서도 읽히게 하려던 장치가 멀리서만 안 읽히게 만든 셈이다.
+   *
+   * 상한은 좌표값이 터무니없어지는 것만 막는 선에서 크게 잡는다.
+   */
+  const labelSize = Math.min(4000, 17 / zoom)
   const labelGap = labelSize * 2.4
   const pos = useMemo(() => new Map(placed.map((p) => [p.id, p])), [placed])
 
