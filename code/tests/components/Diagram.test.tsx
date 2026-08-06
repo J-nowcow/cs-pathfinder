@@ -2,6 +2,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { render, screen, cleanup } from '@testing-library/react'
 import { Prose } from '@/components/Prose'
+import { StateDiagram } from '@/components/Diagram'
 
 /**
  * 도식이 화면에 실제로 그려지는지.
@@ -168,5 +169,61 @@ describe('Prose — 도식이 없을 때', () => {
   it('renders an empty body without crashing', () => {
     const { container } = render(<Prose body="" />)
     expect(container.textContent).toBe('')
+  })
+})
+
+/**
+ * 상태 전이 도식.
+ *
+ * flow와 다른 전부가 **출발 상태로 묶는 것**이다. 한 상태에서 여러 갈래로
+ * 나가는 것이 상태 머신의 요점인데, flow처럼 번호를 매기면 그 갈림이
+ * "그다음 차례"로 읽힌다.
+ */
+describe('StateDiagram', () => {
+  const steps = [
+    { from: '닫힘', to: '열림', label: '실패율이 기준을 넘는다' },
+    { from: '열림', to: '반열림', label: '일정 시간이 지난다' },
+    { from: '반열림', to: '닫힘', label: '성공하면 원래대로' },
+    { from: '반열림', to: '열림', label: '실패하면 다시 막는다' },
+  ]
+
+  it('출발 상태별로 묶는다', () => {
+    const { container } = render(<StateDiagram steps={steps} />)
+    // 전이는 넷인데 출발 상태는 셋이다
+    expect(container.querySelectorAll('figure > ul > li')).toHaveLength(3)
+  })
+
+  /*
+   * 낭독기가 중첩 목록을 그대로 읽으므로 "반열림 아래에 두 갈래"가 소리로도
+   * 전달된다. 이것이 flow로 그릴 때 잃는 정보다.
+   */
+  it('갈라지는 상태 아래에 두 갈래를 둔다', () => {
+    const { container } = render(<StateDiagram steps={steps} />)
+    const outer = [...container.querySelectorAll('figure > ul > li')]
+    const branching = outer.find((li) => li.textContent?.startsWith('반열림'))!
+    expect(branching.querySelectorAll('ul > li')).toHaveLength(2)
+  })
+
+  /*
+   * 그림만 보고 알 수 없으면 안 된다. 낭독기용 글자를 따로 둔다.
+   *
+   * 서킷 브레이커는 `반열림`에서 나가는 둘(`닫힘`·`열림`)이 **모두** 앞에
+   * 나온 상태로 돌아간다. 상태 머신이 도는 구조라 되돌아가는 길이 흔하다.
+   */
+  it('되돌아가는 전이를 낭독기에도 알린다', () => {
+    render(<StateDiagram steps={steps} />)
+    expect(screen.getAllByText('(앞의 상태로 돌아간다)')).toHaveLength(2)
+  })
+
+  it('앞으로만 가는 전이에는 안 붙인다', () => {
+    render(<StateDiagram steps={steps.slice(0, 2)} />)
+    expect(screen.queryByText('(앞의 상태로 돌아간다)')).toBeNull()
+  })
+
+  it('설명이 없어도 그린다', () => {
+    const { container } = render(
+      <StateDiagram steps={[{ from: 'A', to: 'B', label: '' }, { from: 'B', to: 'C', label: '' }]} />,
+    )
+    expect(container.querySelectorAll('figure > ul > li')).toHaveLength(2)
   })
 })

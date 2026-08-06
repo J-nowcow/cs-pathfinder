@@ -17,6 +17,8 @@ export type Block =
   | { type: 'paragraph'; text: string }
   /** 행위자 사이의 순서. 3-way handshake 같은 것 */
   | { type: 'flow'; steps: FlowStep[] }
+  /** 같은 것이 상태를 바꾸며 돌아오거나 갈라질 때. 문법은 flow와 같다 */
+  | { type: 'state'; steps: FlowStep[] }
   /** 위에서 아래로 쌓이는 계층. OSI, 메모리 영역 같은 것 */
   | { type: 'stack'; layers: StackLayer[] }
   /** 열 비교. 낙관적 락 대 비관적 락 같은 것 */
@@ -34,7 +36,7 @@ export type StackLayer = { name: string; note: string }
  *
  * 실측에서 세 번 중 두 번은 정확했고 한 번은 이런 변형이었다.
  */
-const FENCE_OPEN = /^:::\s*(flow|stack)\b/
+const FENCE_OPEN = /^:::\s*(flow|state|stack)\b/
 const FENCE_CLOSE = /^:::\s*(end)?\s*$/
 
 /**
@@ -48,7 +50,7 @@ const FENCE_CLOSE = /^:::\s*(end)?\s*$/
  * 그 자리만 지운다. 줄 시작만 보면 "…이다. :::flow" 같은 모양이 빠져나간다.
  */
 const FENCE_ONLY_LINE = /^\s*(:::|```)/
-const INLINE_FENCE = /:::\s*(flow|stack|end)?|```+[a-z]*/g
+const INLINE_FENCE = /:::\s*(flow|state|stack|end)?|```+[a-z]*/g
 
 /** `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN` */
 const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
@@ -99,6 +101,23 @@ function parseFlow(lines: string[]): Block | null {
     steps.push(...expandChain(m[1], m[2], m[3].trim()))
   }
   return steps.length > 0 ? { type: 'flow', steps } : null
+}
+
+/**
+ * 상태 전이.
+ *
+ * **문법이 `flow`와 완전히 같다.** 모델이 배울 것이 없다 — 이미 이 문법으로
+ * 상태 머신을 쓰고 있었는데 그것이 `flow`로 그려지고 있었을 뿐이다.
+ * 바뀌는 것은 울타리 이름과 그리는 방식뿐이다.
+ *
+ * 다만 전이가 하나뿐이면 상태 머신이 아니다. `A -> B` 한 줄은 그냥 순서다.
+ * 그때는 `null`을 돌려 문단으로 떨어뜨린다 — 억지로 상태로 그리면 "상태가
+ * 둘 있다"는 없는 뜻이 생긴다.
+ */
+function parseState(lines: string[]): Block | null {
+  const flow = parseFlow(lines)
+  if (!flow || flow.type !== 'flow' || flow.steps.length < 2) return null
+  return { type: 'state', steps: flow.steps }
 }
 
 function parseStack(lines: string[]): Block | null {
@@ -168,7 +187,7 @@ function splitTrailingFence(lines: string[]): string[] {
   const out: string[] = []
 
   for (const line of lines) {
-    const m = /^(.*\S)\s+(:::\s*(?:flow|stack)\b.*)$/.exec(line)
+    const m = /^(.*\S)\s+(:::\s*(?:flow|state|stack)\b.*)$/.exec(line)
     if (m) {
       out.push(m[1])
       out.push(m[2])
@@ -232,7 +251,12 @@ export function parseBlocks(body: string): Block[] {
     }
 
     const inner = lines.slice(i + 1, close).filter((l) => l.trim().length > 0)
-    const parsed = open[1] === 'flow' ? parseFlow(inner) : parseStack(inner)
+    const parsed =
+      open[1] === 'flow'
+        ? parseFlow(inner)
+        : open[1] === 'state'
+          ? parseState(inner)
+          : parseStack(inner)
 
     flushParagraphs()
 

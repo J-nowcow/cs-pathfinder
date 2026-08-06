@@ -329,3 +329,68 @@ describe('여러 걸음이 한 줄에 있을 때', () => {
     expect(block.steps[2].to).toBe('D')
   })
 })
+
+/**
+ * 상태 전이.
+ *
+ * 문법이 `flow`와 완전히 같다. 모델이 배울 것이 없다 — 이미 이 문법으로 상태
+ * 머신을 쓰고 있었는데 그것이 `flow`로 그려지고 있었을 뿐이다.
+ *
+ * flow는 번호를 매겨 한 줄로 세운다. 상태 머신은 그러면 안 된다. 한 상태에서
+ * 여러 갈래로 나가는 것이 요점인데 번호를 매기면 그 갈림이 "그다음 차례"로
+ * 읽힌다.
+ */
+describe('parseBlocks · state', () => {
+  const CIRCUIT = [
+    ':::state',
+    '닫힘 -> 열림: 실패율이 기준을 넘는다',
+    '열림 -> 반열림: 일정 시간이 지난다',
+    '반열림 -> 닫힘: 성공하면 원래대로',
+    '반열림 -> 열림: 하나라도 실패하면 다시 막는다',
+    ':::',
+  ].join('\n')
+
+  it('상태 전이를 알아본다', () => {
+    const b = parseBlocks(CIRCUIT)
+    expect(b).toHaveLength(1)
+    expect(b[0].type).toBe('state')
+  })
+
+  it('전이를 순서대로 담는다', () => {
+    const b = parseBlocks(CIRCUIT)[0]
+    if (b.type !== 'state') throw new Error('state가 아니다')
+    expect(b.steps).toHaveLength(4)
+    expect(b.steps[0]).toEqual({ from: '닫힘', to: '열림', label: '실패율이 기준을 넘는다' })
+    // 같은 상태에서 두 갈래로 나가는 것이 그대로 남는다
+    expect(b.steps.filter((s) => s.from === '반열림')).toHaveLength(2)
+  })
+
+  /*
+   * 전이가 하나뿐이면 상태 머신이 아니라 그냥 순서다. 억지로 상태로 그리면
+   * "상태가 둘 있다"는 없는 뜻이 생긴다.
+   */
+  it('전이가 하나뿐이면 문단으로 떨어뜨린다', () => {
+    const b = parseBlocks(':::state\n대기 -> 실행: 스케줄러가 고른다\n:::')
+    expect(b).toHaveLength(1)
+    expect(b[0].type).toBe('paragraph')
+  })
+
+  /* 파서는 본문을 절대 먹지 않는다. 못 알아봐도 내용은 남는다 */
+  it('문법이 틀려도 내용을 잃지 않는다', () => {
+    const b = parseBlocks(':::state\n화살표가 없는 줄\n:::')
+    expect(b[0].type).toBe('paragraph')
+    if (b[0].type !== 'paragraph') throw new Error('paragraph가 아니다')
+    expect(b[0].text).toContain('화살표가 없는 줄')
+  })
+
+  /* flow가 받는 관용을 그대로 받는다 */
+  it('띄어 쓴 울타리와 :::end를 살린다', () => {
+    const b = parseBlocks('::: state\nA -> B: 하나\nB -> C: 둘\n:::end')
+    expect(b[0].type).toBe('state')
+  })
+
+  it('flow는 그대로 flow다', () => {
+    const b = parseBlocks(':::flow\n앱 -> DB: 요청\nDB -> 앱: 응답\n:::')
+    expect(b[0].type).toBe('flow')
+  })
+})

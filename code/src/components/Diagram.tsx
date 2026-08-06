@@ -71,6 +71,77 @@ export function FlowDiagram({ steps }: { steps: FlowStep[] }) {
 }
 
 /**
+ * 상태 전이.
+ *
+ * `flow`와 문법이 같은데 그리는 방식이 다르다. **출발 상태로 묶는 것**이
+ * 전부다.
+ *
+ * flow는 1·2·3으로 번호를 매겨 한 줄로 세운다. 상태 머신은 그러면 안 된다.
+ * 한 상태에서 여러 갈래로 나가는 것이 상태 머신의 요점인데, 번호를 매기면
+ * 그 갈림이 "그다음 차례"로 읽힌다. `반열림 → 닫힘`과 `반열림 → 열림`은
+ * 순서가 아니라 **둘 중 하나**다.
+ *
+ * 그래서 중첩 목록이다. 바깥이 상태, 안쪽이 그 상태에서 나가는 길. 화면
+ * 낭독기가 중첩 목록을 그대로 읽으므로 "반열림 아래에 두 갈래"가 소리로도
+ * 전달된다.
+ *
+ * 되돌아가는 전이(앞에 이미 나온 상태로 가는 것)에는 `↩`를 붙인다. 그림만
+ * 보고 알 수 없으면 안 되므로 낭독기용 글자를 따로 둔다.
+ */
+export function StateDiagram({ steps }: { steps: FlowStep[] }) {
+  /*
+   * 출발 상태별로 모은다. 나온 순서를 지킨다 — 상태 머신에는 대개 시작
+   * 상태가 있고 모델이 그것을 먼저 쓴다.
+   */
+  const groups: Array<{ from: string; outs: FlowStep[] }> = []
+  for (const s of steps) {
+    const hit = groups.find((g) => g.from === s.from)
+    if (hit) hit.outs.push(s)
+    else groups.push({ from: s.from, outs: [s] })
+  }
+
+  /* 앞에서 이미 출발 상태로 나온 곳으로 가면 되돌아가는 길이다 */
+  const seenBefore = (index: number, to: string) =>
+    groups.slice(0, index).some((g) => g.from === to)
+
+  return (
+    <figure className="my-6 overflow-hidden rounded-lg border border-line bg-raised">
+      <ul className="divide-y divide-line">
+        {groups.map((g, gi) => (
+          <li key={gi} className="px-4 py-3.5 sm:px-5">
+            <p className="text-[13px] font-medium text-ink">{g.from}</p>
+
+            <ul className="mt-1.5 space-y-2">
+              {g.outs.map((s, si) => {
+                const back = seenBefore(gi, s.to)
+                return (
+                  <li key={si} className="flex gap-2">
+                    <span aria-hidden className="mt-[3px] shrink-0 text-[12px] text-accent">
+                      {back ? '↩' : '→'}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[13px] font-medium text-accent">
+                        {s.to}
+                        {back && <span className="sr-only"> (앞의 상태로 돌아간다)</span>}
+                      </p>
+                      {s.label.length > 0 && (
+                        <p className="mt-0.5 text-[15px] leading-[1.6] text-muted">
+                          <Inline text={s.label} />
+                        </p>
+                      )}
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </figure>
+  )
+}
+
+/**
  * 계층.
  *
  * 위가 위층이다. OSI나 메모리 영역처럼 "쌓여 있다"는 것 자체가 정보인 경우에 쓴다.
