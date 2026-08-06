@@ -1,0 +1,14 @@
+-- tree.root_node_id에 인덱스를 붙인다.
+--
+-- 외래키인데 인덱스가 없었다. 두 가지가 걸린다.
+--
+-- 하나. 세 곳이 이 열로 조인한다 — 홈의 지난 질문(roots.ts), 레포 목록
+-- (catalog.ts), 질문 지도(graph.ts). 셋 다 매 요청 도는 자리다.
+--
+-- 둘. on delete cascade가 걸려 있다. 인덱스 없는 참조 열은 부모를 지울 때마다
+-- 자식 테이블을 통째로 훑는다. qnode를 지우는 자리가 실제로 있다 —
+-- 발행 중복 정리(publish.ts)와 루트 중복 제거(dedupe-roots.ts)다.
+--
+-- 지금은 행이 적어 순차 훑기가 더 빠를 수도 있지만, 매일 하나씩 늘어나는
+-- 테이블이라 언젠가 뒤집힌다. 그때는 느려진 이유를 찾기 어렵다.
+create index if not exists tree_root_node_idx on tree (root_node_id);

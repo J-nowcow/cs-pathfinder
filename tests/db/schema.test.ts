@@ -110,3 +110,37 @@ describe('core graph schema', () => {
     expect(await lookupByHash('hash-nope')).toBeNull()
   })
 })
+
+/**
+ * 외래키에 인덱스가 붙어 있는가.
+ *
+ * Postgres는 참조 열에 인덱스를 자동으로 만들지 않는다. 없으면 부모를 지울
+ * 때마다 자식 테이블을 통째로 훑는다. `on delete cascade`가 걸린 자리에서는
+ * 그 훑기가 삭제 한 번마다 일어난다.
+ *
+ * tree.root_node_id가 실제로 그랬다. 조인하는 곳이 셋(홈 목록·레포 목록·지도)
+ * 이고 qnode를 지우는 자리도 둘(발행 중복 정리·루트 중복 제거)인데 인덱스가
+ * 없었다. 행이 적을 때는 순차 훑기가 더 빠를 수도 있어서 티가 안 난다.
+ */
+describe('외래키 인덱스', () => {
+  it('indexes the columns that cascade deletes walk', async () => {
+    const db = await getDb()
+    const rows = await db.query<{ tablename: string; indexdef: string }>(
+      `select tablename, indexdef from pg_indexes where schemaname = 'public'`,
+    )
+    const defs = rows.map((r) => r.indexdef.toLowerCase())
+
+    const needed: Array<[string, string]> = [
+      ['tree', 'root_node_id'],
+      ['qedge', 'child_id'],
+      ['qnode_alias', 'qnode_id'],
+      ['tree_vote', 'voter_key'],
+    ]
+
+    const missing = needed.filter(
+      ([table, column]) =>
+        !defs.some((d) => d.includes(` on public.${table} `) && d.includes(`(${column}`)),
+    )
+    expect(missing).toEqual([])
+  })
+})
