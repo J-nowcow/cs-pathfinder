@@ -272,3 +272,26 @@ describe('손으로 채운 노드', () => {
     }
   })
 })
+
+/* 타임라인이 실은 순서인 경우 — stack처럼 도피처가 되기 쉽다 */
+describe('contentIssues · 타임라인 겹침', () => {
+  const body = (inner: string) => ({ body: `답이다.\n\n:::timeline\n${inner}\n:::`, suggestions: [] })
+  const rules = (c: Parameters<typeof contentIssues>[0]) => contentIssues(c).map((i) => i.rule)
+
+  it('둘이 같은 칸에 있으면 통과한다', () => {
+    expect(
+      rules(body('A | 읽는다 | 계산한다 |  | 쓴다\nB |  | 읽는다 | 계산한다 | 쓴다')),
+    ).not.toContain('겹침없음')
+  })
+
+  it('겹치는 칸이 없으면 순서라고 댄다', () => {
+    expect(rules(body('A | 보낸다 |  | 받는다\nB |  | 답한다 | '))).toContain('겹침없음')
+  })
+
+  /* 막지는 않는다 — 블로킹 입출력도 겹치는 칸이 없다 */
+  it('겹침없음은 막지 않는다', () => {
+    const c = body('A | 보낸다 |  | 받는다\nB |  | 답한다 | ')
+    expect(contentIssues(c).find((i) => i.rule === '겹침없음')?.severity).toBe('note')
+    expect(blocking(contentIssues(c)).map((i) => i.rule)).not.toContain('겹침없음')
+  })
+})

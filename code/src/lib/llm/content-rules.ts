@@ -178,6 +178,30 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
       }
     }
 
+    /*
+     * 타임라인이 실은 순서인 경우.
+     *
+     * timeline이 flow와 다른 점은 하나다 — **같은 칸에 둘이 동시에 있는 것.**
+     * 어느 칸에도 둘이 같이 차 있지 않으면 겹치는 것이 없다는 뜻이고, 그러면
+     * 차례로 주고받는 순서라 flow가 맞다. stack이 그랬듯 timeline도 형태를
+     * 못 고를 때의 도피처가 되기 쉬워서 미리 댄다.
+     *
+     * 막지는 않는다. 하나가 통째로 멈춰 서 있고 다른 하나만 일하는 것(블로킹
+     * 입출력)도 진짜 타임라인인데, 그때는 겹치는 칸이 없다.
+     */
+    if (b.type === 'timeline') {
+      const overlapped = b.rows[0].slots.some(
+        (_, t) => b.rows.filter((r) => r.slots[t].length > 0).length >= 2,
+      )
+      if (!overlapped) {
+        out.push({
+          rule: '겹침없음',
+          detail: '타임라인에 같은 칸을 함께 쓴 자리가 없다. 차례로 주고받는 것이면 flow로 써라',
+          severity: 'note',
+        })
+      }
+    }
+
     if (b.type === 'table') {
       if (b.head.length > MAX_TABLE_COLS) {
         out.push({

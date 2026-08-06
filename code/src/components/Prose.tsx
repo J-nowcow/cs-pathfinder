@@ -6,6 +6,7 @@ import {
   StateDiagram,
   TreeDiagram,
   MemoryDiagram,
+  TimelineDiagram,
   StackDiagram,
   TableDiagram,
 } from '@/components/Diagram'
@@ -33,6 +34,8 @@ export function Prose({ body }: { body: string }) {
             return <TreeDiagram key={i} nodes={block.nodes} />
           case 'memory':
             return <MemoryDiagram key={i} areas={block.areas} />
+          case 'timeline':
+            return <TimelineDiagram key={i} rows={block.rows} />
           case 'stack':
             return <StackDiagram key={i} layers={block.layers} />
           case 'table':

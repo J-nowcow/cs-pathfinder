@@ -23,6 +23,8 @@ export type Block =
   | { type: 'tree'; nodes: TreeNode[] }
   /** 어디에 놓이고 어느 쪽으로 자라는가. 주소 공간·스택과 힙 같은 것 */
   | { type: 'memory'; areas: MemoryArea[] }
+  /** 누가 같은 시간에 무엇을 하는가. 경쟁 상태·블로킹 같은 것 */
+  | { type: 'timeline'; rows: TimelineRow[] }
   /** 위에서 아래로 쌓이는 계층. OSI, 메모리 영역 같은 것 */
   | { type: 'stack'; layers: StackLayer[] }
   /** 열 비교. 낙관적 락 대 비관적 락 같은 것 */
@@ -32,6 +34,7 @@ export type FlowStep = { from: string; to: string; label: string }
 export type StackLayer = { name: string; note: string }
 export type TreeNode = { depth: number; name: string; note: string }
 export type MemoryArea = { name: string; note: string; grow: 'up' | 'down' | null }
+export type TimelineRow = { actor: string; slots: string[] }
 
 /**
  * 울타리 인식은 넉넉하게 잡는다.
@@ -42,7 +45,7 @@ export type MemoryArea = { name: string; note: string; grow: 'up' | 'down' | nul
  *
  * 실측에서 세 번 중 두 번은 정확했고 한 번은 이런 변형이었다.
  */
-const FENCE_OPEN = /^:::\s*(flow|state|tree|memory|stack)\b/
+const FENCE_OPEN = /^:::\s*(flow|state|tree|memory|timeline|stack)\b/
 const FENCE_CLOSE = /^:::\s*(end)?\s*$/
 
 /**
@@ -56,7 +59,7 @@ const FENCE_CLOSE = /^:::\s*(end)?\s*$/
  * 그 자리만 지운다. 줄 시작만 보면 "…이다. :::flow" 같은 모양이 빠져나간다.
  */
 const FENCE_ONLY_LINE = /^\s*(:::|```)/
-const INLINE_FENCE = /:::\s*(flow|state|tree|memory|stack|end)?|```+[a-z]*/g
+const INLINE_FENCE = /:::\s*(flow|state|tree|memory|timeline|stack|end)?|```+[a-z]*/g
 
 /** `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN` */
 const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
@@ -186,6 +189,53 @@ function parseTree(lines: string[]): Block | null {
   return { type: 'tree', nodes }
 }
 
+/** 폰에서 못 읽는 크기. 넘으면 도식이 아니라 표다 */
+const MAX_ACTORS = 3
+const MAX_SLOTS = 5
+
+/**
+ * 누가 같은 시간에 무엇을 하는가.
+ *
+ * 한 줄이 한 주체, `|`로 나뉜 칸이 시간이다. 경쟁 상태·블로킹과 논블로킹처럼
+ * **둘이 같은 시간에 무엇을 하는가**가 답인 자리에 쓴다.
+ *
+ * **빈 칸이 뜻이다.** 아무것도 안 하는 칸을 비워 두면 그것이 기다림이고,
+ * 두 주체의 칸이 같은 줄에 차 있으면 그것이 겹침이다. 순서 도식으로 그리면
+ * 그 둘이 시간 순서로 눕혀져 "동시에"가 사라진다.
+ *
+ * 줄마다 칸 수가 다르면 긴 쪽에 맞춰 채운다. 모델이 끝의 빈 칸을 자주
+ * 빠뜨리는데 그때마다 도식을 잃는 것은 과하다.
+ */
+function parseTimeline(lines: string[]): Block | null {
+  const rows: TimelineRow[] = []
+  let width = 0
+
+  for (const line of lines) {
+    const cells = line
+      .trim()
+      .replace(/^\||\|$/g, '')
+      .split('|')
+      .map((c) => c.trim())
+
+    const [actor, ...slots] = cells
+    if (!actor || actor.length === 0) return null
+    // 칸이 하나면 시간이 아니다
+    if (slots.length < 2) return null
+
+    width = Math.max(width, slots.length)
+    rows.push({ actor, slots })
+  }
+
+  if (rows.length < 2 || rows.length > MAX_ACTORS) return null
+  if (width > MAX_SLOTS) return null
+
+  for (const r of rows) {
+    while (r.slots.length < width) r.slots.push('')
+  }
+
+  return { type: 'timeline', rows }
+}
+
 /** 자라는 방향. 이 둘 말고는 안 받는다 */
 const GROW = ['위로', '아래로'] as const
 
@@ -296,7 +346,7 @@ function splitTrailingFence(lines: string[]): string[] {
   const out: string[] = []
 
   for (const line of lines) {
-    const m = /^(.*\S)\s+(:::\s*(?:flow|state|tree|memory|stack)\b.*)$/.exec(line)
+    const m = /^(.*\S)\s+(:::\s*(?:flow|state|tree|memory|timeline|stack)\b.*)$/.exec(line)
     if (m) {
       out.push(m[1])
       out.push(m[2])
@@ -369,7 +419,9 @@ export function parseBlocks(body: string): Block[] {
             ? parseTree(inner)
             : open[1] === 'memory'
               ? parseMemory(inner)
-              : parseStack(inner)
+              : open[1] === 'timeline'
+                ? parseTimeline(inner)
+                : parseStack(inner)
 
     flushParagraphs()
 

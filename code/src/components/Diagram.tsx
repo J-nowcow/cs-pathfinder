@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { parseInline } from '@/lib/markdown/inline'
-import type { FlowStep, StackLayer, TreeNode, MemoryArea } from '@/lib/markdown/blocks'
+import type { FlowStep, StackLayer, TreeNode, MemoryArea, TimelineRow } from '@/lib/markdown/blocks'
 
 /**
  * 해설 안의 도식.
@@ -256,6 +256,72 @@ export function MemoryDiagram({ areas }: { areas: MemoryArea[] }) {
           </li>
         ))}
       </ol>
+    </figure>
+  )
+}
+
+/**
+ * 누가 같은 시간에 무엇을 하는가.
+ *
+ * **시간을 아래로 흘린다.** 가로 시간축은 폰에서 죽는다 — 다섯 칸이면
+ * 칸당 70px이라 한 칸에 두 글자만 들어간다.
+ *
+ * **진짜 `<table>`을 쓴다.** 행이 시간, 열이 주체다. `<th scope="col">`이
+ * 주체 이름이라 낭독기가 "2번째: 스레드 A 100+50 계산, 스레드 B 잔액 100
+ * 읽기"로 읽는다. 접근성이 마크업에서 공짜로 나온다.
+ *
+ * **빈 칸에는 아무것도 안 그린다.** 비어 보이는 것이 이 도식의 전부다 —
+ * 기다림과 겹침이 거기서 읽힌다.
+ *
+ * `.rtable` 접기 규칙은 안 탄다. 그 규칙은 첫 칸을 카드 제목으로 삼는데
+ * 여기 첫 칸은 순번이라 뜻이 없다. 대신 넘치면 이 안에서만 밀리게 한다.
+ */
+export function TimelineDiagram({ rows }: { rows: TimelineRow[] }) {
+  const slots = rows[0]?.slots.length ?? 0
+
+  return (
+    <figure className="my-6 overflow-x-auto rounded-lg border border-line bg-raised">
+      <table className="w-full border-collapse text-left">
+        <thead>
+          <tr className="border-b border-line">
+            <th scope="col" className="w-8 px-3 py-2">
+              <span className="sr-only">순서</span>
+            </th>
+            {rows.map((r) => (
+              <th
+                key={r.actor}
+                scope="col"
+                className="px-3 py-2 text-[12px] font-medium text-muted"
+              >
+                <Inline text={r.actor} />
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {Array.from({ length: slots }, (_, t) => (
+            <tr key={t} className="border-b border-line last:border-b-0">
+              <td className="px-3 py-2 align-top font-mono text-[11px] text-faint">{t + 1}</td>
+              {rows.map((r) => (
+                <td key={r.actor} className="px-3 py-2 align-top">
+                  {/*
+                    주체가 셋이면 폰에서 한 칸이 99px이라 줄이 넘어간다. 기본
+                    규칙은 글자 단위로 끊어서 "받아 적는 / 다"가 된다 — 어절
+                    한가운데가 갈라져 읽다가 걸린다. `break-keep`으로 어절을
+                    지키면 "받아 / 적는다"가 된다. 칸 수가 적어 가로로 넘칠 일은
+                    없다(파서가 다섯으로 막는다).
+                  */}
+                  {r.slots[t]?.length > 0 && (
+                    <span className="inline-block break-keep rounded bg-accent-soft px-2 py-1 text-[13px] leading-[1.45] text-ink">
+                      <Inline text={r.slots[t]} />
+                    </span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </figure>
   )
 }

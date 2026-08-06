@@ -525,3 +525,58 @@ describe('parseBlocks · memory', () => {
     expect(parseBlocks(':::stack\n전송 | TCP\n네트워크 | IP\n:::')[0].type).toBe('stack')
   })
 })
+
+/**
+ * 누가 같은 시간에 무엇을 하는가.
+ *
+ * **빈 칸이 뜻이다.** 아무것도 안 하는 칸을 비워 두면 그것이 기다림이고,
+ * 두 주체의 칸이 같은 줄에 차 있으면 그것이 겹침이다. 순서 도식으로 그리면
+ * 그 둘이 시간 순서로 눕혀져 "동시에"가 사라진다.
+ */
+describe('parseBlocks · timeline', () => {
+  const tl = (inner: string) => parseBlocks(`:::timeline\n${inner}\n:::`)[0]
+
+  it('주체와 시간 칸을 읽는다', () => {
+    const b = tl('A | 읽는다 | 계산한다 |  | 쓴다\nB |  | 읽는다 | 계산한다 | 쓴다')
+    if (b.type !== 'timeline') throw new Error('timeline이 아니다')
+    expect(b.rows).toHaveLength(2)
+    expect(b.rows[0]).toEqual({ actor: 'A', slots: ['읽는다', '계산한다', '', '쓴다'] })
+    // 빈 칸이 그대로 남아야 기다림이 보인다
+    expect(b.rows[1].slots[0]).toBe('')
+  })
+
+  /* 모델이 끝의 빈 칸을 자주 빠뜨린다. 그때마다 도식을 잃는 것은 과하다 */
+  it('칸 수가 다르면 긴 쪽에 맞춰 채운다', () => {
+    const b = tl('A | 하나 | 둘 | 셋\nB | 하나 | 둘')
+    if (b.type !== 'timeline') throw new Error('timeline이 아니다')
+    expect(b.rows[1].slots).toEqual(['하나', '둘', ''])
+  })
+
+  it('한 줄뿐이면 동시가 아니다', () => {
+    expect(tl('A | 하나 | 둘').type).toBe('paragraph')
+  })
+
+  it('칸이 하나면 시간이 아니다', () => {
+    expect(tl('A | 하나\nB | 둘').type).toBe('paragraph')
+  })
+
+  /* 폰에서 못 읽는 크기다. 넘으면 도식이 아니라 표다 */
+  it('주체가 넷이면 문단으로 떨어뜨린다', () => {
+    expect(tl('A | 1 | 2\nB | 1 | 2\nC | 1 | 2\nD | 1 | 2').type).toBe('paragraph')
+  })
+
+  it('칸이 여섯이면 문단으로 떨어뜨린다', () => {
+    expect(tl('A | 1 | 2 | 3 | 4 | 5 | 6\nB | 1 | 2 | 3 | 4 | 5 | 6').type).toBe('paragraph')
+  })
+
+  it('띄어 쓴 울타리와 :::end를 살린다', () => {
+    expect(parseBlocks('::: timeline\nA | 하나 | 둘\nB | 셋 | 넷\n:::end')[0].type).toBe('timeline')
+  })
+
+  /* 파서는 본문을 절대 먹지 않는다 */
+  it('못 알아봐도 내용을 잃지 않는다', () => {
+    const b = tl('A | 혼자만 있다')
+    if (b.type !== 'paragraph') throw new Error('paragraph가 아니다')
+    expect(b.text).toContain('혼자만 있다')
+  })
+})
