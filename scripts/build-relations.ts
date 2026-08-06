@@ -8,6 +8,7 @@ import { EXAMPLE_NODES } from '../data/example-nodes'
 import { GENERATED_NODES } from '../data/generated-nodes'
 import { shortlist } from '../src/lib/relations/shortlist'
 import { judgeRelations, type JudgeNode } from '../src/lib/relations/judge'
+import { nextPace } from '../src/lib/relations/pace'
 import type { RelationKind } from '../src/lib/db/relations'
 import { MODEL_GEMMA } from '../src/lib/llm/client'
 
@@ -130,6 +131,7 @@ const targets = nodes.slice(from, from + limit).filter((_, i) => (i + from) % sh
 console.log(`질문 ${nodes.length}개 · 이번에 볼 것 ${targets.length}개 · 이미 한 것 ${judged.size}개`)
 
 let asked = 0
+let failures = 0
 for (const focus of targets) {
   const src = byId.get(focus.id)!
   if (judged.has(`${src.identityScope}::${src.question}`)) continue
@@ -153,9 +155,26 @@ for (const focus of targets) {
      */
     rels = await judgeRelations(focus, cands, { model: MODEL_GEMMA })
   } catch (e) {
-    console.log(`  ! ${focus.question} — ${(e as Error).message}`)
+    /*
+     * 막히면 쉬고, 쉬어도 안 되면 그만둔다.
+     *
+     * 예전에는 그냥 다음 질문으로 넘어갔다. 한도에 걸린 실행이 남은 102개를
+     * 순식간에 전부 실패로 태우고 끝났다(성공 1개). 실패가 빨라지자 목록을
+     * 빠르게 태우게 된 것이다.
+     */
+    failures += 1
+    const pace = nextPace({ consecutiveFailures: failures })
+    console.log(`  ! ${focus.question} — ${(e as Error).message.slice(0, 90)}`)
+
+    if (pace.stop) {
+      console.log(`  연속 ${failures}회 막혔다. 여기서 끝낸다 — 남은 질문은 다음 실행이 이어받는다`)
+      break
+    }
+    console.log(`  ${Math.round(pace.waitMs / 1000)}초 쉰다`)
+    await new Promise((r) => setTimeout(r, pace.waitMs))
     continue
   }
+  failures = 0
 
   for (const r of rels) {
     const dst = byId.get(r.toId)
