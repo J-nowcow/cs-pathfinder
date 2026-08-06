@@ -35,7 +35,7 @@ export async function generateMetadata({
   const lead = node.body.split('\n\n')[0]?.slice(0, 140) ?? ''
 
   return {
-    title: node.question,
+    // title은 socialMeta가 준다. 여기서 또 적으면 두 곳이 갈릴 자리가 생긴다
     description: lead,
     ...socialMeta({ title: node.question, description: lead, type: 'article' }),
   }

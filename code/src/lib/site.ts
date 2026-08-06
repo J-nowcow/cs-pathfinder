@@ -61,7 +61,17 @@ export const OG_IMAGE_PATH = '/opengraph-image.png'
  * 페이지가 늘 때마다 같은 실수가 나므로 한 자리에 모은다. 절대 주소는
  * metadataBase가 펴준다.
  */
+/**
+ * 서비스 이름.
+ *
+ * 한 곳에만 둔다. 전에는 `layout.tsx`의 상수와 페이지마다 손으로 적은 제목이
+ * 따로 놀아서, 이름을 바꿨을 때 **네 곳에 옛 이름이 남았다**. `/questions`와
+ * `/map`의 공유 카드 제목이 그랬다.
+ */
+export const SITE_NAME = 'CS 길라잡이'
+
 export function socialMeta(args: {
+  /** 이 화면의 이름만 준다. 뒤에 서비스 이름은 여기서 붙인다 */
   title: string
   description: string
   /** 질문·트리처럼 내용이 있는 문서면 article. 기본은 website */
@@ -69,9 +79,26 @@ export function socialMeta(args: {
 }) {
   const images = [OG_IMAGE_PATH]
 
+  /*
+   * 공유 카드에는 서비스 이름을 직접 붙인다.
+   *
+   * 브라우저 제목은 루트 레이아웃의 `template`(`%s · 이름`)이 붙여주지만
+   * openGraph·twitter에는 그 규칙이 안 먹는다. 카톡에 붙였을 때 어디서 온
+   * 링크인지가 안 보이면 안 누른다.
+   */
+  const full = `${args.title} · ${SITE_NAME}`
+
   return {
+    /*
+     * **`title`을 안 내놓고 있었다.**
+     *
+     * openGraph와 twitter만 채우고 있어서, 이걸 쓰는 화면은 전부 브라우저
+     * 제목이 루트 기본값으로 떨어졌다 — `/questions`도 `/map`도 탭 이름이
+     * 똑같이 `CS 길라잡이`였다. 탭을 여러 개 띄우면 어느 것이 무엇인지 모른다.
+     */
+    title: args.title,
     openGraph: {
-      title: args.title,
+      title: full,
       description: args.description,
       type: args.type ?? 'website',
       locale: 'ko_KR',
@@ -79,7 +106,7 @@ export function socialMeta(args: {
     },
     twitter: {
       card: 'summary_large_image' as const,
-      title: args.title,
+      title: full,
       description: args.description,
       images,
     },

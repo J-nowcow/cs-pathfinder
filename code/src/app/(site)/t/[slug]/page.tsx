@@ -50,7 +50,7 @@ export async function generateMetadata({
   const description = tree.summary || `${tree.category} 질문 ${tree.nodes.length}개`
 
   return {
-    title: tree.title,
+    // title은 socialMeta가 준다. 여기서 또 적으면 두 곳이 갈릴 자리가 생긴다
     description,
     ...socialMeta({ title: tree.title, description, type: 'article' }),
   }
@@ -82,7 +82,7 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
         href="/"
         className="text-[13px] font-medium text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
-        ← 꼬리에 꼬리를 무는 CS 공부
+        ← CS 길라잡이
       </Link>
 
       <header className="mt-6">

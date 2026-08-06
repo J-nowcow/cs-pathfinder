@@ -7,7 +7,7 @@ import { socialMeta } from '@/lib/site'
 export const revalidate = 0
 
 export const metadata: Metadata = socialMeta({
-  title: '질문 지도 — 꼬리에 꼬리를 무는 CS 공부',
+  title: '질문 지도',
   description: '지금까지 올라온 CS 질문을 한눈에 본다.',
 })
 

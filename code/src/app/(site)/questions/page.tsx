@@ -9,7 +9,7 @@ import { socialMeta } from '@/lib/site'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = socialMeta({
-  title: '카테고리별 질문 — 꼬리에 꼬리를 무는 CS 공부',
+  title: '카테고리별 질문',
   description: '지금까지 올라온 CS 질문을 카테고리로 묶어서 본다.',
 })
 
@@ -37,7 +37,7 @@ export default async function QuestionsPage() {
   return (
     <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
       <Link href="/" className="text-[13px] text-faint hover:text-ink">
-        ← 꼬리에 꼬리를 무는 CS 공부
+        ← CS 길라잡이
       </Link>
 
       <h1 className="mt-6 text-[26px] font-extrabold leading-[1.35] tracking-[-0.02em] sm:text-[30px]">
