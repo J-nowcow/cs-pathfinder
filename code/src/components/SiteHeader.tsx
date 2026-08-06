@@ -73,7 +73,7 @@ export function SiteHeader() {
       */}
       <nav className="mx-auto flex max-w-3xl flex-nowrap items-center gap-0.5 whitespace-nowrap px-5 py-3 sm:gap-1 sm:px-8">
         <Link href="/" className="mr-auto text-[14px] font-bold tracking-[-0.01em]">
-          꼬꼬무 CS
+          CS 길라잡이
         </Link>
 
         {LINKS.map((l) => {
@@ -127,7 +127,7 @@ export function SiteHeader() {
           제목을 미리 채워 둔다. 어디서 온 메일인지 받는 쪽이 바로 안다.
         */}
         <OutLink
-          href={`mailto:${CONTACT}?subject=${encodeURIComponent('[꼬꼬무 CS] 문의')}`}
+          href={`mailto:${CONTACT}?subject=${encodeURIComponent('[CS 길라잡이] 문의')}`}
           label="문의하기 (메일)"
         >
           <svg viewBox="0 0 16 16" width="17" height="17" fill="currentColor" aria-hidden>

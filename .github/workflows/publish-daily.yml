@@ -93,7 +93,7 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
-          mkdir -p docs
+          mkdir -p cs
 
           # 임시 파일에 받고 성공했을 때만 옮긴다.
           #
@@ -112,8 +112,8 @@ jobs:
             exit 1
           fi
 
-          mv /tmp/questions.md docs/questions.md
-          wc -l docs/questions.md
+          mv /tmp/questions.md cs/questions.md
+          wc -l cs/questions.md
 
       # 앞 스텝이 실패했으면 여기는 안 돈다.
       #
@@ -126,16 +126,16 @@ jobs:
 
           # `git diff`가 아니라 `git status`를 본다.
           #
-          # diff는 **추적되는** 파일의 변경만 본다. docs/questions.md는 한 번도
+          # diff는 **추적되는** 파일의 변경만 본다. cs/questions.md는 한 번도
           # 커밋된 적이 없어 미추적이었고, 그래서 diff가 늘 "변화 없음"으로
           # 통과했다. 매 실행이 여기서 exit 0으로 빠져 git add에 닿은 적이 없다.
           # README가 링크하는 그 파일이 레포에 없는 이유가 이것이다.
-          if [ -z "$(git status --porcelain -- docs/questions.md)" ]; then
+          if [ -z "$(git status --porcelain -- cs/questions.md)" ]; then
             echo "목록에 변화 없음"
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/questions.md
+          git add cs/questions.md
           git commit -m "chore: 질문 목록 갱신"
           git push

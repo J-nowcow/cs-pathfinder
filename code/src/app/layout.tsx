@@ -2,7 +2,14 @@ import type { Metadata, Viewport } from 'next'
 import { siteUrl } from '@/lib/site'
 import './globals.css'
 
-const TITLE = '꼬리에 꼬리를 무는 CS 공부'
+/*
+ * 이름은 `CS 길라잡이`다.
+ *
+ * 전에는 서비스가 하는 일을 그대로 제목에 썼다(`꼬리에 꼬리를 무는 CS 공부`).
+ * 설명으로는 좋지만 이름 노릇을 못 한다 — 카톡에 붙었을 때 한 줄이 다 차고,
+ * 사람이 입에 올려 부를 수가 없다. 설명은 아래 DESCRIPTION이 이미 한다.
+ */
+const TITLE = 'CS 길라잡이'
 const DESCRIPTION = '하루에 질문 하나. 어디로 파고들지는 직접 고르면 돼요. 판 만큼 지도가 그려지고요.'
 
 /**

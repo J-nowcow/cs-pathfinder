@@ -2,14 +2,20 @@ node_modules/
 .next/
 .env.local
 .superpowers/
-supabase/.temp/
+code/supabase/.temp/
 .pgdata/
 tsconfig.tsbuildinfo
 .vercel
 .env*
+# 값이 없는 본보기라 담아야 한다.
+#
+# 루트에 있을 때는 이미 추적 중이라 위 `.env*`가 안 걸렸다. code/로 옮기면서
+# 새 경로가 되자 그대로 무시돼 커밋에서 **조용히 빠졌다**. 무엇을 넣어야
+# 하는지 알 방법이 사라진다.
+!code/.env.local.example
 
 # 설계 문서와 구현 계획은 Obsidian vault에서 관리한다.
 # 30_Personal/Side-Projects/cs-pathfinder/ 에 있고 [[cs-pathfinder MOC]]가 허브다.
 # 레포에는 README가 설계 요지를 담는다.
-docs/superpowers/
-docs/brand.md
+code/docs/superpowers/
+code/docs/brand.md
