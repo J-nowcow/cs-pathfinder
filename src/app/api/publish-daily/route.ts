@@ -1,7 +1,7 @@
-import { timingSafeEqual } from 'node:crypto'
 import { publishDaily, type PublishOutcome } from '@/lib/daily/publish'
 import { resolveCaller } from '@/lib/llm/resolve'
 import type { DailyTree } from '@/lib/daily/today'
+import { authorizedCron } from '@/lib/api/cron-auth'
 
 // 발행은 매번 새로 판단해야 한다. 정적 최적화 대상이 아니다.
 export const dynamic = 'force-dynamic'
@@ -13,32 +13,6 @@ function json(payload: unknown, status: number): Response {
     status,
     headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' },
   })
-}
-
-/** 길이가 다르면 timingSafeEqual이 던진다. 길이 비교를 먼저 한다 */
-function safeEqual(a: string, b: string): boolean {
-  const ab = Buffer.from(a, 'utf8')
-  const bb = Buffer.from(b, 'utf8')
-  if (ab.length !== bb.length) return false
-  return timingSafeEqual(ab, bb)
-}
-
-/**
- * GitHub Actions만 부를 수 있게 한다.
- *
- * CRON_SECRET이 없으면 잠근다. 설정이 빠졌을 때 열어두면 누구나 발행할 수 있고,
- * 그 사실을 아무도 모른 채로 지나간다.
- */
-function authorized(request: Request): boolean {
-  const secret = process.env.CRON_SECRET?.trim()
-  if (!secret) return false
-
-  const header = request.headers.get('authorization') ?? ''
-  const bearer = header.toLowerCase().startsWith('bearer ') ? header.slice(7).trim() : ''
-  if (bearer && safeEqual(bearer, secret)) return true
-
-  const alt = request.headers.get('x-cron-secret')?.trim() ?? ''
-  return alt.length > 0 && safeEqual(alt, secret)
 }
 
 function treePayload(tree: DailyTree) {
@@ -92,7 +66,7 @@ function respond(outcome: PublishOutcome): Response {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  if (!authorized(request)) {
+  if (!authorizedCron(request)) {
     return json({ error: 'unauthorized' }, 401)
   }
 

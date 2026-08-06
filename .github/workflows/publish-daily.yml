@@ -17,11 +17,15 @@ concurrency:
   group: publish-daily
   cancel-in-progress: false
 
+# 목록 갱신 커밋을 밀어넣어야 한다. 발행 요청만 할 때는 필요 없던 권한이다.
+permissions:
+  contents: write
+
 jobs:
   publish:
     name: POST /api/publish-daily
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - name: 발행 요청
@@ -69,3 +73,43 @@ jobs:
 
           echo "세 번 모두 실패했다"
           exit 1
+
+      # 레포에서도 질문 목록을 볼 수 있게 떠 놓는다.
+      #
+      # DB에 직접 붙지 않고 엔드포인트로 받는다. 직접 붙으려면 DATABASE_URL을
+      # GitHub 시크릿에도 넣어야 하는데, DB 자격증명을 한 곳 더 늘리는 것보다
+      # 이미 있는 CRON_SECRET을 쓰는 편이 낫다.
+      #
+      # 발행이 실패해도 여기는 돈다. 어제까지 올라온 것이라도 목록은 맞는 편이
+      # 낫고, 발행 실패는 위 스텝이 이미 빨간불로 알린다.
+      - name: 코드 받기
+        if: always()
+        uses: actions/checkout@v4
+
+      - name: 질문 목록 받아 쓰기
+        if: always()
+        env:
+          DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          mkdir -p docs
+          curl --fail-with-body -sS \
+            --max-time 60 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "${DEPLOY_URL%/}/api/catalog" -o docs/questions.md
+          wc -l docs/questions.md
+
+      - name: 바뀌었으면 커밋
+        if: always()
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/questions.md; then
+            echo "목록에 변화 없음"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/questions.md
+          git commit -m "chore: 질문 목록 갱신"
+          git push

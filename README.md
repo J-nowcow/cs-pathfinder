@@ -151,6 +151,10 @@ npx tsc --noEmit
 
 부팅 시 예시 루트 30개가 자동으로 시드된다. 노드 ID는 질문 텍스트에서 파생하므로 서버를 다시 띄워도 같은 URL이 살아 있다.
 
+지금까지 올라온 질문은 [`docs/questions.md`](docs/questions.md)에 있다. 발행 워크플로가 매일 다시 쓴다 — 레포만 보러 온 사람에게도 이 서비스가 무엇을 담고 있는지 보이게 하려는 것이다. `data/topic-seeds.ts`의 412개는 "언젠가 질문을 만들 대기열"이지 질문이 아니다.
+
+**사용자가 자유 입력으로 판 질문은 담지 않는다.** `ready`는 생성이 끝났다는 뜻이지 공개해도 된다는 뜻이 아니고, 레포에 박히면 되돌릴 수 없다.
+
 ### 운영 명령
 
 | 명령 | 하는 일 |
@@ -161,6 +165,7 @@ npx tsc --noEmit
 | `npm run db:republish -- [날짜]` | 잘못 뽑힌 발행분을 버리고 다시 뽑기 |
 | `npm run db:purge-stubs` | 키 없는 배포가 남긴 가짜 해설 정리 |
 | `npm run db:enrich` | 도식 없는 옛 해설을 제자리에서 다시 쓰기 (`--yes`로 반영) |
+| `npm run docs:questions` | 질문 목록을 `docs/questions.md`로 뜨기 (발행 워크플로가 매일 자동 실행) |
 | `npm run db:status` | 발행 이력과 남은 시드 일수 |
 | `npm run db:backfill-links` | 이미 판 꼬리질문을 결과 노드와 잇기 |
 | `npm run verify:concurrency` | 실제 Postgres에 동시 요청을 던져 잠금이 도는지 확인 |
