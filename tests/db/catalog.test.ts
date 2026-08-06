@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { getDb, truncateAll } from '@/lib/db/client'
 import { insertNode } from '@/lib/expand/nodes'
 import { loadCatalog, renderCatalog } from '@/lib/db/catalog'
+import { listRoots, countRoots } from '@/lib/db/roots'
 
 /**
  * 레포에 올릴 질문 목록.
@@ -129,5 +130,66 @@ describe('빈 목록', () => {
     const c = await loadCatalog(TODAY)
     expect(c.entries.length).toBe(0)
     expect(c.byCategory).toEqual([])
+  })
+})
+
+/**
+ * 홈이 목록을 통째로 싣지 않아야 한다.
+ *
+ * 접어두기만 했을 때는 249개가 전부 문서에 남아 홈 HTML이 447KB였다. 유입이
+ * 카톡 링크라 첫 방문 대부분이 폰인데, 오늘 질문 하나 보려고 그만큼을 받는다.
+ *
+ * 상한을 걸면 **새 것부터** 와야 한다. 상한 없을 때 순서가 오래된 것 먼저라,
+ * 거기 상한만 걸면 새 발행분이 먼저 잘려나간다.
+ */
+describe('listRoots 상한', () => {
+  beforeEach(truncateAll)
+
+  /*
+   * 시각을 손으로 벌린다.
+   *
+   * 한 시험 안에서 연달아 넣으면 created_at이 같은 값이 되고, 그러면 2차
+   * 정렬(가나다)이 순서를 정한다. 재려는 것은 만들어진 순서지 이름순이 아니다.
+   */
+  async function nodeAt(question: string, iso: string) {
+    const id = await node(question)
+    const db = await getDb()
+    await db.query('update qnode set created_at = $2 where id = $1', [id, iso])
+    return id
+  }
+
+  it('takes the newest when a limit is given', async () => {
+    await nodeAt('먼저 만든 질문은?', '2026-08-01T00:00:00Z')
+    await nodeAt('나중에 만든 질문은?', '2026-08-02T00:00:00Z')
+
+    const limited = await listRoots({ limit: 1 })
+    expect(limited.map((r) => r.question)).toEqual(['나중에 만든 질문은?'])
+  })
+
+  it('keeps the oldest-first order when there is no limit', async () => {
+    await nodeAt('먼저 만든 질문은?', '2026-08-01T00:00:00Z')
+    await nodeAt('나중에 만든 질문은?', '2026-08-02T00:00:00Z')
+
+    const all = await listRoots()
+    expect(all.map((r) => r.question)).toEqual(['먼저 만든 질문은?', '나중에 만든 질문은?'])
+  })
+
+  /** 홈은 열두 개만 보여주지만 "지난 질문 N개"의 N은 전체다 */
+  it('counts everything even when the list is capped', async () => {
+    await nodeAt('하나는?', '2026-08-01T00:00:00Z')
+    await nodeAt('둘은?', '2026-08-02T00:00:00Z')
+    await nodeAt('셋은?', '2026-08-03T00:00:00Z')
+
+    expect((await listRoots({ limit: 1 })).length).toBe(1)
+    expect(await countRoots()).toBe(3)
+  })
+
+  /** 아직 오지 않은 발행분은 세지도 않는다. 목록에서 빼는 것과 같은 기준이다 */
+  it('does not count a daily published for a later date', async () => {
+    const future = await node('먼 미래의 질문은?')
+    await daily('2099-12-31', future, '먼 미래의 질문은?')
+    await node('지난 질문은?')
+
+    expect(await countRoots(TODAY)).toBe(1)
   })
 })

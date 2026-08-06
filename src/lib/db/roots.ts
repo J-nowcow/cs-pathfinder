@@ -22,11 +22,14 @@ type Row = {
  * 계획 3에서 매일 발행이 붙으면 같은 질의에 오늘의 질문이 함께 잡힌다.
  * status='ready'만 본다. 생성 중이거나 실패한 노드가 홈에 뜨면 안 된다.
  *
- * 상한이 없다. 매일 하나씩 늘어나므로 언젠가 홈이 길어진다. 어디서 자르고
- * 어떤 순서로 세울지는 화면 구성 결정이라 여기서 임의로 정하지 않는다 —
- * 지금 순서(오래된 것 먼저)에 상한만 걸면 새 발행분이 먼저 잘려나간다.
+ * `limit`을 주면 **새 것부터** 그만큼만 준다. 상한이 없을 때는 오래된 것
+ * 먼저 주는데, 거기에 상한만 걸면 새 발행분이 먼저 잘려나간다.
+ *
+ * 상한이 필요한 이유는 홈의 무게다. 249개를 다 실으니 HTML이 447KB였다.
+ * 유입이 카톡 링크라 첫 방문 대부분이 폰인데, 오늘 질문 하나 보려고 그만큼을
+ * 받는다. 전체 목록은 /questions가 따로 맡는다.
  */
-export async function listRoots(): Promise<RootSummary[]> {
+export async function listRoots(opts: { limit?: number } = {}): Promise<RootSummary[]> {
   const db = await getDb()
 
   // 발췌를 DB에서 자른다. 카드는 첫 문단만 쓰는데 본문을 통째로 실어 나르면
@@ -41,7 +44,8 @@ export async function listRoots(): Promise<RootSummary[]> {
           where t.root_node_id = qnode.id
             and t.publish_date > $1::date
        )
-     order by created_at asc, normalized_question asc`,
+     order by created_at ${opts.limit ? 'desc' : 'asc'}, normalized_question asc
+     ${opts.limit ? `limit ${Math.max(1, Math.floor(opts.limit))}` : ''}`,
     [kstToday()],
   )
 
@@ -51,4 +55,26 @@ export async function listRoots(): Promise<RootSummary[]> {
     category: r.primary_category,
     excerpt: r.excerpt,
   }))
+}
+
+/**
+ * 배치 루트 총 개수.
+ *
+ * 홈은 열두 개만 보여주지만 "지난 질문 N개"의 N은 전체다. 그 숫자를 위해
+ * 249행을 다 실어올 이유는 없다.
+ */
+export async function countRoots(today: string = kstToday()): Promise<number> {
+  const db = await getDb()
+  const rows = await db.query<{ n: string }>(
+    `select count(*) as n
+       from qnode
+      where origin = 'batch' and status = 'ready'
+        and not exists (
+          select 1 from tree t
+           where t.root_node_id = qnode.id
+             and t.publish_date > $1::date
+        )`,
+    [today],
+  )
+  return Number(rows[0]?.n ?? 0)
 }

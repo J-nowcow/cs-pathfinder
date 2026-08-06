@@ -1,5 +1,5 @@
 import { ensureSeeded } from '@/lib/db/bootstrap'
-import { listRoots } from '@/lib/db/roots'
+import { listRoots, countRoots } from '@/lib/db/roots'
 import { listTrees, BOARD_PAGE_SIZE } from '@/lib/db/trees'
 import { getTodayTree } from '@/lib/daily/today'
 import { RootCard } from '@/components/RootCard'
@@ -29,7 +29,7 @@ export const dynamic = 'force-dynamic'
  * `isToday: false`라 화면은 "가장 최근 질문"이라고 부른다. 없는 발행을 있는 척하지 않는다.
  */
 async function loadFeature(): Promise<{ feature: TodayFeature | null; roots: Awaited<ReturnType<typeof listRoots>> }> {
-  const [today, roots] = await Promise.all([getTodayTree(), listRoots()])
+  const [today, roots] = await Promise.all([getTodayTree(), listRoots({ limit: FIRST_PAINT + 1 })])
 
   if (today) {
     return {
@@ -72,9 +72,10 @@ const FIRST_PAINT = 12
 export default async function HomePage() {
   await ensureSeeded()
 
-  const [{ feature, roots }, board] = await Promise.all([
+  const [{ feature, roots }, board, total] = await Promise.all([
     loadFeature(),
     listTrees({ sort: 'popular', limit: BOARD_PAGE_SIZE }),
+    countRoots(),
   ])
 
   // 주인공 카드가 이미 맡은 질문은 목록에서 뺀다. 같은 화면에 두 번 나오면
@@ -114,7 +115,7 @@ export default async function HomePage() {
       {rest.length > 0 && (
         <section className="mt-14">
           <div className="mb-4 flex items-baseline justify-between gap-3">
-            <h2 className="text-[13px] font-medium text-faint">지난 질문 {rest.length}개</h2>
+            <h2 className="text-[13px] font-medium text-faint">지난 질문 {total}개</h2>
             <Link href="/questions" className="text-[13px] text-accent hover:underline">
               카테고리별로 보기 →
             </Link>
@@ -126,25 +127,22 @@ export default async function HomePage() {
           </div>
 
           {/*
-            나머지는 접어둔다.
+            나머지는 여기 안 싣는다.
 
-            질문이 늘수록 홈이 길어진다. 서른 개면 폰에서 마흔 화면이 넘는데
-            그 아래 게시판이 있어서, 안 접으면 게시판까지 아무도 못 내려간다.
+            접어두기만 했을 때는 249개가 전부 문서에 남아 홈이 447KB였다.
+            유입이 카톡 링크라 첫 방문 대부분이 폰인데, 오늘 질문 하나 보려고
+            그만큼을 받는다.
 
-            details라 자바스크립트가 필요 없고 열어둔 상태로 검색에도 잡힌다.
+            전체 목록은 /questions가 맡는다. 홈은 최근 열두 개까지만 보여주고
+            나머지는 그쪽으로 보낸다.
           */}
-          {rest.length > FIRST_PAINT && (
-            <details className="group mt-3">
-              <summary className="cursor-pointer list-none rounded-lg border border-line px-4 py-3 text-center text-[13px] text-muted hover:text-ink">
-                <span className="group-open:hidden">나머지 {rest.length - FIRST_PAINT}개 보기</span>
-                <span className="hidden group-open:inline">접기</span>
-              </summary>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                {rest.slice(FIRST_PAINT).map((r) => (
-                  <RootCard key={r.id} root={r} />
-                ))}
-              </div>
-            </details>
+          {total > FIRST_PAINT && (
+            <Link
+              href="/questions"
+              className="mt-3 block rounded-lg border border-line px-4 py-3 text-center text-[13px] text-muted transition-colors hover:border-accent hover:text-ink"
+            >
+              나머지 {total - FIRST_PAINT}개 보기 →
+            </Link>
           )}
         </section>
       )}
