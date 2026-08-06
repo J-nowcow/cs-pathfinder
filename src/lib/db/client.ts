@@ -137,13 +137,51 @@ export function readMigrations(): Array<{ name: string; sql: string }> {
     .map((name) => ({ name, sql: readFileSync(resolve(migrationsDir, name), 'utf8') }))
 }
 
+/**
+ * 준비 중인 작업을 들고 있는다.
+ *
+ * 완성된 결과가 아니라 **약속**을 캐싱하는 것이 요점이다. 결과만 캐싱하면
+ * 첫 호출이 `await`에 걸려 있는 동안 도착한 두 번째 호출이 `if (!holder…)`를
+ * 그대로 통과한다.
+ *
+ * 실제로 그랬다. `Promise.all([getDb(), getDb(), getDb(), getDb()])`를 재보니
+ * 서로 다른 인스턴스가 4개 나왔고 그중 하나만 스키마를 가졌다 — 나머지 셋은
+ * `relation "qnode" does not exist`로 죽는다.
+ *
+ * 프로덕션에서는 스키마가 서버에 있어 질의는 통하지만, 요청 수만큼 `pg.Pool`이
+ * 생기고(각 max 5) 아무도 안 닫는다. 연결 상한으로 직행한다.
+ *
+ * 더 나쁜 것은 그 위에 쌓은 동시성 장치들이다. 생성 리스·자문 잠금·할당량 행
+ * 잠금이 전부 "같은 DB를 본다"를 전제하는데, 서로 다른 풀에서 돌면 그 전제가
+ * 깨진다.
+ *
+ * 바로 아래 `ensureSeeded`(db/bootstrap.ts)가 같은 이유로 같은 패턴을 쓴다.
+ * 그쪽 주석이 이 함정을 정확히 적어 놓고 정작 자기가 부르는 `getDb`가 그
+ * 함정이었다.
+ */
+let opening: Promise<Db> | null = null
+
 export async function getDb(): Promise<Db> {
+  if (holder.__csqtDb && holder.__csqtMigrated) return holder.__csqtDb
+
+  if (!opening) {
+    opening = open().catch((e) => {
+      // 실패를 캐싱하면 다음 요청이 영영 같은 실패를 돌려받는다
+      opening = null
+      throw e
+    })
+  }
+  return opening
+}
+
+async function open(): Promise<Db> {
   if (!holder.__csqtDb) {
     const url = postgresUrl()
-    holder.__csqtDb = url ? await createPostgres(url) : await createPglite()
+    const db = url ? await createPostgres(url) : await createPglite()
 
     // 실제 Postgres는 스키마가 이미 서 있다. 마이그레이션은 배포 시 한 번만 돌린다.
     // 매 요청마다 create table을 다시 던지면 느리고 위험하다.
+    holder.__csqtDb = db
     if (url) holder.__csqtMigrated = true
   }
 
@@ -159,6 +197,8 @@ export async function getDb(): Promise<Db> {
 
 /** 테스트 격리용. 스키마를 통째로 다시 만든다. */
 export async function resetDb(): Promise<Db> {
+  // 준비 중인 약속도 같이 비운다. 안 그러면 getDb가 옛 인스턴스를 계속 돌려준다
+  opening = null
   holder.__csqtDb = null
   holder.__csqtMigrated = false
   return getDb()
