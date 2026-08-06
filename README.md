@@ -164,6 +164,6 @@ AI가 쓴 글이라 가끔 틀려요. 헤더의 `문의`를 누르면 GitHub 이
 
 ---
 
-어떻게 만들었는지가 궁금하시면 [`code/docs/engineering.md`](code/docs/engineering.md)에 적어 뒀어요. 지금까지 올라온 질문 전문은 [`cs/questions.md`](cs/questions.md)에 있고요.
+어떻게 만들었는지가 궁금하시면 [`code/docs/engineering.md`](code/docs/engineering.md)에 적어 뒀어요. 지금까지 올라온 해설 전문은 [`cs/explanations/`](cs/explanations/)에 분야별로 담겨 있어요. 제목만 훑으려면 [`cs/questions.md`](cs/questions.md)가 링크 목록이고요.
 
 MIT 라이선스예요.
