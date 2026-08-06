@@ -9,6 +9,7 @@ import { analyzeConnectivity, mapStatus } from '@/lib/graph/connectivity'
 import { strokeWidthAt } from '@/lib/graph/stroke'
 import { rankByCategory, quotaAt, pickVisible } from '@/lib/graph/representatives'
 import { fitToPane } from '@/lib/graph/fit'
+import { Prose } from '@/components/Prose'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
 /**
@@ -525,10 +526,39 @@ function Sheet({
   onClose: () => void
   onOpen: (id: string) => void
 }) {
+  /*
+   * 해설은 눌렀을 때 받아온다.
+   *
+   * 지도는 제목과 카테고리만 싣고 온다. 질문 하나에 300~700자인데 249개를 전부
+   * 실어 나르면 지도를 여는 순간 수십 KB를 받게 되고, 그중 사람이 읽는 것은
+   * 눌러본 한둘뿐이다.
+   *
+   * 받아오는 동안 제목은 이미 떠 있다. 누른 것이 맞는지부터 보여야 기다릴 수 있다.
+   */
+  const [body, setBody] = useState<string | null>(null)
+  const [failed, setFailed] = useState(false)
+
+  useEffect(() => {
+    if (!node) return
+    setBody(null)
+    setFailed(false)
+
+    // 받아오는 중에 다른 노드를 누르면 먼저 온 응답이 늦게 도착해 덮을 수 있다
+    const ac = new AbortController()
+    fetch(`/api/node/${node.id}`, { signal: ac.signal })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((d: { body?: string }) => setBody(d.body ?? ''))
+      .catch((e: unknown) => {
+        if ((e as Error)?.name === 'AbortError') return
+        setFailed(true)
+      })
+    return () => ac.abort()
+  }, [node?.id])
+
   if (!node) return null
 
   return (
-    <div className="absolute inset-x-0 bottom-0 z-10 max-h-[56dvh] overflow-y-auto rounded-t-2xl border-t border-line bg-raised shadow-2xl">
+    <div className="absolute inset-x-0 bottom-0 z-10 max-h-[72dvh] overflow-y-auto rounded-t-2xl border-t border-line bg-raised shadow-2xl">
       <div className="sticky top-0 flex items-start gap-3 border-b border-line bg-raised px-5 py-4">
         <h2 className="flex-1 text-[16px] font-bold leading-[1.45]">{node.question}</h2>
         <button
@@ -541,9 +571,30 @@ function Sheet({
       </div>
 
       <div className="px-5 py-4">
+        {/*
+          해설을 여기서 읽게 한다.
+
+          전에는 제목과 버튼만 있었다. 지도에서 질문을 눌러도 "이런 게 있다"까지만
+          알 뿐 무슨 내용인지 알려면 다른 화면으로 나가야 했다. 지도를 훑는
+          사람에게는 그 이동이 곧 이탈이다.
+        */}
+        {body === null && !failed && (
+          <p className="text-[14px] leading-[1.75] text-faint">해설을 불러오는 중…</p>
+        )}
+        {failed && (
+          <p className="text-[14px] leading-[1.75] text-muted">
+            해설을 못 불러왔어요. 아래에서 열어보세요.
+          </p>
+        )}
+        {body !== null && (
+          <div className="text-[14px] leading-[1.8]">
+            <Prose body={body} />
+          </div>
+        )}
+
         <Link
           href={`/q/${node.id}`}
-          className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent"
+          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent"
         >
           이 질문에서 파고들기 →
         </Link>

@@ -22,12 +22,47 @@ const LINKS = [
   { href: '/map', label: '지도' },
 ]
 
+const REPO = 'https://github.com/J-nowcow/cs-pathfinder'
+
+/**
+ * 바깥으로 나가는 두 곳.
+ *
+ * 글자 대신 그림으로 둔다. 폰 390px에서 안쪽 링크 셋만으로도 자리가 빠듯해서
+ * 글자를 더 붙이면 줄이 넘친다. 대신 `aria-label`로 이름을 남긴다 — 화면
+ * 낭독기에는 그림이 안 보인다.
+ *
+ * **별을 대신 눌러줄 수는 없다.** 남의 계정으로 하는 일이고 그런 주소도 없다.
+ * 저장소로 보내고 거기서 누르게 한다.
+ */
+function OutLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      // noopener가 없으면 열린 창이 window.opener로 이 페이지를 조작할 수 있다
+      rel="noopener noreferrer"
+      aria-label={label}
+      title={label}
+      className="-my-1.5 grid h-11 w-9 place-items-center rounded-lg text-muted transition-colors hover:text-ink"
+    >
+      {children}
+    </a>
+  )
+}
+
 export function SiteHeader() {
   const pathname = usePathname()
 
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-surface/85 backdrop-blur">
-      <nav className="mx-auto flex max-w-3xl items-center gap-1 px-5 py-3 sm:px-8">
+      {/*
+        `flex-nowrap`이 있어야 한 줄이다.
+
+        아이콘 둘을 넣었더니 폰 390px에서 두 줄로 접혔다 — "오늘의 질 / 문"처럼
+        낱말이 갈라졌다. 넘침은 0이었지만 줄바꿈으로 피한 것이라 숫자만 봐서는
+        안 보였다. 화면을 찍어야 알 수 있는 종류다.
+      */}
+      <nav className="mx-auto flex max-w-3xl flex-nowrap items-center gap-0.5 whitespace-nowrap px-5 py-3 sm:gap-1 sm:px-8">
         <Link href="/" className="mr-auto text-[14px] font-bold tracking-[-0.01em]">
           꼬꼬무 CS
         </Link>
@@ -52,7 +87,7 @@ export function SiteHeader() {
                 옆 항목이 눌린다. `py`를 키우고 같은 만큼 `-my`로 당기면 글자
                 위치와 헤더 높이는 그대로인 채 판정 영역만 44px가 된다.
               */
-              className={`-my-1.5 rounded-lg px-2.5 py-3 text-[13px] transition-colors ${
+              className={`-my-1.5 rounded-lg px-1.5 py-3 text-[12.5px] transition-colors sm:px-2.5 sm:text-[13px] ${
                 here ? 'font-medium text-ink' : 'text-muted hover:text-ink'
               }`}
             >
@@ -60,6 +95,25 @@ export function SiteHeader() {
             </Link>
           )
         })}
+
+        {/* 안쪽 길과 바깥 길을 선으로 가른다. 섞이면 어디로 나가는지 안 보인다 */}
+        <span aria-hidden className="mx-1 h-4 w-px bg-line" />
+
+        <OutLink href={REPO} label="GitHub에서 보기 (별을 눌러주세요)">
+          <svg viewBox="0 0 16 16" width="17" height="17" fill="currentColor" aria-hidden>
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+          </svg>
+        </OutLink>
+
+        {/*
+          문의는 이슈로 받는다. 메일 주소를 화면에 박으면 그대로 수집되고,
+          이슈는 주고받은 것이 남아서 같은 질문에 두 번 답하지 않아도 된다.
+        */}
+        <OutLink href={`${REPO}/issues/new`} label="문의하기 (GitHub 이슈)">
+          <svg viewBox="0 0 16 16" width="17" height="17" fill="currentColor" aria-hidden>
+            <path d="M8 1.5a6.5 6.5 0 0 0-5.66 9.71l-.82 2.6a.5.5 0 0 0 .63.62l2.65-.83A6.5 6.5 0 1 0 8 1.5Zm0 1.25a5.25 5.25 0 1 1-2.6 9.81.63.63 0 0 0-.5-.05l-1.7.53.52-1.66a.63.63 0 0 0-.06-.5A5.25 5.25 0 0 1 8 2.75Z" />
+          </svg>
+        </OutLink>
       </nav>
     </header>
   )
