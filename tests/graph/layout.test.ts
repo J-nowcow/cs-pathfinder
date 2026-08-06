@@ -86,3 +86,44 @@ describe('categorySummary', () => {
     expect([g.x, g.y]).toEqual([categoryCenter('네트워크').x, categoryCenter('네트워크').y])
   })
 })
+
+/**
+ * 자랐을 때도 겹치지 않아야 한다.
+ *
+ * 처음 잡은 값(원 반지름 1400·한 바퀴 7개)은 30개에서는 멀쩡했는데 220개가
+ * 되니 카테고리 간 최소 거리가 38까지 떨어졌다. 덩어리가 서로 파고들면
+ * "카테고리가 자리"라는 이 배치의 전제가 깨진다.
+ *
+ * 개수에 따라 반지름을 늘리는 방법도 있지만 그러면 질문 하나가 늘 때마다
+ * 모든 카테고리가 밀려서, 지키려던 자리 고정이 무너진다. 그래서 자랄 크기에
+ * 맞춰 미리 크게 잡았고, 이 시험이 그 값을 지킨다.
+ */
+describe('밀도', () => {
+  /** 카드 폭이 210이다. 그보다 여유를 두고 본다 */
+  const SAME_MIN = 240
+  const CROSS_MIN = 320
+
+  function closest(perCategory: number) {
+    const items = CATEGORIES.flatMap((c, ci) =>
+      Array.from({ length: perCategory }, (_, i) => ({ id: `${ci}-${i}`, category: c })),
+    )
+    const placed = layoutGlobal(items)
+
+    let same = Infinity
+    let cross = Infinity
+    for (let i = 0; i < placed.length; i += 1) {
+      for (let j = i + 1; j < placed.length; j += 1) {
+        const d = Math.hypot(placed[i].x - placed[j].x, placed[i].y - placed[j].y)
+        if (placed[i].category === placed[j].category) same = Math.min(same, d)
+        else cross = Math.min(cross, d)
+      }
+    }
+    return { same, cross }
+  }
+
+  it.each([3, 22, 40])('keeps cards apart at %i per category', (per) => {
+    const { same, cross } = closest(per)
+    expect(same).toBeGreaterThanOrEqual(SAME_MIN)
+    expect(cross).toBeGreaterThanOrEqual(CROSS_MIN)
+  })
+})
