@@ -150,3 +150,64 @@ describe('complaint', () => {
     expect(text).not.toContain('문체')
   })
 })
+
+/**
+ * 도식이 제 뜻에 맞게 쓰였는가.
+ *
+ * 실측에서 도피처가 표가 아니라 **stack**이었다. 표 127개 중 형태가 틀린
+ * 것이 30개(24%)인데 stack 56개 중에서는 23개(41%)다.
+ *
+ * 파서가 이유를 설명한다 — `parseStack`은 절대 실패하지 않는다. 비어 있지
+ * 않은 모든 줄을 층으로 받는다. flow는 화살표가 없으면 null, 표는 구분줄이
+ * 없으면 null인데 stack만 무엇이든 삼킨다.
+ */
+describe('contentIssues · 도식 오용', () => {
+  const withDiagram = (d: string) => ({ ...ok, body: `답이다.\n\n${d}` })
+
+  /*
+   * 2층 stack은 계층이 아니라 둘을 나란히 놓은 것이다. 위아래로 쌓으면
+   * 읽는 사람이 없는 계층을 지어낸다("WAS가 웹 서버 아래층인가").
+   * 생성분 56개 중 30개가 2층이었다.
+   */
+  it('2층 계층은 적어둔다', () => {
+    const issues = contentIssues(withDiagram(':::stack\n웹 서버 | 정적 파일\nWAS | 동적 콘텐츠\n:::'))
+    expect(issues.map((i) => i.rule)).toContain('얕은계층')
+    expect(blocking(issues)).toEqual([])
+  })
+
+  it('3층부터는 계층으로 인정한다', () => {
+    const issues = contentIssues(
+      withDiagram(':::stack\n애플리케이션 | HTTP\n전송 | TCP\n네트워크 | IP\n:::'),
+    )
+    expect(issues.map((i) => i.rule)).not.toContain('얕은계층')
+  })
+
+  /*
+   * 이건 지금 화면에서 실제로 깨지고 있다. `--- | ---`이 이름이 `---`이고
+   * 설명이 `---`인 층으로 그대로 그려진다. 생성분에 2건 있다.
+   */
+  it('계층 안에 표 구분줄이 있으면 막는다', () => {
+    const issues = contentIssues(
+      withDiagram(':::stack\n상태 코드 | 분류\n--- | ---\n1xx | 정보 제공\n:::'),
+    )
+    expect(blocking(issues).map((i) => i.rule)).toContain('표를계층에')
+  })
+
+  it('표가 네 열이면 막는다', () => {
+    const t = '| 기준 | A | B | C |\n| --- | --- | --- | --- |\n| 값 | 1 | 2 | 3 |\n| 값2 | 4 | 5 | 6 |'
+    expect(blocking(contentIssues(withDiagram(t))).map((i) => i.rule)).toContain('표열수')
+  })
+
+  it('세 열까지는 통과한다', () => {
+    const t = '| 기준 | A | B |\n| --- | --- | --- |\n| 값 | 1 | 2 |\n| 값2 | 3 | 4 |'
+    expect(blocking(contentIssues(withDiagram(t)))).toEqual([])
+  })
+
+  /* 한 줄짜리 표는 견주는 것이 아니라 문장이다. 막지는 않는다 */
+  it('한 줄짜리 표는 적어둔다', () => {
+    const t = '| 기준 | A | B |\n| --- | --- | --- |\n| 값 | 1 | 2 |'
+    const issues = contentIssues(withDiagram(t))
+    expect(issues.map((i) => i.rule)).toContain('표한줄')
+    expect(blocking(issues)).toEqual([])
+  })
+})

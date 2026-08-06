@@ -46,6 +46,13 @@ export const MAX_SUGGESTION = 35
 /** 답을 말하고 곧바로 보여준다. 줄글을 이만큼 쌓은 뒤면 늦다 */
 export const DIAGRAM_BY = 3
 
+/** 층이 이보다 적으면 계층이 아니라 둘을 나란히 놓은 것이다 */
+export const MIN_STACK_LAYERS = 3
+/** 폰에서 네 열이면 글자가 뭉개져 표가 오히려 안 읽힌다 */
+export const MAX_TABLE_COLS = 3
+/** 표 구분줄. 계층 도식 안에 들어오면 그대로 층으로 그려진다 */
+const RULE_LINE = /^\s*-{2,}\s*$/
+
 /**
  * 같은 낱말이 그대로 붙어 나오는 자리.
  *
@@ -114,6 +121,63 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
   }
 
   for (const b of blocks) {
+    /*
+     * 도식이 제 뜻에 맞게 쓰였는가.
+     *
+     * 실측에서 도피처가 표가 아니라 **stack**이었다. 표 127개 중 형태가 틀린
+     * 것이 30개(24%)인데 stack 56개 중에서는 23개(41%)다.
+     *
+     * 파서가 이유를 설명한다 — `parseStack`은 **절대 실패하지 않는다.**
+     * 비어 있지 않은 모든 줄을 층으로 받는다. flow는 화살표가 없으면 `null`,
+     * 표는 구분줄이 없으면 `null`인데 stack만 무엇이든 삼킨다. 그래서 모델이
+     * 형태를 못 고를 때 stack 울타리에 아무거나 넣는다.
+     *
+     * 실제로 표를 stack에 넣은 노드가 둘 있고, `--- | ---`이 **이름이
+     * `---`이고 설명이 `---`인 층으로 화면에 그려지고 있다.**
+     */
+    if (b.type === 'stack') {
+      if (b.layers.length < MIN_STACK_LAYERS) {
+        /*
+         * 2층 stack은 계층이 아니라 둘을 나란히 놓은 것이다. `웹 서버` 위에
+         * `WAS`를 쌓으면 독자는 "WAS가 아래층인가"로 읽는다. 정보를 잃는
+         * 정도가 아니라 **없는 계층을 만들어낸다.** 56개 중 30개가 2층이다.
+         *
+         * 막지는 않는다. 층이 둘뿐인 진짜 계층도 있다.
+         */
+        out.push({
+          rule: '얕은계층',
+          detail: `계층 도식이 ${b.layers.length}층뿐이다. 위아래로 쌓인 것이 아니면 표로 견줘라`,
+          severity: 'note',
+        })
+      }
+      if (b.layers.some((l) => RULE_LINE.test(l.name) || RULE_LINE.test(l.note))) {
+        out.push({
+          rule: '표를계층에',
+          detail: '계층 도식 안에 표 구분줄(`---`)이 있다. 표는 울타리 없이 그대로 써라',
+          severity: 'block',
+        })
+      }
+    }
+
+    if (b.type === 'table') {
+      if (b.head.length > MAX_TABLE_COLS) {
+        /* 폰에서 네 열이면 글자가 뭉개져 표가 오히려 안 읽힌다 */
+        out.push({
+          rule: '표열수',
+          detail: `표가 ${b.head.length}열이다. ${MAX_TABLE_COLS}열까지만 쓴다. 축이 더 필요하면 한 칸에 두 문장으로 적어라`,
+          severity: 'block',
+        })
+      }
+      if (b.rows.length < 2) {
+        /* 한 줄짜리 표는 견주는 것이 아니다. 문장으로 쓰는 편이 짧다 */
+        out.push({
+          rule: '표한줄',
+          detail: '표가 한 줄뿐이다. 견줄 것이 둘 이상일 때만 표를 쓴다',
+          severity: 'note',
+        })
+      }
+    }
+
     if (b.type !== 'paragraph') continue
 
     const stutter = b.text.match(REPEATED_WORD)
