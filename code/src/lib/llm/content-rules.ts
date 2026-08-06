@@ -1,6 +1,7 @@
 import { parseBlocks, isDivider } from '@/lib/markdown/blocks'
 import { questionFormIssues } from '@/lib/llm/question-form'
 import { proseIssues } from '@/lib/llm/prose'
+import { staleFactIssues } from '@/lib/llm/stale-facts'
 
 /**
  * 생성된 해설이 규칙을 지켰는지 본다.
@@ -128,6 +129,18 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
       severity: 'block',
     })
   }
+
+  /*
+   * 교과서가 낡아서 배운 대로 쓰면 틀리는 자리.
+   *
+   * **여기만 형태가 아니라 내용을 본다.** 사실 확인 전체를 규칙으로 할 수는
+   * 없지만, 표본 20편을 대조해 보니 틀린 것들이 한 종류로 모였다. 문장 모양이
+   * 거의 정해져 있어서 그것만은 잡을 수 있다.
+   *
+   * 글 전체를 본다 — 주제어는 첫 문단에, 틀린 표현은 도식 안에 있는 경우가
+   * 실제로 있다(`Key Exchange | 프리마스터 시크릿 전달`).
+   */
+  out.push(...staleFactIssues(c.body))
 
   /*
    * 계층 울타리에 표를 넣은 것.
