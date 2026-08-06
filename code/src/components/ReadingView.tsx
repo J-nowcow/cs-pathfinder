@@ -254,9 +254,20 @@ export function ReadingView({
     <>
       <main className="mx-auto max-w-3xl px-5 pb-40 pt-5 sm:px-8 sm:pt-8">
         <div className="mb-5 flex items-center justify-between">
+          {/*
+            **글자와 가는 곳이 달랐다.** `← 질문 목록`이라고 쓰고 `/`로 보냈다.
+            같은 화면 헤더의 `질문 목록`은 `/questions`로 가므로, 글자가 같은
+            링크 둘이 서로 다른 데로 갔다. 대문에도 "목록으로 돌아가요"라고
+            적혀 있다. 글자를 믿고 `/questions`로 맞춘다.
+
+            누르는 자리도 같이 키운다. 폰에서 20px이었다. 위로 27px·아래로
+            681px이 비어 있어 판정만 늘려도 겹칠 것이 없다. `py`를 키우고 같은
+            만큼 `-my`로 당기면 줄 높이는 안 변한다 — 게시판 칩과 같은 방식이다.
+            오른쪽 끝의 깊이·공유와는 가로로 멀리 떨어져 있다.
+          */}
           <Link
-            href="/"
-            className="text-[13px] font-medium text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            href="/questions"
+            className="-my-[12px] py-[12px] text-[13px] font-medium text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             ← 질문 목록
           </Link>
