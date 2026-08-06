@@ -56,3 +56,45 @@ describe('parseInline', () => {
     expect(r).toEqual([{ type: 'text', value: '<script>alert(1)</script>' }])
   })
 })
+
+/**
+ * LaTeX.
+ *
+ * 프롬프트가 시킨 적 없는데 모델이 쓴다. 화면을 열어 세어보니 노드 다섯 개에서
+ * `$O(1)$`이 표 칸에 달러 기호째로 찍혀 있었다. 파서가 모르는 표기는 문자
+ * 그대로 나가고 그게 고장으로 읽힌다.
+ *
+ * 렌더링은 안 한다 — KaTeX는 2MB고 여기 수식은 `O(n)`이 거의 전부라 코드
+ * 조각으로 충분하다.
+ */
+describe('parseInline · LaTeX', () => {
+  it('unwraps a math span into code', () => {
+    expect(parseInline('접근은 $O(1)$이다.')).toEqual([
+      { type: 'text', value: '접근은 ' },
+      { type: 'code', value: 'O(1)' },
+      { type: 'text', value: '이다.' },
+    ])
+  })
+
+  /* 실제로 나온 명령만 바꾼다. 그 둘이 전부였다 */
+  it('turns the commands that actually appeared into symbols', () => {
+    expect(parseInline('$O(\\log N)$')[0]).toEqual({ type: 'code', value: 'O(log N)' })
+    expect(parseInline('$A \\rightarrow B$')[0]).toEqual({ type: 'code', value: 'A → B' })
+  })
+
+  /* 모르는 명령은 백슬래시만 뗀다. 지우면 뜻이 사라진다 */
+  it('keeps an unknown command readable', () => {
+    expect(parseInline('$\\alpha$')[0]).toEqual({ type: 'code', value: 'alpha' })
+  })
+
+  /* 값 하나짜리 달러는 마크업이 아니다. 가격이 코드로 바뀌면 안 된다 */
+  it('leaves a lone dollar alone', () => {
+    expect(parseInline('가격은 $5 이다.')).toEqual([{ type: 'text', value: '가격은 $5 이다.' }])
+  })
+
+  /* 줄을 넘어가면 수식이 아니다. 두 문단이 통째로 코드가 되는 것을 막는다 */
+  it('does not span a line break', () => {
+    const out = parseInline('$5 짜리\n다른 줄 $9')
+    expect(out.every((t) => t.type === 'text')).toBe(true)
+  })
+})

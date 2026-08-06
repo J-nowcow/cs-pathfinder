@@ -18,8 +18,36 @@ export function splitParagraphs(body: string): string[] {
     .filter((p) => p.length > 0)
 }
 
-// 빈 쌍(**** 나 ``)은 잡지 않는다. 마크업이 아니라 문자 그대로일 확률이 높다.
-const MARKER = /\*\*([^*]+?)\*\*|`([^`]+?)`/g
+/*
+ * 빈 쌍(**** 나 ``)은 잡지 않는다. 마크업이 아니라 문자 그대로일 확률이 높다.
+ *
+ * 세 번째 갈래는 LaTeX 수식이다. 프롬프트가 시킨 적이 없는데 모델이 쓴다 —
+ * 화면에서 `$O(1)$`을 세어보니 노드 다섯 개에서 나왔고, 표 칸에 달러 기호가
+ * 그대로 찍혀 있었다. 파서가 모르면 문자 그대로 나가고, 그게 고장으로 읽힌다.
+ *
+ * 렌더링은 안 한다. KaTeX를 붙이면 2MB가 따라오고 이 서비스의 수식은 `O(n)`이
+ * 거의 전부다. 그건 코드 조각으로 충분하다. 달러만 벗겨 코드로 넘긴다.
+ */
+const MARKER = /\*\*([^*]+?)\*\*|`([^`]+?)`|\$([^$\n]+?)\$/g
+
+/**
+ * LaTeX 표기를 사람이 읽는 문자로 바꾼다.
+ *
+ * 다 다루지 않는다. 실제로 나온 것만 본다 — `\log`, `\rightarrow` 두 종류였다.
+ * 안 다루는 명령은 백슬래시만 떼고 남긴다. 모르는 것을 지우면 뜻이 사라진다.
+ */
+function stripLatex(expr: string): string {
+  return expr
+    .replace(/\\(?:rightarrow|to)\b/g, '→')
+    .replace(/\\(?:leftarrow)\b/g, '←')
+    .replace(/\\times\b/g, '×')
+    .replace(/\\cdot\b/g, '·')
+    .replace(/\\l(?:e|eq)\b/g, '≤')
+    .replace(/\\g(?:e|eq)\b/g, '≥')
+    .replace(/\\/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
 
 export function parseInline(text: string): InlineToken[] {
   const tokens: InlineToken[] = []
@@ -30,7 +58,8 @@ export function parseInline(text: string): InlineToken[] {
     if (at > cursor) tokens.push({ type: 'text', value: text.slice(cursor, at) })
 
     if (m[1] !== undefined) tokens.push({ type: 'bold', value: m[1] })
-    else tokens.push({ type: 'code', value: m[2] })
+    else if (m[2] !== undefined) tokens.push({ type: 'code', value: m[2] })
+    else tokens.push({ type: 'code', value: stripLatex(m[3]) })
 
     cursor = at + m[0].length
   }
