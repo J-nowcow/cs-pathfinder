@@ -7,6 +7,7 @@ import { HeroBackdrop } from '@/components/HeroBackdrop'
 import { TodayCard, type TodayFeature } from '@/components/TodayCard'
 import Link from 'next/link'
 import { Board } from '@/components/Board'
+import { ResumeLine } from '@/components/ResumeLine'
 
 // PGlite가 인메모리라 매 요청 실제 DB를 읽는다. 정적 생성 대상이 아니다.
 export const dynamic = 'force-dynamic'
@@ -97,6 +98,13 @@ export default async function HomePage() {
           판 만큼 지도가 그려지고요.
         </p>
       </header>
+
+      {/*
+        파던 자리로 돌아가는 줄. 두 칸 넘게 판 사람에게만 보인다.
+        `localStorage`를 읽으므로 붙은 뒤에 나타난다 — 그래서 오늘 카드 위에
+        둔다. 아래에 두면 나중에 끼어들며 카드를 밀어낸다.
+      */}
+      <ResumeLine />
 
       {feature ? (
         <TodayCard feature={feature} />
