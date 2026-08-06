@@ -43,7 +43,15 @@ const want = process.argv.includes('--list')
   ? process.argv[process.argv.indexOf('--list') + 1]
   : null
 
-const byRule = new Map<string, Row[]>()
+/*
+ * **편으로 센다.** 처음에는 지적을 그대로 쌓았는데, 한 편에 긴 꼬리질문이
+ * 셋이면 셋으로 세어 `꼬리질문길이 53편`이 나왔다. 막을 것이 21편인데 그중
+ * 한 규칙만 53편일 수는 없다 — 앞뒤가 안 맞는 것으로 알아챘다.
+ *
+ * 우선순위를 정할 때 필요한 것은 "몇 군데 고쳐야 하는가"가 아니라 "몇 편을
+ * 다시 불러야 하는가"다. 한 편을 다시 부르면 그 안의 지적이 한꺼번에 없어진다.
+ */
+const byRule = new Map<string, Map<string, Row>>()
 const kinds = new Map<string, number>()
 let blocked = 0
 let noted = 0
@@ -57,7 +65,16 @@ for (const r of rows) {
   if (parseBlocks(r.body).every((b) => b.type === 'paragraph')) diagramless++
 
   const issues = contentIssues({ body: r.body, suggestions: byNode.get(r.id) ?? [] })
-  for (const i of issues) byRule.set(i.rule, [...(byRule.get(i.rule) ?? []), r])
+  for (const i of issues) {
+    /*
+     * `문체:긴 문장(92자)`처럼 규칙 이름에 숫자가 박힌 것이 있다. 그대로 묶으면
+     * 92자짜리와 114자짜리가 서로 다른 규칙이 되어 한 줄에 1편씩 스무 줄이 된다.
+     * 괄호를 떼고 묶는다.
+     */
+    const key = i.rule.replace(/\(.*\)$/, '')
+    if (!byRule.has(key)) byRule.set(key, new Map())
+    byRule.get(key)!.set(r.id, r)
+  }
 
   if (blocking(issues).length > 0) blocked++
   else if (issues.length > 0) noted++
@@ -80,12 +97,12 @@ for (const [k, n] of [...kinds].sort((a, b) => b[1] - a[1])) {
 if (!kinds.has('timeline')) console.log('  timeline      0개  ← 어휘는 있는데 코퍼스에 하나도 없다')
 
 console.log('\n## 규칙별 (많은 순)')
-for (const [r, hits] of [...byRule].sort((a, b) => b[1].length - a[1].length)) {
-  console.log(`  ${r.padEnd(10)} ${String(hits.length).padStart(4)}편 (${pct(hits.length)}%)`)
+for (const [r, hits] of [...byRule].sort((a, b) => b[1].size - a[1].size)) {
+  console.log(`  ${r.padEnd(10)} ${String(hits.size).padStart(4)}편 (${pct(hits.size)}%)`)
 }
 
 if (want) {
-  const hits = byRule.get(want) ?? []
+  const hits = [...(byRule.get(want)?.values() ?? [])]
   console.log(`\n## '${want}' 걸린 ${hits.length}편`)
   for (const h of hits) console.log(`  [${h.category}] ${h.question}  (${h.origin}) ${h.id}`)
 }
