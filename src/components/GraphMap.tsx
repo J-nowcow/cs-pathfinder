@@ -7,6 +7,7 @@ import '@xyflow/react/dist/style.css'
 import { layoutGlobal, categorySummary, type Placed } from '@/lib/graph/layout'
 import { analyzeConnectivity, mapStatus } from '@/lib/graph/connectivity'
 import { strokeWidthAt } from '@/lib/graph/stroke'
+import { rankByCategory, quotaAt } from '@/lib/graph/representatives'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
 /**
@@ -23,9 +24,6 @@ import type { MapData, MapNode } from '@/lib/db/graph'
  * **해설은 노드 안에 넣지 않는다.** 300~700자를 노드에 넣으면 노드 크기가
  * 터지고 관계선도 자리 기억도 깨진다. 눌렀을 때 아래에서 시트가 올라온다.
  */
-
-/** 제목이 읽히기 시작하는 화면상 노드 폭(px). 논리 줌 값이 아니라 실제 크기로 판단한다 */
-const READABLE_WIDTH = 150
 
 const NODE_W = 210
 
@@ -45,17 +43,6 @@ const HUE: Record<string, string> = {
 
 function colorOf(category: string): string {
   return HUE[category] ?? '#7d8894'
-}
-
-/**
- * 지금 배율에서 제목을 그릴지 정한다.
- *
- * 줌 값을 그대로 쓰지 않는 이유는 노드 폭이 바뀌면 같은 줌에서도 읽힘이
- * 달라지기 때문이다. 화면에 실제로 몇 px로 보이는지가 기준이다.
- */
-function useShowTitles(): boolean {
-  const zoom = useStore((s) => s.transform[2])
-  return NODE_W * zoom >= READABLE_WIDTH
 }
 
 type Props = { data: MapData }
@@ -223,7 +210,6 @@ function Layers({
   edges: MapData['edges']
   onOpen: (id: string) => void
 }) {
-  const showTitles = useShowTitles()
   const zoom = useStore((st) => st.transform[2])
   const flow = useReactFlow()
 
@@ -242,6 +228,36 @@ function Layers({
   const labelSize = Math.min(4000, 17 / zoom)
   const labelGap = labelSize * 2.4
   const pos = useMemo(() => new Map(placed.map((p) => [p.id, p])), [placed])
+
+  /*
+   * 이름을 드러낼 순위와 개수.
+   *
+   * 순위는 배율과 무관하게 한 번만 매긴다. 배율이 바뀔 때마다 다시 뽑으면
+   * 확대하는 동안 이름이 바뀌어 어지럽고, 무엇보다 아까 본 것을 다시 못 찾는다.
+   */
+  const rank = useMemo(() => rankByCategory(placed, edges), [placed, edges])
+  const quota = quotaAt(zoom)
+
+  /*
+   * 카드와 점도 화면상 크기를 지킨다.
+   *
+   * 좌표계가 축소되면 안에 있는 것이 전부 같이 줄어든다. 카테고리 이름에는 이미
+   * 배율 역수 보정이 있었는데 카드와 점에는 없었다 — 그래서 폰 개요에서 점이
+   * 0.82px, 확대 라벨이 9px이었다.
+   *
+   * 상한을 두는 이유는 배율이 0에 가까울 때 좌표가 터무니없어지는 것을 막기
+   * 위해서다. 하한은 대표 카드가 개요에서도 읽히는 크기다.
+   */
+  const cardW = Math.min(6000, Math.max(NODE_W, 168 / zoom))
+  const dotSize = Math.min(900, Math.max(6, 7 / zoom))
+
+  /*
+   * 손가락이 닿는 자리는 점보다 크다.
+   *
+   * 점은 작아야 개요가 지저분하지 않은데, 누르는 자리까지 작으면 못 누른다.
+   * 화면상 44px를 목표로 잡는다 — 그보다 작으면 옆 점이 눌린다.
+   */
+  const hitSize = Math.min(2400, Math.max(dotSize, 44 / zoom))
 
   /*
    * 카테고리로 들어간다.
@@ -265,10 +281,18 @@ function Layers({
       const minY = Math.min(...mine.map((p) => p.y)) - 150
       const maxY = Math.max(...mine.map((p) => p.y)) + 90
 
-      const zoom = Math.min(
-        1.2,
-        Math.max(0.75, Math.min((w * 0.92) / (maxX - minX), (h * 0.92) / (maxY - minY))),
-      )
+      /*
+       * 그 분야가 화면에 다 들어오게만 맞춘다.
+       *
+       * 전에는 하한 0.75가 있었다. 카드 폭이 210px로 고정이던 시절에 "이만큼은
+       * 확대해야 제목이 읽힌다"고 둔 값이다. 카드가 배율을 따라가게 바뀐 뒤로는
+       * 그 하한이 오히려 방해가 됐다 — 분야 하나가 1,600좌표쯤 되는데 0.75로
+       * 밀어 넣으면 세 배쯤 더 들어가 가장자리 카드가 화면 밖으로 나간다.
+       * 실제로 눌러보니 가운데가 텅 비고 카드가 네 귀퉁이에 걸렸다.
+       *
+       * 상한만 남긴다. 질문이 서넛뿐인 분야에서 지나치게 당겨지는 것만 막으면 된다.
+       */
+      const zoom = Math.min(1.2, Math.min((w * 0.92) / (maxX - minX), (h * 0.92) / (maxY - minY)))
       flow.setCenter((minX + maxX) / 2, (minY + maxY) / 2, { zoom, duration: 420 })
     },
     [flow, placed],
@@ -327,38 +351,75 @@ function Layers({
             })}
           </svg>
 
-          {showTitles
-            ? placed.map((p) => (
+          {/*
+            배율에 따라 이름을 조금씩 드러낸다.
+
+            전에는 두 상태뿐이었다 — 멀리서는 점, 가까이서는 전부. 재보니 폰
+            개요에서 점 지름이 0.82px이고 확대해도 이름이 9px이었다. 둘 다
+            물리적으로 안 읽히므로 지도가 "무엇이 있는지" 알려주는 일을 아예
+            못 했다.
+
+            지금은 분야마다 대표부터 드러나고 다가갈수록 주변이 붙는다.
+            순위는 고정이라 확대하는 동안 보이던 이름이 사라지지 않는다.
+          */}
+          {placed.map((p) => {
+            const shown = (rank.get(p.id) ?? Infinity) < quota
+
+            if (!shown) {
+              /*
+               * 점도 누를 수 있다.
+               *
+               * 전에는 `pointer-events: none`에 `aria-hidden`이라 개요에서
+               * 누를 수 있는 것이 분야 이름뿐이었다. 화면의 대부분이 점인데
+               * 그 전부가 죽어 있었다.
+               *
+               * 손가락이 닿는 크기를 따로 잡는다. 점 자체는 작아야 개요가
+               * 지저분해지지 않지만, 누르는 자리는 44px는 돼야 한다.
+               */
+              return (
                 <button
                   key={p.id}
                   type="button"
+                  aria-label={p.question}
                   onClick={() => focus(p.id)}
-                  className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-raised px-3 py-2 text-left text-[12px] leading-[1.45] shadow-sm transition-colors hover:border-accent"
-                  style={{
-                    left: p.x,
-                    top: p.y,
-                    width: NODE_W,
-                    borderColor: colorOf(p.category),
-                  }}
+                  className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 grid place-items-center"
+                  style={{ left: p.x, top: p.y, width: hitSize, height: hitSize }}
                 >
-                  {p.question}
+                  <span
+                    aria-hidden
+                    className="rounded-full"
+                    style={{
+                      width: dotSize,
+                      height: dotSize,
+                      background: colorOf(p.category),
+                      opacity: 0.75,
+                    }}
+                  />
                 </button>
-              ))
-            : placed.map((p) => (
-                <span
-                  key={p.id}
-                  aria-hidden
-                  className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full"
-                  style={{
-                    left: p.x,
-                    top: p.y,
-                    width: 26,
-                    height: 26,
-                    background: colorOf(p.category),
-                    opacity: 0.75,
-                  }}
-                />
-              ))}
+              )
+            }
+
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => focus(p.id)}
+                className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-raised text-left shadow-sm transition-colors hover:border-accent"
+                style={{
+                  left: p.x,
+                  top: p.y,
+                  // 카드도 글자도 화면상 크기를 지킨다. 카테고리 이름과 같은 원리다
+                  width: cardW,
+                  padding: `${cardW * 0.045}px ${cardW * 0.07}px`,
+                  fontSize: cardW * 0.062,
+                  lineHeight: 1.45,
+                  borderColor: colorOf(p.category),
+                }}
+              >
+                {p.question}
+              </button>
+            )
+          })}
 
           {/*
             카테고리 이름은 배율과 무관하게 읽혀야 한다. 지도의 뼈대이고,
