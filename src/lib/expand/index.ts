@@ -221,24 +221,33 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
     lease = await acquireLease(hash)
   }
 
-  if (lease.result === 'done' && lease.qnodeId) {
-    const node = await loadNode(lease.qnodeId)
+  /*
+   * 캐시가 가리키는 노드가 없을 수 있다.
+   *
+   * 두 모양이 있고 **둘 다 받아야 한다.**
+   *
+   *   qnodeId는 있는데 그 노드가 안 읽힌다
+   *   qnodeId 자체가 null이다
+   *
+   * 두 번째가 실제로 흔한 쪽이다. `generation_job.qnode_id`가
+   * `on delete set null`(0002_ops.sql:23)이라 노드를 지우면 id가 null로 바뀐다.
+   * 재발행·purge-stubs·dedupe-roots가 전부 노드를 지우므로 이 경로로 온다.
+   *
+   * 처음에는 가드를 `done && qnodeId`로 뒀는데 그래서 안 켜졌다. 노드를 지워
+   * 상황을 만들면 qnodeId가 null이 되어 조건을 통과 못 한다 — 막으려던 바로
+   * 그 경우를 비껴갔다. 시험 셋도 전부 새 코드를 한 줄도 안 지났다.
+   *
+   * 옛 흐름은 여기서 `releaseQuota`를 먼저 하고 아래 생성 구간으로 흘러들었다.
+   * 예약을 반납한 채 LLM을 태우고, 리스를 잡은 적 없는데 `completeLease`가
+   * 남의 job을 덮고, 생성이 실패하면 `failLease`가 정상 캐시된 done job을
+   * failed로 바꿔 그 해시를 기다리던 사람 전원이 캐시를 잃는다.
+   *
+   * 예약은 성공했을 때만 반납한다. 흘러들 때는 그대로 들고 가야 생성 구간의
+   * `commitQuota`와 짝이 맞는다.
+   */
+  if (lease.result === 'done') {
+    const node = lease.qnodeId ? await loadNode(lease.qnodeId) : null
 
-    /*
-     * 노드가 사라진 캐시는 캐시가 아니다.
-     *
-     * 원래는 `releaseQuota`를 먼저 하고 `loadNode`가 null이면 아래 생성 구간으로
-     * 흘러들었다. 예약을 반납한 채로 LLM을 태우는 길이다. 그리고 리스를 잡은
-     * 적이 없는데도 `completeLease`가 남의 job을 덮고, 생성이 실패하면
-     * `failLease`가 **정상으로 캐시된 done job을 failed로 바꾼다** — 그 해시를
-     * 기다리던 사람 전원이 캐시를 잃는다.
-     *
-     * 도달 가능한 경로다. `publish.ts`의 재발행이 `delete from qnode`를 하고
-     * `purge-stubs`·`dedupe-roots`도 노드를 지운다. 리스는 남고 노드만 없어진다.
-     *
-     * 예약은 성공했을 때만 반납한다. 흘러들 때는 그대로 들고 가야 생성 구간의
-     * `commitQuota`와 짝이 맞는다.
-     */
     if (node) {
       await releaseQuota(input.quotaKey)
       await ensureEdge(input.parentNodeId, node.id)
