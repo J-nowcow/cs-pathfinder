@@ -127,15 +127,25 @@ export async function judgeRelations(
   let done = 0
   let lastError = ''
 
-  for (let i = 0; i < rounds; i += 1) {
-    let out: z.infer<typeof judgeSchema>
-    try {
-      out = await call({ model: MODEL_GATE, system: SYSTEM, schema: judgeSchema, prompt })
-    } catch (e) {
+  /*
+   * 회차를 동시에 뽑는다.
+   *
+   * 회차끼리 서로를 안 본다 — 그게 다수결의 전제다. 차례로 돌리면 판정 하나에
+   * 세 번을 기다리고, 249개면 여덟 시간이다. 같은 프롬프트라 캐시가 듣지도 않는다.
+   */
+  const settled = await Promise.allSettled(
+    Array.from({ length: rounds }, () =>
+      call({ model: MODEL_GATE, system: SYSTEM, schema: judgeSchema, prompt }),
+    ),
+  )
+
+  for (const s of settled) {
+    if (s.status === 'rejected') {
       // 이 회차는 없던 것으로 친다. 분모에서도 빠진다
-      lastError = (e as Error).message
+      lastError = (s.reason as Error)?.message ?? String(s.reason)
       continue
     }
+    const out = s.value
     done += 1
 
     // 한 회차 안에서 같은 후보를 두 번 말해도 한 표다

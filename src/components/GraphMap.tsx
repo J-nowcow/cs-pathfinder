@@ -250,6 +250,15 @@ function Layers({
               const a = pos.get(e.parentId)
               const b = pos.get(e.childId)
               if (!a || !b) return null
+
+              /*
+               * 걸어간 길과 이어준 관계를 다르게 그린다.
+               *
+               * 걸어간 길은 사람이 실제로 지나간 것이라 확실하다. 관계는 판정이
+               * 이은 것이라 틀릴 수 있다. 같은 선으로 그리면 그 차이가 사라지고,
+               * 사용자는 전부 사실인 줄 안다. 관계 쪽을 점선에 옅게 둔다.
+               */
+              const walked = e.kind === 'walked'
               return (
                 <line
                   key={i}
@@ -258,7 +267,9 @@ function Layers({
                   x2={b.x}
                   y2={b.y}
                   stroke="var(--line)"
-                  strokeWidth={2}
+                  strokeWidth={walked ? 2 : 1.5}
+                  strokeDasharray={walked ? undefined : '6 5'}
+                  opacity={walked ? 1 : 0.55}
                 />
               )
             })}

@@ -17,6 +17,16 @@ export type MapNode = {
 export type MapEdge = {
   parentId: string
   childId: string
+  /**
+   * 이 선이 어디서 왔나.
+   *
+   * `walked`는 사람이 실제로 걸어간 길이고 `related`는 판정이 이은 관계다.
+   * 화면이 둘을 다르게 그려야 한다 — 걸어간 길은 확실하고, 이어준 관계는
+   * 판정 결과라 틀릴 수 있다. 같은 굵기로 그리면 그 차이가 사라진다.
+   */
+  kind: 'walked' | 'related'
+  /** 왜 이었는지. `related`에만 있다 */
+  reason?: string
 }
 
 export type MapData = {
@@ -61,13 +71,41 @@ export async function loadMapData(today: string = kstToday()): Promise<MapData> 
    * 질문(on_demand)으로 이어진 간선이 대부분 여기 해당한다.
    */
   const ids = nodes.map((n) => n.id)
-  const edges = await db.query<MapEdge>(
-    `select parent_id as "parentId", child_id as "childId"
-       from qedge
-      where parent_id = any($1::uuid[])
-        and child_id  = any($1::uuid[])`,
-    [ids],
-  )
+
+  /*
+   * 걸어간 길과 이어준 관계를 함께 싣는다.
+   *
+   * 관계가 없으면 지도는 점만 249개다. 실제로 그랬다 — 꼬리질문이 기존 질문과
+   * 같은 경우가 5%뿐이라 걸어간 길만으로는 선이 거의 안 생긴다.
+   *
+   * 표를 적게 받은 관계는 뺀다. 회차마다 흔들리는 것을 봤으므로 과반은
+   * 최소 조건이고, 지도에 그릴 것은 그보다 확실해야 한다.
+   */
+  const [walked, related] = await Promise.all([
+    db.query<MapEdge>(
+      `select parent_id as "parentId", child_id as "childId", 'walked' as kind
+         from qedge
+        where parent_id = any($1::uuid[])
+          and child_id  = any($1::uuid[])`,
+      [ids],
+    ),
+    db.query<MapEdge>(
+      `select from_id as "parentId", to_id as "childId", 'related' as kind, reason
+         from semantic_relation
+        where active
+          and votes >= 2
+          and from_id = any($1::uuid[])
+          and to_id   = any($1::uuid[])`,
+      [ids],
+    ),
+  ])
+
+  /*
+   * 같은 쌍이 양쪽에 있으면 걸어간 쪽을 남긴다. 사람이 실제로 지나간 것이
+   * 판정보다 확실하다.
+   */
+  const seen = new Set(walked.map((e) => `${e.parentId}::${e.childId}`))
+  const edges = [...walked, ...related.filter((e) => !seen.has(`${e.parentId}::${e.childId}`))]
 
   return { nodes, edges }
 }
