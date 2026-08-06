@@ -262,9 +262,31 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
     // 죽은 리스를 비워 다음 사람이 새로 잡게 한다. 안 비우면 여기 계속 걸린다
     await failLease(hash)
     lease = await acquireLease(hash)
+
     if (lease.result === 'busy') {
       await releaseQuota(input.quotaKey)
       return { kind: 'busy' }
+    }
+
+    /*
+     * 비운 사이에 누가 정상으로 끝냈으면 그것을 쓴다.
+     *
+     * 안 보면 방금 생긴 캐시를 무시하고 다시 만든다. 가드를 `done` 전체로
+     * 넓히면서 이 블록에 들어오는 빈도가 늘었으니 그만큼 자주 낭비된다.
+     * 손상은 아니지만 LLM 한 번이다.
+     */
+    if (lease.result === 'done' && lease.qnodeId) {
+      const fresh = await loadNode(lease.qnodeId)
+      if (fresh) {
+        await releaseQuota(input.quotaKey)
+        await ensureEdge(input.parentNodeId, fresh.id)
+        return {
+          kind: 'ok',
+          node: fresh,
+          cache: 'hit',
+          quota: await snapshot(input.quotaKey, input.dailyLimit),
+        }
+      }
     }
   }
 
