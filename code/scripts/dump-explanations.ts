@@ -2,7 +2,7 @@ import { loadEnvLocal } from '../src/lib/load-env'
 
 loadEnvLocal()
 
-import { writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
+import { writeFileSync, readFileSync, mkdirSync, readdirSync, rmSync, existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { getDb } from '../src/lib/db/client'
 import { ensureSeeded } from '../src/lib/db/bootstrap'
@@ -51,6 +51,31 @@ if (SITE_URL.includes('localhost')) {
 /** 파일 이름. 분야 이름에 공백과 `·`가 있어 그대로는 못 쓴다 */
 const fileOf = (category: string) => `${categoryAnchor(category).replace(/^c-/, '')}.md`
 
+/**
+ * 대조에서 지적이 나온 편.
+ *
+ * 파일 맨 위에 "열 편 중 셋에 지적이 있다"고만 적으면 **읽는 사람은 어느 셋인지
+ * 모른다.** 결국 전부를 반쯤 의심하며 읽거나, 아무것도 의심하지 않게 된다.
+ * 둘 다 나쁘다.
+ *
+ * 그 셋을 그 자리에서 표시한다. 나머지는 지적이 없었다는 뜻이 되므로 경고의
+ * 값어치가 생긴다.
+ *
+ * 지적 목록(`hard-errors.md`)에서 id를 읽는다. 그 파일이 없으면 표시를 안 하고
+ * 넘어간다 — 표시가 없는 것이 잘못된 표시보다 낫다.
+ */
+function flaggedIds(): Set<string> {
+  const path = resolve(process.cwd(), 'docs/audit/2026-08-07-hard-errors.md')
+  if (!existsSync(path)) {
+    console.error('지적 목록이 없다. 표시 없이 뜬다.')
+    return new Set()
+  }
+  const ids = readFileSync(path, 'utf8').match(/^`([0-9a-f-]{36})`/gm) ?? []
+  return new Set(ids.map((s) => s.replace(/`/g, '')))
+}
+
+const flagged = flaggedIds()
+
 await ensureSeeded()
 
 const db = await getDb()
@@ -74,20 +99,25 @@ const rows = await db.query<{ id: string; question: string; category: string; bo
 /**
  * 머리말.
  *
- * **틀릴 수 있다는 말을 맨 위에 둔다.** 이 글은 대부분 모델이 썼고, 전수
- * 대조에서 열 편 중 셋에 면접관이 되물을 서술이 있었다
+ * **틀릴 수 있다는 말을 맨 위에 둔다.** 이 글은 대부분 모델이 썼고 전수 대조에서
+ * 열 편 중 셋에 면접관이 되물을 서술이 있었다
  * (`code/docs/audit/2026-08-07-fact-check-full.md`). 그것을 안 적고 내놓으면
  * 읽는 사람을 속이는 것이다.
+ *
+ * 다만 "열 편 중 셋"이라고만 적으면 어느 셋인지 모른다. 지적이 나온 편에는
+ * 제목 아래 표시를 달았으므로, 여기서는 **표시가 없으면 지적이 없었다는 뜻**임을
+ * 알린다. 그래야 표시의 값어치가 생긴다.
  */
-function header(category: string, n: number): string {
+function header(category: string, n: number, flaggedHere: number): string {
   return [
     `# ${category}`,
     '',
-    `질문 ${n}개. [서비스에서 보기](${SITE_URL}/questions#${categoryAnchor(category)})`,
+    `질문 ${n}개 · 지적이 나온 해설 ${flaggedHere}개. ` +
+      `[서비스에서 보기](${SITE_URL}/questions#${categoryAnchor(category)})`,
     '',
-    '> 이 글은 대부분 AI가 썼다. 전수 대조에서 **열 편 중 셋**에 면접관이 되물을',
-    '> 서술이 있었다. 고쳐야 할 것을 [`code/docs/audit/2026-08-07-hard-errors.md`]',
-    '> (../../code/docs/audit/2026-08-07-hard-errors.md)에 모아 두었다.',
+    '> 이 글은 대부분 AI가 썼다. 전수 대조에서 지적이 나온 해설에는 제목 바로 아래',
+    '> ⚠️ 표시를 달았다. **표시가 없으면 대조에서 지적이 안 나온 것**이다.',
+    '> 지적 전문은 [하드 오류 목록](../../code/docs/audit/2026-08-07-hard-errors.md)에 있다.',
     '> 틀린 곳을 찾으면 이슈로 알려 주면 고친다.',
     '',
     '> 도식은 서비스에서 그림으로 그려진다. 여기서는 GitHub이 그릴 수 있는',
@@ -118,16 +148,33 @@ for (const category of CATEGORIES) {
   if (mine.length === 0) continue
 
   const body = mine
-    .map(
-      (r) =>
+    .map((r) => {
+      /*
+       * **"틀렸다"고 안 쓴다.** 지적한 것도 모델이고 사람이 아직 안 봤다.
+       * 확정처럼 쓰면 멀쩡한 글에 없는 흠을 만든다.
+       */
+      const warn = flagged.has(r.id)
+        ? '> ⚠️ 이 해설은 교차 대조에서 **사실 지적이 나왔다**(사람 검토 전). ' +
+          '지적 내용은 [하드 오류 목록](../../code/docs/audit/2026-08-07-hard-errors.md)에 있다.\n\n'
+        : ''
+      return (
         `## ${r.question}\n\n` +
+        warn +
         `${toGithubMarkdown(r.body)}\n\n` +
-        `[이 질문 파고들기 →](${SITE_URL}/q/${r.id})\n`,
-    )
+        `[이 질문 파고들기 →](${SITE_URL}/q/${r.id})\n`
+      )
+    })
     .join('\n---\n\n')
 
-  writeFileSync(`${DIR}/${fileOf(category)}`, `${header(category, mine.length)}${body}`)
-  index.push(`- [${category}](${fileOf(category)}) — ${mine.length}개`)
+  const flaggedHere = mine.filter((r) => flagged.has(r.id)).length
+  writeFileSync(
+    `${DIR}/${fileOf(category)}`,
+    `${header(category, mine.length, flaggedHere)}${body}`,
+  )
+  index.push(
+    `- [${category}](${fileOf(category)}) — ${mine.length}개` +
+      (flaggedHere > 0 ? ` (지적 ${flaggedHere})` : ''),
+  )
   written += 1
 }
 
@@ -149,5 +196,6 @@ writeFileSync(
   ].join('\n'),
 )
 
-console.log(`해설 ${rows.length}개 → ${written}개 파일 (${DIR})`)
+const marked = rows.filter((r) => flagged.has(r.id)).length
+console.log(`해설 ${rows.length}개 → ${written}개 파일 · 지적 표시 ${marked}개 (${DIR})`)
 process.exit(0)
