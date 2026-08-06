@@ -11,6 +11,7 @@ import { rankByCategory, quotaAt, pickVisible } from '@/lib/graph/representative
 import { fitToPane } from '@/lib/graph/fit'
 import { MAP_OVERLAY_Z } from '@/lib/graph/stacking'
 import { nearestGaps, hitSizeFor } from '@/lib/graph/hit'
+import { wantsBrowserDefault } from '@/lib/graph/open-intent'
 import { Prose } from '@/components/Prose'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
@@ -505,11 +506,15 @@ function Layers({
               const hit = hitSizeFor(gaps.get(p.id) ?? Infinity, dotSize, wantedHit)
 
               return (
-                <button
+                <a
                   key={p.id}
-                  type="button"
+                  href={`/q/${p.id}`}
                   aria-label={p.question}
-                  onClick={() => focus(p.id)}
+                  onClick={(e) => {
+                    if (wantsBrowserDefault(e)) return
+                    e.preventDefault()
+                    focus(p.id)
+                  }}
                   className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 grid place-items-center"
                   style={{ left: p.x, top: p.y, width: hit, height: hit }}
                 >
@@ -523,16 +528,20 @@ function Layers({
                       opacity: 0.75,
                     }}
                   />
-                </button>
+                </a>
               )
             }
 
             return (
-              <button
+              <a
                 key={p.id}
-                type="button"
-                onClick={() => focus(p.id)}
-                className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-raised text-left shadow-sm transition-colors hover:border-accent"
+                href={`/q/${p.id}`}
+                onClick={(e) => {
+                  if (wantsBrowserDefault(e)) return
+                  e.preventDefault()
+                  focus(p.id)
+                }}
+                className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-raised text-left text-ink no-underline shadow-sm transition-colors hover:border-accent"
                 style={{
                   left: p.x,
                   top: p.y,
@@ -545,7 +554,7 @@ function Layers({
                 }}
               >
                 {p.question}
-              </button>
+              </a>
             )
           })}
 
