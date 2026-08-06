@@ -110,6 +110,17 @@ export async function callOnce<T>(
     system,
     prompt,
     abortSignal,
+    /*
+     * SDK 안에서 재시도하지 않는다.
+     *
+     * 기본값이 3회라 우리 폴백이 실패를 보기까지 backoff를 두 번 기다린다.
+     * 폴백 사슬(callWithFallback)이 이미 같은 일을 더 잘한다 — 같은 모델을
+     * 다시 두드리는 대신 다음 모델이나 다음 키로 넘어간다.
+     *
+     * 실제로 비쌌다. 1차 모델의 무료 한도가 마른 날 호출마다 7초를 버리고
+     * 폴백으로 갔다. 한도 초과는 몇 초 뒤에 풀리는 종류가 아니다.
+     */
+    maxRetries: 0,
     experimental_repairText: async ({ text }: { text: string }) => stripCodeFence(text),
   })
 

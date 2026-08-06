@@ -97,6 +97,18 @@ export type JudgeDeps = {
   call?: StructuredCaller
   /** 몇 번 뽑을 것인가. 홀수가 낫다 — 짝수면 표가 갈릴 때 정할 수 없다 */
   rounds?: number
+  /**
+   * 어느 모델로 물을 것인가.
+   *
+   * 기본은 게이트 모델이다. 후보 중에 고르는 일이라 큰 모델이 필요 없다.
+   *
+   * 다만 한도는 **모델마다 따로** 찬다. 게이트 사슬(3.1-flash-lite →
+   * 3.5-flash-lite → gemma)이 셋 다 마른 날을 실제로 만났다. 그날 질문 219개를
+   * 생성하면서 같은 버킷을 다 썼기 때문이다. 큰 모델 쪽은 멀쩡했다.
+   *
+   * 그래서 대량 배치는 이 값을 옮겨 쓸 수 있게 열어 둔다.
+   */
+  model?: string
 }
 
 /**
@@ -119,6 +131,7 @@ export async function judgeRelations(
 
   const call = deps.call ?? realCaller
   const rounds = deps.rounds ?? 3
+  const model = deps.model ?? MODEL_GATE
   const prompt = buildJudgePrompt(focus, pool)
   const allowed = new Set(pool.map((c) => c.id))
 
@@ -135,7 +148,7 @@ export async function judgeRelations(
    */
   const settled = await Promise.allSettled(
     Array.from({ length: rounds }, () =>
-      call({ model: MODEL_GATE, system: SYSTEM, schema: judgeSchema, prompt }),
+      call({ model, system: SYSTEM, schema: judgeSchema, prompt }),
     ),
   )
 

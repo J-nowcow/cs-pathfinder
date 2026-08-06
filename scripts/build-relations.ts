@@ -9,6 +9,7 @@ import { GENERATED_NODES } from '../data/generated-nodes'
 import { shortlist } from '../src/lib/relations/shortlist'
 import { judgeRelations, type JudgeNode } from '../src/lib/relations/judge'
 import type { RelationKind } from '../src/lib/db/relations'
+import { MODEL_GENERATE } from '../src/lib/llm/client'
 
 /**
  * 질문 사이의 의미 관계를 만든다.
@@ -116,7 +117,17 @@ for (const focus of targets) {
 
   let rels
   try {
-    rels = await judgeRelations(focus, cands)
+    /*
+     * 게이트 모델 말고 큰 모델로 묻는다.
+     *
+     * 한도는 모델마다 따로 찬다. 게이트 사슬(3.1-flash-lite → 3.5-flash-lite →
+     * gemma)이 셋 다 마른 날 재보니 3.6-flash와 3.5-flash는 멀쩡했다. 같은 날
+     * 질문 219개를 생성하면서 lite 버킷만 다 썼기 때문이다.
+     *
+     * 이쪽 사슬은 3.6-flash → 3.5-flash → 게이트 → gemma라, 마른 것들이
+     * 뒤에 있고 살아 있는 것이 앞에 있다.
+     */
+    rels = await judgeRelations(focus, cands, { model: MODEL_GENERATE })
   } catch (e) {
     console.log(`  ! ${focus.question} — ${(e as Error).message}`)
     continue
