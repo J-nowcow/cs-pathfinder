@@ -56,12 +56,47 @@ const FLOW_LINE = /^(.+?)\s*(?:->|→|=>)\s*(.+?)\s*:\s*(.+)$/
 /** `전송 계층 | TCP, UDP` — 오른쪽 설명은 없어도 된다 */
 const STACK_LINE = /^(.+?)(?:\s*\|\s*(.*))?$/
 
+/**
+ * 한 줄에 화살표가 여러 개인 것을 여러 단계로 편다.
+ *
+ * 규칙은 한 줄에 한 걸음인데 모델이 이렇게 쓸 때가 있다.
+ *
+ *   루트 -> 'a' 노드 -> 'b' 노드 -> 'c' 노드: 'abc' 검색 완료
+ *
+ * 정규식이 첫 화살표에서 끊으므로 받는 쪽에 나머지 사슬이 통째로 들어간다.
+ * 화면에는 한 단계짜리 순서 도식이 그려지고, 단계가 하나면 순서가 아니다.
+ *
+ * 실제로 생성분 219개 중 둘이 이 모양이었다. 버리는 대신 편다 — 모델이
+ * 쓴 것은 사슬이 맞고 표기만 우리 규칙과 달랐다.
+ *
+ * 이름표는 마지막 걸음에만 붙인다. 중간 걸음에 같은 말을 반복하면 도식이
+ * 아니라 같은 문장의 나열이 된다.
+ */
+function expandChain(from: string, rest: string, label: string): FlowStep[] {
+  const hops = rest
+    .split(/\s*(?:->|→|=>)\s*/)
+    .map((h) => h.trim())
+    .filter((h) => h.length > 0)
+  if (hops.length === 0) return []
+
+  const nodes = [from.trim(), ...hops]
+  const steps: FlowStep[] = []
+  for (let i = 0; i < nodes.length - 1; i += 1) {
+    steps.push({
+      from: nodes[i],
+      to: nodes[i + 1],
+      label: i === nodes.length - 2 ? label : '',
+    })
+  }
+  return steps
+}
+
 function parseFlow(lines: string[]): Block | null {
   const steps: FlowStep[] = []
   for (const line of lines) {
     const m = FLOW_LINE.exec(line.trim())
     if (!m) return null
-    steps.push({ from: m[1].trim(), to: m[2].trim(), label: m[3].trim() })
+    steps.push(...expandChain(m[1], m[2], m[3].trim()))
   }
   return steps.length > 0 ? { type: 'flow', steps } : null
 }

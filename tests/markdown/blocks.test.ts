@@ -282,3 +282,50 @@ describe('parseBlocks — 문장 끝에 붙은 울타리', () => {
     expect(out[0].type).toBe('paragraph')
   })
 })
+
+/**
+ * 한 줄에 화살표가 여러 개일 때.
+ *
+ * 규칙은 한 줄에 한 걸음인데 모델이 사슬을 한 줄에 쓸 때가 있다. 정규식이
+ * 첫 화살표에서 끊으므로 받는 쪽에 나머지가 통째로 들어가고, 화면에는 한
+ * 단계짜리 순서 도식이 그려진다. 단계가 하나면 순서가 아니다.
+ *
+ * 생성분 219개를 훑다가 둘을 찾았다. 형식 검사는 "도식이 있는가"만 봐서
+ * 못 잡는 자리였다.
+ */
+describe('여러 걸음이 한 줄에 있을 때', () => {
+  it('splits a chain into one step per hop', () => {
+    const [block] = parseBlocks([':::flow', "루트 -> 'a' -> 'b' -> 'c': 검색 완료", ':::'].join('\n'))
+    expect(block.type).toBe('flow')
+    if (block.type !== 'flow') return
+
+    expect(block.steps.map((s) => [s.from, s.to])).toEqual([
+      ['루트', "'a'"],
+      ["'a'", "'b'"],
+      ["'b'", "'c'"],
+    ])
+  })
+
+  /** 이름표를 걸음마다 반복하면 도식이 아니라 같은 문장의 나열이 된다 */
+  it('puts the label on the last hop only', () => {
+    const [block] = parseBlocks([':::flow', 'A -> B -> C: 끝났다', ':::'].join('\n'))
+    if (block.type !== 'flow') throw new Error('flow가 아니다')
+
+    expect(block.steps.map((s) => s.label)).toEqual(['', '끝났다'])
+  })
+
+  it('leaves a single hop alone', () => {
+    const [block] = parseBlocks([':::flow', 'A -> B: 한 걸음', ':::'].join('\n'))
+    if (block.type !== 'flow') throw new Error('flow가 아니다')
+
+    expect(block.steps).toEqual([{ from: 'A', to: 'B', label: '한 걸음' }])
+  })
+
+  it('handles mixed arrow shapes in one chain', () => {
+    const [block] = parseBlocks([':::flow', 'A → B => C -> D: 끝', ':::'].join('\n'))
+    if (block.type !== 'flow') throw new Error('flow가 아니다')
+
+    expect(block.steps.length).toBe(3)
+    expect(block.steps[2].to).toBe('D')
+  })
+})
