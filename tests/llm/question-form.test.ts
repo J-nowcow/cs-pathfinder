@@ -6,6 +6,7 @@ import {
 } from '@/lib/llm/question-form'
 import { EXAMPLE_NODES } from '../../data/example-nodes'
 import { parseBlocks } from '@/lib/markdown/blocks'
+import { GENERATED_NODES } from '../../data/generated-nodes'
 
 describe('hasPoliteEnding', () => {
   it('catches the shapes that actually showed up', () => {
@@ -136,5 +137,56 @@ describe('example nodes follow their own rules', () => {
   it('gives every example exactly five follow-ups', () => {
     const off = EXAMPLE_NODES.filter((e) => e.suggestions.length !== 5).map((e) => e.question)
     expect(off).toEqual([])
+  })
+})
+
+/**
+ * 생성된 노드도 화면에 나간다.
+ *
+ * 손으로 쓴 예시와 파일은 나눠 두지만(그쪽이 기준선이라) 사용자는 둘을
+ * 나란히 읽는다. 한쪽만 문단이 길거나 도식이 뒤에 있으면 그 차이가 보인다.
+ *
+ * 이 시험이 깨지면 build-generated-nodes.ts의 거르는 조건이 느슨해진 것이다.
+ */
+describe('generated nodes meet the same bar', () => {
+  it('every question is in the target form and short enough', () => {
+    const bad = GENERATED_NODES.filter(
+      (e) => questionFormIssues(e.question).length > 0 || e.question.length > 40,
+    ).map((e) => e.question)
+    expect(bad).toEqual([])
+  })
+
+  it('every follow-up fits a button', () => {
+    const bad = GENERATED_NODES.flatMap((e) => e.suggestions).filter(
+      (s) => s.length > 35 || questionFormIssues(s).length > 0,
+    )
+    expect(bad).toEqual([])
+  })
+
+  it('puts a diagram right after the answer', () => {
+    const bad = GENERATED_NODES.filter((e) => {
+      const at = parseBlocks(e.body).findIndex((b) => b.type !== 'paragraph')
+      return at < 0 || at >= 3
+    }).map((e) => e.question)
+    expect(bad).toEqual([])
+  })
+
+  it('keeps every paragraph readable on a phone', () => {
+    const long = GENERATED_NODES.flatMap((e) =>
+      parseBlocks(e.body)
+        .filter((b) => b.type === 'paragraph')
+        .map((b) => (b as { text: string }).text)
+        .filter((t) => t.length > 150),
+    )
+    expect(long).toEqual([])
+  })
+
+  /** 같은 질문이 양쪽에 있으면 노드 id가 겹쳐 하나가 다른 하나를 덮는다 */
+  it('does not collide with a hand-written example', () => {
+    const hand = new Set(EXAMPLE_NODES.map((e) => `${e.identityScope}::${e.question}`))
+    const clash = GENERATED_NODES.filter((g) => hand.has(`${g.identityScope}::${g.question}`)).map(
+      (g) => g.question,
+    )
+    expect(clash).toEqual([])
   })
 })

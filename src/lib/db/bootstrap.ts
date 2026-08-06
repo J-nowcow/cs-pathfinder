@@ -3,6 +3,7 @@ import { derivedUuid } from '@/lib/db/uuid'
 import { questionHash } from '@/lib/expand/hash'
 import { NORMALIZER_VERSION } from '@/lib/llm/gate'
 import { EXAMPLE_NODES, type ExampleNode } from '../../../data/example-nodes'
+import { GENERATED_NODES } from '../../../data/generated-nodes'
 
 export function rootNodeId(node: Pick<ExampleNode, 'identityScope' | 'question'>): string {
   return derivedUuid(`node:${node.identityScope}:${node.question}`)
@@ -31,7 +32,16 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
   let inserted = 0
   let refreshed = 0
 
-  for (const ex of EXAMPLE_NODES) {
+  /*
+   * 손으로 쓴 것과 생성된 것을 함께 심는다.
+   *
+   * 파일은 나눠 둔다 — example-nodes.ts는 생성 규칙의 기준선이고 시험이 그것을
+   * 상대로 걸려 있다. 심을 때는 둘 다 화면에 나가는 콘텐츠라 차이가 없다.
+   *
+   * 손으로 쓴 것을 먼저 심는다. 같은 질문이 양쪽에 있으면 손으로 쓴 쪽이
+   * 남아야 한다.
+   */
+  for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES]) {
     const id = rootNodeId(ex)
 
     // xmax = 0 이면 방금 넣은 행이다. 갱신된 행과 구별하는 표준 수법이다.

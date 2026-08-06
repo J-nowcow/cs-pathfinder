@@ -4,6 +4,13 @@ import { derivedUuid } from '@/lib/db/uuid'
 import { seedExampleNodes, ensureSeeded, resetSeedCache } from '@/lib/db/bootstrap'
 import { listRoots } from '@/lib/db/roots'
 import { EXAMPLE_NODES } from '../../data/example-nodes'
+import { GENERATED_NODES } from '../../data/generated-nodes'
+
+/**
+ * 부팅 때 심는 것은 손으로 쓴 예시와 생성된 노드를 합친 것이다.
+ * 파일은 나눠 두지만(기준선을 지키려고) 심을 때는 둘 다 화면에 나가는 콘텐츠다.
+ */
+const SEEDED = EXAMPLE_NODES.length + GENERATED_NODES.length
 
 const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
 
@@ -26,13 +33,13 @@ describe('seedExampleNodes', () => {
 
   it('inserts every example root', async () => {
     const r = await seedExampleNodes()
-    expect(r.inserted).toBe(EXAMPLE_NODES.length)
+    expect(r.inserted).toBe(SEEDED)
 
     const db = await getDb()
     const rows = await db.query<{ n: string }>(
       "select count(*) as n from qnode where origin = 'batch'",
     )
-    expect(Number(rows[0].n)).toBe(EXAMPLE_NODES.length)
+    expect(Number(rows[0].n)).toBe(SEEDED)
   })
 
   it('is idempotent so a second boot does not duplicate', async () => {
@@ -42,7 +49,7 @@ describe('seedExampleNodes', () => {
 
     const db = await getDb()
     const rows = await db.query<{ n: string }>('select count(*) as n from qnode')
-    expect(Number(rows[0].n)).toBe(EXAMPLE_NODES.length)
+    expect(Number(rows[0].n)).toBe(SEEDED)
   })
 
   it('gives each node a derived id so urls survive a restart', async () => {
@@ -74,7 +81,7 @@ describe('seedExampleNodes', () => {
     await seedExampleNodes()
     const db = await getDb()
     const rows = await db.query<{ n: string }>('select count(*) as n from qnode_alias')
-    expect(Number(rows[0].n)).toBe(EXAMPLE_NODES.length)
+    expect(Number(rows[0].n)).toBe(SEEDED)
   })
 })
 
@@ -91,7 +98,7 @@ describe('ensureSeeded', () => {
 
     const db = await getDb()
     const rows = await db.query<{ n: string }>('select count(*) as n from qnode')
-    expect(Number(rows[0].n)).toBe(EXAMPLE_NODES.length)
+    expect(Number(rows[0].n)).toBe(SEEDED)
   })
 })
 
@@ -106,7 +113,7 @@ describe('listRoots', () => {
     await seedExampleNodes()
     const roots = await listRoots()
 
-    expect(roots).toHaveLength(EXAMPLE_NODES.length)
+    expect(roots).toHaveLength(SEEDED)
     for (const r of roots) {
       expect(r.question.length).toBeGreaterThan(0)
       expect(r.category.length).toBeGreaterThan(0)
