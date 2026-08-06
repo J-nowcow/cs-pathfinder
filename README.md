@@ -166,6 +166,7 @@ npx tsc --noEmit
 | `npm run db:purge-stubs` | 키 없는 배포가 남긴 가짜 해설 정리 |
 | `npm run db:enrich` | 도식 없는 옛 해설을 제자리에서 다시 쓰기 (`--yes`로 반영) |
 | `npm run docs:questions` | 질문 목록을 `docs/questions.md`로 뜨기 (발행 워크플로가 매일 자동 실행) |
+| `npm run check:graph` | 전역 질문 그래프가 이어져 있는지 (지도를 만들 만한지 판단) |
 | `npm run db:status` | 발행 이력과 남은 시드 일수 |
 | `npm run db:backfill-links` | 이미 판 꼬리질문을 결과 노드와 잇기 |
 | `npm run verify:concurrency` | 실제 Postgres에 동시 요청을 던져 잠금이 도는지 확인 |

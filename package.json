@@ -24,7 +24,8 @@
     "db:republish": "tsx scripts/republish-daily.ts",
     "db:backfill-links": "tsx scripts/backfill-suggestion-links.ts",
     "db:enrich": "tsx scripts/enrich-bodies.ts",
-    "docs:questions": "tsx scripts/dump-questions.ts"
+    "docs:questions": "tsx scripts/dump-questions.ts",
+    "check:graph": "tsx scripts/check-graph.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
