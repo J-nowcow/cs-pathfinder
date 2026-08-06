@@ -23,6 +23,7 @@ const LINKS = [
 ]
 
 const REPO = 'https://github.com/J-nowcow/cs-pathfinder'
+const CONTACT = 'wkdgusdn0321@naver.com'
 
 /**
  * 바깥으로 나가는 두 곳.
@@ -35,12 +36,20 @@ const REPO = 'https://github.com/J-nowcow/cs-pathfinder'
  * 저장소로 보내고 거기서 누르게 한다.
  */
 function OutLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
+  /*
+    `mailto:`에는 새 창을 열지 않는다.
+
+    메일 앱을 띄우는 주소라 새 탭을 열어도 그 탭은 곧바로 빈 화면으로 남는다.
+    브라우저에 따라 빈 탭이 그대로 떠 있어서 사람이 직접 닫아야 한다.
+  */
+  const newTab = !href.startsWith('mailto:')
+
   return (
     <a
       href={href}
-      target="_blank"
+      target={newTab ? '_blank' : undefined}
       // noopener가 없으면 열린 창이 window.opener로 이 페이지를 조작할 수 있다
-      rel="noopener noreferrer"
+      rel={newTab ? 'noopener noreferrer' : undefined}
       aria-label={label}
       title={label}
       className="-my-1.5 grid h-11 w-9 place-items-center rounded-lg text-muted transition-colors hover:text-ink"
@@ -106,12 +115,24 @@ export function SiteHeader() {
         </OutLink>
 
         {/*
-          문의는 이슈로 받는다. 메일 주소를 화면에 박으면 그대로 수집되고,
-          이슈는 주고받은 것이 남아서 같은 질문에 두 번 답하지 않아도 된다.
+          문의는 메일로 받는다.
+
+          처음에는 GitHub 이슈로 걸었다. 기록이 남고 주소가 안 새서 좋지만
+          **GitHub 계정이 없으면 아예 못 쓴다.** 이 서비스를 읽는 사람이 전부
+          개발자 계정을 가졌다고 볼 수 없다.
+
+          `mailto:`는 주소가 HTML에 그대로 들어가 수집 봇에 긁힌다. 그 대가를
+          알고 고른 것이다 — 문의하려는 사람이 문턱에서 돌아서는 쪽이 더 나쁘다.
+
+          제목을 미리 채워 둔다. 어디서 온 메일인지 받는 쪽이 바로 안다.
         */}
-        <OutLink href={`${REPO}/issues/new`} label="문의하기 (GitHub 이슈)">
+        <OutLink
+          href={`mailto:${CONTACT}?subject=${encodeURIComponent('[꼬꼬무 CS] 문의')}`}
+          label="문의하기 (메일)"
+        >
           <svg viewBox="0 0 16 16" width="17" height="17" fill="currentColor" aria-hidden>
-            <path d="M8 1.5a6.5 6.5 0 0 0-5.66 9.71l-.82 2.6a.5.5 0 0 0 .63.62l2.65-.83A6.5 6.5 0 1 0 8 1.5Zm0 1.25a5.25 5.25 0 1 1-2.6 9.81.63.63 0 0 0-.5-.05l-1.7.53.52-1.66a.63.63 0 0 0-.06-.5A5.25 5.25 0 0 1 8 2.75Z" />
+            {/* 봉투. 말풍선을 쓰면 채팅으로 읽혀서 메일이라는 것이 안 보인다 */}
+            <path d="M2 3.5h12c.55 0 1 .45 1 1v7c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1v-7c0-.55.45-1 1-1Zm.6 1.25L8 8.36l5.4-3.61H2.6ZM13.75 6.1 8.35 9.7a.63.63 0 0 1-.7 0L2.25 6.1v5.15h11.5V6.1Z" />
           </svg>
         </OutLink>
       </nav>
