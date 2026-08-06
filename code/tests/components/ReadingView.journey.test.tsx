@@ -111,7 +111,7 @@ describe('파고드는 동안', () => {
 
     const withSuggestion = {
       ...NODE,
-      suggestions: [{ id: 's1', text: '더 궁금한 것은?' }],
+      suggestions: [{ id: 's1', text: '더 궁금한 것은?', resolved: false }],
     }
     const { getByText, queryByRole, findByRole } = render(
       <ReadingView initialNode={withSuggestion} initialQuota={{ used: 0, limit: 5 }} />,
