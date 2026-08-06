@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { contentIssues, blocking, complaint } from '@/lib/llm/content-rules'
+import { contentIssues, blocking, complaint, questionIssues } from '@/lib/llm/content-rules'
 import { EXAMPLE_NODES } from '../../data/example-nodes'
+import { AUTHORED_NODES } from '../../data/authored-nodes'
+import { parseBlocks } from '@/lib/markdown/blocks'
 
 /**
  * 규칙 검사기.
@@ -228,5 +230,45 @@ describe('contentIssues · 도식 오용', () => {
     const issues = contentIssues(withDiagram(t))
     expect(issues.map((i) => i.rule)).toContain('표한줄')
     expect(blocking(issues)).toEqual([])
+  })
+})
+
+/**
+ * 손으로 채운 노드도 같은 규칙을 지킨다.
+ *
+ * 분야가 통째로 빠진 자리를 메우려고 직접 썼다(컨테이너·합의 알고리즘·
+ * SQL 인젝션 등). 사용자는 모델이 쓴 것과 나란히 읽으므로 한쪽만 규칙을
+ * 어기면 사이트가 두 사람이 쓴 것처럼 보인다.
+ *
+ * 기준선(`example-nodes.ts`)과 파일을 나눈 것은 성격이 달라서지 규칙이
+ * 달라서가 아니다.
+ */
+describe('손으로 채운 노드', () => {
+  it('하나도 막히지 않는다', () => {
+    const blocked = AUTHORED_NODES.filter(
+      (n) => blocking(contentIssues(n)).length > 0 || blocking(questionIssues(n.question)).length > 0,
+    )
+    expect(blocked.map((n) => n.question)).toEqual([])
+  })
+
+  /*
+   * 새로 만든 도식(`:::state`·`:::tree`)을 실제로 쓰는 첫 콘텐츠다. 렌더러와
+   * 프롬프트만 있고 그것을 쓰는 글이 없으면 만든 값이 안 드러난다.
+   */
+  it('새 도식을 실제로 쓴다', () => {
+    const kinds = new Set(
+      AUTHORED_NODES.flatMap((n) => parseBlocks(n.body))
+        .filter((b) => b.type !== 'paragraph')
+        .map((b) => b.type),
+    )
+    expect(kinds.has('state')).toBe(true)
+    expect(kinds.has('tree')).toBe(true)
+  })
+
+  it('편마다 도식이 하나씩 있다', () => {
+    for (const n of AUTHORED_NODES) {
+      const d = parseBlocks(n.body).filter((b) => b.type !== 'paragraph')
+      expect(d.length).toBeGreaterThan(0)
+    }
   })
 })

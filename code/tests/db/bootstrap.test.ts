@@ -5,12 +5,17 @@ import { seedExampleNodes, ensureSeeded, resetSeedCache } from '@/lib/db/bootstr
 import { listRoots } from '@/lib/db/roots'
 import { EXAMPLE_NODES } from '../../data/example-nodes'
 import { GENERATED_NODES } from '../../data/generated-nodes'
+import { AUTHORED_NODES } from '../../data/authored-nodes'
 
 /**
  * 부팅 때 심는 것은 손으로 쓴 예시와 생성된 노드를 합친 것이다.
  * 파일은 나눠 두지만(기준선을 지키려고) 심을 때는 둘 다 화면에 나가는 콘텐츠다.
  */
-const SEEDED = EXAMPLE_NODES.length + GENERATED_NODES.length
+/*
+ * 심는 것은 세 곳에서 온다 — 기준선 30개, 모델이 쓴 것, 손으로 채운 것.
+ * 파일을 따로 두는 이유는 각각 성격이 달라서다(각 파일 머리말 참고).
+ */
+const SEEDED = EXAMPLE_NODES.length + GENERATED_NODES.length + AUTHORED_NODES.length
 
 const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
 
