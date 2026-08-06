@@ -19,8 +19,8 @@ describe('fitToPane', () => {
       paneHeight: 400,
       overhang: none,
     })!
-    // 가로가 더 빡빡하므로 가로가 배율을 정한다
-    expect(fit.zoom).toBeCloseTo(0.4, 5)
+    // 가로가 더 빡빡하므로 가로가 배율을 정한다. 3% 물러선 값이다
+    expect(fit.zoom).toBeCloseTo(0.4 * 0.97, 5)
     expect(fit.centerX).toBe(500)
     expect(fit.centerY).toBe(250)
   })
@@ -36,8 +36,8 @@ describe('fitToPane', () => {
       paneHeight: 400,
       overhang: { left: 50, right: 50, top: 0, bottom: 0 },
     })!
-    // 400 - 100 = 300 이 쓸 수 있는 폭이다
-    expect(fit.zoom).toBeCloseTo(0.3, 5)
+    // 400 - 100 = 300 이 쓸 수 있는 폭이다. 여기서 3% 물러선다
+    expect(fit.zoom).toBeCloseTo(0.3 * 0.97, 5)
   })
 
   /*
@@ -91,5 +91,25 @@ describe('fitToPane', () => {
 
   it('returns nothing for an empty map', () => {
     expect(fitToPane({ xs: [], ys: [], paneWidth: 400, paneHeight: 400, overhang: none })).toBeNull()
+  })
+})
+
+/**
+ * 3% 물러서기.
+ *
+ * 여백을 정확히 맞추면 삐져나오는 양을 1px 덜 잡았을 때 바로 잘린다. 실제로
+ * 데스크톱에서 위를 맞추니 아래가 10px 잘렸다.
+ */
+describe('fitToPane · 안전 여유', () => {
+  it('stops a little short of a perfect fit', () => {
+    const fit = fitToPane({
+      xs: [0, 100],
+      ys: [0, 100],
+      paneWidth: 100,
+      paneHeight: 100,
+      overhang: { left: 0, right: 0, top: 0, bottom: 0 },
+    })!
+    expect(fit.zoom).toBeLessThan(1)
+    expect(fit.zoom).toBeGreaterThan(0.9)
   })
 })

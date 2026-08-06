@@ -47,7 +47,17 @@ export function fitToPane({ xs, ys, paneWidth, paneHeight, overhang }: FitInput)
   const spanX = Math.max(1, maxX - minX)
   const spanY = Math.max(1, maxY - minY)
 
-  const zoom = Math.min(usableW / spanX, usableH / spanY)
+  /*
+   * 계산한 배율에서 조금 물러선다.
+   *
+   * 여백을 정확히 맞추면 삐져나오는 양을 1px이라도 덜 잡았을 때 바로 잘린다.
+   * 실제로 그랬다 — 데스크톱에서 위를 맞추니 아래가 10px 잘렸다. 이름 폭·줄
+   * 높이가 글꼴과 브라우저에 따라 조금씩 달라서 상수로는 끝까지 못 맞춘다.
+   *
+   * 3%를 물러서면 그 오차를 흡수한다. 지도가 3% 작아지는 것은 눈에 안 띄지만
+   * 이름이 잘리는 것은 눈에 띈다.
+   */
+  const zoom = Math.min(usableW / spanX, usableH / spanY) * 0.97
 
   /*
    * 가운데는 **노드 범위**가 아니라 삐져나온 것까지 포함한 자리다.

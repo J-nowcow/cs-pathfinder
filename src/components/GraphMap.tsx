@@ -179,9 +179,13 @@ function FitOnMount({ placed }: { placed: Array<Placed<MapNode>> }) {
     /*
      * 삐져나오는 것은 전부 화면 고정 크기다.
      *
-     * 분야 이름이 17px이고 그중 가장 긴 것("아키텍처 · 분산시스템")이 열두 자라
-     * 대략 140px, 반이 70px이다. 이름은 노드 위쪽 41px에 서므로 위로 58px쯤
-     * 삐져나온다. 아래는 점 반지름뿐이다.
+     * 가장 긴 이름("아키텍처 · 분산시스템")이 139px이라 절반인 70px이 바깥으로
+     * 나간다. 다만 그 이름은 무리 가운데에 서고 무리는 안쪽에 있으므로 실제로
+     * 넘치는 양은 그보다 작다 — 재보니 24px였다.
+     *
+     * 위쪽은 배율과 무관하게 58px이다. 이름이 노드 위 41px(labelGap이 배율
+     * 역수라 화면에서 늘 41px)에 서고 글자가 17px이다. 34px로 뒀더니 폰에서는
+     * 안 드러났는데(가로가 배율을 정해서) 데스크톱에서 위가 잘렸다.
      *
      * 예전에는 이 자리에 좌표 고정값(가로 210, 위 420·아래 120)이 있었다.
      * 배율이 정해지기 전이라 좌표로는 얼마를 비울지 알 수 없는데 그렇게 잡으니
@@ -192,7 +196,7 @@ function FitOnMount({ placed }: { placed: Array<Placed<MapNode>> }) {
       ys: placed.map((p) => p.y),
       paneWidth: pane.clientWidth,
       paneHeight: pane.clientHeight,
-      overhang: { left: 24, right: 24, top: 34, bottom: 10 },
+      overhang: { left: 24, right: 24, top: 62, bottom: 12 },
     })
     if (!fit) return
 
