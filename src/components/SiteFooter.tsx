@@ -12,6 +12,16 @@ import { CATEGORIES, categoryAnchor } from '@/lib/tree/categories'
  * 때문이다. "네트워크만 보고 싶다"가 흔한 요구인데 지금은 목록 화면에 들어가야
  * 보인다.
  */
+/*
+ * 여기 링크는 손끝 기준(44px)보다 작다. 폰에서 재보니 16px이다.
+ *
+ * 키우려다 되돌렸다. 세로로 촘촘히 쌓인 목록이라 판정 영역만 늘리면 위아래가
+ * **서로 겹쳐** 엉뚱한 링크가 눌린다. 겹치지 않으려면 줄 간격을 16px 이상으로
+ * 벌려야 하는데, 이 푸터는 이미 폰에서 407px(화면의 53%)라 더 키울 수 없다.
+ *
+ * 그래서 그대로 둔다. WCAG AA 최소치(24px)는 넘고, 부차적인 길잡이라 헤더의
+ * 주 항목만큼 자주 눌리지 않는다. 푸터를 줄이는 작업과 함께 다시 볼 자리다.
+ */
 export function SiteFooter() {
   return (
     <footer className="mt-16 border-t border-line">

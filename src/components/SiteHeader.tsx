@@ -45,7 +45,14 @@ export function SiteHeader() {
               key={l.href}
               href={l.href}
               aria-current={here ? 'page' : undefined}
-              className={`rounded-lg px-2.5 py-1.5 text-[13px] transition-colors ${
+              /*
+                보이는 크기는 그대로 두고 누르는 자리만 키운다.
+
+                폰에서 재보니 높이가 32px이었다. 손끝이 닿는 자리로는 작다 —
+                옆 항목이 눌린다. `py`를 키우고 같은 만큼 `-my`로 당기면 글자
+                위치와 헤더 높이는 그대로인 채 판정 영역만 44px가 된다.
+              */
+              className={`-my-1.5 rounded-lg px-2.5 py-3 text-[13px] transition-colors ${
                 here ? 'font-medium text-ink' : 'text-muted hover:text-ink'
               }`}
             >

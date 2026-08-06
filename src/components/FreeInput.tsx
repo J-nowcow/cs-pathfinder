@@ -77,7 +77,14 @@ export function FreeInput({
           <button
             type="submit"
             disabled={!canSend}
-            className="rounded-md bg-accent px-3.5 py-1.5 text-[13px] font-medium text-on-accent transition-opacity disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            /*
+              이 화면의 주 행동이다. 폰에서 재보니 높이가 32px이었다.
+
+              여기는 배경이 있는 버튼이라 헤더처럼 눌러 당기지 않는다 — 당기면
+              색칠된 면이 커져 보이는 모양이 바뀐다. 대신 실제로 키운다.
+              주 행동을 작게 둘 이유가 없다.
+            */
+            className="min-h-[44px] rounded-md bg-accent px-4 py-2.5 text-[13px] font-medium text-on-accent transition-opacity disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             {pending ? '파는 중' : '파고들기'}
           </button>
