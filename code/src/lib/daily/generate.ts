@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { IDENTITY_SCOPES, isIdentityScope } from '@/lib/expand/scopes'
 import { dailyCaller, MODEL_DAILY, type StructuredCaller } from '@/lib/llm/client'
+import { contentIssues, blocking, complaint } from '@/lib/llm/content-rules'
 
 const dailySchema = z.object({
   question: z.string(),
@@ -155,37 +156,66 @@ export async function generateDailyRoot(args: {
 
   const prompt = [`주제어: ${args.term}`, `대분류: ${args.category}`].join('\n')
 
-  const out = await call({
-    model: MODEL_DAILY,
-    schema: dailySchema,
-    system: SYSTEM,
-    prompt,
-  })
+  const once = async (extra?: string) => {
+    const out = await call({
+      model: MODEL_DAILY,
+      schema: dailySchema,
+      system: SYSTEM,
+      prompt: extra ? `${prompt}\n\n${extra}` : prompt,
+    })
 
-  const question = out.question.trim()
-  if (question.length === 0) {
-    throw new Error('daily generation returned an empty question')
+    const question = out.question.trim()
+    if (question.length === 0) {
+      throw new Error('daily generation returned an empty question')
+    }
+
+    const body = out.body.trim()
+    if (body.length === 0) {
+      throw new Error('daily generation returned an empty body')
+    }
+
+    const suggestions = out.suggestions
+      .map((s) => s.text.trim())
+      .filter((s) => s.length > 0)
+      .slice(0, 5)
+
+    if (suggestions.length === 0) {
+      throw new Error('daily generation returned no suggestions')
+    }
+
+    // 모르는 스코프를 그대로 저장하면 오병합 방어선이 무너진다. generic으로 좁힌다.
+    const identityScope = isIdentityScope(out.identity_scope) ? out.identity_scope : 'generic'
+
+    // 요약이 비면 카드가 빈 줄로 뜬다. 질문으로 대신한다.
+    const summary = out.summary.trim() || question
+
+    return {
+      content: { question, identityScope, body, summary, suggestions },
+      issues: contentIssues({ body, suggestions }),
+    }
   }
 
-  const body = out.body.trim()
-  if (body.length === 0) {
-    throw new Error('daily generation returned an empty body')
+  /*
+   * 어긋났으면 한 번만 다시 부른다.
+   *
+   * 여기는 확장 경로보다 다시 부를 값이 싸다. 하루에 한 번이고 사용자가
+   * 기다리고 있지 않다. 대신 무료 한도가 빠듯한 자리라(3.6-flash가 하루
+   * 20건) 두 번까지만 쓴다.
+   *
+   * 다시 부르는 것이 실패하면 첫 번째를 쓴다. 발행이 아예 안 되는 것보다
+   * 규칙 하나 어긋난 질문이 올라오는 편이 낫다 — 그날 질문이 없으면
+   * 서비스가 빈다.
+   */
+  const first = await once()
+  if (blocking(first.issues).length === 0) return first.content
+
+  let second: Awaited<ReturnType<typeof once>> | null = null
+  try {
+    second = await once(complaint(first.issues))
+  } catch {
+    return first.content
   }
 
-  const suggestions = out.suggestions
-    .map((s) => s.text.trim())
-    .filter((s) => s.length > 0)
-    .slice(0, 5)
-
-  if (suggestions.length === 0) {
-    throw new Error('daily generation returned no suggestions')
-  }
-
-  // 모르는 스코프를 그대로 저장하면 오병합 방어선이 무너진다. generic으로 좁힌다.
-  const identityScope = isIdentityScope(out.identity_scope) ? out.identity_scope : 'generic'
-
-  // 요약이 비면 카드가 빈 줄로 뜬다. 질문으로 대신한다.
-  const summary = out.summary.trim() || question
-
-  return { question, identityScope, body, summary, suggestions }
+  const better = blocking(second.issues).length < blocking(first.issues).length ? second : first
+  return better.content
 }

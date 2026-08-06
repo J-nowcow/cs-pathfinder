@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs'
-import { parseBlocks } from '../src/lib/markdown/blocks'
 import { questionFormIssues } from '../src/lib/llm/question-form'
+import { contentIssues } from '../src/lib/llm/content-rules'
 import { CATEGORIES } from '../src/lib/tree/categories'
 
 /**
@@ -65,26 +65,32 @@ const made: Made[] = readdirSync('/tmp/cs-harvest')
  * 생성 때의 검사를 다시 돈다. 그 사이 규칙이 바뀌었을 수 있고, 무엇보다
  * 판단 근거가 파일에 적힌 문자열이 아니라 지금 코드여야 한다.
  */
+/*
+ * 해설 규칙은 `src/lib/llm/content-rules.ts` 한 곳에만 둔다.
+ *
+ * 전에는 그 규칙이 여기 손으로 다시 적혀 있었다. 그래서 운영 경로에 검사를
+ * 붙일 때 **두 벌이 갈릴 자리**가 생겼고, 실제로 문체 규칙은 여기에만 없어서
+ * 생성분 219개 중 52개가 번역투를 달고 통과했다.
+ *
+ * 여기서만 보는 것은 루트 노드의 성질이다 — 카테고리와 질문 문장. 확장으로
+ * 만들어지는 노드는 질문을 모델이 짓지 않아서 해당이 없다.
+ */
 function usable(m: Made): string[] {
   const bad: string[] = []
   if (!CATEGORIES.includes(m.category as (typeof CATEGORIES)[number])) bad.push('카테고리')
   if (questionFormIssues(m.question).length > 0) bad.push('질문형식')
   if (m.question.length > 40) bad.push('질문길이')
-  if (m.suggestions.length !== 5) bad.push('꼬리질문수')
-  if (m.suggestions.some((s) => s.length > 35 || questionFormIssues(s).length > 0))
-    bad.push('꼬리질문')
 
-  const blocks = parseBlocks(m.body)
-  const first = blocks.findIndex((b) => b.type !== 'paragraph')
-  if (first < 0) bad.push('도식없음')
-  else if (first >= 3) bad.push('도식위치')
-  for (const b of blocks) {
-    if (b.type !== 'paragraph') continue
-    if (b.text.includes(':::') || b.text.includes('```')) bad.push('울타리누출')
-    if (b.text.length > 150) bad.push('긴문단')
+  for (const i of contentIssues({ body: m.body, suggestions: m.suggestions })) {
+    // note는 담되 세어만 둔다. 문체 하나로 멀쩡한 해설을 버리면 코퍼스가 얇아진다
+    if (i.severity === 'block') bad.push(i.rule)
+    else noted.set(i.rule, (noted.get(i.rule) ?? 0) + 1)
   }
   return bad
 }
+
+/** 버리지는 않되 세어 두는 것 */
+const noted = new Map<string, number>()
 
 /** 같은 질문이 두 번 들어가면 노드 id가 겹쳐 하나가 다른 하나를 덮는다 */
 const seen = new Set<string>()
@@ -147,6 +153,10 @@ console.log(`생성 ${made.length}개 → 담은 것 ${kept.length}개`)
 if (dropped.size > 0) {
   console.log('걸러낸 이유:')
   for (const [why, n] of [...dropped].sort((a, b) => b[1] - a[1])) console.log(`  ${why}: ${n}`)
+}
+if (noted.size > 0) {
+  console.log('담았지만 어긋난 것:')
+  for (const [why, n] of [...noted].sort((a, b) => b[1] - a[1])) console.log(`  ${why}: ${n}`)
 }
 console.log('카테고리별:')
 for (const c of CATEGORIES) console.log(`  ${c}: ${byCat.get(c) ?? 0}`)

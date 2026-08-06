@@ -298,12 +298,29 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
   // ── 8. 생성 (DB 트랜잭션 밖) ──────────────────────────────
   let content: { body: string; suggestions: string[] }
   try {
-    content = await generateNodeContent({
+    const made = await generateNodeContent({
       question: normalizedQuestion,
       identityScope,
       parentQuestion: parent.question,
       call: input.call,
     })
+    content = made
+
+    /*
+     * 남은 지적을 로그로 남긴다.
+     *
+     * 화면에는 안 쓴다. 사용자에게 "이 해설은 규칙을 어겼습니다"라고 알릴
+     * 이유가 없다. 대신 우리가 비율을 볼 수 있어야 한다 — 모델을 바꾸거나
+     * 프롬프트를 고쳤을 때 좋아졌는지 나빠졌는지는 세어야만 안다.
+     *
+     * DB 이벤트가 아니라 런타임 로그로 둔다. 스키마를 늘리지 않고도
+     * Vercel 로그에서 `rule-miss`로 긁을 수 있다.
+     */
+    if (made.issues.length > 0) {
+      console.warn(
+        `rule-miss node=${hash} retried=${made.retried} ${made.issues.map((i) => i.rule).join(',')}`,
+      )
+    }
   } catch {
     await failLease(hash)
     await releaseQuota(input.quotaKey)

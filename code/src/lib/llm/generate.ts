@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { realCaller, MODEL_GENERATE, type StructuredCaller } from '@/lib/llm/client'
+import { contentIssues, blocking, complaint, type ContentIssue } from '@/lib/llm/content-rules'
 
 const generateSchema = z.object({
   body: z.string(),
@@ -111,12 +112,21 @@ export const SYSTEM = `당신은 CS 면접 학습 콘텐츠를 쓰는 저자다.
     좋음: "DB 수준 락은 분산 환경에서 무엇이 한계인가?" (26자)
 - 부모 질문을 그대로 되풀이하지 않는다.`
 
+export type GeneratedContent = {
+  body: string
+  suggestions: string[]
+  /** 두 번째 시도까지 남은 지적. 집계용이고 화면에는 안 쓴다 */
+  issues: ContentIssue[]
+  /** 규칙 때문에 다시 불렀는가 */
+  retried: boolean
+}
+
 export async function generateNodeContent(args: {
   question: string
   identityScope: string
   parentQuestion: string | null
   call?: StructuredCaller
-}): Promise<{ body: string; suggestions: string[] }> {
+}): Promise<GeneratedContent> {
   const call = args.call ?? realCaller
 
   const prompt = [
@@ -125,22 +135,50 @@ export async function generateNodeContent(args: {
     args.parentQuestion ? `상위 맥락: ${args.parentQuestion}` : '상위 맥락: (없음)',
   ].join('\n')
 
-  const out = await call({
-    model: MODEL_GENERATE,
-    schema: generateSchema,
-    system: SYSTEM,
-    prompt,
-  })
+  const once = async (extra?: string) => {
+    const out = await call({
+      model: MODEL_GENERATE,
+      schema: generateSchema,
+      system: SYSTEM,
+      prompt: extra ? `${prompt}\n\n${extra}` : prompt,
+    })
 
-  const body = out.body.trim()
-  if (body.length === 0) {
-    throw new Error('generation returned an empty body')
+    const body = out.body.trim()
+    if (body.length === 0) {
+      throw new Error('generation returned an empty body')
+    }
+
+    const suggestions = out.suggestions
+      .map((s) => s.text.trim())
+      .filter((s) => s.length > 0)
+      .slice(0, 5)
+
+    return { body, suggestions, issues: contentIssues({ body, suggestions }) }
   }
 
-  const suggestions = out.suggestions
-    .map((s) => s.text.trim())
-    .filter((s) => s.length > 0)
-    .slice(0, 5)
+  const first = await once()
+  if (blocking(first.issues).length === 0) return { ...first, retried: false }
 
-  return { body, suggestions }
+  /*
+   * 어긋났으면 한 번만 다시 부른다.
+   *
+   * **던지지 않는다.** 규칙 위반은 사용자가 겪는 실패 중 가장 가벼운 축이다.
+   * 문단이 170자인 해설은 읽기 불편할 뿐이지만, 거기서 예외를 던지면 사용자는
+   * 아무것도 못 받는다. 잃는 쪽이 훨씬 크다.
+   *
+   * 두 번째도 어긋나면 **덜 어긋난 쪽**을 쓴다. 재시도가 더 나빠질 수도
+   * 있어서다 — 그때 새 결과를 그냥 쓰면 고치려다 악화시킨 셈이 된다.
+   *
+   * 다시 부르는 것 자체가 실패할 수도 있다(한도·과부하). 그러면 첫 번째를
+   * 그대로 쓴다. 검사를 붙였다고 전에 되던 것이 안 되면 안 된다.
+   */
+  let second: Awaited<ReturnType<typeof once>> | null = null
+  try {
+    second = await once(complaint(first.issues))
+  } catch {
+    return { ...first, retried: true }
+  }
+
+  const better = blocking(second.issues).length < blocking(first.issues).length ? second : first
+  return { ...better, retried: true }
 }
