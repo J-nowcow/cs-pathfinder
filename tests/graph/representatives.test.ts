@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { rankByCategory, quotaAt } from '@/lib/graph/representatives'
+import { rankByCategory, quotaAt, pickVisible } from '@/lib/graph/representatives'
 
 /**
  * 대표 뽑기.
@@ -89,5 +89,88 @@ describe('quotaAt', () => {
     for (let i = 1; i < zooms.length; i += 1) {
       expect(quotaAt(zooms[i])).toBeGreaterThanOrEqual(quotaAt(zooms[i - 1]))
     }
+  })
+})
+
+/**
+ * 겹치는 자리는 건너뛴다.
+ *
+ * 순위만으로 뽑으면 겹친다. 선이 많이 닿은 질문끼리 가까이 모여 있는 일이
+ * 흔하다 — 분야 안에서 대표 3개를 띄웠더니 6쌍이 겹쳤다.
+ */
+describe('pickVisible', () => {
+  const P = (id: string, x: number, y: number, category = '네트워크') => ({ id, x, y, category })
+  const rankOf = (...ids: string[]) => new Map(ids.map((id, i) => [id, i]))
+
+  it('skips a card that would overlap one already picked', () => {
+    const placed = [P('a', 0, 0), P('b', 10, 0), P('c', 500, 0)]
+    const out = pickVisible(placed, rankOf('a', 'b', 'c'), 3, 100)
+    expect([...out].sort()).toEqual(['a', 'c'])
+  })
+
+  /* 건너뛴 자리는 다음 순위가 받는다. 그래야 개수가 줄지 않는다 */
+  it('lets a lower rank take the skipped slot', () => {
+    const placed = [P('a', 0, 0), P('b', 10, 0), P('c', 500, 0), P('d', 1000, 0)]
+    const out = pickVisible(placed, rankOf('a', 'b', 'c', 'd'), 3, 100)
+    expect(out.size).toBe(3)
+    expect(out.has('b')).toBe(false)
+  })
+
+  /* 배율이 오르면 문턱이 낮아져 더 들어간다 */
+  it('fits more as the threshold shrinks', () => {
+    const placed = [P('a', 0, 0), P('b', 50, 0), P('c', 100, 0)]
+    expect(pickVisible(placed, rankOf('a', 'b', 'c'), 3, 80).size).toBe(2)
+    expect(pickVisible(placed, rankOf('a', 'b', 'c'), 3, 10).size).toBe(3)
+  })
+
+  /* 카테고리마다 따로 센다. 큰 분야가 작은 분야 자리를 먹으면 안 된다 */
+  it('counts the quota per category', () => {
+    const placed = [
+      P('n1', 0, 0, '네트워크'),
+      P('n2', 500, 0, '네트워크'),
+      P('d1', 0, 5000, '데이터베이스'),
+    ]
+    const rank = new Map([['n1', 0], ['n2', 1], ['d1', 0]])
+    const out = pickVisible(placed, rank, 1, 100)
+    expect([...out].sort()).toEqual(['d1', 'n1'])
+  })
+
+  /* 개요에서는 아무것도 안 뽑는다 */
+  it('picks nothing when the quota is zero', () => {
+    expect(pickVisible([P('a', 0, 0)], rankOf('a'), 0, 100).size).toBe(0)
+  })
+
+  /* 같은 조건이면 늘 같은 결과여야 한다. 흔들리면 확대할 때마다 달라진다 */
+  it('is deterministic', () => {
+    const placed = [P('a', 0, 0), P('b', 500, 0), P('c', 1000, 0)]
+    const rank = rankOf('a', 'b', 'c')
+    const first = [...pickVisible(placed, rank, 2, 100)].sort()
+    const second = [...pickVisible([...placed].reverse(), rank, 2, 100)].sort()
+    expect(first).toEqual(second)
+  })
+})
+
+/**
+ * 분야 이름 자리는 비운다.
+ *
+ * 카드끼리만 안 겹치게 했더니 분야 이름을 가렸다. 그 이름이 지도의 뼈대라
+ * 카드보다 우선한다.
+ */
+describe('pickVisible · 피할 자리', () => {
+  const P = (id: string, x: number, y: number) => ({ id, x, y, category: '네트워크' })
+
+  it('keeps cards away from a reserved spot', () => {
+    const placed = [P('a', 0, 0), P('b', 500, 0)]
+    const rank = new Map([['a', 0], ['b', 1]])
+    const out = pickVisible(placed, rank, 2, 100, [{ x: 0, y: 0 }], 60)
+    expect(out.has('a')).toBe(false)
+    expect(out.has('b')).toBe(true)
+  })
+
+  /* 피할 자리가 없으면 예전과 같이 동작한다 */
+  it('behaves as before when nothing is reserved', () => {
+    const placed = [P('a', 0, 0), P('b', 500, 0)]
+    const rank = new Map([['a', 0], ['b', 1]])
+    expect(pickVisible(placed, rank, 2, 100).size).toBe(2)
   })
 })

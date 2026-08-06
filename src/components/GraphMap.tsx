@@ -7,7 +7,7 @@ import '@xyflow/react/dist/style.css'
 import { layoutGlobal, categorySummary, type Placed } from '@/lib/graph/layout'
 import { analyzeConnectivity, mapStatus } from '@/lib/graph/connectivity'
 import { strokeWidthAt } from '@/lib/graph/stroke'
-import { rankByCategory, quotaAt } from '@/lib/graph/representatives'
+import { rankByCategory, quotaAt, pickVisible } from '@/lib/graph/representatives'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
 /**
@@ -236,7 +236,6 @@ function Layers({
    * 확대하는 동안 이름이 바뀌어 어지럽고, 무엇보다 아까 본 것을 다시 못 찾는다.
    */
   const rank = useMemo(() => rankByCategory(placed, edges), [placed, edges])
-  const quota = quotaAt(zoom)
 
   /*
    * 카드와 점도 화면상 크기를 지킨다.
@@ -258,6 +257,29 @@ function Layers({
    * 화면상 44px를 목표로 잡는다 — 그보다 작으면 옆 점이 눌린다.
    */
   const hitSize = Math.min(2400, Math.max(dotSize, 44 / zoom))
+
+  /*
+   * 실제로 이름을 띄울 것.
+   *
+   * 순위만으로 뽑으면 겹친다. 선이 많이 닿은 질문끼리 가까이 모여 있어서,
+   * 분야 안에서 대표 3개를 띄웠더니 6쌍이 겹쳤다. 앞 카드와 겹치는 자리는
+   * 건너뛰고 다음 순위가 대신 받는다.
+   *
+   * 문턱은 카드 폭이다. 배율이 오르면 좌표 단위 카드 폭이 줄어 문턱도 낮아지고,
+   * 그만큼 더 들어간다 — 확대할수록 드러난다는 성질이 자연히 따라온다.
+   */
+  const visible = useMemo(
+    () =>
+      pickVisible(
+        placed,
+        rank,
+        quotaAt(zoom),
+        cardW * 1.08,
+        // 분야 이름 자리는 비운다. 그 이름이 지도의 뼈대라 카드보다 우선한다
+        summary.map((g) => ({ x: g.x, y: g.y - labelGap })),
+      ),
+    [placed, rank, zoom, cardW, summary, labelGap],
+  )
 
   /*
    * 카테고리로 들어간다.
@@ -363,7 +385,7 @@ function Layers({
             순위는 고정이라 확대하는 동안 보이던 이름이 사라지지 않는다.
           */}
           {placed.map((p) => {
-            const shown = (rank.get(p.id) ?? Infinity) < quota
+            const shown = visible.has(p.id)
 
             if (!shown) {
               /*
