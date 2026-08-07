@@ -653,7 +653,7 @@ function Viewport({ children }: { children: React.ReactNode }) {
  *
  * 제목은 즉시 띄우고 본문만 받아온다. 누른 것이 맞는지부터 보여야 기다릴 수 있다.
  */
-function Sheet({
+export function Sheet({
   node,
   links,
   cameFrom,
