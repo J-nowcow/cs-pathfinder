@@ -86,8 +86,15 @@ const flagged = reviewedIds().rejected
 await ensureSeeded()
 
 const db = await getDb()
-const rows = await db.query<{ id: string; question: string; category: string; body: string }>(
+const rows = await db.query<{
+  id: string
+  number: number
+  question: string
+  category: string
+  body: string
+}>(
   `select n.id,
+          n.number,
           n.normalized_question as question,
           n.primary_category    as category,
           n.body
@@ -165,10 +172,10 @@ for (const category of CATEGORIES) {
           '판단 근거는 [교정 기록](../../code/docs/audit/fixes/)에 있다.\n\n'
         : ''
       return (
-        `## ${r.question}\n\n` +
+        `## ${r.number}. ${r.question}\n\n` +
         warn +
         `${toGithubMarkdown(r.body)}\n\n` +
-        `[이 질문 파고들기 →](${SITE_URL}/q/${r.id})\n`
+        `[#${r.number} 파고들기 →](${SITE_URL}/q/${r.number})\n`
       )
     })
     .join('\n---\n\n')

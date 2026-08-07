@@ -15,6 +15,7 @@ import { ReadingView } from '@/components/ReadingView'
  */
 const NODE = {
   id: 'n1',
+  number: 1,
   question: '질문 하나는?',
   body: '본문이다.',
   identityScope: 'generic',

@@ -161,6 +161,7 @@ export function ReadingView({
         const raw = await res.json()
         const loaded: ReadingNode = {
           id: raw.id,
+          number: typeof raw.number === 'number' ? raw.number : 0,
           question: raw.question,
           body: raw.body,
           identityScope: raw.identity_scope,
@@ -272,6 +273,13 @@ export function ReadingView({
             ← 질문 목록
           </Link>
           <div className="flex items-center gap-3">
+            {/*
+              번호를 보여준다. 레포와 이슈에서 이 질문을 부르는 이름이고
+              주소에도 `/q/3`으로 쓸 수 있다. 36자짜리 UUID는 사람이 못 부른다.
+            */}
+            {node.number > 0 && (
+              <span className="font-mono text-[11px] text-faint">#{node.number}</span>
+            )}
             <span className="font-mono text-[11px] text-faint">깊이 {path.length - 1}</span>
             {/* 파고든 다음에야 공유할 게 생긴다. 버튼은 스스로 그때 나타난다 */}
             <ShareSheet journey={journey} />

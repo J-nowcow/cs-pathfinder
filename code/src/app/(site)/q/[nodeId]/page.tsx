@@ -57,6 +57,7 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
 
   const initial: ReadingNode = {
     id: node.id,
+    number: node.number,
     question: node.question,
     body: node.body,
     identityScope: node.identityScope,

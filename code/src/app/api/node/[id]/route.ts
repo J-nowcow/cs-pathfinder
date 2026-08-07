@@ -25,6 +25,7 @@ export async function GET(
   return Response.json(
     {
       id: node.id,
+      number: node.number,
       question: node.question,
       body: node.body,
       identity_scope: node.identityScope,

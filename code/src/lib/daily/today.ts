@@ -74,6 +74,7 @@ async function hydrate(row: TreeRow | undefined, today: string): Promise<DailyTr
     isToday: row.publish_date === today,
     root: {
       id: node.id,
+      number: node.number,
       question: node.question,
       body: node.body,
       identityScope: node.identityScope,

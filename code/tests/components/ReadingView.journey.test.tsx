@@ -21,6 +21,7 @@ import { serializeJourney, deserializeJourney, JOURNEY_STORAGE_KEY } from '@/lib
  */
 const NODE = {
   id: 'new-one',
+  number: 1,
   question: '새로 들어온 질문은?',
   body: '본문이다.',
   identityScope: 'generic',

@@ -7,6 +7,8 @@ export type PublicSuggestion = {
 
 export type PublicNode = {
   id: string
+  /** 사람이 읽는 짧은 번호. 주소와 레포에 이것을 쓴다 */
+  number: number
   question: string
   body: string
   identityScope: string
@@ -53,6 +55,8 @@ function toNode(raw: Record<string, unknown>): PublicNode | null {
 
   return {
     id: raw.id,
+    /* 서버가 안 실어 주면 0. 화면은 0을 안 보여준다 */
+    number: typeof raw.number === 'number' ? raw.number : 0,
     question: raw.question,
     body: typeof raw.body === 'string' ? raw.body : '',
     identityScope: typeof raw.identity_scope === 'string' ? raw.identity_scope : 'generic',
