@@ -52,29 +52,36 @@ if (SITE_URL.includes('localhost')) {
 const fileOf = (category: string) => `${categoryAnchor(category).replace(/^c-/, '')}.md`
 
 /**
- * 대조에서 지적이 나온 편.
+ * 대조에서 지적이 나왔고 **아직 안 고친 편.**
  *
- * 파일 맨 위에 "열 편 중 셋에 지적이 있다"고만 적으면 **읽는 사람은 어느 셋인지
- * 모른다.** 결국 전부를 반쯤 의심하며 읽거나, 아무것도 의심하지 않게 된다.
- * 둘 다 나쁘다.
+ * 처음에는 지적 목록(`hard-errors.md`)의 80편 전부에 표시를 달았다. 그때는
+ * 사람이 아직 안 본 상태라 그게 맞았다.
  *
- * 그 셋을 그 자리에서 표시한다. 나머지는 지적이 없었다는 뜻이 되므로 경고의
- * 값어치가 생긴다.
+ * 지금은 그 80편을 하나씩 판정해 **77편을 고쳤다**(`docs/audit/fixes/`).
+ * 고친 편에까지 "지적이 나왔다"를 달아 두면 거짓이다 — 읽는 사람은 지금 보는
+ * 글이 아직 틀린 줄 안다.
  *
- * 지적 목록(`hard-errors.md`)에서 id를 읽는다. 그 파일이 없으면 표시를 안 하고
- * 넘어간다 — 표시가 없는 것이 잘못된 표시보다 낫다.
+ * 그래서 교정안에서 `판정: 고침`인 편은 표시를 뺀다. `판정: 반려`인 편만
+ * 남기되 문구를 바꾼다 — 지적은 있었지만 검토해서 그대로 두기로 한 것이다.
  */
-function flaggedIds(): Set<string> {
-  const path = resolve(process.cwd(), 'docs/audit/2026-08-07-hard-errors.md')
-  if (!existsSync(path)) {
-    console.error('지적 목록이 없다. 표시 없이 뜬다.')
-    return new Set()
+function reviewedIds(): { rejected: Set<string> } {
+  const dir = resolve(process.cwd(), 'docs/audit/fixes')
+  const rejected = new Set<string>()
+  if (!existsSync(dir)) return { rejected }
+
+  for (const f of readdirSync(dir).filter((f) => f.endsWith('.md'))) {
+    const text = readFileSync(`${dir}/${f}`, 'utf8')
+    let id = ''
+    for (const line of text.split('\n')) {
+      const head = /^##\s+([0-9a-f-]{36})/.exec(line)
+      if (head) { id = head[1]; continue }
+      if (/^판정:\s*반려/.test(line) && id) rejected.add(id)
+    }
   }
-  const ids = readFileSync(path, 'utf8').match(/^`([0-9a-f-]{36})`/gm) ?? []
-  return new Set(ids.map((s) => s.replace(/`/g, '')))
+  return { rejected }
 }
 
-const flagged = flaggedIds()
+const flagged = reviewedIds().rejected
 
 await ensureSeeded()
 
@@ -112,12 +119,12 @@ function header(category: string, n: number, flaggedHere: number): string {
   return [
     `# ${category}`,
     '',
-    `질문 ${n}개 · 지적이 나온 해설 ${flaggedHere}개. ` +
+    `질문 ${n}개 · 검토 후 유지 ${flaggedHere}개. ` +
       `[서비스에서 보기](${SITE_URL}/questions#${categoryAnchor(category)})`,
     '',
-    '> 이 글은 대부분 AI가 썼다. 전수 대조에서 지적이 나온 해설에는 제목 바로 아래',
-    '> ⚠️ 표시를 달았다. **표시가 없으면 대조에서 지적이 안 나온 것**이다.',
-    '> 지적 전문은 [하드 오류 목록](../../code/docs/audit/2026-08-07-hard-errors.md)에 있다.',
+    '> 이 글은 대부분 AI가 썼다. 전수 대조에서 나온 지적 80편을 하나씩 판정해',
+    '> **77편을 고쳤다**([교정 기록](../../code/docs/audit/fixes/)). 검토 후 그대로',
+    '> 두기로 한 편에만 제목 아래 한 줄을 달았다.',
     '> 틀린 곳을 찾으면 이슈로 알려 주면 고친다.',
     '',
     '> 도식은 서비스에서 그림으로 그려진다. 여기서는 GitHub이 그릴 수 있는',
@@ -154,8 +161,8 @@ for (const category of CATEGORIES) {
        * 확정처럼 쓰면 멀쩡한 글에 없는 흠을 만든다.
        */
       const warn = flagged.has(r.id)
-        ? '> ⚠️ 이 해설은 교차 대조에서 **사실 지적이 나왔다**(사람 검토 전). ' +
-          '지적 내용은 [하드 오류 목록](../../code/docs/audit/2026-08-07-hard-errors.md)에 있다.\n\n'
+        ? '> 이 해설은 교차 대조에서 지적이 나왔으나 **검토 후 그대로 두기로 했다.** ' +
+          '판단 근거는 [교정 기록](../../code/docs/audit/fixes/)에 있다.\n\n'
         : ''
       return (
         `## ${r.question}\n\n` +
@@ -173,7 +180,7 @@ for (const category of CATEGORIES) {
   )
   index.push(
     `- [${category}](${fileOf(category)}) — ${mine.length}개` +
-      (flaggedHere > 0 ? ` (지적 ${flaggedHere})` : ''),
+      (flaggedHere > 0 ? ` (검토 후 유지 ${flaggedHere})` : ''),
   )
   written += 1
 }
@@ -197,5 +204,5 @@ writeFileSync(
 )
 
 const marked = rows.filter((r) => flagged.has(r.id)).length
-console.log(`해설 ${rows.length}개 → ${written}개 파일 · 지적 표시 ${marked}개 (${DIR})`)
+console.log(`해설 ${rows.length}개 → ${written}개 파일 · 검토 후 유지 표시 ${marked}개 (${DIR})`)
 process.exit(0)
