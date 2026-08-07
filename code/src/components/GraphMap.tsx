@@ -55,6 +55,28 @@ type Props = { data: MapData }
 export function GraphMap({ data }: Props) {
   const [openId, setOpenId] = useState<string | null>(null)
 
+  /*
+   * 시트 안에서 이어진 질문을 눌러 옮겨왔을 때, **방금까지 보던 질문**이
+   * 무엇이었는지 기억한다.
+   *
+   * 이어진 질문은 부모·자식을 한 목록으로 모으므로 **방금 온 질문이 늘 그
+   * 안에 섞여 있다.** 표시가 없으면 사용자가 그것을 새로운 갈래로 알고 눌러
+   * 왔던 곳으로 되돌아간다. 지도에서 길을 잃는 가장 흔한 방식이다.
+   *
+   * 지도의 점을 눌러 새로 연 것은 옮겨온 것이 아니므로 지운다.
+   */
+  const [cameFrom, setCameFrom] = useState<string | null>(null)
+
+  const openFromMap = useCallback((id: string) => {
+    setCameFrom(null)
+    setOpenId(id)
+  }, [])
+
+  const openFromSheet = useCallback((id: string) => {
+    setCameFrom(openId)
+    setOpenId(id)
+  }, [openId])
+
   const placed = useMemo(() => layoutGlobal(data.nodes), [data.nodes])
   const status = useMemo(
     () => mapStatus(analyzeConnectivity(data.nodes.map((n) => n.id), data.edges)),
@@ -125,15 +147,19 @@ export function GraphMap({ data }: Props) {
       </header>
 
       <div className="relative flex-1">
-        <Canvas placed={placed} summary={summary} edges={data.edges} onOpen={setOpenId} />
+        <Canvas placed={placed} summary={summary} edges={data.edges} onOpen={openFromMap} />
       </div>
 
       {openId && (
         <Sheet
           node={byId.get(openId) ?? null}
           links={neighbors.get(openId) ?? []}
-          onOpen={setOpenId}
-          onClose={() => setOpenId(null)}
+          cameFrom={cameFrom}
+          onOpen={openFromSheet}
+          onClose={() => {
+            setCameFrom(null)
+            setOpenId(null)
+          }}
         />
       )}
     </div>
@@ -630,12 +656,15 @@ function Viewport({ children }: { children: React.ReactNode }) {
 function Sheet({
   node,
   links,
+  cameFrom,
   onClose,
   onOpen,
 }: {
   node: { id: string; question: string } | null
   /** 이 질문과 이어진 것들. 어느 방향이든 한 목록으로 본다 */
   links: Array<{ id: string; question: string; reason?: string }>
+  /** 방금까지 보던 질문. 이어진 질문 목록에 섞여 있으면 표시한다 */
+  cameFrom: string | null
   onClose: () => void
   onOpen: (id: string) => void
 }) {
@@ -728,8 +757,21 @@ function Sheet({
                   <button
                     type="button"
                     onClick={() => onOpen(l.id)}
-                    className="w-full rounded-lg border border-line px-3 py-2.5 text-left transition-colors hover:border-accent"
+                    className={
+                      l.id === cameFrom
+                        ? 'w-full rounded-lg border border-dashed border-line bg-surface px-3 py-2.5 text-left transition-colors hover:border-accent'
+                        : 'w-full rounded-lg border border-line px-3 py-2.5 text-left transition-colors hover:border-accent'
+                    }
                   >
+                    {/*
+                      방금 온 곳임을 말한다. 테두리만 바꾸면 색을 못 보는 사람과
+                      낭독기가 못 읽으므로 글자로 적는다.
+                    */}
+                    {l.id === cameFrom && (
+                      <span className="mb-0.5 block text-[11px] font-medium text-faint">
+                        ← 방금 여기서 왔어요
+                      </span>
+                    )}
                     <span className="block text-[13px] leading-[1.5]">{l.question}</span>
                     {l.reason && (
                       <span className="mt-1 block text-[12px] leading-[1.55] text-faint">{l.reason}</span>
