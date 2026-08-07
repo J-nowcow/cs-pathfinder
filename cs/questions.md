@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 249개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 257개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -10,6 +10,7 @@
 
 - [DB 커넥션을 매번 새로 맺는 비용이 큰 이유는?](https://cs-pathfinder.vercel.app/q/5d9cb401-d07f-46db-885b-c2a94c063919)
 - [인덱스를 만들었는데 실행 계획에서 타지 않는 이유는?](https://cs-pathfinder.vercel.app/q/89d388cf-89c4-4956-aaf6-1694bfb4e576)
+- [서브쿼리를 언제 조인으로 재작성해야 성능이 향상되는가?](https://cs-pathfinder.vercel.app/q/67fb7a7c-ecfe-4846-bb47-87c1f8c06079) — 2026-08-06
 - [격리 수준을 올리면 무엇을 잃는가?](https://cs-pathfinder.vercel.app/q/070512bd-81b4-4603-9c9a-7f0c5b726798)
 - [데이터베이스 정규화를 수행하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/de461af2-e76f-4420-85f5-c0c86b9d951d)
 - [트랜잭션 격리 수준을 결정하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/c41f45e9-a7c0-4357-8947-e82a6baf3b50)
@@ -62,6 +63,7 @@
 
 - [equals를 재정의할 때 hashCode도 함께 재정의해야 하는 이유는?](https://cs-pathfinder.vercel.app/q/2e8d9a00-0d82-4044-bbf9-66e543fb9a1e)
 - [setTimeout(0)이 즉시 실행되지 않는 이유는?](https://cs-pathfinder.vercel.app/q/55230228-e25f-440d-ab7a-f6da114dbb65)
+- [메모리 관점에서 값 타입과 참조 타입의 선택 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/718653d4-4ede-4faf-a3c7-33f5a3639ebc) — 2026-08-07
 - [가비지 컬렉션이 멈춤을 만드는 이유는?](https://cs-pathfinder.vercel.app/q/acd8d116-38e7-4e74-82ae-3075e2ff9956)
 - [객체와 호출 프레임은 왜 따로 저장하는가?](https://cs-pathfinder.vercel.app/q/311895c6-7c6c-4d1d-8961-691de7f6f96d)
 - [순환 참조 객체도 회수할 수 있는 이유는?](https://cs-pathfinder.vercel.app/q/25d4b8af-8c78-490a-ad1e-471800e6255d)
@@ -147,6 +149,7 @@
 - [이진 탐색 트리를 사용하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/86f59092-177d-47db-90c0-c02bcdd29b86)
 - [재귀 함수 사용 시 스택 오버플로가 발생하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/b7d2bf6d-44dc-4f87-b4b6-0a5badabbb01)
 - [우선순위 큐를 힙으로 구현하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/9ac88a5c-11c3-4a52-b642-09a97936fdfa)
+- [B-tree는 왜 디스크에 유리한가?](https://cs-pathfinder.vercel.app/q/212ffacb-9cca-4c8f-9cb5-906568c356b3)
 
 ## 프레임워크
 
@@ -176,10 +179,12 @@
 - [인터페이스와 추상 클래스는 무엇으로 구분하는가?](https://cs-pathfinder.vercel.app/q/bbd92984-377a-4412-8c70-4d7a73812fe2)
 - [스트림의 지연 연산은 왜 필요한가?](https://cs-pathfinder.vercel.app/q/808ae487-ceed-42e8-8eb2-7de7dc8b7497)
 - [ORM을 사용하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/6876f3f6-e938-491f-980c-739b5d094da5)
+- [단위 시험과 통합 시험은 무엇으로 가르는가?](https://cs-pathfinder.vercel.app/q/2a1ae829-21b3-42da-8593-599384cd6ec3)
 
 ## 아키텍처 · 분산시스템
 
 - [분산 트랜잭션에서 Saga 패턴이 필요한 이유는?](https://cs-pathfinder.vercel.app/q/d06deb06-5f59-458b-844b-50e9d8800547)
+- [이벤트 소싱을 도입할 때의 트레이드오프는 무엇인가?](https://cs-pathfinder.vercel.app/q/e20bf8cd-8e00-40aa-9c8a-8b798a574286) — 2026-08-05
 - [메시지 큐를 두면 무엇을 얻고 무엇을 잃는가?](https://cs-pathfinder.vercel.app/q/76123298-3456-4517-a4a6-5455a6626ded)
 - [캐시를 지우는 일이 어려운 이유는?](https://cs-pathfinder.vercel.app/q/9106cc19-bdbc-4862-a28c-83d6573741a3)
 - [분산 시스템에서 CAP 중 무엇을 포기하게 되는가?](https://cs-pathfinder.vercel.app/q/c477cda6-0fed-4650-86da-ba77f94f9eeb)
@@ -195,6 +200,7 @@
 - [팩토리 메소드 패턴을 언제 사용하는가?](https://cs-pathfinder.vercel.app/q/c455ab5e-f217-4cee-bb5c-bd9486e9ed5b)
 - [스트레티지 패턴을 사용하는 판단 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/97035d84-ac30-45eb-8af1-758190d3769d)
 - [컴포지트 패턴을 어떤 상황에서 사용하는가?](https://cs-pathfinder.vercel.app/q/6c67c76c-45ce-4c5e-9bec-b86322a0d2cb)
+- [Raft는 왜 과반수를 요구하는가?](https://cs-pathfinder.vercel.app/q/d514a598-a059-44d7-8d12-acf74d54d585)
 
 ## 프론트엔드
 
@@ -251,6 +257,8 @@
 - [TLS 핸드셰이크의 핵심 목적은 무엇인가?](https://cs-pathfinder.vercel.app/q/a4ec9e80-ba7e-409b-91c8-68118a65141f)
 - [가상 메모리 관리에서 페이징과 세그먼테이션은 무엇으로 구분하는가?](https://cs-pathfinder.vercel.app/q/f872a4d2-b77b-424a-b900-2a72ed50075e)
 - [함수형 프로그래밍을 적용하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/248eb887-bf2c-4f81-ae85-54fa864c0ca4)
+- [컨테이너는 가상 머신과 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/1728103c-348b-49d7-a413-01febbae2993)
+- [SQL 인젝션은 무엇으로 막는가?](https://cs-pathfinder.vercel.app/q/575ab839-a535-4bd7-a57e-f852164914ad)
 
 ## 모바일
 
