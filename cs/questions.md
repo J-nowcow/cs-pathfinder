@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 257개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 258개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -34,6 +34,7 @@
 - [TCP 연결을 끊을 때 TIME_WAIT 상태가 필요한 이유는?](https://cs-pathfinder.vercel.app/q/6928bfd0-7ad2-4316-8122-c9b62c8edce3)
 - [HTTP/2는 HTTP/1.1의 무엇을 고쳤는가?](https://cs-pathfinder.vercel.app/q/d29e123e-1e44-4e8b-8c97-98b8ee7f7604)
 - [DNS 조회는 어떤 순서로 도는가?](https://cs-pathfinder.vercel.app/q/e701e42e-a3dc-44b7-baa1-332f197e90b1)
+- [DNS 질의 시 재귀적 질의와 반복적 질의의 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/62e02f6b-29f6-4147-97a3-651d066b5e3f) — 2026-08-08
 - [수신자는 여유 있는데 전송이 느린 이유는?](https://cs-pathfinder.vercel.app/q/944b54e3-4faf-4a40-82e7-80286f3e9109)
 - [연결 설정 왕복을 언제 줄일 수 있는가?](https://cs-pathfinder.vercel.app/q/af9fd00b-4fa7-4b8c-8f3f-ea6b0470bdbe)
 - [신뢰성보다 지연을 우선할 기준은?](https://cs-pathfinder.vercel.app/q/d8359e86-e42c-491b-b0f7-c7e426833cd2)
