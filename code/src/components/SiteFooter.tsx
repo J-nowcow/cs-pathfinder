@@ -45,6 +45,11 @@ export function SiteFooter() {
                   질문 지도
                 </Link>
               </li>
+              <li>
+                <Link href="/me" className="text-[13px] text-muted hover:text-ink">
+                  내가 판 자리
+                </Link>
+              </li>
               {/*
                 개인정보처리방침은 찾을 수 있어야 뜻이 있다. 만들어 두고 아무
                 데서도 안 걸어 두면 없는 것과 같다. 바닥글이 모든 화면에 붙으므로

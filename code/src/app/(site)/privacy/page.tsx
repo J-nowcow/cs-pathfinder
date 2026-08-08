@@ -63,9 +63,15 @@ export default function PrivacyPage() {
           성별, 결제 정보. 계정이 없으므로 받을 자리도 없다.
         </p>
         <p>
-          어떤 질문을 눌러 어디까지 파고들었는지를 나타내는 <strong className="text-ink">지도</strong>는
+          어떤 질문을 눌러 어디까지 파고들었는지를 나타내는 <strong className="text-ink">지도</strong>와,
+          며칠에 몇 편을 팠는지를 나타내는 <strong className="text-ink">판 자국</strong>은
           브라우저 안(localStorage)에만 있다. 서버로 보내지 않는다. 브라우저 저장소를 비우면
           같이 사라지고, 다른 기기에서는 보이지 않는다.
+        </p>
+        <p>
+          판 자국에는 <strong className="text-ink">날짜와 질문 번호</strong>만 적는다. 무엇을 검색했는지,
+          어떤 글을 얼마나 오래 봤는지는 적지 않는다. 남기는 날 수에 상한이 있어 오래된 것부터
+          지워진다.
         </p>
       </Section>
 

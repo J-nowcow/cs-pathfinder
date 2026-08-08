@@ -1,6 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { loadStreak, saveStreak, todayKst } from '@/lib/streak/client'
+import { recordRead } from '@/lib/streak/storage'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import {
@@ -135,6 +137,23 @@ export function ReadingView({
    */
   useEffect(() => {
     window.scrollTo({ top: 0 })
+  }, [node.id])
+
+  /**
+   * 오늘 이 질문을 팠다고 적는다.
+   *
+   * 여정에도 발자국이 남지만 **거기에는 시각이 없다**(`journey/types.ts`).
+   * 잔디는 날짜가 있어야 그린다. 여정 형식을 바꾸면 지금 저장된 기록이 통째로
+   * 버려지므로 따로 적는다.
+   *
+   * 같은 질문을 다시 열어도 그날 한 번만 센다. 새로고침으로 잔디가 진해지면
+   * 그 숫자는 아무 뜻이 없다.
+   */
+  useEffect(() => {
+    const day = todayKst()
+    const before = loadStreak()
+    const after = recordRead(before, day, node.id)
+    if (after !== before) saveStreak(after)
   }, [node.id])
 
   /** 이미 지나온 발자국으로 이동한다. 본문은 캐시에 없으면 받아온다 */
