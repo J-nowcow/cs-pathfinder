@@ -8,6 +8,7 @@ import { EXAMPLE_NODES, type ExampleNode } from '../../../data/example-nodes'
 import { GENERATED_NODES } from '../../../data/generated-nodes'
 import { AUTHORED_NODES } from '../../../data/authored-nodes'
 import { ON_DEMAND_NODES } from '../../../data/on-demand-nodes'
+import { QUESTION_RENAMES } from '../../../data/renames'
 import { SEED_RELATIONS, type SeedRelation } from '../../../data/relations'
 import { saveRelations, type NewRelation } from '@/lib/db/relations'
 
@@ -84,8 +85,22 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
     for (const r of rows) suggestionText.set(`${r.qnode_id}:${r.position}`, r.text)
   }
 
+  /*
+   * **제목을 바꾼 것은 옛 제목으로 찾는다.**
+   *
+   * 위 지도는 지금 저장된 제목으로 만들어져 있다. 파일에서 제목만 고치면
+   * 여기서 못 찾고 새 행이 하나 더 생긴다 -- 옛 행은 옛 제목으로 목록에
+   * 그대로 남는다. 26편을 꺼냈을 때 그렇게 291행이 317행이 됐다.
+   *
+   * `data/renames.ts`에 옛 제목을 적어 두면 그 행을 찾아 제목만 고친다.
+   * 번호와 주소가 살아 있고 판 경로도 안 끊긴다.
+   */
+  const renamedFrom = new Map(QUESTION_RENAMES.map((r) => [r.to.trim(), r.from.trim()]))
+
   for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]) {
-    const id = existing.get(ex.question.trim()) ?? rootNodeId(ex)
+    const q = ex.question.trim()
+    const old = renamedFrom.get(q)
+    const id = existing.get(q) ?? (old ? existing.get(old) : undefined) ?? rootNodeId(ex)
 
     /*
      * **`origin`도 함께 `batch`로 올린다.**
@@ -105,8 +120,11 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
       `insert into qnode
          (id, identity_scope, normalized_question, body, primary_category, status, origin)
        values ($1, $2, $3, $4, $5, 'ready', 'batch')
-       on conflict (id) do update set body = excluded.body, origin = 'batch'
-         where qnode.body is distinct from excluded.body or qnode.origin <> 'batch'
+       on conflict (id) do update set body = excluded.body, origin = 'batch',
+         normalized_question = excluded.normalized_question
+         where qnode.body is distinct from excluded.body
+            or qnode.origin <> 'batch'
+            or qnode.normalized_question is distinct from excluded.normalized_question
        returning id, (xmax = 0) as created`,
       [id, ex.identityScope, ex.question, ex.body, ex.category],
     )
