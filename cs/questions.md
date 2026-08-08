@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 258개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 317개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -10,8 +10,18 @@
 
 - [DB 커넥션을 매번 새로 맺는 비용이 큰 이유는?](https://cs-pathfinder.vercel.app/q/5d9cb401-d07f-46db-885b-c2a94c063919)
 - [인덱스를 만들었는데 실행 계획에서 타지 않는 이유는?](https://cs-pathfinder.vercel.app/q/89d388cf-89c4-4956-aaf6-1694bfb4e576)
+- [데이터베이스 커넥션 풀의 적정 크기를 설정할 때 왜 CPU 코어 수를 기준으로 설정하는지 그 이유가 궁금합니다.](https://cs-pathfinder.vercel.app/q/b6ce7342-8bb3-49a8-be05-ff7c3f45d8ff)
+- [분산 환경에서 데이터베이스 수준의 락이 가지는 한계점과 이를 해결하기 위한 분산 락의 역할은 무엇인가?](https://cs-pathfinder.vercel.app/q/ed754fd1-035b-4b98-b169-a66fd2024b4e)
+- [Redis를 활용한 분산 락 구현 시 스핀 락 방식과 Pub/Sub 방식의 성능 및 구조적 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/f995b280-0d7f-405f-846d-2b7cda082021)
+- [낙관적 락을 사용할 때 데이터 충돌이 발생하면 애플리케이션 수준에서 재시도 로직을 어떻게 구현하는가?](https://cs-pathfinder.vercel.app/q/ce219de9-f5fb-45ac-bcff-55edd4b4b8ec)
+- [데이터베이스 격리 수준을 높이면 전체 처리량은 어떻게 변화하는가?](https://cs-pathfinder.vercel.app/q/0da10686-c707-4e28-beef-737416af5e1f)
 - [서브쿼리를 언제 조인으로 재작성해야 성능이 향상되는가?](https://cs-pathfinder.vercel.app/q/67fb7a7c-ecfe-4846-bb47-87c1f8c06079) — 2026-08-06
 - [격리 수준을 올리면 무엇을 잃는가?](https://cs-pathfinder.vercel.app/q/070512bd-81b4-4603-9c9a-7f0c5b726798)
+- [데이터베이스 옵티마이저에서 서브쿼리 언네스팅의 정의와 발생 조건은 무엇인가?](https://cs-pathfinder.vercel.app/q/731d1828-bec1-4118-8fad-6f211e38f3ad)
+- [데이터베이스 옵티마이저에서 서브쿼리 언네스팅과 뷰 병합(View Merging)의 차이점은 무엇인가?](https://cs-pathfinder.vercel.app/q/18fcb0bd-12e5-4a18-8b63-2c4330a53af4)
+- [데이터베이스에서 EXISTS 서브쿼리와 IN 서브쿼리를 조인으로 변환할 때 발생하는 차이점은 무엇인가?](https://cs-pathfinder.vercel.app/q/9e5a2ea6-ae8f-4cb4-b3fc-0c16b9e0d465)
+- [데이터베이스에서 ANTI JOIN과 SEMI JOIN의 차이점은 무엇인가?](https://cs-pathfinder.vercel.app/q/f9a0b251-a94b-4b97-ad0f-957c49073c66)
+- [Hash Anti Join은 데이터베이스 내부에서 구체적으로 어떻게 동작하는가?](https://cs-pathfinder.vercel.app/q/3696debd-7e93-44aa-9b0c-a106be574bf8)
 - [데이터베이스 정규화를 수행하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/de461af2-e76f-4420-85f5-c0c86b9d951d)
 - [트랜잭션 격리 수준을 결정하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/c41f45e9-a7c0-4357-8947-e82a6baf3b50)
 - [데이터베이스 뷰는 언제 사용하는가?](https://cs-pathfinder.vercel.app/q/577db5ee-a456-43d1-8b9f-14178363b74d)
@@ -28,13 +38,21 @@
 - [낙관적 락과 비관적 락은 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/eb4d321c-88a1-491d-b344-3980915332a5)
 - [인덱스 범위 스캔과 전체 스캔 중 무엇을 선택하는가?](https://cs-pathfinder.vercel.app/q/552308dc-7dc6-4fb3-b64c-fcd4621f6859)
 - [SQL과 NoSQL은 어떤 기준으로 선택하는가?](https://cs-pathfinder.vercel.app/q/17beb041-8cb3-4c6a-820e-3ff9d60d93fb)
+- [SQL에서 뷰나 인라인 뷰를 사용하여 쿼리를 작성할 때 성능 최적화를 위해 주의해야 할 점은 무엇인가?](https://cs-pathfinder.vercel.app/q/659355a6-1670-497f-ae52-55059ff9d6de)
+- [고차원 데이터에서 거리 계산 시 발생하는 문제는 무엇인가?](https://cs-pathfinder.vercel.app/q/a6976146-8c02-4d06-97c5-d83ad17a52d9)
+- [갑자기 꺼져도 커밋한 것이 남는 이유는?](https://cs-pathfinder.vercel.app/q/9ae31a22-f8af-4040-96ff-e3dcce7afe8e)
+- [읽기만 하는데도 잠금이 걸리는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/a530a092-d500-4353-ba45-4b6b53c852a7)
+- [인덱스를 어느 칸부터 놓아야 하는가?](https://cs-pathfinder.vercel.app/q/78cf3a60-5d0e-4493-8dfc-302528460643)
+- [데이터가 한 대에 안 들어가면 어떻게 나누는가?](https://cs-pathfinder.vercel.app/q/2c52b510-2586-4cbf-9c7d-266338fb2a10)
 
 ## 네트워크
 
 - [TCP 연결을 끊을 때 TIME_WAIT 상태가 필요한 이유는?](https://cs-pathfinder.vercel.app/q/6928bfd0-7ad2-4316-8122-c9b62c8edce3)
 - [HTTP/2는 HTTP/1.1의 무엇을 고쳤는가?](https://cs-pathfinder.vercel.app/q/d29e123e-1e44-4e8b-8c97-98b8ee7f7604)
+- [TCP 연결 종료는 왜 대개 네 번 주고받는가?](https://cs-pathfinder.vercel.app/q/4052fe26-b550-4c15-bcfe-0dfd9d709234)
 - [DNS 조회는 어떤 순서로 도는가?](https://cs-pathfinder.vercel.app/q/e701e42e-a3dc-44b7-baa1-332f197e90b1)
 - [DNS 질의 시 재귀적 질의와 반복적 질의의 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/62e02f6b-29f6-4147-97a3-651d066b5e3f) — 2026-08-08
+- [TCP 연결 종료 시 TIME_WAIT 상태가 누적되어 포트가 고갈되는 현상을 진단하는 방법은 무엇인가?](https://cs-pathfinder.vercel.app/q/2f9ed05f-6771-4752-a46f-9c198e8a812f)
 - [수신자는 여유 있는데 전송이 느린 이유는?](https://cs-pathfinder.vercel.app/q/944b54e3-4faf-4a40-82e7-80286f3e9109)
 - [연결 설정 왕복을 언제 줄일 수 있는가?](https://cs-pathfinder.vercel.app/q/af9fd00b-4fa7-4b8c-8f3f-ea6b0470bdbe)
 - [신뢰성보다 지연을 우선할 기준은?](https://cs-pathfinder.vercel.app/q/d8359e86-e42c-491b-b0f7-c7e426833cd2)
@@ -59,6 +77,17 @@
 - [HTTPS는 HTTP와 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/10f835f1-f9b4-4bff-90ab-d398907b5bea)
 - [쿠키와 세션의 상태 유지 방식은 무엇으로 구분하는가?](https://cs-pathfinder.vercel.app/q/7b38d98d-9bd4-4db6-86b8-539718229686)
 - [HTTP 메서드 선택 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/e1382ce5-221d-40e3-b024-a440a3134b1b)
+- [죽은 서버로 요청이 안 가는 이유는?](https://cs-pathfinder.vercel.app/q/61b75f93-9056-444d-8d0f-eabaddd9e1c7)
+- [헬스 체크는 어떤 조건을 검사하는가?](https://cs-pathfinder.vercel.app/q/1f0efb56-8eef-48cb-a39b-2edcd62b0f45)
+- [먼 나라 사용자도 빠르게 받는 방법은?](https://cs-pathfinder.vercel.app/q/2185c7f3-ba1e-41cf-a089-5eed1f80f909)
+- [서버 앞에 하나를 더 두는 이유는?](https://cs-pathfinder.vercel.app/q/7c5ede7c-2875-4659-9e41-08391627cd6b)
+- [TCP 연결에서 RST 패킷은 어떤 상황에 전송되는가?](https://cs-pathfinder.vercel.app/q/68ceebf1-7e7f-4175-8fb4-6ac135c0e4f0)
+- [TCP 연결은 어떤 상태를 지나 닫히는가?](https://cs-pathfinder.vercel.app/q/0375925c-d6bf-439a-8c94-7ccb2f3c63ed)
+- [TCP는 보낼 양을 어떻게 늘렸다 줄이는가?](https://cs-pathfinder.vercel.app/q/a2d37d71-e268-4c99-897b-1c012244ee50)
+- [보낼 데이터가 길에서 감당할 크기보다 크면 어떻게 되는가?](https://cs-pathfinder.vercel.app/q/61d99555-d500-4a54-907b-af8d321993e8)
+- [같은 망 안에서 상대를 어떻게 찾아가는가?](https://cs-pathfinder.vercel.app/q/6d298223-6d57-4502-8608-4b5f72d101b5)
+- [집 안의 여러 기기가 IP 하나로 어떻게 나가는가?](https://cs-pathfinder.vercel.app/q/2b791b01-ac8a-4437-a509-84cf84aee58b)
+- [브라우저가 캐시를 쓸지 말지 어떻게 정하는가?](https://cs-pathfinder.vercel.app/q/f77e5584-6af6-44d2-95ef-315de61dd583)
 
 ## 언어 · 런타임
 
@@ -96,12 +125,16 @@
 - [호이스팅으로 인한 부작용을 어떻게 막는가?](https://cs-pathfinder.vercel.app/q/6b76ee3c-f879-4719-b1aa-e8fac2c9228d)
 - [값 타입과 참조 타입은 무엇으로 구분하는가?](https://cs-pathfinder.vercel.app/q/6f6b9e44-b4f0-4aaf-a5f1-cc8f05ca02b1)
 - [GC 알고리즘 선택 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/e2d1f494-78aa-45b5-88df-a9b300d31862)
+- [자바의 원시 타입과 래퍼 클래스는 메모리 구조상 어떤 차이가 있는가?](https://cs-pathfinder.vercel.app/q/0cd9828a-f7ac-4d13-8888-93b229216cb3)
+- [같은 문자열 리터럴이 같은 객체인 이유는?](https://cs-pathfinder.vercel.app/q/7fd1672b-21d7-4cea-b50f-3bcf6069088d)
+- [한 줄짜리 코드가 화면을 멈추게 하는 이유는?](https://cs-pathfinder.vercel.app/q/c5737225-78af-4ed8-b661-ff2adb2ff5e5)
 
 ## 운영체제
 
 - [컨텍스트 스위칭 비용은 구체적으로 어디서 발생하는가?](https://cs-pathfinder.vercel.app/q/9822adc5-13cf-4641-80a0-147c82605eee)
 - [데드락은 어떤 조건이 모두 모여야 생기는가?](https://cs-pathfinder.vercel.app/q/29992d13-ec8a-450e-a643-195dfb8ec48e)
 - [가상 메모리는 무엇을 해결하는가?](https://cs-pathfinder.vercel.app/q/4b85da13-1505-4313-b640-1dd708d1fbb5)
+- [데몬 프로세스는 왜 세션 리더로 지정되지 않는가?](https://cs-pathfinder.vercel.app/q/e2a3399c-208b-4918-a710-97027c0f9bc7) — 2026-08-09
 - [사용자 모드에서 커널 모드로 진입하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/dd899ffd-3cf6-4877-9508-eb6e7238bae4)
 - [프로세스 주소공간을 나누어 사용하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/93a1ba7f-a849-441e-8656-ba9035bc362e)
 - [스레드 풀을 사용하는 주된 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/2041ab82-86f9-4745-8521-74b91db6afea)
@@ -122,6 +155,12 @@
 - [쓰레싱이 발생하는 원인과 해결책은 무엇인가?](https://cs-pathfinder.vercel.app/q/5c9cee42-893b-43b8-a767-a4baeff36913)
 - [동기화 문제를 하드웨어적으로 어떻게 해결하는가?](https://cs-pathfinder.vercel.app/q/3ddad76b-7308-4416-8d74-bbb8947b8e43)
 - [프로세스와 스레드의 핵심 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/8add93e5-3894-4b90-95bb-b7fb8058e071)
+- [좀비 프로세스는 왜 남는가?](https://cs-pathfinder.vercel.app/q/d0adf6de-f255-44d5-90b8-da97ea2ce37c)
+- [코어마다 캐시가 따로인데 값이 어긋나지 않는 이유는?](https://cs-pathfinder.vercel.app/q/d6339dc7-996b-4fa4-8dbd-e38264db2d29)
+- [급한 일이 안 급한 일에 밀리는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/e02d2479-a036-4bfb-a824-9fd5666ac8b5)
+- [파일 디스크립터 3은 무엇을 가리키는가?](https://cs-pathfinder.vercel.app/q/9e94da0d-7690-47ad-82f6-beb533f0aa5e)
+- [조건문 하나가 성능을 좌우하는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/09f14dd1-9ffd-4f9e-9642-69b04f2df7c8)
+- [읽은 파일이 두 번째부터 빨라지는 이유는?](https://cs-pathfinder.vercel.app/q/93b1c472-c606-4045-9b0d-b23e50531d81)
 
 ## 자료구조 · 알고리즘
 
@@ -142,7 +181,7 @@
 - [그래프 구현 시 인접 행렬과 인접 리스트 중 무엇을 선택하는가?](https://cs-pathfinder.vercel.app/q/95ba7ad5-7f4d-4509-b33a-d3996401875c)
 - [공유 자료구조를 Thread-Safe하게 만드는 방법은 무엇인가?](https://cs-pathfinder.vercel.app/q/b702a8a3-b7b2-460d-9dd1-df95688272d5)
 - [해시 충돌을 해결하는 두 방식의 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/466eaf7e-6cae-4f48-a32f-5d1f58832ec2)
-- [해시 충돌 발생 시 해결적으로 어떤 방법을 사용하는가?](https://cs-pathfinder.vercel.app/q/206e4412-af51-4d71-8d71-9210387ee437)
+- [해시 충돌이 생기면 어떤 방법으로 푸는가?](https://cs-pathfinder.vercel.app/q/206e4412-af51-4d71-8d71-9210387ee437)
 - [해시 충돌이 발생했을 때의 해결책은 무엇인가?](https://cs-pathfinder.vercel.app/q/53a5b06e-fae6-43c0-b488-00dfce172a75)
 - [최단 경로 알고리즘의 선택 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/8296435a-7e7f-4cf3-8f42-343e167d7983)
 - [문자열 검색 최적화 시 어떤 기준으로 알고리즘을 고르는가?](https://cs-pathfinder.vercel.app/q/588dc1c9-8c1b-417f-bbeb-c3932c61de1b)
@@ -151,6 +190,7 @@
 - [재귀 함수 사용 시 스택 오버플로가 발생하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/b7d2bf6d-44dc-4f87-b4b6-0a5badabbb01)
 - [우선순위 큐를 힙으로 구현하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/9ac88a5c-11c3-4a52-b642-09a97936fdfa)
 - [B-tree는 왜 디스크에 유리한가?](https://cs-pathfinder.vercel.app/q/212ffacb-9cca-4c8f-9cb5-906568c356b3)
+- [B-Tree가 디스크에 맞는 이유는?](https://cs-pathfinder.vercel.app/q/35514c0e-b8ee-4fd5-b3cb-420077bd0b3c)
 
 ## 프레임워크
 
@@ -176,11 +216,13 @@
 - [JVM GC의 효율을 높이는 튜닝 포인트는 무엇인가?](https://cs-pathfinder.vercel.app/q/503859af-cf26-4668-83d6-93711d6f96eb)
 - [JVM의 핵심 역할은 무엇인가?](https://cs-pathfinder.vercel.app/q/a1497084-ec66-4667-a481-be82e6438792)
 - [체크 예외와 언체크 예외의 선택 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/080aa4a6-9daf-4a63-9a2c-09a8d243bd85)
-- [톰캣은 WAS와 웹 서버의 차이점으로 무엇을 수행하는가?](https://cs-pathfinder.vercel.app/q/e63a3f49-6807-43ff-ac54-ac899b30f0ac)
+- [톰캣은 서블릿 컨테이너로서 어떤 일을 하는가?](https://cs-pathfinder.vercel.app/q/e63a3f49-6807-43ff-ac54-ac899b30f0ac)
 - [인터페이스와 추상 클래스는 무엇으로 구분하는가?](https://cs-pathfinder.vercel.app/q/bbd92984-377a-4412-8c70-4d7a73812fe2)
 - [스트림의 지연 연산은 왜 필요한가?](https://cs-pathfinder.vercel.app/q/808ae487-ceed-42e8-8eb2-7de7dc8b7497)
 - [ORM을 사용하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/6876f3f6-e938-491f-980c-739b5d094da5)
 - [단위 시험과 통합 시험은 무엇으로 가르는가?](https://cs-pathfinder.vercel.app/q/2a1ae829-21b3-42da-8593-599384cd6ec3)
+- [목록 하나 읽었는데 쿼리가 백 번 나가는 이유는?](https://cs-pathfinder.vercel.app/q/374cf387-4019-4a55-82e4-63e3f0057085)
+- [수정 메서드를 안 불렀는데 UPDATE가 나가는 이유는?](https://cs-pathfinder.vercel.app/q/8f957463-4d9f-4b08-9730-a3aa2ebf771b)
 
 ## 아키텍처 · 분산시스템
 
@@ -202,6 +244,11 @@
 - [스트레티지 패턴을 사용하는 판단 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/97035d84-ac30-45eb-8af1-758190d3769d)
 - [컴포지트 패턴을 어떤 상황에서 사용하는가?](https://cs-pathfinder.vercel.app/q/6c67c76c-45ce-4c5e-9bec-b86322a0d2cb)
 - [Raft는 왜 과반수를 요구하는가?](https://cs-pathfinder.vercel.app/q/d514a598-a059-44d7-8d12-acf74d54d585)
+- [처리에 실패한 메시지는 어디로 가는가?](https://cs-pathfinder.vercel.app/q/7356700d-8f51-474a-aca2-8ad007a02f2f)
+- [부하가 늘면 서버를 어떻게 늘리는가?](https://cs-pathfinder.vercel.app/q/aa7b88a8-0a20-4493-9cdd-c7560b4a9929)
+- [보내는 쪽이 받는 쪽보다 빠르면 무엇이 터지는가?](https://cs-pathfinder.vercel.app/q/6a012a74-5bb6-47f2-880f-e8d75576dc28)
+- [단계마다 타임아웃을 5초씩 주면 무엇이 잘못되는가?](https://cs-pathfinder.vercel.app/q/01adb8f9-173d-458d-b58c-40a69553aa92)
+- [남의 서버에 일이 생긴 것을 어떻게 아는가?](https://cs-pathfinder.vercel.app/q/81f81144-b784-453c-99a2-b0ffd6ee95cf)
 
 ## 프론트엔드
 
@@ -236,6 +283,9 @@
 - [웹 서버와 WAS의 역할 분담은 왜 하는가?](https://cs-pathfinder.vercel.app/q/bf82e0fb-89e4-44fe-b91f-a096579ddb48)
 - [React Hook을 사용하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/d2c66d5d-e803-4db2-a174-9a966c16328f)
 - [브라우저에서 FTP 지원을 중단하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/364e8e45-1a16-492f-a91d-c23d6a448d46)
+- [브라우저가 요청을 미리 한 번 더 보내는 이유는?](https://cs-pathfinder.vercel.app/q/967090c2-5cca-4237-9c42-bf522d7f530e)
+- [스타일을 바꿨을 뿐인데 왜 느려지는가?](https://cs-pathfinder.vercel.app/q/d32cc10b-eadc-4b30-9939-57447d055fff)
+- [화면이 안 바뀌는데 값은 바뀌어 있는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/11d2c118-26e3-4110-ba9a-85c30187173f)
 
 ## 인프라 · 보안
 
@@ -249,7 +299,7 @@
 - [대칭키와 공개키 중 무엇을 선택하는가?](https://cs-pathfinder.vercel.app/q/61e43b03-57ea-4211-a981-189bd2295061)
 - [블로킹과 논블로킹 I/O의 결정적 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/0c72906c-013c-4126-acbe-a8805e04c930)
 - [경쟁 상태를 막으려면 무엇을 고려해야 하는가?](https://cs-pathfinder.vercel.app/q/2d3e822c-6061-4831-aa0f-640315da6da5)
-- [리팩토링과 기능 추가를 동시에 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/0e488dff-b273-44ab-8a74-76b9f33989a9)
+- [리팩토링과 기능 추가를 나눠서 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/0e488dff-b273-44ab-8a74-76b9f33989a9)
 - [트라이를 사용하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/0e62b699-6555-439e-9eea-cfc08b57b240)
 - [컨텍스트 스위칭은 왜 비용이 발생하는가?](https://cs-pathfinder.vercel.app/q/0671d985-6096-44de-8d32-24f8669d880d)
 - [뮤텍스와 세마포어는 무엇으로 구분하는가?](https://cs-pathfinder.vercel.app/q/0c27fab1-346a-48a0-a003-18dc26a01daf)
@@ -260,6 +310,15 @@
 - [함수형 프로그래밍을 적용하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/248eb887-bf2c-4f81-ae85-54fa864c0ca4)
 - [컨테이너는 가상 머신과 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/1728103c-348b-49d7-a413-01febbae2993)
 - [SQL 인젝션은 무엇으로 막는가?](https://cs-pathfinder.vercel.app/q/575ab839-a535-4bd7-a57e-f852164914ad)
+- [죽은 파드는 누가 다시 만드는가?](https://cs-pathfinder.vercel.app/q/f62dfeb1-abd5-4c51-bdd0-fd526bcfd563)
+- [이미지를 고쳐도 조금만 받는 이유는?](https://cs-pathfinder.vercel.app/q/985233cb-840c-413a-9aca-563eedd7d5e2)
+- [빌드는 통과했는데 배포에서 깨지는 이유는?](https://cs-pathfinder.vercel.app/q/269007b2-92b6-4122-9f48-91e353cb2d64)
+- [비밀번호를 앱에 안 주고 로그인하는 방법은?](https://cs-pathfinder.vercel.app/q/5534d33e-6c20-4e38-ad1b-7c9a09f9d2a8)
+- [이미지와 컨테이너는 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/e4e31881-dd78-43ab-8baf-d785600300b1)
+- [비밀번호를 그냥 해시하면 왜 안 되는가?](https://cs-pathfinder.vercel.app/q/4587345b-135b-4d03-9822-76bd10f77f5d)
+- [되돌리기와 지우기는 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/70ea23df-4924-4166-a53f-aefa26ce25a0)
+- [요청이 한꺼번에 몰릴 때 어떻게 막는가?](https://cs-pathfinder.vercel.app/q/4d3effbf-1bab-453e-8652-8adb87157d28)
+- [누가 무엇을 할 수 있는지 어떻게 정하는가?](https://cs-pathfinder.vercel.app/q/36dc8d14-256a-4574-9ec2-562d38cd243e)
 
 ## 모바일
 
