@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { flowShape, actorsOf, MAX_LANES } from '@/lib/markdown/flow-shape'
+import { flowShape, actorsOf, MAX_LANES, MAX_CHAIN } from '@/lib/markdown/flow-shape'
 import type { FlowStep } from '@/lib/markdown/blocks'
 
 /**
@@ -35,18 +35,50 @@ describe('오가는 것', () => {
   })
 })
 
-describe('한 방향으로만 흐르는 것', () => {
+describe('한 줄로 이어지는 것', () => {
   /*
    * 파이프라인이다. 기둥을 세우면 마디마다 하나씩 서서 화살표가 글자보다
-   * 짧아진다. 지금 목록이 낫다.
+   * 짧아진다. 상자와 이음줄로 꿴다.
    */
-  it('선형 사슬은 손대지 않는다', () => {
+  it('선형 사슬은 상자와 이음줄로 그린다', () => {
     expect(
       flowShape([
         step('소스 코드', '전처리기', '매크로 확장'),
         step('전처리기', '컴파일러', '어셈블리 생성'),
         step('컴파일러', '링커', '실행 파일 생성'),
       ]),
+    ).toBe('chain')
+  })
+
+  /*
+   * 마디가 아홉이면 상자와 이음줄이 화면 두 장을 넘어가 처음과 끝을 한눈에
+   * 못 본다. 그때는 번호가 붙은 목록이 훑기 좋다.
+   */
+  it('너무 길면 손대지 않는다', () => {
+    const long = Array.from({ length: MAX_CHAIN }, (_, i) => step(`n${i}`, `n${i + 1}`, `${i}`))
+    expect(flowShape(long)).toBe('other')
+  })
+
+  /*
+   * 한 마디에서 두 번 출발하면 갈라진 것이다. 사슬로 그리면 갈래 하나가
+   * 사라지거나 없는 순서가 생긴다.
+   */
+  it('같은 마디에서 두 번 나가면 사슬이 아니다', () => {
+    expect(
+      flowShape([
+        step('수집기', '미도달 객체', '회수한다'),
+        step('수집기', '생존 객체', '압축한다'),
+      ]),
+    ).toBe('other')
+  })
+
+  /*
+   * 앞 걸음의 도착과 다음 걸음의 출발이 다르면 끊긴 것이다. 이어 붙이면
+   * 없던 연결을 만든다.
+   */
+  it('중간이 끊기면 사슬이 아니다', () => {
+    expect(
+      flowShape([step('A', 'B', '하나'), step('C', 'D', '둘')]),
     ).toBe('other')
   })
 

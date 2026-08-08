@@ -55,8 +55,8 @@ describe('Prose — 순서 도식', () => {
    * 한 방향으로만 흐르는 것은 손대지 않는다. 파이프라인에 기둥을 세우면
    * 마디마다 하나씩 서서 화살표가 글자보다 짧아진다.
    */
-  it('한 방향으로만 흐르면 걸음마다 행위자를 되풀이한다', () => {
-    render(
+  it('한 줄로 이어지면 마디를 한 번만 그린다', () => {
+    const { container } = render(
       <Prose
         body={[
           ':::flow',
@@ -67,19 +67,65 @@ describe('Prose — 순서 도식', () => {
       />,
     )
 
-    expect(screen.getAllByText('컴파일러').length).toBe(2)
+    // 걸음마다 되풀이하지 않는다. 사슬에서 같은 이름은 같은 자리다
+    expect(screen.getAllByText('컴파일러').length).toBe(1)
+    expect(screen.getByText('기계어로 바꾼다')).toBeTruthy()
+
+    // 세로 순서만으로 방향이 전해지면 안 된다
+    const sr = [...container.querySelectorAll('.sr-only')].map((e) => e.textContent)
+    expect(sr).toContain('그다음은 컴파일러다. ')
+    expect(sr).toContain('그다음은 링커다. ')
   })
 
-  /** 번호가 없으면 순서인지 목록인지 구별이 안 된다 */
-  it('numbers the steps in order', () => {
+  /*
+   * 낭독기가 읽는 문장이라 눈으로는 안 걸린다. 소리로 들으면 바로 걸린다 --
+   * `주문다`가 아니라 `주문이다`다. 실제 해설에서 넷 중 둘이 틀려 있었다.
+   */
+  it('받침이 있는 마디에는 이를 붙인다', () => {
+    const { container } = render(
+      <Prose
+        body={[':::flow', '요청 -> 주문: 넘긴다', '주문 -> 결제: 다시 넘긴다', ':::'].join('\n')}
+      />,
+    )
+    const sr = [...container.querySelectorAll('.sr-only')].map((e) => e.textContent)
+    expect(sr).toContain('그다음은 주문이다. ')
+    expect(sr).toContain('그다음은 결제다. ')
+  })
+
+  /* 갈라지는 것은 사슬이 아니다. 지금 목록 그대로 둔다 */
+  it('갈라지면 걸음마다 행위자를 되풀이한다', () => {
+    render(
+      <Prose
+        body={[
+          ':::flow',
+          '수집기 -> 미도달 객체: 회수한다',
+          '수집기 -> 생존 객체: 압축한다',
+          ':::',
+        ].join('\n')}
+      />,
+    )
+
+    expect(screen.getAllByText('수집기').length).toBe(2)
+  })
+
+  /**
+   * 번호가 없으면 순서인지 목록인지 구별이 안 된다.
+   *
+   * 사슬은 걸음이 아니라 **마디**를 센다. `A→B→C→D`는 걸음 셋이지만 마디는
+   * 넷이고, 사람이 세는 것은 거쳐 가는 자리다.
+   */
+  it('사슬은 마디마다 번호를 붙인다', () => {
     const { container } = render(
       <Prose body={[':::flow', 'A -> B: 하나', 'B -> C: 둘', 'C -> D: 셋', ':::'].join('\n')} />,
     )
 
     const items = container.querySelectorAll('ol > li')
-    expect(items.length).toBe(3)
+    expect(items.length).toBe(4)
     expect(items[0].textContent).toContain('1')
-    expect(items[2].textContent).toContain('셋')
+    expect(items[0].textContent).toContain('A')
+    expect(items[3].textContent).toContain('4')
+    expect(items[3].textContent).toContain('D')
+    expect(container.textContent).toContain('셋')
   })
 
   /** 순서는 ol이어야 스크린 리더가 "3개 중 1번"으로 읽는다 */

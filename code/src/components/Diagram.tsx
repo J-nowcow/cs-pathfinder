@@ -39,14 +39,34 @@ function Inline({ text }: { text: string }) {
  * 행위자를 가로로 늘어놓는 전형적인 시퀀스 다이어그램은 폰에서 글자가 뭉갠다.
  * 세로 타임라인으로 눕히고 번호를 매긴다. 왼쪽 선이 "이어지는 한 줄기"를 말한다.
  */
-/** 낭독기 문장에서 조사를 고른다. 받침이 있으면 `으로` */
-function needsEu(word: string): boolean {
+/**
+ * 마지막 글자의 받침 번호. 한글이 아니면 `null`.
+ *
+ * 영문·숫자로 끝나는 이름이 흔하다(`FCM`, `L1`, `TCP`). 그때는 받침을 알 수
+ * 없으므로 조사를 붙이지 않는 쪽으로 흘린다 — 틀린 조사보다 없는 편이 낫다.
+ */
+function jongOf(word: string): number | null {
   const last = word.trim().slice(-1)
   const code = last.charCodeAt(0)
-  if (Number.isNaN(code) || code < 0xac00 || code > 0xd7a3) return false
-  const jong = (code - 0xac00) % 28
-  /* 받침 ㄹ은 `로`를 쓴다 */
-  return jong !== 0 && jong !== 8
+  if (Number.isNaN(code) || code < 0xac00 || code > 0xd7a3) return null
+  return (code - 0xac00) % 28
+}
+
+/** `로` 앞에 `으`가 필요한가. 받침 ㄹ은 그냥 `로`를 쓴다 */
+export function needsEu(word: string): boolean {
+  const jong = jongOf(word)
+  return jong !== null && jong !== 0 && jong !== 8
+}
+
+/**
+ * `다` 앞에 `이`가 필요한가.
+ *
+ * `주문다`가 아니라 `주문이다`다. 낭독기가 읽는 문장이라 눈에 안 띄는데,
+ * 소리로 들으면 바로 걸린다. 실제로 브라우저에서 듣기 전까지 못 봤다.
+ */
+export function needsI(word: string): boolean {
+  const jong = jongOf(word)
+  return jong !== null && jong !== 0
 }
 
 /**
@@ -175,6 +195,67 @@ export function SequenceDiagram({ steps }: { steps: FlowStep[] }) {
   )
 }
 
+/**
+ * 한 줄로 이어지는 것 — 상자와 이음줄.
+ *
+ * `소스 -> 전처리기 -> 컴파일러 -> 링커`는 마디가 저마다 한 번씩만 나오는
+ * 사슬이다. 지금 목록은 걸음마다 `소스 → 전처리기`를 다시 적어서, 같은
+ * 이름이 두 줄에 걸쳐 나오고 **하나로 이어진다는 사실이 글자에 묻힌다.**
+ *
+ * 마디를 상자로 한 번만 두고 사이를 이음줄로 꿴다. 설명은 줄 옆에 붙는다 --
+ * 그 자리에 있어야 "이래서 다음으로 간다"로 읽힌다.
+ *
+ * 여기서 같은 이름을 하나로 합치는 것은 **맞다.** 사슬에서 같은 이름은 같은
+ * 자리를 뜻하기 때문이다. 왕복에 그 규칙을 쓰면 핸드셰이크가 분기 그래프가
+ * 되므로 왕복은 앞에서 갈라낸다.
+ */
+export function ChainDiagram({ steps }: { steps: FlowStep[] }) {
+  const nodes = [steps[0].from, ...steps.map((s) => s.to)]
+
+  return (
+    <figure className="my-6 rounded-lg border border-line bg-raised px-4 py-4 sm:px-5">
+      <ol className="list-none">
+        {nodes.map((name, i) => (
+          <li key={i}>
+            {i > 0 && (
+              <div className="flex items-stretch gap-3">
+                {/* 이음줄과 화살촉. 설명 높이만큼 늘어난다 */}
+                <div aria-hidden className="flex w-5 shrink-0 flex-col items-center">
+                  <span className="w-0.5 flex-1 bg-line" />
+                  <span className="h-0 w-0 border-x-[4px] border-t-[6px] border-x-transparent border-t-accent" />
+                </div>
+                <p className="min-w-0 flex-1 py-1.5 text-[13px] leading-[1.55] text-muted">
+                  <span className="sr-only">{`그다음은 ${nodes[i]}${needsI(nodes[i]) ? '이다' : '다'}. `}</span>
+                  {steps[i - 1].label.length > 0 ? (
+                    <Inline text={steps[i - 1].label} />
+                  ) : (
+                    <span className="text-faint">그다음</span>
+                  )}
+                </p>
+              </div>
+            )}
+
+            <div
+              className={
+                i === nodes.length - 1
+                  ? 'flex items-baseline gap-2.5 rounded-lg border border-accent bg-raised px-3.5 py-2.5'
+                  : 'flex items-baseline gap-2.5 rounded-lg border border-line bg-raised px-3.5 py-2.5'
+              }
+            >
+              <span aria-hidden className="font-mono text-[11px] text-faint">
+                {i + 1}
+              </span>
+              <span className="min-w-0 flex-1 text-[15px] leading-[1.45] font-medium text-ink">
+                <Inline text={name} />
+              </span>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </figure>
+  )
+}
+
 /** 화살촉. 테두리 삼각형이라 SVG가 필요 없다 */
 function ArrowHead({ dir }: { dir: 'left' | 'right' }) {
   return (
@@ -196,7 +277,9 @@ export function FlowDiagram({ steps }: { steps: FlowStep[] }) {
    * 저장된 본문을 한 글자도 안 고치고 그림만 고른다. 못 알아본 것은 아래
    * 목록 그대로 둔다 — 섣불리 그리느니 그대로가 낫다.
    */
-  if (flowShape(steps) === 'sequence') return <SequenceDiagram steps={steps} />
+  const shape = flowShape(steps)
+  if (shape === 'sequence') return <SequenceDiagram steps={steps} />
+  if (shape === 'chain') return <ChainDiagram steps={steps} />
 
   return (
     <figure className="my-6 overflow-hidden rounded-lg border border-line bg-raised">
