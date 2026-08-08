@@ -41,7 +41,24 @@ export interface Db extends Tx {
  *
  * 테스트는 파일마다 환경이 분리되므로 영향이 없다. resetDb가 여기도 비운다.
  */
-type Holder = { __csqtDb?: Db | null; __csqtMigrated?: boolean }
+type Holder = {
+  __csqtDb?: Db | null
+  __csqtMigrated?: boolean
+  /**
+   * 실제 Postgres일 때의 연결 풀.
+   *
+   * `Db` 인터페이스 뒤에 숨겨 두면 될 줄 알았는데 안 되는 손님이 있다.
+   * 인증 어댑터(`@auth/pg-adapter`)는 **`pg.Pool` 그 자체**를 요구한다.
+   * 우리 인터페이스를 못 받는다.
+   *
+   * 그렇다고 어댑터가 자기 풀을 따로 만들게 두면 안 된다. 서버 인스턴스마다
+   * 풀이 둘이 되고(각 max 5) 아무도 안 닫는다 -- 바로 아래 `getDb` 주석이
+   * 적어 둔 그 함정을 이름만 바꿔 다시 밟는 것이다.
+   *
+   * 그래서 만든 풀을 여기 얹어 두고 필요한 쪽이 **같은 것을** 받아 가게 한다.
+   */
+  __csqtPool?: unknown
+}
 const holder = globalThis as unknown as Holder
 
 const here = dirname(fileURLToPath(import.meta.url))
@@ -97,6 +114,8 @@ async function createPostgres(connectionString: string): Promise<Db> {
     // Neon은 TLS를 요구하는데 사내망 프록시가 인증서를 가로채면 검증이 깨진다.
     ssl: { rejectUnauthorized: false },
   })
+  /* 인증 어댑터처럼 `pg.Pool` 자체를 요구하는 쪽이 같은 것을 받아 가게 둔다 */
+  holder.__csqtPool = pool
 
   return {
     async query<T>(sql: string, params?: unknown[]): Promise<T[]> {
@@ -195,12 +214,29 @@ async function open(): Promise<Db> {
   return holder.__csqtDb
 }
 
+/**
+ * 연결 풀을 그대로 내준다. PGlite로 돌 때는 `null`이다.
+ *
+ * **`null`을 받았으면 그건 고장이 아니라 "여기서는 못 쓴다"는 뜻이다.**
+ * 테스트는 PGlite로 도는데 그건 WASM이라 `pg.Pool`이 아예 없다. 부르는 쪽이
+ * 그때 무엇을 할지 정해야 한다 -- 조용히 새 풀을 만들어 우회하면 안 된다.
+ *
+ * 풀을 여기서 만들지 않는다. `getDb()`가 만든 것을 돌려줄 뿐이다. 그래야
+ * 인스턴스마다 하나만 산다.
+ */
+export async function getPool(): Promise<import('pg').Pool | null> {
+  await getDb()
+  return (holder.__csqtPool as import('pg').Pool | undefined) ?? null
+}
+
 /** 테스트 격리용. 스키마를 통째로 다시 만든다. */
 export async function resetDb(): Promise<Db> {
   // 준비 중인 약속도 같이 비운다. 안 그러면 getDb가 옛 인스턴스를 계속 돌려준다
   opening = null
   holder.__csqtDb = null
   holder.__csqtMigrated = false
+  // 풀도 같이 놓는다. 안 그러면 죽은 DB의 풀을 다음 사람이 받아 간다
+  holder.__csqtPool = undefined
   return getDb()
 }
 
