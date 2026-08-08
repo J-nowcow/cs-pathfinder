@@ -69,6 +69,23 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
 
     inserted += 1
 
+    /*
+     * **번호는 여기서 붙인다. insert에 맡기면 안 된다.**
+     *
+     * 위 `insert ... on conflict`에 `number`를 안 적으면 컬럼 기본값이
+     * 충돌 검사보다 **먼저** 평가된다. 이미 있는 행이어도 `nextval`이 돌고,
+     * 시퀀스는 트랜잭션을 안 타므로 되돌지도 않는다. 부팅 한 번에 시드
+     * 개수만큼 번호가 사라졌다 -- 283행에 29,480개를 태웠다.
+     *
+     * `0011`에서 기본값을 뗐다. 그래서 여기서 붙인다. `created`가 참일 때만
+     * 도므로 이미 있는 행은 번호를 안 먹는다.
+     */
+    await db.query(
+      `update qnode set number = nextval('qnode_number_seq')
+        where id = $1 and number is null`,
+      [id],
+    )
+
     for (const [position, text] of ex.suggestions.entries()) {
       await db.query(
         `insert into qnode_suggestion (id, qnode_id, text, position, target_node_id)

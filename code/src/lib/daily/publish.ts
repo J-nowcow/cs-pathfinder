@@ -82,9 +82,10 @@ async function commitPublish(args: {
     }
 
     const inserted = await tx.query<{ id: string }>(
+      /* `number`를 손으로 적는다. `0011`에서 컬럼 기본값을 뗐다 */
       `insert into qnode
-         (identity_scope, normalized_question, body, primary_category, status, origin)
-       values ($1, $2, $3, $4, 'ready', 'batch')
+         (identity_scope, normalized_question, body, primary_category, status, origin, number)
+       values ($1, $2, $3, $4, 'ready', 'batch', nextval('qnode_number_seq'))
        returning id`,
       [
         args.content.identityScope,

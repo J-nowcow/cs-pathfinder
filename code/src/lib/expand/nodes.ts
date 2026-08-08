@@ -12,9 +12,14 @@ export type NewNode = {
 export async function insertNode(node: NewNode): Promise<string> {
   const db = await getDb()
   const rows = await db.query<{ id: string }>(
+    /*
+     * `number`를 손으로 적는다. `0011`에서 컬럼 기본값을 뗐기 때문이다 --
+     * 기본값은 `on conflict` 경로에서 번호를 태웠다. 여기는 충돌 절이 없어
+     * 한 행에 한 번만 돈다.
+     */
     `insert into qnode
-       (identity_scope, normalized_question, body, primary_category, status, origin)
-     values ($1, $2, $3, $4, $5, $6)
+       (identity_scope, normalized_question, body, primary_category, status, origin, number)
+     values ($1, $2, $3, $4, $5, $6, nextval('qnode_number_seq'))
      returning id`,
     [
       node.identityScope,
