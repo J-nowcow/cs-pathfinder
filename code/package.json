@@ -44,7 +44,8 @@
     "dump:stack": "tsx scripts/dump-stack-blocks.ts",
     "stack:table": "tsx scripts/stack-to-table.ts",
     "fix:timeline": "tsx scripts/fix-timeline-batch.ts",
-    "dump:tables": "tsx scripts/dump-table-only.ts"
+    "dump:tables": "tsx scripts/dump-table-only.ts",
+    "fix:tables": "tsx scripts/fix-table-batch.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
