@@ -24,6 +24,11 @@ export const metadata: Metadata = {
   metadataBase: siteUrl(),
   title: { default: TITLE, template: `%s · ${TITLE}` },
   description: DESCRIPTION,
+  /*
+   * 읽기 도구가 주소만 넣어도 피드를 찾게 한다. 이 줄이 없으면 사용자가
+   * `/rss.xml`을 직접 알고 쳐야 한다 — 대부분 그러지 않는다.
+   */
+  alternates: { types: { 'application/rss+xml': '/rss.xml' } },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,

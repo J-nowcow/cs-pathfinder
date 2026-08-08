@@ -23,9 +23,20 @@ const DATA_FILES = [
   'data/on-demand-nodes.ts',
 ]
 
-/** 정적 파일에는 본문이 한 줄짜리 JSON 문자열로 들어 있다 */
+/**
+ * 정적 파일에는 본문이 한 줄짜리 JSON 문자열로 들어 있다.
+ *
+ * **역슬래시를 먼저 막는다.** 안 막으면 수식이 든 자리를 영영 못 찾는다 --
+ * 본문 값의 `$\rightarrow$`는 파일에 `$\\rightarrow$`로 적혀 있다. 줄바꿈만
+ * 바꾸고 찾으면 안 나오고, 도구는 "그런 문장이 없다"고 답한다. 실제로 그랬다.
+ *
+ * 따옴표도 막는다. 본문이 큰따옴표 안에 들어 있어 안에 든 `"`는 `\"`로 적힌다.
+ *
+ * 순서가 중요하다. 역슬래시를 나중에 바꾸면 앞서 넣은 `\n`의 역슬래시까지
+ * 다시 바뀐다.
+ */
 export function escapeForData(s: string): string {
-  return s.replace(/\n/g, '\\n')
+  return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n')
 }
 
 export type PatchResult =
