@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import { parseInline } from '@/lib/markdown/inline'
+import { flowShape, actorsOf } from '@/lib/markdown/flow-shape'
 import type { FlowStep, StackLayer, TreeNode, MemoryArea, TimelineRow } from '@/lib/markdown/blocks'
 
 /**
@@ -38,7 +39,165 @@ function Inline({ text }: { text: string }) {
  * 행위자를 가로로 늘어놓는 전형적인 시퀀스 다이어그램은 폰에서 글자가 뭉갠다.
  * 세로 타임라인으로 눕히고 번호를 매긴다. 왼쪽 선이 "이어지는 한 줄기"를 말한다.
  */
+/** 낭독기 문장에서 조사를 고른다. 받침이 있으면 `으로` */
+function needsEu(word: string): boolean {
+  const last = word.trim().slice(-1)
+  const code = last.charCodeAt(0)
+  if (Number.isNaN(code) || code < 0xac00 || code > 0xd7a3) return false
+  const jong = (code - 0xac00) % 28
+  /* 받침 ㄹ은 `로`를 쓴다 */
+  return jong !== 0 && jong !== 8
+}
+
+/**
+ * 오가는 것 — 기둥과 화살표.
+ *
+ * `flow` 안에 두 모양이 섞여 있다. `A→B`와 `B→A`가 둘 다 있는 **왕복**은
+ * 세로 목록으로 그리면 오간 것이 사라진다. 핸드셰이크가 "1번 다음 2번"으로
+ * 읽히고 누가 공을 쥐고 있는지 매 줄 읽어야 안다.
+ *
+ * **좌표를 한 줄도 계산하지 않는다.** 격자 두 층이 같은 폭을 다르게 나눈다.
+ * 기둥은 `repeat(N, 1fr)`, 화살표는 `0.5fr repeat(N-1, 1fr) 0.5fr`. 양 끝을
+ * 반 칸으로 두면 화살표 층의 격자선이 기둥 한가운데에 정확히 떨어져서
+ * **주체 i의 기둥 = 격자선 i+2** 하나로 끝난다. 손보정이 필요 없다.
+ *
+ * **칸 안에 글자를 넣지 않는다.** 390px을 넷으로 나누면 97px이라 한글이 안
+ * 들어간다. 칸은 화살표만 나르고 설명은 아래 줄에서 폭을 통째로 쓴다. 주체가
+ * 늘어도 글자 칸은 안 줄고 화살표만 짧아진다.
+ *
+ * 재시도·실패 같은 것을 구조에서 짐작하지 않는다. `flow` 문법에는 그것을
+ * 적을 자리가 없고, 짐작하면 관계없는 걸음을 오탐한다.
+ */
+export function SequenceDiagram({ steps }: { steps: FlowStep[] }) {
+  const actors = actorsOf(steps)
+  const n = actors.length
+
+  const laneCols = `repeat(${n}, minmax(0, 1fr))`
+  const arrowCols = `minmax(0, 0.5fr) repeat(${n - 1}, minmax(0, 1fr)) minmax(0, 0.5fr)`
+
+  return (
+    <figure className="my-6 rounded-lg border border-line bg-raised px-3 py-3.5">
+      {/* 기둥 머리. 칸을 벌리지 않는다 — 벌리면 아래 두 층과 한가운데가 어긋난다 */}
+      <div aria-hidden className="grid" style={{ gridTemplateColumns: laneCols }}>
+        {actors.map((a) => (
+          <p
+            key={a}
+            className="mx-0.5 rounded-md bg-accent-soft px-1 py-1 text-center text-[11px] leading-[1.25] font-medium break-keep text-ink"
+          >
+            {a}
+          </p>
+        ))}
+      </div>
+
+      <div className="relative mt-2">
+        {/*
+          생명선. 설명 줄이 대부분을 덮으므로 남는 것은 줄 사이의 짧은 도막뿐이다.
+          1px로는 거의 안 보였다. 색은 토큰이 정해져 있어 못 바꾸므로 폭으로 벌었다.
+        */}
+        <div aria-hidden className="absolute inset-0 grid" style={{ gridTemplateColumns: laneCols }}>
+          {actors.map((a) => (
+            <span key={a} className="mx-auto h-full w-0.5 rounded-full bg-line" />
+          ))}
+        </div>
+
+        <ol className="relative list-none">
+          {steps.map((s, i) => {
+            const a = actors.indexOf(s.from)
+            const b = actors.indexOf(s.to)
+            const self = a === b
+            const rightward = b > a
+            /* 픽셀이 아니라 격자선이다. 주체 i의 기둥 = 격자선 i+2 */
+            const span = self
+              ? `${a + 2} / span 1`
+              : `${Math.min(a, b) + 2} / ${Math.max(a, b) + 2}`
+
+            return (
+              <li key={i} className="pb-3 last:pb-1">
+                {/*
+                  낭독기는 화살표 모양을 못 읽는다. 누가 누구에게 무엇을 보냈는지
+                  한 문장으로 남긴다 — 이것만 읽어도 뜻이 통해야 한다.
+                */}
+                <span className="sr-only">
+                  {`${i + 1}. ${s.from}에서 ${s.to}${needsEu(s.to) ? '으로' : '로'}${
+                    s.label.length > 0 ? `: ${s.label}` : ''
+                  }`}
+                </span>
+
+                <div aria-hidden>
+                  <div className="grid items-center" style={{ gridTemplateColumns: arrowCols }}>
+                    <div className="flex h-5 items-center" style={{ gridColumn: span }}>
+                      {self ? (
+                        /*
+                         * 자기 자신에게. 왼쪽이 트인 고리라 기둥에서 나가 기둥으로
+                         * 돌아온다. 화살촉을 안 붙인다 — 고리의 트인 쪽과 겹쳐
+                         * 삼각형이 아니라 덩어리로 보인다.
+                         */
+                        <span className="flex h-4 w-full max-w-[58px] items-center">
+                          <span className="-mr-[3px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                          <span className="h-4 flex-1 rounded-r-[7px] border-2 border-l-0 border-solid border-accent" />
+                        </span>
+                      ) : rightward ? (
+                        <>
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                          <span className="min-w-0 flex-1 border-t-2 border-accent" />
+                          <ArrowHead dir="right" />
+                        </>
+                      ) : (
+                        <>
+                          <ArrowHead dir="left" />
+                          <span className="min-w-0 flex-1 border-t-2 border-accent" />
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 폭을 통째로 쓴다. 배경이 있어 뒤의 생명선을 덮는다 */}
+                  <p className="mt-1 flex flex-wrap items-baseline gap-x-1.5 gap-y-1 bg-raised px-0.5 text-[14px] leading-[1.55] break-keep text-ink">
+                    <span className="font-mono text-[10px] text-faint">{i + 1}</span>
+                    <span className="min-w-0 flex-1">
+                      {s.label.length > 0 ? (
+                        <Inline text={s.label} />
+                      ) : (
+                        <span className="text-muted">
+                          {s.from} → {s.to}
+                        </span>
+                      )}
+                    </span>
+                  </p>
+                </div>
+              </li>
+            )
+          })}
+        </ol>
+      </div>
+    </figure>
+  )
+}
+
+/** 화살촉. 테두리 삼각형이라 SVG가 필요 없다 */
+function ArrowHead({ dir }: { dir: 'left' | 'right' }) {
+  return (
+    <span
+      className={
+        dir === 'right'
+          ? 'h-0 w-0 shrink-0 border-y-[4px] border-l-[7px] border-y-transparent border-l-accent'
+          : 'h-0 w-0 shrink-0 border-y-[4px] border-r-[7px] border-y-transparent border-r-accent'
+      }
+    />
+  )
+}
+
 export function FlowDiagram({ steps }: { steps: FlowStep[] }) {
+  /*
+   * 오가는 것은 기둥으로 그린다.
+   *
+   * 문법을 새로 열지 않았다. 파싱된 걸음만 보면 왕복인지 알 수 있으므로
+   * 저장된 본문을 한 글자도 안 고치고 그림만 고른다. 못 알아본 것은 아래
+   * 목록 그대로 둔다 — 섣불리 그리느니 그대로가 낫다.
+   */
+  if (flowShape(steps) === 'sequence') return <SequenceDiagram steps={steps} />
+
   return (
     <figure className="my-6 overflow-hidden rounded-lg border border-line bg-raised">
       <ol className="divide-y divide-line">

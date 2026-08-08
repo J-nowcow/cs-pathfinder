@@ -13,8 +13,18 @@ import { StateDiagram } from '@/components/Diagram'
 afterEach(cleanup)
 
 describe('Prose — 순서 도식', () => {
-  it('draws each step with its actors and label', () => {
-    render(
+  /*
+   * 오가는 것은 기둥과 화살표로 그린다.
+   *
+   * 전에는 `클라이언트`와 `서버`가 걸음마다 반복돼 두 번씩 나왔다. 지금은
+   * 기둥 머리에 한 번씩만 서고 오간 것은 화살표가 말한다 — 핸드셰이크가
+   * "1번 다음 2번"이 아니라 왕복으로 보여야 하기 때문이다.
+   *
+   * **화살표는 낭독기가 못 읽는다.** 그래서 누가 누구에게 무엇을 보냈는지를
+   * 문장으로 따로 남기는지도 같이 건다. 이게 빠지면 그림만 남는다.
+   */
+  it('오가는 걸음은 기둥으로 그리고 문장으로도 남긴다', () => {
+    const { container } = render(
       <Prose
         body={[
           '앞 문단이다.',
@@ -30,9 +40,34 @@ describe('Prose — 순서 도식', () => {
     expect(screen.getByText('앞 문단이다.')).toBeTruthy()
     expect(screen.getByText('SYN')).toBeTruthy()
     expect(screen.getByText('SYN + ACK')).toBeTruthy()
-    // 행위자는 단계마다 반복되므로 여러 개가 나온다
-    expect(screen.getAllByText('클라이언트').length).toBe(2)
-    expect(screen.getAllByText('서버').length).toBe(2)
+
+    // 기둥 머리에 한 번씩
+    expect(screen.getAllByText('클라이언트').length).toBe(1)
+    expect(screen.getAllByText('서버').length).toBe(1)
+
+    // 낭독기가 읽을 것
+    const sr = [...container.querySelectorAll('.sr-only')].map((e) => e.textContent)
+    expect(sr).toContain('1. 클라이언트에서 서버로: SYN')
+    expect(sr).toContain('2. 서버에서 클라이언트로: SYN + ACK')
+  })
+
+  /*
+   * 한 방향으로만 흐르는 것은 손대지 않는다. 파이프라인에 기둥을 세우면
+   * 마디마다 하나씩 서서 화살표가 글자보다 짧아진다.
+   */
+  it('한 방향으로만 흐르면 걸음마다 행위자를 되풀이한다', () => {
+    render(
+      <Prose
+        body={[
+          ':::flow',
+          '소스 -> 컴파일러: 기계어로 바꾼다',
+          '컴파일러 -> 링커: 실행 파일을 만든다',
+          ':::',
+        ].join('\n')}
+      />,
+    )
+
+    expect(screen.getAllByText('컴파일러').length).toBe(2)
   })
 
   /** 번호가 없으면 순서인지 목록인지 구별이 안 된다 */
