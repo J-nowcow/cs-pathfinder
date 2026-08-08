@@ -40,7 +40,9 @@
     "retag": "tsx scripts/retag-fence.ts",
     "find:stack": "tsx scripts/find-stack-targets.ts",
     "show": "tsx scripts/show-block.ts",
-    "fix:stack": "tsx scripts/fix-stack-batch.ts"
+    "fix:stack": "tsx scripts/fix-stack-batch.ts",
+    "dump:stack": "tsx scripts/dump-stack-blocks.ts",
+    "stack:table": "tsx scripts/stack-to-table.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
