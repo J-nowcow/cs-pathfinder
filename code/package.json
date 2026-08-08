@@ -35,7 +35,9 @@
     "repair:generated": "tsx scripts/repair-generated.ts",
     "measure:coverage": "tsx scripts/measure-coverage.ts",
     "measure:corpus": "tsx scripts/measure-corpus.ts",
-    "measure:flow-shape": "tsx scripts/measure-flow-shape.ts"
+    "measure:flow-shape": "tsx scripts/measure-flow-shape.ts",
+    "find:state": "tsx scripts/find-state-candidates.ts",
+    "retag": "tsx scripts/retag-fence.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
