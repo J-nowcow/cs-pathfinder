@@ -33,7 +33,8 @@
     "gen:examples": "tsx scripts/generate-examples.ts",
     "build:generated": "tsx scripts/build-generated-nodes.ts",
     "repair:generated": "tsx scripts/repair-generated.ts",
-    "measure:coverage": "tsx scripts/measure-coverage.ts"
+    "measure:coverage": "tsx scripts/measure-coverage.ts",
+    "measure:corpus": "tsx scripts/measure-corpus.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
