@@ -7,6 +7,7 @@ import { isMissingTable } from '@/lib/db/missing-table'
 import { EXAMPLE_NODES, type ExampleNode } from '../../../data/example-nodes'
 import { GENERATED_NODES } from '../../../data/generated-nodes'
 import { AUTHORED_NODES } from '../../../data/authored-nodes'
+import { ON_DEMAND_NODES } from '../../../data/on-demand-nodes'
 import { SEED_RELATIONS, type SeedRelation } from '../../../data/relations'
 import { saveRelations, type NewRelation } from '@/lib/db/relations'
 
@@ -46,7 +47,12 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
    * 손으로 쓴 것을 먼저 심는다. 같은 질문이 양쪽에 있으면 손으로 쓴 쪽이
    * 남아야 한다.
    */
-  for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES]) {
+  /*
+ * `ON_DEMAND_NODES`는 사용자가 물어보다 만들어져 DB에만 남아 있던 글이다.
+ * 여기 넣어야 파일이 진짜 출처가 된다. 빼면 그 26편은 다시 고칠 파일이
+ * 없는 상태로 돌아간다 -- tests/db/bodies-have-a-home.test.ts가 지킨다.
+ */
+for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]) {
     const id = rootNodeId(ex)
 
     // xmax = 0 이면 방금 넣은 행이다. 갱신된 행과 구별하는 표준 수법이다.

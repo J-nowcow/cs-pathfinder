@@ -20,6 +20,7 @@ const DATA_FILES = [
   'data/example-nodes.ts',
   'data/authored-nodes.ts',
   'data/pending-nodes.ts',
+  'data/on-demand-nodes.ts',
 ]
 
 /** 정적 파일에는 본문이 한 줄짜리 JSON 문자열로 들어 있다 */
