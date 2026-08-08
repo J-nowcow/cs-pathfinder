@@ -45,6 +45,28 @@ describe('다음에 팔 것', () => {
     expect(out.length).toBe(3)
   })
 
+  /*
+   * 번호순으로 채우면 다섯 중 넷이 같은 분야로 나온다. 실제로 그랬다 --
+   * 배포하고 화면을 보고서야 알았다. 처음 온 사람에게 한 분야를 몰아 주면
+   * 나머지가 있는 줄도 모른다.
+   */
+  it('기록이 없으면 분야를 골고루 준다', () => {
+    const out = suggestNext(ALL, new Set(), [], 4)
+    expect(new Set(out.map((x) => x.category)).size).toBe(4)
+  })
+
+  it('기록이 있어도 한 분야로만 채우지 않는다', () => {
+    const out = suggestNext(ALL, new Set(['id1']), ['네트워크', '네트워크', '네트워크'], 4)
+    expect(out[0].category).toBe('네트워크')
+    expect(new Set(out.map((x) => x.category)).size).toBeGreaterThan(2)
+  })
+
+  /* 분야가 하나뿐이면 돌 곳이 없다. 그래도 멈춰야 한다 */
+  it('분야가 하나뿐이어도 멈춘다', () => {
+    const only = [c(1, '네트워크'), c(2, '네트워크')]
+    expect(suggestNext(only, new Set(), [], 5).length).toBe(2)
+  })
+
   it('다 팠으면 빈 목록이다', () => {
     const out = suggestNext(ALL, new Set(ALL.map((x) => x.id)), ['네트워크'], 5)
     expect(out).toEqual([])
