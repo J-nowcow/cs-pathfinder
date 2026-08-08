@@ -45,6 +45,21 @@ const HEADS: Record<number, [string, string]> = {
   187: ['실행 방식', '실행 조건·특성'],
   193: ['스케줄러', '역할'],
   199: ['저장소', '노출 데이터'],
+  24: ['조건', '뜻'],
+  41: ['진단 항목', '확인 방법'],
+  104: ['모듈', '담기는 것'],
+  203: ['구분', '내용'],
+  205: ['대응 수준', '방식'],
+  216: ['구분', '메모리 영역'],
+  230: ['구분', '역할'],
+  233: ['프로토콜', '전송 방식'],
+  239: ['구분', '처리 대상'],
+  240: ['컴포넌트', '상태·생명주기 도구'],
+  241: ['메커니즘', '역할'],
+  243: ['타입', '저장 위치'],
+  250: ['구분', '방식'],
+  258: ['구성 요소', '성능 영향'],
+  259: ['힙 종류', '부모·자식 관계'],
 }
 
 const GEN = 'data/generated-nodes.ts'
@@ -65,7 +80,11 @@ function build(body: string, heads: [string, string], dropFirst: boolean) {
   const end = lines.findIndex((l, i) => i > start && /^:::[ \t]*(end)?[ \t]*$/.test(l))
   if (end < 0) return { error: '닫는 울타리가 없다' }
 
-  let inner = lines.slice(start + 1, end).filter((l) => l.trim().length > 0)
+  let inner = lines
+    .slice(start + 1, end)
+    .filter((l) => l.trim().length > 0)
+    /* 구분줄은 데이터가 아니다. 두면 `| --- | --- |` 행이 하나 생긴다 */
+    .filter((l) => !/^\|?[\s:-]*-{2,}[\s:|-]*$/.test(l.trim()))
   if (dropFirst) inner = inner.slice(1)
   if (inner.length < 2) return { error: `줄이 ${inner.length}개다` }
 
