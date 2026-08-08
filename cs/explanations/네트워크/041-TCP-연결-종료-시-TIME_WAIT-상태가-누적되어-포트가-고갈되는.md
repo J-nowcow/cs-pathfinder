@@ -1,6 +1,6 @@
 # TCP 연결 종료 시 TIME_WAIT 상태가 누적되어 포트가 고갈되는 현상을 진단하는 방법은 무엇인가?
 
-`#296` · 네트워크
+`#41` · 네트워크
 
 netstat이나 ss 명령어로 TIME_WAIT 상태의 소켓 개수를 세고 local_port_range 한도와 비교하는 것이다.
 
@@ -20,7 +20,7 @@ netstat이나 ss 명령어로 TIME_WAIT 상태의 소켓 개수를 세고 local_
 
 ---
 
-**[꼬리를 물고 더 파고들기 →](https://cs-pathfinder.vercel.app/q/296)** · [네트워크 목록](README.md) · [전체 목록](../README.md)
+**[꼬리를 물고 더 파고들기 →](https://cs-pathfinder.vercel.app/q/41)** · [네트워크 목록](README.md) · [전체 목록](../README.md)
 
 > 이 글은 대부분 AI가 썼다. 틀린 곳을 찾으면 이슈로 알려 주면 고친다.
 > 도식은 서비스에서 그림으로 그려진다. 여기서는 GitHub이 그릴 수 있는 표와 목록으로 옮겼다.

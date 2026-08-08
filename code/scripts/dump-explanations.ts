@@ -5,6 +5,10 @@ loadEnvLocal()
 import { writeFileSync, readFileSync, mkdirSync, readdirSync, rmSync, existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { getDb } from '../src/lib/db/client'
+import { EXAMPLE_NODES } from '../data/example-nodes'
+import { AUTHORED_NODES } from '../data/authored-nodes'
+import { GENERATED_NODES } from '../data/generated-nodes'
+import { ON_DEMAND_NODES } from '../data/on-demand-nodes'
 import { ensureSeeded } from '../src/lib/db/bootstrap'
 import { CATEGORIES, categoryAnchor } from '../src/lib/tree/categories'
 import { toGithubMarkdown } from '../src/lib/markdown/to-github'
@@ -24,9 +28,10 @@ import { SITE_URL } from '../src/lib/site'
  * **분야마다 파일을 나눈다.** 한 파일에 다 넣으면 200KB가 넘어 GitHub에서 한
  * 화면에 안 들어오고, 무엇이 있는지 훑을 수도 없다.
  *
- * 담는 범위는 `loadCatalog`와 같은 규칙이다 — `origin='batch'`이고 발행일이
- * 지난 것만. 사용자가 자유 입력으로 판 질문은 안 담는다. 생성이 끝났다는 것과
- * 공개해도 된다는 것은 다르고, 레포에 박히면 되돌릴 수 없다.
+ * 담는 범위는 **정적 파일에 담긴 것**과 발행일이 지난 것이다. 생성이 끝났다는
+ * 것과 공개해도 된다는 것은 다르고, 레포에 박히면 되돌릴 수 없다. 그래서 사람이
+ * 훑어 파일로 옮긴 것만 나간다 — 자유 입력으로 막 생긴 질문은 사이트에만 있다가
+ * 파일로 들어오는 날 함께 나간다.
  *
  * 실행: npx tsx scripts/dump-explanations.ts
  */
@@ -113,7 +118,7 @@ const flagged = reviewedIds().rejected
 await ensureSeeded()
 
 const db = await getDb()
-const rows = await db.query<{
+const allRows = await db.query<{
   id: string
   number: number
   question: string
@@ -130,12 +135,31 @@ const rows = await db.query<{
             on t.root_node_id = n.id
            and t.kind = 'daily'
     where n.status = 'ready'
-      and n.origin = 'batch'
       and n.body is not null and n.body <> ''
       and (t.publish_date is null or t.publish_date <= $1::date)
     order by n.created_at asc, n.normalized_question asc`,
   [kstToday()],
 )
+
+/*
+ * **공개는 커레이션을 따라간다.**
+ *
+ * 예전에는 `origin = 'batch'`로 걸렀다. 그 열은 누가 썼는지가 아니라 언제
+ * 만들었는지를 담는다. 사용자가 물어봐서 생긴 글을 빼려던 것인데, 그 글도
+ * 사람이 훑어 고치고 정적 파일에 담으면 나머지와 다를 것이 없다.
+ *
+ * 실제로 26편을 그렇게 추려 파일에 넣었더니 그중 17편이 공개 말뭉치에서만
+ * 빠졌다. 사이트에는 있고 저장소에는 없는 상태다.
+ *
+ * 그래서 기준을 바꾼다. **정적 파일에 담긴 것만 낸다.** 아직 안 추린 글은
+ * 사이트에만 있다가 파일로 들어오는 날 함께 나간다.
+ */
+const curated = new Set(
+  [...EXAMPLE_NODES, ...AUTHORED_NODES, ...GENERATED_NODES, ...ON_DEMAND_NODES].map((n) =>
+    n.question.trim(),
+  ),
+)
+const rows = allRows.filter((r) => curated.has(r.question.trim()))
 
 /**
  * 머리말.

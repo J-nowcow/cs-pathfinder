@@ -52,8 +52,40 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
  * 여기 넣어야 파일이 진짜 출처가 된다. 빼면 그 26편은 다시 고칠 파일이
  * 없는 상태로 돌아간다 -- tests/db/bodies-have-a-home.test.ts가 지킨다.
  */
-for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]) {
-    const id = rootNodeId(ex)
+/*
+   * **이미 있는 행은 질문으로 찾는다. id로 찾으면 못 만난다.**
+   *
+   * 시드는 id를 질문 해시에서 만든다. 그런데 사용자가 물어봐서 생긴 행은
+   * 그 경로가 아니라 임의의 uuid로 만들어졌다. 그래서 같은 질문인데 id가
+   * 달라 `on conflict (id)`가 안 걸리고 **행이 하나 더 생긴다.**
+   *
+   * 실제로 그랬다. 26편을 파일로 꺼내 시드에 넣었더니 291행이 317행이 됐다.
+   * 화면은 옛 행(`/q/21`)을 계속 내보내고 고친 글은 새 행(`/q/292`)에만
+   * 들어갔다. 고쳤는데 아무것도 안 바뀌는 상태였다.
+   *
+   * 그래서 질문으로 먼저 찾는다. 있으면 그 행의 id를 쓴다 -- 짧은 주소가
+   * 그대로 살아 있어야 한다.
+   */
+  const existing = new Map<string, string>()
+  {
+    const rows = await db.query<{ id: string; q: string }>(
+      `select id, normalized_question q from qnode`,
+    )
+    /* 같은 질문이 여럿이면 번호가 작은 쪽, 즉 먼저 생긴 쪽을 남긴다 */
+    for (const r of rows) if (!existing.has(r.q.trim())) existing.set(r.q.trim(), r.id)
+  }
+
+  /* 지금 붙어 있는 꼬리질문. 다른 것만 쓰려고 미리 읽는다 */
+  const suggestionText = new Map<string, string>()
+  {
+    const rows = await db.query<{ qnode_id: string; position: number; text: string }>(
+      `select qnode_id, position, text from qnode_suggestion`,
+    )
+    for (const r of rows) suggestionText.set(`${r.qnode_id}:${r.position}`, r.text)
+  }
+
+  for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]) {
+    const id = existing.get(ex.question.trim()) ?? rootNodeId(ex)
 
     // xmax = 0 이면 방금 넣은 행이다. 갱신된 행과 구별하는 표준 수법이다.
     const rows = await db.query<{ id: string; created: boolean }>(
@@ -66,14 +98,9 @@ for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON
       [id, ex.identityScope, ex.question, ex.body, ex.category],
     )
 
-    if (rows.length === 0) continue
-
-    if (!rows[0].created) {
-      refreshed += 1
-      continue
-    }
-
-    inserted += 1
+    const created = rows.length > 0 && rows[0].created
+    if (rows.length > 0 && !created) refreshed += 1
+    if (created) inserted += 1
 
     /*
      * **번호는 여기서 붙인다. insert에 맡기면 안 된다.**
@@ -86,17 +113,30 @@ for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON
      * `0011`에서 기본값을 뗐다. 그래서 여기서 붙인다. `created`가 참일 때만
      * 도므로 이미 있는 행은 번호를 안 먹는다.
      */
-    await db.query(
-      `update qnode set number = nextval('qnode_number_seq')
-        where id = $1 and number is null`,
-      [id],
-    )
+    if (created) {
+      await db.query(
+        `update qnode set number = nextval('qnode_number_seq')
+          where id = $1 and number is null`,
+        [id],
+      )
+    }
 
+    /*
+     * **꼬리질문은 본문이 안 바뀌어도 고쳐야 한다.**
+     *
+     * 예전에는 이 자리가 새로 만든 행에서만 돌았고 충돌하면 `do nothing`이었다.
+     * 그래서 이미 있는 행의 단추는 **영영 안 바뀌었다.** 35자를 넘거나 경어체인
+     * 단추 44개를 고쳤는데 화면에는 옛 글자가 그대로 나왔다.
+     *
+     * 다만 291편 곱하기 다섯이면 매 부팅에 1,400번 넘게 쓴다. 그래서 미리
+     * 한 번 읽어 두고 **다른 것만** 쓴다.
+     */
     for (const [position, text] of ex.suggestions.entries()) {
+      if (suggestionText.get(`${id}:${position}`) === text) continue
       await db.query(
         `insert into qnode_suggestion (id, qnode_id, text, position, target_node_id)
          values ($1, $2, $3, $4, null)
-         on conflict (qnode_id, position) do nothing`,
+         on conflict (qnode_id, position) do update set text = excluded.text`,
         [suggestionId(id, position), id, text, position],
       )
     }
