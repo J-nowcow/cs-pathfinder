@@ -253,19 +253,26 @@ export function StateProto({ steps }: { steps: FlowStep[] }) {
                             </span>
                           </span>
 
-                          {o.guard.length > 0 && (
-                            <p className="mt-1">
-                              <span className="inline-block break-keep rounded border border-line bg-surface px-1.5 py-0.5 text-[12px] leading-[1.45] text-muted">
-                                <Inline text={o.guard} />
-                              </span>
-                            </p>
-                          )}
+                          {/*
+                            조건과 설명은 도착 칩의 왼쪽 끝에 맞춘다. 화살촉
+                            5.5px + 사이 6px = 11.5px. 여기를 안 맞추면 글이
+                            칩보다 왼쪽으로 삐져나와 한 덩어리로 안 읽힌다.
+                          */}
+                          <div className="pl-[11.5px]">
+                            {o.guard.length > 0 && (
+                              <p className="mt-1">
+                                <span className="inline-block break-keep rounded border border-line bg-surface px-1.5 py-0.5 text-[12px] leading-[1.45] text-muted">
+                                  <Inline text={o.guard} />
+                                </span>
+                              </p>
+                            )}
 
-                          {o.note.length > 0 && (
-                            <p className="mt-1 break-keep text-[14px] leading-[1.6] text-ink">
-                              <Inline text={o.note} />
-                            </p>
-                          )}
+                            {o.note.length > 0 && (
+                              <p className="mt-1 break-keep text-[14px] leading-[1.6] text-ink">
+                                <Inline text={o.note} />
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </li>
                     )

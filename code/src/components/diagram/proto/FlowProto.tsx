@@ -243,11 +243,18 @@ function JumpChip({ jump }: { jump: Jump }) {
 }
 
 /**
- * 되풀이 구간을 감싸는 점선 괄호.
+ * 되돌아가는 간선. 점선 괄호가 곧 그 선이다.
  *
  * 되돌아가는 선을 200px 위로 그으려면 높이를 알아야 하는데, 글자가 몇 줄로
  * 접힐지는 브라우저만 안다. 그래서 **선을 긋는 대신 감싼다.** `inset-y-0`이라
  * 안에 무엇이 들어오든 딱 그만큼 자란다. 계산이 없으니 어긋날 것도 없다.
+ *
+ * 이름표는 "여기로 되돌아온다"다. "되풀이 구간"이라고 붙였다가 물렸다 —
+ * 괄호 안에는 되풀이되지 않는 것도 들어온다. 재시도 도식에서 `성공 처리`와
+ * `실패 종료`는 빠져나가는 끝인데 자리로는 괄호 안이다. 세로 한 줄기로 펴는
+ * 이상 그 둘을 괄호 밖으로 뺄 수가 없다(문서 순서로 사이에 끼어 있다).
+ * 그래서 괄호에 "여기가 다 되풀이된다"를 시키지 않는다. 괄호는 **어디로
+ * 돌아오는지**만 말하고, 어디서 돌아오는지는 아래 칩이 말한다.
  */
 function LoopWrap({ children }: { children: React.ReactNode }) {
   return (
@@ -260,7 +267,7 @@ function LoopWrap({ children }: { children: React.ReactNode }) {
         aria-hidden
         className="absolute right-[16px] top-[-5px] h-0 w-0 border-y-[5px] border-r-[7px] border-y-transparent border-r-warn"
       />
-      <p className="mb-1.5 text-[11px] font-medium tracking-tight text-warn">되풀이 구간</p>
+      <p className="mb-1.5 text-[11px] font-medium tracking-tight text-warn">여기로 되돌아온다</p>
       {children}
     </div>
   )
@@ -306,13 +313,13 @@ function ForkView({
                   {!last && (
                     <span
                       aria-hidden
-                      className="absolute inset-y-0 w-0.5 bg-line"
+                      className="absolute inset-y-0 w-0.5 bg-accent"
                       style={{ left: RAIL }}
                     />
                   )}
                   <span
                     aria-hidden
-                    className="absolute top-0 h-[14px] w-[13px] rounded-bl-[7px] border-b-2 border-l-2 border-line"
+                    className="absolute top-0 h-[14px] w-[13px] rounded-bl-[7px] border-b-2 border-l-2 border-accent"
                     style={{ left: RAIL }}
                   />
                 </>

@@ -198,10 +198,17 @@ export function SeqProto({
       </div>
 
       <div className="relative mt-2">
-        {/* 생명선. 아래 목록보다 먼저 그려지므로 설명 줄에 가려진다 */}
+        {/*
+          생명선. 아래 목록보다 먼저 그려지므로 설명 줄에 가려진다.
+
+          1px로 뒀더니 실제로 그려보니 거의 안 보였다. `--line`은 칸을 나누는
+          색이라 배경과의 차이가 원래 작은데, 설명 줄이 대부분을 덮어서 남는
+          것이 줄 사이의 짧은 도막뿐이다. 색은 못 바꾸므로(토큰이 정해져 있다)
+          폭으로 벌었다.
+        */}
         <div aria-hidden className="absolute inset-0 grid" style={{ gridTemplateColumns: laneCols }}>
           {actors.map((a) => (
-            <span key={a} className="mx-auto h-full w-px bg-line" />
+            <span key={a} className="mx-auto h-full w-0.5 rounded-full bg-line" />
           ))}
         </div>
 
@@ -254,14 +261,19 @@ export function SeqProto({
                         /*
                          * 자기 자신에게. 왼쪽이 트인 고리라 기둥에서 나가
                          * 기둥으로 돌아온다. 칸 폭을 다 쓰지 않게 잘라둔다.
+                         *
+                         * **화살촉을 안 붙인다.** 붙여봤더니 고리의 트인 쪽과
+                         * 겹쳐서 삼각형이 아니라 덩어리로 보였다. 돌아오는 고리는
+                         * 그것만으로 방향이 분명하고, 시작점은 다른 걸음과 같은
+                         * 점으로 찍으면 된다.
                          */
-                        <span className="relative flex h-4 w-full max-w-[58px] items-end">
+                        <span className="flex h-4 w-full max-w-[58px] items-center">
                           <span
-                            className={`h-4 w-full rounded-r-[7px] border-2 border-l-0 border-solid ${TONE[tone].line}`}
+                            className={`-mr-[3px] h-1.5 w-1.5 shrink-0 rounded-full ${TONE[tone].dot}`}
                           />
-                          <span className="absolute bottom-0 left-0 -mb-[1px]">
-                            <Head dir="left" tone={tone} />
-                          </span>
+                          <span
+                            className={`h-4 flex-1 rounded-r-[7px] border-2 border-l-0 border-solid ${TONE[tone].line}`}
+                          />
                         </span>
                       ) : rightward ? (
                         <>
