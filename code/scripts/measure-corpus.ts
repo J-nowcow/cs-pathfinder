@@ -100,6 +100,32 @@ async function main() {
   }).length
   const nothing = rows.length - empty - withAny
   console.log(`표만 있는 편      ${onlyTable}`)
+
+/*
+ * **표만 있는 편을 둘로 나눠 센다.**
+ *
+ * 총계만 보면 "표가 너무 많다"로 읽힌다. 그런데 견주거나 고르는 질문은
+ * 표가 맞는 자리다. 섞어 세면 고칠 것과 안 고쳐도 되는 것이 뭉개진다.
+ *
+ * 처음에 `차이|비교` 정도로만 재서 비교형이 10%뿐이라고 봤다. 틀렸다.
+ * "구분하여 쓰는가", "어떤 기준으로 선택하는가"가 다 빠져 있었다. 넓혀
+ * 다시 재니 72편이다.
+ *
+ * 고칠 것은 **아래쪽 숫자**다. 견주는 질문이 아닌데 표만 있는 편.
+ */
+const PICKY = /(차이|다른가|다른 점|비교|구분|어느 쪽|vs|선택|고르는|기준은|언제 쓰|언제 사용|무엇을 쓰)/
+let pickyTable = 0
+let plainTable = 0
+for (const r of rows) {
+  if (!r.body.trim()) continue
+  const m = countBlocks(r.body)
+  const onlyT = m.size > 0 && [...m.keys()].every((k) => k === '(마크다운 표)' || k === 'table')
+  if (!onlyT) continue
+  if (PICKY.test(r.question)) pickyTable += 1
+  else plainTable += 1
+}
+console.log(`  견주는 질문이라 표가 맞는 것  ${pickyTable}`)
+console.log(`  견주는 질문이 아닌데 표만     ${plainTable}   <- 줄여야 하는 숫자`)
   console.log(`통짜 글인 편      ${nothing}`)
 
   console.log('\n도식 종류별  (건수 / 그것을 가진 편수)')
