@@ -87,13 +87,26 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
   for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]) {
     const id = existing.get(ex.question.trim()) ?? rootNodeId(ex)
 
+    /*
+     * **`origin`도 함께 `batch`로 올린다.**
+     *
+     * 그 열은 목록·지도·공개 말뭉치가 "내보내도 되는가"를 판단하는 데 쓴다
+     * (`db/catalog.ts` 주석: "`ready`는 생성이 끝났다는 뜻이지 공개해도 된다는
+     * 뜻이 아니다"). 옳은 구분이다.
+     *
+     * 그런데 **정적 파일에 담겼다는 것이 곧 그 공개 판단이다.** 사람이 읽고
+     * 고쳐 파일에 옮겼으면 나머지와 다를 것이 없다. 그 표시를 여기서 붙인다.
+     *
+     * 안 붙이면 이렇게 된다 -- 26편을 추려 넣었는데 그중 17편이 `/questions`
+     * 목록에도, 지도에도, 공개 말뭉치에도 없고 주소로만 닿는다.
+     */
     // xmax = 0 이면 방금 넣은 행이다. 갱신된 행과 구별하는 표준 수법이다.
     const rows = await db.query<{ id: string; created: boolean }>(
       `insert into qnode
          (id, identity_scope, normalized_question, body, primary_category, status, origin)
        values ($1, $2, $3, $4, $5, 'ready', 'batch')
-       on conflict (id) do update set body = excluded.body
-         where qnode.body is distinct from excluded.body
+       on conflict (id) do update set body = excluded.body, origin = 'batch'
+         where qnode.body is distinct from excluded.body or qnode.origin <> 'batch'
        returning id, (xmax = 0) as created`,
       [id, ex.identityScope, ex.question, ex.body, ex.category],
     )

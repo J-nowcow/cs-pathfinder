@@ -81,3 +81,32 @@ describe('부팅 시드는 있는 행을 고친다', () => {
     expect(after[0].text).toBe(SAMPLE.suggestions[0])
   })
 })
+
+/**
+ * 파일에 담긴 글은 **목록에 나와야 한다.**
+ *
+ * `origin`은 목록·지도·공개 말뭉치가 "내보내도 되는가"를 판단하는 열이다.
+ * 물어봐서 생긴 행은 `on_demand`이고 그 셋에서 전부 빠진다.
+ *
+ * 사람이 읽고 고쳐 정적 파일에 옮겼으면 그 판단은 끝난 것이다. 시드가 그
+ * 표시를 올려 주지 않으면 17편이 주소로만 닿는 유령이 된다.
+ */
+describe('파일에 담긴 글은 공개 목록에 오른다', () => {
+  it('물어봐서 생긴 행도 파일에 있으면 origin이 batch로 오른다', async () => {
+    const db = await getDb()
+    await db.query(
+      `insert into qnode (id, identity_scope, normalized_question, body, primary_category, status, origin, number)
+       values ('99999999-8888-7777-6666-555555555555', $1, $2, $3, $4, 'ready', 'on_demand', 9002)`,
+      [SAMPLE.identityScope, SAMPLE.question, SAMPLE.body, SAMPLE.category],
+    )
+
+    await ensureSeeded()
+
+    const rows = await db.query<{ origin: string }>(
+      `select origin from qnode where normalized_question = $1`,
+      [SAMPLE.question],
+    )
+    expect(rows.length).toBe(1)
+    expect(rows[0].origin).toBe('batch')
+  })
+})
