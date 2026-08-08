@@ -116,6 +116,9 @@ const GLUED_JOSA = /(?<=[가-힣])(를|을|는|와|과)\1(?=[\s.,)·]|$)/m
  * 도식 안은 문장 규칙을 안 댄다 — `:::flow`의 라벨은 문장이 아니라 이름표라
  * 문장 규칙을 대면 전부 걸린다.
  */
+/** 쓸 수 있는 울타리 이름. `parseBlocks`가 아는 것과 같아야 한다 */
+const FENCE_NAMES = new Set(['flow', 'state', 'tree', 'memory', 'timeline', 'stack'])
+
 export function contentIssues(c: { body: string; suggestions: string[] }): ContentIssue[] {
   const out: ContentIssue[] = []
   const blocks = parseBlocks(c.body)
@@ -153,6 +156,45 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
     out.push({
       rule: '도식위치',
       detail: `첫 도식이 ${firstDiagram + 1}번째 블록에 있다. 답 바로 뒤로 올려라`,
+      severity: 'block',
+    })
+  }
+
+  /*
+   * **울타리를 열고도 그림이 안 나온 자리.**
+   *
+   * 위의 `도식삼킴`은 도식이 **하나도 없을 때만** 운다. 그래서 표 하나가
+   * 함께 있으면 옆에서 울타리가 통째로 사라져도 조용히 지나간다.
+   *
+   * 실제로 그런 편이 있었다. `:::stack` 안에 마크다운 표 구분선(`--- | ---`)이
+   * 들어 있어 파서가 표로 읽고 울타리를 버렸다. 표가 남으니 `도식삼킴`이
+   * 안 울었고, 317편을 훑는 검사에서 0건으로 나왔다.
+   *
+   * 그래서 **연 개수와 그려진 개수를 견준다.** 이름을 적어 열었으면 그 수만큼
+   * 나와야 한다. 덜 나왔으면 어딘가에서 먹혔다는 뜻이다.
+   */
+  const opened = [...c.body.matchAll(/^:::[ \t]*([A-Za-z가-힣_-]+)/gm)].map((m) => m[1])
+
+  /*
+   * 모르는 이름을 먼저 가른다. `:::sequence`처럼 없는 종류를 쓰면 파서가
+   * 통째로 버리는데, 아래 개수 비교만으로는 "문법이 틀렸다"로 읽혀 엉뚱한
+   * 곳을 고치게 된다. 지금 코퍼스에 0건이지만 **새 종류를 열 때 여기가
+   * 먼저 걸려야 한다.**
+   */
+  const unknown = [...new Set(opened.filter((n) => !FENCE_NAMES.has(n)))]
+  if (unknown.length > 0) {
+    out.push({
+      rule: '모르는울타리',
+      detail: `\`:::${unknown[0]}\`은 없는 도식 종류다. 쓸 수 있는 것은 ${[...FENCE_NAMES].join('·')}뿐이다`,
+      severity: 'block',
+    })
+  }
+
+  const drawn = blocks.filter((b) => FENCE_NAMES.has(b.type)).length
+  if (unknown.length === 0 && opened.length > drawn) {
+    out.push({
+      rule: '울타리삼킴',
+      detail: `울타리를 ${opened.length}개 열었는데 ${drawn}개만 그려졌다. 안에 표 구분선(\`--- | ---\`)이 들어 있거나 문법이 어긋난 것이다`,
       severity: 'block',
     })
   }
