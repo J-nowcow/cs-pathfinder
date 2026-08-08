@@ -308,3 +308,43 @@ describe('StateDiagram', () => {
     expect(container.querySelectorAll('figure > ul > li')).toHaveLength(2)
   })
 })
+
+/**
+ * 같은 시간에 누가 무엇을 하는가.
+ *
+ * **빈 칸이 이 도식의 뜻이다.** 아무것도 안 하는 칸이 기다림이고, 그 기다림을
+ * 보여주려고 이 도식을 쓴다. 순서 도식으로 그리면 두 주체가 시간 순서로
+ * 눕혀져 "동시에"가 통째로 사라진다.
+ *
+ * 그런데 빈 `<td>`는 낭독기가 아무 말도 안 하고 지나간다. 눈으로 보는 사람만
+ * 뜻을 받고 듣는 사람은 못 받는다.
+ */
+describe('Prose — 같은 시간 도식', () => {
+  const body = [
+    ':::timeline',
+    '스레드 A | 100을 읽는다 |  | 150을 쓴다 | ',
+    '스레드 B |  | 100을 읽는다 |  | 130을 쓴다',
+    ':::',
+  ].join('\n')
+
+  it('주체를 열로, 시간을 행으로 놓는다', () => {
+    const { container } = render(<Prose body={body} />)
+    const heads = [...container.querySelectorAll('thead th')].map((e) => e.textContent)
+    expect(heads).toContain('스레드 A')
+    expect(heads).toContain('스레드 B')
+    expect(container.querySelectorAll('tbody tr').length).toBe(4)
+  })
+
+  it('빈 칸을 글자로도 남긴다', () => {
+    const { container } = render(<Prose body={body} />)
+    const empties = [...container.querySelectorAll('tbody .sr-only')].map((e) => e.textContent)
+    // A는 2번·4번 칸이, B는 1번·3번 칸이 비어 있다
+    expect(empties.filter((t) => t === '아무것도 하지 않는다').length).toBe(4)
+  })
+
+  it('찬 칸에는 그 글자를 그대로 쓴다', () => {
+    render(<Prose body={body} />)
+    expect(screen.getAllByText('100을 읽는다').length).toBe(2)
+    expect(screen.getByText('130을 쓴다')).toBeTruthy()
+  })
+})

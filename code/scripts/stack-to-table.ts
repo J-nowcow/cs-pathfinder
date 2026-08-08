@@ -1,6 +1,7 @@
 import { loadEnvLocal } from '../src/lib/load-env'
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { parseBlocks } from '../src/lib/markdown/blocks'
+import { patchDataFiles } from './lib/patch-data'
 
 /**
  * `:::stack`으로 쓰인 비교표를 진짜 표로 되돌린다.
@@ -158,8 +159,6 @@ async function main() {
     return
   }
 
-  const gen = readFileSync(GEN, 'utf8')
-  let nextGen = gen
   mkdirSync('docs/audit', { recursive: true })
   let backup: Record<string, { question: string; body: string }> = {}
   try {
@@ -171,12 +170,15 @@ async function main() {
   for (const o of ok) {
     if (!backup[o.id]) backup[o.id] = { question: o.question, body: o.body }
     await pool.query(`update qnode set body = $1 where id = $2`, [o.next, o.id])
-    const from = escaped(o.before)
-    if (nextGen.includes(from)) nextGen = nextGen.replace(from, escaped(o.after))
+    /*
+     * **정적 파일을 반드시 같이 고친다.** `bootstrap`이 거기서 본문을
+     * 덮어쓰므로 DB만 고치면 요청 하나에 되돌아간다.
+     */
+    const r = patchDataFiles(o.before, o.after)
+    if (!r.ok) console.error(`  #${o.number} 정적 파일 ${r.reason}${r.hits.length ? ': ' + r.hits.join(', ') : ''} — 되돌아간다!`)
   }
 
   writeFileSync(BACKUP, JSON.stringify(backup, null, 2))
-  if (nextGen !== gen) writeFileSync(GEN, nextGen)
   console.log(`\n${ok.length}편 적용. 되돌리려면 ${BACKUP}`)
   await pool.end()
 }

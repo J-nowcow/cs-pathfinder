@@ -556,10 +556,19 @@ export function TimelineDiagram({ rows }: { rows: TimelineRow[] }) {
                     지키면 "받아 / 적는다"가 된다. 칸 수가 적어 가로로 넘칠 일은
                     없다(파서가 다섯으로 막는다).
                   */}
-                  {r.slots[t]?.length > 0 && (
+                  {r.slots[t]?.length > 0 ? (
                     <span className="inline-block break-keep rounded bg-accent-soft px-2 py-1 text-[13px] leading-[1.45] text-ink">
                       <Inline text={r.slots[t]} />
                     </span>
+                  ) : (
+                    /*
+                      **빈 칸이 이 도식의 뜻이다.** 아무것도 안 하는 칸이
+                      기다림이고, 그 기다림을 보여주려고 timeline을 쓴다.
+                      그런데 빈 `<td>`는 낭독기가 아무 말도 안 하고 지나간다 --
+                      눈으로 보는 사람만 뜻을 받고 듣는 사람은 못 받는다.
+                      글자로 남긴다.
+                    */
+                    <span className="sr-only">아무것도 하지 않는다</span>
                   )}
                 </td>
               ))}
