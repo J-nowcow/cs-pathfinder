@@ -1,4 +1,6 @@
 import { loadEnvLocal } from '../src/lib/load-env'
+import { parseBlocks } from '../src/lib/markdown/blocks'
+import { flowShape } from '../src/lib/markdown/flow-shape'
 
 /**
  * 저장된 해설 전부를 훑어 **지금 무엇이 있는지** 센다.
@@ -127,6 +129,32 @@ for (const r of rows) {
 console.log(`  견주는 질문이라 표가 맞는 것  ${pickyTable}`)
 console.log(`  견주는 질문이 아닌데 표만     ${plainTable}   <- 줄여야 하는 숫자`)
   console.log(`통짜 글인 편      ${nothing}`)
+
+  /*
+   * **`flow` 개수만으로는 새 도식이 쓰이는지 알 수 없다.**
+   *
+   * `:::flow`는 저장된 문법이고 화면에 나가는 그림은 `flowShape()`가 고른다.
+   * 왕복이면 기둥, 선형이면 사슬, 나머지는 예전 모양 그대로다. 그래서
+   * "flow 90개"는 늘어도 **새 그림을 받는 수는 그대로일 수 있다.**
+   *
+   * 여기서 함께 찍는다. 따로 도구를 돌려야 하면 아무도 안 본다.
+   * 판정은 반드시 화면이 쓰는 그 함수로 한다 -- 사본을 두면 갈라진다.
+   */
+  const shape = { sequence: 0, chain: 0, other: 0 }
+  for (const row of rows) {
+    if (!row.body.trim()) continue
+    for (const b of parseBlocks(row.body)) {
+      if (b.type === 'flow') shape[flowShape(b.steps)] += 1
+    }
+  }
+  const flowTotal = shape.sequence + shape.chain + shape.other
+  const drawn = shape.sequence + shape.chain
+  console.log('\nflow가 실제로 받는 그림')
+  console.log(`  기둥 ${shape.sequence} · 사슬 ${shape.chain} · 그대로 ${shape.other}`)
+  console.log(
+    `  새 그림을 받는 것 ${drawn}/${flowTotal}` +
+      (flowTotal > 0 ? ` (${Math.round((drawn / flowTotal) * 100)}%)` : ''),
+  )
 
   console.log('\n도식 종류별  (건수 / 그것을 가진 편수)')
   const kinds = [...blockCount.entries()].sort((a, b) => b[1] - a[1])
