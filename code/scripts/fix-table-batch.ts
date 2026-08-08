@@ -25,40 +25,61 @@ loadEnvLocal()
 
 type Fix = { number: number; why: string; before: string; after: string }
 
+/*
+ * 이미 넣은 둘은 목록에서 뺐다. 다시 돌리면 원문이 안 맞아 멈춘다.
+ *
+ *   #216 JVM 메모리 영역 -> tree   (Codex·B 일치. 두 표)
+ *   #233 HTTPS           -> stack  (Codex와 나. B는 반대 — 갈린 판정이다)
+ *
+ * `#233`은 내 규칙("둘 이상 일치")을 어기고 넣은 것이다. B는 "질문 자체가
+ * 무엇이 다른가라 대조가 답"이라고 봤다. 본문이 "전송 계층 위에 얹은
+ * 구조"라고 쓰는데 표가 그 층을 한 칸에 뭉쳤다는 점으로 갈랐다.
+ * 되돌리려면 `docs/audit/_bodies-before-table-fix.json`.
+ */
 const FIXES: Fix[] = [
   {
-    number: 216,
-    why: '공유/개별 아래 실제 영역이 담긴다. 두 단 포함 관계다',
-    before: `| 구분 | 메모리 영역 |
-| --- | --- |
-| 공유 영역 | Heap, Method Area |
-| 개별 영역 | Stack, PC Register, Native Method Stack |`,
-    after: `:::tree
-공유 영역 | 모든 스레드가 함께 쓴다
-  Heap
-  Method Area
-개별 영역 | 스레드마다 따로 생긴다
-  Stack
-  PC Register
-  Native Method Stack
+    /*
+     * 분류자 둘(외부 모델 · 서브에이전트 A)이 따로 같은 판정을 냈다.
+     *
+     * 나는 처음에 거부했다 -- 3열 표를 두 칸 도식으로 옮기면 `대가` 열이
+     * 사라진다고 봤다. 그런데 A가 그 손실을 알면서도 갈랐다. **나란히 놓고
+     * 고르는 두 방식이 아니라 누적되는 사다리**라는 것이다. 위 수준이 아래가
+     * 막는 것을 포함한다. 본문도 처음부터 "위로 올라갈수록"이라고 쓴다.
+     *
+     * `대가`는 설명 칸에 붙여 살린다. 순서를 뒤집는다 -- `StackDiagram`은
+     * 첫 줄을 맨 위에 그리므로 Serializable이 먼저 와야 본문의 "위로"와 맞는다.
+     */
+    number: 30,
+    why: '누적 사다리다. 본문이 "위로 올라갈수록"이라고 쓴다 (Codex·A 일치)',
+    before: `| 수준 | 막아주는 것 | 대가 |
+| --- | --- | --- |
+| Read Committed | 커밋 안 된 값 읽기 | 같은 질의가 두 번 다를 수 있다 |
+| Repeatable Read | 읽은 행이 중간에 바뀌는 것 | 없던 행이 끼어드는 것은 못 막는다 |
+| Serializable | 전부 | 충돌 시 트랜잭션이 취소된다 |`,
+    after: `:::stack
+Serializable | 전부 막는다. 대신 충돌하면 트랜잭션이 취소된다
+Repeatable Read | 읽은 행이 중간에 바뀌는 것까지. 없던 행이 끼어드는 것은 못 막는다
+Read Committed | 커밋 안 된 값 읽기까지. 같은 질의가 두 번 다를 수 있다
 :::`,
   },
   {
     /*
-     * 본문이 이미 "전송 계층 위에 SSL/TLS라는 보안 계층을 얹은 구조"라고
-     * 적는다. 그런데 표는 `HTTPS | HTTP + SSL/TLS`로 그 층을 한 칸에 뭉쳐
-     * 놓았다. 층으로 그리면 글이 말하는 것이 그대로 보인다.
+     * **표가 사실을 뒤집어 놓았다.** `JVM 내부 | Java Runtime Environment (JRE)`
+     * 는 거꾸로다 -- JRE가 JVM을 담는다(JRE = JVM + 표준 클래스 라이브러리).
+     *
+     * 그래서 이 편은 도식 판정과 무관하게 고쳐야 한다. 바로 아래 본문이
+     * "컴파일러가 바이트코드로 변환하면 JVM이 읽어 기계어로 해석한다"고
+     * 순서를 그대로 말하므로, 틀린 표를 그 순서로 바꾼다.
      */
-    number: 233,
-    why: '본문이 "위에 얹은 구조"라고 말하는데 표는 층을 한 칸에 뭉쳤다',
-    before: `| 프로토콜 | 전송 방식 |
+    number: 203,
+    why: '표가 사실을 뒤집었다 — JRE가 JVM을 담는다. 본문이 말하는 순서로 바꾼다',
+    before: `| 구분 | 내용 |
 | --- | --- |
-| HTTPS | HTTP + SSL/TLS |
-| HTTP | 평문 전송 |`,
-    after: `:::stack
-HTTP | 요청과 응답. 내용은 그대로다
-SSL/TLS | 암호화·인증·무결성. **HTTPS는 이 층이 더 있는 것이다**
-TCP | 전송
+| JVM 내부 | Java Runtime Environment (JRE) |
+| 실행 대상 | Java Bytecode (.class) |`,
+    after: `:::flow
+자바 소스코드 -> 바이트코드(.class): 컴파일러가 변환한다
+바이트코드(.class) -> 각 OS의 기계어: JVM이 읽어 해석한다
 :::`,
   },
 ]
@@ -94,7 +115,7 @@ async function main() {
     }
     const next = row.body.replace(fix.before, fix.after)
     const kinds = parseBlocks(next).map((b) => b.type)
-    const want = fix.after.startsWith(':::tree') ? 'tree' : 'stack'
+    const want = fix.after.slice(3, fix.after.indexOf('\n'))
     if (!kinds.includes(want as never)) {
       console.error(`#${fix.number} 바꿔도 ${want}로 안 읽힌다: ${kinds.join(',')}. 중단.`)
       process.exit(1)
