@@ -48,8 +48,35 @@ if (SITE_URL.includes('localhost')) {
   process.exit(1)
 }
 
-/** 파일 이름. 분야 이름에 공백과 `·`가 있어 그대로는 못 쓴다 */
-const fileOf = (category: string) => `${categoryAnchor(category).replace(/^c-/, '')}.md`
+/** 분야 폴더 이름. 분야 이름에 공백과 `·`가 있어 그대로는 못 쓴다 */
+const dirOf = (category: string) => categoryAnchor(category).replace(/^c-/, '')
+
+/**
+ * 질문 하나에 파일 하나.
+ *
+ * 전에는 분야마다 한 파일이라 `네트워크.md` 하나에 30편이 29KB로 들어 있었다.
+ * GitHub에서 그건 세 가지로 손해다.
+ *
+ * - **찾을 수가 없다.** 코드 검색은 파일 단위로 결과를 주는데 30편이 한
+ *   파일이면 어느 질문에서 걸린 것인지 안 보인다
+ * - **가리킬 수가 없다.** 이슈나 PR에서 특정 질문을 지목할 주소가 없다.
+ *   한글 앵커는 깨지기 쉽다
+ * - **고치기가 무섭다.** 오타 하나에 29KB 파일로 PR을 열어야 한다
+ *
+ * 번호를 세 자리로 채운다. 안 채우면 파일 목록이 `1, 10, 100, 2`로 선다.
+ * 질문 번호는 이미 주소(`/q/3`)와 같은 번호라 파일·링크·서비스가 한 번호로
+ * 꿰인다.
+ */
+function fileOf(number: number, question: string): string {
+  const slug = question
+    .replace(/[?!.,'"`()[\]{}<>:;/\\|*]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 40)
+    .replace(/-$/, '')
+  return `${String(number).padStart(3, '0')}-${slug}.md`
+}
 
 /**
  * 대조에서 지적이 나왔고 **아직 안 고친 편.**
@@ -130,14 +157,12 @@ function header(category: string, n: number, flaggedHere: number): string {
       `[서비스에서 보기](${SITE_URL}/questions#${categoryAnchor(category)})`,
     '',
     '> 이 글은 대부분 AI가 썼다. 전수 대조에서 나온 지적 80편을 하나씩 판정해',
-    '> **77편을 고쳤다**([교정 기록](../../code/docs/audit/fixes/)). 검토 후 그대로',
+    '> **77편을 고쳤다**([교정 기록](../../../code/docs/audit/fixes/)). 검토 후 그대로',
     '> 두기로 한 편에만 제목 아래 한 줄을 달았다.',
     '> 틀린 곳을 찾으면 이슈로 알려 주면 고친다.',
     '',
-    '> 도식은 서비스에서 그림으로 그려진다. 여기서는 GitHub이 그릴 수 있는',
-    '> 표와 목록으로 옮겼다.',
+    '> 질문 하나에 파일 하나다. 제목을 눌러 들어가면 해설 전문이 있다.',
     '',
-    /* 인용 블록과 첫 제목이 붙어 있으면 읽을 때 한 덩어리로 보인다 */
     '',
   ].join('\n')
 }
@@ -150,43 +175,64 @@ mkdirSync(DIR, { recursive: true })
  * 분야가 통째로 비거나 이름이 바뀌면 옛 파일이 그대로 남는다. 그러면 목록에는
  * 없는데 파일은 있는 상태가 되고, 레포를 보는 사람은 그것도 현재 내용으로 읽는다.
  */
-for (const f of readdirSync(DIR).filter((f) => f.endsWith('.md'))) {
-  rmSync(`${DIR}/${f}`)
-}
+if (existsSync(DIR)) rmSync(DIR, { recursive: true })
+mkdirSync(DIR, { recursive: true })
 
 let written = 0
 const index: string[] = []
+
+let files = 0
 
 for (const category of CATEGORIES) {
   const mine = rows.filter((r) => r.category === category)
   if (mine.length === 0) continue
 
-  const body = mine
-    .map((r) => {
-      /*
-       * **"틀렸다"고 안 쓴다.** 지적한 것도 모델이고 사람이 아직 안 봤다.
-       * 확정처럼 쓰면 멀쩡한 글에 없는 흠을 만든다.
-       */
-      const warn = flagged.has(r.id)
-        ? '> 이 해설은 교차 대조에서 지적이 나왔으나 **검토 후 그대로 두기로 했다.** ' +
-          '판단 근거는 [교정 기록](../../code/docs/audit/fixes/)에 있다.\n\n'
-        : ''
-      return (
-        `## ${r.number}. ${r.question}\n\n` +
-        warn +
-        `${toGithubMarkdown(r.body)}\n\n` +
-        `[#${r.number} 파고들기 →](${SITE_URL}/q/${r.number})\n`
-      )
-    })
-    .join('\n---\n\n')
+  const dir = `${DIR}/${dirOf(category)}`
+  mkdirSync(dir, { recursive: true })
+
+  const listed: string[] = []
+
+  for (const r of mine) {
+    /*
+     * **"틀렸다"고 안 쓴다.** 지적한 것도 모델이고 사람이 아직 안 봤다.
+     * 확정처럼 쓰면 멀쩡한 글에 없는 흠을 만든다.
+     */
+    const warn = flagged.has(r.id)
+      ? '> 이 해설은 교차 대조에서 지적이 나왔으나 **검토 후 그대로 두기로 했다.** ' +
+        '판단 근거는 [교정 기록](../../../code/docs/audit/fixes/)에 있다.\n\n'
+      : ''
+
+    const name = fileOf(r.number, r.question)
+    writeFileSync(
+      `${dir}/${name}`,
+      [
+        `# ${r.question}`,
+        '',
+        `\`#${r.number}\` · ${category}`,
+        '',
+        warn + toGithubMarkdown(r.body),
+        '',
+        '---',
+        '',
+        `**[꼬리를 물고 더 파고들기 →](${SITE_URL}/q/${r.number})** · ` +
+          `[${category} 목록](README.md) · [전체 목록](../README.md)`,
+        '',
+        '> 이 글은 대부분 AI가 썼다. 틀린 곳을 찾으면 이슈로 알려 주면 고친다.',
+        '> 도식은 서비스에서 그림으로 그려진다. 여기서는 GitHub이 그릴 수 있는 표와 목록으로 옮겼다.',
+        '',
+      ].join('\n'),
+    )
+    listed.push(
+      `- [\`#${r.number}\` ${r.question}](${name})` +
+        (flagged.has(r.id) ? ' — 검토 후 유지' : ''),
+    )
+    files += 1
+  }
 
   const flaggedHere = mine.filter((r) => flagged.has(r.id)).length
-  writeFileSync(
-    `${DIR}/${fileOf(category)}`,
-    `${header(category, mine.length, flaggedHere)}${body}`,
-  )
+  writeFileSync(`${dir}/README.md`, `${header(category, mine.length, flaggedHere)}${listed.join('\n')}\n`)
   index.push(
-    `- [${category}](${fileOf(category)}) — ${mine.length}개` +
+    `- [${category}](${dirOf(category)}/) — ${mine.length}개` +
       (flaggedHere > 0 ? ` (검토 후 유지 ${flaggedHere})` : ''),
   )
   written += 1
@@ -197,8 +243,8 @@ writeFileSync(
   [
     '# 해설 전문',
     '',
-    `질문 ${rows.length}개를 분야 ${written}개로 나눠 담았다. 서비스에서 보이는 것과 같은 글이고`,
-    'GitHub이 그릴 수 있게 도식만 표와 목록으로 옮겼다.',
+    `질문 ${rows.length}개. **질문 하나에 파일 하나다.**`,
+    '서비스에서 보이는 것과 같은 글이고 GitHub이 그릴 수 있게 도식만 표와 목록으로 옮겼다.',
     '',
     ...index,
     '',
@@ -211,5 +257,5 @@ writeFileSync(
 )
 
 const marked = rows.filter((r) => flagged.has(r.id)).length
-console.log(`해설 ${rows.length}개 → ${written}개 파일 · 검토 후 유지 표시 ${marked}개 (${DIR})`)
+console.log(`해설 ${rows.length}개 → 파일 ${files}개 · 분야 ${written}개 · 검토 후 유지 표시 ${marked}개 (${DIR})`)
 process.exit(0)
