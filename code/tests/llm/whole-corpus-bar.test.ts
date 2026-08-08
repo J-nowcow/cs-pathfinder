@@ -4,6 +4,7 @@ import { AUTHORED_NODES } from '../../data/authored-nodes'
 import { GENERATED_NODES } from '../../data/generated-nodes'
 import { ON_DEMAND_NODES } from '../../data/on-demand-nodes'
 import { contentIssues, blocking } from '@/lib/llm/content-rules'
+import { CATEGORIES } from '@/lib/tree/categories'
 
 /**
  * **말뭉치 전체가 규칙을 지키는가.**
@@ -28,6 +29,25 @@ const SETS = [
   ['모델이 쓴 것(배치)', GENERATED_NODES],
   ['모델이 쓴 것(물어봐서)', ON_DEMAND_NODES],
 ] as const
+
+/**
+ * **분야 이름이 목록 안에 있는가.**
+ *
+ * `/questions`와 지도와 공개 말뭉치가 전부 `CATEGORIES`를 돌면서 그 분야에
+ * 속한 것만 모은다. 목록에 없는 이름을 적으면 **그 질문은 어디에도 안 나온다.**
+ * 오류도 안 나고 화면도 멀쩡하다. 그냥 없는 것이 된다.
+ *
+ * 실제로 `기타`라고 적었다가 걸렸다. 타입은 `string`이라 컴파일도 통과했다.
+ */
+describe('분야 이름', () => {
+  it('전부 목록 안에 있다', () => {
+    const known = new Set<string>(CATEGORIES)
+    const bad = SETS.flatMap(([, nodes]) => nodes)
+      .filter((n) => !known.has(n.category))
+      .map((n) => `${n.category} · ${n.question}`)
+    expect(bad).toEqual([])
+  })
+})
 
 describe('말뭉치 전체', () => {
   for (const [label, nodes] of SETS) {
