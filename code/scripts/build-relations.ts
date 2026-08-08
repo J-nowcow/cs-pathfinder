@@ -6,6 +6,8 @@ loadEnvLocal()
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { EXAMPLE_NODES } from '../data/example-nodes'
 import { GENERATED_NODES } from '../data/generated-nodes'
+import { AUTHORED_NODES } from '../data/authored-nodes'
+import { ON_DEMAND_NODES } from '../data/on-demand-nodes'
 import { shortlist } from '../src/lib/relations/shortlist'
 import { judgeRelations, type JudgeNode } from '../src/lib/relations/judge'
 import { nextPace } from '../src/lib/relations/pace'
@@ -47,7 +49,17 @@ const arg = (name: string): number | null => {
   return i > 0 && process.argv[i + 1] ? Number(process.argv[i + 1]) : null
 }
 
-const ALL = [...EXAMPLE_NODES, ...GENERATED_NODES]
+/*
+ * **네 벌을 다 넣는다.**
+ *
+ * 예전에는 앞의 둘만 읽었다. 그래서 손으로 쓴 것과 사용자가 물어봐 생긴 것은
+ * 관계가 하나도 안 붙었다. 지도에서 312개 중 217개만 이어져 있었고, 빠진
+ * 95개의 상당수가 그 둘이었다.
+ *
+ * 이어지지 않은 질문은 지도에서 외딴 점으로 뜨고 "꼬리를 물고" 넘어갈 길도
+ * 없다. 이 서비스에서 그건 없는 것과 비슷하다.
+ */
+const ALL = [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]
 
 /*
  * 판정에는 질문과 카테고리만 필요하다. id는 여기서만 쓰는 임시 번호다 —
@@ -85,6 +97,48 @@ const done: Row[] = existsSync(CACHE) ? JSON.parse(readFileSync(CACHE, 'utf8')) 
 /** 조각을 다 모은다. 마지막에 데이터 파일로 쓸 것 */
 function mergeAll(): Row[] {
   const all: Row[] = []
+
+  /*
+   * **이미 만들어 둔 것을 먼저 넣는다.**
+   *
+   * 조각 캐시는 `/tmp`에 있다. 기계를 껐거나 임시 폴더가 비워졌으면 그 조각의
+   * 결과가 사라지는데, 그 상태로 합치면 **데이터 파일을 그만큼 덜어 낸 채로
+   * 덮어쓴다.** 몇 시간 걸려 만든 것이 조용히 없어진다.
+   *
+   * 그래서 지금 파일에 있는 것을 후보에 함께 넣는다. 아래 다수결이 같은 쌍을
+   * 하나로 줄이므로 겹쳐도 문제가 없다. 합치기는 늘어나기만 한다.
+   */
+  try {
+    if (existsSync(OUT)) {
+      const text = readFileSync(OUT, 'utf8')
+      const start = text.indexOf('[')
+      const end = text.lastIndexOf(']')
+      if (start > 0 && end > start) {
+        /* 데이터 파일은 TS라 그대로 못 읽는다. 줄 단위로 필요한 값만 뽑는다 */
+        for (const line of text.slice(start, end).split('\n')) {
+          const m =
+            /fromScope: "((?:[^"\\]|\\.)*)", fromQuestion: "((?:[^"\\]|\\.)*)", toScope: "((?:[^"\\]|\\.)*)", toQuestion: "((?:[^"\\]|\\.)*)", kind: "([a-z_]+)", reason: "((?:[^"\\]|\\.)*)", votes: (\d+)/.exec(
+              line,
+            )
+          if (!m) continue
+          all.push({
+            fromScope: JSON.parse(`"${m[1]}"`),
+            fromQuestion: JSON.parse(`"${m[2]}"`),
+            toScope: JSON.parse(`"${m[3]}"`),
+            toQuestion: JSON.parse(`"${m[4]}"`),
+            kind: m[5] as RelationKind,
+            reason: JSON.parse(`"${m[6]}"`),
+            votes: Number(m[7]),
+          })
+        }
+      }
+    }
+  } catch {
+    console.log('  (기존 관계를 못 읽었다 — 캐시만으로 합친다)')
+  }
+  const carried = all.length
+  if (carried > 0) console.log(`  기존 관계 ${carried}개를 이어받는다`)
+
   for (let i = 0; i < 16; i += 1) {
     const p = cachePath(i)
     if (!existsSync(p)) continue
