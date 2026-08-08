@@ -37,7 +37,10 @@
     "measure:corpus": "tsx scripts/measure-corpus.ts",
     "measure:flow-shape": "tsx scripts/measure-flow-shape.ts",
     "find:state": "tsx scripts/find-state-candidates.ts",
-    "retag": "tsx scripts/retag-fence.ts"
+    "retag": "tsx scripts/retag-fence.ts",
+    "find:stack": "tsx scripts/find-stack-targets.ts",
+    "show": "tsx scripts/show-block.ts",
+    "fix:stack": "tsx scripts/fix-stack-batch.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
