@@ -1,0 +1,55 @@
+name: 임베딩 스윕
+
+on:
+  schedule:
+    # UTC 21:43 = KST 다음 날 06:43. 발행(21:13)이 만든 새 노드까지 줍게
+    # 발행 뒤에 돈다.
+    #
+    # 정각·30분을 피한 것은 발행 워크플로와 같은 이유다 — GitHub Actions
+    # 스케줄 큐가 그 시각에 몰려 수십 분씩 밀린다.
+    - cron: '43 21 * * *'
+  # 수동 실행. 전량 재작업 뒤 잔여를 즉시 줍거나 백필 실패를 바로 메꿀 때.
+  workflow_dispatch:
+
+concurrency:
+  group: embed-sweep
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    name: POST /api/embed-sweep
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 스윕 요청
+        env:
+          DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+
+          : "${DEPLOY_URL:?DEPLOY_URL secret이 설정되지 않았다}"
+          : "${CRON_SECRET:?CRON_SECRET secret이 설정되지 않았다}"
+
+          # 응답 뒤 백필(after)이 fail-open이라 이 스윕이 유일한 그물이다.
+          # 조용히 실패하면 임베딩이 빈 노드가 쌓여도 아무도 모른다 —
+          # 라우트가 실패를 5xx로 옮기고(부분 실패도 502), 여기는 그것을
+          # 빨간불로 바꾼다.
+          for attempt in 1 2 3; do
+            echo "시도 ${attempt}/3"
+            if curl --fail-with-body -sS -X POST \
+              --max-time 90 \
+              -H "Authorization: Bearer ${CRON_SECRET}" \
+              -H "content-type: application/json" \
+              "${DEPLOY_URL%/}/api/embed-sweep"; then
+              echo
+              echo "스윕 성공 (시도 ${attempt})"
+              exit 0
+            fi
+            echo
+            if [ "${attempt}" -lt 3 ]; then sleep 30; fi
+          done
+
+          echo "세 번 모두 실패했다"
+          exit 1

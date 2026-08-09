@@ -289,18 +289,28 @@ async function vectorNeighbors(
      * 안 올린 날 화면 전부가 500이 됐던 것과 같은 모양이다. 확장은 덤이고
      * 확장이 본체다 -- 확장(기능)이 확장(extension) 때문에 죽으면 안 된다.
      */
-    if (!isMissingVectorSupport(e)) throw e
-    console.warn('[expand] vector 확장이 없다. 벡터 후보를 건너뛴다 — npm run db:migrate')
+    if (!isVectorUnavailable(e)) throw e
+    console.warn('[expand] 벡터 후보를 못 쓴다. 구조·관계 후보만 쓴다 —', String(e).slice(0, 120))
     return []
   }
 }
 
-/** Postgres `42704 undefined_object` / `42883 undefined_function`. 확장이 없을 때 나온다 */
-function isMissingVectorSupport(e: unknown): boolean {
+/**
+ * 벡터 검색이 "지금 안 되는" 오류인가.
+ *
+ * 둘을 잡는다.
+ * - 확장 없음 — `42704 undefined_object` / `42883 undefined_function`.
+ *   `0012`를 프로덕션에 안 올린 채 배포한 경우다
+ * - **차원 불일치** — "expected N dimensions, not M". 모델을 갈아탈 때
+ *   코드(새 차원)와 DB(옛 벡터)가 잠깐 어긋난다. bge-m3(1024) →
+ *   gemini(768) 전환에서 실제로 지나는 창이다. 이걸 안 잡으면 그 창
+ *   동안 확장 전체가 500이다 — 벡터는 덤이고 확장이 본체다
+ */
+function isVectorUnavailable(e: unknown): boolean {
   const code = (e as { code?: unknown })?.code
   if (code === '42704' || code === '42883') return true
   const msg = e instanceof Error ? e.message : String(e)
-  return /type "vector" does not exist|operator does not exist.*<=>/i.test(msg)
+  return /type "vector" does not exist|operator does not exist.*<=>|dimensions/i.test(msg)
 }
 
 /** Postgres `42P01 undefined_table`. PGlite도 같은 코드를 준다 */

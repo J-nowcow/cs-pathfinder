@@ -69,8 +69,9 @@ describe('벡터 후보', () => {
   })
 
   it('가까운 순으로 준다', async () => {
+    /* 두 각 모두 문턱 안이어야 한다. 여기서 재는 것은 문턱이 아니라 순서다 */
     const focus = await mk('초점?', axis(0))
-    await mk('먼 쪽?', axis(40))
+    await mk('먼 쪽?', axis(25))
     await mk('가까운 쪽?', axis(5))
 
     const got = await collectCandidates(focus)

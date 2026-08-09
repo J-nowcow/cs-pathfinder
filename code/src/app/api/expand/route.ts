@@ -1,8 +1,29 @@
 import { z } from 'zod'
+import { after } from 'next/server'
 import { expand } from '@/lib/expand'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { resolveCaller } from '@/lib/llm/resolve'
 import { quotaKeyFromHeaders, anonDailyLimit } from '@/lib/quota/key'
+import { backfillEmbedding } from '@/lib/embed/backfill'
+
+/**
+ * 새 노드의 임베딩을 응답 **뒤에** 채운다.
+ *
+ * 확장 응답에 임베딩 호출을 끼우면 그만큼 사용자가 기다리고, 임베딩이
+ * 죽으면 멀쩡한 확장까지 죽는다. `after()`는 응답을 보낸 뒤에 돌므로
+ * 어느 쪽도 안 일어난다. `t/[slug]`의 조회수 집계가 같은 방식이다.
+ *
+ * 시험은 Next 요청 컨텍스트 밖에서 라우트를 직접 부른다. 거기서 `after()`는
+ * 던지는데, 그것 때문에 확장 응답이 500이 되면 안 된다 — 못 채운 노드는
+ * 매일 스윕(`/api/embed-sweep`)이 줍는다.
+ */
+function scheduleEmbedding(nodeId: string): void {
+  try {
+    after(() => backfillEmbedding(nodeId))
+  } catch {
+    /* 요청 컨텍스트 밖. 스윕이 줍는다 */
+  }
+}
 
 const bodySchema = z.object({
   idempotency_key: z.string().min(1),
@@ -54,6 +75,8 @@ export async function POST(request: Request): Promise<Response> {
 
   switch (outcome.kind) {
     case 'ok':
+      /* 'hit'은 이미 있던 노드라 임베딩도 이미 있다. 새로 만든 것만 */
+      if (outcome.cache === 'miss') scheduleEmbedding(outcome.node.id)
       return json(
         {
           node: {

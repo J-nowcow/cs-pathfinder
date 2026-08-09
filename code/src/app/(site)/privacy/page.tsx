@@ -104,8 +104,9 @@ export default function PrivacyPage() {
             <strong className="text-ink">Neon</strong> — 데이터베이스 보관
           </li>
           <li>
-            <strong className="text-ink">Google (Gemini API)</strong> — 해설 생성. 사용자가 누른
-            질문의 <em>글자</em>가 전달된다. IP나 쿠키 값은 보내지 않는다.
+            <strong className="text-ink">Google (Gemini API)</strong> — 해설 생성과 질문
+            임베딩(비슷한 질문을 찾으려고 문장을 숫자로 바꾸는 일). 두 경우 모두 질문의{' '}
+            <em>글자</em>만 전달된다. IP나 쿠키 값은 보내지 않는다.
           </li>
         </ul>
         <p>이들에게 개인정보를 팔거나 광고 목적으로 넘기지 않는다.</p>

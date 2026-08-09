@@ -1,66 +1,25 @@
 import { loadEnvLocal } from '../src/lib/load-env'
 import { EMBED_MODEL, EMBED_DIM } from '../src/lib/embed/model'
+import { embedQuestions } from '../src/lib/embed/gemini'
 
 /**
  * 질문 문장을 임베딩해 `qnode.embedding`에 담는다.
  *
- * **밤에 도는 배치다.** 런타임은 이 값을 읽기만 하고 모델을 부르지 않는다
- * (`src/lib/embed/model.ts`가 왜 그런지 적어 뒀다).
+ * 상시 경로는 이것이 아니다 — 신규 노드는 응답 뒤 백필(`after()`)이,
+ * 놓친 것은 매일 GitHub Actions가 `/api/embed-sweep`으로 줍는다.
+ * 이 스크립트는 **전량 재작업**용이다: 모델·차원·taskType을 바꿔 벡터
+ * 공간이 통째로 갈릴 때, 그리고 문턱을 정하려고 분포를 볼 때.
  *
- * 로컬 ollama를 쓴다. 무료 한도가 없고 글자가 밖으로 안 나가서
- * `/privacy`의 위탁 처리자를 안 늘려도 된다.
- *
- * **NULL인 것만 처리한다.** 중간에 끊겨도 다시 돌리면 이어서 간다. 앞
- * 사이클에 관계 만들기가 한도 소진으로 멈춘 적이 있어서, 멈추는 것을
- * 전제로 만든다.
+ * **NULL인 것만 처리한다**(기본). 중간에 끊겨도 다시 돌리면 이어서 간다.
  *
  * 실행:
  *   npm run embed              -- NULL인 것만
- *   npm run embed -- --all     -- 전부 다시
- *   npm run embed -- --probe   -- 담지 않고 가까운 쌍만 보여준다
+ *   npm run embed -- --all     -- 전부 다시 (모델을 바꿨을 때)
+ *   npm run embed -- --probe   -- 담지 않고 분포와 가까운 쌍만 보여준다
  */
 loadEnvLocal()
 
-const OLLAMA = process.env.OLLAMA_HOST?.trim() || 'http://127.0.0.1:11434'
-
 type Row = { id: string; number: number | null; question: string }
-
-/**
- * ollama에 한 덩이씩 보낸다.
- *
- * 한 번에 다 보내면 응답이 커지고, 하나가 터지면 그 묶음을 통째로 잃는다.
- * 로컬이라 왕복 비용이 싸므로 작게 자른다.
- */
-async function embedBatch(texts: string[]): Promise<number[][]> {
-  const res = await fetch(`${OLLAMA}/api/embed`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ model: EMBED_MODEL, input: texts }),
-  })
-  if (!res.ok) {
-    throw new Error(`ollama ${res.status}: ${await res.text()}`)
-  }
-  const json = (await res.json()) as { embeddings?: number[][] }
-  const out = json.embeddings
-  if (!out || out.length !== texts.length) {
-    throw new Error(`임베딩 개수가 안 맞는다: ${out?.length} vs ${texts.length}`)
-  }
-  /*
-   * 차원을 여기서 본다.
-   *
-   * 모델을 바꿔 놓고 상수를 안 고치면 SQL 캐스팅이 터지는데, 그때는 이미
-   * 절반이 담긴 뒤다. 담기 전에 잡는다.
-   */
-  for (const v of out) {
-    if (v.length !== EMBED_DIM) {
-      throw new Error(
-        `차원이 ${v.length}인데 상수는 ${EMBED_DIM}이다. ` +
-          `모델(${EMBED_MODEL})을 바꿨으면 src/lib/embed/model.ts도 고쳐야 한다`,
-      )
-    }
-  }
-  return out
-}
 
 function cosine(a: number[], b: number[]): number {
   let dot = 0
@@ -104,13 +63,41 @@ async function main() {
 
   console.log(`${rows.length}편 · 모델 ${EMBED_MODEL} · ${EMBED_DIM}차원`)
 
-  const SIZE = 16
+  /* 진행이 보이게 작게 자른다. embedQuestions 안에서 또 API 상한으로 자른다 */
+  const SIZE = 50
   const vectors = new Map<string, number[]>()
   let done = 0
 
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+  /*
+   * 분당 한도를 존중한다.
+   *
+   * batchEmbedContents는 **안에 든 항목이 각각 요청으로 센다.** 50개짜리
+   * 두 덩이를 몇 초 안에 보냈더니 429가 왔다(실측 2026-08-09). 그래서
+   * 덩이 사이를 띄우고, 429가 오면 기다렸다 같은 덩이를 다시 던진다.
+   * 배치 전용 처방이다 — 런타임(백필·스윕)은 실패를 세고 다음 스윕이
+   * 줍는 것이 이미 재시도라 기다리지 않는다.
+   */
+  async function embedWithBackoff(texts: string[]): Promise<number[][]> {
+    let lastError: unknown
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      try {
+        return await embedQuestions(texts)
+      } catch (e) {
+        lastError = e
+        if (!/429|RESOURCE_EXHAUSTED/i.test(String(e))) throw e
+        process.stdout.write(`\r  429 — 45초 대기 (${attempt + 1}/4)      `)
+        await sleep(45_000)
+      }
+    }
+    throw lastError
+  }
+
   for (let i = 0; i < rows.length; i += SIZE) {
     const chunk = rows.slice(i, i + SIZE)
-    const vecs = await embedBatch(chunk.map((c) => c.question))
+    if (i > 0) await sleep(20_000)
+    const vecs = await embedWithBackoff(chunk.map((c) => c.question))
 
     for (const [j, node] of chunk.entries()) vectors.set(node.id, vecs[j])
 
@@ -131,8 +118,8 @@ async function main() {
   /*
    * 담고 끝내지 않는다.
    *
-   * 숫자가 들어갔다는 것과 그 숫자가 쓸 만하다는 것은 다르다. 한국어 CS
-   * 용어에서 이 모델이 뭘 가깝다고 보는지 **눈으로 봐야** 문턱을 정할 수 있다.
+   * 숫자가 들어갔다는 것과 그 숫자가 쓸 만하다는 것은 다르다. 이 모델이
+   * 한국어 CS 용어에서 뭘 가깝다고 보는지 **눈으로 봐야** 문턱을 정할 수 있다.
    */
   const ids = [...vectors.keys()]
   const byId = new Map(rows.map((x) => [x.id, x]))
