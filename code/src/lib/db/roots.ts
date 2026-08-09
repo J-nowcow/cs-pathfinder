@@ -9,6 +9,8 @@ export type RootSummary = {
   excerpt: string
   /** `data/tags.ts` 통제 어휘 안의 태그. 무태그면 빈 배열 */
   tags: string[]
+  /** `data/levels.ts` 3단 중 하나. 미판정이면 null */
+  level: string | null
 }
 
 type Row = {
@@ -17,6 +19,7 @@ type Row = {
   primary_category: string
   excerpt: string
   tags: string[]
+  level: string | null
 }
 
 /**
@@ -38,7 +41,7 @@ export async function listRoots(opts: { limit?: number } = {}): Promise<RootSumm
   // 발췌를 DB에서 자른다. 카드는 첫 문단만 쓰는데 본문을 통째로 실어 나르면
   // 예시 스무 개만 해도 20KB가 넘고, 발행이 쌓일수록 매일 한 문서씩 늘어난다.
   const rows = await db.query<Row>(
-    `select id, normalized_question, primary_category, tags,
+    `select id, normalized_question, primary_category, tags, level,
             split_part(body, E'\n\n', 1) as excerpt
      from qnode
      where origin = 'batch' and status = 'ready'
@@ -58,6 +61,7 @@ export async function listRoots(opts: { limit?: number } = {}): Promise<RootSumm
     category: r.primary_category,
     excerpt: r.excerpt,
     tags: r.tags ?? [],
+    level: r.level,
   }))
 }
 

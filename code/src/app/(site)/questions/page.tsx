@@ -5,6 +5,7 @@ import { listRoots } from '@/lib/db/roots'
 import { CATEGORIES, categoryAnchor } from '@/lib/tree/categories'
 import { socialMeta } from '@/lib/site'
 import { TAGS, TAG_NAMES } from '../../../../data/tags'
+import { LEVELS, LEVEL_NAMES } from '../../../../data/levels'
 
 // 매 요청 실제 DB를 읽는다. 발행이 하나 늘면 여기도 같이 늘어야 한다
 export const dynamic = 'force-dynamic'
@@ -27,21 +28,35 @@ export const metadata: Metadata = socialMeta({
 export default async function QuestionsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tag?: string }>
+  searchParams: Promise<{ tag?: string; level?: string }>
 }) {
   await ensureSeeded()
   const roots = await listRoots()
 
   /*
-   * 태그 필터는 주소로 건다(`?tag=동시성`).
+   * 태그·난이도 필터는 주소로 건다(`?tag=동시성&level=심화`).
    *
    * 서버 컴포넌트 그대로라 JS가 안 늘고, 필터된 목록이 곧 공유 가능한
    * 주소가 된다. 통제 어휘 밖의 값은 조용히 무시한다 — 주소는 크롤러와
-   * 옛 링크가 온갖 것을 들고 오는 자리다.
+   * 옛 링크가 온갖 것을 들고 오는 자리다. 두 축은 AND다 — "동시성이면서
+   * 심화"를 고르는 것이 조합의 뜻이다.
    */
-  const { tag } = await searchParams
+  const { tag, level } = await searchParams
   const activeTag = tag && TAG_NAMES.has(tag) ? tag : null
-  const filtered = activeTag ? roots.filter((r) => r.tags.includes(activeTag)) : roots
+  const activeLevel = level && LEVEL_NAMES.has(level) ? level : null
+  const filtered = roots.filter(
+    (r) =>
+      (!activeTag || r.tags.includes(activeTag)) && (!activeLevel || r.level === activeLevel),
+  )
+
+  /** 지금 고른 필터를 유지한 채 한 축만 바꾼 주소 */
+  const href = (t: string | null, l: string | null) => {
+    const q = new URLSearchParams()
+    if (t) q.set('tag', t)
+    if (l) q.set('level', l)
+    const s = q.toString()
+    return s ? `/questions?${s}` : '/questions'
+  }
 
   /* 개수 0인 태그는 필터 줄에 안 세운다. 눌러 봐야 빈 화면이다 */
   const tagCounts = new Map<string, number>()
@@ -77,10 +92,12 @@ export default async function QuestionsPage({
         카테고리별 질문
       </h1>
       <p className="mt-3 text-[15px] leading-[1.72] text-muted">
-        {activeTag ? (
+        {activeTag || activeLevel ? (
           <>
-            <strong className="text-ink">{activeTag}</strong> 태그가 붙은 질문 {filtered.length}
-            개예요.
+            {activeTag && <strong className="text-ink">{activeTag}</strong>}
+            {activeTag && activeLevel && ' · '}
+            {activeLevel && <strong className="text-ink">{activeLevel}</strong>} 질문{' '}
+            {filtered.length}개예요.
           </>
         ) : (
           <>지금까지 올라온 질문 {roots.length}개. 궁금한 쪽부터 파고들면 돼요.</>
@@ -94,7 +111,7 @@ export default async function QuestionsPage({
       */}
       <nav aria-label="태그" className="mt-5 flex flex-wrap gap-2">
         <Link
-          href="/questions"
+          href={href(null, activeLevel)}
           className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
             activeTag
               ? 'border-line text-muted hover:border-accent hover:text-ink'
@@ -106,7 +123,7 @@ export default async function QuestionsPage({
         {TAGS.filter((t) => (tagCounts.get(t.name) ?? 0) > 0).map((t) => (
           <Link
             key={t.name}
-            href={`/questions?tag=${encodeURIComponent(t.name)}`}
+            href={href(activeTag === t.name ? null : t.name, activeLevel)}
             title={t.scope}
             className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
               activeTag === t.name
@@ -115,6 +132,28 @@ export default async function QuestionsPage({
             }`}
           >
             {t.name} {tagCounts.get(t.name)}
+          </Link>
+        ))}
+      </nav>
+
+      {/*
+        난이도 줄. 태그와 별줄로 두는 이유 — 한 줄에 섞으면 "동시성"과
+        "심화"가 같은 축처럼 읽힌다. 둘은 AND로 조합되는 다른 축이다.
+        같은 태그를 다시 누르면 풀리고, 축을 바꿔도 다른 축 선택은 유지된다.
+      */}
+      <nav aria-label="난이도" className="mt-2 flex flex-wrap gap-2">
+        {LEVELS.map((l) => (
+          <Link
+            key={l.name}
+            href={href(activeTag, activeLevel === l.name ? null : l.name)}
+            title={l.rubric}
+            className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
+              activeLevel === l.name
+                ? 'border-accent bg-accent-soft text-ink'
+                : 'border-line text-muted hover:border-accent hover:text-ink'
+            }`}
+          >
+            {l.name}
           </Link>
         ))}
       </nav>

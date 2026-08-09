@@ -219,3 +219,23 @@ describe('listRoots 태그', () => {
     expect(roots[0].tags).toEqual([])
   })
 })
+
+/** 난이도도 목록에 실려야 /questions 필터가 거를 수 있다 */
+describe('listRoots 난이도', () => {
+  beforeEach(truncateAll)
+
+  it('난이도를 함께 준다', async () => {
+    const id = await node('난이도 달린 질문은?')
+    const db = await getDb()
+    await db.query(`update qnode set level = '심화' where id = $1`, [id])
+
+    const roots = await listRoots()
+    expect(roots.find((r) => r.id === id)?.level).toBe('심화')
+  })
+
+  it('미판정이면 null이다', async () => {
+    await node('미판정 질문은?')
+    const roots = await listRoots()
+    expect(roots[0].level).toBeNull()
+  })
+})
