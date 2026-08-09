@@ -332,17 +332,29 @@ function isVectorUnavailable(e: unknown): boolean {
 export async function linkEquivalent(
   a: string,
   b: string,
-  decidedBy: 'gate' | 'human',
+  /*
+   * 'claude'를 더했다. B6 중복 정리는 모델(Claude)이 쌍을 판정했는데
+   * 'human'으로 적으면 검수 기록이 거짓이 된다. 누가 정했는지가 이 표의
+   * 존재 이유다 -- 되돌릴 때 무엇을 지울지 그것으로 가른다.
+   */
+  decidedBy: 'gate' | 'human' | 'claude',
   decisionId?: string,
+  /**
+   * 남길 쪽. 안 정했으면 생략.
+   *
+   * 저장하는 이유는 판정 근거(관계 수·판 경로)가 시간이 지나면 변해서다.
+   * "나중에 다시 계산"은 같은 답을 주지 않는다.
+   */
+  canonicalId?: string,
 ): Promise<void> {
   if (a === b) return
   const [lo, hi] = a < b ? [a, b] : [b, a]
   const db = await getDb()
   await db.query(
-    `insert into qnode_equivalence (node_a, node_b, decided_by, decision_id)
-     values ($1, $2, $3, $4)
+    `insert into qnode_equivalence (node_a, node_b, decided_by, decision_id, canonical_id)
+     values ($1, $2, $3, $4, $5)
      on conflict (node_a, node_b) do nothing`,
-    [lo, hi, decidedBy, decisionId ?? null],
+    [lo, hi, decidedBy, decisionId ?? null, canonicalId ?? null],
   )
 }
 

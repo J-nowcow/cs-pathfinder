@@ -47,7 +47,8 @@
     "dump:tables": "tsx scripts/dump-table-only.ts",
     "fix:tables": "tsx scripts/fix-table-batch.ts",
     "measure:candidates": "tsx scripts/measure-candidates.ts",
-    "embed": "tsx scripts/embed.ts"
+    "embed": "tsx scripts/embed.ts",
+    "mark:duplicates": "tsx scripts/mark-duplicates.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
