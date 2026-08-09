@@ -410,4 +410,11 @@ export const SEED_RELATIONS: SeedRelation[] = [
   { fromScope: "java", fromQuestion: "HashMap은 해시 충돌을 어떤 방식으로 처리하는가?", toScope: "generic", toQuestion: "해시 충돌 발생 시 해결 방법은 무엇인가?", kind: "instance_of", reason: "HashMap의 충돌 처리는 일반 해시 충돌 해결법의 구체 사례다", votes: 2 },
   { fromScope: "java", fromQuestion: "HashMap은 해시 충돌을 어떤 방식으로 처리하는가?", toScope: "generic", toQuestion: "해시 충돌이 생기면 어떤 방법으로 푸는가?", kind: "instance_of", reason: "HashMap의 충돌 처리는 일반 해시 충돌 해결법의 구체 사례다", votes: 2 },
   { fromScope: "docker", fromQuestion: "컨테이너 이미지를 최소화해야 하는 이유는 무엇인가?", toScope: "generic", toQuestion: "이미지를 고쳐도 조금만 받는 이유는?", kind: "shares_concept", reason: "둘 다 컨테이너 이미지 레이어 구조에 기반한다", votes: 2 },
+  { fromScope: "generic", fromQuestion: "이미지와 컨테이너는 무엇이 다른가?", toScope: "generic", toQuestion: "이미지를 고쳐도 조금만 받는 이유는?", kind: "prerequisite", reason: "이미지가 무엇인지 알아야 층 캐시로 조금만 받는 것이 읽힌다", votes: 2 },
+  { fromScope: "react", fromQuestion: "변경점을 비교하면 언제 비용이 줄어드는가?", toScope: "generic", toQuestion: "이미지를 고쳐도 조금만 받는 이유는?", kind: "shares_concept", reason: "변경분만 다시 만들고 전송한다는 같은 원리를 다룬다", votes: 2 },
+  { fromScope: "deploy", fromQuestion: "배포 방식은 무엇을 기준으로 고르는가?", toScope: "generic", toQuestion: "빌드는 통과했는데 배포에서 깨지는 이유는?", kind: "shares_concept", reason: "빌드 산출물이 배포 환경을 만나는 지점의 문제를 다룬다", votes: 2 },
+  { fromScope: "os", fromQuestion: "소스 코드가 실행 파일로 변하는 과정은 무엇인가?", toScope: "generic", toQuestion: "빌드는 통과했는데 배포에서 깨지는 이유는?", kind: "prerequisite", reason: "빌드가 무엇인지 알아야 빌드 통과와 배포 실패의 간극이 읽힌다", votes: 2 },
+  { fromScope: "load-balancing", fromQuestion: "요청을 어떤 서버로 보낼지 어떻게 정하는가?", toScope: "generic", toQuestion: "죽은 서버로 요청이 안 가는 이유는?", kind: "shares_concept", reason: "요청을 보낼 서버를 고르는 같은 계층을 다룬다", votes: 2 },
+  { fromScope: "generic", fromQuestion: "서버 앞에 하나를 더 두는 이유는?", toScope: "generic", toQuestion: "죽은 서버로 요청이 안 가는 이유는?", kind: "shares_concept", reason: "앞단 중계가 서버 상태를 가리는 같은 구조를 다룬다", votes: 2 },
+  { fromScope: "distributed", fromQuestion: "남의 서버에 일이 생긴 것을 어떻게 아는가?", toScope: "generic", toQuestion: "죽은 서버로 요청이 안 가는 이유는?", kind: "shares_concept", reason: "서버의 생사를 밖에서 확인하는 같은 문제를 다룬다", votes: 2 },
 ]
