@@ -206,4 +206,4 @@ RSS로요. 읽기 도구에 `https://cs-pathfinder.vercel.app/rss.xml`을 넣으
 
 어떻게 만들었는지가 궁금하시면 [`code/docs/engineering.md`](code/docs/engineering.md)에 적어 뒀어요. 지금까지 올라온 해설 전문은 [`cs/explanations/`](cs/explanations/)에 **질문 하나에 파일 하나씩** 담겨 있어요. 분야별 목차가 폴더마다 있고요. 제목만 훑으려면 [`cs/questions.md`](cs/questions.md)가 링크 목록이고요.
 
-MIT 라이선스예요.
+MIT 라이선스예요. 해설이든 코드든 자유롭게 가져다 쓰시고, 출처 링크를 남겨 주시면 고마워요. 다만 해설에는 오류가 있을 수 있어요 — 얼마나 있는지는 위 "얼마나 믿어도 되나요"에 재 둔 그대로예요.

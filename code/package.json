@@ -75,5 +75,6 @@
     "tsx": "^4.19.2",
     "typescript": "^5",
     "vitest": "^3.0.0"
-  }
+  },
+  "license": "MIT"
 }
