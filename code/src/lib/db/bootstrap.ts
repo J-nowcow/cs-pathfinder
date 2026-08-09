@@ -9,6 +9,7 @@ import { GENERATED_NODES } from '../../../data/generated-nodes'
 import { AUTHORED_NODES } from '../../../data/authored-nodes'
 import { ON_DEMAND_NODES } from '../../../data/on-demand-nodes'
 import { QUESTION_RENAMES } from '../../../data/renames'
+import { NODE_TAGS } from '../../../data/node-tags'
 import { SEED_RELATIONS, type SeedRelation } from '../../../data/relations'
 import { saveRelations, type NewRelation } from '@/lib/db/relations'
 
@@ -96,6 +97,8 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
    * 번호와 주소가 살아 있고 판 경로도 안 끊긴다.
    */
   const renamedFrom = new Map(QUESTION_RENAMES.map((r) => [r.to.trim(), r.from.trim()]))
+  /* 태그 원본은 data/node-tags.ts다. 질문 키로 조인해 컬럼을 채운다 */
+  const tagsByQuestion = new Map(NODE_TAGS.map((t) => [t.question.trim(), t.tags]))
 
   for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]) {
     const q = ex.question.trim()
@@ -118,17 +121,19 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
     // xmax = 0 이면 방금 넣은 행이다. 갱신된 행과 구별하는 표준 수법이다.
     const rows = await db.query<{ id: string; created: boolean }>(
       `insert into qnode
-         (id, identity_scope, normalized_question, body, primary_category, status, origin)
-       values ($1, $2, $3, $4, $5, 'ready', 'batch')
+         (id, identity_scope, normalized_question, body, primary_category, status, origin, tags)
+       values ($1, $2, $3, $4, $5, 'ready', 'batch', $6)
        on conflict (id) do update set body = excluded.body, origin = 'batch',
          normalized_question = excluded.normalized_question,
-         primary_category = excluded.primary_category
+         primary_category = excluded.primary_category,
+         tags = excluded.tags
          where qnode.body is distinct from excluded.body
             or qnode.origin <> 'batch'
             or qnode.normalized_question is distinct from excluded.normalized_question
             or qnode.primary_category is distinct from excluded.primary_category
+            or qnode.tags is distinct from excluded.tags
        returning id, (xmax = 0) as created`,
-      [id, ex.identityScope, ex.question, ex.body, ex.category],
+      [id, ex.identityScope, ex.question, ex.body, ex.category, tagsByQuestion.get(q) ?? []],
     )
 
     const created = rows.length > 0 && rows[0].created
