@@ -24,7 +24,19 @@ export const RELATION_JUDGE_VERSION = 'relation-v1-vote'
 
 const KINDS: RelationKind[] = ['shares_concept', 'prerequisite', 'alternative', 'instance_of']
 
-export type JudgeNode = { id: string; question: string; category: string }
+export type JudgeNode = {
+  id: string
+  question: string
+  category: string
+  /**
+   * 질문 문장의 벡터. 있으면 후보 추림이 낱말 대신 이것을 쓴다.
+   *
+   * 선택인 이유는 새로 생긴 노드가 밤 배치 전까지 비어 있기 때문이다.
+   * 비어 있으면 낱말 방식으로 떨어진다 -- 못 이으면 이을 기회가 아예 없지만,
+   * 낱말로라도 물어보면 절반은 잡는다.
+   */
+  embedding?: number[]
+}
 
 export type JudgedRelation = {
   toId: string

@@ -72,8 +72,23 @@ function postgresUrl(): string | null {
 }
 
 async function createPglite(): Promise<Db> {
-  const { PGlite } = await import('@electric-sql/pglite')
-  const pg = new PGlite()
+  const [{ PGlite }, { vector }] = await Promise.all([
+    import('@electric-sql/pglite'),
+    import('@electric-sql/pglite/vector'),
+  ])
+
+  /*
+   * 확장을 여기서 넣어야 한다.
+   *
+   * `new PGlite()`에 그냥 두면 `create extension vector`가
+   * `extension "vector" is not available`로 죽는다. 번들은 패키지에 들어
+   * 있지만 인스턴스를 만들 때 넘겨야 로드된다.
+   *
+   * **마이그레이션보다 먼저다.** 아래 `open()`이 새 DB마다 마이그레이션을
+   * 전부 다시 돌리는데, `0012`가 확장을 켜므로 그 전에 실려 있어야 한다.
+   * 순서가 뒤집히면 DB 시험 전부가 첫 줄에서 죽는다.
+   */
+  const pg = new PGlite({ extensions: { vector } })
   await pg.waitReady
 
   return {

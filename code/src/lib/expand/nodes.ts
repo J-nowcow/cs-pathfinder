@@ -1,4 +1,5 @@
 import { getDb } from '@/lib/db/client'
+import { EMBED_DIM, EMBED_TOP_K, EMBED_MIN_SIMILARITY } from '@/lib/embed/model'
 
 export type NewNode = {
   identityScope: string
@@ -112,12 +113,35 @@ export async function linkSuggestion(suggestionId: string, nodeId: string): Prom
  * `qedge`가 인접 리스트라 조회 한 번이면 되고, 근처에서 이미 만들어진
  * 같은 개념을 잡을 확률이 올라간다.
  *
- * 전역 재사용까지는 못 간다. 그건 임베딩 검색을 켤 때의 일이다(스펙 §5).
+ * **구조만 보다가 96.3%가 빈손이었다.** 운영 노드 321개에서 후보 분포를
+ * 재보니 309개가 후보 0개였다(`npm run measure:candidates`). `qedge`가
+ * 12행이기 때문이다. 시딩이 간선을 안 만들고, 사람이 안 걸어간 자리에는
+ * 길이 없다.
+ *
+ * 게이트 정확도는 튜닝 124/124 · 홀드아웃 60/60이다. **정확한데 일할
+ * 기회가 없었다.** 그래서 고칠 곳은 판정기가 아니라 여기다.
+ *
+ * 그래서 의미 관계를 후보에 더한다. `semantic_relation`은 330행 살아
+ * 있었는데 매칭 경로가 그것을 안 보고 있었다.
+ *
+ * **구조를 앞에 둔다.** 사람이 실제로 걸어간 길이라 더 믿을 만하고,
+ * 상한에 걸려 잘릴 때 잘리는 쪽은 의미여야 한다.
  *
  * 상한을 두는 이유는 프롬프트 길이와 판정 정확도 때문이다. 후보 50개까지는
- * 정확도가 유지되는 것을 실측했다(스펙 부록 D).
+ * 정확도가 유지되는 것을 실측했다(스펙 부록 D). 다만 그 실측은 표본이
+ * 7건이라 신뢰구간이 49~97%다. 후보 구성을 바꿨으니 `measure:match`로
+ * 다시 본다.
  */
 export const MAX_CANDIDATES = 50
+
+/**
+ * 표를 둘 이상 받은 관계만 쓴다.
+ *
+ * 화면이 같은 기준으로 선을 그린다(`db/graph.ts`). 매칭이 더 헐거운 기준을
+ * 쓰면 **사용자에게 보이지 않는 관계를 근거로 질문이 합쳐진다.** 왜 합쳐졌는지
+ * 화면에서 확인할 길이 없어진다.
+ */
+const MIN_RELATION_VOTES = 2
 
 export async function collectCandidates(
   parentNodeId: string,
@@ -150,7 +174,141 @@ export async function collectCandidates(
     [parentNodeId, MAX_CANDIDATES],
   )
 
-  return rows.map((r) => ({ id: r.id, question: r.normalized_question }))
+  const out = rows.map((r) => ({ id: r.id, question: r.normalized_question }))
+  const seen = new Set(out.map((c) => c.id))
+
+  const add = (more: Array<{ id: string; question: string }>) => {
+    for (const c of more) {
+      if (out.length >= MAX_CANDIDATES) return
+      if (seen.has(c.id)) continue
+      seen.add(c.id)
+      out.push(c)
+    }
+  }
+
+  if (out.length < MAX_CANDIDATES) {
+    add(await semanticNeighbors(parentNodeId, MAX_CANDIDATES - out.length))
+  }
+  if (out.length < MAX_CANDIDATES) {
+    add(await vectorNeighbors(parentNodeId, Math.min(EMBED_TOP_K, MAX_CANDIDATES - out.length)))
+  }
+
+  return out
+}
+
+/**
+ * 의미로 이어진 이웃.
+ *
+ * **질의를 따로 낸다.** 위 CTE에 합치면 왕복이 한 번 줄지만, 표가 없을 때
+ * 확장 전체가 죽는다. `semantic_relation`은 `0009`에서 생겼고 그 마이그레이션을
+ * 프로덕션에 적용하지 않은 채 배포한 날 화면 전부가 500이 됐다. 지도는 선 없이
+ * 그리면 되지만 확장은 이 서비스의 본체다 — **관계가 없으면 관계 없이 판다.**
+ *
+ * 방향은 양쪽 다 본다. 방향 없는 관계도 행은 하나만 두기 때문이다(`0009` 주석).
+ */
+async function semanticNeighbors(
+  nodeId: string,
+  limit: number,
+): Promise<Array<{ id: string; question: string }>> {
+  if (limit <= 0) return []
+  const db = await getDb()
+
+  try {
+    const rows = await db.query<{ id: string; normalized_question: string }>(
+      `select n.id, n.normalized_question
+         from semantic_relation r
+         join qnode n
+           on n.id = case when r.from_id = $1 then r.to_id else r.from_id end
+        where r.active
+          and r.votes >= $3
+          and (r.from_id = $1 or r.to_id = $1)
+          and n.status = 'ready'
+          and n.id <> $1
+        group by n.id, n.normalized_question, n.created_at
+        order by max(r.votes) desc, n.created_at asc
+        limit $2`,
+      [nodeId, limit, MIN_RELATION_VOTES],
+    )
+    return rows.map((r) => ({ id: r.id, question: r.normalized_question }))
+  } catch (e) {
+    if (!isMissingRelationTable(e)) throw e
+    console.warn('[expand] semantic_relation이 없다. 구조 후보만 쓴다 — npm run db:migrate')
+    return []
+  }
+}
+
+/**
+ * 벡터로 가까운 이웃.
+ *
+ * **부모의 임베딩을 쓴다. 사용자가 친 문장을 임베딩하지 않는다.**
+ * 그래서 이 경로에 모델 호출이 없다 -- 미리 담아 둔 값끼리 견주기만 한다.
+ * 임베딩을 밤에 로컬에서 만들 수 있는 것도 이 때문이다.
+ *
+ * 대가는 정확도다. 사용자가 실제로 무엇을 물었는지가 아니라 "지금 보고 있는
+ * 질문 근처"를 가져온다. 게이트가 어차피 후보 중에서 고르는 판정기라
+ * 후보는 "이 근처일 법한 것"이면 되지만, 입력 자체로 찾는 것보다는 무디다.
+ * 입력으로 찾고 싶어지면 런타임에 같은 모델을 불러야 하고, 그때는 로컬이
+ * 성립하지 않는다(`lib/embed/model.ts`).
+ *
+ * `<=>`는 코사인 **거리**다. 유사도로 쓰려면 뒤집어야 한다.
+ */
+async function vectorNeighbors(
+  nodeId: string,
+  limit: number,
+): Promise<Array<{ id: string; question: string }>> {
+  if (limit <= 0) return []
+  const db = await getDb()
+
+  try {
+    const rows = await db.query<{ id: string; normalized_question: string }>(
+      /*
+       * 차원을 문자열로 끼운다. 타입 캐스팅의 괄호 안은 파라미터를 못 받는다.
+       * `EMBED_DIM`은 코드 상수(숫자)라 바깥 입력이 닿지 않는다.
+       */
+      `with me as (
+         select embedding::vector(${EMBED_DIM}) as v
+           from qnode
+          where id = $1 and embedding is not null
+       )
+       select n.id, n.normalized_question
+         from qnode n, me
+        where n.status = 'ready'
+          and n.id <> $1
+          and n.embedding is not null
+          and 1 - (n.embedding::vector(${EMBED_DIM}) <=> me.v) >= $3
+        order by n.embedding::vector(${EMBED_DIM}) <=> me.v asc, n.created_at asc
+        limit $2`,
+      [nodeId, limit, EMBED_MIN_SIMILARITY],
+    )
+    return rows.map((r) => ({ id: r.id, question: r.normalized_question }))
+  } catch (e) {
+    /*
+     * 확장이 없으면 벡터 없이 판다.
+     *
+     * `0012`를 프로덕션에 적용하지 않은 채 배포하면 여기가 터진다. `0009`를
+     * 안 올린 날 화면 전부가 500이 됐던 것과 같은 모양이다. 확장은 덤이고
+     * 확장이 본체다 -- 확장(기능)이 확장(extension) 때문에 죽으면 안 된다.
+     */
+    if (!isMissingVectorSupport(e)) throw e
+    console.warn('[expand] vector 확장이 없다. 벡터 후보를 건너뛴다 — npm run db:migrate')
+    return []
+  }
+}
+
+/** Postgres `42704 undefined_object` / `42883 undefined_function`. 확장이 없을 때 나온다 */
+function isMissingVectorSupport(e: unknown): boolean {
+  const code = (e as { code?: unknown })?.code
+  if (code === '42704' || code === '42883') return true
+  const msg = e instanceof Error ? e.message : String(e)
+  return /type "vector" does not exist|operator does not exist.*<=>/i.test(msg)
+}
+
+/** Postgres `42P01 undefined_table`. PGlite도 같은 코드를 준다 */
+function isMissingRelationTable(e: unknown): boolean {
+  const code = (e as { code?: unknown })?.code
+  if (code === '42P01') return true
+  const msg = e instanceof Error ? e.message : String(e)
+  return /relation .*semantic_relation.* does not exist/i.test(msg)
 }
 
 /**

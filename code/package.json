@@ -45,7 +45,9 @@
     "stack:table": "tsx scripts/stack-to-table.ts",
     "fix:timeline": "tsx scripts/fix-timeline-batch.ts",
     "dump:tables": "tsx scripts/dump-table-only.ts",
-    "fix:tables": "tsx scripts/fix-table-batch.ts"
+    "fix:tables": "tsx scripts/fix-table-batch.ts",
+    "measure:candidates": "tsx scripts/measure-candidates.ts",
+    "embed": "tsx scripts/embed.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",

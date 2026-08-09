@@ -73,6 +73,50 @@ const nodes: JudgeNode[] = ALL.map((n, i) => ({
 }))
 const byId = new Map(nodes.map((n, i) => [n.id, ALL[i]]))
 
+/**
+ * 임베딩을 실어 준다.
+ *
+ * 없어도 돈다 -- `shortlist`가 낱말 방식으로 떨어진다. 그래서 DB가 없거나
+ * 아직 안 담겼으면 경고만 하고 넘어간다. **이 스크립트가 임베딩을 만들지는
+ * 않는다.** 그건 `npm run embed`가 밤에 하는 일이다.
+ *
+ * 질문 문장으로 맞춘다. 여기 `id`는 `q0` 같은 임시 번호라 DB의 uuid와
+ * 이어지지 않는다.
+ */
+async function attachEmbeddings(): Promise<void> {
+  const url = process.env.DATABASE_URL?.trim()
+  if (!url) {
+    console.warn('DATABASE_URL이 없다. 낱말로 후보를 추린다')
+    return
+  }
+
+  const { Pool } = await import('pg')
+  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  try {
+    const r = await pool.query<{ q: string; embedding: number[] | null }>(
+      `select normalized_question as q, embedding
+         from qnode
+        where status = 'ready' and embedding is not null`,
+    )
+    const byQuestion = new Map(r.rows.map((x) => [x.q.trim(), x.embedding]))
+
+    let hit = 0
+    for (const n of nodes) {
+      const v = byQuestion.get(n.question.trim())
+      if (v) {
+        n.embedding = v
+        hit += 1
+      }
+    }
+    console.log(`임베딩 ${hit}/${nodes.length} 실림`)
+    if (hit === 0) {
+      console.warn('하나도 못 실었다. 낱말로 후보를 추린다 — npm run embed')
+    }
+  } finally {
+    await pool.end()
+  }
+}
+
 /*
  * 조각으로 나눠 동시에 돌린다.
  *
@@ -181,6 +225,8 @@ const judged = new Set(mergeAll().map((r) => `${r.fromScope}::${r.fromQuestion}`
 const from = arg('--from') ?? 0
 const limit = arg('--limit') ?? nodes.length
 const targets = nodes.slice(from, from + limit).filter((_, i) => (i + from) % shards === shard)
+
+await attachEmbeddings()
 
 console.log(`질문 ${nodes.length}개 · 이번에 볼 것 ${targets.length}개 · 이미 한 것 ${judged.size}개`)
 
