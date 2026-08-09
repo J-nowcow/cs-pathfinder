@@ -4,6 +4,7 @@ import { ensureSeeded } from '@/lib/db/bootstrap'
 import { getDb } from '@/lib/db/client'
 import { kstToday } from '@/lib/daily/date'
 import { MePanel } from '@/components/MePanel'
+import { AuthCard } from '@/components/AuthCard'
 import type { Candidate } from '@/lib/streak/suggest'
 
 /**
@@ -59,6 +60,11 @@ export default async function MePage() {
 
       <div className="mt-8">
         <MePanel all={rows} />
+      </div>
+
+      {/* 기록 아래에 둔다 — 로그인이 기록을 가로막는 것처럼 보이면 안 된다 */}
+      <div className="mt-8">
+        <AuthCard />
       </div>
 
       <p className="mt-10 text-sm text-muted">

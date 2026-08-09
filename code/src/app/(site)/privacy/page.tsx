@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 }
 
 /** 이 방침이 마지막으로 사실과 대조된 날 */
-const REVIEWED = '2026년 8월 8일'
+const REVIEWED = '2026년 8월 10일'
 const CONTACT = 'wkdgusdn0321@naver.com'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
       <p className="mt-2 text-[13px] text-faint">사실과 대조한 날: {REVIEWED}</p>
 
       <Section title="1. 무엇을 저장하는가">
-        <p>지금 저장하는 것은 둘뿐이다.</p>
+        <p>지금 저장하는 것은 셋뿐이다.</p>
         <ul className="ml-4 list-disc space-y-2">
           <li>
             <strong className="text-ink">IP 주소</strong> — 하루에 새 해설을 몇 개까지 만들 수
@@ -57,10 +57,16 @@ export default function PrivacyPage() {
             만드는 임의의 값이다. &ldquo;이 브라우저가 이 글에 이미 추천했는가&rdquo;를 판단하는 데만
             쓴다. 이름·이메일과 이어지지 않고, 이 값만으로는 누구인지 알 수 없다.
           </li>
+          <li>
+            <strong className="text-ink">로그인하면, 이메일 주소</strong> — 계정을 알아보고 탈퇴
+            요청에 응답하는 데 쓴다. 이름·프로필 사진은 구글이 보내와도{' '}
+            <strong className="text-ink">받지 않는다.</strong> 로그인 상태는 서버의 세션 표에
+            남고, 탈퇴하면 그 자리에서 지워진다 — 다른 기기의 로그인도 그 순간 끝난다.
+          </li>
         </ul>
         <p>
-          <strong className="text-ink">저장하지 않는 것</strong> — 이름, 이메일, 전화번호, 생년월일,
-          성별, 결제 정보. 계정이 없으므로 받을 자리도 없다.
+          <strong className="text-ink">저장하지 않는 것</strong> — 이름, 프로필 사진, 전화번호,
+          생년월일, 성별, 결제 정보. 로그인은 선택이고, 로그인해도 이메일 밖의 것은 받지 않는다.
         </p>
         <p>
           어떤 질문을 눌러 어디까지 파고들었는지를 나타내는 <strong className="text-ink">지도</strong>와,
@@ -88,6 +94,10 @@ export default function PrivacyPage() {
           <li>하루 한도 기록(IP) — 날짜 단위로 쌓이며, 목적을 다한 기록은 지운다.</li>
           <li>추천 식별 쿠키 — 브라우저에 1년. 브라우저에서 쿠키를 지우면 즉시 사라진다.</li>
           <li>추천 기록 — 어떤 식별자가 어떤 글에 추천했는지. 추천을 되돌리면 지운다.</li>
+          <li>
+            로그인 계정과 세션 — 탈퇴를 요청하면 그 자리에서 지운다. 세션 행이 지워지는 순간
+            모든 기기에서 로그아웃된다.
+          </li>
         </ul>
       </Section>
 
@@ -107,6 +117,10 @@ export default function PrivacyPage() {
             <strong className="text-ink">Google (Gemini API)</strong> — 해설 생성과 질문
             임베딩(비슷한 질문을 찾으려고 문장을 숫자로 바꾸는 일). 두 경우 모두 질문의{' '}
             <em>글자</em>만 전달된다. IP나 쿠키 값은 보내지 않는다.
+          </li>
+          <li>
+            <strong className="text-ink">Google (로그인)</strong> — 구글 계정으로 로그인할 때
+            인증은 구글이 처리한다. 서비스가 받는 것은 이메일 주소뿐이다.
           </li>
         </ul>
         <p>이들에게 개인정보를 팔거나 광고 목적으로 넘기지 않는다.</p>
