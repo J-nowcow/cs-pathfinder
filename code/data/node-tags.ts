@@ -21,6 +21,7 @@ export type NodeTag = {
 }
 
 export const NODE_TAGS: NodeTag[] = [
+  { question: 'HSTS는 무엇을 막는가?', tags: ['암호화', '프로토콜'] },
   { question: '분산 트랜잭션에서 Saga 패턴이 필요한 이유는?', tags: ['트랜잭션'] },
   { question: 'TCP 연결을 끊을 때 TIME_WAIT 상태가 필요한 이유는?', tags: ['프로토콜'] },
   { question: '컨텍스트 스위칭 비용은 구체적으로 어디서 발생하는가?', tags: ['동시성'] },

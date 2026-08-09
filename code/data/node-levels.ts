@@ -16,6 +16,8 @@ export type NodeLevel = {
 }
 
 export const NODE_LEVELS: NodeLevel[] = [
+  { question: '비밀키를 코드에 넣으면 왜 안 되는가?', level: '기초' },
+  { question: 'HSTS는 무엇을 막는가?', level: '심화' },
   { question: 'DB 커넥션을 매번 새로 맺는 비용이 큰 이유는?', level: '기초' },
   { question: '분산 트랜잭션에서 Saga 패턴이 필요한 이유는?', level: '심화' },
   { question: 'TCP 연결을 끊을 때 TIME_WAIT 상태가 필요한 이유는?', level: '기초' },
