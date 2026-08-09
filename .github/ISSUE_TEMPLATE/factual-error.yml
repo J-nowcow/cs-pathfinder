@@ -1,0 +1,32 @@
+name: 해설이 틀렸어요
+description: 사실 오류 신고. 이 저장소가 가장 반기는 기여예요.
+title: "[오류] "
+labels: ["사실 오류"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        고마워요. **직접 고치지 않으셔도 돼요** — 어디가 틀렸는지 알려 주시는 것만으로 충분해요.
+        해설 초안은 AI가 써서 조건을 뺀 단정이 종종 남아요. 그걸 잡아 주시는 거예요.
+  - type: input
+    id: question
+    attributes:
+      label: 어느 질문인가요
+      description: 주소(`/q/번호`)나 질문 제목
+      placeholder: "/q/3 또는 'TCP 연결을 끊을 때 TIME_WAIT 상태가 필요한 이유는?'"
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: 어느 문장이 틀렸나요
+      description: 해설에서 그대로 복사해 주세요
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 왜 틀렸나요
+      description: 근거가 있으면 함께요 — 공식 문서·표준·실측 무엇이든. "제 경험상"도 좋아요, 조건만 붙여 주세요
+    validations:
+      required: true

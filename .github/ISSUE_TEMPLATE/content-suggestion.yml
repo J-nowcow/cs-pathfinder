@@ -1,0 +1,35 @@
+name: 질문·용어·태그 제안
+description: 새 질문, 용어 사전 항목, 태그 어휘를 제안해요.
+title: "[제안] "
+labels: ["제안"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        셋 다 **원본이 파일**이에요. 어디를 고치게 될지 미리 알려 드리면 —
+        - 새 질문 → `code/data/` (자세한 길은 [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md))
+        - 용어 사전 → `code/data/glossary.ts` (등재 기준: 본문 5편 이상 등장)
+        - 태그 → `code/data/tags.ts` (통제 어휘 — 태그를 늘리는 건 이 파일 PR이 먼저예요)
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 어떤 제안인가요
+      options:
+        - 새 질문
+        - 용어 사전 항목
+        - 태그 어휘
+        - 기존 질문의 태그·난이도 수정
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: 내용
+      description: 질문이면 질문 문장을, 용어면 용어와 한 문장 뜻을, 태그면 이름과 범위를
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 왜 필요한가요
+      description: 용어라면 어느 해설에서 걸렸는지, 태그라면 기존 16개로 왜 안 되는지

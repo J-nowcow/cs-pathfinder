@@ -1,0 +1,24 @@
+name: 화면·기능이 이상해요
+description: 안 열리거나, 잘리거나, 눌렀는데 다른 게 나와요.
+title: "[버그] "
+labels: ["버그"]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: 어느 화면인가요
+      placeholder: "/q/3, /map, /questions?tag=동시성 ..."
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 무엇이 어떻게 이상한가요
+      description: 기대한 것과 실제로 본 것. 스크린샷이 있으면 최고예요
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 기기와 브라우저
+      placeholder: "아이폰 15 사파리 / 갤럭시 크롬 / 맥 크롬 ..."
