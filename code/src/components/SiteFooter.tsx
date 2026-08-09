@@ -71,6 +71,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/terms" className="text-[13px] text-muted hover:text-ink">
+                  이용약관
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy" className="text-[13px] text-muted hover:text-ink">
                   개인정보처리방침
                 </Link>
