@@ -354,14 +354,16 @@ export async function recordEvent(args: {
   resultingNodeId?: string
   candidateIds?: string[]
   matchedNodeId?: string
+  /** 매칭이 어떻게 이뤄졌나. 'gate'|'hash'|'suggestion'|'lease'|'ancestor'. 매칭이 아니면 생략 */
+  matchedVia?: string
   gateVersion?: string
 }): Promise<string> {
   const db = await getDb()
   const rows = await db.query<{ id: string }>(
     `insert into expansion_event
        (parent_qnode_id, raw_input, verdict, reject_reason, resulting_qnode_id,
-        candidate_ids, matched_node_id, gate_version)
-     values ($1, $2, $3, $4, $5, $6, $7, $8)
+        candidate_ids, matched_node_id, gate_version, matched_via)
+     values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
      returning id`,
     [
       args.parentNodeId,
@@ -372,6 +374,7 @@ export async function recordEvent(args: {
       args.candidateIds ?? null,
       args.matchedNodeId ?? null,
       args.gateVersion ?? null,
+      args.matchedVia ?? null,
     ],
   )
   return rows[0].id

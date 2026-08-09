@@ -98,11 +98,33 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
     if (sug.targetNodeId) {
       const hit = findAncestorHit(input.ancestorNodeIds, sug.targetNodeId)
       if (hit !== null) {
+        /*
+         * 이 경로도 기록한다. 주석이 "전체 확장의 대부분"이라 부르는 경로가
+         * 이벤트를 안 남겨서, expansion_event로 확장량을 세면 대부분이
+         * 빠지는 상태였다. 스펙 §5가 임베딩 검색을 켜는 조건으로 지정한
+         * "같은 개념 재생성 비율"도 이 구멍 때문에 잴 수 없었다.
+         */
+        await recordEvent({
+          parentNodeId: input.parentNodeId,
+          rawInput: sug.text,
+          verdict: 'accepted',
+          resultingNodeId: sug.targetNodeId,
+          matchedNodeId: sug.targetNodeId,
+          matchedVia: 'ancestor',
+        })
         return { kind: 'ancestor_jump', ancestorIndex: hit, nodeId: sug.targetNodeId }
       }
       const node = await loadNode(sug.targetNodeId)
       if (!node) return { kind: 'not_found', what: 'suggestion' }
       await ensureEdge(input.parentNodeId, node.id)
+      await recordEvent({
+        parentNodeId: input.parentNodeId,
+        rawInput: sug.text,
+        verdict: 'accepted',
+        resultingNodeId: node.id,
+        matchedNodeId: node.id,
+        matchedVia: 'suggestion',
+      })
       return {
         kind: 'ok',
         node,
@@ -153,6 +175,16 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
   if (gate.matchedId !== null) {
     const hit = findAncestorHit(input.ancestorNodeIds, gate.matchedId)
     if (hit !== null) {
+      await recordEvent({
+        parentNodeId: input.parentNodeId,
+        rawInput,
+        verdict: 'accepted',
+        resultingNodeId: gate.matchedId,
+        candidateIds,
+        matchedNodeId: gate.matchedId,
+        matchedVia: 'ancestor',
+        gateVersion: NORMALIZER_VERSION,
+      })
       return { kind: 'ancestor_jump', ancestorIndex: hit, nodeId: gate.matchedId }
     }
 
@@ -166,6 +198,12 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
         resultingNodeId: node.id,
         candidateIds,
         matchedNodeId: node.id,
+        /*
+         * 'gate'와 'hash'를 가른다. 전에는 둘 다 matched_node_id만 채워서
+         * 게이트가 고른 것과 같은 문장이 다시 온 것이 로그에서 구분되지
+         * 않았다 — 매칭률을 재는 순간 틀린 값이 나오는 상태였다.
+         */
+        matchedVia: 'gate',
         gateVersion: NORMALIZER_VERSION,
       })
       return {
@@ -189,6 +227,16 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
   if (cached) {
     const hit = findAncestorHit(input.ancestorNodeIds, cached.id)
     if (hit !== null) {
+      await recordEvent({
+        parentNodeId: input.parentNodeId,
+        rawInput,
+        verdict: 'accepted',
+        resultingNodeId: cached.id,
+        candidateIds,
+        matchedNodeId: cached.id,
+        matchedVia: 'ancestor',
+        gateVersion: NORMALIZER_VERSION,
+      })
       return { kind: 'ancestor_jump', ancestorIndex: hit, nodeId: cached.id }
     }
     await ensureEdge(input.parentNodeId, cached.id)
@@ -199,6 +247,7 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
       resultingNodeId: cached.id,
       candidateIds,
       matchedNodeId: cached.id,
+      matchedVia: 'hash',
       gateVersion: NORMALIZER_VERSION,
     })
     return {
@@ -251,6 +300,15 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
     if (node) {
       await releaseQuota(input.quotaKey)
       await ensureEdge(input.parentNodeId, node.id)
+      await recordEvent({
+        parentNodeId: input.parentNodeId,
+        rawInput,
+        verdict: 'accepted',
+        resultingNodeId: node.id,
+        matchedNodeId: node.id,
+        matchedVia: 'lease',
+        gateVersion: NORMALIZER_VERSION,
+      })
       return {
         kind: 'ok',
         node,
@@ -280,6 +338,15 @@ async function runExpand(input: ExpandInput): Promise<ExpandOutcome> {
       if (fresh) {
         await releaseQuota(input.quotaKey)
         await ensureEdge(input.parentNodeId, fresh.id)
+        await recordEvent({
+          parentNodeId: input.parentNodeId,
+          rawInput,
+          verdict: 'accepted',
+          resultingNodeId: fresh.id,
+          matchedNodeId: fresh.id,
+          matchedVia: 'lease',
+          gateVersion: NORMALIZER_VERSION,
+        })
         return {
           kind: 'ok',
           node: fresh,
