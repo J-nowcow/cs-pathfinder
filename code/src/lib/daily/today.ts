@@ -78,6 +78,8 @@ async function hydrate(row: TreeRow | undefined, today: string): Promise<DailyTr
       question: node.question,
       body: node.body,
       identityScope: node.identityScope,
+      tags: node.tags,
+      level: node.level,
       suggestions: node.suggestions.map((s) => ({
         id: s.id,
         text: s.text,

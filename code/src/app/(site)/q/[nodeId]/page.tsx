@@ -60,6 +60,8 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
     number: node.number,
     question: node.question,
     body: node.body,
+    tags: node.tags,
+    level: node.level,
     identityScope: node.identityScope,
     category: node.primaryCategory,
     suggestions: node.suggestions.map((s) => ({

@@ -12,6 +12,10 @@ export type PublicNode = {
   question: string
   body: string
   identityScope: string
+  /** 통제 어휘 태그. 서버가 안 실어 주면 빈 배열 */
+  tags: string[]
+  /** 난이도 3단. 미판정·미수신이면 null */
+  level: string | null
   suggestions: PublicSuggestion[]
 }
 
@@ -60,6 +64,8 @@ function toNode(raw: Record<string, unknown>): PublicNode | null {
     question: raw.question,
     body: typeof raw.body === 'string' ? raw.body : '',
     identityScope: typeof raw.identity_scope === 'string' ? raw.identity_scope : 'generic',
+    tags: Array.isArray(raw.tags) ? (raw.tags as string[]).filter((t) => typeof t === 'string') : [],
+    level: typeof raw.level === 'string' ? raw.level : null,
     suggestions: suggestions.map((s) => ({
       id: s.id,
       text: s.text,

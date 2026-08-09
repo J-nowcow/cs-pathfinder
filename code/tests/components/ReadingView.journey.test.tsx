@@ -26,6 +26,8 @@ const NODE = {
   body: '본문이다.',
   identityScope: 'generic',
   category: '네트워크',
+  tags: [],
+  level: null,
   suggestions: [],
 }
 

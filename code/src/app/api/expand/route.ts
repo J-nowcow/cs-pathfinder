@@ -68,6 +68,8 @@ export async function POST(request: Request): Promise<Response> {
             question: outcome.node.question,
             body: outcome.node.body,
             identity_scope: outcome.node.identityScope,
+            tags: outcome.node.tags,
+            level: outcome.node.level,
             suggestions: outcome.node.suggestions.map((s) => ({
               id: s.id,
               text: s.text,

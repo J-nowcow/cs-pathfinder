@@ -30,6 +30,8 @@ export async function GET(
       body: node.body,
       identity_scope: node.identityScope,
       category: node.primaryCategory,
+      tags: node.tags,
+      level: node.level,
       suggestions: node.suggestions.map((s) => ({
         id: s.id,
         text: s.text,

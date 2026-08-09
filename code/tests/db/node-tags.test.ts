@@ -92,3 +92,24 @@ describe('태그 시드', () => {
     expect(rows[0].tags).toEqual(sample.tags)
   })
 })
+
+/**
+ * 상세 화면 칩의 데이터 경로 — loadNode가 태그·난이도를 실어야
+ * 칩이 그려진다. select에서 빠지면 칩이 조용히 사라진다.
+ */
+describe('loadNode 태그·난이도', () => {
+  it('태그와 난이도를 함께 준다', async () => {
+    await ensureSeeded()
+    const { loadNode } = await import('@/lib/expand/cache')
+    const db = await getDb()
+    const sample = NODE_TAGS[0]
+    const [row] = await db.query<{ id: string }>(
+      `select id from qnode where normalized_question = $1`,
+      [sample.question],
+    )
+
+    const node = await loadNode(row.id)
+    expect(node?.tags).toEqual(sample.tags)
+    expect(node?.level === null || typeof node?.level === 'string').toBe(true)
+  })
+})

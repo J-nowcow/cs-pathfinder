@@ -184,6 +184,8 @@ export function ReadingView({
           question: raw.question,
           body: raw.body,
           identityScope: raw.identity_scope,
+          tags: Array.isArray(raw.tags) ? raw.tags : [],
+          level: typeof raw.level === 'string' ? raw.level : null,
           category: raw.category,
           suggestions: raw.suggestions,
         }
@@ -311,8 +313,32 @@ export function ReadingView({
           {node.question}
         </h1>
 
-        <p className="mt-3 text-[12px] text-faint">
-          {node.category} <span className="font-mono">· {node.identityScope}</span>
+        <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-faint">
+          <span>
+            {node.category} <span className="font-mono">· {node.identityScope}</span>
+          </span>
+          {/*
+            태그·난이도 칩. 링크가 /questions 필터로 간다 — "이 주제 더"가
+            칩의 뜻이다. 확장으로 노드가 바뀌면 API 응답에 실려 온 값으로
+            같이 바뀐다(안 실려 오면 그냥 안 그린다).
+          */}
+          {node.level && (
+            <a
+              href={`/questions?level=${encodeURIComponent(node.level)}`}
+              className="rounded-full border border-line px-2 py-0.5 text-muted hover:border-accent hover:text-ink"
+            >
+              {node.level}
+            </a>
+          )}
+          {node.tags.map((t) => (
+            <a
+              key={t}
+              href={`/questions?tag=${encodeURIComponent(t)}`}
+              className="rounded-full border border-line px-2 py-0.5 text-muted hover:border-accent hover:text-ink"
+            >
+              {t}
+            </a>
+          ))}
         </p>
 
         <div className="mt-7">

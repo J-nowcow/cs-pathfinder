@@ -15,6 +15,10 @@ export type CachedNode = {
   body: string
   identityScope: string
   primaryCategory: string
+  /** data/tags.ts 통제 어휘 안. 무태그면 빈 배열 */
+  tags: string[]
+  /** data/levels.ts 3단. 미판정이면 null */
+  level: string | null
   suggestions: CachedSuggestion[]
 }
 
@@ -25,6 +29,8 @@ type NodeRow = {
   body: string
   identity_scope: string
   primary_category: string
+  tags: string[] | null
+  level: string | null
 }
 
 type SuggestionRow = {
@@ -70,12 +76,12 @@ export async function loadNode(nodeId: string): Promise<CachedNode | null> {
 
   const nodes = isNumber(nodeId)
     ? await db.query<NodeRow>(
-        `select id, number, normalized_question, body, identity_scope, primary_category
+        `select id, number, normalized_question, body, identity_scope, primary_category, tags, level
          from qnode where number = $1 and status = 'ready'`,
         [Number(nodeId)],
       )
     : await db.query<NodeRow>(
-        `select id, number, normalized_question, body, identity_scope, primary_category
+        `select id, number, normalized_question, body, identity_scope, primary_category, tags, level
          from qnode where id = $1 and status = 'ready'`,
         [nodeId],
       )
@@ -97,6 +103,8 @@ export async function loadNode(nodeId: string): Promise<CachedNode | null> {
     body: n.body,
     identityScope: n.identity_scope,
     primaryCategory: n.primary_category,
+    tags: n.tags ?? [],
+    level: n.level,
     suggestions: suggestions.map((s) => ({
       id: s.id,
       text: s.text,
