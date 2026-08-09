@@ -16,6 +16,8 @@ export type NodeLevel = {
 }
 
 export const NODE_LEVELS: NodeLevel[] = [
+  { question: '세션 하이재킹은 왜 성립하는가?', level: '심화' },
+  { question: '권한은 왜 최소로 주는가?', level: '기초' },
   { question: '비밀키를 코드에 넣으면 왜 안 되는가?', level: '기초' },
   { question: 'HSTS는 무엇을 막는가?', level: '심화' },
   { question: 'DB 커넥션을 매번 새로 맺는 비용이 큰 이유는?', level: '기초' },

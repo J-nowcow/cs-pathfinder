@@ -21,6 +21,8 @@ export type NodeTag = {
 }
 
 export const NODE_TAGS: NodeTag[] = [
+  { question: '세션 하이재킹은 왜 성립하는가?', tags: ['인증·인가'] },
+  { question: '권한은 왜 최소로 주는가?', tags: ['인증·인가'] },
   { question: 'HSTS는 무엇을 막는가?', tags: ['암호화', '프로토콜'] },
   { question: '분산 트랜잭션에서 Saga 패턴이 필요한 이유는?', tags: ['트랜잭션'] },
   { question: 'TCP 연결을 끊을 때 TIME_WAIT 상태가 필요한 이유는?', tags: ['프로토콜'] },
