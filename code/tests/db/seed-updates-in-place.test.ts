@@ -56,6 +56,34 @@ describe('부팅 시드는 있는 행을 고친다', () => {
     expect(rows[0].body).toBe(SAMPLE.body)
   })
 
+  /**
+   * **분야도 파일이 원본이다.**
+   *
+   * B5 재분류에서 발견 — upsert가 body·질문만 갱신하고 분야를 안 갱신해서,
+   * 파일에서 `인프라 · 보안` → `운영체제`로 고쳐도 기존 행은 그대로였다.
+   * 분야가 틀리면 그 질문은 목록 필터·지도 묶음·덤프 폴더 전부에서
+   * 엉뚱한 자리에 선다. 그리고 **눈으로 안 잡힌다** — 어느 화면도
+   * 깨지지 않고, 자리만 틀리다.
+   */
+  it('분야가 바뀌면 갱신한다', async () => {
+    const db = await getDb()
+
+    await db.query(
+      `insert into qnode (id, identity_scope, normalized_question, body, primary_category, status, origin, number)
+       values ('11111111-2222-3333-4444-666666666666', $1, $2, $3, '엉뚱한 분야', 'ready', 'batch', 9002)`,
+      [SAMPLE.identityScope, SAMPLE.question, SAMPLE.body],
+    )
+
+    await ensureSeeded()
+
+    const rows = await db.query<{ primary_category: string }>(
+      `select primary_category from qnode where normalized_question = $1`,
+      [SAMPLE.question],
+    )
+    expect(rows.length).toBe(1)
+    expect(rows[0].primary_category).toBe(SAMPLE.category)
+  })
+
   it('꼬리질문 글자가 바뀌면 갱신한다', async () => {
     const db = await getDb()
     await ensureSeeded()
