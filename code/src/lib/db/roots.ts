@@ -1,4 +1,5 @@
 import { getDb } from '@/lib/db/client'
+import { NOT_FOLDED_SQL } from '@/lib/db/equivalence'
 import { kstToday } from '@/lib/daily/date'
 
 export type RootSummary = {
@@ -45,6 +46,7 @@ export async function listRoots(opts: { limit?: number } = {}): Promise<RootSumm
             split_part(body, E'\n\n', 1) as excerpt
      from qnode
      where origin = 'batch' and status = 'ready'
+       and ${NOT_FOLDED_SQL('qnode')}
        and not exists (
          select 1 from tree t
           where t.root_node_id = qnode.id

@@ -2,6 +2,7 @@ import { getDb } from '@/lib/db/client'
 import { kstToday } from '@/lib/daily/date'
 import { isMissingTable } from '@/lib/db/missing-table'
 import { MIN_RELATION_VOTES } from '@/lib/db/relations'
+import { NOT_FOLDED_SQL } from '@/lib/db/equivalence'
 
 /**
  * 전역 질문 지도에 실을 것.
@@ -60,6 +61,7 @@ export async function loadMapData(today: string = kstToday()): Promise<MapData> 
       where n.status = 'ready'
         and n.origin = 'batch'
         and (t.publish_date is null or t.publish_date <= $1::date)
+        and ${NOT_FOLDED_SQL('n')}
       order by n.created_at asc, n.normalized_question asc`,
     [today],
   )
