@@ -18,14 +18,7 @@ import { EMBED_DIM, EMBED_TOP_K, EMBED_MIN_SIMILARITY } from '@/lib/embed/model'
  */
 beforeEach(resetDb)
 
-/** 축 하나만 세운 벡터. 각도를 손으로 정하려고 이렇게 만든다 */
-function axis(deg: number): number[] {
-  const rad = (deg * Math.PI) / 180
-  const v = new Array(EMBED_DIM).fill(0)
-  v[0] = Math.cos(rad)
-  v[1] = Math.sin(rad)
-  return v
-}
+import { axis } from '../helpers/axis'
 
 async function mk(q: string, vec?: number[]): Promise<string> {
   const id = await insertNode({

@@ -1,6 +1,8 @@
 import { loadEnvLocal } from '../src/lib/load-env'
 import { EMBED_MODEL, EMBED_DIM } from '../src/lib/embed/model'
 import { embedQuestions } from '../src/lib/embed/gemini'
+import { cosine } from '../src/lib/embed/cosine'
+import { classifyFailure } from '../src/lib/llm/failure'
 
 /**
  * 질문 문장을 임베딩해 `qnode.embedding`에 담는다.
@@ -20,18 +22,6 @@ import { embedQuestions } from '../src/lib/embed/gemini'
 loadEnvLocal()
 
 type Row = { id: string; number: number | null; question: string }
-
-function cosine(a: number[], b: number[]): number {
-  let dot = 0
-  let na = 0
-  let nb = 0
-  for (let i = 0; i < a.length; i += 1) {
-    dot += a[i] * b[i]
-    na += a[i] * a[i]
-    nb += b[i] * b[i]
-  }
-  return dot / (Math.sqrt(na) * Math.sqrt(nb) || 1)
-}
 
 async function main() {
   const url = process.env.DATABASE_URL?.trim()
@@ -86,7 +76,12 @@ async function main() {
         return await embedQuestions(texts)
       } catch (e) {
         lastError = e
-        if (!/429|RESOURCE_EXHAUSTED/i.test(String(e))) throw e
+        /*
+         * 분류는 기존 것을 쓴다. 처음엔 /429|RESOURCE_EXHAUSTED/ 정규식을
+         * 새로 짰는데, `llm/failure.ts`의 `classifyFailure`가 같은 판정을
+         * 더 넓게(rate limit·too many requests까지) 이미 하고 있었다.
+         */
+        if (classifyFailure(e) !== 'quota') throw e
         process.stdout.write(`\r  429 — 45초 대기 (${attempt + 1}/4)      `)
         await sleep(45_000)
       }

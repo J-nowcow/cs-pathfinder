@@ -1,4 +1,6 @@
 import { getDb } from '@/lib/db/client'
+import { isMissingTable } from '@/lib/db/missing-table'
+import { MIN_RELATION_VOTES } from '@/lib/db/relations'
 import { EMBED_DIM, EMBED_TOP_K, EMBED_MIN_SIMILARITY } from '@/lib/embed/model'
 
 export type NewNode = {
@@ -134,14 +136,10 @@ export async function linkSuggestion(suggestionId: string, nodeId: string): Prom
  */
 export const MAX_CANDIDATES = 50
 
-/**
- * 표를 둘 이상 받은 관계만 쓴다.
- *
- * 화면이 같은 기준으로 선을 그린다(`db/graph.ts`). 매칭이 더 헐거운 기준을
- * 쓰면 **사용자에게 보이지 않는 관계를 근거로 질문이 합쳐진다.** 왜 합쳐졌는지
- * 화면에서 확인할 길이 없어진다.
+/*
+ * 표 문턱은 `db/relations.ts`의 공유 상수를 쓴다. 화면과 매칭이 같은
+ * 기준이어야 하는 이유가 그 상수의 주석에 있다.
  */
-const MIN_RELATION_VOTES = 2
 
 export async function collectCandidates(
   parentNodeId: string,
@@ -186,11 +184,22 @@ export async function collectCandidates(
     }
   }
 
+  /*
+   * 두 의미 층은 서로 독립이라 **동시에** 묻는다.
+   *
+   * 여기는 확장 응답 경로다 — 사용자가 기다린다. 순차로 돌리면 Neon 왕복이
+   * 최대 3번 줄지어 서는데, 뒤 질의가 앞 질의에서 실제로 받는 것은 남은
+   * 자리 수뿐이고 그건 전송량 절약이지 결과를 바꾸는 의존이 아니다.
+   * 각자 자기 상한만큼 가져오게 하고 자리 배분은 `add`가 순서대로 한다 —
+   * 어느 행이 뽑히는지는 순차일 때와 같다.
+   */
   if (out.length < MAX_CANDIDATES) {
-    add(await semanticNeighbors(parentNodeId, MAX_CANDIDATES - out.length))
-  }
-  if (out.length < MAX_CANDIDATES) {
-    add(await vectorNeighbors(parentNodeId, Math.min(EMBED_TOP_K, MAX_CANDIDATES - out.length)))
+    const [semantic, vector] = await Promise.all([
+      semanticNeighbors(parentNodeId, MAX_CANDIDATES),
+      vectorNeighbors(parentNodeId, EMBED_TOP_K),
+    ])
+    add(semantic)
+    add(vector)
   }
 
   return out
@@ -231,7 +240,8 @@ async function semanticNeighbors(
     )
     return rows.map((r) => ({ id: r.id, question: r.normalized_question }))
   } catch (e) {
-    if (!isMissingRelationTable(e)) throw e
+    /* 표 부재 판별은 전용 모듈을 쓴다. `graph.ts`가 같은 표 부재를 같은 함수로 잡는다 */
+    if (!isMissingTable(e)) throw e
     console.warn('[expand] semantic_relation이 없다. 구조 후보만 쓴다 — npm run db:migrate')
     return []
   }
@@ -311,14 +321,6 @@ function isVectorUnavailable(e: unknown): boolean {
   if (code === '42704' || code === '42883') return true
   const msg = e instanceof Error ? e.message : String(e)
   return /type "vector" does not exist|operator does not exist.*<=>|dimensions/i.test(msg)
-}
-
-/** Postgres `42P01 undefined_table`. PGlite도 같은 코드를 준다 */
-function isMissingRelationTable(e: unknown): boolean {
-  const code = (e as { code?: unknown })?.code
-  if (code === '42P01') return true
-  const msg = e instanceof Error ? e.message : String(e)
-  return /relation .*semantic_relation.* does not exist/i.test(msg)
 }
 
 /**

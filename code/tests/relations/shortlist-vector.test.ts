@@ -17,13 +17,7 @@ import { EMBED_DIM, RELATION_MIN_SIMILARITY } from '@/lib/embed/model'
  *
  * 여기 시험은 **벡터 분기를 지우면 깨져야 한다.**
  */
-const vec = (deg: number): number[] => {
-  const rad = (deg * Math.PI) / 180
-  const v = new Array(EMBED_DIM).fill(0)
-  v[0] = Math.cos(rad)
-  v[1] = Math.sin(rad)
-  return v
-}
+import { axis as vec } from '../helpers/axis'
 
 const N = (id: string, question: string, category: string, deg?: number) => ({
   id,

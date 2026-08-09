@@ -1,6 +1,7 @@
 import { getDb } from '@/lib/db/client'
 import { kstToday } from '@/lib/daily/date'
 import { isMissingTable } from '@/lib/db/missing-table'
+import { MIN_RELATION_VOTES } from '@/lib/db/relations'
 
 /**
  * 전역 질문 지도에 실을 것.
@@ -105,10 +106,10 @@ export async function loadMapData(today: string = kstToday()): Promise<MapData> 
         `select from_id as "parentId", to_id as "childId", 'related' as kind, reason
            from semantic_relation
           where active
-            and votes >= 2
+            and votes >= $2
             and from_id = any($1::uuid[])
             and to_id   = any($1::uuid[])`,
-        [ids],
+        [ids, MIN_RELATION_VOTES],
       )
       .catch((e: unknown) => {
         if (!isMissingTable(e)) throw e

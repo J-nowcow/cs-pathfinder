@@ -69,15 +69,33 @@ export async function sweepEmbeddings(limit = 200, embed: EmbedFn = embedQuestio
   const SIZE = 50
   for (let i = 0; i < rows.length; i += SIZE) {
     const chunk = rows.slice(i, i + SIZE)
+
+    /*
+     * 덩이 사이를 띄운다. batchEmbedContents는 안에 든 항목이 각각
+     * 요청으로 세서, 50개 두 덩이를 몇 초 안에 보내면 분당 한도에
+     * 걸린다(429 실측 2026-08-09). 밀린 것을 따라잡는 날이 정확히
+     * 그 모양이다. 2초면 함수 예산(60초) 안에서 최대 덩이 수(4)를
+     * 감당하고도 남는다.
+     */
+    if (i > 0) await new Promise((r) => setTimeout(r, 2_000))
+
     try {
       const vecs = await embed(chunk.map((c) => c.q))
-      for (const [j, node] of chunk.entries()) {
-        await db.query(
-          `update qnode set embedding = $2::real[] where id = $1 and embedding is null`,
-          [node.id, vecs[j]],
-        )
-        filled += 1
-      }
+      /*
+       * 덩이 하나를 한 번의 왕복으로 쓴다. 행마다 UPDATE를 날리면
+       * 최대 200회 순차 왕복이라 함수 예산을 쓰기 지연이 갉아먹는다.
+       * 벡터는 Postgres 배열 리터럴 문자열로 실어 `::real[]`로 되살린다.
+       */
+      const ids = chunk.map((c) => c.id)
+      const lits = vecs.map((v) => `{${v.join(',')}}`)
+      await db.query(
+        `update qnode q
+            set embedding = u.emb::real[]
+           from unnest($1::uuid[], $2::text[]) as u(id, emb)
+          where q.id = u.id and q.embedding is null`,
+        [ids, lits],
+      )
+      filled += chunk.length
     } catch (e) {
       /* 한 덩이가 죽어도 다음 덩이는 시도한다. 남은 것은 내일 스윕 몫이다 */
       failed += chunk.length

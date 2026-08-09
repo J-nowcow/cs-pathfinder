@@ -13,6 +13,19 @@ import { getDb } from '@/lib/db/client'
 export type RelationKind = 'shares_concept' | 'prerequisite' | 'alternative' | 'instance_of'
 export type RelationSource = 'llm' | 'human' | 'seed'
 
+/**
+ * 관계가 "쓰이는" 최소 표.
+ *
+ * 지도(`db/graph.ts`)가 선을 그릴 때와 매칭(`expand/nodes.ts`)이 후보를
+ * 모을 때 **같은 값이어야 한다.** 갈리면 사용자에게 보이지 않는 관계를
+ * 근거로 질문이 합쳐지고, 왜 합쳐졌는지 화면에서 확인할 길이 없다.
+ *
+ * 전에는 지도가 리터럴 `2`, 매칭이 자기 상수 `2`로 따로 들고 있었다 —
+ * 주석으로만 "같아야 한다"고 묶여 있어서 한쪽만 고치면 조용히 갈렸다.
+ * 그래서 관계의 저장을 맡는 이 파일로 올렸다.
+ */
+export const MIN_RELATION_VOTES = 2
+
 export type NewRelation = {
   fromId: string
   toId: string
