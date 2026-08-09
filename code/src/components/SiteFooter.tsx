@@ -66,6 +66,11 @@ export function SiteFooter() {
                 여기가 그 자리다.
               */}
               <li>
+                <Link href="/glossary" className="text-[13px] text-muted hover:text-ink">
+                  용어 사전
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy" className="text-[13px] text-muted hover:text-ink">
                   개인정보처리방침
                 </Link>
