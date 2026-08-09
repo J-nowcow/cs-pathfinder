@@ -49,6 +49,9 @@ const CLUSTERS: Array<{ keep: number; fold: number[]; why: string }> = [
   { keep: 224, fold: [238], why: '쿠키/세션 구분 -- 저장 위치·상태 유지, 같은 답. 관계 4>3' },
   { keep: 8, fold: [69], why: 'equals/hashCode 규약 -- 같은 답(HashMap 동작). 유일하게 간선 있는 쪽' },
   { keep: 248, fold: [191], why: 'Thread-Safe 방법. 관계 4>0' },
+  /* M2 관계 판정 중 발견된 2건 (2026-08-09 밤) */
+  { keep: 30, fold: [20], why: '격리 수준 상승의 대가 — 같은 답(동시성·처리량 저하). 관계 3>0' },
+  { keep: 71, fold: [256], why: '스트림 지연 평가 이유 — 같은 답. 관계 1>0' },
 ]
 
 /**
