@@ -4,6 +4,7 @@ import { ensureSeeded } from '@/lib/db/bootstrap'
 import { listRoots } from '@/lib/db/roots'
 import { CATEGORIES, categoryAnchor } from '@/lib/tree/categories'
 import { socialMeta } from '@/lib/site'
+import { TAGS, TAG_NAMES } from '../../../../data/tags'
 
 // 매 요청 실제 DB를 읽는다. 발행이 하나 늘면 여기도 같이 늘어야 한다
 export const dynamic = 'force-dynamic'
@@ -23,15 +24,34 @@ export const metadata: Metadata = socialMeta({
  *
  * 그래서 질문 전체를 카테고리로 묶는 자리를 따로 뒀다. 필터가 아니라 목차다.
  */
-export default async function QuestionsPage() {
+export default async function QuestionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string }>
+}) {
   await ensureSeeded()
   const roots = await listRoots()
+
+  /*
+   * 태그 필터는 주소로 건다(`?tag=동시성`).
+   *
+   * 서버 컴포넌트 그대로라 JS가 안 늘고, 필터된 목록이 곧 공유 가능한
+   * 주소가 된다. 통제 어휘 밖의 값은 조용히 무시한다 — 주소는 크롤러와
+   * 옛 링크가 온갖 것을 들고 오는 자리다.
+   */
+  const { tag } = await searchParams
+  const activeTag = tag && TAG_NAMES.has(tag) ? tag : null
+  const filtered = activeTag ? roots.filter((r) => r.tags.includes(activeTag)) : roots
+
+  /* 개수 0인 태그는 필터 줄에 안 세운다. 눌러 봐야 빈 화면이다 */
+  const tagCounts = new Map<string, number>()
+  for (const r of roots) for (const t of r.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
 
   // CATEGORIES 순서를 따른다. 개수순으로 세우면 발행 하나에 순서가 흔들려서
   // 어제 봤던 자리에 오늘 다른 게 있다
   const grouped = CATEGORIES.map((category) => ({
     category,
-    items: roots.filter((r) => r.category === category),
+    items: filtered.filter((r) => r.category === category),
   })).filter((g) => g.items.length > 0)
 
   return (
@@ -57,8 +77,47 @@ export default async function QuestionsPage() {
         카테고리별 질문
       </h1>
       <p className="mt-3 text-[15px] leading-[1.72] text-muted">
-        지금까지 올라온 질문 {roots.length}개. 궁금한 쪽부터 파고들면 돼요.
+        {activeTag ? (
+          <>
+            <strong className="text-ink">{activeTag}</strong> 태그가 붙은 질문 {filtered.length}
+            개예요.
+          </>
+        ) : (
+          <>지금까지 올라온 질문 {roots.length}개. 궁금한 쪽부터 파고들면 돼요.</>
+        )}
       </p>
+
+      {/*
+        태그 필터. 분야(아래 sticky 목차)와 다른 축이다 — 분야는 소속,
+        태그는 주제. "운영체제이면서 동시성"을 분야 목차는 못 가르고
+        여기가 가른다. 개수 0인 태그는 안 세운다.
+      */}
+      <nav aria-label="태그" className="mt-5 flex flex-wrap gap-2">
+        <Link
+          href="/questions"
+          className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
+            activeTag
+              ? 'border-line text-muted hover:border-accent hover:text-ink'
+              : 'border-accent bg-accent-soft text-ink'
+          }`}
+        >
+          전체 {roots.length}
+        </Link>
+        {TAGS.filter((t) => (tagCounts.get(t.name) ?? 0) > 0).map((t) => (
+          <Link
+            key={t.name}
+            href={`/questions?tag=${encodeURIComponent(t.name)}`}
+            title={t.scope}
+            className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
+              activeTag === t.name
+                ? 'border-accent bg-accent-soft text-ink'
+                : 'border-line text-muted hover:border-accent hover:text-ink'
+            }`}
+          >
+            {t.name} {tagCounts.get(t.name)}
+          </Link>
+        ))}
+      </nav>
 
       {/*
         목차를 위에 두고 **따라다니게** 한다.

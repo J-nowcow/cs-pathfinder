@@ -193,3 +193,29 @@ describe('listRoots 상한', () => {
     expect(await countRoots(TODAY)).toBe(1)
   })
 })
+
+/**
+ * **목록이 태그를 실어 나르는가.**
+ *
+ * `/questions`의 태그 필터가 이 값으로 거른다. select에서 tags가 빠지면
+ * 필터 줄은 그려지는데 어느 태그를 눌러도 0개다 — 화면은 안 깨지고
+ * 기능만 조용히 죽는다.
+ */
+describe('listRoots 태그', () => {
+  beforeEach(truncateAll)
+
+  it('태그를 함께 준다', async () => {
+    const id = await node('태그 달린 질문은?')
+    const db = await getDb()
+    await db.query(`update qnode set tags = '{동시성,메모리}' where id = $1`, [id])
+
+    const roots = await listRoots()
+    expect(roots.find((r) => r.id === id)?.tags).toEqual(['동시성', '메모리'])
+  })
+
+  it('무태그면 빈 배열이다', async () => {
+    await node('태그 없는 질문은?')
+    const roots = await listRoots()
+    expect(roots[0].tags).toEqual([])
+  })
+})
