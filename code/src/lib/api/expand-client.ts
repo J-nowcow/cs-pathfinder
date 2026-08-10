@@ -5,6 +5,17 @@ export type PublicSuggestion = {
   resolved: boolean
 }
 
+/** "이거 봤으면 이것도" 한 줄. `/api/node/[id]`만 실어 준다 */
+export type PublicRelated = {
+  id: string
+  /** 주소가 되는 번호. `/q/{number}`로 간다 */
+  number: number
+  question: string
+  category: string
+  /** 왜 이어졌는지. 벡터로 데려온 것은 null */
+  reason: string | null
+}
+
 export type PublicNode = {
   id: string
   /** 사람이 읽는 짧은 번호. 주소와 레포에 이것을 쓴다 */
@@ -17,6 +28,15 @@ export type PublicNode = {
   /** 난이도 3단. 미판정·미수신이면 null */
   level: string | null
   suggestions: PublicSuggestion[]
+  /**
+   * 관련 질문. **`undefined`와 `[]`가 다르다.**
+   *
+   * 확장 응답(`/api/expand`)은 이것을 안 싣는다 — 방금 만든 노드라 관계도
+   * 임베딩도 아직 없고, 35초짜리 응답을 목록 때문에 더 늦출 이유도 없다.
+   * 그래서 `undefined`는 "아직 안 물어봤다"는 뜻이고, 화면이 그때 따로
+   * 물어본다. `[]`는 "물어봤는데 없다"라 더 할 일이 없다.
+   */
+  related?: PublicRelated[]
 }
 
 /**
@@ -52,6 +72,34 @@ function newKey(): string {
 
 type RawSuggestion = { id: string; text: string; resolved: boolean }
 
+/**
+ * 관련 질문 목록을 받아 화면이 쓸 모양으로 옮긴다.
+ *
+ * 배열이 아니면 `undefined`다 — "안 실려 왔다"와 "비어 있다"를 구별해야
+ * 화면이 뒤늦게 채울지 말지를 정할 수 있다.
+ *
+ * **번호가 없는 줄은 버린다.** 목록의 링크가 `/q/{번호}`라 번호 없이는
+ * 그릴 수 없다. 서버도 같은 조건으로 거르지만(`expand/nodes.ts`) 화면이
+ * 그것을 믿고 `/q/undefined`를 만들 이유는 없다.
+ */
+export function parseRelated(raw: unknown): PublicRelated[] | undefined {
+  if (!Array.isArray(raw)) return undefined
+
+  return raw.flatMap((r: Record<string, unknown>) => {
+    if (typeof r?.id !== 'string' || typeof r.question !== 'string') return []
+    if (typeof r.number !== 'number' || r.number <= 0) return []
+    return [
+      {
+        id: r.id,
+        number: r.number,
+        question: r.question,
+        category: typeof r.category === 'string' ? r.category : '',
+        reason: typeof r.reason === 'string' && r.reason.length > 0 ? r.reason : null,
+      },
+    ]
+  })
+}
+
 function toNode(raw: Record<string, unknown>): PublicNode | null {
   if (typeof raw.id !== 'string' || typeof raw.question !== 'string') return null
 
@@ -71,6 +119,8 @@ function toNode(raw: Record<string, unknown>): PublicNode | null {
       text: s.text,
       resolved: s.resolved === true,
     })),
+    /* 확장 응답에는 없다. 그러면 undefined로 남고 화면이 따로 물어본다 */
+    related: parseRelated(raw.related),
   }
 }
 

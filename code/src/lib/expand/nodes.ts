@@ -1,7 +1,12 @@
 import { getDb } from '@/lib/db/client'
 import { isMissingTable } from '@/lib/db/missing-table'
 import { MIN_RELATION_VOTES } from '@/lib/db/relations'
-import { EMBED_DIM, EMBED_TOP_K, EMBED_MIN_SIMILARITY } from '@/lib/embed/model'
+import {
+  EMBED_DIM,
+  EMBED_TOP_K,
+  EMBED_MIN_SIMILARITY,
+  RELATION_MIN_SIMILARITY,
+} from '@/lib/embed/model'
 
 export type NewNode = {
   identityScope: string
@@ -321,6 +326,192 @@ function isVectorUnavailable(e: unknown): boolean {
   if (code === '42704' || code === '42883') return true
   const msg = e instanceof Error ? e.message : String(e)
   return /type "vector" does not exist|operator does not exist.*<=>|dimensions/i.test(msg)
+}
+
+/**
+ * 화면에 내보낼 관련 질문 한 줄.
+ *
+ * 게이트 후보(`collectCandidates`)와 담는 것이 다르다. 후보는 판정기가 읽으므로
+ * id와 질문이면 되지만, 이쪽은 사람이 읽고 누른다 — 주소가 될 번호와 분류,
+ * 그리고 왜 이어졌는지가 필요하다.
+ */
+export type RelatedNode = {
+  id: string
+  /** 주소가 되는 번호. `/q/{number}`로 간다 */
+  number: number
+  question: string
+  category: string
+  /** 왜 이어졌는지 한 줄. 벡터로 데려온 것은 근거가 없어 null */
+  reason: string | null
+}
+
+/**
+ * 한 화면에 보여줄 개수.
+ *
+ * 다섯을 넘으면 목록이 본문과 경쟁한다. 여기는 "다 읽었으면 다음"을 권하는
+ * 자리이지 목록 화면이 아니다 — 더 보고 싶으면 `/questions`가 있다.
+ */
+export const RELATED_DISPLAY_LIMIT = 5
+
+/**
+ * "이거 봤으면 이것도".
+ *
+ * **후보 수집(`collectCandidates`)을 화면용으로 늘리지 않고 따로 둔다.**
+ * 후보는 확장 핫패스에서 돌고 사용자가 그 앞에서 기다린다. 화면 사정으로
+ * 컬럼을 늘리면 그 대가를 확장이 치른다. 반대로 목적도 다르다 — 후보는
+ * "같은 질문인가"를 물으려고 넉넉히 모으고, 이쪽은 "다음에 읽을 것"을
+ * 다섯 개로 추린다.
+ *
+ * **관계가 먼저, 벡터가 나중이다.** 관계는 판정을 거쳤고 왜 이었는지를
+ * 문장으로 들고 있다. 벡터는 아무 판정도 안 거친 이웃이라 근거를 못 적는다.
+ * 상한에 걸려 잘릴 때 잘리는 쪽은 벡터여야 한다.
+ *
+ * 관계로 자리가 다 차면 **벡터를 아예 안 묻는다.** `collectCandidates`가
+ * 둘을 동시에 묻는 것과 다른 선택이다 — 그쪽은 35초짜리 확장 응답 안이라
+ * 왕복 하나가 아깝고, 여기는 읽기 화면이라 전체 스캔 한 번을 아끼는 쪽이
+ * 낫다.
+ */
+export async function relatedForDisplay(
+  nodeId: string,
+  limit: number = RELATED_DISPLAY_LIMIT,
+): Promise<RelatedNode[]> {
+  if (limit <= 0) return []
+
+  const out = await relatedByRelation(nodeId, limit)
+  if (out.length >= limit) return out
+
+  const seen = new Set(out.map((r) => r.id))
+  for (const v of await relatedByVector(nodeId, limit)) {
+    if (out.length >= limit) break
+    if (seen.has(v.id)) continue
+    seen.add(v.id)
+    out.push(v)
+  }
+
+  return out
+}
+
+/**
+ * 판정으로 이어진 관련 질문.
+ *
+ * 문턱은 `MIN_RELATION_VOTES`다. 지도(`db/graph.ts`)가 선을 그리는 기준과
+ * 반드시 같아야 한다 — 갈리면 **화면에 선이 없는 관계를 근거로 다음 질문을
+ * 권하게 되고**, 왜 권했는지 확인할 길이 사용자에게 없다.
+ *
+ * `number is not null`을 건다. 목록의 링크가 `/q/{번호}`인데 번호는
+ * `0011` 이후 시드 경로에서 행을 넣은 뒤에 붙으므로 잠깐 비어 있는 창이 있다.
+ *
+ * 같은 노드로 가는 관계가 여럿일 수 있다(`shares_concept`과 `prerequisite`).
+ * `distinct on`으로 표를 가장 많이 받은 한 줄만 남긴다 — 그 줄의 이유가
+ * 가장 여러 번 확인된 이유다.
+ */
+async function relatedByRelation(nodeId: string, limit: number): Promise<RelatedNode[]> {
+  const db = await getDb()
+
+  try {
+    const rows = await db.query<{
+      id: string
+      number: number
+      normalized_question: string
+      primary_category: string
+      reason: string | null
+    }>(
+      `with picked as (
+         select distinct on (n.id)
+                n.id, n.number, n.normalized_question, n.primary_category,
+                n.created_at, r.reason, r.votes
+           from semantic_relation r
+           join qnode n
+             on n.id = case when r.from_id = $1 then r.to_id else r.from_id end
+          where r.active
+            and r.votes >= $3
+            and (r.from_id = $1 or r.to_id = $1)
+            and n.status = 'ready'
+            and n.id <> $1
+            and n.number is not null
+          order by n.id, r.votes desc
+       )
+       select id, number, normalized_question, primary_category, reason
+         from picked
+        order by votes desc, created_at asc
+        limit $2`,
+      [nodeId, limit, MIN_RELATION_VOTES],
+    )
+
+    return rows.map((r) => ({
+      id: r.id,
+      number: r.number,
+      question: r.normalized_question,
+      category: r.primary_category,
+      /*
+       * 빈 이유는 없는 것으로 친다. 컬럼 기본값이 `''`이라(`0009`) 근거 없이
+       * 저장된 관계가 화면에 빈 줄을 남기는 것을 막는다.
+       */
+      reason: r.reason && r.reason.trim().length > 0 ? r.reason : null,
+    }))
+  } catch (e) {
+    /* 관련 질문은 덤이고 해설이 본체다. 표가 없으면 목록 없이 읽는다 */
+    if (!isMissingTable(e)) throw e
+    console.warn('[related] semantic_relation이 없다. 관계 없이 그린다 — npm run db:migrate')
+    return []
+  }
+}
+
+/**
+ * 벡터로 가까운 관련 질문.
+ *
+ * 관계는 판정을 돌린 만큼만 생긴다. 판정이 안 닿은 노드에서 목록이 통째로
+ * 비지 않게 이 층이 뒤를 받친다.
+ *
+ * **문턱은 `RELATION_MIN_SIMILARITY`(0.76)다. 매칭이 쓰는 0.85가 아니다.**
+ * 두 값이 묻는 것이 다르다(`embed/model.ts`). 0.85는 "같은 질문인가"의
+ * 문턱이라 그 위에 남는 것은 사실상 중복이다 — 방금 읽은 것과 같은 질문을
+ * "이것도 보라"고 권하는 목록이 된다. 여기가 찾는 것은 **다르지만 이어지는**
+ * 질문이고, 그 문턱이 0.76이다. 실측 분포(321편 51,360쌍)에서 0.85는
+ * 99분위 위라 목록이 거의 늘 비기도 한다.
+ */
+async function relatedByVector(nodeId: string, limit: number): Promise<RelatedNode[]> {
+  if (limit <= 0) return []
+  const db = await getDb()
+
+  try {
+    const rows = await db.query<{
+      id: string
+      number: number
+      normalized_question: string
+      primary_category: string
+    }>(
+      /* 차원은 문자열로 끼운다. 캐스팅 괄호 안은 파라미터를 못 받는다 */
+      `with me as (
+         select embedding::vector(${EMBED_DIM}) as v
+           from qnode
+          where id = $1 and embedding is not null
+       )
+       select n.id, n.number, n.normalized_question, n.primary_category
+         from qnode n, me
+        where n.status = 'ready'
+          and n.id <> $1
+          and n.number is not null
+          and n.embedding is not null
+          and 1 - (n.embedding::vector(${EMBED_DIM}) <=> me.v) >= $3
+        order by n.embedding::vector(${EMBED_DIM}) <=> me.v asc, n.created_at asc
+        limit $2`,
+      [nodeId, limit, RELATION_MIN_SIMILARITY],
+    )
+
+    return rows.map((r) => ({
+      id: r.id,
+      number: r.number,
+      question: r.normalized_question,
+      category: r.primary_category,
+      /* 아무 판정도 안 거쳤다. 내세울 근거가 없으면 안 적는다 */
+      reason: null,
+    }))
+  } catch (e) {
+    if (!isVectorUnavailable(e)) throw e
+    console.warn('[related] 벡터를 못 쓴다. 관계만 쓴다 —', String(e).slice(0, 120))
+    return []
+  }
 }
 
 /**

@@ -45,7 +45,11 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
   await ensureSeeded()
 
   const { nodeId } = await params
-  const node = await loadNode(nodeId)
+  /*
+   * 관련 질문까지 함께 받는다. 화면이 따로 물으면 첫 화면에 목록이 없다가
+   * 뒤늦게 튀어나온다 — 남은 횟수를 서버에서 받아 오는 것과 같은 이유다.
+   */
+  const node = await loadNode(nodeId, { withRelated: true })
   if (!node) notFound()
 
   // 남은 횟수를 첫 화면부터 보여준다. 클라이언트가 따로 물으면 한 번 더 왕복하고
@@ -69,6 +73,7 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
       text: s.text,
       resolved: s.targetNodeId !== null,
     })),
+    related: node.related ?? [],
   }
 
   return <ReadingView initialNode={initial} initialQuota={{ used, limit }} />

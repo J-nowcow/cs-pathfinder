@@ -1,5 +1,6 @@
 import { getDb } from '@/lib/db/client'
 import { NORMALIZER_VERSION } from '@/lib/llm/gate'
+import { relatedForDisplay, type RelatedNode } from '@/lib/expand/nodes'
 
 export type CachedSuggestion = {
   id: string
@@ -20,6 +21,13 @@ export type CachedNode = {
   /** data/levels.ts 3단. 미판정이면 null */
   level: string | null
   suggestions: CachedSuggestion[]
+  /**
+   * "이거 봤으면 이것도". **부른 쪽이 달라고 해야 담긴다**(`withRelated`).
+   * 안 달라고 했으면 `undefined`다 — 빈 배열과 다르다. 빈 배열은 "찾아봤는데
+   * 없다"이고 `undefined`는 "안 찾아봤다"이며, 화면이 그 둘을 구별해야
+   * 뒤늦게 채울지 말지를 정할 수 있다.
+   */
+  related?: RelatedNode[]
 }
 
 type NodeRow = {
@@ -68,7 +76,18 @@ function isUuid(key: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(key)
 }
 
-export async function loadNode(nodeId: string): Promise<CachedNode | null> {
+/**
+ * @param opts.withRelated 관련 질문까지 담을지. **기본은 담지 않는다.**
+ *
+ * 이 함수는 확장 경로에서만 여러 번 돈다(`expand/index.ts`가 다섯 자리에서
+ * 부른다). 관련 질문은 화면 아래 목록에만 쓰이는데 기본으로 담으면 그 다섯
+ * 자리와 카카오 스킬이 전부 쓰지도 않을 질의를 하나씩 더 낸다. 필요한 쪽이
+ * 달라고 하게 둔다.
+ */
+export async function loadNode(
+  nodeId: string,
+  opts: { withRelated?: boolean } = {},
+): Promise<CachedNode | null> {
   /* 번호도 UUID도 아니면 찾을 것이 없다. 질의에 넣으면 500이 난다 */
   if (!isNumber(nodeId) && !isUuid(nodeId)) return null
 
@@ -96,6 +115,9 @@ export async function loadNode(nodeId: string): Promise<CachedNode | null> {
     [n.id],
   )
 
+  /* 관련 질문도 찾은 노드의 id로 찾는다. 관계 표는 번호를 모른다 */
+  const related = opts.withRelated ? await relatedForDisplay(n.id) : undefined
+
   return {
     id: n.id,
     number: n.number,
@@ -110,6 +132,7 @@ export async function loadNode(nodeId: string): Promise<CachedNode | null> {
       text: s.text,
       targetNodeId: s.target_node_id,
     })),
+    related,
   }
 }
 

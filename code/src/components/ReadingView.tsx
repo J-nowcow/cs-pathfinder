@@ -20,9 +20,15 @@ import { loadJourney, saveJourney } from '@/lib/journey/storage'
 import { mergeJourney } from '@/lib/journey/merge'
 import { JOURNEY_SYNCED_EVENT } from '@/lib/journey/sync'
 import type { JourneyState } from '@/lib/journey/types'
-import { requestExpand, type PublicNode, type PublicSuggestion } from '@/lib/api/expand-client'
+import {
+  requestExpand,
+  parseRelated,
+  type PublicNode,
+  type PublicSuggestion,
+} from '@/lib/api/expand-client'
 import { PathChips } from '@/components/PathChips'
 import { Suggestions } from '@/components/Suggestions'
+import { RelatedList } from '@/components/RelatedList'
 import { FreeInput } from '@/components/FreeInput'
 import { Prose } from '@/components/Prose'
 import { Banner, GeneratingBody, ExpandingNote, type BannerState } from '@/components/Banners'
@@ -149,6 +155,49 @@ export function ReadingView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [journey])
 
+  /**
+   * 관련 질문 중 이미 판 것.
+   *
+   * 여정이 메모리에 있으므로 따로 물을 것이 없다. 다만 **복원 전에는 쓰지
+   * 않는다** — 그때의 여정은 지금 질문 하나뿐이라 판 것도 안 판 것으로 나온다.
+   */
+  const readIds = useMemo(
+    () => new Set(journey.occurrences.map((o) => o.nodeId)),
+    [journey],
+  )
+
+  /**
+   * 확장으로 노드가 바뀌면 관련 질문을 뒤늦게 채운다.
+   *
+   * 확장 응답은 목록을 안 싣는다(`api/expand-client.ts`). 그래서 `related`가
+   * `undefined`인 노드는 "아직 안 물어봤다"는 뜻이고, 여기서 한 번 물어본다.
+   * 첫 화면은 서버가 이미 실어 주므로(`q/[nodeId]/page.tsx`) 이 훅을 안 탄다.
+   *
+   * **실패하면 조용히 안 그린다.** 이건 덤이고 해설이 본체다 — 목록을 못
+   * 받았다고 배너를 띄우면 읽는 것을 방해한다.
+   */
+  useEffect(() => {
+    if (node.related !== undefined) return
+
+    const ac = new AbortController()
+    void (async () => {
+      try {
+        const res = await fetch(`/api/node/${node.id}`, { signal: ac.signal })
+        if (!res.ok) return
+        const related = parseRelated((await res.json())?.related) ?? []
+
+        const cached = cache.current.get(node.id)
+        if (cached) cache.current.set(node.id, { ...cached, related })
+        /* 그 사이 다른 질문으로 옮겼으면 지금 화면을 건드리지 않는다 */
+        setNode((cur) => (cur.id === node.id ? { ...cur, related } : cur))
+      } catch {
+        /* 목록 없이 읽는다 */
+      }
+    })()
+
+    return () => ac.abort()
+  }, [node.id, node.related])
+
   const layout = useMemo(() => layoutJourney(journey), [journey])
   const path = useMemo(
     () => (journey.currentId ? pathTo(journey, journey.currentId) : []),
@@ -223,6 +272,8 @@ export function ReadingView({
           level: typeof raw.level === 'string' ? raw.level : null,
           category: raw.category,
           suggestions: raw.suggestions,
+          /* 이 응답은 목록을 실어 준다. 위 훅이 또 물으러 가지 않는다 */
+          related: parseRelated(raw.related) ?? [],
         }
         cache.current.set(loaded.id, loaded)
         setNode(loaded)
@@ -418,6 +469,15 @@ export function ReadingView({
               onSubmit={(text) => void run({ mode: 'free', rawInput: text })}
             />
           </div>
+
+          {/*
+            파고들 자리 다음에 옆으로 갈 자리를 둔다. 더 깊이 가는 것이
+            이 서비스의 본체라 그쪽이 먼저다.
+
+            감싸는 상자를 두지 않는다. 목록이 비면 `RelatedList`가 아무것도
+            안 그리는데, 상자가 있으면 빈 여백만 남는다.
+          */}
+          <RelatedList items={node.related ?? []} readIds={readIds} hydrated={hydrated} />
         </div>
       </main>
 
