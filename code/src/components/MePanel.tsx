@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Grass } from '@/components/Grass'
 import { GrassShare } from '@/components/GrassShare'
@@ -88,6 +89,25 @@ export function MePanel({ all }: { all: Candidate[] }) {
     <div className="flex flex-col gap-8">
       <section>
         <h2 className="mb-3 text-lg font-semibold">학습 기록</h2>
+        {view.total === 0 && (
+          <div className="mb-4 flex items-center gap-4 rounded-lg border border-line bg-raised p-4">
+            {/* 문구가 전부를 말한다 — 두더지는 장식이라 낭독기에서 뺀다 */}
+            <Image
+              src="/mascot/mole-digging.png"
+              alt=""
+              aria-hidden
+              width={88}
+              height={88}
+              className="shrink-0 select-none"
+            />
+            <p className="text-[15px] leading-[1.7] text-muted">
+              아직 판 기록이 없습니다. 질문 하나를 열어 보면 여기 잔디가 자라기 시작합니다.{' '}
+              <Link href="/" className="font-medium text-accent">
+                오늘 치부터 파 보기
+              </Link>
+            </p>
+          </div>
+        )}
         <Grass weeks={view.weeks} summary={view.summary} />
         <GrassShare
           weeks={view.weeks}

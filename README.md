@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="code/public/mascot/mole-main.png" width="170" alt="헤드랜턴을 쓴 아기 두더지가 청록색 지식 노드 그래프 앞에 서 있는 마스코트 그림" />
+
 # 꼬리에 꼬리를 무는 CS 공부
 
 **하루에 질문 하나. 판 만큼 지도가 됩니다.**

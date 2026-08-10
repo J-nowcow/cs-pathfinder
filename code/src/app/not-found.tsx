@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 
 /**
@@ -17,6 +18,16 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main className="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-5 py-20 sm:px-8">
+      {/* 글 내용과 겹치는 정보가 없는 장식 — 낭독기에는 안 읽힌다 */}
+      <Image
+        src="/mascot/mole-curious.png"
+        alt=""
+        aria-hidden
+        width={140}
+        height={140}
+        className="mb-5 select-none"
+        priority
+      />
       <h1 className="text-[24px] font-semibold leading-[1.35] tracking-[-0.02em] text-ink sm:text-[28px]">
         없는 주소입니다
       </h1>
