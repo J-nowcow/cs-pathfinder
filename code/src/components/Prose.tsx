@@ -22,6 +22,82 @@ import {
  * 독자가 머리로 다시 그려야 한다 — 그 몫을 도식이 진다. 도식도 전부 React
  * 요소로 만들기 때문에 위 원칙은 그대로다.
  */
+/**
+ * 문단 하나치의 인라인 마크업을 그린다.
+ *
+ * 문단과 콜아웃이 같은 경로를 쓴다. 갈라 놓으면 콜아웃 안에서만 용어 링크나
+ * 코드가 조용히 사라진다 — 답 블록에서 한 번 겪을 뻔한 함정이라 처음부터
+ * 한 곳으로 모은다.
+ *
+ * `seen`은 **본문 단위**로 받는다. 여기서 새로 만들면 문단 수만큼 같은 링크가
+ * 생긴다.
+ */
+function Tokens({ text, seen }: { text: string; seen: Set<string> }) {
+  return (
+    <>
+      {linkifyTokens(parseInline(text), seen).map((t, j) => (
+        <Fragment key={j}>
+          {t.type === 'bold' ? (
+            <strong>{t.value}</strong>
+          ) : t.type === 'code' ? (
+            <code>{t.value}</code>
+          ) : t.type === 'mark' ? (
+            <mark>{t.value}</mark>
+          ) : t.type === 'term' ? (
+            /*
+             * 낭독기는 링크 텍스트(용어 자체)를 읽는다. title은 마우스
+             * 올림에서 뜻을 보여 주는 덤이고, 뜻 전체는 링크가 닿는 사전
+             * 페이지에 있다.
+             */
+            <a
+              href={`/glossary#${encodeURIComponent(t.term)}`}
+              title={t.short}
+              className="rounded-sm underline decoration-dotted underline-offset-2 hover:bg-surface"
+            >
+              {t.value}
+            </a>
+          ) : (
+            t.value
+          )}
+        </Fragment>
+      ))}
+    </>
+  )
+}
+
+/** 상자 이름은 파서가 아니라 여기서 정한다. 본문에는 울타리 이름만 적혀 있다 */
+const CALLOUT_LABEL = { note: '핵심 정리', warn: '주의' } as const
+
+/**
+ * 콜아웃.
+ *
+ * 답 블록과 **같은 시각 문법**이다 — 왼쪽 3px + soft 바탕. 강조 수단이 셋으로
+ * 늘어도 독자가 새로 배울 규칙은 없다. 색만 갈린다.
+ *
+ * 라벨을 `p`로 두는 것은 모양 때문이 아니라 순서 때문이다. 낭독기가 상자에
+ * 들어서면 "핵심 정리"를 먼저 읽고 내용으로 넘어간다.
+ */
+function Callout({
+  kind,
+  paragraphs,
+  seen,
+}: {
+  kind: 'note' | 'warn'
+  paragraphs: string[]
+  seen: Set<string>
+}) {
+  return (
+    <div className={`callout callout-${kind}`}>
+      <p className="cl-label">{CALLOUT_LABEL[kind]}</p>
+      {paragraphs.map((text, j) => (
+        <p key={j}>
+          <Tokens text={text} seen={seen} />
+        </p>
+      ))}
+    </div>
+  )
+}
+
 export function Prose({ body }: { body: string }) {
   /*
    * 용어 링크의 "첫 등장"은 **본문 단위**다. 문단마다 Set을 새로 만들면
@@ -69,33 +145,15 @@ export function Prose({ body }: { body: string }) {
             return <StackDiagram key={i} layers={block.layers} />
           case 'table':
             return <TableDiagram key={i} head={block.head} rows={block.rows} />
+          case 'note':
+          case 'warn':
+            return (
+              <Callout key={i} kind={block.type} paragraphs={block.paragraphs} seen={seenTerms} />
+            )
           case 'paragraph':
             return (
               <p key={i} className={i === leadIndex ? 'prose-lead' : undefined}>
-                {linkifyTokens(parseInline(block.text), seenTerms).map((t, j) => (
-                  <Fragment key={j}>
-                    {t.type === 'bold' ? (
-                      <strong>{t.value}</strong>
-                    ) : t.type === 'code' ? (
-                      <code>{t.value}</code>
-                    ) : t.type === 'term' ? (
-                      /*
-                       * 낭독기는 링크 텍스트(용어 자체)를 읽는다. title은
-                       * 마우스 올림에서 뜻을 보여 주는 덤이고, 뜻 전체는
-                       * 링크가 닿는 사전 페이지에 있다.
-                       */
-                      <a
-                        href={`/glossary#${encodeURIComponent(t.term)}`}
-                        title={t.short}
-                        className="rounded-sm underline decoration-dotted underline-offset-2 hover:bg-surface"
-                      >
-                        {t.value}
-                      </a>
-                    ) : (
-                      t.value
-                    )}
-                  </Fragment>
-                ))}
+                <Tokens text={block.text} seen={seenTerms} />
               </p>
             )
         }

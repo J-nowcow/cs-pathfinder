@@ -58,6 +58,62 @@ describe('parseInline', () => {
 })
 
 /**
+ * 하이라이트.
+ *
+ * 답의 핵심 구 하나를 세우는 자리다. 굵게와 나눠 쓴다 — 굵게는 문장 안의
+ * 낱말을 집고, 하이라이트는 **답 그 자체인 구절**을 집는다.
+ *
+ * 기존 마커와 같은 관례를 그대로 받는다. 빈 쌍은 마크업이 아니고, 닫히지
+ * 않으면 문자 그대로 남고, 줄을 넘어가지 않는다.
+ */
+describe('parseInline · ==하이라이트==', () => {
+  it('마크 토큰으로 끊는다', () => {
+    expect(parseInline('답은 ==여기에 있다== 뒤')).toEqual([
+      { type: 'text', value: '답은 ' },
+      { type: 'mark', value: '여기에 있다' },
+      { type: 'text', value: ' 뒤' },
+    ])
+  })
+
+  /* 깨진 마크업이 본문을 먹어치우면 안 된다 */
+  it('닫히지 않은 마커는 문자 그대로 남는다', () => {
+    expect(parseInline('==닫히지 않음')).toEqual([{ type: 'text', value: '==닫히지 않음' }])
+  })
+
+  it('빈 쌍은 하이라이트가 아니다', () => {
+    expect(parseInline('====')).toEqual([{ type: 'text', value: '====' }])
+  })
+
+  it('기존 토큰과 섞여도 각자 산다', () => {
+    const r = parseInline('**굵게**와 ==강조==와 `코드`')
+    expect(r.map((t) => t.type)).toEqual(['bold', 'text', 'mark', 'text', 'code'])
+    expect(r.map((t) => t.value)).toEqual(['굵게', '와 ', '강조', '와 ', '코드'])
+  })
+
+  /*
+   * `a == b`는 비교 연산이지 강조가 아니다. 코드가 먼저 걸려 통째로 삼키므로
+   * 안쪽 `==`가 하이라이트로 새지 않는다.
+   */
+  it('코드 안의 == 는 코드로 남는다', () => {
+    expect(parseInline('`a == b`이다')).toEqual([
+      { type: 'code', value: 'a == b' },
+      { type: 'text', value: '이다' },
+    ])
+  })
+
+  /* 수식이 줄을 안 넘는 것과 같은 이유다. 두 문단이 통째로 칠해지면 안 된다 */
+  it('줄을 넘어가면 하이라이트가 아니다', () => {
+    const out = parseInline('== 한 줄\n다음 줄 ==')
+    expect(out.every((t) => t.type === 'text')).toBe(true)
+  })
+
+  it('한 문단에 여러 번 나와도 각각 잡는다', () => {
+    const r = parseInline('==하나==와 ==둘==')
+    expect(r.filter((t) => t.type === 'mark').map((t) => t.value)).toEqual(['하나', '둘'])
+  })
+})
+
+/**
  * LaTeX.
  *
  * 프롬프트가 시킨 적 없는데 모델이 쓴다. 화면을 열어 세어보니 노드 다섯 개에서

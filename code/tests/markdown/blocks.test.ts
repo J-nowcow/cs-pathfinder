@@ -580,3 +580,129 @@ describe('parseBlocks · timeline', () => {
     expect(b.text).toContain('혼자만 있다')
   })
 })
+
+/**
+ * 콜아웃.
+ *
+ * 도식이 아니다. 도식은 줄글로 못 나르는 뜻(순서·소속·방향·동시성)을 지지만
+ * 콜아웃은 **본문이 이미 말한 것을 한 번 더 세우는** 자리다. 그래서 안이 그냥
+ * 문단이고, 문법이랄 것이 울타리 이름 하나뿐이다.
+ *
+ * 답 블록과 같은 시각 문법(왼쪽 3px + soft 바탕)으로 그리므로 읽는 쪽에도
+ * 새로 배울 규칙이 없다.
+ */
+describe('parseBlocks · note와 warn', () => {
+  it('핵심 정리 울타리를 알아본다', () => {
+    const out = parseBlocks('앞 문단.\n\n:::note\n요약이다.\n:::\n\n뒤 문단.')
+
+    expect(out.map((b) => b.type)).toEqual(['paragraph', 'note', 'paragraph'])
+    if (out[1].type !== 'note') throw new Error('note가 아니다')
+    expect(out[1].paragraphs).toEqual(['요약이다.'])
+  })
+
+  it('주의 울타리를 알아본다', () => {
+    const out = parseBlocks(':::warn\n밟기 쉬운 자리다.\n:::')
+
+    if (out[0].type !== 'warn') throw new Error('warn이 아니다')
+    expect(out[0].paragraphs).toEqual(['밟기 쉬운 자리다.'])
+  })
+
+  /* 빈 줄이 문단을 가른다. 바깥 본문과 같은 규칙이다 */
+  it('빈 줄로 나뉜 여러 문단을 담는다', () => {
+    const out = parseBlocks(':::note\n첫 문단이다.\n\n둘째 문단이다.\n:::')
+
+    if (out[0].type !== 'note') throw new Error('note가 아니다')
+    expect(out[0].paragraphs).toEqual(['첫 문단이다.', '둘째 문단이다.'])
+  })
+
+  it('한 문단 안의 줄바꿈은 그대로 둔다', () => {
+    const out = parseBlocks(':::note\n한 문단인데\n줄만 바뀐 것이다.\n:::')
+
+    if (out[0].type !== 'note') throw new Error('note가 아니다')
+    expect(out[0].paragraphs).toEqual(['한 문단인데\n줄만 바뀐 것이다.'])
+  })
+
+  /* 인라인 마크업은 렌더러가 푼다. 파서는 글자를 그대로 넘긴다 */
+  it('인라인 마크업을 글자 그대로 넘긴다', () => {
+    const out = parseBlocks(':::note\n==강조==와 `코드`다.\n:::')
+
+    if (out[0].type !== 'note') throw new Error('note가 아니다')
+    expect(out[0].paragraphs[0]).toBe('==강조==와 `코드`다.')
+  })
+
+  it('띄어 쓴 울타리와 :::end를 살린다', () => {
+    expect(parseBlocks('::: note\n요약이다.\n:::end')[0].type).toBe('note')
+    expect(parseBlocks(':::  warn 조심할 것\n함정이다.\n:::end')[0].type).toBe('warn')
+  })
+
+  it('문장 끝에 붙은 울타리를 떼어낸다', () => {
+    const out = parseBlocks('정리하면 이렇다. :::note\n요약이다.\n:::')
+
+    expect(out.map((b) => b.type)).toEqual(['paragraph', 'note'])
+    if (out[0].type === 'paragraph') expect(out[0].text).toBe('정리하면 이렇다.')
+  })
+
+  /* 내용이 없으면 세울 것이 없다. 라벨만 남은 빈 상자를 그리지 않는다 */
+  it('내용이 비면 아무것도 안 남긴다', () => {
+    expect(parseBlocks(':::note\n:::')).toEqual([])
+  })
+
+  it('닫히지 않으면 내용만 문단으로 남는다', () => {
+    const out = parseBlocks(':::warn\n조심할 것이다.')
+
+    expect(out.every((b) => b.type === 'paragraph')).toBe(true)
+    for (const b of out) {
+      if (b.type === 'paragraph') expect(b.text).not.toContain(':::')
+    }
+  })
+
+  /*
+   * 마지막 그물이 note·warn에도 걸려야 한다. 도식을 못 그리는 것은 아쉬운
+   * 정도지만 `:::`가 화면에 보이는 것은 고장으로 읽힌다.
+   */
+  it('기호가 본문에 새지 않는다', () => {
+    const bodies = [
+      '앞 문단.\n\n::::note\n이상한 것\n::::\n\n뒤 문단.',
+      '앞 문단.\n\n```\n:::warn\n조심할 것\n```\n\n뒤 문단.',
+      ':::notes\n모르는 이름이다\n:::',
+      '설명이 이어진다. :::warn 조심할 것 :::',
+    ]
+    for (const body of bodies) {
+      for (const b of parseBlocks(body)) {
+        if (b.type === 'paragraph') {
+          expect(b.text).not.toContain(':::')
+          expect(b.text).not.toContain('```')
+        }
+      }
+    }
+  })
+
+  /* 도식과 섞여도 순서가 그대로여야 한다 */
+  it('도식·표와 섞여도 순서를 지킨다', () => {
+    const body = [
+      '답이다.',
+      '',
+      ':::flow',
+      'A -> B: 하나',
+      ':::',
+      '',
+      ':::note',
+      '요약이다.',
+      ':::',
+      '',
+      '근거다.',
+      '',
+      ':::warn',
+      '함정이다.',
+      ':::',
+    ].join('\n')
+
+    expect(parseBlocks(body).map((b) => b.type)).toEqual([
+      'paragraph',
+      'flow',
+      'note',
+      'paragraph',
+      'warn',
+    ])
+  })
+})

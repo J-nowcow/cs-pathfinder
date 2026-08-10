@@ -22,6 +22,7 @@ import { parseBlocks, type Block } from '@/lib/markdown/blocks'
  * - 타임라인 → 표. 열이 주체, 행이 시각. **빈 칸은 비워 둔다** — 그것이 기다림이다
  * - 계층 → 표 + **위가 위층이라는 한 줄**
  * - 표 → 그대로. GitHub이 이미 그린다
+ * - 콜아웃 → GitHub 알림 상자. 우리 화면의 상자와 뜻이 같다
  */
 
 /** 표 칸 안에서 `|`는 칸을 쪼갠다. 살려서 보여주려면 막아야 한다 */
@@ -116,6 +117,23 @@ function fromBlock(b: Block): string {
 
     case 'table':
       return table(b.head, b.rows)
+
+    /*
+     * GitHub은 인용 안의 `[!NOTE]`·`[!WARNING]`을 상자로 그린다. 우리 화면의
+     * 콜아웃과 뜻이 같다 — 한 번 더 세운 말과 밟기 쉬운 자리.
+     *
+     * **빈 줄에도 `>`를 붙여야 한 상자로 이어진다.** 안 붙이면 둘째 문단부터
+     * 인용 밖으로 떨어져 나와 상자 아래에 따로 놓인다.
+     */
+    case 'note':
+    case 'warn':
+      return [
+        `> ${b.type === 'note' ? '[!NOTE]' : '[!WARNING]'}`,
+        ...b.paragraphs
+          .join('\n\n')
+          .split('\n')
+          .map((l) => (l.length > 0 ? `> ${l}` : '>')),
+      ].join('\n')
   }
 }
 

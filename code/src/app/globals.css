@@ -271,6 +271,89 @@ summary::-webkit-details-marker {
 }
 
 /*
+ * 하이라이트.
+ *
+ * **글자 뒤를 통째로 칠하지 않는다.** 아래 40%만 칠해 형광펜 밑줄처럼 만든다.
+ * 통칠하면 그 구절이 본문에서 떨어져 나온 상자처럼 보이고, 한 문단에 답 블록과
+ * 하이라이트가 같이 있으면 상자가 둘이 된다. 밑줄이면 문장이 이어진 채로 남는다.
+ *
+ * 브라우저 기본 `mark`는 노란 바탕에 검은 글씨다. `background` 한 줄로 덮이지만
+ * 글자색은 따로 되돌려야 한다 — 안 하면 다크 모드에서 검은 글씨가 남는다.
+ *
+ * 색은 토큰만 쓴다. 라이트에서 ink #191c20 on accent-soft #e9f4f2 = 15.2:1이고,
+ * 다크에서는 밝은 글씨가 어두운 청록 위에 얹혀 여유가 더 크다. 어느 쪽이든
+ * 칠하지 않은 위쪽 60%는 그냥 본문 바탕이라 대비가 본문과 같다.
+ */
+.prose-body mark {
+  background: linear-gradient(180deg, transparent 60%, var(--accent-soft) 60%);
+  color: var(--ink);
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+/*
+ * 콜아웃.
+ *
+ * **답 블록과 같은 시각 문법이다** — 왼쪽 3px + soft 바탕 + 오른쪽만 둥근 모서리.
+ * 강조 수단이 셋으로 늘어도 독자가 새로 배울 규칙은 없고, 색으로만 갈린다
+ * (청록 = 한 번 더 세우는 말, 붉은색 = 밟기 쉬운 자리).
+ *
+ * 위아래 여백이 문단 사이(1.3em ≈ 20.8px)보다 넓다. 상자는 앞뒤 문단 어느
+ * 쪽에도 묶이면 안 된다 — 묶이면 그 문단의 딸린 설명으로 읽힌다.
+ *
+ * 안쪽 글씨는 본문보다 조금 작다. 상자가 본문보다 세지면 안 된다. 답 블록이
+ * 1.125em으로 큰 것과 짝이라, 셋을 함께 보면 답 > 본문 > 콜아웃 순서가 선다.
+ */
+.prose-body .callout {
+  margin: 1.5rem 0;
+  border-left: 3px solid;
+  border-radius: 0 0.625rem 0.625rem 0;
+  padding: 0.875rem 1rem;
+}
+
+/*
+ * 도식 안 문단처럼 여기도 전역 문단 여백을 끈다. 상자 안에서 1.3em은 너무
+ * 벌어져 라벨과 내용이 따로 논다.
+ */
+.prose-body .callout p {
+  margin-bottom: 0.625rem;
+  font-size: 0.9375em;
+  line-height: 1.7;
+}
+.prose-body .callout p:last-child {
+  margin-bottom: 0;
+}
+
+/* 라벨은 12px 고정이다. 상자 안 본문과 함께 줄어들면 이름표 구실을 못 한다 */
+.prose-body .callout .cl-label {
+  margin-bottom: 0.375rem;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/*
+ * 라벨 대비를 바꾸지 말 것. 12px이라 큰 글씨 예외(3:1)를 못 받는다.
+ * 라이트 accent #0f7a6c on accent-soft #e9f4f2 = 4.65:1, warn #a8452f on
+ * warn-soft #f8ebe7 = 5.07:1. 인라인 코드와 같은 조합이라 한쪽을 건드리면
+ * 둘이 같이 미달한다.
+ */
+.prose-body .callout-note {
+  border-color: var(--d0);
+  background: var(--accent-soft);
+}
+.prose-body .callout-note .cl-label {
+  color: var(--d0);
+}
+.prose-body .callout-warn {
+  border-color: var(--warn);
+  background: var(--warn-soft);
+}
+.prose-body .callout-warn .cl-label {
+  color: var(--warn);
+}
+
+/*
  * 도식 안의 문단은 줄글이 아니다.
  *
  * `.prose-body p`가 아래 여백 1.15em과 행간 1.8을 준다. 긴 글을 연달아 읽는

@@ -29,6 +29,19 @@ export type Block =
   | { type: 'stack'; layers: StackLayer[] }
   /** 열 비교. 낙관적 락 대 비관적 락 같은 것 */
   | { type: 'table'; head: string[]; rows: string[][] }
+  /**
+   * 본문이 이미 말한 것을 한 번 더 세우는 자리.
+   *
+   * **도식이 아니다.** 도식은 줄글로 못 나르는 뜻(순서·소속·방향·동시성)을
+   * 지지만 콜아웃은 나른 것이 없다 — 같은 말을 자리만 바꿔 놓는다. 그래서
+   * 안이 그냥 문단이고 문법이랄 것이 울타리 이름 하나뿐이다.
+   *
+   * 여기에 **새 내용을 넣으면 안 된다.** 본문에 없는 말이 상자 안에만 있으면
+   * 상자를 지웠을 때 글이 무너진다.
+   */
+  | { type: 'note'; paragraphs: string[] }
+  /** 밟기 쉬운 함정. `note`와 문법이 같고 색만 다르다 */
+  | { type: 'warn'; paragraphs: string[] }
 
 export type FlowStep = { from: string; to: string; label: string }
 export type StackLayer = { name: string; note: string }
@@ -45,7 +58,7 @@ export type TimelineRow = { actor: string; slots: string[] }
  *
  * 실측에서 세 번 중 두 번은 정확했고 한 번은 이런 변형이었다.
  */
-const FENCE_OPEN = /^:::\s*(flow|state|tree|memory|timeline|stack)\b/
+const FENCE_OPEN = /^:::\s*(flow|state|tree|memory|timeline|stack|note|warn)\b/
 const FENCE_CLOSE = /^:::\s*(end)?\s*$/
 
 /**
@@ -59,7 +72,7 @@ const FENCE_CLOSE = /^:::\s*(end)?\s*$/
  * 그 자리만 지운다. 줄 시작만 보면 "…이다. :::flow" 같은 모양이 빠져나간다.
  */
 const FENCE_ONLY_LINE = /^\s*(:::|```)/
-const INLINE_FENCE = /:::\s*(flow|state|tree|memory|timeline|stack|end)?|```+[a-z]*/g
+const INLINE_FENCE = /:::\s*(flow|state|tree|memory|timeline|stack|note|warn|end)?|```+[a-z]*/g
 
 /**
  * `클라이언트 -> 서버: SYN` 또는 `클라이언트 → 서버: SYN`
@@ -369,6 +382,29 @@ function parseTable(lines: string[]): Block | null {
 }
 
 /**
+ * 콜아웃.
+ *
+ * 다른 울타리와 달리 **빈 줄을 남긴 채로 받는다.** 안이 도식이 아니라 줄글이라
+ * 빈 줄이 문단을 가르는 뜻을 그대로 갖는다. 다른 도식은 빈 줄이 아무 뜻도
+ * 없어서 부르는 쪽이 미리 털어내지만 여기서는 그것이 정보다.
+ *
+ * 문단 안의 홑 줄바꿈은 그대로 둔다. 바깥 본문과 같은 규칙이라 모델이든
+ * 사람이든 새로 익힐 것이 없다.
+ *
+ * 내용이 비면 `null`이다. 라벨만 남은 빈 상자는 그리지 않는다 — 독자에게는
+ * 무언가 사라진 자리로 보인다.
+ */
+function parseCallout(kind: 'note' | 'warn', lines: string[]): Block | null {
+  const paragraphs = lines
+    .join('\n')
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0)
+
+  return paragraphs.length > 0 ? { type: kind, paragraphs } : null
+}
+
+/**
  * 본문을 블록으로 나눈다.
  *
  * 빈 줄로 먼저 자르고, 조각마다 어떤 블록인지 본다. `:::` 울타리는 안에 빈 줄이
@@ -385,7 +421,9 @@ function splitTrailingFence(lines: string[]): string[] {
   const out: string[] = []
 
   for (const line of lines) {
-    const m = /^(.*\S)\s+(:::\s*(?:flow|state|tree|memory|timeline|stack)\b.*)$/.exec(line)
+    const m = /^(.*\S)\s+(:::\s*(?:flow|state|tree|memory|timeline|stack|note|warn)\b.*)$/.exec(
+      line,
+    )
     if (m) {
       out.push(m[1])
       out.push(m[2])
@@ -448,7 +486,12 @@ export function parseBlocks(body: string): Block[] {
       continue
     }
 
-    const inner = lines.slice(i + 1, close).filter((l) => l.trim().length > 0)
+    /*
+     * 도식은 빈 줄에 아무 뜻이 없어서 미리 턴다. 콜아웃만 `raw`를 받는다 —
+     * 거기서는 빈 줄이 문단을 가르는 정보다.
+     */
+    const raw = lines.slice(i + 1, close)
+    const inner = raw.filter((l) => l.trim().length > 0)
     const parsed =
       open[1] === 'flow'
         ? parseFlow(inner)
@@ -460,7 +503,11 @@ export function parseBlocks(body: string): Block[] {
               ? parseMemory(inner)
               : open[1] === 'timeline'
                 ? parseTimeline(inner)
-                : parseStack(inner)
+                : open[1] === 'note'
+                  ? parseCallout('note', raw)
+                  : open[1] === 'warn'
+                    ? parseCallout('warn', raw)
+                    : parseStack(inner)
 
     flushParagraphs()
 

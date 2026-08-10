@@ -116,8 +116,30 @@ const GLUED_JOSA = /(?<=[가-힣])(를|을|는|와|과)\1(?=[\s.,)·]|$)/m
  * 도식 안은 문장 규칙을 안 댄다 — `:::flow`의 라벨은 문장이 아니라 이름표라
  * 문장 규칙을 대면 전부 걸린다.
  */
-/** 쓸 수 있는 울타리 이름. `parseBlocks`가 아는 것과 같아야 한다 */
-const FENCE_NAMES = new Set(['flow', 'state', 'tree', 'memory', 'timeline', 'stack'])
+/**
+ * 쓸 수 있는 울타리 이름. `parseBlocks`가 아는 것과 같아야 한다.
+ *
+ * `note`·`warn`은 도식이 아니라 콜아웃이지만 **여기서는 같이 센다.** 이 집합이
+ * 두 가지 일을 하기 때문이다 — 모르는 이름을 가르는 일(`모르는울타리`)과
+ * 연 개수와 그려진 개수를 견주는 일(`울타리삼킴`). 콜아웃을 빼면 앞엣것이
+ * 멀쩡한 `:::note`를 없는 종류라고 막고, 뒤엣것은 열린 것을 안 그려졌다고 센다.
+ *
+ * **대신 `firstDiagram`이 콜아웃을 도식으로 센다.** 지금은 닿지 않는 자리다 —
+ * 생성 프롬프트(`llm/generate.ts`)가 콜아웃을 가르치지 않아 모델이 쓰지 않고,
+ * 손으로 쓴 편은 전부 도식이나 표를 따로 갖고 있다. **프롬프트에 콜아웃을
+ * 넣는 날 이 줄을 같이 봐야 한다.** 안 보면 콜아웃 하나로 `도식없음`이
+ * 조용히 통과해 도식 없는 해설이 그린 것으로 세어진다.
+ */
+const FENCE_NAMES = new Set([
+  'flow',
+  'state',
+  'tree',
+  'memory',
+  'timeline',
+  'stack',
+  'note',
+  'warn',
+])
 
 export function contentIssues(c: { body: string; suggestions: string[] }): ContentIssue[] {
   const out: ContentIssue[] = []
