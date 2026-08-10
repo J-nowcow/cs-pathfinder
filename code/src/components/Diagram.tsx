@@ -13,6 +13,11 @@ import type { FlowStep, StackLayer, TreeNode, MemoryArea, TimelineRow } from '@/
  * 그려지고, innerHTML 경로가 생기지 않는다.
  *
  * 모바일이 기준이다. 가로로 넓은 도식은 폰에서 읽을 수 없으므로 세로로 쌓는다.
+ *
+ * **위아래 여백이 다르다**(28px / 18px). 전에는 `my-6`으로 위아래가 같았는데,
+ * 그러면 도식이 앞 문단과 뒤 문단 사이에 똑같이 떠서 어느 쪽에 붙는지가
+ * 안 보인다. 도식 다음 문단은 대개 그 도식을 풀어 쓴 글이다. 뒤를 붙이고
+ * 앞을 벌리면 "문단 → [도식 + 설명]" 한 덩어리로 읽힌다.
  */
 
 function Inline({ text }: { text: string }) {
@@ -85,7 +90,7 @@ export function SequenceDiagram({ steps }: { steps: FlowStep[] }) {
   const arrowCols = `minmax(0, 0.5fr) repeat(${n - 1}, minmax(0, 1fr)) minmax(0, 0.5fr)`
 
   return (
-    <figure className="my-6 rounded-lg border border-line bg-raised px-3 py-3.5">
+    <figure className="mt-7 mb-[1.125rem] rounded-lg border border-line bg-raised px-3 py-3.5">
       {/* 기둥 머리. 칸을 벌리지 않는다 — 벌리면 아래 두 층과 한가운데가 어긋난다 */}
       <div aria-hidden className="grid" style={{ gridTemplateColumns: laneCols }}>
         {actors.map((a) => (
@@ -202,7 +207,7 @@ export function ChainDiagram({ steps }: { steps: FlowStep[] }) {
   const nodes = [steps[0].from, ...steps.map((s) => s.to)]
 
   return (
-    <figure className="my-6 rounded-lg border border-line bg-raised px-4 py-4 sm:px-5">
+    <figure className="mt-7 mb-[1.125rem] rounded-lg border border-line bg-raised px-4 py-4 sm:px-5">
       <ol className="list-none">
         {nodes.map((name, i) => (
           <li key={i}>
@@ -271,7 +276,7 @@ export function FlowDiagram({ steps }: { steps: FlowStep[] }) {
   if (shape === 'chain') return <ChainDiagram steps={steps} />
 
   return (
-    <figure className="my-6 overflow-hidden rounded-lg border border-line bg-raised">
+    <figure className="mt-7 mb-[1.125rem] overflow-hidden rounded-lg border border-line bg-raised">
       <ol className="divide-y divide-line">
         {steps.map((s, i) => (
           <li key={i} className="flex gap-3.5 px-4 py-3.5 sm:px-5">
@@ -339,7 +344,7 @@ export function StateDiagram({ steps }: { steps: FlowStep[] }) {
     groups.slice(0, index).some((g) => g.from === to)
 
   return (
-    <figure className="my-6 overflow-hidden rounded-lg border border-line bg-raised">
+    <figure className="mt-7 mb-[1.125rem] overflow-hidden rounded-lg border border-line bg-raised">
       <ul className="divide-y divide-line">
         {groups.map((g, gi) => (
           <li key={gi} className="px-4 py-3.5 sm:px-5">
@@ -427,7 +432,7 @@ export function TreeDiagram({ nodes }: { nodes: TreeNode[] }) {
   )
 
   return (
-    <figure className="my-6 rounded-lg border border-line bg-raised px-4 py-3.5 sm:px-5">
+    <figure className="mt-7 mb-[1.125rem] rounded-lg border border-line bg-raised px-4 py-3.5 sm:px-5">
       <List items={roots} depth={0} />
     </figure>
   )
@@ -451,7 +456,7 @@ export function MemoryDiagram({ areas }: { areas: MemoryArea[] }) {
     i > 0 && areas[i - 1].grow === 'down' && areas[i].grow === 'up'
 
   return (
-    <figure className="my-6 grid grid-cols-[auto_1fr] items-stretch gap-x-2">
+    <figure className="mt-7 mb-[1.125rem] grid grid-cols-[auto_1fr] items-stretch gap-x-2">
       <div className="flex flex-col justify-between py-1 text-[11px] text-faint">
         <span>높은 주소</span>
         <span>낮은 주소</span>
@@ -514,7 +519,7 @@ export function TimelineDiagram({ rows }: { rows: TimelineRow[] }) {
   const slots = rows[0]?.slots.length ?? 0
 
   return (
-    <figure className="my-6 overflow-x-auto rounded-lg border border-line bg-raised">
+    <figure className="mt-7 mb-[1.125rem] overflow-x-auto rounded-lg border border-line bg-raised">
       <table className="w-full border-collapse text-left">
         <thead>
           <tr className="border-b border-line">
@@ -577,7 +582,7 @@ export function TimelineDiagram({ rows }: { rows: TimelineRow[] }) {
  */
 export function StackDiagram({ layers }: { layers: StackLayer[] }) {
   return (
-    <figure className="my-6 overflow-hidden rounded-lg border border-line bg-raised">
+    <figure className="mt-7 mb-[1.125rem] overflow-hidden rounded-lg border border-line bg-raised">
       <ul className="divide-y divide-line">
         {layers.map((l, i) => (
           <li
@@ -607,7 +612,7 @@ export function StackDiagram({ layers }: { layers: StackLayer[] }) {
  */
 export function TableDiagram({ head, rows }: { head: string[]; rows: string[][] }) {
   return (
-    <figure className="my-6">
+    <figure className="mt-7 mb-[1.125rem]">
       {/*
         좁은 화면에서는 표를 줄 단위 카드로 접는다 (rtable, globals.css).
 

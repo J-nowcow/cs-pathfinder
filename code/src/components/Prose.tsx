@@ -29,9 +29,31 @@ export function Prose({ body }: { body: string }) {
    * 새지 않는다.
    */
   const seenTerms = new Set<string>()
+
+  const blocks = parseBlocks(body)
+
+  /**
+   * 첫 문단이 답이다.
+   *
+   * 생성 규칙이 "답 먼저 → 도식 → 근거"라 첫 문단에는 늘 결론이 들어 있다.
+   * 그런데 나머지 문단과 같은 크기로 흘리면 그 사실이 글자에 묻힌다. 읽는
+   * 사람은 답을 찾으려고 본문 전체를 훑게 된다.
+   *
+   * **본문을 한 글자도 안 고친다.** 저장된 글에 `**`를 넣어 첫 문장을 굵게
+   * 만드는 방법도 있었지만 그러면 322편을 전부 다시 써야 하고, 규칙이 바뀔
+   * 때마다 또 써야 한다. 렌더러가 첫 문단을 다르게 그리는 쪽이 되돌리기도
+   * 쉽다.
+   *
+   * **번호가 아니라 종류로 찾는다.** `blocks[0]`이 아니다 — 모델이 도식이나
+   * 표를 먼저 놓는 경우가 있고, 그때 `blocks[0]`은 문단이 아니다. 그러면
+   * 리드가 통째로 사라지거나 도식에 문단 스타일이 붙는다. 처음 나오는
+   * **문단**을 찾는다. 문단이 하나도 없으면 `-1`이라 아무것도 안 붙는다.
+   */
+  const leadIndex = blocks.findIndex((b) => b.type === 'paragraph')
+
   return (
     <div className="prose-body text-[16px] text-ink sm:text-[17px]">
-      {parseBlocks(body).map((block, i) => {
+      {blocks.map((block, i) => {
         switch (block.type) {
           case 'flow':
             return <FlowDiagram key={i} steps={block.steps} />
@@ -49,7 +71,7 @@ export function Prose({ body }: { body: string }) {
             return <TableDiagram key={i} head={block.head} rows={block.rows} />
           case 'paragraph':
             return (
-              <p key={i}>
+              <p key={i} className={i === leadIndex ? 'prose-lead' : undefined}>
                 {linkifyTokens(parseInline(block.text), seenTerms).map((t, j) => (
                   <Fragment key={j}>
                     {t.type === 'bold' ? (
