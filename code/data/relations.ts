@@ -417,4 +417,27 @@ export const SEED_RELATIONS: SeedRelation[] = [
   { fromScope: "load-balancing", fromQuestion: "요청을 어떤 서버로 보낼지 어떻게 정하는가?", toScope: "generic", toQuestion: "죽은 서버로 요청이 안 가는 이유는?", kind: "shares_concept", reason: "요청을 보낼 서버를 고르는 같은 계층을 다룬다", votes: 2 },
   { fromScope: "generic", fromQuestion: "서버 앞에 하나를 더 두는 이유는?", toScope: "generic", toQuestion: "죽은 서버로 요청이 안 가는 이유는?", kind: "shares_concept", reason: "앞단 중계가 서버 상태를 가리는 같은 구조를 다룬다", votes: 2 },
   { fromScope: "distributed", fromQuestion: "남의 서버에 일이 생긴 것을 어떻게 아는가?", toScope: "generic", toQuestion: "죽은 서버로 요청이 안 가는 이유는?", kind: "shares_concept", reason: "서버의 생사를 밖에서 확인하는 같은 문제를 다룬다", votes: 2 },
+
+  /*
+   * 다리 질문 10편(2026-08-11)의 관계 — 세션 Claude가 직접 판정했다.
+   * 임베딩 top-10 후보에서 개념 관계가 실재하는 것만 채택(17/100).
+   * 표면 유사 기각례: '인코딩과 암호화와 해싱'의 최고 유사(0.844)는
+   * 해시 충돌 해결이었지만 자료구조 축이라 제외했다.
+   */
+  { fromScope: "generic", fromQuestion: "한글이 깨져 보이는 이유는?", toScope: "security", toQuestion: "인코딩과 암호화와 해싱은 무엇이 다른가?", kind: "shares_concept", reason: "인코딩이라는 같은 밑바탕을 다룬다 — 한쪽은 규칙이 어긋나 깨지는 현상을, 한쪽은 인코딩이 암호화·해싱과 어떻게 다른지를 다룬다.", votes: 3 },
+  { fromScope: "generic", fromQuestion: "0.1을 더했는데 왜 딱 안 떨어지는가?", toScope: "generic", toQuestion: "고정 소수점과 부동 소수점은 무엇으로 구분하는가?", kind: "prerequisite", reason: "부동 소수점 표현 방식을 알아야 0.1이 이진법으로 정확히 표현되지 않는 이유가 이해된다.", votes: 3 },
+  { fromScope: "distributed", fromQuestion: "서버마다 시계가 다르면 무엇이 깨지는가?", toScope: "mobile", toQuestion: "오프라인 수정이 서버 값과 충돌하면 누가 이기는가?", kind: "shares_concept", reason: "충돌 해소가 타임스탬프에 기대는 순간 시계 어긋남이 승자를 바꾼다 — 둘 다 물리 시계의 한계를 다룬다.", votes: 2 },
+  { fromScope: "distributed", fromQuestion: "서버마다 시계가 다르면 무엇이 깨지는가?", toScope: "mysql", toQuestion: "분산 환경에서 데이터베이스 수준의 락이 가지는 한계점과 이를 해결하기 위한 분산 락의 역할은 무엇인가?", kind: "shares_concept", reason: "분산 락의 만료 판단은 서버 시계에 기댄다 — 시계가 어긋나면 락의 안전성이 무너진다.", votes: 2 },
+  { fromScope: "os", fromQuestion: "큰 파일을 통째로 읽으면 무엇이 문제인가?", toScope: "network", toQuestion: "보낼 데이터가 길에서 감당할 크기보다 크면 어떻게 되는가?", kind: "shares_concept", reason: "감당 못 할 크기를 조각으로 나눠 다룬다는 같은 해법을 쓴다 — 한쪽은 메모리가, 한쪽은 전송 경로가 한계다.", votes: 2 },
+  { fromScope: "os", fromQuestion: "큰 파일을 통째로 읽으면 무엇이 문제인가?", toScope: "os", toQuestion: "읽은 파일이 두 번째부터 빨라지는 이유는?", kind: "shares_concept", reason: "둘 다 파일 읽기와 메모리(페이지 캐시) 사이의 관계를 다룬다.", votes: 3 },
+  { fromScope: "os", fromQuestion: "큰 파일을 통째로 읽으면 무엇이 문제인가?", toScope: "generic", toQuestion: "메모리보다 큰 데이터를 정렬할 때 무엇을 쓰는가?", kind: "shares_concept", reason: "메모리에 다 올라가지 않는 데이터를 다룬다는 같은 전제에 서 있다 — 외부 정렬이 그 해법의 대표다.", votes: 2 },
+  { fromScope: "http", fromQuestion: "응답을 압축하면 무엇을 치르는가?", toScope: "android", toQuestion: "설치 크기를 줄이면 실행 시 무엇을 치르는가?", kind: "shares_concept", reason: "크기를 줄이는 대가로 CPU를 치른다는 같은 트레이드오프를 전송과 설치에서 각각 다룬다.", votes: 3 },
+  { fromScope: "http", fromQuestion: "응답을 압축하면 무엇을 치르는가?", toScope: "generic", toQuestion: "먼 나라 사용자도 빠르게 받는 방법은?", kind: "shares_concept", reason: "둘 다 전송에서 생기는 지연을 줄이는 수단이다 — 압축은 양을 줄이고 CDN은 거리를 줄인다.", votes: 2 },
+  { fromScope: "generic", fromQuestion: "정규식 하나가 서버를 멈추게 하는가?", toScope: "cpu", toQuestion: "조건문 하나가 성능을 좌우하는 경우가 있는가?", kind: "shares_concept", reason: "사소해 보이는 코드 한 조각이 실행 비용을 폭발시킨다는 같은 현상을 다룬다.", votes: 2 },
+  { fromScope: "generic", fromQuestion: "정규식 하나가 서버를 멈추게 하는가?", toScope: "js", toQuestion: "한 줄짜리 코드가 화면을 멈추게 하는 이유는?", kind: "shares_concept", reason: "단일 스레드를 오래 점유하는 동기 작업이 전체를 멈춘다는 같은 메커니즘이다 — 백트래킹 폭발은 그 극단이다.", votes: 3 },
+  { fromScope: "distributed", fromQuestion: "메시지 형식을 바꾸면 옛 소비자는 어떻게 되는가?", toScope: "generic", toQuestion: "메시지 큐를 두면 무엇을 얻고 무엇을 잃는가?", kind: "prerequisite", reason: "큐가 생산자와 소비자를 분리한다는 구조를 알아야 형식 변경이 소비자를 깨뜨리는 문제가 보인다.", votes: 2 },
+  { fromScope: "distributed", fromQuestion: "메시지 형식을 바꾸면 옛 소비자는 어떻게 되는가?", toScope: "generic", toQuestion: "처리에 실패한 메시지는 어디로 가는가?", kind: "shares_concept", reason: "형식이 맞지 않아 처리에 실패한 메시지가 흘러가는 곳이 데드레터 큐다 — 실패 처리라는 같은 흐름 위에 있다.", votes: 2 },
+  { fromScope: "security", fromQuestion: "인코딩과 암호화와 해싱은 무엇이 다른가?", toScope: "security", toQuestion: "비밀번호를 그냥 해시하면 왜 안 되는가?", kind: "shares_concept", reason: "해싱의 용도를 구분해야 비밀번호 저장에 왜 소금과 느린 해시가 따로 필요한지 이해된다.", votes: 3 },
+  { fromScope: "security", fromQuestion: "인코딩과 암호화와 해싱은 무엇이 다른가?", toScope: "http", toQuestion: "HTTPS는 HTTP와 무엇이 다른가?", kind: "shares_concept", reason: "HTTPS가 HTTP에 더하는 것이 정확히 암호화다 — 인코딩과 암호화의 구분이 그 이해의 전제다.", votes: 2 },
+  { fromScope: "security", fromQuestion: "무작위 값은 어디서 만들어야 안전한가?", toScope: "generic", toQuestion: "비밀키를 코드에 넣으면 왜 안 되는가?", kind: "shares_concept", reason: "둘 다 비밀의 생성과 보관을 다룬다 — 예측 가능한 난수와 노출된 키는 같은 방식으로 뚫린다.", votes: 2 },
 ]
