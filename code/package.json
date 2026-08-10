@@ -29,6 +29,7 @@
     "docs:questions": "tsx scripts/dump-questions.ts",
     "check:graph": "tsx scripts/check-graph.ts",
     "check:render": "tsx scripts/smoke-render.ts",
+    "smoke": "tsx scripts/smoke.ts",
     "audit:corpus": "tsx scripts/audit-corpus.ts",
     "gen:examples": "tsx scripts/generate-examples.ts",
     "build:generated": "tsx scripts/build-generated-nodes.ts",
