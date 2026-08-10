@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ContactMenu } from '@/components/ContactMenu'
+import { AuthMenu } from '@/components/AuthMenu'
 
 /**
  * 화면 맨 위의 길잡이.
@@ -28,10 +29,24 @@ const LINKS = [
   { href: '/me', label: '내 기록' },
 ]
 
+/**
+ * 폰에서는 빼는 안쪽 길.
+ *
+ * 용어 사전은 **본문에서 먼저 만난다** — 해설 속 점선 밑줄을 누르면 그
+ * 항목으로 바로 온다. 머리글 링크는 그 길을 이미 지난 사람이 목록째
+ * 보려 할 때 쓰는 두 번째 길이다. 폰에서는 자리가 없어 바닥글에만 두고
+ * (`SiteFooter`가 이미 걸고 있다) sm 위에서만 세운다.
+ *
+ * 자리가 없다는 것은 재서 안 것이다. 390px에서 이 줄은 350px을 쓸 수
+ * 있는데 항목들이 366px을 달라고 한다 — 넣을 자리가 모자란 정도가
+ * 아니라 이미 넘쳐 있었다.
+ */
+const WIDE_LINKS = [{ href: '/glossary', label: '용어 사전' }]
+
 const REPO = 'https://github.com/J-nowcow/cs-pathfinder'
 
 /**
- * 바깥으로 나가는 두 곳.
+ * 바깥으로 나가는 곳.
  *
  * 글자 대신 그림으로 둔다. 폰 390px에서 안쪽 링크 셋만으로도 자리가 빠듯해서
  * 글자를 더 붙이면 줄이 넘친다. 대신 `aria-label`로 이름을 남긴다 — 화면
@@ -39,6 +54,11 @@ const REPO = 'https://github.com/J-nowcow/cs-pathfinder'
  *
  * **별을 대신 눌러줄 수는 없다.** 남의 계정으로 하는 일이고 그런 주소도 없다.
  * 저장소로 보내고 거기서 누르게 한다.
+ *
+ * 폰에서는 감춘다(`hidden sm:grid`). 계정 아이콘이 들어오면서 자리를 하나
+ * 내줘야 했는데, 둘 중 뒤로 물러설 것은 이쪽이다 — 로그인은 기록을 다른
+ * 기기로 잇는 기능이고 저장소 링크는 권유다. 폰에서도 아주 사라지지는
+ * 않는다. `문의`를 열면 첫 항목이 GitHub이다.
  */
 function OutLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
   /*
@@ -57,7 +77,7 @@ function OutLink({ href, label, children }: { href: string; label: string; child
       rel={newTab ? 'noopener noreferrer' : undefined}
       aria-label={label}
       title={label}
-      className="-my-1.5 grid h-11 w-9 place-items-center rounded-lg text-muted transition-colors hover:text-ink"
+      className="-my-1.5 hidden h-11 w-9 place-items-center rounded-lg text-muted transition-colors hover:text-ink sm:grid"
     >
       {children}
     </a>
@@ -67,6 +87,31 @@ function OutLink({ href, label, children }: { href: string; label: string; child
 export function SiteHeader() {
   const pathname = usePathname()
 
+  /*
+   * 지금 있는 곳을 표시한다.
+   *
+   * 홈은 정확히 같을 때만 켠다. `startsWith`로 하면 '/'가 모든 주소에
+   * 걸려 어디에 있든 홈이 켜진 것처럼 보인다.
+   */
+  const isHere = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href))
+
+  /*
+    보이는 크기는 그대로 두고 누르는 자리만 키운다.
+
+    폰에서 재보니 높이가 32px이었다. 손끝이 닿는 자리로는 작다 — 옆 항목이
+    눌린다. `py`를 키우고 같은 만큼 `-my`로 당기면 글자 위치와 헤더 높이는
+    그대로인 채 판정 영역만 44px가 된다.
+
+    좌우는 폰에서 `px-1`로 줄였다. 계정 아이콘이 들어오면서 6px이 모자랐는데
+    줄일 수 있는 곳이 여기뿐이었다. **세로는 건드리지 않는다** — 44px 판정을
+    만드는 것은 `py`와 `-my` 짝이고, 좌우는 옆 항목과 벌어지는 간격 문제다.
+    글자 사이는 8px이 남아 폰에서 옆 것이 눌리지 않는다.
+  */
+  const linkClass = (here: boolean) =>
+    `-my-2 rounded-lg px-1 py-[13px] text-[12.5px] transition-colors sm:px-2.5 sm:text-[13px] ${
+      here ? 'font-medium text-ink' : 'text-muted hover:text-ink'
+    }`
+
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-surface/85 backdrop-blur">
       {/*
@@ -75,40 +120,40 @@ export function SiteHeader() {
         아이콘 둘을 넣었더니 폰 390px에서 두 줄로 접혔다 — "오늘의 질 / 문"처럼
         낱말이 갈라졌다. 넘침은 0이었지만 줄바꿈으로 피한 것이라 숫자만 봐서는
         안 보였다. 화면을 찍어야 알 수 있는 종류다.
+
+        **폰에서는 칸 사이를 0으로 붙인다.** 계정 아이콘을 넣기 전에 재보니
+        390px에서 쓸 수 있는 350px에 항목들이 366px을 달라고 하고 있었다.
+        모자란 16px은 flex가 알아서 메우고 있었는데, 메우는 방식이 제일 덜
+        버티는 칸을 줄이는 것이라 GitHub 아이콘이 36px에서 **17px로 눌려**
+        있었다. 줄이 안 넘쳤으니 화면으로도 안 보이고 숫자로도 안 잡힌다.
+        항목마다 붙은 `px`가 이미 사이를 벌리고 있어서 `gap`은 없어도 된다.
       */}
-      <nav className="mx-auto flex max-w-3xl flex-nowrap items-center gap-0.5 whitespace-nowrap px-5 py-3 sm:gap-1 sm:px-8">
+      <nav className="mx-auto flex max-w-3xl flex-nowrap items-center gap-0 whitespace-nowrap px-5 py-3 sm:gap-1 sm:px-8">
         <Link href="/" className="-my-3 mr-auto py-3 text-[14px] font-bold tracking-[-0.01em]">
           CS 길라잡이
         </Link>
 
-        {LINKS.map((l) => {
-          /*
-           * 지금 있는 곳을 표시한다.
-           *
-           * 홈은 정확히 같을 때만 켠다. `startsWith`로 하면 '/'가 모든 주소에
-           * 걸려 어디에 있든 홈이 켜진 것처럼 보인다.
-           */
-          const here = l.href === '/' ? pathname === '/' : pathname.startsWith(l.href)
-          return (
-            <Link
-              key={l.href}
-              href={l.href}
-              aria-current={here ? 'page' : undefined}
-              /*
-                보이는 크기는 그대로 두고 누르는 자리만 키운다.
+        {LINKS.map((l) => (
+          <Link
+            key={l.href}
+            href={l.href}
+            aria-current={isHere(l.href) ? 'page' : undefined}
+            className={linkClass(isHere(l.href))}
+          >
+            {l.label}
+          </Link>
+        ))}
 
-                폰에서 재보니 높이가 32px이었다. 손끝이 닿는 자리로는 작다 —
-                옆 항목이 눌린다. `py`를 키우고 같은 만큼 `-my`로 당기면 글자
-                위치와 헤더 높이는 그대로인 채 판정 영역만 44px가 된다.
-              */
-              className={`-my-2 rounded-lg px-1.5 py-[13px] text-[12.5px] transition-colors sm:px-2.5 sm:text-[13px] ${
-                here ? 'font-medium text-ink' : 'text-muted hover:text-ink'
-              }`}
-            >
-              {l.label}
-            </Link>
-          )
-        })}
+        {WIDE_LINKS.map((l) => (
+          <Link
+            key={l.href}
+            href={l.href}
+            aria-current={isHere(l.href) ? 'page' : undefined}
+            className={`hidden sm:block ${linkClass(isHere(l.href))}`}
+          >
+            {l.label}
+          </Link>
+        ))}
 
         {/* 안쪽 길과 바깥 길을 선으로 가른다. 섞이면 어디로 나가는지 안 보인다 */}
         <span aria-hidden className="mx-1 h-4 w-px bg-line" />
@@ -130,6 +175,15 @@ export function SiteHeader() {
           "누르면 무언가 열린다"가 안 읽혀서 글자로 바꿨다.
         */}
         <ContactMenu />
+
+        {/*
+          계정은 맨 끝이다.
+
+          왼쪽부터 "무엇을 읽을까(안쪽 길) → 만든 사람에게(바깥 길) → 나"
+          순서다. 로그인은 읽는 일과 상관이 없어서 안쪽 길에 섞으면 매번
+          지나쳐 읽게 된다.
+        */}
+        <AuthMenu />
       </nav>
     </header>
   )

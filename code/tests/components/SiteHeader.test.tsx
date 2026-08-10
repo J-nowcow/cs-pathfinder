@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { describe, it, expect, afterEach, vi } from 'vitest'
+import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
 import { render, screen, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { SiteHeader } from '@/components/SiteHeader'
@@ -12,6 +12,19 @@ import { SiteHeader } from '@/components/SiteHeader'
  */
 let pathname = '/'
 vi.mock('next/navigation', () => ({ usePathname: () => pathname }))
+
+/*
+ * 계정 자리는 세션을 물어본다. 안 막으면 시험이 진짜 서버로 요청을 보내고
+ * ECONNREFUSED가 쌓인다 — 통과는 하지만 실패가 로그에 묻힌다.
+ * 여닫는 것 자체는 AuthMenu.test.tsx에서 잰다. 여기서는 자리만 본다.
+ */
+vi.mock('@/lib/auth/client', () => ({
+  authClient: {
+    useSession: () => ({ data: null, isPending: false }),
+    signOut: vi.fn(),
+    signIn: { social: vi.fn() },
+  },
+}))
 
 afterEach(cleanup)
 
@@ -93,5 +106,61 @@ describe('SiteHeader · 현재 위치', () => {
     pathname = '/map/db'
     render(<SiteHeader />)
     expect(screen.getByText('지도').getAttribute('aria-current')).toBe('page')
+  })
+})
+
+/**
+ * 폰에서 무엇을 세우고 무엇을 접는가.
+ *
+ * 재 보니 390px에서 쓸 수 있는 350px에 항목들이 366px을 달라고 하고 있었다.
+ * 모자란 16px은 flex가 제일 덜 버티는 칸을 줄여 메우고 있었고, 그래서 GitHub
+ * 아이콘이 36px에서 17px로 눌려 있었다 — 줄이 안 넘쳤으니 화면으로도 숫자로도
+ * 안 잡히는 종류다.
+ *
+ * 그래서 계정을 넣으면서 둘을 접었다. **접었다는 사실 자체를 시험으로 못
+ * 박는다.** 클래스 하나만 빠져도 폰에서 도로 눌리기 시작하는데 시험은
+ * 통과하고 화면도 멀쩡해 보인다.
+ */
+describe('SiteHeader · 폰에서 접는 것', () => {
+  beforeEach(() => {
+    pathname = '/'
+  })
+
+  it('용어 사전으로 가는 길이 있다', () => {
+    render(<SiteHeader />)
+    expect(screen.getByText('용어 사전').getAttribute('href')).toBe('/glossary')
+  })
+
+  /* 폰에서는 바닥글이 대신 든다(SiteFooter가 이미 걸고 있다) */
+  it('용어 사전은 sm 위에서만 세운다', () => {
+    render(<SiteHeader />)
+    expect(screen.getByText('용어 사전').className).toContain('hidden sm:block')
+  })
+
+  /* 폰에서 아주 사라지지는 않는다 — `문의`를 열면 첫 항목이 GitHub이다 */
+  it('저장소 아이콘도 sm 위에서만 세운다', () => {
+    render(<SiteHeader />)
+    const repo = screen.getByLabelText('GitHub에서 보기 (별을 눌러주세요)')
+    expect(repo.className).toContain('hidden')
+    expect(repo.className).toContain('sm:grid')
+  })
+
+  /**
+   * 계정은 폰에서도 남는다.
+   *
+   * 자리를 하나 내줘야 했을 때 뒤로 물러선 쪽이 저장소였다. 로그인은 기록을
+   * 다른 기기로 잇는 기능이고 저장소 링크는 권유다.
+   */
+  it('계정 자리는 폰에서도 남는다', () => {
+    render(<SiteHeader />)
+    expect(screen.getByRole('button', { name: 'Google로 로그인' }).className).not.toContain('hidden')
+  })
+
+  /* 붙은 채로 한 줄을 유지하는 것이 이 줄의 전제다 */
+  it('한 줄을 강제하는 클래스를 유지한다', () => {
+    const { container } = render(<SiteHeader />)
+    const nav = container.querySelector('nav')!
+    expect(nav.className).toContain('flex-nowrap')
+    expect(nav.className).toContain('whitespace-nowrap')
   })
 })
