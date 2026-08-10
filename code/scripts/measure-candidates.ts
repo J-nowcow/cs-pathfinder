@@ -102,8 +102,8 @@ async function main() {
    * 고립됐는지 모른다. 고칠 때 무엇을 봐야 하는지 알려면 실물이 필요하다.
    */
   if (zero.length > 0) {
-    console.log(`\n--- 후보 0개 노드 (앞 12개 / ${zero.length}) ---`)
-    for (const r of zero.slice(0, 12)) {
+    console.log(`\n--- 후보 0개 노드 (전체 ${zero.length}) ---`)
+    for (const r of zero) {
       console.log(`  #${String(r.number ?? '?').padStart(3)}  ${r.question}`)
     }
   }
