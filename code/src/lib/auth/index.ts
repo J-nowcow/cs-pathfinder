@@ -94,6 +94,34 @@ async function create(): Promise<Auth> {
     database: pool,
     secret: process.env.BETTER_AUTH_SECRET,
     baseURL: process.env.BETTER_AUTH_URL,
+    /*
+     * 탈퇴. 켜지 않으면 `/delete-user`가 아예 404다.
+     *
+     * sendDeleteAccountVerification을 안 주면 확인 메일 없이 즉시 지운다.
+     * 메일을 한 번 더 거치게 하는 편이 안전하지만, 지금은 보내는 길이
+     * 없다 — 확인은 화면에서 받는다(AuthCard의 확인 블록).
+     *
+     * 지워지는 범위는 DB의 cascade가 정한다. user 행이 사라지면
+     * session·account·journey_occurrence·journey_cursor·streak_read가
+     * 함께 지워지고, 그 다섯을 tests/db/journeys.test.ts(D7)가 고정한다.
+     */
+    user: { deleteUser: { enabled: true } },
+    /*
+     * 세션 신선도 검사를 **탈퇴만을 위해** 껐다.
+     *
+     * /delete-user는 비밀번호를 안 받으면 세션 나이를 본다
+     * (`!ctx.body.password && freshAge !== 0` → SESSION_EXPIRED, 1.6.26).
+     * 기본값이 하루라서, 어제 로그인한 사람은 탈퇴를 못 한다. 그런데
+     * 우리는 구글 로그인만 있어 비밀번호로 넘을 방법이 없다 — 비밀번호
+     * 재확인 경로가 없는 소셜 전용 계정이라 신선도 검사가 탈퇴를 막는
+     * 문턱이 된다. 다시 신선해지려면 로그아웃 후 재로그인뿐인데, 그것을
+     * 탈퇴 화면에서 요구하는 것은 길이 아니다.
+     *
+     * 같이 느슨해지는 곳은 /unlink-account와 /list-sessions 둘뿐이고,
+     * 지금 둘 다 화면이 없다. 민감 작업이 늘면 재검토한다 — 그때는 이
+     * 값을 되돌리고 재인증 흐름을 먼저 만드는 순서다.
+     */
+    session: { freshAge: 0 },
     socialProviders: {
       google: {
         clientId: process.env.AUTH_GOOGLE_ID ?? '',
