@@ -440,4 +440,19 @@ export const SEED_RELATIONS: SeedRelation[] = [
   { fromScope: "security", fromQuestion: "인코딩과 암호화와 해싱은 무엇이 다른가?", toScope: "security", toQuestion: "비밀번호를 그냥 해시하면 왜 안 되는가?", kind: "shares_concept", reason: "해싱의 용도를 구분해야 비밀번호 저장에 왜 소금과 느린 해시가 따로 필요한지 이해된다.", votes: 3 },
   { fromScope: "security", fromQuestion: "인코딩과 암호화와 해싱은 무엇이 다른가?", toScope: "http", toQuestion: "HTTPS는 HTTP와 무엇이 다른가?", kind: "shares_concept", reason: "HTTPS가 HTTP에 더하는 것이 정확히 암호화다 — 인코딩과 암호화의 구분이 그 이해의 전제다.", votes: 2 },
   { fromScope: "security", fromQuestion: "무작위 값은 어디서 만들어야 안전한가?", toScope: "generic", toQuestion: "비밀키를 코드에 넣으면 왜 안 되는가?", kind: "shares_concept", reason: "둘 다 비밀의 생성과 보관을 다룬다 — 예측 가능한 난수와 노출된 키는 같은 방식으로 뚫린다.", votes: 2 },
+
+  /*
+   * 2차 다리 2편(입력 의심·프로세스 죽음)과 렌더링 정본(#26)의 관계 —
+   * 세션 Claude 직접 판정(2026-08-11). 렌더링 다리는 #26과 실질 중복이라
+   * 등가로 접고, 잇기로 했던 고립(선택자·너비·스타일 변경)은 정본에서 잇는다.
+   */
+  { fromScope: "security", fromQuestion: "사용자 입력을 왜 전부 의심해야 하는가?", toScope: "generic", toQuestion: "SQL 인젝션은 무엇으로 막는가?", kind: "shares_concept", reason: "인젝션은 의심 없이 이어 붙인 입력이 명령으로 해석되는 대표 사례다 — 같은 원칙의 총론과 각론이다.", votes: 3 },
+  { fromScope: "security", fromQuestion: "사용자 입력을 왜 전부 의심해야 하는가?", toScope: "generic", toQuestion: "권한은 왜 최소로 주는가?", kind: "shares_concept", reason: "입력 검증과 최소 권한은 심층 방어의 두 층이다 — 검증이 뚫려도 권한이 좁으면 피해가 줄어든다.", votes: 2 },
+  { fromScope: "process", fromQuestion: "좀비 프로세스는 왜 남는가?", toScope: "os", toQuestion: "프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?", kind: "prerequisite", reason: "죽음에서 무엇이 정리되고 무엇이 남는지를 알아야 종료 상태가 남은 것이 좀비임이 이해된다.", votes: 3 },
+  { fromScope: "os", fromQuestion: "프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?", toScope: "android", toQuestion: "메모리 부족 시 어떤 프로세스부터 종료되는가?", kind: "shares_concept", reason: "한쪽은 죽은 뒤의 정리를, 한쪽은 시스템이 죽일 대상을 고르는 기준을 다룬다 — 프로세스 종료라는 같은 사건의 앞뒤다.", votes: 2 },
+  { fromScope: "os", fromQuestion: "프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?", toScope: "transaction", toQuestion: "갑자기 꺼져도 커밋한 것이 남는 이유는?", kind: "shares_concept", reason: "죽음의 단위가 프로세스인지 기계인지에 따라 디스크에 남는 범위가 갈린다 — 커밋의 지속성이 그 경계 위에 서 있다.", votes: 2 },
+  { fromScope: "os", fromQuestion: "프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?", toScope: "android", toQuestion: "앱이 백그라운드에서 죽는 이유는?", kind: "shares_concept", reason: "모바일에서 앱 프로세스를 거두는 것도 같은 그림이다 — 커널이 자원을 회수하고 앱은 그 전제 위에서 상태를 지킨다.", votes: 2 },
+  { fromScope: "react", fromQuestion: "브라우저가 화면을 그리기까지 무슨 일이 일어나는가?", toScope: "browser", toQuestion: "스타일을 바꿨을 뿐인데 왜 느려지는가?", kind: "shares_concept", reason: "어느 단계부터 다시 그리는가가 느려짐의 원인이다 — 파이프라인 총론과 그 비용 각론이다.", votes: 3 },
+  { fromScope: "react", fromQuestion: "브라우저가 화면을 그리기까지 무슨 일이 일어나는가?", toScope: "css", toQuestion: "선언한 너비와 실제 크기가 왜 달라지는가?", kind: "shares_concept", reason: "레이아웃 단계가 계산하는 것이 바로 상자의 실제 크기다 — 박스 모델은 그 계산의 규칙이다.", votes: 2 },
+  { fromScope: "react", fromQuestion: "브라우저가 화면을 그리기까지 무슨 일이 일어나는가?", toScope: "css", toQuestion: "선택자 최적화는 실제로 언제 필요한가?", kind: "shares_concept", reason: "선택자 매칭은 파이프라인의 스타일 계산 단계 비용이다 — 언제 병목이 되는지가 양쪽의 물음이다.", votes: 2 },
 ]
