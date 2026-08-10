@@ -261,6 +261,7 @@ export async function truncateAll(): Promise<void> {
   await db.query(`
     truncate semantic_relation, tree_vote, tree_occurrence, tree, qedge, qnode_alias, qnode_suggestion,
              qnode_equivalence, expansion_event, generation_job, usage_quota, topic_seed,
+             journey_cursor, journey_occurrence, streak_read, "user",
              qnode restart identity cascade
   `)
 }

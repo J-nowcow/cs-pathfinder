@@ -51,11 +51,16 @@ export function stripSessionClient<T extends Record<string, unknown>>(session: T
  * 우리가 쓰는 표면만 좁혀 둔 타입.
  *
  * betterAuth의 반환 타입은 옵션에 종속된 제네릭이라 그대로 이름 붙이면
- * 옵션이 조금만 달라져도 할당이 깨진다. 지금 부르는 것은 handler뿐이다 —
- * 서버에서 세션을 읽을 일이 생기면(C4) 그때 표면을 넓힌다.
+ * 옵션이 조금만 달라져도 할당이 깨진다. handler와 getSession만 쓴다 —
+ * getSession은 C4(여정 서버 저장)가 라우트에서 세션을 읽는 자리다.
  */
 export interface Auth {
   handler: (request: Request) => Promise<Response>
+  api: {
+    getSession: (ctx: {
+      headers: Headers
+    }) => Promise<{ session: { userId: string }; user: { id: string; email: string } } | null>
+  }
 }
 
 /**

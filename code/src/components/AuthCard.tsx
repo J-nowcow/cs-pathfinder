@@ -8,9 +8,10 @@ import { authClient } from '@/lib/auth/client'
  * 헤더에 안 넣는 이유: 390px에서 링크 넷+아이콘 둘로 이미 빠듯하다
  * (SiteHeader 주석 참조). 로그인이 의미 있는 자리가 "내 자국"이기도 하다.
  *
- * **지금은 로그인해도 달라지는 것이 없다**고 정직하게 적는다. 기록의
- * 서버 저장(C4)이 붙기 전까지는 계정만 만들어지는 상태다. 부풀리면
- * 로그인한 사람이 "그래서 뭐가 달라졌지"를 겪는다.
+ * 로그인의 효용은 C4가 만들었다 — SyncAgent가 이 기기의 여정·잔디를
+ * 계정과 합치고, 다른 기기에서 로그인하면 거기로 내려간다. 문구는 그
+ * 사실 그대로만 적는다. 부풀리면 로그인한 사람이 "그래서 뭐가
+ * 달라졌지"를 겪는다.
  */
 export function AuthCard() {
   const { data: session, isPending } = authClient.useSession()
@@ -22,10 +23,10 @@ export function AuthCard() {
     return (
       <div className="rounded-xl border border-line bg-surface p-4">
         <p className="text-sm">
-          <span className="font-medium">{session.user.email}</span>로 로그인돼 있다.
+          <span className="font-medium">{session.user.email}</span>로 로그인돼 있습니다.
         </p>
         <p className="mt-1 text-sm text-muted">
-          기록을 계정에 잇는 기능은 준비 중이다. 지금은 이 브라우저에만 쌓인다.
+          이 기기의 기록과 계정의 기록을 합쳐 저장합니다. 다른 기기에서 로그인하면 이어집니다.
         </p>
         <button
           type="button"
@@ -41,10 +42,10 @@ export function AuthCard() {
   return (
     <div className="rounded-xl border border-line bg-surface p-4">
       <p className="text-sm">
-        로그인하면 나중에 기록을 다른 기기에서도 이어볼 수 있게 준비 중이다.
+        로그인하면 판 기록이 계정에 저장되어 다른 기기에서도 이어집니다.
       </p>
       <p className="mt-1 text-sm text-muted">
-        저장하는 것은 이메일뿐이다. 이름·프로필 사진은 받지 않는다.
+        저장하는 것은 이메일뿐입니다. 이름·프로필 사진은 받지 않습니다.
       </p>
       <button
         type="button"

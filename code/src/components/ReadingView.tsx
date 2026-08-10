@@ -17,6 +17,8 @@ import {
 } from '@/lib/journey/path'
 import { layoutJourney } from '@/lib/journey/graph'
 import { loadJourney, saveJourney } from '@/lib/journey/storage'
+import { mergeJourney } from '@/lib/journey/merge'
+import { JOURNEY_SYNCED_EVENT } from '@/lib/journey/sync'
 import type { JourneyState } from '@/lib/journey/types'
 import { requestExpand, type PublicNode, type PublicSuggestion } from '@/lib/api/expand-client'
 import { PathChips } from '@/components/PathChips'
@@ -68,6 +70,15 @@ export function ReadingView({
   const cache = useRef(new Map<string, ReadingNode>([[initialNode.id, initialNode]]))
   const lastAttempt = useRef<Attempt | null>(null)
   const restored = useRef(false)
+  /*
+   * 복원이 끝나기 전에는 저장하지 않는다.
+   *
+   * useState의 초기값은 1개짜리 새 여정이다. 게이트 없이는 그것이 복원보다
+   * 먼저 저장 훅을 타고 localStorage를 한 틱 덮는다 — 그 틱에 언마운트되거나
+   * 다른 탭이 읽으면 기록을 잃는다. 서버 동기화(C4)가 끼면 그 1개짜리가
+   * 서버로도 올라간다.
+   */
+  const [hydrated, setHydrated] = useState(false)
 
   // ── 저장된 여정 복원 ──────────────────────────────────────
   useEffect(() => {
@@ -75,12 +86,16 @@ export function ReadingView({
     restored.current = true
 
     const saved = loadJourney()
-    if (!saved) return
+    if (!saved) {
+      setHydrated(true)
+      return
+    }
 
     // 이미 판 자리면 그리로 돌아간다
     const hit = saved.occurrences.find((o) => o.nodeId === initialNode.id)
     if (hit) {
       setJourney(moveTo(saved, hit.id))
+      setHydrated(true)
       return
     }
 
@@ -95,11 +110,31 @@ export function ReadingView({
      * 2에서 1로, 깊이가 1에서 0으로 떨어졌다.
      */
     setJourney(enterAsRoot(saved, toVisited(initialNode)).state)
+    setHydrated(true)
   }, [initialNode])
 
   useEffect(() => {
+    if (!hydrated) return
     saveJourney(journey)
-  }, [journey])
+  }, [journey, hydrated])
+
+  /*
+   * 서버 병합 결과를 메모리 상태에 **더하기로** 받아들인다 (C4).
+   *
+   * sync가 localStorage만 고치면 이 화면의 저장 훅이 옛 메모리 상태로 도로
+   * 덮는다 — 지난 버그와 같은 모양이다. 서버 데이터는 반드시 여기(메모리)를
+   * 통과해야 한다. mergeJourney는 합집합이라 이벤트가 언제 도착하든 어느 쪽
+   * 발자국도 죽지 않고, currentId는 로컬(보고 있는 자리)이 이긴다.
+   */
+  useEffect(() => {
+    const onSynced = (e: Event) => {
+      const merged = (e as CustomEvent<JourneyState>).detail
+      if (!merged || !Array.isArray(merged.occurrences)) return
+      setJourney((prev) => mergeJourney(prev, merged.occurrences, merged.currentId))
+    }
+    window.addEventListener(JOURNEY_SYNCED_EVENT, onSynced)
+    return () => window.removeEventListener(JOURNEY_SYNCED_EVENT, onSynced)
+  }, [])
 
   // ── 뒤로가기 ─────────────────────────────────────────────
   useEffect(() => {
@@ -192,7 +227,7 @@ export function ReadingView({
         cache.current.set(loaded.id, loaded)
         setNode(loaded)
       } catch {
-        setBanner({ kind: 'error', message: '질문을 불러오지 못했어요.' })
+        setBanner({ kind: 'error', message: '질문을 불러오지 못했습니다.' })
       } finally {
         setLoadingNode(false)
       }

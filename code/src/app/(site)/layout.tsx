@@ -1,5 +1,6 @@
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { SyncAgent } from '@/components/SyncAgent'
 
 /**
  * 읽는 화면의 공통 틀.
@@ -13,6 +14,8 @@ import { SiteFooter } from '@/components/SiteFooter'
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      {/* 로그인한 사람의 기록을 계정과 합친다. 아무것도 안 그린다 (C4) */}
+      <SyncAgent />
       <SiteHeader />
       {children}
       <SiteFooter />
