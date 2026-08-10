@@ -357,4 +357,7 @@ export const NODE_LEVELS: NodeLevel[] = [
   { question: '메시지 형식을 바꾸면 옛 소비자는 어떻게 되는가?', level: '깊이' },
   { question: '인코딩과 암호화와 해싱은 무엇이 다른가?', level: '기초' },
   { question: '무작위 값은 어디서 만들어야 안전한가?', level: '심화' },
+  { question: '사용자 입력을 왜 전부 의심해야 하는가?', level: '기초' },
+  { question: '프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?', level: '기초' },
+  { question: '브라우저는 화면을 어떤 순서로 그리는가?', level: '기초' },
 ]
