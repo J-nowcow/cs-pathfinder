@@ -34,8 +34,19 @@ function kakaoText(text: string): Response {
   return new Response(
     JSON.stringify({
       version: '2.0',
-      // simpleText는 1000자 제한 — 넘치면 카카오가 거부한다
-      template: { outputs: [{ simpleText: { text: text.slice(0, 990) } }] },
+      template: {
+        // simpleText는 1000자 제한 — 넘치면 카카오가 거부한다
+        outputs: [{ simpleText: { text: text.slice(0, 990) } }],
+        /*
+         * 모든 응답 아래에 붙는 바로가기 버튼. 누르면 그 문구를 발화로
+         * 보내고, 폴백 블록이 이 스킬로 돌려보낸다 — 오픈빌더에 발화
+         * 블록을 따로 만들 필요가 없다.
+         */
+        quickReplies: [
+          { label: '오늘의 질문', action: 'message', messageText: '오늘의 질문' },
+          { label: '질문 목록 보기', action: 'message', messageText: '도움말' },
+        ],
+      },
     }),
     { status: 200, headers: { 'content-type': 'application/json' } },
   )
@@ -52,9 +63,9 @@ export async function POST(request: Request): Promise<Response> {
     /* 빈 발화로 진행 — 아래 도움말이 답한다 */
   }
 
-  if (!utterance) {
+  if (!utterance || utterance === '도움말') {
     return kakaoText(
-      `CS 길라잡이 봇입니다.\n"오늘의 질문"이라고 보내면 오늘 발행된 질문을, CS 궁금증을 보내면 비슷한 질문의 해설을 찾아 드립니다.`,
+      `CS 길라잡이 봇입니다.\n"오늘의 질문"이라고 보내면 오늘 발행된 질문을, CS 궁금증을 보내면 비슷한 질문의 해설을 찾아 드립니다.\n\n전체 질문 목록: ${SITE}/questions`,
     )
   }
 
