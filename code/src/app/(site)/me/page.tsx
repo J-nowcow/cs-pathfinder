@@ -8,7 +8,7 @@ import { AuthCard } from '@/components/AuthCard'
 import type { Candidate } from '@/lib/streak/suggest'
 
 /**
- * 내가 판 자리.
+ * 내 기록.
  *
  * **계정이 없어도 누적은 보여줄 수 있다.** 무엇을 봤는지는 이미 브라우저에
  * 남아 있고(`journey`), 언제 봤는지는 이번에 따로 적기 시작했다(`streak`).
@@ -22,7 +22,7 @@ import type { Candidate } from '@/lib/streak/suggest'
  * 하고, 그건 계정 없이 하고 싶지 않은 일이다.
  */
 export const metadata: Metadata = {
-  title: '내가 판 자리',
+  title: '내 기록',
   description: '며칠에 몇 편을 팠는지, 다음에 무엇을 팔지.',
 }
 
@@ -53,7 +53,7 @@ export default async function MePage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <h1 className="text-2xl font-semibold">내가 판 자리</h1>
+      <h1 className="text-2xl font-semibold">내 기록</h1>
       <p className="mt-2 text-muted">
         로그인 없이 이 브라우저에 쌓인 기록입니다. 지금까지 {rows.length}개 질문이 있습니다.
       </p>

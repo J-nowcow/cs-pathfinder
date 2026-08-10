@@ -11,7 +11,7 @@ import { JOURNEY_SYNCED_EVENT, STREAK_SYNCED_EVENT } from '@/lib/journey/sync'
 import { suggestNext, type Candidate } from '@/lib/streak/suggest'
 
 /**
- * 내가 판 자리.
+ * 내 기록.
  *
  * 숫자는 전부 이 브라우저의 localStorage에서 나온다. 로그인하면
  * SyncAgent가 계정 기록을 여기로 합치고(C4) 이벤트로 알린다 — 그때
@@ -86,7 +86,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
   return (
     <div className="flex flex-col gap-8">
       <section>
-        <h2 className="mb-3 text-lg font-semibold">판 자국</h2>
+        <h2 className="mb-3 text-lg font-semibold">학습 기록</h2>
         <Grass weeks={view.weeks} summary={view.summary} />
       </section>
 

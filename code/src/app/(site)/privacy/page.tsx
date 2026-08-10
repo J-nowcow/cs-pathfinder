@@ -70,7 +70,7 @@ export default function PrivacyPage() {
         </p>
         <p>
           어떤 질문을 눌러 어디까지 파고들었는지를 나타내는 <strong className="text-ink">지도</strong>와,
-          며칠에 몇 편을 팠는지를 나타내는 <strong className="text-ink">판 자국</strong>은 기본적으로
+          며칠에 몇 편을 팠는지를 나타내는 <strong className="text-ink">학습 기록(잔디)</strong>은 기본적으로
           브라우저 안(localStorage)에 있습니다. <strong className="text-ink">로그인하지 않으면 서버로
           보내지 않습니다.</strong> 브라우저 저장소를 비우면 같이 사라지고, 다른 기기에서는 보이지
           않습니다.
@@ -101,7 +101,7 @@ export default function PrivacyPage() {
             모든 기기에서 로그아웃됩니다.
           </li>
           <li>
-            계정에 저장된 학습 기록(지도·판 자국) — 계정이 지워지면 함께 지워지도록 데이터베이스
+            계정에 저장된 학습 기록(지도·잔디) — 계정이 지워지면 함께 지워지도록 데이터베이스
             차원에서 묶여 있습니다.
           </li>
         </ul>

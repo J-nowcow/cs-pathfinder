@@ -22,10 +22,10 @@ const LINKS = [
   { href: '/questions', label: '질문 목록' },
   { href: '/map', label: '지도' },
   /*
-   * 판 자국은 **돌아올 이유**다. 오늘의 질문은 매일 새로 오지만 어제까지
+   * 학습 기록은 **돌아올 이유**다. 오늘의 질문은 매일 새로 오지만 어제까지
    * 쌓인 것은 여기서만 보인다. 머리글에 없으면 아무도 못 찾는다.
    */
-  { href: '/me', label: '내 자국' },
+  { href: '/me', label: '내 기록' },
 ]
 
 const REPO = 'https://github.com/J-nowcow/cs-pathfinder'

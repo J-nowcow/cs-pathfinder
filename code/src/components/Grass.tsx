@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import type { Cell } from '@/lib/streak/grass'
 
 /**
@@ -5,6 +8,14 @@ import type { Cell } from '@/lib/streak/grass'
  *
  * 한 칸이 하루고 세로가 요일이다. 색만으로 뜻을 전하는 그림이라 **낭독기가
  * 읽을 문장을 반드시 함께 둔다.** 색맹인 사람에게도 그 문장이 본문이다.
+ *
+ * 칸을 누르면 그 날짜와 편수를 잔디 아래 한 줄로 보여준다. title 속성은
+ * 마우스 호버에서만 뜨고 **폰 터치에서는 아무것도 안 뜬다** — 그래서
+ * 누르는 길을 따로 둔다. 같은 칸을 다시 누르면 닫힌다.
+ *
+ * 칸은 button이지만 tabIndex -1로 키보드 순회에서 뺀다. 격자가 aria-hidden
+ * (낭독기에는 아래 문장이 본문)인데 포커스가 들어가면 낭독기 사용자가
+ * 아무것도 안 읽히는 곳에 갇힌다. 날짜별 숫자는 눈으로 고르는 부가 정보다.
  *
  * SVG 문자열을 넣지 않는다. 칸은 그냥 사각형이라 요소로 그려도 똑같고,
  * 문자열을 넣는 길은 열어 둘 이유가 없다.
@@ -19,6 +30,12 @@ function colorOf(level: Cell['level']): string {
   return `color-mix(in oklab, var(--color-accent) ${MIX[level]}%, var(--color-raised))`
 }
 
+/** '2026-08-09' → '2026년 8월 9일'. 잔디 아래 한 줄에 쓴다 */
+function readableDay(day: string): string {
+  const [y, m, d] = day.split('-')
+  return `${y}년 ${Number(m)}월 ${Number(d)}일`
+}
+
 export function Grass({
   weeks,
   summary,
@@ -26,6 +43,8 @@ export function Grass({
   weeks: Array<Array<Cell | null>>
   summary: string
 }) {
+  const [picked, setPicked] = useState<Cell | null>(null)
+
   return (
     <figure className="m-0">
       {/*
@@ -40,10 +59,18 @@ export function Grass({
                 cell === null ? (
                   <div key={d} className="h-[11px] w-[11px]" />
                 ) : (
-                  <div
+                  <button
                     key={d}
-                    className="h-[11px] w-[11px] rounded-[2px]"
-                    style={{ background: colorOf(cell.level) }}
+                    type="button"
+                    tabIndex={-1}
+                    onClick={() => setPicked((p) => (p?.day === cell.day ? null : cell))}
+                    className="h-[11px] w-[11px] cursor-pointer rounded-[2px] border-0 p-0"
+                    style={{
+                      background: colorOf(cell.level),
+                      // 고른 칸이 어딘지 보여야 아래 문장과 이어진다
+                      outline: picked?.day === cell.day ? '2px solid var(--color-accent)' : 'none',
+                      outlineOffset: '1px',
+                    }}
                     title={`${cell.day} · ${cell.count}편`}
                   />
                 ),
@@ -52,6 +79,12 @@ export function Grass({
           ))}
         </div>
       </div>
+      {picked && (
+        <p className="mt-2 text-sm">
+          <span className="font-medium">{readableDay(picked.day)}</span> —{' '}
+          {picked.count === 0 ? '판 질문이 없습니다.' : `${picked.count}편 팠습니다.`}
+        </p>
+      )}
       <figcaption className="mt-2 text-sm text-muted">{summary}</figcaption>
     </figure>
   )
