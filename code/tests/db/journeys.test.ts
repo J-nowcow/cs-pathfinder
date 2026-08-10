@@ -8,7 +8,7 @@ import { mergeJourneyForUser, loadJourneyForUser } from '@/lib/db/journeys'
  *
  * - 멱등: 같은 forest를 두 번 보내도 행이 안 는다 (응답 유실 후 재시도 대비)
  * - 정체성 = pathKey: 브라우저마다 다른 occurrence id로는 안 접힌다
- * - 원자성: unknown node가 하나라도 있으면 아무것도 안 남는다
+ * - 관용: 모르는 노드(재시드로 사라진 것)는 그 가지만 버리고 나머지는 저장한다
  * - 파기: 사용자 행을 지우면 여정·커서가 따라 지워진다 (개인정보 파기 의무)
  */
 beforeEach(async () => {
@@ -110,23 +110,29 @@ describe('mergeJourneyForUser', () => {
     expect(rows[0].position).toBeLessThan(rows[1].position)
   })
 
-  it('D5 모르는 노드가 하나라도 있으면 아무것도 안 남는다', async () => {
+  it('D5 모르는 노드는 그 가지만 버리고 나머지는 저장한다', async () => {
+    /*
+     * 처음에는 전체를 거부(400)했다. 그랬더니 서비스 초기에 팠다가 재시드로
+     * 사라진 노드 하나가 localStorage에 남은 사용자는 **동기화가 영영
+     * 실패했다** — 실제 운영에서 관찰됐다. 잔디가 이미 하는 것처럼 조용히
+     * 버린다. 죽은 노드의 자손은 경로(pathKey)가 오염되므로 함께 버린다.
+     */
     await seedUserAndNodes()
     const out = await mergeJourneyForUser(
       U,
       [
         { id: 'a', nodeId: NODE_A, parentId: null },
-        { id: 'b', nodeId: '99999999-9999-9999-9999-999999999999', parentId: 'a' },
+        { id: 'dead', nodeId: '99999999-9999-9999-9999-999999999999', parentId: 'a' },
+        { id: 'child-of-dead', nodeId: NODE_B, parentId: 'dead' },
+        { id: 'b', nodeId: NODE_B, parentId: 'a' },
       ],
       null,
     )
-    expect(out.kind).toBe('unknown_node')
-    const db = await getDb()
-    const rows = await db.query<{ c: number }>(
-      `select count(*)::int c from journey_occurrence where user_id = $1`,
-      [U],
-    )
-    expect(rows[0].c).toBe(0)
+    if (out.kind !== 'ok') throw new Error(out.kind)
+    // A와 A>B만 남는다. dead와 그 자손은 버려진다
+    const keys = out.journey.occurrences.map((o) => o.nodeId).sort()
+    expect(keys).toEqual([NODE_A, NODE_B].sort())
+    expect(out.journey.occurrences).toHaveLength(2)
   })
 
   it('D6 손상 forest(없는 부모·중복 id)는 거부한다', async () => {

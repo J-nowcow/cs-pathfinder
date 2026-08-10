@@ -26,9 +26,8 @@ export type JourneySnapshot = {
 }
 
 export type MergeOutcome =
-  | { kind: 'ok'; journey: JourneySnapshot }
+  | { kind: 'ok'; journey: JourneySnapshot; droppedUnknown: number }
   | { kind: 'invalid_forest'; reason: string }
-  | { kind: 'unknown_node' }
 
 /**
  * 더하기 병합. 치환 경로는 없다.
@@ -72,19 +71,41 @@ export async function mergeJourneyForUser(
 
   const db = await getDb()
 
-  // 3. 노드 실재 검증 — FK 오류(500)를 400으로 앞당긴다
+  /*
+   * 3. 모르는 노드는 **그 가지만 버린다.**
+   *
+   * 처음에는 전체를 거부(unknown_node 400)했다. 그랬더니 서비스 초기에
+   * 팠다가 재시드로 사라진 노드 하나가 localStorage에 남은 사용자는
+   * 동기화가 영영 실패했다 — 실제 운영에서 관찰됐다. 잔디(db/streaks)가
+   * 이미 하는 것처럼 조용히 버린다. 죽은 노드의 자손은 pathKey에 죽은
+   * nodeId가 박혀 있으므로 함께 버린다 — 오염된 키를 저장하면 그 경로는
+   * 영영 못 접힌다.
+   */
+  let alive = occurrences
+  let droppedUnknown = 0
   if (occurrences.length > 0) {
     const nodeIds = [...new Set(occurrences.map((o) => o.nodeId))]
     const found = await db.query<{ id: string }>(
       `select id from qnode where id = any($1::uuid[])`,
       [nodeIds],
     )
-    if (found.length !== nodeIds.length) return { kind: 'unknown_node' }
+    const exists = new Set(found.map((r) => r.id))
+    if (exists.size !== nodeIds.length) {
+      const dropped = new Set<string>()
+      alive = occurrences.filter((o) => {
+        if (!exists.has(o.nodeId) || (o.parentId !== null && dropped.has(o.parentId))) {
+          dropped.add(o.id)
+          return false
+        }
+        return true
+      })
+      droppedUnknown = occurrences.length - alive.length
+    }
   }
 
   await db.transaction(async (tx) => {
     // 얕은 것부터 — 부모 키가 항상 먼저 서버 id를 얻는다
-    const sorted = [...occurrences].sort(
+    const sorted = [...alive].sort(
       (a, b) => keyOf.get(a.id)!.split('>').length - keyOf.get(b.id)!.split('>').length,
     )
 
@@ -141,7 +162,7 @@ export async function mergeJourneyForUser(
     }
   })
 
-  return { kind: 'ok', journey: await loadJourneyForUser(userId) }
+  return { kind: 'ok', journey: await loadJourneyForUser(userId), droppedUnknown }
 }
 
 /** 전체 여정 + 커서. 문장은 qnode에서 — 여정은 이력이라 등가 접기를 안 건다. */

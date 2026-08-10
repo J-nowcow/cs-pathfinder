@@ -127,7 +127,8 @@ describe('POST /api/journey/merge', () => {
     expect((await res.json()).error).toBe('invalid_forest')
   })
 
-  it('모르는 노드는 400 unknown_node', async () => {
+  it('모르는 노드만 있으면 200에 빈 세트 — 거부가 아니라 드롭이다', async () => {
+    // 재시드로 사라진 노드가 localStorage에 남은 사용자도 동기화는 돼야 한다
     mockUserId.value = await seedUser()
     const res = await POST(
       postReq({
@@ -137,7 +138,7 @@ describe('POST /api/journey/merge', () => {
         current_id: null,
       }),
     )
-    expect(res.status).toBe(400)
-    expect((await res.json()).error).toBe('unknown_node')
+    expect(res.status).toBe(200)
+    expect((await res.json()).occurrences).toEqual([])
   })
 })

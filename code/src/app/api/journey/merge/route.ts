@@ -63,10 +63,11 @@ export async function POST(request: Request): Promise<Response> {
       // Vercel 로그에서 400의 사유를 볼 수 있어야 한다 — 응답 본문은 로그에 안 남는다
       console.warn(`[journey/merge] invalid_forest: ${outcome.reason} (user=${userId})`)
       return json({ error: 'invalid_forest', detail: outcome.reason }, 400)
-    case 'unknown_node':
-      console.warn(`[journey/merge] unknown_node (user=${userId})`)
-      return json({ error: 'unknown_node' }, 400)
     case 'ok':
+      if (outcome.droppedUnknown > 0) {
+        // 재시드로 사라진 노드의 흔적 — 정상 처리지만 규모는 지켜본다
+        console.warn(`[journey/merge] dropped ${outcome.droppedUnknown} unknown-node steps (user=${userId})`)
+      }
       return json(
         {
           occurrences: outcome.journey.occurrences.map((o) => ({
