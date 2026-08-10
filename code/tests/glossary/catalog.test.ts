@@ -107,6 +107,13 @@ describe('검색', () => {
   it('없으면 빈 목록이다', () => {
     expect(filterEntries(entries, '없는말')).toEqual([])
   })
+
+  /* thread로 배운 사람은 "스레드"라는 표기를 모른 채 찾는다 */
+  it('영문 표기로도 찾는다', () => {
+    const bilingual = [{ term: '스레드', short: '뜻', english: 'Thread' }, e('GC')]
+    expect(filterEntries(bilingual, 'thread').map((x) => x.term)).toEqual(['스레드'])
+    expect(filterEntries(bilingual, 'Thre').map((x) => x.term)).toEqual(['스레드'])
+  })
 })
 
 describe('구간 나누기', () => {

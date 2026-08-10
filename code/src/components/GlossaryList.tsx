@@ -96,7 +96,16 @@ export function GlossaryList() {
                * 한다** — 모양을 바꾸면 본문 전체의 용어 링크가 한꺼번에 죽는다.
                */
               <div key={e.term} id={e.term} className="scroll-mt-20 border-b border-line py-4">
-                <dt className="text-[16px] font-bold">{e.term}</dt>
+                <dt className="text-[16px] font-bold">
+                  {e.term}
+                  {/*
+                    영문 병기 — 면접에서 영어로 나오는 용어를 한글 표기와
+                    잇는다. 표시일 뿐 정렬·인덱스·앵커는 term 그대로다.
+                  */}
+                  {e.english && (
+                    <span className="ml-2 text-[13px] font-normal text-faint">{e.english}</span>
+                  )}
+                </dt>
                 <dd className="mt-1 text-[15px] leading-[1.75] text-muted">{e.short}</dd>
               </div>
             ))}

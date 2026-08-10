@@ -54,6 +54,19 @@ describe('용어 사전 검색', () => {
     await userEvent.type(screen.getByRole('searchbox', { name: '용어 검색' }), text)
   }
 
+  /* 병기는 표시일 뿐 — 앵커·정렬은 term 그대로여야 한다 (위 앵커 시험이 지킨다) */
+  it('영문 표기를 병기하고, 영문으로 검색해도 닿는다', async () => {
+    const { container } = render(<GlossaryList />)
+    const dt = container.querySelector('div[id="스레드"] dt')
+    expect(dt?.textContent).toContain('스레드')
+    expect(dt?.textContent).toContain('Thread')
+
+    const user = userEvent.setup()
+    await user.type(screen.getByRole('searchbox'), 'thread')
+    expect(anchors(container)).toContain('스레드')
+    expect(anchors(container)).not.toContain('GC')
+  })
+
   it('용어 이름으로 거른다', async () => {
     const { container } = render(<GlossaryList />)
     await type('스레드')

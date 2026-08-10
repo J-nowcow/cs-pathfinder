@@ -79,10 +79,11 @@ export function sortEntries(entries: readonly GlossaryEntry[]): GlossaryEntry[] 
 }
 
 /**
- * 검색. 용어와 뜻을 함께 본다.
+ * 검색. 용어와 영문 표기와 뜻을 함께 본다.
  *
  * 뜻까지 보는 이유 — 이름을 모르니까 찾는다. "메모리를 회수"로 GC에
- * 닿을 수 있어야 사전 노릇을 한다.
+ * 닿을 수 있어야 사전 노릇을 한다. 영문 표기를 보는 이유도 같다 —
+ * `thread`로 배운 사람은 "스레드"라는 표기를 모른 채 찾는다.
  *
  * 대소문자를 접는다. `tcp`로 쳐서 `TCP`가 안 나오면 고장으로 보인다.
  */
@@ -90,7 +91,10 @@ export function filterEntries(entries: readonly GlossaryEntry[], query: string):
   const q = query.trim().toLowerCase()
   if (!q) return [...entries]
   return entries.filter(
-    (e) => e.term.toLowerCase().includes(q) || e.short.toLowerCase().includes(q),
+    (e) =>
+      e.term.toLowerCase().includes(q) ||
+      e.english?.toLowerCase().includes(q) ||
+      e.short.toLowerCase().includes(q),
   )
 }
 

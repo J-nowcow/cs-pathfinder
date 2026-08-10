@@ -83,14 +83,19 @@ export function Board({ initial }: Props) {
     누르는 자리를 손끝 크기로 키운다.
 
     폰에서 재보니 높이가 34px이었다. 칩이 열세 개 붙어 있는 줄이라 옆 칩이
-    눌리기 쉽다. 보이는 알약 모양은 그대로 두고 위아래 여백만 늘려 44px로
-    만든다 — `py`를 키우고 같은 만큼 `-my`로 당기면 줄 높이는 안 변한다.
+    눌리기 쉽다. 다만 `py`를 키우는 방식은 못 쓴다 — 칩은 배경이 칠해져
+    있어 패딩이 그대로 시각 높이가 되고, "전체"처럼 짧은 라벨은 폭 54에
+    높이 44라 알약이 아니라 원형 덩어리로 보였다.
+
+    그래서 보이는 알약(~32px)은 그대로 두고, 투명한 유사요소로 판정
+    영역만 위아래 6px씩 넓혀 44px를 채운다 — 헤더 아이콘·초성 인덱스의
+    "보이는 크기는 그대로, 누르는 자리만 크게"와 같은 규칙이다.
 
     가로로 늘어선 줄이라 이 방식이 안전하다. 세로로 쌓인 푸터 링크에는 못
     쓴다. 거기서는 위아래 항목의 판정 영역이 서로 겹친다.
   */
   const chip = (active: boolean) =>
-    `shrink-0 -my-[7px] rounded-full px-3.5 py-[12px] text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+    `relative shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
       active
         ? 'bg-accent text-on-accent'
         : 'border border-line bg-raised text-muted hover:border-faint hover:text-ink'
