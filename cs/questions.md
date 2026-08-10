@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 322개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 336개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -44,6 +44,7 @@
 - [읽기만 하는데도 잠금이 걸리는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/a530a092-d500-4353-ba45-4b6b53c852a7)
 - [인덱스를 어느 칸부터 놓아야 하는가?](https://cs-pathfinder.vercel.app/q/78cf3a60-5d0e-4493-8dfc-302528460643)
 - [데이터가 한 대에 안 들어가면 어떻게 나누는가?](https://cs-pathfinder.vercel.app/q/2c52b510-2586-4cbf-9c7d-266338fb2a10)
+- [목록을 나눌 때 번호와 커서는 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/c45a74f0-5788-463f-a246-c52724f98476)
 
 ## 네트워크
 
@@ -88,6 +89,7 @@
 - [같은 망 안에서 상대를 어떻게 찾아가는가?](https://cs-pathfinder.vercel.app/q/6d298223-6d57-4502-8608-4b5f72d101b5)
 - [집 안의 여러 기기가 IP 하나로 어떻게 나가는가?](https://cs-pathfinder.vercel.app/q/2b791b01-ac8a-4437-a509-84cf84aee58b)
 - [브라우저가 캐시를 쓸지 말지 어떻게 정하는가?](https://cs-pathfinder.vercel.app/q/f77e5584-6af6-44d2-95ef-315de61dd583)
+- [응답을 압축하면 무엇을 치르는가?](https://cs-pathfinder.vercel.app/q/86cee3be-7152-48a1-a1c1-b2b8988f1888)
 
 ## 언어 · 런타임
 
@@ -130,6 +132,9 @@
 - [자바의 원시 타입과 래퍼 클래스는 메모리 구조상 어떤 차이가 있는가?](https://cs-pathfinder.vercel.app/q/0cd9828a-f7ac-4d13-8888-93b229216cb3)
 - [같은 문자열 리터럴이 같은 객체인 이유는?](https://cs-pathfinder.vercel.app/q/7fd1672b-21d7-4cea-b50f-3bcf6069088d)
 - [한 줄짜리 코드가 화면을 멈추게 하는 이유는?](https://cs-pathfinder.vercel.app/q/c5737225-78af-4ed8-b661-ff2adb2ff5e5)
+- [한글이 깨져 보이는 이유는?](https://cs-pathfinder.vercel.app/q/8be3f11b-baa4-4f08-9684-87440551b4a3)
+- [0.1을 더했는데 왜 딱 안 떨어지는가?](https://cs-pathfinder.vercel.app/q/31dc816a-bae1-4aa0-9b1b-b4c0bf587aea)
+- [정규식 하나가 서버를 멈추게 하는가?](https://cs-pathfinder.vercel.app/q/5487a800-f726-4b85-ab6d-9369eaf24d83)
 
 ## 운영체제
 
@@ -170,6 +175,8 @@
 - [파일 디스크립터 3은 무엇을 가리키는가?](https://cs-pathfinder.vercel.app/q/9e94da0d-7690-47ad-82f6-beb533f0aa5e)
 - [조건문 하나가 성능을 좌우하는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/09f14dd1-9ffd-4f9e-9642-69b04f2df7c8)
 - [읽은 파일이 두 번째부터 빨라지는 이유는?](https://cs-pathfinder.vercel.app/q/93b1c472-c606-4045-9b0d-b23e50531d81)
+- [큰 파일을 통째로 읽으면 무엇이 문제인가?](https://cs-pathfinder.vercel.app/q/3fa7893e-1d02-41ba-9ec8-a8fefe1e6445)
+- [프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?](https://cs-pathfinder.vercel.app/q/6ecf2ded-2ca1-47bd-8dc3-e29c3fc198ec)
 
 ## 자료구조 · 알고리즘
 
@@ -209,6 +216,7 @@
 - [@Transactional이 걸리지 않는 경우는?](https://cs-pathfinder.vercel.app/q/7c4fc33e-3e7f-4204-b0ef-5376568ea8d6)
 - [JPA에서 N+1 쿼리는 왜 생기고 무엇으로 막는가?](https://cs-pathfinder.vercel.app/q/2ac697dd-fb59-4aff-b357-5f9d90a01b56)
 - [스프링 빈이 싱글톤인 것이 언제 문제가 되는가?](https://cs-pathfinder.vercel.app/q/3c2a28ea-207a-4401-9cca-3b7a272de960)
+- [스프링 AOP의 프록시 자기 호출 시 무엇이 문제인가?](https://cs-pathfinder.vercel.app/q/77772f02-fcc0-4bd7-b51d-9abd0e553506) — 2026-08-11
 - [생성자 주입이 기본 선택인 이유는?](https://cs-pathfinder.vercel.app/q/153ee4b0-df68-400e-9a05-d10b23cf4fbe)
 - [빈 초기화 로직은 어느 시점에 실행해야 하는가?](https://cs-pathfinder.vercel.app/q/412ece4d-926e-4e50-a424-d6938987089b)
 - [내부 메서드 호출에 부가기능이 빠지는 이유는?](https://cs-pathfinder.vercel.app/q/c896600d-ad6d-426d-b790-22cc223e1543)
@@ -263,6 +271,8 @@
 - [보내는 쪽이 받는 쪽보다 빠르면 무엇이 터지는가?](https://cs-pathfinder.vercel.app/q/6a012a74-5bb6-47f2-880f-e8d75576dc28)
 - [단계마다 타임아웃을 5초씩 주면 무엇이 잘못되는가?](https://cs-pathfinder.vercel.app/q/01adb8f9-173d-458d-b58c-40a69553aa92)
 - [남의 서버에 일이 생긴 것을 어떻게 아는가?](https://cs-pathfinder.vercel.app/q/81f81144-b784-453c-99a2-b0ffd6ee95cf)
+- [서버마다 시계가 다르면 무엇이 깨지는가?](https://cs-pathfinder.vercel.app/q/c08c3c2d-6035-4b02-bec3-560c5e4ce85b)
+- [메시지 형식을 바꾸면 옛 소비자는 어떻게 되는가?](https://cs-pathfinder.vercel.app/q/37c38eb6-ab27-41f9-8827-70edbf2c741a)
 
 ## 프론트엔드
 
@@ -300,6 +310,7 @@
 - [브라우저가 요청을 미리 한 번 더 보내는 이유는?](https://cs-pathfinder.vercel.app/q/967090c2-5cca-4237-9c42-bf522d7f530e)
 - [스타일을 바꿨을 뿐인데 왜 느려지는가?](https://cs-pathfinder.vercel.app/q/d32cc10b-eadc-4b30-9939-57447d055fff)
 - [화면이 안 바뀌는데 값은 바뀌어 있는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/11d2c118-26e3-4110-ba9a-85c30187173f)
+- [브라우저는 화면을 어떤 순서로 그리는가?](https://cs-pathfinder.vercel.app/q/74f64264-fecc-4cbc-9fa0-a595ac13a012)
 
 ## 인프라 · 보안
 
@@ -324,6 +335,9 @@
 - [HSTS는 무엇을 막는가?](https://cs-pathfinder.vercel.app/q/0ad35cb0-8445-4a8e-96e7-6d306bcd8daf)
 - [세션 하이재킹은 왜 성립하는가?](https://cs-pathfinder.vercel.app/q/2f29dc53-83aa-497d-979d-62e5ef2a8f98)
 - [권한은 왜 최소로 주는가?](https://cs-pathfinder.vercel.app/q/470bff7f-f9ad-41ef-b986-9a3e8a710b1a)
+- [인코딩과 암호화와 해싱은 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/179b5c31-2873-4831-b21a-b30c7bfbed07)
+- [무작위 값은 어디서 만들어야 안전한가?](https://cs-pathfinder.vercel.app/q/bdc03c03-fa02-46ae-aaa3-c35f96281650)
+- [사용자 입력을 왜 전부 의심해야 하는가?](https://cs-pathfinder.vercel.app/q/a0783c56-8cdc-49e2-a270-707fc6e540a4)
 
 ## 모바일
 
