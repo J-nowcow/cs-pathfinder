@@ -1,4 +1,6 @@
 import { ensureSeeded } from '@/lib/db/bootstrap'
+import { webSiteJsonLd, serializeJsonLd } from '@/lib/seo/jsonld'
+import { siteUrl } from '@/lib/site'
 import { listRoots, countRoots } from '@/lib/db/roots'
 import { listTrees, BOARD_PAGE_SIZE } from '@/lib/db/trees'
 import { getTodayTree } from '@/lib/daily/today'
@@ -83,8 +85,18 @@ export default async function HomePage() {
   // 목록이 아니라 중복으로 읽힌다
   const rest = roots.filter((r) => r.id !== feature?.nodeId)
 
+  const jsonLd = webSiteJsonLd({
+    name: 'CS 길라잡이',
+    url: siteUrl().origin,
+    description: '하루에 질문 하나. 꼬리에 꼬리를 무는 CS 면접 공부.',
+  })
+
   return (
     <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
       <header className="relative mb-10 overflow-hidden sm:mb-12">
         <HeroBackdrop />
         <h1 className="relative text-[30px] font-extrabold leading-[1.32] tracking-[-0.025em] sm:text-[34px]">

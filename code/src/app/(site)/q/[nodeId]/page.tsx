@@ -6,6 +6,8 @@ import { socialMeta } from '@/lib/site'
 import { headers } from 'next/headers'
 import { getQuota } from '@/lib/quota'
 import { quotaKeyFromHeaders, anonDailyLimit } from '@/lib/quota/key'
+import { qaPageJsonLd, serializeJsonLd } from '@/lib/seo/jsonld'
+import { siteUrl } from '@/lib/site'
 import { ReadingView, type ReadingNode } from '@/components/ReadingView'
 
 export const dynamic = 'force-dynamic'
@@ -76,5 +78,23 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
     related: node.related ?? [],
   }
 
-  return <ReadingView initialNode={initial} initialQuota={{ used, limit }} />
+  /*
+   * 크롤러에게 이 페이지가 질문과 답임을 형식으로 알린다. 주소는 짧은
+   * 번호 주소를 정본으로 준다 — sitemap이 알리는 주소와 같아야 한다.
+   */
+  const jsonLd = qaPageJsonLd({
+    question: node.question,
+    body: node.body,
+    url: `${siteUrl().origin}/q/${node.number ?? node.id}`,
+  })
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      <ReadingView initialNode={initial} initialQuota={{ used, limit }} />
+    </>
+  )
 }

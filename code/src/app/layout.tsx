@@ -29,6 +29,14 @@ export const metadata: Metadata = {
    * `/rss.xml`을 직접 알고 쳐야 한다 — 대부분 그러지 않는다.
    */
   alternates: { types: { 'application/rss+xml': '/rss.xml' } },
+  /*
+   * Search Console 소유권 인증. 값은 콘솔이 발급한다 — 코드에 박으면
+   * 저장소가 공개라 상관은 없지만, 프로젝트 밖 값이라 env로 받는다.
+   * env가 없으면 태그 자체가 안 나간다.
+   */
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
