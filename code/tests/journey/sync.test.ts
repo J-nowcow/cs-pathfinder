@@ -129,3 +129,33 @@ describe('syncForUser', () => {
     expect(window.sessionStorage.getItem(SYNC_MARKER_KEY)).toBeNull()
   })
 })
+
+describe('보내기 전 정화 (S4)', () => {
+  it('미아 부모가 있는 옛 여정도 정화되어 올라간다 — 정화를 지우면 400 무한 실패로 돌아간다', async () => {
+    // 부모가 잘려 나간 발자국 — 옛 버전이 남긴 모양 그대로
+    window.localStorage.setItem(
+      JOURNEY_STORAGE_KEY,
+      JSON.stringify({
+        version: 1,
+        occurrences: [
+          { id: 'x', nodeId: '44444444-4444-4444-4444-444444444444', parentId: 'ghost', question: 'X?', category: '망' },
+        ],
+        currentId: 'x',
+      }),
+    )
+
+    let sentBody: { occurrences: Array<{ parent_id: string | null }> } | null = null
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (input, init) => {
+      const url = String(input)
+      if (url.includes('/api/journey/merge')) {
+        sentBody = JSON.parse(String(init?.body))
+        return okJson({ occurrences: [], current_id: null })
+      }
+      return okJson({ days: {} })
+    })
+
+    await syncForUser('u1')
+    expect(sentBody).not.toBeNull()
+    expect(sentBody!.occurrences[0].parent_id).toBeNull()
+  })
+})

@@ -24,6 +24,45 @@ export function pathKeyOf(state: JourneyState, occurrenceId: string): string {
 }
 
 /**
+ * 서버에 보내기 전에 손상을 고친다.
+ *
+ * 옛 버전이 저장한 여정에는 부모가 잘려 나간 발자국·중복 id가 남아 있을 수
+ * 있다. 서버는 그런 forest를 거부하므로(invalid_forest 400) 고치지 않으면
+ * **그 사용자는 동기화가 영영 안 된다** — 실제 운영에서 관찰된 사례다.
+ *
+ * 규칙은 하나다: **앞서 등장한 발자국만 부모로 인정한다.** 저장 불변식
+ * ("부모가 자식보다 앞")과 같은 기준이라, 미아 부모·순서 위반·순환이
+ * 전부 한 규칙으로 정리되고 결과는 항상 유효한 숲이다. 지우지 않고
+ * 뿌리로 승격한다 — enterAsRoot와 같은 판단이다. 숲이어도 된다.
+ */
+export function sanitizeForest(state: JourneyState): JourneyState {
+  const seen = new Set<string>()
+  const out: Occurrence[] = []
+  let changed = false
+
+  for (const o of state.occurrences) {
+    if (seen.has(o.id)) {
+      changed = true
+      continue
+    }
+    // 자기 id를 등록하기 **전에** 부모를 검사한다 — 자기참조(o.parentId === o.id)도
+    // "앞서 등장한 부모가 아니다"로 걸려 뿌리로 승격된다
+    const parentOk = o.parentId === null || seen.has(o.parentId)
+    seen.add(o.id)
+    if (!parentOk) {
+      changed = true
+      out.push({ ...o, parentId: null })
+    } else {
+      out.push(o)
+    }
+  }
+
+  if (!changed) return state
+  const currentId = state.currentId && seen.has(state.currentId) ? state.currentId : null
+  return { occurrences: out, currentId }
+}
+
+/**
  * 서버 세트(position 순 = 부모 선행)를 먼저 깔고, 로컬 전용만 뒤에 잇는다.
  *
  * 같은 키가 양쪽에 있으면 **서버 id를 남긴다** — 다음 동기화 때 같은

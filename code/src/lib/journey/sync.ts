@@ -1,5 +1,5 @@
 import { loadJourney, saveJourney } from '@/lib/journey/storage'
-import { mergeJourney } from '@/lib/journey/merge'
+import { mergeJourney, sanitizeForest } from '@/lib/journey/merge'
 import { EMPTY_JOURNEY, type JourneyState, type Occurrence } from '@/lib/journey/types'
 import { loadStreak, saveStreak } from '@/lib/streak/client'
 import { mergeStreak } from '@/lib/streak/merge'
@@ -78,7 +78,12 @@ type WireOccurrence = {
 type WireJourney = { occurrences: WireOccurrence[]; current_id: string | null }
 
 async function syncJourney(): Promise<boolean> {
-  const local = loadJourney() ?? EMPTY_JOURNEY
+  /*
+   * 보내기 전에 정화한다. 옛 버전이 저장한 여정에는 미아 부모·중복 id가
+   * 남아 있을 수 있고, 서버는 그런 forest를 400으로 거부한다 — 정화 없이는
+   * 그 사용자만 동기화가 영영 실패한다 (실제 운영에서 관찰된 사례).
+   */
+  const local = sanitizeForest(loadJourney() ?? EMPTY_JOURNEY)
 
   let res: Response
   try {

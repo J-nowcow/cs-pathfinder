@@ -60,8 +60,11 @@ export async function POST(request: Request): Promise<Response> {
 
   switch (outcome.kind) {
     case 'invalid_forest':
+      // Vercel 로그에서 400의 사유를 볼 수 있어야 한다 — 응답 본문은 로그에 안 남는다
+      console.warn(`[journey/merge] invalid_forest: ${outcome.reason} (user=${userId})`)
       return json({ error: 'invalid_forest', detail: outcome.reason }, 400)
     case 'unknown_node':
+      console.warn(`[journey/merge] unknown_node (user=${userId})`)
       return json({ error: 'unknown_node' }, 400)
     case 'ok':
       return json(

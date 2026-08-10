@@ -103,3 +103,58 @@ describe('mergeJourney', () => {
     expect(out.occurrences.filter((o) => o.nodeId === 'node-B')).toHaveLength(2)
   })
 })
+
+describe('sanitizeForest — 옛 데이터의 손상을 보내기 전에 고친다', () => {
+  /**
+   * 실전 400의 재현. 옛 버전이 저장한 여정에는 부모가 잘려 나간 발자국이
+   * 남아 있을 수 있다 — 서버는 그런 forest를 거부하므로(invalid_forest)
+   * 동기화가 영영 안 된다. 지우면 기록을 잃으니 뿌리로 승격한다
+   * (enterAsRoot와 같은 판단: 숲이어도 된다).
+   */
+  it('부모가 없는 발자국은 뿌리로 승격된다', async () => {
+    const { sanitizeForest } = await import('@/lib/journey/merge')
+    const out = sanitizeForest({
+      occurrences: [
+        { id: 'a', nodeId: 'node-A', parentId: 'ghost', question: '', category: '' },
+        { id: 'b', nodeId: 'node-B', parentId: 'a', question: '', category: '' },
+      ],
+      currentId: 'b',
+    })
+    expect(out.occurrences[0].parentId).toBeNull()
+    expect(out.occurrences[1].parentId).toBe('a')
+    expect(out.currentId).toBe('b')
+  })
+
+  it('중복 id는 첫 것만 남는다', async () => {
+    const { sanitizeForest } = await import('@/lib/journey/merge')
+    const out = sanitizeForest({
+      occurrences: [
+        { id: 'a', nodeId: 'node-A', parentId: null, question: '', category: '' },
+        { id: 'a', nodeId: 'node-B', parentId: null, question: '', category: '' },
+      ],
+      currentId: 'a',
+    })
+    expect(out.occurrences).toHaveLength(1)
+    expect(out.occurrences[0].nodeId).toBe('node-A')
+  })
+
+  it('뒤에 있는 부모를 가리키면(순서 위반·순환) 뿌리로 승격된다', async () => {
+    const { sanitizeForest } = await import('@/lib/journey/merge')
+    const out = sanitizeForest({
+      occurrences: [
+        { id: 'a', nodeId: 'node-A', parentId: 'b', question: '', category: '' },
+        { id: 'b', nodeId: 'node-B', parentId: 'a', question: '', category: '' },
+      ],
+      currentId: null,
+    })
+    expect(out.occurrences[0].parentId).toBeNull()
+    // b는 a가 앞에 있으므로 그대로 산다
+    expect(out.occurrences[1].parentId).toBe('a')
+  })
+
+  it('멀쩡한 forest는 그대로 통과한다', async () => {
+    const { sanitizeForest } = await import('@/lib/journey/merge')
+    const local = twoNodeLocal()
+    expect(sanitizeForest(local)).toEqual(local)
+  })
+})
