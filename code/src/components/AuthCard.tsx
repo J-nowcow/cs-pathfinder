@@ -30,7 +30,7 @@ export function AuthCard() {
         <button
           type="button"
           onClick={() => authClient.signOut()}
-          className="mt-3 rounded-lg border border-line px-3 py-1.5 text-sm text-muted transition-colors hover:text-ink"
+          className="mt-3 min-h-11 rounded-lg border border-line px-4 py-1.5 text-sm text-muted transition-colors hover:text-ink"
         >
           로그아웃
         </button>
@@ -49,7 +49,7 @@ export function AuthCard() {
       <button
         type="button"
         onClick={() => authClient.signIn.social({ provider: 'google', callbackURL: '/me' })}
-        className="mt-3 rounded-lg border border-line px-3 py-1.5 text-sm font-medium transition-colors hover:bg-line/40"
+        className="mt-3 min-h-11 rounded-lg border border-line px-4 py-1.5 text-sm font-medium transition-colors hover:bg-line/40"
       >
         Google로 로그인
       </button>
