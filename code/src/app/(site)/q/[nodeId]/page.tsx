@@ -29,7 +29,7 @@ export async function generateMetadata({
   const node = await loadNode(nodeId)
 
   // 접미는 layout의 title template이 붙인다. 여기서 또 붙이면 두 번 나온다.
-  if (!node) return { title: '없는 질문이에요' }
+  if (!node) return { title: '없는 질문입니다' }
 
   // 해설 첫 문단이 결론이라 미리보기 두 번째 줄로 알맞다
   const lead = node.body.split('\n\n')[0]?.slice(0, 140) ?? ''

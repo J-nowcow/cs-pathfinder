@@ -45,7 +45,7 @@ export async function generateMetadata({
   const tree = await load(slug)
 
   // 접미는 layout의 title template이 붙인다. 여기서 또 붙이면 두 번 나온다
-  if (!tree) return { title: '없는 링크예요' }
+  if (!tree) return { title: '없는 링크입니다' }
 
   const description = tree.summary || `${tree.category} 질문 ${tree.nodes.length}개`
 
@@ -117,10 +117,10 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
           누군가 판 자리에서 바로 이어 팔 수 있어야 유입이 사용으로 바뀐다 */}
       <section className="mt-12 rounded-lg border border-line bg-raised p-6 sm:p-7">
         <h2 className="text-[17px] font-semibold leading-[1.45] tracking-[-0.015em] text-ink">
-          여기서부터는 직접 파보실래요?
+          여기서부터는 직접 파보시겠습니까?
         </h2>
         <p className="mt-2 text-[14px] leading-[1.7] text-muted">
-          같은 질문에서 출발해도 어디로 갈지는 매번 달라요. 판 만큼 지도가 따로 그려지고요.
+          같은 질문에서 출발해도 어디로 갈지는 매번 다릅니다. 판 만큼 지도가 따로 그려집니다.
         </p>
 
         <div className="mt-5 flex flex-wrap gap-2.5">

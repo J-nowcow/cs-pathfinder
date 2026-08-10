@@ -725,7 +725,7 @@ export function Sheet({
         )}
         {failed && (
           <p className="text-[14px] leading-[1.75] text-muted">
-            해설을 못 불러왔어요. 아래에서 열어보세요.
+            해설을 불러오지 못했습니다. 아래에서 열어 보세요.
           </p>
         )}
         {body !== null && (
@@ -769,7 +769,7 @@ export function Sheet({
                     */}
                     {l.id === cameFrom && (
                       <span className="mb-0.5 block text-[11px] font-medium text-faint">
-                        ← 방금 여기서 왔어요
+                        ← 방금 여기서 왔습니다
                       </span>
                     )}
                     <span className="block text-[13px] leading-[1.5]">{l.question}</span>

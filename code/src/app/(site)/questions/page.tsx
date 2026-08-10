@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = socialMeta({
   title: '카테고리별 질문',
-  description: '지금까지 올라온 CS 질문을 카테고리로 묶어서 본다.',
+  description: '지금까지 올라온 CS 질문을 카테고리로 묶어서 봅니다.',
 })
 
 /**
@@ -97,10 +97,10 @@ export default async function QuestionsPage({
             {activeTag && <strong className="text-ink">{activeTag}</strong>}
             {activeTag && activeLevel && ' · '}
             {activeLevel && <strong className="text-ink">{activeLevel}</strong>} 질문{' '}
-            {filtered.length}개예요.
+            {filtered.length}개입니다.
           </>
         ) : (
-          <>지금까지 올라온 질문 {roots.length}개. 궁금한 쪽부터 파고들면 돼요.</>
+          <>지금까지 올라온 질문 {roots.length}개. 궁금한 쪽부터 파고들면 됩니다.</>
         )}
       </p>
 
@@ -223,7 +223,7 @@ export default async function QuestionsPage({
 
       {grouped.length === 0 && (
         <div className="mt-12 rounded-lg border border-dashed border-line px-6 py-14 text-center">
-          <p className="text-[15px] text-muted">아직 올라온 질문이 없어요.</p>
+          <p className="text-[15px] text-muted">아직 올라온 질문이 없습니다.</p>
         </div>
       )}
     </main>

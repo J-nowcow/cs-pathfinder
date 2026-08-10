@@ -59,17 +59,6 @@ export function needsEu(word: string): boolean {
 }
 
 /**
- * `다` 앞에 `이`가 필요한가.
- *
- * `주문다`가 아니라 `주문이다`다. 낭독기가 읽는 문장이라 눈에 안 띄는데,
- * 소리로 들으면 바로 걸린다. 실제로 브라우저에서 듣기 전까지 못 봤다.
- */
-export function needsI(word: string): boolean {
-  const jong = jongOf(word)
-  return jong !== null && jong !== 0
-}
-
-/**
  * 오가는 것 — 기둥과 화살표.
  *
  * `flow` 안에 두 모양이 섞여 있다. `A→B`와 `B→A`가 둘 다 있는 **왕복**은
@@ -225,7 +214,7 @@ export function ChainDiagram({ steps }: { steps: FlowStep[] }) {
                   <span className="h-0 w-0 border-x-[4px] border-t-[6px] border-x-transparent border-t-accent" />
                 </div>
                 <p className="min-w-0 flex-1 py-1.5 text-[13px] leading-[1.55] text-muted">
-                  <span className="sr-only">{`그다음은 ${nodes[i]}${needsI(nodes[i]) ? '이다' : '다'}. `}</span>
+                  <span className="sr-only">{`그다음은 ${nodes[i]}입니다. `}</span>
                   {steps[i - 1].label.length > 0 ? (
                     <Inline text={steps[i - 1].label} />
                   ) : (
@@ -367,7 +356,7 @@ export function StateDiagram({ steps }: { steps: FlowStep[] }) {
                     <div className="min-w-0 flex-1">
                       <p className="text-[13px] font-medium text-accent">
                         {s.to}
-                        {back && <span className="sr-only"> (앞의 상태로 돌아간다)</span>}
+                        {back && <span className="sr-only"> (앞의 상태로 돌아갑니다)</span>}
                       </p>
                       {s.label.length > 0 && (
                         <p className="mt-0.5 text-[15px] leading-[1.6] text-muted">
@@ -488,7 +477,7 @@ export function MemoryDiagram({ areas }: { areas: MemoryArea[] }) {
                 <span className="shrink-0 text-[13px] text-accent">
                   <span aria-hidden>{a.grow === 'down' ? '↓' : '↑'}</span>
                   <span className="sr-only">
-                    {a.grow === 'down' ? '아래로 자란다' : '위로 자란다'}
+                    {a.grow === 'down' ? '아래로 자랍니다' : '위로 자랍니다'}
                   </span>
                 </span>
               )}
@@ -568,7 +557,7 @@ export function TimelineDiagram({ rows }: { rows: TimelineRow[] }) {
                       눈으로 보는 사람만 뜻을 받고 듣는 사람은 못 받는다.
                       글자로 남긴다.
                     */
-                    <span className="sr-only">아무것도 하지 않는다</span>
+                    <span className="sr-only">아무것도 하지 않습니다</span>
                   )}
                 </td>
               ))}

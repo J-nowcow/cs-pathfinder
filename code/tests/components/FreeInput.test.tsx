@@ -30,12 +30,12 @@ describe('FreeInput — 남은 횟수', () => {
   it('replaces the count with a reason when spent', () => {
     render(<FreeInput {...base} quotaExceeded remaining={0} />)
     expect(screen.queryByText(/남음/)).toBeNull()
-    expect(screen.getByText(/오늘 몫은 다 쓰셨어요/)).toBeTruthy()
+    expect(screen.getByText(/오늘 몫은 다 쓰셨습니다/)).toBeTruthy()
   })
 
   it('keeps the privacy notice while there is room left', () => {
     render(<FreeInput {...base} />)
-    expect(screen.getByText(/이름이나 연락처는 넣지 말아주세요/)).toBeTruthy()
+    expect(screen.getByText(/이름이나 연락처는 넣지 말아 주세요/)).toBeTruthy()
   })
 })
 

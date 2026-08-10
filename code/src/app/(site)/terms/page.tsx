@@ -34,21 +34,21 @@ export default function TermsPage() {
     <main className="mx-auto max-w-[680px] px-5 py-10">
       <h1 className="text-[24px] font-bold leading-[1.35]">이용약관</h1>
       <p className="mt-3 text-[15px] leading-[1.75] text-muted">
-        CS 길라잡이(이하 &lsquo;서비스&rsquo;)를 쓰실 때의 약속이다. 짧다 — 지킬 수 있는
-        것만 적었기 때문이다.
+        CS 길라잡이(이하 &lsquo;서비스&rsquo;)를 쓰실 때의 약속입니다. 짧습니다 — 지킬 수 있는
+        것만 적었기 때문입니다.
       </p>
       <p className="mt-2 text-[13px] text-faint">사실과 대조한 날: {REVIEWED}</p>
 
       <Section title="1. 이 서비스는 무엇인가">
         <p>
-          CS 면접 질문과 해설을 읽고, 꼬리질문으로 파고드는 무료 학습 서비스다. 가입 없이
-          쓸 수 있고, 지금은 계정 기능이 없다. 개인이 만들어 운영한다.
+          CS 면접 질문과 해설을 읽고, 꼬리질문으로 파고드는 무료 학습 서비스입니다. 가입 없이
+          쓸 수 있고, 지금은 계정 기능이 없습니다. 개인이 만들어 운영합니다.
         </p>
       </Section>
 
       <Section title="2. 해설의 정확성 — 가장 중요한 조항">
         <p>
-          <strong className="text-ink">해설 초안은 AI가 쓰고, 틀릴 수 있다.</strong> 얼마나
+          <strong className="text-ink">해설 초안은 AI가 쓰고, 틀릴 수 있습니다.</strong> 얼마나
           틀리는지 재서{' '}
           <a
             className="underline decoration-dotted underline-offset-2"
@@ -56,21 +56,21 @@ export default function TermsPage() {
           >
             공개된 기록
           </a>
-          으로 남기고 있지만, 오류가 0이라고 약속하지 않는다.
+          으로 남기고 있지만, 오류가 0이라고 약속하지 않습니다.
         </p>
         <p>
-          면접에서 하는 답변의 책임은 답한 사람에게 있다. 이 서비스는 학습을 돕는 참고
-          자료이지, 정답을 보증하는 교재가 아니다. 틀린 곳을 찾으면 화면 위{' '}
-          <strong className="text-ink">문의</strong>로 알려 달라 — 가장 반기는 기여다.
+          면접에서 하는 답변의 책임은 답한 사람에게 있습니다. 이 서비스는 학습을 돕는 참고
+          자료이지, 정답을 보증하는 교재가 아닙니다. 틀린 곳을 찾으면 화면 위{' '}
+          <strong className="text-ink">문의</strong>로 알려 주시기 바랍니다 — 가장 반기는 기여입니다.
         </p>
       </Section>
 
       <Section title="3. 직접 물어보기에 적는 것">
         <ul className="ml-4 list-disc space-y-2">
-          <li>적은 내용은 해설을 만드는 AI에 전달되고, AI 학습에 쓰일 수 있다. 입력 칸에도 같은 안내가 있다.</li>
-          <li>이름·연락처 같은 개인정보는 적지 말라. 자동 검사가 막기도 하지만 완전하지 않다.</li>
-          <li>CS 학습과 무관한 요청(코드 대필·번역·잡담)은 거절된다.</li>
-          <li>하루 사용 한도가 있다. 남은 횟수는 입력 칸 옆에 보인다.</li>
+          <li>적은 내용은 해설을 만드는 AI에 전달되고, AI 학습에 쓰일 수 있습니다. 입력 칸에도 같은 안내가 있습니다.</li>
+          <li>이름·연락처 같은 개인정보는 적지 마시기 바랍니다. 자동 검사가 막기도 하지만 완전하지 않습니다.</li>
+          <li>CS 학습과 무관한 요청(코드 대필·번역·잡담)은 거절됩니다.</li>
+          <li>하루 사용 한도가 있습니다. 남은 횟수는 입력 칸 옆에 보입니다.</li>
         </ul>
       </Section>
 
@@ -83,21 +83,21 @@ export default function TermsPage() {
           >
             GitHub 저장소
           </a>
-          에 MIT 라이선스로 공개돼 있다. 자유롭게 쓰되, 출처를 남겨 주면 고맙다.
-          단 해설에 오류가 있을 수 있으므로(2조) 가져다 쓴 결과의 책임은 가져간 쪽에 있다.
+          에 MIT 라이선스로 공개돼 있습니다. 자유롭게 쓰되, 출처를 남겨 주시면 고맙겠습니다.
+          단 해설에 오류가 있을 수 있으므로(2조) 가져다 쓴 결과의 책임은 가져간 쪽에 있습니다.
         </p>
       </Section>
 
       <Section title="5. 서비스의 변경과 중단">
         <p>
-          무료로 운영하는 개인 서비스라 예고 없이 바뀌거나 멈출 수 있다. 대신 콘텐츠는
-          저장소에 남는다 — 서비스가 사라져도 해설은 읽을 수 있다.
+          무료로 운영하는 개인 서비스라 예고 없이 바뀌거나 멈출 수 있습니다. 대신 콘텐츠는
+          저장소에 남습니다 — 서비스가 사라져도 해설은 읽을 수 있습니다.
         </p>
       </Section>
 
       <Section title="6. 하지 말아 달라는 것">
         <ul className="ml-4 list-disc space-y-2">
-          <li>자동화 도구로 과도한 요청을 보내는 것. 하루 한도는 사람 기준이다.</li>
+          <li>자동화 도구로 과도한 요청을 보내는 것. 하루 한도는 사람 기준입니다.</li>
           <li>다른 사람의 개인정보를 입력하는 것.</li>
           <li>서비스를 사칭하거나, 여기서 만든 것을 서비스 공식 자료처럼 배포하는 것.</li>
         </ul>
@@ -113,7 +113,7 @@ export default function TermsPage() {
           <a className="underline decoration-dotted underline-offset-2" href="/privacy">
             개인정보처리방침
           </a>
-          에 따로 있다.
+          에 따로 있습니다.
         </p>
       </Section>
     </main>

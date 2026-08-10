@@ -29,7 +29,7 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-const MARK = '← 방금 여기서 왔어요'
+const MARK = '← 방금 여기서 왔습니다'
 
 /** 링크 하나가 그려진 버튼을 글자로 찾는다 */
 function linkButton(question: string): HTMLElement {

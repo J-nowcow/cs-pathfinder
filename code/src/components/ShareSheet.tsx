@@ -76,7 +76,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
       if (!res.ok) {
         setPhase({
           kind: 'failed',
-          message: body?.detail ?? '링크를 못 만들었어요. 잠시 뒤에 다시 해주세요.',
+          message: body?.detail ?? '링크를 만들지 못했습니다. 잠시 뒤에 다시 시도해 주세요.',
         })
         return
       }
@@ -84,7 +84,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
       setPhase({ kind: 'done', url: new URL(body.url, window.location.origin).toString() })
     } catch {
       // 네트워크가 끊긴 경우다. 서버 사유가 없으니 지어내지 않는다
-      setPhase({ kind: 'failed', message: '연결이 끊겼어요. 잠시 뒤에 다시 해주세요.' })
+      setPhase({ kind: 'failed', message: '연결이 끊겼습니다. 잠시 뒤에 다시 시도해 주세요.' })
     }
   }
 
@@ -136,8 +136,8 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
                   판 걸 공유하기
                 </h2>
                 <p className="mt-2 text-[13px] leading-[1.65] text-muted">
-                  지금까지 판 질문 {journey.occurrences.length}개가 그대로 박제돼요. 나중에 다른
-                  길이 생겨도 이 트리는 안 바뀌고요.
+                  지금까지 판 질문 {journey.occurrences.length}개가 그대로 박제됩니다. 나중에
+                  다른 길이 생겨도 이 트리는 바뀌지 않습니다.
                 </p>
 
                 <label htmlFor="share-title" className="mt-5 block text-[13px] font-medium text-muted">
@@ -153,7 +153,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
                   className="mt-1.5 w-full rounded-md border border-line bg-surface px-3 py-2.5 text-[15px] text-ink outline-none focus:border-accent disabled:opacity-60"
                 />
                 <p className="mt-1.5 text-[12px] text-faint">
-                  비워두면 첫 질문이 제목이 돼요.
+                  비워두면 첫 질문이 제목이 됩니다.
                 </p>
 
                 {phase.kind === 'failed' && (
@@ -210,9 +210,9 @@ function Done({
 
   return (
     <>
-      <h2 className="text-[17px] font-semibold tracking-[-0.015em] text-ink">링크가 생겼어요</h2>
+      <h2 className="text-[17px] font-semibold tracking-[-0.015em] text-ink">링크가 생겼습니다</h2>
       <p className="mt-2 text-[13px] leading-[1.65] text-muted">
-        이 주소를 받은 사람은 판 모양을 그대로 보고, 같은 자리에서 이어 팔 수 있어요.
+        이 주소를 받은 사람은 판 모양을 그대로 보고, 같은 자리에서 이어 팔 수 있습니다.
       </p>
 
       <input
@@ -248,7 +248,7 @@ function Done({
           onClick={onCopy}
           className="rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          {copied ? '복사했어요' : '주소 복사'}
+          {copied ? '복사했습니다' : '주소 복사'}
         </button>
       </div>
 

@@ -93,9 +93,9 @@ export default async function HomePage() {
           CS 공부
         </h1>
         <p className="relative mt-4 max-w-lg text-[15px] leading-[1.72] text-muted">
-          하루에 질문 하나. 어디로 파고들지는 직접 고르면 돼요.
+          하루에 질문 하나. 어디로 파고들지는 직접 고르면 됩니다.
           <br />
-          판 만큼 지도가 그려지고요.
+          판 만큼 지도가 그려집니다.
         </p>
       </header>
 
@@ -110,8 +110,8 @@ export default async function HomePage() {
         <TodayCard feature={feature} />
       ) : (
         <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
-          <p className="text-[15px] text-muted">아직 올라온 질문이 없어요.</p>
-          <p className="mt-2 text-[13px] text-faint">서버를 다시 켜면 예시 질문이 채워져요.</p>
+          <p className="text-[15px] text-muted">아직 올라온 질문이 없습니다.</p>
+          <p className="mt-2 text-[13px] text-faint">서버를 다시 켜면 예시 질문이 채워집니다.</p>
         </div>
       )}
 

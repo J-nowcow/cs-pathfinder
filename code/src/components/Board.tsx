@@ -150,7 +150,7 @@ export function Board({ initial }: Props) {
           </div>
         ) : failed ? (
           <div className="rounded-lg border border-warn/30 bg-warn-soft px-6 py-10 text-center">
-            <p className="text-[15px] text-ink">게시판을 못 불러왔어요.</p>
+            <p className="text-[15px] text-ink">게시판을 불러오지 못했습니다.</p>
             <button
               type="button"
               onClick={() => void fetchPage(sort, category, null)}
@@ -199,20 +199,20 @@ function Empty({ category }: { category: string | null }) {
     <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
       {category ? (
         <>
-          <p className="text-[15px] text-muted">{category} 쪽은 아직 판 사람이 없어요.</p>
+          <p className="text-[15px] text-muted">{category} 쪽은 아직 판 사람이 없습니다.</p>
           <p className="mt-2 text-[13px] text-faint">
-            여기는 사람이 공유한 트리만 걸려요. 질문 자체를 찾는 거라면{' '}
+            여기는 사람이 공유한 트리만 걸립니다. 질문 자체를 찾는 것이라면{' '}
             <Link href="/questions" className="text-accent hover:underline">
               카테고리별 질문
             </Link>
-            에 있어요.
+            에 있습니다.
           </p>
         </>
       ) : (
         <>
-          <p className="text-[15px] text-muted">아직 공유된 트리가 없어요.</p>
+          <p className="text-[15px] text-muted">아직 공유된 트리가 없습니다.</p>
           <p className="mt-2 text-[13px] text-faint">
-            오늘 치 질문을 파고 공유하면 여기가 첫 자리예요.
+            오늘 치 질문을 파고 공유하면 여기가 첫 자리입니다.
           </p>
         </>
       )}

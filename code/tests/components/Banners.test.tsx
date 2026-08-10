@@ -29,14 +29,14 @@ function advance(seconds: number) {
 describe('GeneratingBody', () => {
   it('starts with the short promise', () => {
     render(<GeneratingBody />)
-    expect(screen.getByText(/몇 초만요/)).toBeTruthy()
+    expect(screen.getByText(/몇 초만 기다려/)).toBeTruthy()
   })
 
   it('softens once it takes longer than promised', () => {
     render(<GeneratingBody />)
     advance(9)
-    expect(screen.queryByText(/몇 초만요/)).toBeNull()
-    expect(screen.getByText(/조금 더 걸리고 있어요/)).toBeTruthy()
+    expect(screen.queryByText(/몇 초만 기다려/)).toBeNull()
+    expect(screen.getByText(/조금 더 걸리고 있습니다/)).toBeTruthy()
   })
 
   /** 마지막 문구는 원인을 그대로 말한다. 왜 느린지 알면 기다리기 쉽다 */
@@ -49,7 +49,7 @@ describe('GeneratingBody', () => {
   it('does not skip ahead too early', () => {
     render(<GeneratingBody />)
     advance(5)
-    expect(screen.getByText(/몇 초만요/)).toBeTruthy()
+    expect(screen.getByText(/몇 초만 기다려/)).toBeTruthy()
   })
 
   /** 스크린 리더가 문구 변화를 읽어야 한다 */
@@ -105,7 +105,7 @@ describe('ExpandingNote', () => {
 
   it('처음에는 몇 초만 기다리라고 한다', () => {
     render(<ExpandingNote />)
-    expect(screen.getByRole('status').textContent).toContain('몇 초만요')
+    expect(screen.getByRole('status').textContent).toContain('몇 초만 기다려')
   })
 
   /*
@@ -116,7 +116,7 @@ describe('ExpandingNote', () => {
     render(<ExpandingNote />)
     advance(20)
     const t = screen.getByRole('status').textContent ?? ''
-    expect(t).not.toContain('몇 초만요')
+    expect(t).not.toContain('몇 초만 기다려')
     expect(t).toContain('한도')
   })
 

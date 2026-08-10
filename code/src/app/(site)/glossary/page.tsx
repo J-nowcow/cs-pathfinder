@@ -13,7 +13,7 @@ import { GLOSSARY } from '../../../../data/glossary'
  */
 export const metadata: Metadata = {
   title: '용어 사전',
-  description: '해설에 자주 나오는 CS 용어를 한 문장씩 풀었다.',
+  description: '해설에 자주 나오는 CS 용어를 한 문장씩 풀었습니다.',
 }
 
 export default function GlossaryPage() {
@@ -23,8 +23,8 @@ export default function GlossaryPage() {
     <main className="mx-auto max-w-[680px] px-5 py-10">
       <h1 className="text-[24px] font-bold leading-[1.35]">용어 사전</h1>
       <p className="mt-3 text-[15px] leading-[1.75] text-muted">
-        해설에 자주 나오는 용어를 한 문장씩 풀었다. 해설 본문에서 점선이 밑에 깔린 용어를
-        누르면 여기로 온다.
+        해설에 자주 나오는 용어를 한 문장씩 풀었습니다. 해설 본문에서 점선이 밑에 깔린 용어를
+        누르면 여기로 옵니다.
       </p>
 
       <dl className="mt-8">
@@ -41,8 +41,8 @@ export default function GlossaryPage() {
       </dl>
 
       <p className="mt-8 text-[13px] text-faint">
-        본문 322편에서 5편 이상 등장한 용어만 실었다. 빠졌거나 틀린 것은 GitHub 이슈로
-        알려 달라.
+        본문 322편에서 5편 이상 등장한 용어만 실었습니다. 빠졌거나 틀린 것은 GitHub 이슈로
+        알려 주시기 바랍니다.
       </p>
     </main>
   )

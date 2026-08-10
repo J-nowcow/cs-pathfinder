@@ -55,7 +55,7 @@ export default async function MePage() {
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <h1 className="text-2xl font-semibold">내가 판 자리</h1>
       <p className="mt-2 text-muted">
-        로그인 없이 이 브라우저에 쌓인 기록이다. 지금까지 {rows.length}개 질문이 있다.
+        로그인 없이 이 브라우저에 쌓인 기록입니다. 지금까지 {rows.length}개 질문이 있습니다.
       </p>
 
       <div className="mt-8">
@@ -68,8 +68,8 @@ export default async function MePage() {
       </div>
 
       <p className="mt-10 text-sm text-muted">
-        <Link href="/questions">질문 목록</Link>에서 직접 골라도 된다. 무엇을 저장하는지는{' '}
-        <Link href="/privacy">개인정보처리방침</Link>에 적어 뒀다.
+        <Link href="/questions">질문 목록</Link>에서 직접 골라도 됩니다. 무엇을 저장하는지는{' '}
+        <Link href="/privacy">개인정보처리방침</Link>에 적어 두었습니다.
       </p>
     </main>
   )

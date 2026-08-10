@@ -14,10 +14,10 @@ export default function QuestionNotFound() {
   return (
     <main className="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-5 py-20 sm:px-8">
       <h1 className="text-[24px] font-semibold leading-[1.35] tracking-[-0.02em] text-ink sm:text-[28px]">
-        없는 질문이에요
+        없는 질문입니다
       </h1>
       <p className="mt-3 max-w-md text-[15px] leading-[1.72] text-muted">
-        주소가 잘려서 왔거나 지워진 질문인 것 같아요. 오늘 치 질문부터 파보셔도 좋고요.
+        주소가 잘려서 왔거나 지워진 질문인 것 같습니다. 오늘 치 질문부터 파보셔도 좋습니다.
       </p>
 
       <div className="mt-7">

@@ -11,17 +11,17 @@ import Link from 'next/link'
  * 접미는 layout의 title template이 붙인다.
  */
 export const metadata: Metadata = {
-  title: '없는 주소예요',
+  title: '없는 주소입니다',
 }
 
 export default function NotFound() {
   return (
     <main className="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-5 py-20 sm:px-8">
       <h1 className="text-[24px] font-semibold leading-[1.35] tracking-[-0.02em] text-ink sm:text-[28px]">
-        없는 주소예요
+        없는 주소입니다
       </h1>
       <p className="mt-3 max-w-md text-[15px] leading-[1.72] text-muted">
-        주소가 잘려서 왔을 수도 있어요. 하루에 질문 하나씩 올라오니까 오늘 치부터 보셔도 좋고요.
+        주소가 잘려서 왔을 수도 있습니다. 하루에 질문 하나씩 올라오니 오늘 치부터 보셔도 좋습니다.
       </p>
 
       <div className="mt-7">

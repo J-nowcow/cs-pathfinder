@@ -99,14 +99,14 @@ export async function requestExpand(
       }),
     })
   } catch {
-    return { kind: 'error', message: '연결이 끊겼어요. 다시 시도해 주세요.' }
+    return { kind: 'error', message: '연결이 끊겼습니다. 다시 시도해 주세요.' }
   }
 
   let payload: Record<string, unknown>
   try {
     payload = (await res.json()) as Record<string, unknown>
   } catch {
-    return { kind: 'error', message: '서버 응답을 읽지 못했어요.' }
+    return { kind: 'error', message: '서버 응답을 읽지 못했습니다.' }
   }
 
   if (res.ok) {
@@ -116,7 +116,7 @@ export async function requestExpand(
     }
 
     const node = toNode((payload.node ?? {}) as Record<string, unknown>)
-    if (!node) return { kind: 'error', message: '받은 응답이 비어 있어요.' }
+    if (!node) return { kind: 'error', message: '받은 응답이 비어 있습니다.' }
 
     const quota = (payload.quota ?? {}) as { used?: number; limit?: number }
     return {
@@ -164,9 +164,9 @@ export async function requestExpand(
     }
 
     case 504:
-      return { kind: 'error', message: '생성이 오래 걸리네요. 조금 뒤에 다시 해보세요.' }
+      return { kind: 'error', message: '생성이 오래 걸리고 있습니다. 조금 뒤에 다시 시도해 주세요.' }
 
     default:
-      return { kind: 'error', message: '요청을 처리하지 못했어요.' }
+      return { kind: 'error', message: '요청을 처리하지 못했습니다.' }
   }
 }

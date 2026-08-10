@@ -81,7 +81,7 @@ export function ContactMenu() {
           </a>
 
           <div className="mt-1 border-t border-line pt-2">
-            <p className="px-2 text-[12px] text-faint">메일로 보내도 돼요</p>
+            <p className="px-2 text-[12px] text-faint">메일로 보내도 됩니다</p>
             {/*
               주소를 글자로 둔다.
 

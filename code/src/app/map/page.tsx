@@ -8,7 +8,7 @@ export const revalidate = 0
 
 export const metadata: Metadata = socialMeta({
   title: '질문 지도',
-  description: '지금까지 올라온 CS 질문을 한눈에 본다.',
+  description: '지금까지 올라온 CS 질문을 한눈에 봅니다.',
 })
 
 // React Flow는 무겁다. 지도를 열 때만 받는다

@@ -73,23 +73,23 @@ describe('Prose — 순서 도식', () => {
 
     // 세로 순서만으로 방향이 전해지면 안 된다
     const sr = [...container.querySelectorAll('.sr-only')].map((e) => e.textContent)
-    expect(sr).toContain('그다음은 컴파일러다. ')
-    expect(sr).toContain('그다음은 링커다. ')
+    expect(sr).toContain('그다음은 컴파일러입니다. ')
+    expect(sr).toContain('그다음은 링커입니다. ')
   })
 
   /*
    * 낭독기가 읽는 문장이라 눈으로는 안 걸린다. 소리로 들으면 바로 걸린다 --
    * `주문다`가 아니라 `주문이다`다. 실제 해설에서 넷 중 둘이 틀려 있었다.
    */
-  it('받침이 있는 마디에는 이를 붙인다', () => {
+  it('마디 이름 뒤를 입니다로 잇는다 — 받침 분기가 필요 없다', () => {
     const { container } = render(
       <Prose
         body={[':::flow', '요청 -> 주문: 넘긴다', '주문 -> 결제: 다시 넘긴다', ':::'].join('\n')}
       />,
     )
     const sr = [...container.querySelectorAll('.sr-only')].map((e) => e.textContent)
-    expect(sr).toContain('그다음은 주문이다. ')
-    expect(sr).toContain('그다음은 결제다. ')
+    expect(sr).toContain('그다음은 주문입니다. ')
+    expect(sr).toContain('그다음은 결제입니다. ')
   })
 
   /* 갈라지는 것은 사슬이 아니다. 지금 목록 그대로 둔다 */
@@ -293,12 +293,12 @@ describe('StateDiagram', () => {
    */
   it('되돌아가는 전이를 낭독기에도 알린다', () => {
     render(<StateDiagram steps={steps} />)
-    expect(screen.getAllByText('(앞의 상태로 돌아간다)')).toHaveLength(2)
+    expect(screen.getAllByText('(앞의 상태로 돌아갑니다)')).toHaveLength(2)
   })
 
   it('앞으로만 가는 전이에는 안 붙인다', () => {
     render(<StateDiagram steps={steps.slice(0, 2)} />)
-    expect(screen.queryByText('(앞의 상태로 돌아간다)')).toBeNull()
+    expect(screen.queryByText('(앞의 상태로 돌아갑니다)')).toBeNull()
   })
 
   it('설명이 없어도 그린다', () => {
@@ -339,7 +339,7 @@ describe('Prose — 같은 시간 도식', () => {
     const { container } = render(<Prose body={body} />)
     const empties = [...container.querySelectorAll('tbody .sr-only')].map((e) => e.textContent)
     // A는 2번·4번 칸이, B는 1번·3번 칸이 비어 있다
-    expect(empties.filter((t) => t === '아무것도 하지 않는다').length).toBe(4)
+    expect(empties.filter((t) => t === '아무것도 하지 않습니다').length).toBe(4)
   })
 
   it('찬 칸에는 그 글자를 그대로 쓴다', () => {

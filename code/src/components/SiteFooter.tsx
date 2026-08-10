@@ -105,7 +105,7 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-10 text-[12px] text-faint">
-          하루에 질문 하나. 파고든 만큼 지도가 남아요.
+          하루에 질문 하나. 파고든 만큼 지도가 남습니다.
         </p>
       </div>
     </footer>

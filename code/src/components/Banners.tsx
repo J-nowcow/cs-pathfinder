@@ -33,32 +33,34 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
     <div role="status" className={`rounded-lg border px-4 py-3 text-[14px] leading-[1.6] ${tone}`}>
       {state.kind === 'rejected' && (
         <>
-          <strong className="font-medium">질문으로 받기 어려운 내용이에요.</strong>
+          <strong className="font-medium">질문으로 받기 어려운 내용입니다.</strong>
           <span className="mt-1 block text-muted">{state.reason}</span>
         </>
       )}
 
       {state.kind === 'quota_exceeded' && (
         <>
-          <strong className="font-medium">오늘 몫은 다 쓰셨어요.</strong>
+          <strong className="font-medium">오늘 몫은 다 쓰셨습니다.</strong>
           <span className="mt-1 block text-muted">
-            이미 파인 길로 표시된 추천은 그대로 누를 수 있고요. 자정에 초기화돼요.
+            이미 파인 길로 표시된 추천은 그대로 누를 수 있습니다. 자정에 초기화됩니다.
           </span>
         </>
       )}
 
       {state.kind === 'rate_limited' && (
         <>
-          <strong className="font-medium">잠깐, 요청이 몰렸어요.</strong>
-          <span className="mt-1 block text-muted">{state.retryAfter}초 뒤에 다시 눌러주세요.</span>
+          <strong className="font-medium">잠깐, 요청이 몰렸습니다.</strong>
+          <span className="mt-1 block text-muted">
+            {state.retryAfter}초 뒤에 다시 눌러 주세요.
+          </span>
         </>
       )}
 
       {state.kind === 'gate_unavailable' && (
         <>
-          <strong className="font-medium">지금은 새 질문을 못 받아요.</strong>
+          <strong className="font-medium">지금은 새 질문을 받지 못합니다.</strong>
           <span className="mt-1 block text-muted">
-            이미 파인 길로 표시된 추천은 그대로 쓸 수 있어요.
+            이미 파인 길로 표시된 추천은 그대로 쓸 수 있습니다.
           </span>
         </>
       )}
@@ -66,7 +68,7 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
       {state.kind === 'error' && (
         <div className="flex items-start justify-between gap-4">
           <span>
-            <strong className="font-medium">파고들지 못했어요.</strong>
+            <strong className="font-medium">파고들지 못했습니다.</strong>
             <span className="mt-1 block text-muted">{state.message}</span>
           </span>
           {onRetry && (
@@ -83,8 +85,8 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
 
       {state.kind === 'ancestor_jump' && (
         <>
-          <strong className="font-medium">이미 지나온 질문이에요.</strong>
-          <span className="mt-1 block text-muted">그 자리로 돌아왔어요.</span>
+          <strong className="font-medium">이미 지나온 질문입니다.</strong>
+          <span className="mt-1 block text-muted">그 자리로 돌아왔습니다.</span>
         </>
       )}
     </div>
@@ -103,9 +105,9 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
  * 왜 느린지 아는 편이 기다리기 쉽다.
  */
 const WAITING_COPY: Array<{ after: number; text: string }> = [
-  { after: 0, text: '해설 만드는 중이에요. 몇 초만요.' },
-  { after: 8, text: '조금 더 걸리고 있어요. 그대로 두셔도 돼요.' },
-  { after: 18, text: '오래 걸리네요. 무료 한도에 걸려 다른 모델로 넘어가는 중일 수 있어요.' },
+  { after: 0, text: '해설을 만드는 중입니다. 몇 초만 기다려 주세요.' },
+  { after: 8, text: '조금 더 걸리고 있습니다. 그대로 두셔도 됩니다.' },
+  { after: 18, text: '오래 걸리고 있습니다. 무료 한도에 걸려 다른 모델로 넘어가는 중일 수 있습니다.' },
 ]
 
 /** 기다린 시간에 맞는 문구를 고른다 */
