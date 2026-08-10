@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Grass } from '@/components/Grass'
+import { GrassShare } from '@/components/GrassShare'
 import { grassWeeks, grassSummary, type Cell } from '@/lib/streak/grass'
 import { loadStreak, todayKst } from '@/lib/streak/client'
 import { distinctRead, streakLength, totalRead, emptyStreak } from '@/lib/streak/storage'
@@ -88,6 +89,10 @@ export function MePanel({ all }: { all: Candidate[] }) {
       <section>
         <h2 className="mb-3 text-lg font-semibold">학습 기록</h2>
         <Grass weeks={view.weeks} summary={view.summary} />
+        <GrassShare
+          weeks={view.weeks}
+          stats={{ total: view.total, distinct: view.distinct, streak: view.streak }}
+        />
       </section>
 
       <section>
