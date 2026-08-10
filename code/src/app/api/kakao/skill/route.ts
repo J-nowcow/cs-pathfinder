@@ -44,7 +44,7 @@ function kakaoText(text: string): Response {
          */
         quickReplies: [
           { label: '오늘의 질문', action: 'message', messageText: '오늘의 질문' },
-          { label: '질문 목록 보기', action: 'message', messageText: '도움말' },
+          { label: '질문 목록 보기', action: 'message', messageText: '질문 목록' },
         ],
       },
     }),
@@ -66,6 +66,13 @@ export async function POST(request: Request): Promise<Response> {
   if (!utterance || utterance === '도움말') {
     return kakaoText(
       `CS 길라잡이 봇입니다.\n"오늘의 질문"이라고 보내면 오늘 발행된 질문을, CS 궁금증을 보내면 비슷한 질문의 해설을 찾아 드립니다.\n\n전체 질문 목록: ${SITE}/questions`,
+    )
+  }
+
+  // 바로가기 버튼("질문 목록 보기")이 보내는 발화 — 라벨과 찍히는 말이 같아야 어색하지 않다
+  if (utterance === '질문 목록') {
+    return kakaoText(
+      `전체 질문 목록입니다.\n${SITE}/questions\n\n분야·태그·난이도로 걸러볼 수 있습니다.`,
     )
   }
 
