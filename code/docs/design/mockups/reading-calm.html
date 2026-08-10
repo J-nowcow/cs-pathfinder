@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>reading-calm — 차분한 강조형</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   reading-calm.html — 시안 1 "차분한 강조형"
+
+   한 줄 요지: 글을 카드로 바꾸지 않는다. 읽는 순서에만 손댄다.
+
+   현행(reading-current.html)에서 바꾼 것은 넷뿐이다.
+   ① 첫 문단 = 답. 리드 블록으로 떼어 16px → 18px, 왼쪽 accent 3px 규칙 +
+      accent-soft 바탕.
+   ② 인라인 코드 글자색을 본문 상속(ink)에서 --accent로. 바탕은 그대로.
+   ③ 도식·표의 머리 자리에 accent-soft 그라데이션 띠를 깔아 "여기부터 도식"을
+      말한다. 테두리는 그대로 --line.
+   ④ 문단 사이 리듬. 도식 앞은 벌리고 뒤는 붙인다 — 도식 다음 문단이 그
+      도식의 설명으로 읽히게. 첫 문장 굵게 처리는 하지 않는다(본문 데이터를
+      한 글자도 안 고치는 것이 전제).
+
+   이 시안의 문법은 하나다 — **왼쪽 3px 규칙 + soft 바탕**. 답 블록·핵심
+   정리·주의가 전부 같은 모양이라 새로 배울 것이 없다.
+
+   출처·전제는 reading-current.html과 같다.
+   본문: data/generated-nodes.ts:308 body 그대로.
+   390px 고정, 라이트 테마만.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --surface: #f3f5f6;
+  --raised: #ffffff;
+  --ink: #191c20;
+  --muted: #565d66;
+  --faint: #666d77;
+  --line: #dde1e5;
+  --accent: #0f7a6c;
+  --accent-soft: #e9f4f2;
+  --on-accent: #ffffff;
+  --warn: #a8452f;
+  --warn-soft: #f8ebe7;
+
+  --font-sans: Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+    system-ui, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: #dfe3e7; font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+p, h1, h2, h3, ul, ol, figure, table, form, label { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+button { font: inherit; color: inherit; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.shell { max-width: 430px; margin: 0 auto; padding: 20px 20px 56px; }
+.shell-label { font-size: 12px; line-height: 1.6; color: #4a5058; margin-bottom: 10px; }
+.shell-label b { color: #22262b; font-size: 13px; }
+.phone {
+  width: 390px; margin: 0 auto; background: var(--surface);
+  border: 1px solid #c8ced4; border-radius: 14px; overflow: hidden;
+}
+
+/* ── 헤더 (현행 그대로) ───────────────────────────────────────── */
+.site-header { border-bottom: 1px solid var(--line); background: rgba(243,245,246,.85); }
+.site-nav { display: flex; flex-wrap: nowrap; align-items: center; gap: 2px; white-space: nowrap; padding: 12px 20px; }
+.brand { margin-right: auto; font-size: 14px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+.nav-link { padding: 0 6px; font-size: 12.5px; color: var(--muted); text-decoration: none; border-radius: 8px; }
+.nav-link[aria-current] { font-weight: 500; color: var(--ink); }
+.nav-sep { width: 1px; height: 16px; background: var(--line); margin: 0 4px; }
+.nav-icon { display: grid; place-items: center; width: 36px; height: 28px; color: var(--muted); }
+.nav-contact { font-size: 12.5px; color: var(--muted); padding: 0 4px; }
+
+/* ── 본문 컨테이너 (현행 그대로) ──────────────────────────────── */
+main { padding: 20px 20px 40px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.back { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.meas { font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
+h1 { margin-top: 24px; font-size: 24px; font-weight: 600; line-height: 1.35; letter-spacing: -0.02em; color: var(--ink); }
+.meta { margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 12px; color: var(--faint); }
+.meta .mono { font-family: var(--font-mono); }
+.chip { border: 1px solid var(--line); border-radius: 9999px; padding: 2px 8px; color: var(--muted); text-decoration: none; }
+
+/* ── 해설 본문 ────────────────────────────────────────────────── */
+.prose-body { margin-top: 28px; font-size: 16px; color: var(--ink); }
+
+/* ④ 리듬: 문단 사이를 1.15em → 1.3em로 살짝 벌린다 */
+.prose-body p { margin-bottom: 1.3em; line-height: 1.8; }
+.prose-body p:last-child { margin-bottom: 0; }
+
+/* ② 코드 — 바탕은 그대로, 글자만 accent로 */
+.prose-body code {
+  font-family: var(--font-mono); font-size: 0.88em; background: var(--accent-soft);
+  color: var(--accent); padding: 0.1em 0.36em; border-radius: 3px;
+}
+.prose-body strong { font-weight: 600; }
+.prose-body figure p { margin-bottom: 0; line-height: inherit; }
+.term { color: inherit; text-decoration: underline dotted; text-underline-offset: 2px; border-radius: 2px; }
+
+/* ① 답 블록 ─ 첫 문단을 리드로 */
+.lead {
+  font-size: 18px; line-height: 1.7; color: var(--ink);
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 18px;
+  margin-bottom: 28px;
+}
+.lead .term { text-decoration-color: var(--accent); }
+
+/* ④ 리듬: 도식 앞은 28px 벌리고 뒤는 18px로 붙인다 */
+.prose-body figure { margin: 28px 0 18px; }
+
+/* ── ③ 도식: timeline + accent-soft 그라데이션 머리띠 ─────────── */
+.fig-timeline {
+  overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--raised);
+}
+.tl { width: 100%; border-collapse: collapse; text-align: left; }
+.tl thead th {
+  padding: 10px 12px; font-size: 12px; font-weight: 500; color: var(--muted);
+  background: linear-gradient(180deg, var(--accent-soft) 0%, #f6fbfa 100%);
+  border-bottom: 1px solid var(--line);
+}
+.tl th.tl-num { width: 32px; }
+.tl tbody tr { border-bottom: 1px solid var(--line); }
+.tl tbody tr:last-child { border-bottom: 0; }
+.tl td { padding: 8px 12px; vertical-align: top; }
+.tl td.tl-num { font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
+.slot {
+  display: inline-block; word-break: keep-all; border-radius: 4px;
+  background: var(--accent-soft); padding: 4px 8px; font-size: 13px;
+  line-height: 1.45; color: var(--ink);
+}
+
+/* ── ③ 비교표: 접힌 카드마다 머리띠 ──────────────────────────── */
+.rtable {
+  width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--raised); text-align: left;
+}
+.rtable, .rtable tbody, .rtable tr, .rtable td { display: block; }
+.rtable thead { display: none; }
+.rtable tr { padding: 14px 16px; }
+.rtable tr + tr { border-top: 1px solid var(--line); }
+.rtable td { padding: 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
+/* 기준 칸이 카드 제목이다. 폭을 통째로 쓰는 그라데이션 띠로 올린다 */
+.rtable td:first-child {
+  margin: -14px -16px 10px; padding: 8px 16px;
+  font-weight: 500; color: var(--ink); font-size: 14px;
+  background: linear-gradient(90deg, var(--accent-soft) 0%, rgba(233,244,242,0) 90%);
+  border-bottom: 1px solid var(--line);
+}
+.rtable td + td {
+  display: grid; grid-template-columns: minmax(3.5rem, max-content) 1fr;
+  gap: 0.75rem; margin-top: 0.375rem;
+}
+.rtable td + td::before { content: attr(data-label); color: var(--faint); font-size: 12px; line-height: 1.6; }
+
+/* ── 더 파고들기 (현행 그대로) ───────────────────────────────── */
+.dig { margin-top: 32px; }
+.dig h2 { margin-bottom: 12px; font-size: 13px; font-weight: 500; color: var(--muted); }
+.sugg li + li { margin-top: 8px; }
+.sugg button {
+  display: flex; width: 100%; align-items: flex-start; gap: 12px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--raised);
+  padding: 14px 16px; text-align: left; cursor: pointer;
+}
+.dot { margin-top: 7px; width: 6px; height: 6px; flex-shrink: 0; border-radius: 9999px; background: var(--line); }
+.dot.on { background: var(--accent); }
+.sugg .text { min-width: 0; flex: 1; }
+.sugg .text > span { display: block; font-size: 15px; line-height: 1.55; color: var(--ink); }
+.sugg .resolved { margin-top: 4px; font-size: 12px; color: var(--accent); }
+.arrow { margin-top: 2px; flex-shrink: 0; font-size: 13px; color: var(--faint); }
+
+.free { margin-top: 24px; }
+.free > label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); }
+.free-box { margin-top: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--raised); }
+.free-box .ph { padding: 12px 16px 0; font-size: 15px; line-height: 1.6; color: var(--faint); min-height: 52px; }
+.free-foot { display: flex; align-items: center; justify-content: space-between; padding: 0 16px 10px; }
+.free-foot .count { font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
+.send { min-height: 44px; border: 0; border-radius: 6px; background: var(--accent); padding: 10px 16px; font-size: 13px; font-weight: 500; color: var(--on-accent); }
+.notice { margin-top: 8px; font-size: 12px; line-height: 1.6; color: var(--faint); }
+
+/* ── 새 문법 미리보기 ─────────────────────────────────────────── */
+.preview { margin-top: 36px; border-top: 1px dashed var(--line); padding-top: 20px; }
+.preview-label { font-size: 12px; font-weight: 500; color: var(--faint); }
+.preview-body { margin-top: 14px; font-size: 16px; color: var(--ink); }
+.preview-body p { margin-bottom: 1.3em; line-height: 1.8; }
+.preview-body code {
+  font-family: var(--font-mono); font-size: 0.88em; background: var(--accent-soft);
+  color: var(--accent); padding: 0.1em 0.36em; border-radius: 3px;
+}
+/* ==하이라이트== — 형광펜 밑줄. 글자 뒤를 통째로 칠하지 않아 줄이 안 무겁다 */
+mark {
+  background: linear-gradient(180deg, transparent 60%, var(--accent-soft) 60%);
+  color: var(--ink); padding: 0 1px;
+}
+/* :::note / :::warn — 답 블록과 같은 문법(왼쪽 3px + soft 바탕) */
+.callout {
+  margin: 24px 0; border-left: 3px solid; border-radius: 0 10px 10px 0; padding: 14px 16px;
+}
+.callout .cl-label { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+.callout p { font-size: 15px; line-height: 1.7; margin: 0; }
+.callout.note { border-color: var(--accent); background: var(--accent-soft); }
+.callout.note .cl-label { color: var(--accent); }
+.callout.warn { border-color: var(--warn); background: var(--warn-soft); }
+.callout.warn .cl-label { color: var(--warn); }
+
+.notes { max-width: 390px; margin: 24px auto 0; font-size: 12.5px; line-height: 1.75; color: #3d434a; }
+.notes h3 { font-size: 13px; margin-bottom: 8px; color: #22262b; }
+.notes ul { list-style: disc; padding-left: 18px; }
+.notes li { margin-bottom: 6px; }
+.notes code { font-family: var(--font-mono); font-size: 11.5px; background: #fff; padding: 1px 4px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <p class="shell-label">
+    <b>시안 1 — 차분한 강조형</b><br>
+    글 중심 유지. 답을 먼저 세우고, 도식·표의 시작을 띠로 알리고, 코드에 색을 준다.
+  </p>
+
+  <div class="phone">
+
+    <header class="site-header">
+      <nav class="site-nav">
+        <a class="brand" href="#">CS 길라잡이</a>
+        <a class="nav-link" href="#">오늘의 질문</a>
+        <a class="nav-link" href="#">질문 목록</a>
+        <a class="nav-link" href="#">지도</a>
+        <a class="nav-link" href="#">내 기록</a>
+        <span class="nav-sep" aria-hidden="true"></span>
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" width="17" height="17" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        </span>
+        <span class="nav-contact">문의</span>
+      </nav>
+    </header>
+
+    <main>
+      <div class="topbar">
+        <a class="back" href="#">← 질문 목록</a>
+        <div class="topbar-right">
+          <span class="meas">#55</span>
+          <span class="meas">깊이 0</span>
+          <span class="meas" aria-hidden="true">공유</span>
+        </div>
+      </div>
+
+      <h1>스레드를 늘려도 CPU 병렬성이 없는 이유는?</h1>
+
+      <p class="meta">
+        <span>언어 · 런타임 <span class="mono">· python</span></span>
+        <a class="chip" href="#">기초</a>
+        <a class="chip" href="#">동시성</a>
+      </p>
+
+      <div class="prose-body">
+
+        <!-- ① 첫 문단 = 답. 리드 블록 -->
+        <p class="lead">CPython 기본 빌드에서는 같은 인터프리터에 속한 <a class="term" href="#" title="프로세스 안에서 명령을 실행하는 흐름. 한 프로세스의 스레드들은 메모리를 공유한다.">스레드</a> 하나만 한 시점에 파이썬 바이트코드를 실행한다. CPU 연산 스레드를 늘리면 GIL 경합과 전환 비용만 커질 수 있다.</p>
+
+        <figure class="fig-timeline">
+          <table class="tl">
+            <thead>
+              <tr>
+                <th class="tl-num" scope="col"><span class="sr-only">순서</span></th>
+                <th scope="col">스레드 A</th>
+                <th scope="col">스레드 B</th>
+                <th scope="col">스레드 C</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tl-num">1</td>
+                <td><span class="slot">바이트코드 실행</span></td>
+                <td><span class="slot">GIL 대기</span></td>
+                <td><span class="slot">GIL 대기</span></td>
+              </tr>
+              <tr>
+                <td class="tl-num">2</td>
+                <td><span class="slot">GIL 대기</span></td>
+                <td><span class="slot">바이트코드 실행</span></td>
+                <td><span class="slot">GIL 대기</span></td>
+              </tr>
+              <tr>
+                <td class="tl-num">3</td>
+                <td><span class="slot">GIL 대기</span></td>
+                <td><span class="slot">GIL 대기</span></td>
+                <td><span class="slot">바이트코드 실행</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </figure>
+
+        <p>셋을 띄워도 한 칸에 하나만 돈다. 코어가 넉넉해도 마찬가지다. 늘린 만큼 기다리는 줄만 길어진다.</p>
+
+        <figure>
+          <table class="rtable" role="table">
+            <thead>
+              <tr><th scope="col">기준</th><th scope="col">CPU 연산</th><th scope="col">I/O 대기</th></tr>
+            </thead>
+            <tbody>
+              <tr role="row">
+                <td role="cell" data-label="기준">스레드 효과</td>
+                <td role="cell" data-label="CPU 연산">GIL 경합</td>
+                <td role="cell" data-label="I/O 대기">대기 중 다른 스레드 실행</td>
+              </tr>
+              <tr role="row">
+                <td role="cell" data-label="기준">주된 선택</td>
+                <td role="cell" data-label="CPU 연산">멀티프로세스</td>
+                <td role="cell" data-label="I/O 대기">스레드·비동기</td>
+              </tr>
+            </tbody>
+          </table>
+        </figure>
+
+        <p>대기하는 많은 I/O 호출과 일부 네이티브 확장은 GIL을 놓는다. 그래서 네트워크 작업이나 GIL을 해제하는 수치 연산은 스레드로도 겹쳐 실행할 수 있다.</p>
+
+        <p>멀티프로세스는 CPU 병렬성을 얻지만 메모리와 <a class="term" href="#" title="메모리 속 객체를 저장하거나 전송할 수 있는 형식으로 바꾸는 일.">직렬화</a> 비용을 낸다. GIL도 복합 연산의 논리적 경쟁까지 막지 않으므로 공유 상태는 따로 동기화해야 한다.</p>
+
+      </div>
+
+      <section class="dig">
+        <h2>더 파고들기</h2>
+        <ul class="sugg">
+          <li><button type="button"><span class="dot on"></span><span class="text"><span>GIL은 어떤 시점에 해제되는가?</span><span class="resolved">이미 파인 길 · 바로 이동</span></span><span class="arrow">→</span></button></li>
+          <li><button type="button"><span class="dot"></span><span class="text"><span>네이티브 확장은 어떻게 병렬화하는가?</span></span><span class="arrow">→</span></button></li>
+          <li><button type="button"><span class="dot"></span><span class="text"><span>멀티프로세스 비용은 무엇인가?</span></span><span class="arrow">→</span></button></li>
+          <li><button type="button"><span class="dot"></span><span class="text"><span>GIL이 데이터 경쟁을 막아 주는가?</span></span><span class="arrow">→</span></button></li>
+          <li><button type="button"><span class="dot"></span><span class="text"><span>free-threaded 빌드는 무엇을 바꾸는가?</span></span><span class="arrow">→</span></button></li>
+        </ul>
+
+        <div class="free">
+          <label>직접 물어보기</label>
+          <div class="free-box">
+            <div class="ph">이 질문에서 더 궁금한 것을 적어 주세요</div>
+            <div class="free-foot">
+              <span class="count">0/300</span>
+              <button class="send" type="button">파고들기</button>
+            </div>
+          </div>
+          <p class="notice">적은 내용은 AI 학습에 쓰일 수 있습니다. 이름이나 연락처는 넣지 말아 주세요.</p>
+        </div>
+      </section>
+
+      <section class="preview">
+        <p class="preview-label">미리보기 — 새 문법 도입 시</p>
+        <div class="preview-body">
+          <p>CPU 연산을 늘리려면 <mark>스레드가 아니라 프로세스를 늘려야 한다</mark>. <code>multiprocessing</code>은 인터프리터를 따로 띄우므로 GIL 경합이 없다.</p>
+
+          <div class="callout note">
+            <p class="cl-label">핵심 정리</p>
+            <p>I/O 대기는 스레드로 겹치고, CPU 연산은 프로세스로 나눈다.</p>
+          </div>
+
+          <div class="callout warn">
+            <p class="cl-label">주의</p>
+            <p>GIL은 <code>list.append</code> 같은 단일 연산만 지켜 준다. 읽고 고쳐 쓰는 복합 연산은 따로 잠가야 한다.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="notes">
+    <h3>각주 — 현행에서 바꾼 값</h3>
+    <ul>
+      <li><b>① 답 블록</b> <code>16px → 18px</code>, 행간 1.8 → 1.7, 왼쪽 <code>3px solid --accent</code> + 바탕 <code>--accent-soft</code>, 아래 여백 28px. 대비: ink #191c20 on #e9f4f2 = <b>15.2:1</b> (AA 통과, 여유 큼).</li>
+      <li><b>② 인라인 코드</b> 글자색 <code>--ink</code> → <code>--accent #0f7a6c</code>. 바탕은 <code>--accent-soft</code> 그대로. 대비 <b>4.65:1</b> — 0.88em(≈14px) 본문 글씨라 AA 4.5:1 기준을 넘지만 <b>여유가 0.15뿐</b>이다. accent 토큰을 조금이라도 밝히면 곧바로 미달하므로, 적용 시 이 조합을 회귀 검사에 넣어야 한다.</li>
+      <li><b>③ 도식 머리띠</b> <code>linear-gradient(180deg, --accent-soft, #f6fbfa)</code>. th 글자는 <code>--muted #565d66</code> 유지 — accent-soft 위 <b>5.93:1</b>. 표 카드 머리띠는 <code>linear-gradient(90deg, --accent-soft, transparent 90%)</code>이고 글자는 <code>--ink</code>라 대비 문제 없음.</li>
+      <li><b>③ 반지름</b> 도식·표 <code>8px → 10px</code>. 테두리 색은 <code>--line</code> 그대로 — 띠가 이미 경계를 말하므로 테두리를 진하게 할 이유가 없다.</li>
+      <li><b>④ 리듬</b> 문단 아래 여백 <code>1.15em → 1.3em</code>. 도식 여백 <code>24px/24px → 28px/18px</code>(앞은 벌리고 뒤는 붙임). 첫 문장 굵게는 <b>하지 않았다</b> — 저장된 본문에 <code>**</code>가 없고 데이터는 무변경이 전제다.</li>
+      <li><b>미리보기</b> <code>==하이라이트==</code>는 글자 뒤 60% 아래만 칠하는 형광펜 밑줄. 통칠보다 줄이 가볍다. <code>:::note</code>·<code>:::warn</code>은 답 블록과 같은 문법(왼쪽 3px + soft 바탕)이라 새 규칙이 늘지 않는다. 라벨 대비: accent on accent-soft <b>4.65:1</b>, warn #a8452f on warn-soft #f8ebe7 <b>5.07:1</b> — 둘 다 12px라 AA 통과.</li>
+      <li><b>안 바꾼 것</b> 헤더·제목 24px·메타줄·꼬리질문·자유 입력·본문 16px·행간 1.8·<code>--line</code>·표 접힘 규칙.</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>
