@@ -10,7 +10,7 @@ import './globals.css'
  * 사람이 입에 올려 부를 수가 없다. 설명은 아래 DESCRIPTION이 이미 한다.
  */
 const TITLE = 'CS 길라잡이'
-const DESCRIPTION = '하루에 질문 하나. 어디로 파고들지는 직접 고르면 됩니다. 판 만큼 지도가 그려집니다.'
+const DESCRIPTION = '하루에 질문 하나. 어디로 파고들지는 직접 고르면 됩니다. 파고든 만큼 지도가 그려집니다.'
 
 /**
  * OG 태그는 장식이 아니라 유입 경로다.

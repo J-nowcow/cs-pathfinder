@@ -26,7 +26,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'CS 길라잡이',
     /* 홈 화면 아이콘 아래에 들어가는 이름. 길면 잘린다 */
     short_name: 'CS 길라잡이',
-    description: '하루에 CS 면접 질문 하나. 궁금한 곳으로 파고들면 판 만큼 지도가 남습니다.',
+    description: '하루에 CS 면접 질문 하나. 궁금한 곳으로 파고들면 파고든 만큼 지도가 남습니다.',
     start_url: '/',
     display: 'standalone',
     /*

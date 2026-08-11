@@ -118,7 +118,7 @@ export function pruneJourney(state: JourneyState, max = MAX_OCCURRENCES): Journe
 /**
  * 브라우저 저장소 읽고 쓰기.
  *
- * **sessionStorage가 아니라 localStorage다.** 화면은 "판 만큼 지도가 남는다"고
+ * **sessionStorage가 아니라 localStorage다.** 화면은 "파고든 만큼 지도가 남는다"고
  * 말하는데 sessionStorage는 탭을 닫으면 사라진다. 모바일에서는 사파리가
  * 백그라운드로 보낸 탭을 정리하면서 더 일찍 사라지기도 한다. 약속과 다르다.
  *

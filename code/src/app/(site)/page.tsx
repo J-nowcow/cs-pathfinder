@@ -107,7 +107,7 @@ export default async function HomePage() {
         <p className="relative mt-4 max-w-lg text-[15px] leading-[1.72] text-muted">
           하루에 질문 하나. 어디로 파고들지는 직접 고르면 됩니다.
           <br />
-          판 만큼 지도가 그려집니다.
+          파고든 만큼 지도가 그려집니다.
         </p>
       </header>
 

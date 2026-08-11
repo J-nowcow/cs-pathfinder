@@ -120,7 +120,7 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
           여기서부터는 직접 파보시겠습니까?
         </h2>
         <p className="mt-2 text-[14px] leading-[1.7] text-muted">
-          같은 질문에서 출발해도 어디로 갈지는 매번 다릅니다. 판 만큼 지도가 따로 그려집니다.
+          같은 질문에서 출발해도 어디로 갈지는 매번 다릅니다. 파고든 만큼 지도가 따로 그려집니다.
         </p>
 
         <div className="mt-5 flex flex-wrap gap-2.5">
