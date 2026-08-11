@@ -45,8 +45,17 @@ const ARCHITECTURE_NAMES = /^(architecture|design|engineering|system-design)(?:\
 const WORKFLOW = /^\.github\/workflows\/[^/]+\.ya?ml$/i
 const UNSAFE_SEGMENT =
   /(^|\/)(?:\.env(?:\.[^/]*)?|[^/]*(?:secret|credential|private[-_]?key)[^/]*)(?:\/|$)/i
+const CONTROL_CHARACTER = /[\u0000-\u001f\u007f]/
 
 type Ranked = GithubEvidenceFile & { rank: number; depth: number }
+
+/** 이후 URL 조립에서 레포 루트 밖으로 해석될 수 없는 상대 경로만 받는다. */
+function isSafeRepoPath(path: string): boolean {
+  if (!path || path.startsWith('/') || path.endsWith('/')) return false
+  if (path.includes('\\') || CONTROL_CHARACTER.test(path)) return false
+
+  return path.split('/').every((segment) => segment !== '' && segment !== '.' && segment !== '..')
+}
 
 function classify(path: string): Omit<Ranked, 'path' | 'size'> | null {
   const lower = path.toLowerCase()
@@ -94,7 +103,7 @@ export function selectGithubEvidence(entries: GithubTreeEntry[]): GithubEvidence
     if (!Number.isSafeInteger(entry.size) || !entry.size || entry.size > MAX_GITHUB_EVIDENCE_FILE_BYTES) {
       continue
     }
-    if (entry.path.includes('\\') || entry.path.includes('\0') || UNSAFE_SEGMENT.test(entry.path)) continue
+    if (!isSafeRepoPath(entry.path) || UNSAFE_SEGMENT.test(entry.path)) continue
 
     const classified = classify(entry.path)
     if (!classified || seen.has(entry.path)) continue

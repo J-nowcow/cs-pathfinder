@@ -40,6 +40,19 @@ describe('GitHub 분석 근거 파일', () => {
     ).toEqual([])
   })
 
+  it.each([
+    '/package.json',
+    './package.json',
+    '../package.json',
+    'apps/../package.json',
+    'apps//package.json',
+    'apps/package.json/',
+    'apps/\t/package.json',
+    'apps\\package.json',
+  ])('레포 루트를 벗어나거나 정규화되지 않은 경로를 제외한다: %s', (path) => {
+    expect(selectGithubEvidence([blob(path)])).toEqual([])
+  })
+
   it('중복 경로를 한 번만 고른다', () => {
     expect(selectGithubEvidence([blob('README.md'), blob('README.md')])).toHaveLength(1)
   })

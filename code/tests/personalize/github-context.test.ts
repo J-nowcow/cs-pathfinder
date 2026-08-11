@@ -47,6 +47,8 @@ describe('GitHub 분석 컨텍스트', () => {
     const result = buildGithubEvidenceContext([
       { path: 'README.md', content: '설명\u0000숨은 값' },
       { path: 'secret/package.json', content: '{}' },
+      { path: '../package.json', content: '{}' },
+      { path: 'apps/\t/package.json', content: '{}' },
     ])
     expect(result.files).toEqual([])
   })
