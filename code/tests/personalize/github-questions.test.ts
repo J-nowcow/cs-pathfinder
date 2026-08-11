@@ -88,6 +88,29 @@ describe('GitHub 맞춤 질문 생성', () => {
     }
   })
 
+  it('근거 파일명과 제거 표시가 질문 문장에 남으면 거부한다', async () => {
+    const result = await generateGithubQuestions({
+      repo,
+      evidence: [
+        { path: 'README.md', content: `API_KEY=secret-value` },
+        { path: 'docs/design.md', content: '# 설계' },
+      ],
+      call: caller({
+        questions: [
+          'README.md는 왜 설계를 설명하는가?',
+          '[비밀정보 제거]는 왜 필요한가?',
+          ...validQuestions.slice(2),
+        ].map((text) => ({ text, evidencePaths: ['README.md'] })),
+      }),
+    })
+
+    expect(result.kind).toBe('invalid_output')
+    if (result.kind === 'invalid_output') {
+      expect(result.issues.filter((issue) => issue.code === 'forbidden_term')).toHaveLength(2)
+      expect(result.issues.every((issue) => !issue.detail.includes('README.md'))).toBe(true)
+    }
+  })
+
   it('선택되지 않은 파일을 근거로 든 질문을 거부한다', async () => {
     const result = await generateGithubQuestions({
       repo,
@@ -124,5 +147,6 @@ describe('GitHub 맞춤 질문 시스템 규칙', () => {
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('트레이드오프')
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('레포명')
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('evidencePaths')
+    expect(GITHUB_QUESTIONS_SYSTEM).toContain('제거 표시')
   })
 })

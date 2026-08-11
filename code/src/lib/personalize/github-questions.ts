@@ -27,6 +27,7 @@ export const GITHUB_QUESTIONS_SYSTEM = `공개 GitHub 레포의 기술 근거로
 - 각 질문에 근거가 된 파일 경로를 evidencePaths로 1~2개 적는다.
 - evidencePaths에는 제공된 파일 경로만 그대로 쓴다.
 - 파일 내용을 그대로 인용하지 않는다.
+- 파일 경로와 개인정보·비밀정보 제거 표시는 질문 문장에 넣지 않는다.
 - 레포명, 소유자명, 회사명, 연락처, URL을 질문에 넣지 않는다.
 ${GITHUB_EVIDENCE_SYSTEM_RULES}`
 
@@ -76,9 +77,15 @@ export async function generateGithubQuestions({
     }
   }
 
+  const forbiddenTerms = new Set([repo.owner, repo.repo, '[개인정보 제거]', '[비밀정보 제거]'])
+  for (const file of prepared.files) {
+    forbiddenTerms.add(file.path)
+    const name = file.path.split('/').at(-1)
+    if (name) forbiddenTerms.add(name)
+  }
   const validated = validatePersonalizedQuestions(
     parsed.data.questions.map((question) => question.text),
-    [repo.owner, repo.repo],
+    [...forbiddenTerms],
   )
 
   if (!validated.ok) return { kind: 'invalid_output', issues: validated.issues }
