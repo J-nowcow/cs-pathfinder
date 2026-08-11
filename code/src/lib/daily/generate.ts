@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { IDENTITY_SCOPES, isIdentityScope } from '@/lib/expand/scopes'
 import { dailyCaller, MODEL_DAILY, type StructuredCaller } from '@/lib/llm/client'
-import { contentIssues, blocking, complaint } from '@/lib/llm/content-rules'
+import { contentIssues, complaint, questionIssues, rewriteNeeded } from '@/lib/llm/content-rules'
 
 const dailySchema = z.object({
   question: z.string(),
@@ -65,6 +65,12 @@ export const SYSTEM = `당신은 CS 면접 학습 서비스의 "오늘의 질문
     나쁨: "따라서 인덱스를 신중히 설계해야 한다"
     좋음: "인덱스를 늘릴수록 쓰기가 느려진다"
 - \`압도적\` \`강력한\` \`획기적\` 같은 과장어를 쓰지 않는다. 구체적인 값으로 말한다.
+- **\`면접에서는\` \`실무에서는\`으로 결론을 시작하지 않는다.** 평가 상황을 설명하지
+  말고 독자가 기억할 기술 내용 자체를 쓴다.
+- \`이를 해결하기 위해\`로 앞말을 되받지 않는다. 해결하는 구성요소나 동작을
+  주어로 바로 쓴다.
+- \`효율적\` \`효과적\` \`활용\`을 한 문단에 겹쳐 쓰지 않는다. 무엇이 줄고
+  무엇이 늘어나는지 구체적으로 쓴다.
 - **한 문단은 150자를 넘기지 않는다.** 폰에서 한 줄이 24자쯤이라 150자면 벌써 여섯 줄이다.
   그보다 길면 눈이 미끄러진다. 할 말이 남으면 문단을 나눈다.
 - **평어체로 쓴다.** "~다"로 끝맺고 "~합니다" "~입니다" 같은 경어체를 쓰지 않는다.
@@ -195,7 +201,7 @@ export async function generateDailyRoot(args: {
 
     return {
       content: { question, identityScope, body, summary, suggestions },
-      issues: contentIssues({ body, suggestions }),
+      issues: [...questionIssues(question), ...contentIssues({ body, suggestions })],
     }
   }
 
@@ -211,7 +217,7 @@ export async function generateDailyRoot(args: {
    * 서비스가 빈다.
    */
   const first = await once()
-  if (blocking(first.issues).length === 0) return first.content
+  if (rewriteNeeded(first.issues).length === 0) return first.content
 
   let second: Awaited<ReturnType<typeof once>> | null = null
   try {
@@ -220,6 +226,6 @@ export async function generateDailyRoot(args: {
     return first.content
   }
 
-  const better = blocking(second.issues).length < blocking(first.issues).length ? second : first
+  const better = rewriteNeeded(second.issues).length < rewriteNeeded(first.issues).length ? second : first
   return better.content
 }

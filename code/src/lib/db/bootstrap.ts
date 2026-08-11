@@ -97,15 +97,19 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
    * `data/renames.ts`에 옛 제목을 적어 두면 그 행을 찾아 제목만 고친다.
    * 번호와 주소가 살아 있고 판 경로도 안 끊긴다.
    */
-  const renamedFrom = new Map(QUESTION_RENAMES.map((r) => [r.to.trim(), r.from.trim()]))
+  const renamedFrom = new Map<string, string[]>()
+  for (const rename of QUESTION_RENAMES) {
+    const target = rename.to.trim()
+    renamedFrom.set(target, [...(renamedFrom.get(target) ?? []), rename.from.trim()])
+  }
   /* 태그 원본은 data/node-tags.ts다. 질문 키로 조인해 컬럼을 채운다 */
   const tagsByQuestion = new Map(NODE_TAGS.map((t) => [t.question.trim(), t.tags]))
   const levelByQuestion = new Map(NODE_LEVELS.map((l) => [l.question.trim(), l.level]))
 
   for (const ex of [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]) {
     const q = ex.question.trim()
-    const old = renamedFrom.get(q)
-    const id = existing.get(q) ?? (old ? existing.get(old) : undefined) ?? rootNodeId(ex)
+    const oldId = renamedFrom.get(q)?.map((old) => existing.get(old)).find((candidate) => candidate != null)
+    const id = existing.get(q) ?? oldId ?? rootNodeId(ex)
 
     /*
      * **`origin`도 함께 `batch`로 올린다.**

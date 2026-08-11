@@ -78,6 +78,28 @@ describe('제목 바꾸기', () => {
     expect(rows[0].number).toBe(9100)
   })
 
+  it('같은 현재 제목에 옛 제목이 여러 개여도 어느 행이든 이어받는다', async () => {
+    const db = await getDb()
+    const r = QUESTION_RENAMES.find((rename) => rename.from.includes('뷰 포스팅'))
+    expect(r).toBeDefined()
+
+    await db.query(
+      `insert into qnode (id, identity_scope, normalized_question, body, primary_category, status, origin, number)
+       values ('55555555-3333-2222-1111-000000000000', 'sql', $1, '옛 글이다', '데이터베이스', 'ready', 'batch', 9200)`,
+      [r!.from],
+    )
+
+    await ensureSeeded()
+
+    const rows = await db.query<{ id: string; q: string; number: number }>(
+      `select id, normalized_question q, number from qnode where normalized_question = any($1)`,
+      [[r!.from, r!.to]],
+    )
+    expect(rows).toEqual([
+      { id: '55555555-3333-2222-1111-000000000000', q: r!.to, number: 9200 },
+    ])
+  })
+
   it('바꾼 제목이 목록에 두 번 뜨지 않는다', async () => {
     await ensureSeeded()
     const db = await getDb()

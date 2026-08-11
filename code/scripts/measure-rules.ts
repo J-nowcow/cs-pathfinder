@@ -1,6 +1,6 @@
 import { EXAMPLE_NODES } from '../data/example-nodes'
 import { GENERATED_NODES } from '../data/generated-nodes'
-import { contentIssues, blocking } from '../src/lib/llm/content-rules'
+import { contentIssues, rewriteNeeded } from '../src/lib/llm/content-rules'
 
 /**
  * 규칙 검사기를 실제 코퍼스에 돌려 본다.
@@ -22,7 +22,7 @@ function run(name: string, nodes: { question: string; body: string; suggestions:
   for (const n of nodes) {
     const issues = contentIssues(n)
     for (const i of issues) byRule.set(i.rule, (byRule.get(i.rule) ?? 0) + 1)
-    if (blocking(issues).length > 0) blocked++
+    if (rewriteNeeded(issues).length > 0) blocked++
     else if (issues.length > 0) noted++
   }
 

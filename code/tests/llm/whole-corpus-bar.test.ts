@@ -3,7 +3,7 @@ import { EXAMPLE_NODES } from '../../data/example-nodes'
 import { AUTHORED_NODES } from '../../data/authored-nodes'
 import { GENERATED_NODES } from '../../data/generated-nodes'
 import { ON_DEMAND_NODES } from '../../data/on-demand-nodes'
-import { contentIssues, blocking } from '@/lib/llm/content-rules'
+import { contentIssues, blocking, questionIssues, rewriteNeeded } from '@/lib/llm/content-rules'
 import { CATEGORIES } from '@/lib/tree/categories'
 
 /**
@@ -61,4 +61,16 @@ describe('말뭉치 전체', () => {
       expect(bad).toEqual([])
     })
   }
+
+  it('재작성이 필요한 AI식 문체와 긴 제목이 남지 않는다', () => {
+    const bad = SETS.flatMap(([, nodes]) => nodes).flatMap((node) => {
+      const issues = [
+        ...rewriteNeeded(contentIssues({ body: node.body, suggestions: node.suggestions })),
+        ...questionIssues(node.question),
+      ]
+      return issues.length > 0 ? [`${node.question}: ${issues.map((issue) => issue.rule).join(', ')}`] : []
+    })
+
+    expect(bad).toEqual([])
+  })
 })

@@ -94,6 +94,19 @@ describe('generateNodeContent · 규칙 재시도', () => {
     expect(r.suggestions.every((s) => s.length <= 35)).toBe(true)
   })
 
+  it('AI식 문체도 다시 부르고 고쳐진 것을 쓴다', async () => {
+    const aiStyle = {
+      ...clean,
+      body: '인덱스를 통해 조회 속도를 효과적으로 높인다.\n\n:::stack\n인덱스 | 탐색 범위를 줄인다\n:::',
+    }
+    const call = sequence(aiStyle, clean)
+    const r = await generateNodeContent({ ...base, call })
+
+    expect(r.retried).toBe(true)
+    expect((call as unknown as CallSpy).mock.calls).toHaveLength(2)
+    expect(r.body).toBe(clean.body)
+  })
+
   /* 두 번이 끝이다. 무료 한도가 빠듯한 자리라 무한정 물을 수 없다 */
   it('두 번을 넘겨 부르지 않는다', async () => {
     const call = sequence(longTail, longTail, clean)

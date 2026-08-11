@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { contentIssues, blocking, complaint, questionIssues } from '@/lib/llm/content-rules'
+import { contentIssues, blocking, complaint, questionIssues, rewriteNeeded } from '@/lib/llm/content-rules'
 import { EXAMPLE_NODES } from '../../data/example-nodes'
 import { AUTHORED_NODES } from '../../data/authored-nodes'
 import { parseBlocks } from '@/lib/markdown/blocks'
@@ -141,15 +141,33 @@ describe('contentIssues · 적어만 둘 것', () => {
     expect(issues.some((i) => i.rule.startsWith('문체'))).toBe(true)
     expect(blocking(issues)).toEqual([])
   })
+
+  it('검증된 문체 오류는 발행 전에 다시 쓰게 한다', () => {
+    const body = '인덱스를 통해 조회가 빨라진다.\n\n:::stack\nA | B\n:::'
+    const issues = contentIssues({ ...ok, body })
+    expect(rewriteNeeded(issues).map((i) => i.rule)).toContain('문체:번역투(~를 통해)')
+  })
+
+  it('면접 상황으로 끝내는 문단은 다시 쓰게 한다', () => {
+    const body = '답이다.\n\n:::stack\nA | B\n:::\n\n면접에서는 구현 한계를 묻는다.'
+    const issues = contentIssues({ ...ok, body })
+    expect(rewriteNeeded(issues).map((i) => i.rule)).toContain('문체:면접 상황으로 설명')
+  })
+
+  it('상투적인 문제 해결 연결은 다시 쓰게 한다', () => {
+    const body = '충돌이 생긴다. 이를 해결하기 위해 락을 사용한다.\n\n:::stack\nA | B\n:::'
+    const issues = contentIssues({ ...ok, body })
+    expect(rewriteNeeded(issues).map((i) => i.rule)).toContain('문체:상투적 문제 해결 연결')
+  })
 })
 
 describe('complaint', () => {
-  /* 규칙을 다시 읊으면 무엇이 틀렸는지가 묻힌다. 틀린 자리만 짚는다 */
-  it('막은 것만 담고 적어둔 것은 안 담는다', () => {
+  /* 구조 오류와 재작성할 문체만 돌려준다. 정보성 note는 넣지 않는다 */
+  it('막은 것과 검증된 문체 오류를 담는다', () => {
     const body = `${'가'.repeat(151)}\n\n인덱스를 통해 빨라진다.`
     const text = complaint(contentIssues({ ...ok, body }))
     expect(text).toContain('151자')
-    expect(text).not.toContain('문체')
+    expect(text).toContain('번역투')
   })
 })
 

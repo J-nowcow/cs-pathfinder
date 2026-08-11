@@ -43,7 +43,16 @@ const TRANSLATIONESE = /(를|을)\s*통해/
 const CONNECTIVE_OPENER = /^(따라서|그러므로|결론적으로|즉,|요약하면)/
 
 /** 과장. 해설에 감탄이 섞이면 정보가 묽어진다 */
-const HYPE = /(매우|아주|정말|굉장히|극도로)\s/
+const HYPE = /(?:(매우|아주|정말|굉장히|극도로)\s|압도적|강력한|획기적)/
+
+/** 내용 대신 채점 상황을 말하는 결말. 독자가 필요한 것은 평가자의 행동이 아니다 */
+const INTERVIEW_FRAME = /^(면접|실무)에서(?:는)?\s/
+
+/** 문제를 되받아 추상적으로 잇는 생성문. 해결 동작의 주어를 바로 쓰는 편이 짧다 */
+const FORMULAIC_BRIDGE = /이를 (해결|방지|최적화)하기 위해/
+
+/** 혼자 쓰이면 괜찮지만 한 문단에 겹치면 무엇이 좋아지는지 숨기는 말들 */
+const VAGUE_BENEFIT = /(효율적|효과적|단순히|기반으로|활용)/g
 
 /** 문장 하나가 이보다 길면 읽다가 앞을 잊는다 */
 const MAX_SENTENCE = 90
@@ -59,6 +68,11 @@ export function proseIssues(text: string): ProseIssue[] {
   if (TRANSLATIONESE.test(text)) out.push('번역투(~를 통해)')
   if (CONNECTIVE_OPENER.test(text.trim())) out.push('접속부사로 시작')
   if (HYPE.test(text)) out.push('과장')
+  if (INTERVIEW_FRAME.test(text.trim())) out.push('면접 상황으로 설명')
+  if (FORMULAIC_BRIDGE.test(text)) out.push('상투적 문제 해결 연결')
+
+  const vagueBenefitCount = [...text.matchAll(VAGUE_BENEFIT)].length
+  if (vagueBenefitCount >= 2) out.push('상투적 이점 표현이 겹침')
 
   for (const s of text.split(/(?<=[.?!])\s+/)) {
     if (s.length > MAX_SENTENCE) {

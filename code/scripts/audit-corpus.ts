@@ -4,7 +4,7 @@ loadEnvLocal()
 
 import { getDb } from '../src/lib/db/client'
 import { parseBlocks } from '../src/lib/markdown/blocks'
-import { contentIssues, blocking } from '../src/lib/llm/content-rules'
+import { contentIssues, blocking, rewriteNeeded } from '../src/lib/llm/content-rules'
 
 /**
  * 이미 나가 있는 해설이 지금 기준으로 어떤가.
@@ -54,6 +54,7 @@ const want = process.argv.includes('--list')
 const byRule = new Map<string, Map<string, Row>>()
 const kinds = new Map<string, number>()
 let blocked = 0
+let rewrites = 0
 let noted = 0
 let clean = 0
 let diagramless = 0
@@ -77,6 +78,7 @@ for (const r of rows) {
   }
 
   if (blocking(issues).length > 0) blocked++
+  else if (rewriteNeeded(issues).length > 0) rewrites++
   else if (issues.length > 0) noted++
   else clean++
 }
@@ -85,6 +87,7 @@ const pct = (x: number) => ((x / rows.length) * 100).toFixed(1)
 
 console.log(`\n## 운영 중인 해설 ${rows.length}편`)
 console.log(`  막을 것(block) : ${blocked}편 (${pct(blocked)}%)`)
+console.log(`  다시 쓸 것     : ${rewrites}편 (${pct(rewrites)}%)`)
 console.log(`  적어둘 것(note): ${noted}편 (${pct(noted)}%)`)
 console.log(`  깨끗           : ${clean}편 (${pct(clean)}%)`)
 console.log(`  통짜 글        : ${diagramless}편 (${pct(diagramless)}%)`)

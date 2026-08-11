@@ -441,6 +441,27 @@ export function blocking(issues: ContentIssue[]): ContentIssue[] {
   return issues.filter((i) => i.severity === 'block')
 }
 
+/*
+ * 화면을 깨뜨리지는 않지만 그대로 발행하면 서비스 말투가 무너지는 지적.
+ *
+ * 문체 지적을 전부 재작성 사유로 삼지는 않는다. 긴 문장은 병렬 열거처럼
+ * 정당한 경우가 있고, 상투 표현 하나도 문맥에 따라 자연스러울 수 있다.
+ * 아래 규칙은 손으로 쓴 기준선에서 오탐이 없었고 생성본에만 몰렸다.
+ */
+const REWRITE_STYLE_RULES = new Set([
+  '문체:번역투(~를 통해)',
+  '문체:접속부사로 시작',
+  '문체:과장',
+  '문체:면접 상황으로 설명',
+  '문체:상투적 문제 해결 연결',
+  '문체:상투적 이점 표현이 겹침',
+])
+
+/** 새로 생성한 글을 한 번 더 쓰게 할 지적. 구조 오류와 검증된 문체 오류를 합친다 */
+export function rewriteNeeded(issues: ContentIssue[]): ContentIssue[] {
+  return issues.filter((i) => i.severity === 'block' || REWRITE_STYLE_RULES.has(i.rule))
+}
+
 /**
  * 모델에게 돌려줄 지적.
  *
@@ -448,7 +469,7 @@ export function blocking(issues: ContentIssue[]): ContentIssue[] {
  * 무엇이 틀렸는지가 묻힌다. **틀린 자리만** 짚는다.
  */
 export function complaint(issues: ContentIssue[]): string {
-  const lines = [...new Set(blocking(issues).map((i) => i.detail))]
+  const lines = [...new Set(rewriteNeeded(issues).map((i) => i.detail))]
   return ['방금 쓴 것이 규칙을 어겼다. 아래만 고쳐 다시 써라.', ...lines.map((l) => `- ${l}`)].join(
     '\n',
   )
