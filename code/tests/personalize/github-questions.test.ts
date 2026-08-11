@@ -17,6 +17,10 @@ const validQuestions = [
   '컨테이너 이미지는 왜 계층으로 나뉘는가?',
   'CI 실패를 재현하려면 무엇을 남기는가?',
 ]
+const groundedQuestions = validQuestions.map((text, index) => ({
+  text,
+  evidencePaths: [index < 2 ? 'package.json' : 'README.md'],
+}))
 
 function caller(payload: unknown): StructuredCaller {
   return vi.fn(async () => payload) as unknown as StructuredCaller
@@ -24,7 +28,7 @@ function caller(payload: unknown): StructuredCaller {
 
 describe('GitHub 맞춤 질문 생성', () => {
   it('불신 데이터로 격리한 공개 근거에서 검증된 질문만 돌려준다', async () => {
-    const call = caller({ questions: validQuestions })
+    const call = caller({ questions: groundedQuestions })
     const result = await generateGithubQuestions({
       repo,
       evidence: [
@@ -36,7 +40,7 @@ describe('GitHub 맞춤 질문 생성', () => {
 
     expect(result).toEqual({
       kind: 'ok',
-      questions: validQuestions,
+      questions: groundedQuestions,
       evidenceFiles: ['README.md', 'package.json'],
     })
     expect(call).toHaveBeenCalledOnce()
@@ -50,7 +54,7 @@ describe('GitHub 맞춤 질문 생성', () => {
   })
 
   it('쓸 수 있는 근거가 없으면 모델을 부르지 않는다', async () => {
-    const call = caller({ questions: validQuestions })
+    const call = caller({ questions: groundedQuestions })
     const result = await generateGithubQuestions({
       repo,
       evidence: [{ path: '.env', content: 'SECRET=value' }],
@@ -71,7 +75,7 @@ describe('GitHub 맞춤 질문 생성', () => {
           'J-nowcow는 어떤 격리 수준을 골랐는가?',
           '문의 test@example.com은 어디서 숨기는가?',
           ...validQuestions.slice(3),
-        ],
+        ].map((text) => ({ text, evidencePaths: ['README.md'] })),
       }),
     })
 
@@ -83,6 +87,35 @@ describe('GitHub 맞춤 질문 생성', () => {
       expect(result.issues.some((issue) => issue.detail.includes(repo.owner))).toBe(false)
     }
   })
+
+  it('선택되지 않은 파일을 근거로 든 질문을 거부한다', async () => {
+    const result = await generateGithubQuestions({
+      repo,
+      evidence: [{ path: 'README.md', content: '# 기술 설명' }],
+      call: caller({
+        questions: validQuestions.map((text) => ({ text, evidencePaths: ['src/private.ts'] })),
+      }),
+    })
+
+    expect(result.kind).toBe('invalid_output')
+    if (result.kind === 'invalid_output') {
+      expect(result.issues.every((issue) => issue.code === 'ungrounded')).toBe(true)
+      expect(result.issues).toHaveLength(validQuestions.length)
+    }
+  })
+
+  it('근거 목록이 없는 비정상 출력도 호출자와 무관하게 거부한다', async () => {
+    const result = await generateGithubQuestions({
+      repo,
+      evidence: [{ path: 'README.md', content: '# 기술 설명' }],
+      call: caller({ questions: validQuestions }),
+    })
+
+    expect(result).toEqual({
+      kind: 'invalid_output',
+      issues: [{ code: 'malformed_output', detail: '질문과 근거 목록 형식이 아닙니다.' }],
+    })
+  })
 })
 
 describe('GitHub 맞춤 질문 시스템 규칙', () => {
@@ -90,5 +123,6 @@ describe('GitHub 맞춤 질문 시스템 규칙', () => {
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('기술 근거')
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('트레이드오프')
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('레포명')
+    expect(GITHUB_QUESTIONS_SYSTEM).toContain('evidencePaths')
   })
 })
