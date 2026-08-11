@@ -19,6 +19,12 @@ export function containsSuspectedPii(input: string): boolean {
   return EMAIL.test(input) || PHONE.test(input)
 }
 
+export function redactSuspectedPii(input: string): string {
+  return input
+    .replace(new RegExp(EMAIL.source, 'g'), '[개인정보 제거]')
+    .replace(new RegExp(PHONE.source, 'g'), '[개인정보 제거]')
+}
+
 /**
  * LLM 호출 전에 건다.
  *

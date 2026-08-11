@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { validateRawInput } from '@/lib/expand/validate'
+import { redactSuspectedPii, validateRawInput } from '@/lib/expand/validate'
 
 describe('validateRawInput', () => {
   it('accepts a normal question', () => {
@@ -50,5 +50,11 @@ describe('validateRawInput', () => {
 
   it('does not flag a plain technical number', () => {
     expect(validateRawInput('pool size 20이면 어떻게 되나요?').ok).toBe(true)
+  })
+
+  it('연락처를 모델 입력 전에 가릴 수 있다', () => {
+    expect(redactSuspectedPii('메일 hong@example.com, 전화 010-1234-5678')).toBe(
+      '메일 [개인정보 제거], 전화 [개인정보 제거]',
+    )
   })
 })
