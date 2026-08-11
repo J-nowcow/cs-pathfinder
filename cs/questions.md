@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 336개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 337개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -10,18 +10,18 @@
 
 - [DB 커넥션을 매번 새로 맺는 비용이 큰 이유는?](https://cs-pathfinder.vercel.app/q/5d9cb401-d07f-46db-885b-c2a94c063919)
 - [인덱스를 만들었는데 실행 계획에서 타지 않는 이유는?](https://cs-pathfinder.vercel.app/q/89d388cf-89c4-4956-aaf6-1694bfb4e576)
-- [데이터베이스 커넥션 풀의 적정 크기를 설정할 때 왜 CPU 코어 수를 기준으로 설정하는지 그 이유가 궁금합니다.](https://cs-pathfinder.vercel.app/q/b6ce7342-8bb3-49a8-be05-ff7c3f45d8ff)
-- [분산 환경에서 데이터베이스 수준의 락이 가지는 한계점과 이를 해결하기 위한 분산 락의 역할은 무엇인가?](https://cs-pathfinder.vercel.app/q/ed754fd1-035b-4b98-b169-a66fd2024b4e)
-- [Redis를 활용한 분산 락 구현 시 스핀 락 방식과 Pub/Sub 방식의 성능 및 구조적 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/f995b280-0d7f-405f-846d-2b7cda082021)
-- [낙관적 락을 사용할 때 데이터 충돌이 발생하면 애플리케이션 수준에서 재시도 로직을 어떻게 구현하는가?](https://cs-pathfinder.vercel.app/q/ce219de9-f5fb-45ac-bcff-55edd4b4b8ec)
+- [커넥션 풀 크기를 CPU 코어 수로 잡는 이유는?](https://cs-pathfinder.vercel.app/q/b6ce7342-8bb3-49a8-be05-ff7c3f45d8ff)
+- [DB 락은 분산 환경에서 무엇이 한계인가?](https://cs-pathfinder.vercel.app/q/ed754fd1-035b-4b98-b169-a66fd2024b4e)
+- [Redis 분산 락의 스핀과 Pub/Sub 방식 차이는?](https://cs-pathfinder.vercel.app/q/f995b280-0d7f-405f-846d-2b7cda082021)
+- [낙관적 락 충돌은 어떻게 재시도하는가?](https://cs-pathfinder.vercel.app/q/ce219de9-f5fb-45ac-bcff-55edd4b4b8ec)
 - [데이터베이스 격리 수준을 높이면 전체 처리량은 어떻게 변화하는가?](https://cs-pathfinder.vercel.app/q/0da10686-c707-4e28-beef-737416af5e1f)
 - [서브쿼리를 언제 조인으로 재작성해야 성능이 향상되는가?](https://cs-pathfinder.vercel.app/q/67fb7a7c-ecfe-4846-bb47-87c1f8c06079) — 2026-08-06
 - [격리 수준을 올리면 무엇을 잃는가?](https://cs-pathfinder.vercel.app/q/070512bd-81b4-4603-9c9a-7f0c5b726798)
-- [데이터베이스 옵티마이저에서 서브쿼리 언네스팅의 정의와 발생 조건은 무엇인가?](https://cs-pathfinder.vercel.app/q/731d1828-bec1-4118-8fad-6f211e38f3ad)
-- [데이터베이스 옵티마이저에서 서브쿼리 언네스팅과 뷰 병합(View Merging)의 차이점은 무엇인가?](https://cs-pathfinder.vercel.app/q/18fcb0bd-12e5-4a18-8b63-2c4330a53af4)
-- [데이터베이스에서 EXISTS 서브쿼리와 IN 서브쿼리를 조인으로 변환할 때 발생하는 차이점은 무엇인가?](https://cs-pathfinder.vercel.app/q/9e5a2ea6-ae8f-4cb4-b3fc-0c16b9e0d465)
-- [데이터베이스에서 ANTI JOIN과 SEMI JOIN의 차이점은 무엇인가?](https://cs-pathfinder.vercel.app/q/f9a0b251-a94b-4b97-ad0f-957c49073c66)
-- [Hash Anti Join은 데이터베이스 내부에서 구체적으로 어떻게 동작하는가?](https://cs-pathfinder.vercel.app/q/3696debd-7e93-44aa-9b0c-a106be574bf8)
+- [서브쿼리 언네스팅은 언제 발생하는가?](https://cs-pathfinder.vercel.app/q/731d1828-bec1-4118-8fad-6f211e38f3ad)
+- [서브쿼리 언네스팅과 뷰 병합의 차이는?](https://cs-pathfinder.vercel.app/q/18fcb0bd-12e5-4a18-8b63-2c4330a53af4)
+- [EXISTS와 IN을 조인으로 바꾸면 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/9e5a2ea6-ae8f-4cb4-b3fc-0c16b9e0d465)
+- [ANTI JOIN과 SEMI JOIN의 차이는?](https://cs-pathfinder.vercel.app/q/f9a0b251-a94b-4b97-ad0f-957c49073c66)
+- [Hash Anti Join은 내부에서 어떻게 동작하는가?](https://cs-pathfinder.vercel.app/q/3696debd-7e93-44aa-9b0c-a106be574bf8)
 - [데이터베이스 정규화를 수행하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/de461af2-e76f-4420-85f5-c0c86b9d951d)
 - [트랜잭션 격리 수준을 결정하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/c41f45e9-a7c0-4357-8947-e82a6baf3b50)
 - [데이터베이스 뷰는 언제 사용하는가?](https://cs-pathfinder.vercel.app/q/577db5ee-a456-43d1-8b9f-14178363b74d)
@@ -38,7 +38,7 @@
 - [낙관적 락과 비관적 락은 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/eb4d321c-88a1-491d-b344-3980915332a5)
 - [인덱스 범위 스캔과 전체 스캔 중 무엇을 선택하는가?](https://cs-pathfinder.vercel.app/q/552308dc-7dc6-4fb3-b64c-fcd4621f6859)
 - [SQL과 NoSQL은 어떤 기준으로 선택하는가?](https://cs-pathfinder.vercel.app/q/17beb041-8cb3-4c6a-820e-3ff9d60d93fb)
-- [SQL에서 뷰나 인라인 뷰를 사용하여 쿼리를 작성할 때 성능 최적화를 위해 주의해야 할 점은 무엇인가?](https://cs-pathfinder.vercel.app/q/659355a6-1670-497f-ae52-55059ff9d6de)
+- [뷰 쿼리의 성능 저하는 무엇을 확인해야 하는가?](https://cs-pathfinder.vercel.app/q/659355a6-1670-497f-ae52-55059ff9d6de)
 - [고차원 데이터에서 거리 계산 시 발생하는 문제는 무엇인가?](https://cs-pathfinder.vercel.app/q/a6976146-8c02-4d06-97c5-d83ad17a52d9)
 - [갑자기 꺼져도 커밋한 것이 남는 이유는?](https://cs-pathfinder.vercel.app/q/9ae31a22-f8af-4040-96ff-e3dcce7afe8e)
 - [읽기만 하는데도 잠금이 걸리는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/a530a092-d500-4353-ba45-4b6b53c852a7)
@@ -53,7 +53,7 @@
 - [TCP 연결 종료는 왜 대개 네 번 주고받는가?](https://cs-pathfinder.vercel.app/q/4052fe26-b550-4c15-bcfe-0dfd9d709234)
 - [DNS 조회는 어떤 순서로 도는가?](https://cs-pathfinder.vercel.app/q/e701e42e-a3dc-44b7-baa1-332f197e90b1)
 - [DNS 질의 시 재귀적 질의와 반복적 질의의 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/62e02f6b-29f6-4147-97a3-651d066b5e3f) — 2026-08-08
-- [TCP 연결 종료 시 TIME_WAIT 상태가 누적되어 포트가 고갈되는 현상을 진단하는 방법은 무엇인가?](https://cs-pathfinder.vercel.app/q/2f9ed05f-6771-4752-a46f-9c198e8a812f)
+- [TIME_WAIT 포트 고갈은 어떻게 진단하는가?](https://cs-pathfinder.vercel.app/q/2f9ed05f-6771-4752-a46f-9c198e8a812f)
 - [수신자는 여유 있는데 전송이 느린 이유는?](https://cs-pathfinder.vercel.app/q/944b54e3-4faf-4a40-82e7-80286f3e9109)
 - [연결 설정 왕복을 언제 줄일 수 있는가?](https://cs-pathfinder.vercel.app/q/af9fd00b-4fa7-4b8c-8f3f-ea6b0470bdbe)
 - [신뢰성보다 지연을 우선할 기준은?](https://cs-pathfinder.vercel.app/q/d8359e86-e42c-491b-b0f7-c7e426833cd2)
@@ -93,7 +93,7 @@
 
 ## 언어 · 런타임
 
-- [equals를 재정의할 때 hashCode도 함께 재정의해야 하는 이유는?](https://cs-pathfinder.vercel.app/q/2e8d9a00-0d82-4044-bbf9-66e543fb9a1e)
+- [equals 재정의 시 hashCode도 바꿔야 하는 이유는?](https://cs-pathfinder.vercel.app/q/2e8d9a00-0d82-4044-bbf9-66e543fb9a1e)
 - [setTimeout(0)이 즉시 실행되지 않는 이유는?](https://cs-pathfinder.vercel.app/q/55230228-e25f-440d-ab7a-f6da114dbb65)
 - [메모리 관점에서 값 타입과 참조 타입의 선택 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/718653d4-4ede-4faf-a3c7-33f5a3639ebc) — 2026-08-07
 - [가비지 컬렉션이 멈춤을 만드는 이유는?](https://cs-pathfinder.vercel.app/q/acd8d116-38e7-4e74-82ae-3075e2ff9956)
@@ -317,6 +317,7 @@
 - [JWT를 세션 대신 쓸 때 무엇을 잃는가?](https://cs-pathfinder.vercel.app/q/45d1365b-23d9-48e2-8e92-6c1e964f5709)
 - [HTTPS는 무엇을 보장하고 무엇을 못 하는가?](https://cs-pathfinder.vercel.app/q/7ff301ef-5a43-4119-a1f6-6e36a31c4542)
 - [CORS는 무엇을 막는가?](https://cs-pathfinder.vercel.app/q/4ce26567-b0b6-4d5e-a6cd-962d3923f5c2)
+- [컨테이너 이미지를 최소화해야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/55da74bb-a832-44c1-a018-84404c900e11) — 2026-08-12
 - [공개키와 비밀키는 무엇으로 구분하는가?](https://cs-pathfinder.vercel.app/q/417f12a2-6daa-40e2-8a1c-8cc17a30b82a)
 - [대칭키와 공개키 중 무엇을 선택하는가?](https://cs-pathfinder.vercel.app/q/61e43b03-57ea-4211-a981-189bd2295061)
 - [TLS 핸드셰이크의 핵심 목적은 무엇인가?](https://cs-pathfinder.vercel.app/q/a4ec9e80-ba7e-409b-91c8-68118a65141f)
