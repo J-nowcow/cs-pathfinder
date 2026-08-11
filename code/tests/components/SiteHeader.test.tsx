@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
-import { render, screen, cleanup } from '@testing-library/react'
+import { render, screen, cleanup, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { SiteHeader } from '@/components/SiteHeader'
 
@@ -71,10 +71,13 @@ describe('SiteHeader · 바깥 링크', () => {
   /* 닫는 길이 없으면 한 번 연 사람이 갇힌다 */
   it('Esc로 닫힌다', async () => {
     render(<SiteHeader />)
-    await userEvent.click(screen.getByRole('button', { name: '문의' }))
+    const trigger = screen.getByRole('button', { name: '문의' })
+    await userEvent.click(trigger)
     expect(screen.getByRole('menu')).toBeTruthy()
+    screen.getByRole('menuitem', { name: /GitHub/ }).focus()
     await userEvent.keyboard('{Escape}')
     expect(screen.queryByRole('menu')).toBeNull()
+    await waitFor(() => expect(document.activeElement).toBe(trigger))
   })
 
   /*

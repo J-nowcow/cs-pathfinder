@@ -37,6 +37,7 @@ export function AuthMenu() {
   const { data: session, isPending } = authClient.useSession()
   const [open, setOpen] = useState(false)
   const box = useRef<HTMLDivElement>(null)
+  const trigger = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (!open) return
@@ -45,7 +46,11 @@ export function AuthMenu() {
       if (!box.current?.contains(e.target as Node)) setOpen(false)
     }
     const esc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
+      if (e.key === 'Escape') {
+        setOpen(false)
+        // 메뉴 항목이 DOM에서 빠진 뒤 옮겨야 브라우저가 초점을 body로 되돌리지 않는다.
+        window.setTimeout(() => trigger.current?.focus(), 0)
+      }
     }
     document.addEventListener('mousedown', away)
     document.addEventListener('keydown', esc)
@@ -81,6 +86,7 @@ export function AuthMenu() {
   return (
     <div ref={box} className="relative">
       <button
+        ref={trigger}
         type="button"
         aria-label="내 계정"
         aria-expanded={open}

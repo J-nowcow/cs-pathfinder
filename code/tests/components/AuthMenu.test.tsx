@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
-import { render, screen, cleanup } from '@testing-library/react'
+import { render, screen, cleanup, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { AuthMenu } from '@/components/AuthMenu'
 
@@ -110,10 +110,13 @@ describe('AuthMenu · 로그인 후', () => {
   it('Esc로 닫힌다', async () => {
     login()
     render(<AuthMenu />)
-    await userEvent.click(screen.getByRole('button', { name: '내 계정' }))
+    const trigger = screen.getByRole('button', { name: '내 계정' })
+    await userEvent.click(trigger)
     expect(screen.getByRole('menu')).toBeTruthy()
+    screen.getByRole('menuitem', { name: '내 기록으로' }).focus()
     await userEvent.keyboard('{Escape}')
     expect(screen.queryByRole('menu')).toBeNull()
+    await waitFor(() => expect(document.activeElement).toBe(trigger))
   })
 
   it('바깥을 누르면 닫힌다', async () => {
