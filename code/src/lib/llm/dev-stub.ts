@@ -1,4 +1,4 @@
-import { MODEL_GATE, MODEL_GENERATE, MODEL_DAILY, type StructuredCaller } from '@/lib/llm/client'
+import { MODEL_GATE, MODEL_GENERATE, MODEL_DAILY, MODEL_CHAT, type StructuredCaller } from '@/lib/llm/client'
 
 /**
  * API 키 없이 화면을 만들고 검증하기 위한 가짜 LLM.
@@ -183,6 +183,18 @@ function dailyResponse(prompt: string) {
   }
 }
 
+/**
+ * 노드 챗 응답. 결정론 — 같은 질문이면 같은 답이라 화면 검증이 재현된다.
+ * 프롬프트의 [질문]을 되읽어 답에 박는다. 무엇이 전달됐는지 화면에서 보인다.
+ */
+function chatResponse(prompt: string): { answer: string } {
+  const m = prompt.match(/\[질문\]\n([\s\S]*)$/)
+  const asked = m ? m[1].trim() : ''
+  return {
+    answer: `(개발 스텁) "${asked}"에 대한 답입니다. 실제 배포에서는 이 자리에서 해설 범위 안의 설명이 옵니다.`,
+  }
+}
+
 export const stubCaller: StructuredCaller = async <T>({
   model,
   prompt,
@@ -193,6 +205,7 @@ export const stubCaller: StructuredCaller = async <T>({
   if (model === MODEL_GATE) return gateResponse(prompt) as T
   if (model === MODEL_GENERATE) return generateResponse(prompt) as T
   if (model === MODEL_DAILY) return dailyResponse(prompt) as T
+  if (model === MODEL_CHAT) return chatResponse(prompt) as T
 
   // 모르는 모델에 그럴듯한 껍데기를 돌려주면 호출부가 조용히 잘못된 값을 쓴다.
   throw new Error(`dev stub has no response shape for model: ${model}`)

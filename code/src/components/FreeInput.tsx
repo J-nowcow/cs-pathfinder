@@ -52,7 +52,7 @@ export function FreeInput({
       }}
     >
       <label htmlFor="free-question" className="block text-[13px] font-medium text-muted">
-        직접 물어보기
+        더 파고들 질문 만들기
       </label>
 
       <div className="mt-2 rounded-lg border border-line bg-raised focus-within:border-accent">

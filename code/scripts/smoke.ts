@@ -213,6 +213,21 @@ async function main(): Promise<void> {
     return `200 · ${text.length}자 · 바로가기 2개`
   })
 
+  /*
+   * 노드 챗 배선. 성공 호출은 안 쏜다 — 스모크가 돌 때마다 모델을 부르고
+   * 익명 쿼터를 깎으면 감시가 비용이 된다. 모양이 어긋난 body에 400을
+   * 돌려주는 것으로 라우트가 배포되어 zod가 지키고 있음을 확인한다.
+   */
+  await check('POST /api/chat (스키마 가드)', async () => {
+    const res = await req('/api/chat', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ node_id: 'not-a-uuid', text: '' }),
+    })
+    expectStatus(res, 400)
+    return '400 (invalid_body)'
+  })
+
   console.log('\n--- 5. 콘텐츠 신호 ---')
   await check('/questions 필터 줄', async () => {
     const res = await req('/questions')

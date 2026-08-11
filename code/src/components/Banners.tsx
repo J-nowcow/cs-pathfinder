@@ -35,6 +35,9 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
         <>
           <strong className="font-medium">질문으로 받기 어려운 내용입니다.</strong>
           <span className="mt-1 block text-muted">{state.reason}</span>
+          <span className="mt-1 block text-muted">
+            설명이 어려워서라면, 아래 &lsquo;이 해설에 대해 물어보기&rsquo;가 맞는 자리입니다.
+          </span>
         </>
       )}
 

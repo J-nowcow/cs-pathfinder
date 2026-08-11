@@ -29,3 +29,15 @@ export function anonDailyLimit(): number {
   const raw = Number(process.env.QUOTA_ANON_DAILY)
   return Number.isFinite(raw) && raw > 0 ? raw : 5
 }
+
+/**
+ * 노드 챗 하루 한도.
+ *
+ * 확장(질문 생성)과 다른 몫을 준다. 챗은 생성보다 값싼 호출이고 한 번의
+ * 궁금증이 두세 왕복으로 끝나는 일이 잦아, 확장 한도(5)에 묶으면 정작
+ * 파는 몫이 대화로 새 나간다.
+ */
+export function chatDailyLimit(): number {
+  const raw = Number(process.env.QUOTA_CHAT_DAILY)
+  return Number.isFinite(raw) && raw > 0 ? raw : 30
+}
