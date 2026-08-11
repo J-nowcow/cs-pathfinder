@@ -1,3 +1,6 @@
+import { containsSuspectedPii } from '@/lib/expand/validate'
+import { redactGithubSecrets } from '@/lib/personalize/github-redaction'
+
 export type GithubTreeEntry = {
   path: string
   type: 'blob' | 'tree'
@@ -53,6 +56,7 @@ type Ranked = GithubEvidenceFile & { rank: number; depth: number }
 function isSafeRepoPath(path: string): boolean {
   if (!path || path.startsWith('/') || path.endsWith('/')) return false
   if (path.includes('\\') || CONTROL_CHARACTER.test(path)) return false
+  if (containsSuspectedPii(path) || redactGithubSecrets(path) !== path) return false
 
   return path.split('/').every((segment) => segment !== '' && segment !== '.' && segment !== '..')
 }

@@ -49,6 +49,8 @@ describe('GitHub 분석 컨텍스트', () => {
       { path: 'secret/package.json', content: '{}' },
       { path: '../package.json', content: '{}' },
       { path: 'apps/\t/package.json', content: '{}' },
+      { path: 'maintainer@example.com/package.json', content: '{}' },
+      { path: `ghp_${'a'.repeat(36)}/package.json`, content: '{}' },
     ])
     expect(result.files).toEqual([])
   })

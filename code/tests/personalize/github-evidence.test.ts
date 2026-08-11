@@ -53,6 +53,15 @@ describe('GitHub 분석 근거 파일', () => {
     expect(selectGithubEvidence([blob(path)])).toEqual([])
   })
 
+  it.each([
+    'maintainer@example.com/package.json',
+    '010-1234-5678/package.json',
+    `ghp_${'a'.repeat(36)}/package.json`,
+    'token=example-value/package.json',
+  ])('연락처나 자격증명이 포함된 경로를 조회 대상에서 제외한다: %s', (path) => {
+    expect(selectGithubEvidence([blob(path)])).toEqual([])
+  })
+
   it('중복 경로를 한 번만 고른다', () => {
     expect(selectGithubEvidence([blob('README.md'), blob('README.md')])).toHaveLength(1)
   })
