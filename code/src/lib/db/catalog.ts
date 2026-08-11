@@ -17,6 +17,8 @@ export type CatalogEntry = {
   category: string
   /** 발행분이면 'YYYY-MM-DD', 예시나 사용자 질문이면 null */
   publishDate: string | null
+  /** `withBody`로 물었을 때만 담긴다. 목록 용도에서는 나르지 않는다 */
+  body?: string
 }
 
 export type Catalog = {
@@ -31,6 +33,7 @@ type Row = {
   question: string
   category: string
   publish_date: string | null
+  body?: string
 }
 
 /**
@@ -42,12 +45,16 @@ type Row = {
  *
  * 아직 오지 않은 발행분도 뺀다. 화면에서 감춰 놓고 레포에 적으면 감춘 의미가 없다.
  */
-export async function loadCatalog(today: string = kstToday()): Promise<Catalog> {
+export async function loadCatalog(
+  today: string = kstToday(),
+  opts: { withBody?: boolean } = {},
+): Promise<Catalog> {
   const db = await getDb()
   const rows = await db.query<Row>(
     `select n.id,
             n.normalized_question as question,
             n.primary_category    as category,
+            ${opts.withBody ? 'n.body,' : ''}
             to_char(t.publish_date, 'YYYY-MM-DD') as publish_date
        from qnode n
        left join tree t
@@ -65,6 +72,7 @@ export async function loadCatalog(today: string = kstToday()): Promise<Catalog> 
     question: r.question,
     category: r.category,
     publishDate: r.publish_date,
+    ...(opts.withBody ? { body: r.body ?? '' } : {}),
   }))
 
   // CATEGORIES 순서를 따른다. 개수순으로 세우면 발행 하나에 순서가 흔들려서
