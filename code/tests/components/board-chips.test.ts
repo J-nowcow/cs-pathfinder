@@ -15,9 +15,17 @@ import { readFileSync } from 'node:fs'
  * 11개 전부 보임, 2줄).
  */
 const src = readFileSync(new URL('../../src/components/Board.tsx', import.meta.url), 'utf8')
-const chipRow = src.match(/<div className="flex w-max[^"]*"/)?.[0] ?? ''
+const chipRow = src.match(/<div\s+className="flex w-max[^"]*"/)?.[0] ?? ''
 
 describe('게시판 카테고리 칩', () => {
+  it('정렬과 카테고리의 선택 상태를 화면 낭독기에 알린다', () => {
+    expect(src).toContain('role="group" aria-label="정렬"')
+    expect(src).toContain('aria-label="카테고리"')
+    expect(src).toContain('aria-pressed={sort === s.value}')
+    expect(src).toContain('aria-pressed={category === null}')
+    expect(src).toContain('aria-pressed={category === c}')
+  })
+
   it('넓은 화면에서는 줄을 바꿔 전부 보여준다', () => {
     expect(chipRow).toContain('sm:flex-wrap')
     expect(chipRow).toContain('sm:w-auto')

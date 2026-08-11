@@ -107,9 +107,15 @@ export function Board({ initial }: Props) {
         사람들이 파고든 길
       </h2>
 
-      <div className="flex gap-1.5">
+      <div className="flex gap-1.5" role="group" aria-label="정렬">
         {SORTS.map((s) => (
-          <button key={s.value} type="button" onClick={() => setSort(s.value)} className={chip(sort === s.value)}>
+          <button
+            key={s.value}
+            type="button"
+            aria-pressed={sort === s.value}
+            onClick={() => setSort(s.value)}
+            className={chip(sort === s.value)}
+          >
             {s.label}
           </button>
         ))}
@@ -134,12 +140,27 @@ export function Board({ initial }: Props) {
           aria-hidden
           className="pointer-events-none sticky right-0 top-0 float-right h-8 w-10 bg-gradient-to-l from-surface to-transparent sm:hidden"
         />
-        <div className="flex w-max gap-1.5 px-5 sm:w-auto sm:flex-wrap sm:gap-y-2 sm:px-0">
-          <button type="button" onClick={() => setCategory(null)} className={chip(category === null)}>
+        <div
+          className="flex w-max gap-1.5 px-5 sm:w-auto sm:flex-wrap sm:gap-y-2 sm:px-0"
+          role="group"
+          aria-label="카테고리"
+        >
+          <button
+            type="button"
+            aria-pressed={category === null}
+            onClick={() => setCategory(null)}
+            className={chip(category === null)}
+          >
             전체
           </button>
           {CATEGORIES.map((c) => (
-            <button key={c} type="button" onClick={() => setCategory(c)} className={chip(category === c)}>
+            <button
+              key={c}
+              type="button"
+              aria-pressed={category === c}
+              onClick={() => setCategory(c)}
+              className={chip(category === c)}
+            >
               {c}
             </button>
           ))}
