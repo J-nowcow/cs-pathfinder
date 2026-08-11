@@ -60,4 +60,13 @@ describe('GitHub 분석 컨텍스트', () => {
     expect(result.files[0].content).toBe('문의: [개인정보 제거] / [개인정보 제거]')
     expect(result.context).not.toContain('maintainer@example.com')
   })
+
+  it('공개 문서에 실수로 들어간 토큰도 모델에 보내기 전에 가린다', () => {
+    const token = `ghp_${'a'.repeat(36)}`
+    const result = buildGithubEvidenceContext([
+      { path: 'README.md', content: `예시 토큰: ${token}` },
+    ])
+    expect(result.files[0].content).toBe('예시 토큰: [비밀정보 제거]')
+    expect(result.context).not.toContain(token)
+  })
 })
