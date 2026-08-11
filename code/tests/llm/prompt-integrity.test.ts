@@ -17,6 +17,9 @@ import { SYSTEM as DAILY_SYSTEM } from '@/lib/daily/generate'
  * 먼저 깨진다.
  */
 const EXPAND_MARKS = [
+  '중심 주장 하나',
+  '도식을 가리키며 해설하지 않는다',
+  '꼬리질문으로는',
   '평어체',
   '150자',
   '첫 문단 바로 뒤',
@@ -33,7 +36,19 @@ const EXPAND_MARKS = [
   '기본값이 아니다',
 ]
 
-const DAILY_MARKS = ['40자', '평어체', '150자', ':::flow', '35자', '통해', '따라서', '기본값이 아니다']
+const DAILY_MARKS = [
+  '40자',
+  '중심 주장 하나',
+  '도식을 가리키며 해설하지 않는다',
+  '꼬리질문으로는',
+  '평어체',
+  '150자',
+  ':::flow',
+  '35자',
+  '통해',
+  '따라서',
+  '기본값이 아니다',
+]
 
 describe('프롬프트가 잘리지 않았는가', () => {
   it('keeps every rule marker in the expand prompt', () => {

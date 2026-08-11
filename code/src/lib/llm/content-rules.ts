@@ -474,3 +474,20 @@ export function complaint(issues: ContentIssue[]): string {
     '\n',
   )
 }
+
+/**
+ * 재작성 모델이 실제 초안을 볼 수 있게 한다.
+ * 호출은 매번 독립적이므로 "방금 쓴 것"이라는 말만으로는 이전 결과를 알 수 없다.
+ */
+export function revisionRequest(
+  issues: ContentIssue[],
+  draft: Record<string, string | string[]>,
+): string {
+  return [
+    complaint(issues),
+    '',
+    '아래 JSON이 고칠 초안이다. 사실과 규칙을 지킨 문장은 보존하고 지적된 자리만 고쳐라.',
+    '응답 필드와 형식은 처음 요청과 같아야 한다.',
+    JSON.stringify(draft, null, 2),
+  ].join('\n')
+}

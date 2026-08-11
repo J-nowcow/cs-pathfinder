@@ -6,7 +6,8 @@ const five = (n: number) => Array.from({ length: n }, (_, i) => ({ text: `꼬리
 const stub = (payload: unknown): StructuredCaller =>
   vi.fn(async () => payload) as unknown as StructuredCaller
 
-type CallSpy = { mock: { calls: Array<[{ model: string }]> } }
+type CallArgs = { model: string; system: string; prompt: string }
+type CallSpy = { mock: { calls: Array<[CallArgs]> } }
 
 const base = { question: 'q', identityScope: 'generic', parentQuestion: null }
 
@@ -48,6 +49,20 @@ describe('generateNodeContent', () => {
     const call = stub({ body: 'b', suggestions: five(5) })
     await generateNodeContent({ ...base, call })
     expect((call as unknown as CallSpy).mock.calls[0][0].model).toBe(MODEL_GENERATE)
+  })
+
+  it('질문 의도에 맞는 사람 작성 예시 하나만 붙인다', async () => {
+    const call = stub({ body: '재시도 총량을 제한한다.', suggestions: five(5) })
+    await generateNodeContent({
+      question: 'retry storm은 어떻게 막는가?',
+      identityScope: 'resilience',
+      parentQuestion: null,
+      call,
+    })
+
+    const system = (call as unknown as CallSpy).mock.calls[0][0].system
+    expect(system).toContain('retry budget은 전체 재시도량에 상한을 둔다')
+    expect(system).not.toContain('낙관적 락과 비관적 락은 무엇으로 고르는가?')
   })
 
   it('throws when the model returns an empty body', async () => {
@@ -92,6 +107,10 @@ describe('generateNodeContent · 규칙 재시도', () => {
     expect(r.retried).toBe(true)
     expect((call as unknown as CallSpy).mock.calls).toHaveLength(2)
     expect(r.suggestions.every((s) => s.length <= 35)).toBe(true)
+    expect((call as unknown as CallSpy).mock.calls[1][0].prompt).toContain(
+      '커넥션을 매번 새로 맺으면 핸드셰이크를 그때마다 다시 한다.',
+    )
+    expect((call as unknown as CallSpy).mock.calls[1][0].prompt).toContain(longTail.suggestions[4].text)
   })
 
   it('AI식 문체도 다시 부르고 고쳐진 것을 쓴다', async () => {

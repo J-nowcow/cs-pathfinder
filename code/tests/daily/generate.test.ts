@@ -33,5 +33,10 @@ describe('generateDailyRoot', () => {
 
     expect(result.question).toBe('인덱스는 언제 쓰기 비용을 키우는가?')
     expect(call).toHaveBeenCalledTimes(2)
+    const calls = vi.mocked(call).mock.calls as Array<[{ system: string; prompt: string }]>
+    expect(calls[0][0].system).toContain('인덱스에 들어가는 값을 바꾸면')
+    expect(calls[0][0].system).not.toContain('Circuit Breaker와 retry는 어떻게 함께 써야 하는가?')
+    expect(calls[1][0].prompt).toContain(`${'가'.repeat(41)}?`)
+    expect(calls[1][0].prompt).toContain('인덱스의 비용을 살핀다.')
   })
 })

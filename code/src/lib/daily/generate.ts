@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { IDENTITY_SCOPES, isIdentityScope } from '@/lib/expand/scopes'
 import { dailyCaller, MODEL_DAILY, type StructuredCaller } from '@/lib/llm/client'
-import { contentIssues, complaint, questionIssues, rewriteNeeded } from '@/lib/llm/content-rules'
+import { contentIssues, questionIssues, revisionRequest, rewriteNeeded } from '@/lib/llm/content-rules'
+import { HUMAN_STYLE_GUIDE, writingExampleFor } from '@/lib/llm/human-style'
 
 const dailySchema = z.object({
   question: z.string(),
@@ -52,29 +53,9 @@ export const SYSTEM = `당신은 CS 면접 학습 서비스의 "오늘의 질문
 - **한 문장은 60자를 넘기지 않는다.** 넘으면 자를 자리가 있는지 먼저 본다.
   병렬 열거처럼 꼭 필요한 자리에만 쉼표를 남긴다.
 
-한국어를 사람이 쓴 것처럼 (생성문에 실제로 많이 나온 것만 골랐다):
-- **\`~를 통해\`를 쓰지 않는다.** \`~로\`, \`~해서\`, \`~여서\`로 바꾼다.
-    나쁨: "인덱스를 통해 조회가 빨라진다"
-    좋음: "인덱스로 조회가 빨라진다"
-- **\`~할 수 있다\`를 남발하지 않는다.** 단언할 것은 단언한다.
-    나쁨: "메모리를 아낄 수 있다"  →  좋음: "메모리를 아낀다"
-    정말 조건부일 때만 남긴다.
-- **\`따라서\` \`결론적으로\` \`이를 통해\` \`그러므로\`로 문단을 시작하지 않는다.**
-    앞 문단을 읽었으면 이어지는 것을 안다. 접속사 없이 바로 시작한다.
-- **\`~해야 한다\`로 끝맺지 않는다.** 훈계가 아니라 설명이다.
-    나쁨: "따라서 인덱스를 신중히 설계해야 한다"
-    좋음: "인덱스를 늘릴수록 쓰기가 느려진다"
-- \`압도적\` \`강력한\` \`획기적\` 같은 과장어를 쓰지 않는다. 구체적인 값으로 말한다.
-- **\`면접에서는\` \`실무에서는\`으로 결론을 시작하지 않는다.** 평가 상황을 설명하지
-  말고 독자가 기억할 기술 내용 자체를 쓴다.
-- \`이를 해결하기 위해\`로 앞말을 되받지 않는다. 해결하는 구성요소나 동작을
-  주어로 바로 쓴다.
-- \`효율적\` \`효과적\` \`활용\`을 한 문단에 겹쳐 쓰지 않는다. 무엇이 줄고
-  무엇이 늘어나는지 구체적으로 쓴다.
-- **한 문단은 150자를 넘기지 않는다.** 폰에서 한 줄이 24자쯤이라 150자면 벌써 여섯 줄이다.
-  그보다 길면 눈이 미끄러진다. 할 말이 남으면 문단을 나눈다.
-- **평어체로 쓴다.** "~다"로 끝맺고 "~합니다" "~입니다" 같은 경어체를 쓰지 않는다.
-- 면접에서 한 단계 더 들어오는 지점을 짚어준다.
+${HUMAN_STYLE_GUIDE}
+
+- 첫 답 다음에는 조건·실패·비용 중 질문에 가장 가까운 하나만 더 짚는다.
 
 도식 규칙 (중요):
 - **줄글로 설명하면 독자가 머리로 다시 그려야 하는 것은 도식으로 낸다.**
@@ -84,8 +65,8 @@ export const SYSTEM = `당신은 CS 면접 학습 서비스의 "오늘의 질문
 - **도식은 첫 문단 바로 뒤에 놓는다.** 답을 한 문단으로 말하고 곧바로 보여준다.
   줄글을 두세 문단 쌓은 뒤에 놓으면 거기까지 가기 전에 읽기를 그만둔다.
   즉 답 → 도식 → 자세한 근거 순이다.
-- 도식 앞이나 뒤 문단에서 그 도식이 무엇을 보여주는지 한 문장으로 잇는다.
-  덩그러니 두면 왜 거기 있는지 모른다.
+- 도식 앞뒤 문장은 도식을 가리키지 말고 기술 대상을 주어로 이어 쓴다.
+  \`위 표는\` \`이 흐름은\` \`아래 도식은\`으로 시작하지 않는다.
 
 순서 (flow) — 주고받는 차례가 핵심일 때. 핸드셰이크, 요청 처리, 트랜잭션 진행.
 **한 줄에 화살표는 하나다.** \`A -> B -> C: 설명\`처럼 사슬을 한 줄에 쓰지 않는다.
@@ -119,21 +100,6 @@ export const SYSTEM = `당신은 CS 면접 학습 서비스의 "오늘의 질문
 
 도식 안에서도 굵게와 코드 표기를 쓸 수 있다.
 이 셋 말고 다른 마크다운(제목, 목록, 인용, HTML, 이미지)은 쓰지 않는다.
-
-아래가 해설 한 편의 모양이다. 답 한 문단 → 도식 → 근거 순이고 문단마다 짧다.
-(주제만 다를 뿐 형태는 이대로 쓴다)
-
-파일 디스크립터는 프로세스가 연 것을 세는 번호다. 한도가 있고, 닫지 않으면 번호가 계속 늘어 결국 새로 열 수 없다.
-
-:::stack
-프로세스 한도 | ulimit -n. 이 프로세스가 열 수 있는 수
-시스템 한도 | 전체 합. 여기 걸리면 다른 프로세스도 못 연다
-:::
-
-소켓도 파일이다. 그래서 커넥션 누수는 곧 디스크립터 누수다. 응답만 읽고 닫지 않는 코드가 가장 흔한 원인이다.
-
-한도에 닿으면 새 연결도 로그 파일도 못 연다. 서비스가 멈춘 것처럼 보이지만 CPU와 메모리는 멀쩡해서 원인을 찾는 데 시간이 걸린다.
-
 
 꼬리질문(suggestions) 규칙:
 - 정확히 5개.
@@ -170,7 +136,7 @@ export async function generateDailyRoot(args: {
     const out = await call({
       model: MODEL_DAILY,
       schema: dailySchema,
-      system: SYSTEM,
+      system: `${SYSTEM}\n\n${writingExampleFor(`${args.term} ${args.category}`)}`,
       prompt: extra ? `${prompt}\n\n${extra}` : prompt,
     })
 
@@ -221,7 +187,15 @@ export async function generateDailyRoot(args: {
 
   let second: Awaited<ReturnType<typeof once>> | null = null
   try {
-    second = await once(complaint(first.issues))
+    second = await once(
+      revisionRequest(first.issues, {
+        question: first.content.question,
+        identity_scope: first.content.identityScope,
+        body: first.content.body,
+        summary: first.content.summary,
+        suggestions: first.content.suggestions,
+      }),
+    )
   } catch {
     return first.content
   }
