@@ -100,7 +100,7 @@ export function FreeInput({
             */
             className="min-h-[44px] rounded-md bg-accent px-4 py-2.5 text-[13px] font-medium text-on-accent transition-opacity disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            {pending ? '파는 중' : '파고들기'}
+            {pending ? '파고드는 중' : '파고들기'}
           </button>
         </div>
       </div>

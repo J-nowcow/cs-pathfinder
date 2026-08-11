@@ -123,7 +123,7 @@ export default async function HomePage() {
       ) : (
         <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
           <p className="text-[15px] text-muted">아직 올라온 질문이 없습니다.</p>
-          <p className="mt-2 text-[13px] text-faint">서버를 다시 켜면 예시 질문이 채워집니다.</p>
+          <p className="mt-2 text-[13px] text-faint">질문을 준비하고 있습니다. 잠시 후 다시 열어 주세요.</p>
         </div>
       )}
 

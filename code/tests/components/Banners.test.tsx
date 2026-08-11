@@ -43,7 +43,7 @@ describe('GeneratingBody', () => {
   it('names the reason when it drags on', () => {
     render(<GeneratingBody />)
     advance(20)
-    expect(screen.getByText(/무료 한도/)).toBeTruthy()
+    expect(screen.getByText(/평소보다 더딘/)).toBeTruthy()
   })
 
   it('does not skip ahead too early', () => {
@@ -117,7 +117,7 @@ describe('ExpandingNote', () => {
     advance(20)
     const t = screen.getByRole('status').textContent ?? ''
     expect(t).not.toContain('몇 초만 기다려')
-    expect(t).toContain('한도')
+    expect(t).toContain('더딘')
   })
 
   /* 본문을 지우지 않는다. 읽던 글까지 없어지면 기다리는 동안 읽을 것이 없다 */

@@ -70,7 +70,7 @@ export default function PrivacyPage() {
         </p>
         <p>
           어떤 질문을 눌러 어디까지 파고들었는지를 나타내는 <strong className="text-ink">지도</strong>와,
-          며칠에 몇 편을 팠는지를 나타내는 <strong className="text-ink">학습 기록(잔디)</strong>은 기본적으로
+          날짜별로 몇 편을 파고들었는지 나타내는 <strong className="text-ink">학습 기록(잔디)</strong>은 기본적으로
           브라우저 안(localStorage)에 있습니다. <strong className="text-ink">로그인하지 않으면 서버로
           보내지 않습니다.</strong> 브라우저 저장소를 비우면 같이 사라지고, 다른 기기에서는 보이지
           않습니다.
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="3. 얼마나 갖고 있는가">
+      <Section title="3. 얼마나 보관하는가">
         <ul className="ml-4 list-disc space-y-2">
           <li>하루 한도 기록(IP) — 날짜 단위로 쌓이며, 목적을 다한 기록은 지웁니다.</li>
           <li>추천 식별 쿠키 — 브라우저에 1년. 브라우저에서 쿠키를 지우면 즉시 사라집니다.</li>
@@ -122,7 +122,7 @@ export default function PrivacyPage() {
           <li>
             <strong className="text-ink">Google (Gemini API)</strong> — 해설 생성과 질문
             임베딩(비슷한 질문을 찾으려고 문장을 숫자로 바꾸는 일). 두 경우 모두 질문의{' '}
-            <em>글자</em>만 전달됩니다. IP나 쿠키 값은 보내지 않습니다.
+            <em>내용</em>만 전달됩니다. IP나 쿠키 값은 보내지 않습니다.
           </li>
           <li>
             <strong className="text-ink">Google (로그인)</strong> — 구글 계정으로 로그인할 때

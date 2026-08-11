@@ -45,7 +45,7 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
         <>
           <strong className="font-medium">오늘 몫은 다 쓰셨습니다.</strong>
           <span className="mt-1 block text-muted">
-            이미 파인 길로 표시된 추천은 그대로 누를 수 있습니다. 자정에 초기화됩니다.
+            이미 파인 길로 표시된 추천은 그대로 누를 수 있습니다. 자정에 다시 채워집니다.
           </span>
         </>
       )}
@@ -110,7 +110,7 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
 const WAITING_COPY: Array<{ after: number; text: string }> = [
   { after: 0, text: '해설을 만드는 중입니다. 몇 초만 기다려 주세요.' },
   { after: 8, text: '조금 더 걸리고 있습니다. 그대로 두셔도 됩니다.' },
-  { after: 18, text: '오래 걸리고 있습니다. 무료 한도에 걸려 다른 모델로 넘어가는 중일 수 있습니다.' },
+  { after: 18, text: '오래 걸리고 있습니다. 응답 준비가 평소보다 더딘 날이 있습니다 — 그대로 두셔도 됩니다.' },
 ]
 
 /** 기다린 시간에 맞는 문구를 고른다 */

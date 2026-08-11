@@ -118,7 +118,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
 
       {error === 'quota' && (
         <p role="status" className="mt-2 text-[13px] text-muted">
-          오늘 물어볼 몫을 다 쓰셨습니다. 자정에 초기화됩니다.
+          오늘 물어볼 몫을 다 쓰셨습니다. 자정에 다시 채워집니다.
         </p>
       )}
       {error === 'failed' && (

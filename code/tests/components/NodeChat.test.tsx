@@ -65,7 +65,7 @@ describe('NodeChat', () => {
     await user.click(screen.getByRole('button', { name: '물어보기' }))
 
     await waitFor(() => {
-      expect(screen.getByText(/자정에 초기화됩니다/)).toBeTruthy()
+      expect(screen.getByText(/자정에 다시 채워집니다/)).toBeTruthy()
     })
   })
 })

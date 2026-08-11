@@ -23,7 +23,7 @@ import type { Candidate } from '@/lib/streak/suggest'
  */
 export const metadata: Metadata = {
   title: '내 기록',
-  description: '며칠에 몇 편을 팠는지, 다음에 무엇을 팔지.',
+  description: '며칠에 몇 편을 파고들었는지, 다음에 어디로 파고들지.',
 }
 
 export const dynamic = 'force-dynamic'
@@ -55,7 +55,7 @@ export default async function MePage() {
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <h1 className="text-2xl font-semibold">내 기록</h1>
       <p className="mt-2 text-muted">
-        로그인 없이 이 브라우저에 쌓인 기록입니다. 지금까지 {rows.length}개 질문이 있습니다.
+        로그인 없이 이 브라우저에 쌓인 기록입니다. 지금까지 올라온 질문은 {rows.length}개입니다.
       </p>
 
       <div className="mt-8">

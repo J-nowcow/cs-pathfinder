@@ -42,7 +42,7 @@ export default function TermsPage() {
       <Section title="1. 이 서비스는 무엇인가">
         <p>
           CS 면접 질문과 해설을 읽고, 꼬리질문으로 파고드는 무료 학습 서비스입니다. 가입 없이
-          쓸 수 있고, 지금은 계정 기능이 없습니다. 개인이 만들어 운영합니다.
+          전부 쓸 수 있고, 구글 로그인을 하면 학습 기록이 계정에 저장됩니다. 개인이 만들어 운영합니다.
         </p>
       </Section>
 
@@ -65,7 +65,7 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <Section title="3. 직접 물어보기에 적는 것">
+      <Section title="3. '더 파고들 질문 만들기'에 적는 것">
         <ul className="ml-4 list-disc space-y-2">
           <li>적은 내용은 해설을 만드는 AI에 전달되고, AI 학습에 쓰일 수 있습니다. 입력 칸에도 같은 안내가 있습니다.</li>
           <li>이름·연락처 같은 개인정보는 적지 마시기 바랍니다. 자동 검사가 막기도 하지만 완전하지 않습니다.</li>
@@ -109,7 +109,7 @@ export default function TermsPage() {
           <a className="underline decoration-dotted underline-offset-2" href={`mailto:${CONTACT}`}>
             {CONTACT}
           </a>{' '}
-          또는 GitHub 이슈로. 개인정보를 어떻게 다루는지는{' '}
+          또는 GitHub 이슈로 보내 주세요. 개인정보를 어떻게 다루는지는{' '}
           <a className="underline decoration-dotted underline-offset-2" href="/privacy">
             개인정보처리방침
           </a>

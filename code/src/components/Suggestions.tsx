@@ -22,7 +22,7 @@ export function Suggestions({
   if (suggestions.length === 0) {
     return (
       <p className="rounded-lg border border-dashed border-line px-4 py-8 text-center text-[14px] text-faint">
-        여기에는 추천 꼬리질문이 없습니다. 아래에 직접 물어보세요.
+        여기에는 추천 꼬리질문이 없습니다. 아래에서 직접 적어 보세요.
       </p>
     )
   }

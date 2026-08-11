@@ -104,7 +104,7 @@ export function Board({ initial }: Props) {
   return (
     <section aria-labelledby="board-heading">
       <h2 id="board-heading" className="mb-4 text-[13px] font-medium text-faint">
-        사람들이 판 트리
+        사람들이 파고든 길
       </h2>
 
       <div className="flex gap-1.5">
@@ -204,7 +204,7 @@ function Empty({ category }: { category: string | null }) {
     <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
       {category ? (
         <>
-          <p className="text-[15px] text-muted">{category} 쪽은 아직 판 사람이 없습니다.</p>
+          <p className="text-[15px] text-muted">{category} 쪽은 아직 아무도 파고들지 않았습니다.</p>
           <p className="mt-2 text-[13px] text-faint">
             여기는 사람이 공유한 트리만 걸립니다. 질문 자체를 찾는 것이라면{' '}
             <Link href="/questions" className="text-accent hover:underline">
