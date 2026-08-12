@@ -74,4 +74,14 @@ describe('지도의 점을 눌러 열었을 때', () => {
     expect(screen.getByRole('button', { name: '닫기' }).className).toContain('min-h-11')
     expect(screen.getByRole('link', { name: /이 질문 읽기/ }).className).toContain('min-h-11')
   })
+
+  it('해설을 기다리는 동안 진행 상태와 로더를 보여준다', () => {
+    vi.stubGlobal('fetch', vi.fn(() => new Promise<Response>(() => {})))
+    const { container } = render(
+      <Sheet node={NODE} links={LINKS} cameFrom={null} onClose={() => {}} onOpen={() => {}} />,
+    )
+    expect(screen.getByRole('status').textContent).toContain('해설을 불러오는 중')
+    expect(container.querySelector('[aria-busy="true"]')).toBeTruthy()
+    expect(container.querySelector('.animate-spin')).toBeTruthy()
+  })
 })

@@ -700,7 +700,10 @@ export function Sheet({
   if (!node) return null
 
   return (
-    <div className="absolute inset-x-0 bottom-0 z-10 max-h-[72dvh] overflow-y-auto rounded-t-2xl border-t border-line bg-raised shadow-2xl">
+    <div
+      aria-busy={body === null && !failed ? 'true' : undefined}
+      className="absolute inset-x-0 bottom-0 z-10 max-h-[72dvh] overflow-y-auto rounded-t-2xl border-t border-line bg-raised shadow-2xl"
+    >
       <div className="sticky top-0 flex items-start gap-3 border-b border-line bg-raised px-5 py-4">
         <h2 className="flex-1 text-[16px] font-bold leading-[1.45]">{node.question}</h2>
         <button
@@ -721,7 +724,13 @@ export function Sheet({
           사람에게는 그 이동이 곧 이탈이다.
         */}
         {body === null && !failed && (
-          <p className="text-[14px] leading-[1.75] text-faint">해설을 불러오는 중…</p>
+          <p role="status" className="flex items-center gap-2 text-[14px] leading-[1.75] text-faint">
+            <span
+              aria-hidden
+              className="size-3.5 animate-spin rounded-full border-2 border-faint/30 border-t-faint"
+            />
+            해설을 불러오는 중…
+          </p>
         )}
         {failed && (
           <p className="text-[14px] leading-[1.75] text-muted">
