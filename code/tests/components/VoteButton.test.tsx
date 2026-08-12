@@ -62,6 +62,7 @@ describe('VoteButton', () => {
       expect(screen.getByRole('button').textContent).toContain('4')
     })
     expect(screen.getByRole('button').getAttribute('aria-pressed')).toBe('true')
+    expect(screen.getByRole('button').getAttribute('aria-busy')).toBe('true')
 
     release({})
   })
