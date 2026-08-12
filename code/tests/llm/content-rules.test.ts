@@ -167,6 +167,12 @@ describe('contentIssues · 적어만 둘 것', () => {
     const issues = contentIssues({ ...ok, body })
     expect(rewriteNeeded(issues).map((i) => i.rule)).toContain('문체:상투적 문제 해결 연결')
   })
+
+  it('도식을 지칭하는 메타 문장은 다시 쓰게 한다', () => {
+    const body = '답이다.\n\n:::stack\nA | B\n:::\n\n위 도식은 계층을 보여준다.'
+    const issues = contentIssues({ ...ok, body })
+    expect(rewriteNeeded(issues).map((i) => i.rule)).toContain('문체:도식을 지칭하며 설명')
+  })
 })
 
 describe('complaint', () => {

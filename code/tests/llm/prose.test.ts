@@ -23,6 +23,12 @@ describe('proseIssues', () => {
     expect(proseIssues('이 방식은 매우 빠르다.')).toContain('과장')
   })
 
+  it('도식 자체를 주어로 설명하는 메타 문장을 잡는다', () => {
+    expect(proseIssues('위 표는 두 락의 차이를 보여준다.')).toContain('도식을 지칭하며 설명')
+    expect(proseIssues('이 흐름에서 요청은 서버로 간다.')).toContain('도식을 지칭하며 설명')
+    expect(proseIssues('요청은 인증을 거쳐 서버로 간다.')).not.toContain('도식을 지칭하며 설명')
+  })
+
   it('catches an overlong sentence', () => {
     const long = `인덱스는 ${'가'.repeat(100)}이다.`
     expect(proseIssues(long).some((i) => i.startsWith('긴 문장'))).toBe(true)
