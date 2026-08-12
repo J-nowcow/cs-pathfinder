@@ -179,7 +179,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
               type="submit"
               disabled={!canSend}
               aria-busy={pending || undefined}
-              className={`inline-flex min-h-11 items-center gap-2 rounded-md bg-accent px-3 text-[13px] font-medium text-on-accent ${
+              className={`inline-flex min-h-11 items-center gap-2 rounded-md bg-accent px-3 text-[13px] font-medium text-on-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                 pending ? 'cursor-wait disabled:opacity-100' : 'disabled:cursor-not-allowed disabled:opacity-50'
               }`}
             >

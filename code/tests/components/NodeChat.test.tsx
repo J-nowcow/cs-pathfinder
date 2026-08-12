@@ -133,6 +133,14 @@ describe('NodeChat', () => {
     expect(button.querySelector('.animate-spin')).toBeTruthy()
   })
 
+  it('물어보기 버튼은 키보드 초점을 표시한다', async () => {
+    render(<NodeChat nodeId={NODE_ID} />)
+    await userEvent.click(screen.getByText(/이 해설에 대해 물어보기/))
+    expect(screen.getByRole('button', { name: '물어보기' }).className).toContain(
+      'focus-visible:outline-2',
+    )
+  })
+
   it('너무 긴 입력을 오류 상태로 알린다', async () => {
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)

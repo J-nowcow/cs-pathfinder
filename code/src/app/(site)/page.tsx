@@ -139,7 +139,7 @@ export default async function HomePage() {
             {/* 폰에서 20px이었다. 보이는 글자는 그대로 두고 누르는 자리만 44px로 */}
             <Link
               href="/questions"
-              className="-my-[13px] inline-block py-[13px] text-[13px] text-accent hover:underline"
+              className="-my-[13px] inline-block rounded-md py-[13px] text-[13px] text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               질문 목록 보기 →
             </Link>
@@ -163,7 +163,7 @@ export default async function HomePage() {
           {total > FIRST_PAINT && (
             <Link
               href="/questions"
-              className="mt-3 block rounded-lg border border-line px-4 py-3 text-center text-[13px] text-muted transition-colors hover:border-accent hover:text-ink"
+              className="mt-3 block rounded-lg border border-line px-4 py-3 text-center text-[13px] text-muted transition-colors hover:border-accent hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               나머지 {total - FIRST_PAINT}개 보기 →
             </Link>
