@@ -100,8 +100,19 @@ export function GrassShare({
         type="button"
         onClick={() => void run()}
         disabled={phase.kind === 'creating'}
-        className="inline-flex min-h-11 items-center rounded-md border border-line bg-raised px-4 text-[14px] font-medium text-ink transition-colors hover:border-accent hover:text-accent disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        aria-busy={phase.kind === 'creating' || undefined}
+        className={`inline-flex min-h-11 items-center gap-2 rounded-md border border-line bg-raised px-4 text-[14px] font-medium text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+          phase.kind === 'creating'
+            ? 'cursor-wait disabled:opacity-100'
+            : 'disabled:opacity-60'
+        }`}
       >
+        {phase.kind === 'creating' && (
+          <span
+            aria-hidden
+            className="size-3.5 animate-spin rounded-full border-2 border-ink/25 border-t-ink"
+          />
+        )}
         {phase.kind === 'creating' ? '만드는 중' : '이미지로 공유'}
       </button>
 

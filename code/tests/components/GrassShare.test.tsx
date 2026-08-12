@@ -93,6 +93,19 @@ describe('GrassShare', () => {
     expect(screen.getByRole('button').className).toContain('min-h-11')
   })
 
+  it('그림을 만드는 동안 로더와 진행 상태를 보여준다', async () => {
+    stubCanvas()
+    HTMLCanvasElement.prototype.toBlob = function () {
+      /* 완료 콜백을 부르지 않아 생성 중 상태를 유지한다 */
+    } as HTMLCanvasElement['toBlob']
+
+    render(<GrassShare weeks={WEEKS} stats={STATS} />)
+    await userEvent.click(screen.getByRole('button'))
+    const pending = screen.getByRole('button', { name: /만드는 중/ })
+    expect(pending.getAttribute('aria-busy')).toBe('true')
+    expect(pending.querySelector('.animate-spin')).toBeTruthy()
+  })
+
   /** 폰. 카톡이 목적지라 파일을 바로 넘기는 것이 제일 짧다 */
   it('파일을 받는 공유 시트가 있으면 거기로 넘긴다', async () => {
     stubCanvas()
