@@ -56,7 +56,7 @@ export function Suggestions({
               <span className="min-w-0 flex-1">
                 <span className="block text-[15px] leading-[1.55] text-ink">{s.text}</span>
                 {pending ? (
-                  <span role="status" className="mt-1 block text-[12px] text-accent">
+                  <span className="mt-1 block text-[12px] text-accent">
                     새 질문과 해설을 만드는 중
                   </span>
                 ) : s.resolved ? (
