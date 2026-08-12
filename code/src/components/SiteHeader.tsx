@@ -77,7 +77,7 @@ function OutLink({ href, label, children }: { href: string; label: string; child
       rel={newTab ? 'noopener noreferrer' : undefined}
       aria-label={label}
       title={label}
-      className="-my-1.5 hidden h-11 w-9 place-items-center rounded-lg text-muted transition-colors hover:text-ink sm:grid"
+      className="-my-1.5 hidden h-11 w-9 place-items-center rounded-lg text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:grid"
     >
       {children}
     </a>
@@ -108,7 +108,7 @@ export function SiteHeader() {
     글자 사이는 8px이 남아 폰에서 옆 것이 눌리지 않는다.
   */
   const linkClass = (here: boolean) =>
-    `-my-2 rounded-lg px-1 py-[13px] text-[12.5px] transition-colors sm:px-2.5 sm:text-[13px] ${
+    `-my-2 rounded-lg px-1 py-[13px] text-[12.5px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-2.5 sm:text-[13px] ${
       here ? 'font-medium text-ink' : 'text-muted hover:text-ink'
     }`
 
@@ -129,7 +129,7 @@ export function SiteHeader() {
         항목마다 붙은 `px`가 이미 사이를 벌리고 있어서 `gap`은 없어도 된다.
       */}
       <nav className="mx-auto flex max-w-3xl flex-nowrap items-center gap-0 whitespace-nowrap px-5 py-3 sm:gap-1 sm:px-8">
-        <Link href="/" className="-my-3 mr-auto py-3 text-[14px] font-bold tracking-[-0.01em]">
+        <Link href="/" className="-my-3 mr-auto rounded-md py-3 text-[14px] font-bold tracking-[-0.01em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
           CS 길라잡이
         </Link>
 

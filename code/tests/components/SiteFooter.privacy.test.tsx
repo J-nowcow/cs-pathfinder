@@ -26,6 +26,7 @@ describe('바닥글', () => {
     render(<SiteFooter />)
     for (const link of screen.getAllByRole('link')) {
       expect(link.className).toContain('min-h-6')
+      expect(link.className).toContain('focus-visible:outline-2')
     }
   })
 })

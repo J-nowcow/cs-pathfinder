@@ -100,6 +100,7 @@ describe('SiteHeader · 바깥 링크', () => {
     const repo = screen.getByLabelText('GitHub에서 보기 (별을 눌러주세요)')
     expect(repo.getAttribute('target')).toBe('_blank')
     expect(repo.getAttribute('rel')).toContain('noopener')
+    expect(repo.className).toContain('focus-visible:outline-2')
   })
 })
 
@@ -120,6 +121,13 @@ describe('SiteHeader · 현재 위치', () => {
     pathname = '/map/db'
     render(<SiteHeader />)
     expect(screen.getByText('지도').getAttribute('aria-current')).toBe('page')
+  })
+
+  it('주요 화면 링크는 키보드 초점을 표시한다', () => {
+    pathname = '/questions'
+    render(<SiteHeader />)
+    expect(screen.getByText('질문 목록').className).toContain('focus-visible:outline-2')
+    expect(screen.getByText('CS 길라잡이').className).toContain('focus-visible:outline-2')
   })
 })
 

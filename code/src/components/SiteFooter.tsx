@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { CATEGORIES, categoryAnchor } from '@/lib/tree/categories'
 
+const FOOTER_LINK =
+  'inline-flex min-h-6 items-center rounded-sm text-[13px] text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
+
 /**
  * 아래쪽 사이트맵.
  *
@@ -32,22 +35,22 @@ export function SiteFooter() {
             <h2 className="text-[12px] font-medium text-faint">둘러보기</h2>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link href="/" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
+                <Link href="/" className={FOOTER_LINK}>
                   오늘의 질문
                 </Link>
               </li>
               <li>
-                <Link href="/questions" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
+                <Link href="/questions" className={FOOTER_LINK}>
                   질문 목록
                 </Link>
               </li>
               <li>
-                <Link href="/map" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
+                <Link href="/map" className={FOOTER_LINK}>
                   질문 지도
                 </Link>
               </li>
               <li>
-                <Link href="/me" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
+                <Link href="/me" className={FOOTER_LINK}>
                   학습 기록
                 </Link>
               </li>
@@ -57,7 +60,7 @@ export function SiteFooter() {
                 등록이 앞에 있어 아직 못 연다. RSS는 지금 열 수 있다.
               */}
               <li>
-                <a href="/rss.xml" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
+                <a href="/rss.xml" className={FOOTER_LINK}>
                   RSS 구독
                 </a>
               </li>
@@ -67,17 +70,17 @@ export function SiteFooter() {
                 여기가 그 자리다.
               */}
               <li>
-                <Link href="/glossary" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
+                <Link href="/glossary" className={FOOTER_LINK}>
                   용어 사전
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
+                <Link href="/terms" className={FOOTER_LINK}>
                   이용약관
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
+                <Link href="/privacy" className={FOOTER_LINK}>
                   개인정보처리방침
                 </Link>
               </li>
@@ -95,7 +98,7 @@ export function SiteFooter() {
                   */}
                   <Link
                     href={`/questions#${categoryAnchor(c)}`}
-                    className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink"
+                    className={FOOTER_LINK}
                   >
                     {c}
                   </Link>
