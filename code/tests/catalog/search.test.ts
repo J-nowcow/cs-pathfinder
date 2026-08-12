@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { matchesCatalogQuery, normalizeCatalogQuery } from '@/lib/catalog/search'
+import { catalogTagCounts, matchesCatalogQuery, normalizeCatalogQuery } from '@/lib/catalog/search'
 
 const root = {
   id: 'q1',
@@ -29,5 +29,15 @@ describe('질문 목록 검색', () => {
 
   it('빈 검색어는 모든 질문을 남긴다', () => {
     expect(matchesCatalogQuery(root, '')).toBe(true)
+  })
+
+  it('검색 결과 안에서만 태그 개수를 센다', () => {
+    const counts = catalogTagCounts([
+      root,
+      { ...root, id: 'q2', tags: ['복원력', '네트워크'] },
+    ])
+    expect(counts.get('복원력')).toBe(2)
+    expect(counts.get('장애 대응')).toBe(1)
+    expect(counts.get('네트워크')).toBe(1)
   })
 })

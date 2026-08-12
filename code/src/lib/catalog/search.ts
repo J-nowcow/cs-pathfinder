@@ -21,3 +21,12 @@ export function matchesCatalogQuery(root: RootSummary, query: string): boolean {
     .toLocaleLowerCase('ko-KR')
   return words.every((word) => haystack.includes(word))
 }
+
+/** 현재 검색 결과 안에서만 태그 개수를 센다. 검색과 무관한 필터를 보여주지 않는다. */
+export function catalogTagCounts(roots: RootSummary[]): Map<string, number> {
+  const counts = new Map<string, number>()
+  for (const root of roots) {
+    for (const tag of root.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1)
+  }
+  return counts
+}

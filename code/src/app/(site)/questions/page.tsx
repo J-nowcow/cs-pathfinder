@@ -6,7 +6,12 @@ import { CATEGORIES, categoryAnchor } from '@/lib/tree/categories'
 import { socialMeta } from '@/lib/site'
 import { TAGS, TAG_NAMES } from '../../../../data/tags'
 import { LEVELS, LEVEL_NAMES } from '../../../../data/levels'
-import { MAX_CATALOG_QUERY, matchesCatalogQuery, normalizeCatalogQuery } from '@/lib/catalog/search'
+import {
+  MAX_CATALOG_QUERY,
+  catalogTagCounts,
+  matchesCatalogQuery,
+  normalizeCatalogQuery,
+} from '@/lib/catalog/search'
 
 // 매 요청 실제 DB를 읽는다. 발행이 하나 늘면 여기도 같이 늘어야 한다
 export const dynamic = 'force-dynamic'
@@ -46,11 +51,11 @@ export default async function QuestionsPage({
   const activeTag = tag && TAG_NAMES.has(tag) ? tag : null
   const activeLevel = level && LEVEL_NAMES.has(level) ? level : null
   const query = normalizeCatalogQuery(q)
-  const filtered = roots.filter(
+  const searchMatches = roots.filter((r) => matchesCatalogQuery(r, query))
+  const filtered = searchMatches.filter(
     (r) =>
       (!activeTag || r.tags.includes(activeTag)) &&
-      (!activeLevel || r.level === activeLevel) &&
-      matchesCatalogQuery(r, query),
+      (!activeLevel || r.level === activeLevel),
   )
 
   /** 지금 고른 필터를 유지한 채 한 축만 바꾼 주소 */
@@ -64,8 +69,7 @@ export default async function QuestionsPage({
   }
 
   /* 개수 0인 태그는 필터 줄에 안 세운다. 눌러 봐야 빈 화면이다 */
-  const tagCounts = new Map<string, number>()
-  for (const r of roots) for (const t of r.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
+  const tagCounts = catalogTagCounts(searchMatches)
 
   // CATEGORIES 순서를 따른다. 개수순으로 세우면 발행 하나에 순서가 흔들려서
   // 어제 봤던 자리에 오늘 다른 게 있다
@@ -156,7 +160,7 @@ export default async function QuestionsPage({
               : 'border-accent bg-accent-soft text-ink'
           }`}
         >
-          전체 {roots.length}
+          전체 {searchMatches.length}
         </Link>
         {TAGS.filter((t) => (tagCounts.get(t.name) ?? 0) > 0).map((t) => (
           <Link
