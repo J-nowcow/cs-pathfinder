@@ -411,7 +411,7 @@ export function ReadingView({
           {node.level && (
             <a
               href={`/questions?level=${encodeURIComponent(node.level)}`}
-              className="rounded-full border border-line px-2 py-0.5 text-muted hover:border-accent hover:text-ink"
+              className="relative rounded-full border border-line px-2 py-0.5 text-muted before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] hover:border-accent hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               {node.level}
             </a>
@@ -420,7 +420,7 @@ export function ReadingView({
             <a
               key={t}
               href={`/questions?tag=${encodeURIComponent(t)}`}
-              className="rounded-full border border-line px-2 py-0.5 text-muted hover:border-accent hover:text-ink"
+              className="relative rounded-full border border-line px-2 py-0.5 text-muted before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] hover:border-accent hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               {t}
             </a>

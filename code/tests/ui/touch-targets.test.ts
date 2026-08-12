@@ -11,6 +11,11 @@ describe('작은 조작 요소의 터치 영역', () => {
     expect(source).toContain('before:-inset-y-1.5')
   })
 
+  it('질문 읽기의 태그와 난이도 칩도 판정 영역을 넓힌다', () => {
+    const source = read('src/components/ReadingView.tsx')
+    expect(source.match(/before:-inset-y-2/g)).toHaveLength(2)
+  })
+
   it('오류 배너의 다시 시도 버튼은 손끝 높이를 확보한다', () => {
     const source = read('src/components/Banners.tsx')
     expect(source).toMatch(/onClick=\{onRetry\}[\s\S]{0,180}className="min-h-11/)
