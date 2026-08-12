@@ -32,7 +32,7 @@ export default function NotFound() {
         없는 주소입니다
       </h1>
       <p className="mt-3 max-w-md text-[15px] leading-[1.72] text-muted">
-        주소가 잘려서 왔을 수도 있습니다. 하루에 질문 하나씩 올라오니 오늘 치부터 보셔도 좋습니다.
+        주소가 잘려서 왔을 수도 있습니다. 하루에 질문 하나씩 올라오니 오늘의 질문부터 보셔도 좋습니다.
       </p>
 
       <div className="mt-7">
@@ -40,7 +40,7 @@ export default function NotFound() {
           href="/"
           className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-[15px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          오늘 치 질문 보기
+          오늘의 질문 보기
           <span aria-hidden>→</span>
         </Link>
       </div>

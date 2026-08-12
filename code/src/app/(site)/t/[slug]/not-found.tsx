@@ -13,7 +13,7 @@ export default function TreeNotFound() {
         없는 링크입니다
       </h1>
       <p className="mt-3 max-w-md text-[15px] leading-[1.72] text-muted">
-        주소가 잘려서 왔거나 지워진 길인 것 같습니다. 대신 오늘 치 질문부터 파보셔도 좋습니다.
+        주소가 잘려서 왔거나 지워진 질문 지도인 것 같습니다. 대신 오늘의 질문부터 읽어 보셔도 좋습니다.
       </p>
 
       <div className="mt-7">

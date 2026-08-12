@@ -45,7 +45,7 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
         <>
           <strong className="font-medium">오늘 몫은 다 쓰셨습니다.</strong>
           <span className="mt-1 block text-muted">
-            이미 파인 길로 표시된 추천은 그대로 누를 수 있습니다. 자정에 다시 채워집니다.
+            이미 만든 질문으로 표시된 추천은 그대로 열 수 있습니다. 자정에 다시 채워집니다.
           </span>
         </>
       )}
@@ -63,7 +63,7 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
         <>
           <strong className="font-medium">지금은 새 질문을 받지 못합니다.</strong>
           <span className="mt-1 block text-muted">
-            이미 파인 길로 표시된 추천은 그대로 쓸 수 있습니다.
+            이미 만든 질문으로 표시된 추천은 그대로 열 수 있습니다.
           </span>
         </>
       )}
@@ -71,7 +71,7 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
       {state.kind === 'error' && (
         <div className="flex items-start justify-between gap-4">
           <span>
-            <strong className="font-medium">파고들지 못했습니다.</strong>
+            <strong className="font-medium">질문을 만들지 못했습니다.</strong>
             <span className="mt-1 block text-muted">{state.message}</span>
           </span>
           {onRetry && (

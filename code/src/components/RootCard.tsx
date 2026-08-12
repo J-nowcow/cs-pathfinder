@@ -34,7 +34,7 @@ export function RootCard({ root, hero = false }: { root: RootSummary; hero?: boo
       </p>
 
       <span className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-accent">
-        파고들기
+        질문 읽기
         <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
           →
         </span>

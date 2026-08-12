@@ -118,7 +118,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="파고든 길 공유하기"
+            aria-label="질문 지도 공유하기"
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-md rounded-t-xl border border-line bg-raised p-6 shadow-xl sm:rounded-xl"
           >
@@ -133,11 +133,11 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
             ) : (
               <>
                 <h2 className="text-[17px] font-semibold tracking-[-0.015em] text-ink">
-                  파고든 길 공유하기
+                  질문 지도 공유하기
                 </h2>
                 <p className="mt-2 text-[13px] leading-[1.65] text-muted">
-                  지금까지 파고든 질문 {journey.occurrences.length}개가 그 모습 그대로 남습니다. 나중에
-                  다른 길이 생겨도 이 트리는 바뀌지 않습니다.
+                  지금까지 이어간 질문 {journey.occurrences.length}개가 그 모습 그대로 남습니다. 나중에
+                  다른 길이 생겨도 이 질문 지도는 바뀌지 않습니다.
                 </p>
 
                 <label htmlFor="share-title" className="mt-5 block text-[13px] font-medium text-muted">
@@ -212,7 +212,7 @@ function Done({
     <>
       <h2 className="text-[17px] font-semibold tracking-[-0.015em] text-ink">링크가 생겼습니다</h2>
       <p className="mt-2 text-[13px] leading-[1.65] text-muted">
-        이 주소를 받은 사람은 파고든 모양을 그대로 보고, 같은 자리에서 이어서 파고들 수 있습니다.
+        이 주소를 받은 사람은 질문 지도를 그대로 보고, 같은 자리에서 학습을 이어갈 수 있습니다.
       </p>
 
       <input
@@ -257,7 +257,7 @@ function Done({
         onClick={onClose}
         className="mt-3 w-full text-[13px] text-faint hover:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
-        계속 파고들기
+        계속 학습하기
       </button>
     </>
   )

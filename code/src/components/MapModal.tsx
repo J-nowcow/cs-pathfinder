@@ -174,12 +174,12 @@ export function MapModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="파고든 지도"
+      aria-label="내 질문 지도"
       className="fixed inset-0 z-50 flex flex-col bg-strata"
     >
       <header className="flex shrink-0 items-center justify-between border-b border-strata-line px-5 py-3">
         <div>
-          <h2 className="text-[14px] font-semibold text-white">파고든 지도</h2>
+          <h2 className="text-[14px] font-semibold text-white">내 질문 지도</h2>
           <p className="mt-0.5 text-[12px] text-strata-ink">
             질문 {layout.nodes.length}개
             {view.hiddenCount > 0 && ` · 멀리 있는 질문 ${view.hiddenCount}개는 숨겼습니다`}

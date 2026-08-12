@@ -58,7 +58,7 @@ export function MinimapStrip({
             height={height}
             viewBox={`0 0 ${width} ${height}`}
             role="img"
-            aria-label={`파고든 지도. 질문 ${layout.nodes.length}개`}
+            aria-label={`내 질문 지도. 질문 ${layout.nodes.length}개`}
             className="block"
           >
             {layout.edges.map((e) => {

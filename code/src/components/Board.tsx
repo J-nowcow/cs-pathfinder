@@ -104,7 +104,7 @@ export function Board({ initial }: Props) {
   return (
     <section aria-labelledby="board-heading">
       <h2 id="board-heading" className="mb-4 text-[13px] font-medium text-faint">
-        사람들이 파고든 길
+        사람들이 공유한 질문 지도
       </h2>
 
       <div className="flex gap-1.5" role="group" aria-label="정렬">
@@ -225,9 +225,9 @@ function Empty({ category }: { category: string | null }) {
     <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
       {category ? (
         <>
-          <p className="text-[15px] text-muted">{category} 쪽은 아직 아무도 파고들지 않았습니다.</p>
+          <p className="text-[15px] text-muted">{category} 질문 지도는 아직 공유되지 않았습니다.</p>
           <p className="mt-2 text-[13px] text-faint">
-            여기는 사람이 공유한 트리만 걸립니다. 질문 자체를 찾는 것이라면{' '}
+            여기는 사람이 공유한 질문 지도만 모입니다. 질문 자체를 찾는 것이라면{' '}
             <Link href="/questions" className="text-accent hover:underline">
               카테고리별 질문
             </Link>
@@ -236,9 +236,9 @@ function Empty({ category }: { category: string | null }) {
         </>
       ) : (
         <>
-          <p className="text-[15px] text-muted">아직 공유된 트리가 없습니다.</p>
+          <p className="text-[15px] text-muted">아직 공유된 질문 지도가 없습니다.</p>
           <p className="mt-2 text-[13px] text-faint">
-            오늘 치 질문을 파고 공유하면 여기가 첫 자리입니다.
+            오늘의 질문에서 꼬리질문을 고른 뒤 질문 지도를 공유할 수 있습니다.
           </p>
         </>
       )}
@@ -248,7 +248,7 @@ function Empty({ category }: { category: string | null }) {
         /* 혼자 서 있는 줄이라 위아래로 늘려도 겹칠 것이 없다. 20px → 44px */
         className="mt-[9px] inline-flex items-center gap-1.5 py-[13px] text-[13px] font-medium text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
-        오늘 치 질문 보러 가기
+        오늘의 질문 보기
         <span aria-hidden>↑</span>
       </Link>
     </div>

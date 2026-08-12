@@ -23,7 +23,7 @@ import type { Candidate } from '@/lib/streak/suggest'
  */
 export const metadata: Metadata = {
   title: '내 기록',
-  description: '며칠에 몇 편을 파고들었는지, 다음에 어디로 파고들지.',
+  description: '며칠에 몇 편을 학습했는지, 다음에 어떤 질문을 볼지.',
 }
 
 export const dynamic = 'force-dynamic'

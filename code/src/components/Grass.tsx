@@ -82,7 +82,7 @@ export function Grass({
       {picked && (
         <p className="mt-2 text-sm">
           <span className="font-medium">{readableDay(picked.day)}</span> —{' '}
-          {picked.count === 0 ? '이날 파고든 질문이 없습니다.' : `${picked.count}편 파고들었습니다.`}
+          {picked.count === 0 ? '이날 학습한 질문이 없습니다.' : `${picked.count}편 학습했습니다.`}
         </p>
       )}
       <figcaption className="mt-2 text-sm text-muted">{summary}</figcaption>

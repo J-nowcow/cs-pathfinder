@@ -445,7 +445,7 @@ export function ReadingView({
             버튼이 안 눌리는 이유를 눈으로만 알 수 있으면 안 된다.
           */}
           <section aria-busy={expanding || undefined}>
-            <h2 className="mb-3 text-[13px] font-medium text-muted">더 파고들기</h2>
+            <h2 className="mb-3 text-[13px] font-medium text-muted">이어갈 꼬리질문</h2>
             <Suggestions
               suggestions={node.suggestions}
               pendingId={pendingId}

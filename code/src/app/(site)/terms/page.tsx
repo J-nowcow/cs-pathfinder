@@ -65,7 +65,7 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <Section title="3. '더 파고들 질문 만들기'에 적는 것">
+      <Section title="3. '원하는 꼬리질문 만들기'에 적는 것">
         <ul className="ml-4 list-disc space-y-2">
           <li>적은 내용은 해설을 만드는 AI에 전달되고, AI 학습에 쓰일 수 있습니다. 입력 칸에도 같은 안내가 있습니다.</li>
           <li>이름·연락처 같은 개인정보는 적지 마시기 바랍니다. 자동 검사가 막기도 하지만 완전하지 않습니다.</li>

@@ -57,7 +57,7 @@ function TreeShape({ nodes }: Props) {
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label={`질문을 파고든 경로. 질문 ${layout.nodes.length}개`}
+        aria-label={`공유된 질문 경로. 질문 ${layout.nodes.length}개`}
         className="block"
       >
         {layout.edges.map((e) => {

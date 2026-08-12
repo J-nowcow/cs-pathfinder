@@ -60,7 +60,7 @@ export function ResumeLine() {
     >
       <div className="min-w-0 flex-1">
         <p className="text-[12px] text-faint">
-          이어서 파던 곳 · <span className="font-mono">깊이 {resume.depth - 1}</span>
+          이어서 학습하기 · <span className="font-mono">깊이 {resume.depth - 1}</span>
         </p>
         <p className="mt-0.5 truncate text-[14px] font-medium text-ink">{resume.question}</p>
       </div>

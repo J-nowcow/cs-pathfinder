@@ -25,7 +25,7 @@ export function TodayCard({ feature }: { feature: TodayFeature }) {
   return (
     <section id="today" aria-labelledby="today-heading" className="scroll-mt-6">
       <p id="today-heading" className="mb-3 text-[13px] font-medium text-faint">
-        {feature.isToday ? '오늘 치 질문' : '가장 최근 질문'}
+        {feature.isToday ? '오늘의 질문' : '가장 최근 질문'}
       </p>
 
       <Link
@@ -41,7 +41,7 @@ export function TodayCard({ feature }: { feature: TodayFeature }) {
         <p className="mt-3.5 text-[15px] leading-[1.72] text-muted">{feature.excerpt}</p>
 
         <span className="mt-5 inline-flex items-center gap-1.5 text-[15px] font-medium text-accent">
-          파고들기
+          질문 읽기
           <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
             →
           </span>
@@ -59,7 +59,7 @@ export function TodayCard({ feature }: { feature: TodayFeature }) {
             */
             className="-my-[14px] inline-block py-[14px] text-muted hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            이 질문의 트리 보기 →
+            이 질문의 지도 보기 →
           </Link>
         </p>
       )}

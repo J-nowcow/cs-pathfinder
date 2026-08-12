@@ -101,9 +101,9 @@ export function MePanel({ all }: { all: Candidate[] }) {
               className="shrink-0 select-none"
             />
             <p className="text-[15px] leading-[1.7] text-muted">
-              아직 파고든 기록이 없습니다. 질문 하나를 열어 보면 여기 잔디가 자라기 시작합니다.{' '}
+              아직 학습 기록이 없습니다. 질문 하나를 열어 보면 여기 잔디가 자라기 시작합니다.{' '}
               <Link href="/" className="font-medium text-accent">
-                오늘 치부터 파 보기
+                오늘의 질문 보기
               </Link>
             </p>
           </div>
@@ -119,8 +119,8 @@ export function MePanel({ all }: { all: Candidate[] }) {
         <h2 className="mb-3 text-lg font-semibold">숫자</h2>
         <dl className="grid grid-cols-3 gap-3">
           {[
-            { k: '이어서 파고든 날', v: `${view.streak}일` },
-            { k: '파고든 질문', v: `${view.distinct}개` },
+            { k: '연속 학습일', v: `${view.streak}일` },
+            { k: '학습한 질문', v: `${view.distinct}개` },
             { k: '열어 본 횟수', v: `${view.total}번` },
           ].map((it) => (
             <div key={it.k} className="rounded-lg border border-line bg-raised p-3">
@@ -132,12 +132,12 @@ export function MePanel({ all }: { all: Candidate[] }) {
       </section>
 
       <section>
-        <h2 className="mb-1 text-lg font-semibold">다음에 파고들 것</h2>
+        <h2 className="mb-1 text-lg font-semibold">다음 추천 질문</h2>
         <p className="mb-3 text-sm text-muted">
-          아직 파고들지 않은 질문 가운데 고릅니다. 자주 파고든 분야를 앞세우되 안 가 본 분야도 하나 섞습니다.
+          아직 읽지 않은 질문 가운데 고릅니다. 자주 학습한 분야를 앞세우되 안 가 본 분야도 하나 섞습니다.
         </p>
         {view.next.length === 0 ? (
-          <p className="text-muted">권할 것이 없습니다. 있는 질문을 모두 파고드셨습니다.</p>
+          <p className="text-muted">권할 것이 없습니다. 있는 질문을 모두 읽으셨습니다.</p>
         ) : (
           <ul className="flex list-none flex-col gap-2 p-0">
             {view.next.map((c) => (

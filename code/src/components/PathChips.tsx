@@ -59,7 +59,7 @@ export function PathChips({
     : path
 
   return (
-    <nav ref={scroller} aria-label="파고든 경로" className="scroll-x -mx-5 sm:-mx-8">
+    <nav ref={scroller} aria-label="학습 경로" className="scroll-x -mx-5 sm:-mx-8">
       {/* 패딩은 ol에 준다. nav에 주면 스크롤 끝에서 오른쪽 여백이 사라져 현재 칩이 잘린다 */}
       <ol className="flex w-max items-center gap-1.5 px-5 sm:px-8">
         {shown.map((occ, i) => {

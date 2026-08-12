@@ -1,0 +1,43 @@
+import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+
+/**
+ * 기능 이름은 화면마다 같은 뜻으로 쓴다.
+ *
+ * `파고들기`는 서비스의 비유로는 남길 수 있다. 하지만 버튼과 상태까지 전부 같은
+ * 말로 부르면 질문을 여는지, 새로 만드는지, 지도를 공유하는지 알 수 없다.
+ */
+const CORE_FILES = [
+  'src/components/TodayCard.tsx',
+  'src/components/RootCard.tsx',
+  'src/components/ReadingView.tsx',
+  'src/components/Suggestions.tsx',
+  'src/components/FreeInput.tsx',
+  'src/components/Board.tsx',
+  'src/components/ShareSheet.tsx',
+  'src/components/MapModal.tsx',
+  'src/components/MinimapStrip.tsx',
+]
+
+const source = CORE_FILES.map((file) => readFileSync(file, 'utf8')).join('\n')
+
+describe('핵심 화면 용어', () => {
+  it.each([
+    '오늘 치 질문',
+    '이미 파인 길',
+    '더 파고들 질문 만들기',
+    '파고드는 중',
+    '이 질문의 트리 보기',
+    '파고든 길 공유하기',
+    '파고든 지도',
+  ])('예전 표현 %s 을 다시 쓰지 않는다', (legacy) => {
+    expect(source).not.toContain(legacy)
+  })
+
+  it.each(['오늘의 질문', '질문 읽기', '이어갈 꼬리질문', '원하는 꼬리질문 만들기', '질문 지도'])(
+    '기준 표현 %s 을 유지한다',
+    (term) => {
+      expect(source).toContain(term)
+    },
+  )
+})

@@ -156,7 +156,7 @@ export function AuthCard() {
   return (
     <div className="rounded-xl border border-line bg-surface p-4">
       <p className="text-sm">
-        로그인하면 파고든 기록이 계정에 저장되어 다른 기기에서도 이어집니다.
+        로그인하면 학습 기록이 계정에 저장되어 다른 기기에서도 이어집니다.
       </p>
       <p className="mt-1 text-sm text-muted">
         저장하는 것은 이메일뿐입니다. 이름·프로필 사진은 받지 않습니다.

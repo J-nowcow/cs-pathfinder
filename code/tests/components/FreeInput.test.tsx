@@ -65,7 +65,9 @@ describe('FreeInput — 보낼 수 있는가', () => {
 
   it('says what it is doing while a request runs', () => {
     render(<FreeInput {...base} pending />)
-    expect(screen.getByRole('button').textContent).toBe('파고드는 중')
+    const button = screen.getByRole('button')
+    expect(button.textContent).toBe('만드는 중')
+    expect(button.getAttribute('aria-busy')).toBe('true')
   })
 })
 
