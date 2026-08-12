@@ -110,6 +110,11 @@ describe('VoteButton', () => {
     expect(screen.getByRole('button').getAttribute('aria-pressed')).toBe('false')
   })
 
+  it('좁은 화면에서는 실패 안내를 다음 줄로 보낼 수 있다', () => {
+    const { container } = render(<VoteButton slug="abc" initialCount={0} initialVoted={false} />)
+    expect(container.firstElementChild?.className).toContain('flex-wrap')
+  })
+
   it('rolls back when the network throws', async () => {
     vi.stubGlobal(
       'fetch',
