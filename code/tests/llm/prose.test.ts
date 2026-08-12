@@ -34,6 +34,13 @@ describe('proseIssues', () => {
     expect(proseIssues('두 방식으로 나뉜다.')).not.toContain('경어체 해설')
   })
 
+  it('문단 중간에 끼어든 면접 메타 해설을 잡는다', () => {
+    expect(proseIssues('트랩은 소프트웨어 인터럽트다. 이 구분이 면접의 핵심이다.')).toContain(
+      '면접 상황으로 설명',
+    )
+    expect(proseIssues('실무에서 락 경합을 측정한다.')).not.toContain('면접 상황으로 설명')
+  })
+
   it('핵심이라고 선언하며 시작하는 문단을 잡는다', () => {
     expect(proseIssues('핵심은 빠른 실패다.')).toContain('핵심을 선언하며 시작')
     expect(proseIssues('빠른 실패가 자원 고갈을 막는다.')).not.toContain('핵심을 선언하며 시작')
