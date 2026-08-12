@@ -50,10 +50,12 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
         }),
       })
       if (res.status === 429) {
+        setTurns(turns)
         setError('quota')
         return
       }
       if (!res.ok) {
+        setTurns(turns)
         setError('failed')
         return
       }
@@ -62,6 +64,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
       setText('')
       setRemaining(Math.max(0, data.quota.limit - data.quota.used))
     } catch {
+      setTurns(turns)
       setError('failed')
     } finally {
       setPending(false)

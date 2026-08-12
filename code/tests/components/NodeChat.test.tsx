@@ -92,6 +92,28 @@ describe('NodeChat', () => {
     expect((screen.getByRole('textbox') as HTMLTextAreaElement).value).toBe('지워지면 안 됩니다')
   })
 
+  it('실패한 질문을 다시 보내도 대화에 두 번 쌓이지 않는다', async () => {
+    vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response('{"error":"failed"}', { status: 500 }))
+      .mockResolvedValueOnce(
+        new Response('{"answer":"다시 받은 답입니다.","quota":{"used":1,"limit":30}}', {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+      )
+    const user = userEvent.setup()
+    render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.type(screen.getByRole('textbox'), '한 번만 보여야 합니다')
+    await user.click(screen.getByRole('button', { name: '물어보기' }))
+    await waitFor(() => expect(screen.getByText(/답을 만들지 못했습니다/)).toBeTruthy())
+
+    await user.click(screen.getByRole('button', { name: '물어보기' }))
+    await waitFor(() => expect(screen.getByText('다시 받은 답입니다.')).toBeTruthy())
+
+    expect(screen.getAllByText('한 번만 보여야 합니다')).toHaveLength(1)
+  })
+
   it('응답을 기다리는 동안 버튼에서 진행 상태를 보여준다', async () => {
     vi.spyOn(globalThis, 'fetch').mockImplementationOnce(() => new Promise<Response>(() => {}))
     const user = userEvent.setup()
