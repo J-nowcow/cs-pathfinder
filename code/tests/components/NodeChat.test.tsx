@@ -93,7 +93,8 @@ describe('NodeChat', () => {
     await user.type(screen.getByRole('textbox'), '지워지면 안 됩니다')
     await user.click(screen.getByRole('button', { name: '물어보기' }))
 
-    await waitFor(() => expect(screen.getByText(/답을 만들지 못했습니다/)).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('alert')).toBeTruthy())
+    expect(screen.getByRole('alert').textContent).toContain('답을 만들지 못했습니다')
     expect((screen.getByRole('textbox') as HTMLTextAreaElement).value).toBe('지워지면 안 됩니다')
   })
 

@@ -172,8 +172,8 @@ describe('GrassShare', () => {
     render(<GrassShare weeks={WEEKS} stats={STATS} />)
     await userEvent.click(screen.getByRole('button'))
 
-    await waitFor(() => expect(screen.getByRole('status')).toBeTruthy())
-    expect(screen.getByRole('status').textContent).toContain('만들지 못했습니다')
+    await waitFor(() => expect(screen.getByRole('alert')).toBeTruthy())
+    expect(screen.getByRole('alert').textContent).toContain('만들지 못했습니다')
     expect(clicks.length).toBe(0)
   })
 
@@ -183,7 +183,7 @@ describe('GrassShare', () => {
     render(<GrassShare weeks={WEEKS} stats={STATS} />)
     await userEvent.click(screen.getByRole('button'))
 
-    await waitFor(() => expect(screen.getByRole('status')).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('alert')).toBeTruthy())
   })
 
   it('굽다가 터져도 화면을 데려가지 않는다', async () => {
@@ -195,7 +195,7 @@ describe('GrassShare', () => {
     render(<GrassShare weeks={WEEKS} stats={STATS} />)
     await userEvent.click(screen.getByRole('button'))
 
-    await waitFor(() => expect(screen.getByRole('status')).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('alert')).toBeTruthy())
     /* 버튼은 살아 있어야 한다. 다시 눌러볼 수 있어야 하니까 */
     expect(screen.getByRole('button').textContent).toBe('이미지로 공유')
   })

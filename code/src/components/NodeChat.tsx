@@ -132,12 +132,12 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
       )}
 
       {error === 'quota' && (
-        <p role="status" className="mt-2 text-[13px] text-muted">
+        <p role="alert" className="mt-2 text-[13px] text-muted">
           오늘 물어볼 몫을 다 쓰셨습니다. 자정에 다시 채워집니다.
         </p>
       )}
       {error === 'failed' && (
-        <p role="status" className="mt-2 text-[13px] text-muted">
+        <p role="alert" className="mt-2 text-[13px] text-muted">
           답을 만들지 못했습니다. 다시 시도해 주세요.
         </p>
       )}

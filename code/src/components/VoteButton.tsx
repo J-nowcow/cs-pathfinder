@@ -83,7 +83,7 @@ export function VoteButton({
       </button>
 
       {failed && (
-        <span role="status" className="text-[13px] text-warn">
+        <span role="alert" className="text-[13px] text-warn">
           반영하지 못했습니다. 다시 눌러 주세요.
         </span>
       )}

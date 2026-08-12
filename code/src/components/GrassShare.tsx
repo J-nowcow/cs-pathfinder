@@ -118,7 +118,7 @@ export function GrassShare({
 
       {phase.kind === 'failed' && (
         <p
-          role="status"
+          role="alert"
           className="mt-2 rounded-md border border-warn/30 bg-warn-soft px-3 py-2.5 text-[13px] leading-[1.6] text-ink"
         >
           {phase.message}

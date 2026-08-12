@@ -104,7 +104,7 @@ describe('VoteButton', () => {
     await userEvent.click(screen.getByRole('button'))
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toBeTruthy()
+      expect(screen.getByRole('alert')).toBeTruthy()
     })
     expect(screen.getByRole('button').textContent).toContain('5')
     expect(screen.getByRole('button').getAttribute('aria-pressed')).toBe('false')
@@ -127,7 +127,7 @@ describe('VoteButton', () => {
     await userEvent.click(screen.getByRole('button'))
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toBeTruthy()
+      expect(screen.getByRole('alert')).toBeTruthy()
     })
     expect(screen.getByRole('button').getAttribute('aria-pressed')).toBe('true')
   })
