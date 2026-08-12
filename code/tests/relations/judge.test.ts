@@ -197,6 +197,13 @@ describe('cleanReason', () => {
     expect(cleanReason(ok)).toBe(ok)
   })
 
+  it('평어체가 아닌 근거 종결을 정리한다', () => {
+    expect(cleanReason('두 질문은 같은 원리를 다루고 있습니다.')).toBe(
+      '두 질문은 같은 원리를 다루고 있다.',
+    )
+    expect(cleanReason('선행 개념이 됩니다.')).toBe('선행 개념이 된다.')
+  })
+
   /*
    * 사람이 쓴 낱말은 지우지 않는다. 번호가 아니면 남는다.
    * "q"로 시작하는 CS 용어가 실제로 있다 — 큐 관련 표기가 그렇다.
