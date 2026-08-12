@@ -24,6 +24,16 @@ afterEach(() => {
 })
 
 describe('Board · 다음 페이지', () => {
+  it('첫 목록 실패를 즉시 알리고 다시 시도할 수 있다', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('', { status: 503 })))
+    render(<Board initial={{ trees: [], nextCursor: null }} />)
+
+    await userEvent.click(screen.getByRole('button', { name: '최신' }))
+
+    await waitFor(() => expect(screen.getByRole('alert')).toBeTruthy())
+    expect(screen.getByRole('button', { name: '다시 시도' })).toBeTruthy()
+  })
+
   it('더 보기 실패 뒤에도 이미 읽던 질문 지도를 남긴다', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => new Response('', { status: 503 })))
     render(<Board initial={{ trees: [tree], nextCursor: 'next-page' }} />)

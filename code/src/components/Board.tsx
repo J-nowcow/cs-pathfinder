@@ -175,7 +175,7 @@ export function Board({ initial }: Props) {
             ))}
           </div>
         ) : failure?.cursor === null ? (
-          <div className="rounded-lg border border-warn/30 bg-warn-soft px-6 py-10 text-center">
+          <div role="alert" className="rounded-lg border border-warn/30 bg-warn-soft px-6 py-10 text-center">
             <p className="text-[15px] text-ink">게시판을 불러오지 못했습니다.</p>
             <button
               type="button"
