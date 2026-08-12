@@ -1,7 +1,14 @@
 import { z } from 'zod'
 import { IDENTITY_SCOPES, isIdentityScope } from '@/lib/expand/scopes'
 import { dailyCaller, MODEL_DAILY, type StructuredCaller } from '@/lib/llm/client'
-import { contentIssues, questionIssues, revisionRequest, rewriteNeeded } from '@/lib/llm/content-rules'
+import {
+  contentIssues,
+  isBetterRevision,
+  questionIssues,
+  revisionRequest,
+  rewriteNeeded,
+  summaryIssues,
+} from '@/lib/llm/content-rules'
 import { HUMAN_STYLE_GUIDE, writingExampleFor } from '@/lib/llm/human-style'
 
 const dailySchema = z.object({
@@ -162,12 +169,17 @@ export async function generateDailyRoot(args: {
     // 모르는 스코프를 그대로 저장하면 오병합 방어선이 무너진다. generic으로 좁힌다.
     const identityScope = isIdentityScope(out.identity_scope) ? out.identity_scope : 'generic'
 
-    // 요약이 비면 카드가 빈 줄로 뜬다. 질문으로 대신한다.
-    const summary = out.summary.trim() || question
+    // 화면은 비우지 않되, 원래 응답이 빈 사실은 검사기에 넘겨 다시 쓰게 한다.
+    const rawSummary = out.summary.trim()
+    const summary = rawSummary || question
 
     return {
       content: { question, identityScope, body, summary, suggestions },
-      issues: [...questionIssues(question), ...contentIssues({ body, suggestions })],
+      issues: [
+        ...questionIssues(question),
+        ...contentIssues({ body, suggestions }),
+        ...summaryIssues(rawSummary),
+      ],
     }
   }
 
@@ -200,6 +212,6 @@ export async function generateDailyRoot(args: {
     return first.content
   }
 
-  const better = rewriteNeeded(second.issues).length < rewriteNeeded(first.issues).length ? second : first
+  const better = isBetterRevision(second.issues, first.issues) ? second : first
   return better.content
 }

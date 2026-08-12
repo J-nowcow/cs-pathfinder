@@ -44,6 +44,8 @@ export type ContentIssue = {
 export const MAX_PARAGRAPH = 150
 /** 꼬리질문은 버튼과 게시판 제목에 그대로 나간다. 넘으면 줄이 접힌다 */
 export const MAX_SUGGESTION = 35
+/** 게시판 카드 요약은 두 줄 안에 들어와야 한다 */
+export const MAX_SUMMARY = 60
 /** 답을 말하고 곧바로 보여준다. 줄글을 이만큼 쌓은 뒤면 늦다 */
 export const DIAGRAM_BY = 3
 
@@ -436,6 +438,39 @@ export function questionIssues(question: string): ContentIssue[] {
   return out
 }
 
+/** 오늘의 질문 카드에 나가는 요약도 본문과 같은 말투를 지킨다. */
+export function summaryIssues(summary: string): ContentIssue[] {
+  const out: ContentIssue[] = []
+  const text = summary.trim()
+
+  if (text.length === 0) {
+    out.push({ rule: '요약없음', detail: '요약이 비었다. 해설의 핵심을 한 문장으로 써라', severity: 'block' })
+    return out
+  }
+  if (text.length > MAX_SUMMARY) {
+    out.push({
+      rule: '요약길이',
+      detail: `요약이 ${text.length}자다. ${MAX_SUMMARY}자 아래로 줄여라`,
+      severity: 'block',
+    })
+  }
+  if (/(?:합니다|입니다|됩니다|배웁니다)[.!]?$/.test(text)) {
+    out.push({
+      rule: '요약경어체',
+      detail: '요약이 경어체다. 본문처럼 평어체로 써라',
+      severity: 'block',
+    })
+  }
+  for (const issue of proseIssues(text)) {
+    out.push({
+      rule: `문체:${issue}`,
+      detail: `요약 문체가 어긋난다 — ${issue}`,
+      severity: 'note',
+    })
+  }
+  return out
+}
+
 /** 다시 부를 만한 것만 */
 export function blocking(issues: ContentIssue[]): ContentIssue[] {
   return issues.filter((i) => i.severity === 'block')
@@ -460,6 +495,14 @@ const REWRITE_STYLE_RULES = new Set([
 /** 새로 생성한 글을 한 번 더 쓰게 할 지적. 구조 오류와 검증된 문체 오류를 합친다 */
 export function rewriteNeeded(issues: ContentIssue[]): ContentIssue[] {
   return issues.filter((i) => i.severity === 'block' || REWRITE_STYLE_RULES.has(i.rule))
+}
+
+/** 구조 오류를 먼저 줄이고, 그다음 전체 재작성 지적 수를 줄인다. */
+export function isBetterRevision(candidate: ContentIssue[], current: ContentIssue[]): boolean {
+  const candidateBlocks = blocking(candidate).length
+  const currentBlocks = blocking(current).length
+  if (candidateBlocks !== currentBlocks) return candidateBlocks < currentBlocks
+  return rewriteNeeded(candidate).length < rewriteNeeded(current).length
 }
 
 /**

@@ -1,6 +1,12 @@
 import { z } from 'zod'
 import { realCaller, MODEL_GENERATE, type StructuredCaller } from '@/lib/llm/client'
-import { contentIssues, revisionRequest, rewriteNeeded, type ContentIssue } from '@/lib/llm/content-rules'
+import {
+  contentIssues,
+  isBetterRevision,
+  revisionRequest,
+  rewriteNeeded,
+  type ContentIssue,
+} from '@/lib/llm/content-rules'
 import { HUMAN_STYLE_GUIDE, writingExampleFor } from '@/lib/llm/human-style'
 
 const generateSchema = z.object({
@@ -276,6 +282,6 @@ export async function generateNodeContent(args: {
     return { ...first, retried: true }
   }
 
-  const better = rewriteNeeded(second.issues).length < rewriteNeeded(first.issues).length ? second : first
+  const better = isBetterRevision(second.issues, first.issues) ? second : first
   return { ...better, retried: true }
 }

@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { contentIssues, blocking, complaint, questionIssues, rewriteNeeded } from '@/lib/llm/content-rules'
+import {
+  contentIssues,
+  blocking,
+  complaint,
+  isBetterRevision,
+  questionIssues,
+  rewriteNeeded,
+  summaryIssues,
+} from '@/lib/llm/content-rules'
 import { EXAMPLE_NODES } from '../../data/example-nodes'
 import { AUTHORED_NODES } from '../../data/authored-nodes'
 import { parseBlocks } from '@/lib/markdown/blocks'
@@ -168,6 +176,30 @@ describe('complaint', () => {
     const text = complaint(contentIssues({ ...ok, body }))
     expect(text).toContain('151자')
     expect(text).toContain('번역투')
+  })
+})
+
+describe('summaryIssues', () => {
+  it('비어 있거나 경어체인 카드 요약을 다시 쓰게 한다', () => {
+    expect(rewriteNeeded(summaryIssues('')).map((i) => i.rule)).toContain('요약없음')
+    expect(rewriteNeeded(summaryIssues('인덱스의 비용을 배웁니다.')).map((i) => i.rule)).toContain(
+      '요약경어체',
+    )
+  })
+
+  it('본문에서 재작성하는 상투 문체를 요약에서도 잡는다', () => {
+    expect(rewriteNeeded(summaryIssues('인덱스를 통해 조회를 줄인다.')).map((i) => i.rule)).toContain(
+      '문체:번역투(~를 통해)',
+    )
+  })
+})
+
+describe('isBetterRevision', () => {
+  it('지적 수가 같으면 구조 오류가 없는 초안을 고른다', () => {
+    const block = [{ rule: '긴문단', detail: '길다', severity: 'block' as const }]
+    const style = [{ rule: '문체:번역투(~를 통해)', detail: '어색하다', severity: 'note' as const }]
+    expect(isBetterRevision(style, block)).toBe(true)
+    expect(isBetterRevision(block, style)).toBe(false)
   })
 })
 

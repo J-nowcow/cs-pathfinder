@@ -39,4 +39,27 @@ describe('generateDailyRoot', () => {
     expect(calls[1][0].prompt).toContain(`${'가'.repeat(41)}?`)
     expect(calls[1][0].prompt).toContain('인덱스의 비용을 살핀다.')
   })
+
+  it('카드 요약이 경어체면 발행 전에 다시 쓴다', async () => {
+    const call = sequence(
+      {
+        question: '인덱스는 언제 쓰기 비용을 키우는가?',
+        identity_scope: 'sql',
+        body,
+        summary: '인덱스의 비용을 배웁니다.',
+        suggestions,
+      },
+      {
+        question: '인덱스는 언제 쓰기 비용을 키우는가?',
+        identity_scope: 'sql',
+        body,
+        summary: '인덱스가 늘리는 쓰기 비용을 살핀다.',
+        suggestions,
+      },
+    )
+
+    const result = await generateDailyRoot({ term: '인덱스', category: '데이터베이스', call })
+    expect(result.summary).toBe('인덱스가 늘리는 쓰기 비용을 살핀다.')
+    expect(call).toHaveBeenCalledTimes(2)
+  })
 })
