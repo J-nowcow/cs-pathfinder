@@ -117,6 +117,11 @@ describe('용어 사전 검색', () => {
     expect(anchors(container)).toHaveLength(GLOSSARY.length)
     expect(screen.queryByRole('status')).toBeNull()
   })
+
+  it('브라우저 자동완성이 검색 지우기 상태와 충돌하지 않는다', () => {
+    render(<GlossaryList />)
+    expect(screen.getByRole('searchbox').getAttribute('autocomplete')).toBe('off')
+  })
 })
 
 describe('용어 사전 초성 인덱스', () => {

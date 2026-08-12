@@ -32,6 +32,7 @@ export function GlossaryList() {
           <input
             type="search"
             value={query}
+            autoComplete="off"
             onChange={(e) => setQuery(e.target.value)}
           /*
            * 뜻으로도 찾힌다는 것을 여기서 알린다. 이름을 알면 본문 링크로
