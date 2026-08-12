@@ -79,7 +79,7 @@ export default async function QuestionsPage({
   })).filter((g) => g.items.length > 0)
 
   /* 보이는 크기는 유지하고 가상 요소로 위아래 판정 영역만 넓힌다. */
-  const filterChip = "relative rounded-full border px-3 py-1.5 text-[13px] transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-['']"
+  const filterChip = "relative rounded-full border px-3 py-1.5 text-[13px] transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
 
   return (
     <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
@@ -142,7 +142,7 @@ export default async function QuestionsPage({
         {query && (
           <Link
             href={href(activeTag, activeLevel, '')}
-            className="inline-flex min-h-11 items-center px-2 text-[13px] text-muted hover:text-ink"
+            className="inline-flex min-h-11 items-center rounded-md px-2 text-[13px] text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             지우기
           </Link>
@@ -258,7 +258,7 @@ export default async function QuestionsPage({
               <li key={r.id} className="border-b border-line last:border-b-0 sm:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
                 <Link
                   href={`/q/${r.id}`}
-                  className="group flex items-center gap-3 py-3 transition-colors hover:text-accent"
+                  className="group flex items-center gap-3 rounded-md py-3 transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   <span className="flex-1 text-[15px] leading-[1.6]">{r.question}</span>
                   <span
@@ -280,7 +280,7 @@ export default async function QuestionsPage({
             {query || activeTag || activeLevel ? '조건에 맞는 질문이 없습니다.' : '아직 올라온 질문이 없습니다.'}
           </p>
           {(query || activeTag || activeLevel) && (
-            <Link href="/questions" className="mt-4 inline-flex min-h-11 items-center text-[13px] font-medium text-accent">
+            <Link href="/questions" className="mt-4 inline-flex min-h-11 items-center rounded-md text-[13px] font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
               검색과 필터 초기화
             </Link>
           )}

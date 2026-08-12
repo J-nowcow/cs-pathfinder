@@ -28,6 +28,13 @@ describe('작은 조작 요소의 터치 영역', () => {
     expect(source).toContain("aria-current={activeLevel === l.name ? 'true' : undefined}")
   })
 
+  it('질문 목록의 필터와 질문 링크는 키보드 초점을 표시한다', () => {
+    const source = read('src/app/(site)/questions/page.tsx')
+    expect(source).toContain('const filterChip = "relative rounded-full')
+    expect(source).toMatch(/const filterChip = [^\n]+focus-visible:outline-2/)
+    expect(source).toMatch(/href=\{`\/q\/\$\{r.id\}`\}[\s\S]{0,240}focus-visible:outline-2/)
+  })
+
   it('추천과 게시판 재시도 버튼도 손끝 높이를 확보한다', () => {
     expect(read('src/components/VoteButton.tsx')).toContain('inline-flex min-h-11')
     const board = read('src/components/Board.tsx')
