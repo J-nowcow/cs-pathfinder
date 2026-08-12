@@ -15,4 +15,11 @@ describe('작은 조작 요소의 터치 영역', () => {
     const source = read('src/components/Banners.tsx')
     expect(source).toMatch(/onClick=\{onRetry\}[\s\S]{0,180}className="min-h-11/)
   })
+
+  it('선택된 질문 필터를 화면 낭독기에도 알린다', () => {
+    const source = read('src/app/(site)/questions/page.tsx')
+    expect(source).toContain("aria-current={!activeTag ? 'true' : undefined}")
+    expect(source).toContain("aria-current={activeTag === t.name ? 'true' : undefined}")
+    expect(source).toContain("aria-current={activeLevel === l.name ? 'true' : undefined}")
+  })
 })

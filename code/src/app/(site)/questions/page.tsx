@@ -157,6 +157,7 @@ export default async function QuestionsPage({
       <nav aria-label="태그" className="mt-5 flex flex-wrap gap-2">
         <Link
           href={href(null, activeLevel)}
+          aria-current={!activeTag ? 'true' : undefined}
           className={`${filterChip} ${
             activeTag
               ? 'border-line text-muted hover:border-accent hover:text-ink'
@@ -170,6 +171,7 @@ export default async function QuestionsPage({
             key={t.name}
             href={href(activeTag === t.name ? null : t.name, activeLevel)}
             title={t.scope}
+            aria-current={activeTag === t.name ? 'true' : undefined}
             className={`${filterChip} ${
               activeTag === t.name
                 ? 'border-accent bg-accent-soft text-ink'
@@ -192,6 +194,7 @@ export default async function QuestionsPage({
             key={l.name}
             href={href(activeTag, activeLevel === l.name ? null : l.name)}
             title={l.rubric}
+            aria-current={activeLevel === l.name ? 'true' : undefined}
             className={`${filterChip} ${
               activeLevel === l.name
                 ? 'border-accent bg-accent-soft text-ink'
