@@ -36,7 +36,7 @@ describe('핵심 화면 용어', () => {
     expect(source).not.toContain(legacy)
   })
 
-  it.each(['오늘의 질문', '질문 읽기', '이어갈 꼬리질문', '원하는 꼬리질문 만들기', '질문 지도', '관련 질문'])(
+  it.each(['오늘의 질문', '질문 읽기', '추천 꼬리질문', '원하는 꼬리질문 만들기', '질문 지도', '관련 질문'])(
     '기준 표현 %s 을 유지한다',
     (term) => {
       expect(source).toContain(term)
