@@ -118,8 +118,17 @@ export function MinimapStrip({
                     cy={cy}
                     r={11}
                     fill="transparent"
-                    className="cursor-pointer"
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`${n.label}로 이동`}
+                    aria-current={n.isCurrent ? 'location' : undefined}
+                    className="cursor-pointer focus-visible:stroke-accent focus-visible:stroke-2 focus-visible:outline-none"
                     onClick={() => onJump(n.occurrenceId)}
+                    onKeyDown={(e) => {
+                      if (e.key !== 'Enter' && e.key !== ' ') return
+                      e.preventDefault()
+                      onJump(n.occurrenceId)
+                    }}
                   >
                     <title>{n.label}</title>
                   </circle>
