@@ -65,8 +65,8 @@ describe('제목 바꾸기', () => {
 
     await ensureSeeded()
 
-    const rows = await db.query<{ id: string; q: string; number: number }>(
-      `select id, normalized_question q, number from qnode where normalized_question = any($1)`,
+    const rows = await db.query<{ id: string; q: string; number: number; scope: string }>(
+      `select id, normalized_question q, number, identity_scope scope from qnode where normalized_question = any($1)`,
       [[r.from, r.to]],
     )
 
@@ -74,6 +74,7 @@ describe('제목 바꾸기', () => {
     expect(rows.length).toBe(1)
     expect(rows[0].q).toBe(r.to)
     expect(rows[0].id).toBe('44444444-3333-2222-1111-000000000000')
+    expect(rows[0].scope).toBe(EXAMPLE_NODES.find((node) => node.question === r.to)?.identityScope)
     /* 번호를 지켜야 한다. 새로 매기면 옛 주소가 죽는다 */
     expect(rows[0].number).toBe(9100)
   })

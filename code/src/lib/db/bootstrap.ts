@@ -130,12 +130,14 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
          (id, identity_scope, normalized_question, body, primary_category, status, origin, tags, level)
        values ($1, $2, $3, $4, $5, 'ready', 'batch', $6, $7)
        on conflict (id) do update set body = excluded.body, origin = 'batch',
+         identity_scope = excluded.identity_scope,
          normalized_question = excluded.normalized_question,
          primary_category = excluded.primary_category,
          tags = excluded.tags,
          level = excluded.level
          where qnode.body is distinct from excluded.body
             or qnode.origin <> 'batch'
+            or qnode.identity_scope is distinct from excluded.identity_scope
             or qnode.normalized_question is distinct from excluded.normalized_question
             or qnode.primary_category is distinct from excluded.primary_category
             or qnode.tags is distinct from excluded.tags
