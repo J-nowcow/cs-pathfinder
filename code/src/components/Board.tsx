@@ -35,7 +35,7 @@ export function Board({ initial }: Props) {
   const [trees, setTrees] = useState(initial.trees)
   const [cursor, setCursor] = useState(initial.nextCursor)
   const [loading, setLoading] = useState(false)
-  const [failed, setFailed] = useState(false)
+  const [failure, setFailure] = useState<{ cursor: string | null } | null>(null)
 
   // 첫 렌더는 서버가 준 것을 그대로 쓴다. 같은 것을 한 번 더 받아올 이유가 없다
   const primed = useRef(true)
@@ -48,7 +48,7 @@ export function Board({ initial }: Props) {
     async (nextSort: SortMode, nextCategory: string | null, nextCursor: string | null) => {
       const ticket = ++latest.current
       setLoading(true)
-      setFailed(false)
+      setFailure(null)
 
       const params = new URLSearchParams({ sort: nextSort })
       if (nextCategory) params.set('category', nextCategory)
@@ -63,7 +63,7 @@ export function Board({ initial }: Props) {
         setTrees((prev) => (nextCursor ? [...prev, ...body.trees] : body.trees))
         setCursor(body.nextCursor)
       } catch {
-        if (ticket === latest.current) setFailed(true)
+        if (ticket === latest.current) setFailure({ cursor: nextCursor })
       } finally {
         if (ticket === latest.current) setLoading(false)
       }
@@ -174,7 +174,7 @@ export function Board({ initial }: Props) {
               <TreeCardSkeleton key={i} />
             ))}
           </div>
-        ) : failed ? (
+        ) : failure?.cursor === null ? (
           <div className="rounded-lg border border-warn/30 bg-warn-soft px-6 py-10 text-center">
             <p className="text-[15px] text-ink">게시판을 불러오지 못했습니다.</p>
             <button
@@ -195,7 +195,23 @@ export function Board({ initial }: Props) {
               ))}
             </div>
 
-            {cursor && (
+            {failure?.cursor && (
+              <div
+                role="alert"
+                className="mt-5 rounded-lg border border-warn/30 bg-warn-soft px-5 py-4 text-center"
+              >
+                <p className="text-[14px] text-ink">다음 질문 지도를 불러오지 못했습니다.</p>
+                <button
+                  type="button"
+                  onClick={() => void fetchPage(sort, category, failure.cursor)}
+                  className="mt-2 min-h-11 rounded-md border border-line bg-raised px-4 py-2 text-[13px] font-medium text-ink hover:border-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  다시 시도
+                </button>
+              </div>
+            )}
+
+            {cursor && !failure && (
               <div className="mt-5 flex justify-center">
                 <button
                   type="button"
