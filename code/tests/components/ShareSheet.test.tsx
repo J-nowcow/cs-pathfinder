@@ -68,4 +68,24 @@ describe('ShareSheet', () => {
     render(<ShareSheet journey={journey()} />)
     expect(screen.getByRole('button', { name: '공유' }).className).toContain('min-h-11')
   })
+
+  it('제목 입력이 빈 제목 안내를 설명으로 연결한다', async () => {
+    render(<ShareSheet journey={journey()} />)
+    await userEvent.click(screen.getByRole('button', { name: '공유' }))
+    expect(screen.getByLabelText('제목').getAttribute('aria-describedby')).toBe('share-title-help')
+  })
+
+  it('완료 화면의 주소 입력란에 이름을 붙인다', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+      new Response('{"url":"/t/shared-map"}', {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    )
+    render(<ShareSheet journey={journey()} />)
+    await userEvent.click(screen.getByRole('button', { name: '공유' }))
+    await userEvent.click(screen.getByRole('button', { name: '링크 만들기' }))
+
+    expect(await screen.findByRole('textbox', { name: '공유 주소' })).toBeTruthy()
+  })
 })

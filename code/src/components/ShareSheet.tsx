@@ -177,9 +177,10 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
                   maxLength={MAX_TITLE_LENGTH}
                   onChange={(e) => setTitle(e.target.value)}
                   disabled={phase.kind === 'creating'}
+                  aria-describedby="share-title-help"
                   className="mt-1.5 w-full rounded-md border border-line bg-surface px-3 py-2.5 text-[15px] text-ink outline-none focus:border-accent disabled:opacity-60"
                 />
-                <p className="mt-1.5 text-[12px] text-faint">
+                <p id="share-title-help" className="mt-1.5 text-[12px] text-faint">
                   비워두면 첫 질문이 제목이 됩니다.
                 </p>
 
@@ -258,6 +259,7 @@ function Done({
         ref={inputRef}
         readOnly
         value={url}
+        aria-label="공유 주소"
         onFocus={(e) => e.target.select()}
         className="mt-5 w-full rounded-md border border-line bg-surface px-3 py-2.5 font-mono text-[13px] text-ink outline-none focus:border-accent"
       />
