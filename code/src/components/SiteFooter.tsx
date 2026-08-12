@@ -13,14 +13,15 @@ import { CATEGORIES, categoryAnchor } from '@/lib/tree/categories'
  * 보인다.
  */
 /*
- * 여기 링크는 손끝 기준(44px)보다 작다. 폰에서 재보니 16px이다.
+ * 여기 링크는 주 동작의 손끝 기준(44px)보다 작다. 부차 링크가 길게 이어지는
+ * 자리라 24px를 하한으로 둔다.
  *
  * 키우려다 되돌렸다. 세로로 촘촘히 쌓인 목록이라 판정 영역만 늘리면 위아래가
  * **서로 겹쳐** 엉뚱한 링크가 눌린다. 겹치지 않으려면 줄 간격을 16px 이상으로
  * 벌려야 하는데, 이 푸터는 이미 폰에서 407px(화면의 53%)라 더 키울 수 없다.
  *
- * 그래서 그대로 둔다. WCAG AA 최소치(24px)는 넘고, 부차적인 길잡이라 헤더의
- * 주 항목만큼 자주 눌리지 않는다. 푸터를 줄이는 작업과 함께 다시 볼 자리다.
+ * 44px로 늘리면 푸터가 화면 대부분을 차지한다. 대신 각 링크에 24px 높이를
+ * 명시해 글자 줄 높이에 따라 판정 영역이 작아지지 않게 한다.
  */
 export function SiteFooter() {
   return (
@@ -31,22 +32,22 @@ export function SiteFooter() {
             <h2 className="text-[12px] font-medium text-faint">둘러보기</h2>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link href="/" className="text-[13px] text-muted hover:text-ink">
+                <Link href="/" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
                   오늘의 질문
                 </Link>
               </li>
               <li>
-                <Link href="/questions" className="text-[13px] text-muted hover:text-ink">
+                <Link href="/questions" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
                   질문 목록
                 </Link>
               </li>
               <li>
-                <Link href="/map" className="text-[13px] text-muted hover:text-ink">
+                <Link href="/map" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
                   질문 지도
                 </Link>
               </li>
               <li>
-                <Link href="/me" className="text-[13px] text-muted hover:text-ink">
+                <Link href="/me" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
                   학습 기록
                 </Link>
               </li>
@@ -56,7 +57,7 @@ export function SiteFooter() {
                 등록이 앞에 있어 아직 못 연다. RSS는 지금 열 수 있다.
               */}
               <li>
-                <a href="/rss.xml" className="text-[13px] text-muted hover:text-ink">
+                <a href="/rss.xml" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
                   RSS 구독
                 </a>
               </li>
@@ -66,17 +67,17 @@ export function SiteFooter() {
                 여기가 그 자리다.
               */}
               <li>
-                <Link href="/glossary" className="text-[13px] text-muted hover:text-ink">
+                <Link href="/glossary" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
                   용어 사전
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-[13px] text-muted hover:text-ink">
+                <Link href="/terms" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
                   이용약관
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-[13px] text-muted hover:text-ink">
+                <Link href="/privacy" className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink">
                   개인정보처리방침
                 </Link>
               </li>
@@ -94,7 +95,7 @@ export function SiteFooter() {
                   */}
                   <Link
                     href={`/questions#${categoryAnchor(c)}`}
-                    className="text-[13px] text-muted hover:text-ink"
+                    className="inline-flex min-h-6 items-center text-[13px] text-muted hover:text-ink"
                   >
                     {c}
                   </Link>

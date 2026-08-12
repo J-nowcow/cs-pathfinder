@@ -21,4 +21,11 @@ describe('바닥글', () => {
     const link = screen.getByText('개인정보처리방침')
     expect(link.getAttribute('href')).toBe('/privacy')
   })
+
+  it('모든 링크가 최소 24px 높이를 확보한다', () => {
+    render(<SiteFooter />)
+    for (const link of screen.getAllByRole('link')) {
+      expect(link.className).toContain('min-h-6')
+    }
+  })
 })
