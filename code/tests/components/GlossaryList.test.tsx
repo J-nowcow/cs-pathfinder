@@ -163,4 +163,9 @@ describe('용어 사전 초성 인덱스', () => {
     render(<GlossaryList />)
     expect(bar().querySelector('a')!.className).toContain('min-h-11')
   })
+
+  it('키보드로 고른 초성을 또렷하게 표시한다', () => {
+    render(<GlossaryList />)
+    expect(bar().querySelector('a')!.className).toContain('focus-visible:outline-2')
+  })
 })

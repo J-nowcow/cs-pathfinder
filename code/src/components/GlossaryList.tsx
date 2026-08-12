@@ -84,7 +84,7 @@ export function GlossaryList() {
               key={g.initial}
               href={`#${encodeURIComponent(groupAnchor(g.initial))}`}
               /* 헤더와 같은 규칙 — 보이는 크기는 그대로 두고 누르는 자리를 44px로 */
-              className="grid min-h-11 w-8 place-items-center rounded-lg text-[13px] text-muted transition-colors hover:bg-surface hover:text-ink"
+              className="grid min-h-11 w-8 place-items-center rounded-lg text-[13px] text-muted transition-colors hover:bg-surface hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               {g.initial}
             </a>

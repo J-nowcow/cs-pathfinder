@@ -710,7 +710,7 @@ export function Sheet({
         <button
           type="button"
           onClick={onClose}
-          className="min-h-11 rounded-lg border border-line px-2.5 py-1 text-[13px] text-muted hover:text-ink"
+          className="min-h-11 rounded-lg border border-line px-2.5 py-1 text-[13px] text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           닫기
         </button>
@@ -739,7 +739,7 @@ export function Sheet({
             <button
               type="button"
               onClick={() => setAttempt((value) => value + 1)}
-              className="mt-2 min-h-11 rounded-lg border border-line px-3 py-1.5 font-medium text-ink transition-colors hover:bg-line/40"
+              className="mt-2 min-h-11 rounded-lg border border-line px-3 py-1.5 font-medium text-ink transition-colors hover:bg-line/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               다시 불러오기
             </button>
@@ -753,7 +753,7 @@ export function Sheet({
 
         <Link
           href={`/q/${node.id}`}
-          className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent"
+          className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           질문 읽기 →
         </Link>
@@ -776,8 +776,8 @@ export function Sheet({
                     onClick={() => onOpen(l.id)}
                     className={
                       l.id === cameFrom
-                        ? 'w-full rounded-lg border border-dashed border-line bg-surface px-3 py-2.5 text-left transition-colors hover:border-accent'
-                        : 'w-full rounded-lg border border-line px-3 py-2.5 text-left transition-colors hover:border-accent'
+                        ? 'w-full rounded-lg border border-dashed border-line bg-surface px-3 py-2.5 text-left transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
+                        : 'w-full rounded-lg border border-line px-3 py-2.5 text-left transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
                     }
                   >
                     {/*
