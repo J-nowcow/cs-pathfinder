@@ -407,8 +407,6 @@ export const SEED_RELATIONS: SeedRelation[] = [
   { fromScope: "postgres", fromQuestion: "인덱스를 만들었는데 실행 계획에서 타지 않는 이유는?", toScope: "db", toQuestion: "인덱스를 어느 칸부터 놓아야 하는가?", kind: "shares_concept", reason: "복합 인덱스 컬럼 순서는 인덱스가 실행 계획에서 안 타는 주요 원인이다", votes: 2 },
   { fromScope: "generic", fromQuestion: "부하가 늘면 서버를 어떻게 늘리는가?", toScope: "infra", toQuestion: "요청이 한꺼번에 몰릴 때 어떻게 막는가?", kind: "shares_concept", reason: "트래픽 급증 대응 전략(유입 제한과 용량 확장)을 다룬다", votes: 2 },
   { fromScope: "android", fromQuestion: "권한을 한 번 받으면 계속 쓸 수 있는가?", toScope: "security", toQuestion: "누가 무엇을 할 수 있는지 어떻게 정하는가?", kind: "shares_concept", reason: "둘 다 권한(인가)의 부여 기준과 지속성을 다룬다", votes: 2 },
-  { fromScope: "java", fromQuestion: "HashMap은 해시 충돌을 어떤 방식으로 처리하는가?", toScope: "generic", toQuestion: "해시 충돌 발생 시 해결 방법은 무엇인가?", kind: "instance_of", reason: "HashMap의 충돌 처리는 일반 해시 충돌 해결법의 구체 사례다", votes: 2 },
-  { fromScope: "java", fromQuestion: "HashMap은 해시 충돌을 어떤 방식으로 처리하는가?", toScope: "generic", toQuestion: "해시 충돌이 생기면 어떤 방법으로 푸는가?", kind: "instance_of", reason: "HashMap의 충돌 처리는 일반 해시 충돌 해결법의 구체 사례다", votes: 2 },
   { fromScope: "docker", fromQuestion: "컨테이너 이미지를 최소화해야 하는 이유는 무엇인가?", toScope: "generic", toQuestion: "이미지를 고쳐도 조금만 받는 이유는?", kind: "shares_concept", reason: "둘 다 컨테이너 이미지 레이어 구조에 기반한다", votes: 2 },
   { fromScope: "generic", fromQuestion: "이미지와 컨테이너는 무엇이 다른가?", toScope: "generic", toQuestion: "이미지를 고쳐도 조금만 받는 이유는?", kind: "prerequisite", reason: "이미지가 무엇인지 알아야 층 캐시로 조금만 받는 것이 읽힌다", votes: 2 },
   { fromScope: "react", fromQuestion: "변경점을 비교하면 언제 비용이 줄어드는가?", toScope: "generic", toQuestion: "이미지를 고쳐도 조금만 받는 이유는?", kind: "shares_concept", reason: "변경분만 다시 만들고 전송한다는 같은 원리를 다룬다", votes: 2 },
@@ -515,7 +513,6 @@ export const SEED_RELATIONS: SeedRelation[] = [
   { fromScope: "generic", fromQuestion: "세션 하이재킹은 왜 성립하는가?", toScope: "http", toQuestion: "쿠키와 세션의 상태 유지 방식은 무엇으로 구분하는가?", kind: "prerequisite", reason: "세션이 쿠키의 식별자에 얹혀 있음을 알아야 그 식별자를 훔치면 왜 통하는지 보인다.", votes: 2 },
   { fromScope: "db", fromQuestion: "목록을 나눌 때 번호와 커서는 무엇이 다른가?", toScope: "react", toQuestion: "목록 항목의 정체성을 어떻게 보존하는가?", kind: "shares_concept", reason: "위치가 아니라 정체성으로 가리킨다는 같은 착상 — 커서와 key가 같은 답이다.", votes: 2 },
   { fromScope: "db", fromQuestion: "목록을 나눌 때 번호와 커서는 무엇이 다른가?", toScope: "sql", toQuestion: "인덱스 범위 스캔과 전체 스캔 중 무엇을 선택하는가?", kind: "shares_concept", reason: "커서 방식이 빠른 이유가 인덱스 범위 스캔이다 — 오프셋은 그만큼을 세며 버린다.", votes: 2 },
-  { fromScope: "generic", fromQuestion: "K-way 병합에서 K를 증가시킬 때 발생하는 문제는 무엇인가?", toScope: "generic", toQuestion: "메모리보다 큰 데이터를 정렬할 때 무엇을 쓰는가?", kind: "prerequisite", reason: "외부 정렬의 병합 단계를 알아야 K를 키울 때의 문제가 보인다.", votes: 3 },
   { fromScope: "generic", fromQuestion: "죽은 파드는 누가 다시 만드는가?", toScope: "os", toQuestion: "프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?", kind: "shares_concept", reason: "죽음 뒤 누가 무엇을 되살리는가 — 프로세스는 커널이 거두고 파드는 컨트롤러가 다시 만든다.", votes: 2 },
   { fromScope: "generic", fromQuestion: "죽은 파드는 누가 다시 만드는가?", toScope: "generic", toQuestion: "죽은 서버로 요청이 안 가는 이유는?", kind: "shares_concept", reason: "죽음을 감지해 트래픽과 실행을 되돌리는 같은 운영 원리다.", votes: 2 },
 ]

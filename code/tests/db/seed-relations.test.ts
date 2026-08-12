@@ -4,6 +4,11 @@ import { insertNode } from '@/lib/expand/nodes'
 import { seedRelations } from '@/lib/db/bootstrap'
 import { loadRelations } from '@/lib/db/relations'
 import type { SeedRelation } from '../../data/relations'
+import { SEED_RELATIONS } from '../../data/relations'
+import { EXAMPLE_NODES } from '../../data/example-nodes'
+import { GENERATED_NODES } from '../../data/generated-nodes'
+import { AUTHORED_NODES } from '../../data/authored-nodes'
+import { ON_DEMAND_NODES } from '../../data/on-demand-nodes'
 
 /**
  * 데이터 파일의 관계를 DB에 심는다.
@@ -73,5 +78,19 @@ describe('seedRelations', () => {
 
   it('handles an empty list', async () => {
     expect(await seedRelations([])).toMatchObject({ inserted: 0, missing: 0 })
+  })
+})
+
+describe('관계 데이터', () => {
+  it('모든 관계가 정적 질문을 가리킨다', () => {
+    const nodes = [...EXAMPLE_NODES, ...GENERATED_NODES, ...AUTHORED_NODES, ...ON_DEMAND_NODES]
+    const keys = new Set(nodes.map((item) => `${item.identityScope}::${item.question}`))
+    const missing = SEED_RELATIONS.filter(
+      (item) =>
+        !keys.has(`${item.fromScope}::${item.fromQuestion}`) ||
+        !keys.has(`${item.toScope}::${item.toQuestion}`),
+    )
+
+    expect(missing).toEqual([])
   })
 })
