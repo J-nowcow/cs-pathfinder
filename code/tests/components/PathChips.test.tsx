@@ -57,6 +57,14 @@ describe('PathChips', () => {
     expect(onJump).toHaveBeenCalledWith('a')
   })
 
+  it('보이는 칩보다 넓은 손끝 판정 영역을 유지한다', () => {
+    render(
+      <PathChips path={[occ('a', '질문 A'), occ('b', '질문 B', 'a')]} onJump={() => {}} />,
+    )
+    const button = screen.getByRole('button', { name: '질문 A' })
+    expect(button.className).toContain('before:-inset-y-2')
+  })
+
   /*
    * 깊이가 쌓이면 가운데를 접는다. 뿌리와 최근 몇 걸음이 방향을 잡는 데
    * 필요한 전부다.

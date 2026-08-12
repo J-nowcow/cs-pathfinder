@@ -85,7 +85,7 @@ export function PathChips({
                 type="button"
                 onClick={() => onJump(occ.id)}
                 aria-current={isLast ? 'step' : undefined}
-                className={`flex max-w-[13rem] items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                className={`relative flex max-w-[13rem] items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] transition-colors before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                   isLast
                     ? 'border-transparent bg-ink/[0.06] font-medium text-ink'
                     : 'border-line text-muted hover:border-faint hover:text-ink'
