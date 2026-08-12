@@ -706,7 +706,7 @@ export function Sheet({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg border border-line px-2.5 py-1 text-[13px] text-muted hover:text-ink"
+          className="min-h-11 rounded-lg border border-line px-2.5 py-1 text-[13px] text-muted hover:text-ink"
         >
           닫기
         </button>
@@ -736,7 +736,7 @@ export function Sheet({
 
         <Link
           href={`/q/${node.id}`}
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent"
+          className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent"
         >
           이 질문 읽기 →
         </Link>

@@ -68,4 +68,10 @@ describe('지도의 점을 눌러 열었을 때', () => {
     expect(screen.queryByText(MARK)).toBeNull()
     expect(linkButton('DB 커넥션 비용이 큰 이유는?').className).not.toContain('border-dashed')
   })
+
+  it('시트를 닫거나 질문을 읽는 버튼은 손끝 높이를 확보한다', () => {
+    render(<Sheet node={NODE} links={LINKS} cameFrom={null} onClose={() => {}} onOpen={() => {}} />)
+    expect(screen.getByRole('button', { name: '닫기' }).className).toContain('min-h-11')
+    expect(screen.getByRole('link', { name: /이 질문 읽기/ }).className).toContain('min-h-11')
+  })
 })
