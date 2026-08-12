@@ -41,4 +41,9 @@ describe('게시판 카테고리 칩', () => {
   it('폰에서 오른쪽 끝을 흐리게 해 더 있다고 알린다', () => {
     expect(src).toMatch(/bg-gradient-to-l[^"]*sm:hidden/)
   })
+
+  it('목록과 더 보기 버튼이 불러오는 상태를 알린다', () => {
+    expect(src).toContain('aria-busy={loading || undefined}')
+    expect(src).toContain('animate-spin')
+  })
 })

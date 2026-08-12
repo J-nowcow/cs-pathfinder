@@ -167,7 +167,7 @@ export function Board({ initial }: Props) {
         </div>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-5" aria-busy={loading || undefined}>
         {loading && trees.length === 0 ? (
           <div className="grid gap-3 sm:grid-cols-2">
             {[0, 1, 2].map((i) => (
@@ -200,9 +200,16 @@ export function Board({ initial }: Props) {
                 <button
                   type="button"
                   disabled={loading}
+                  aria-busy={loading || undefined}
                   onClick={() => void fetchPage(sort, category, cursor)}
                   className="min-h-11 rounded-lg border border-line bg-raised px-5 py-2.5 text-[14px] font-medium text-ink transition-colors hover:border-accent hover:text-accent disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
+                  {loading && (
+                    <span
+                      aria-hidden
+                      className="mr-2 inline-block size-3.5 animate-spin rounded-full border-2 border-accent/30 border-t-accent align-[-2px]"
+                    />
+                  )}
                   {loading ? '불러오는 중' : '더 보기'}
                 </button>
               </div>
