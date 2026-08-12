@@ -38,6 +38,7 @@ export function AuthMenu() {
   const [open, setOpen] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
+  const firstItem = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     if (!open) return
@@ -91,7 +92,10 @@ export function AuthMenu() {
         aria-label="내 계정"
         aria-expanded={open}
         aria-haspopup="menu"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          setOpen((v) => !v)
+          if (!open) requestAnimationFrame(() => firstItem.current?.focus())
+        }}
         className={`${BUTTON} ${open ? 'text-ink' : 'text-muted hover:text-ink'}`}
       >
         <PersonIcon />
@@ -120,10 +124,11 @@ export function AuthMenu() {
           <p className="break-all px-2 text-[12px] text-faint">{session.user.email}</p>
 
           <Link
+            ref={firstItem}
             role="menuitem"
             href="/me"
             onClick={() => setOpen(false)}
-            className="mt-2 flex min-h-[40px] items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface"
+            className="mt-2 flex min-h-11 items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface"
           >
             내 기록으로
           </Link>
@@ -136,7 +141,7 @@ export function AuthMenu() {
                 setOpen(false)
                 authClient.signOut()
               }}
-              className="flex min-h-[40px] w-full items-center rounded-md px-2 text-left text-[13px] text-muted hover:bg-surface hover:text-ink"
+              className="flex min-h-11 w-full items-center rounded-md px-2 text-left text-[13px] text-muted hover:bg-surface hover:text-ink"
             >
               로그아웃
             </button>

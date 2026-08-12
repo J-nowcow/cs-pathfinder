@@ -95,6 +95,9 @@ describe('AuthMenu · 로그인 후', () => {
     render(<AuthMenu />)
     await userEvent.click(screen.getByRole('button', { name: '내 계정' }))
     expect(screen.getByRole('menuitem', { name: '내 기록으로' }).getAttribute('href')).toBe('/me')
+    await waitFor(() =>
+      expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: '내 기록으로' })),
+    )
     expect(screen.getByRole('menuitem', { name: '로그아웃' })).toBeTruthy()
   })
 

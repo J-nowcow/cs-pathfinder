@@ -59,6 +59,9 @@ describe('SiteHeader · 바깥 링크', () => {
     expect(screen.getByRole('menuitem', { name: /메일 앱/ }).getAttribute('href')).toContain(
       'mailto:wkdgusdn0321@naver.com',
     )
+    await waitFor(() =>
+      expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: /GitHub/ })),
+    )
   })
 
   /* 메일 주소로 새 탭을 열면 그 탭이 빈 화면으로 남아 사람이 직접 닫아야 한다 */

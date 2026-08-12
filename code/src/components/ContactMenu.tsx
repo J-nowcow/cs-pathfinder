@@ -25,6 +25,7 @@ export function ContactMenu() {
   const [open, setOpen] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
+  const firstItem = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     if (!open) return
@@ -60,7 +61,10 @@ export function ContactMenu() {
         type="button"
         aria-expanded={open}
         aria-haspopup="menu"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          setOpen((v) => !v)
+          if (!open) requestAnimationFrame(() => firstItem.current?.focus())
+        }}
         /* 헤더의 다른 항목과 같은 규격. 보이는 크기는 그대로 두고 누르는 자리만 44px로 */
         className={`-my-2 rounded-lg px-1.5 py-[13px] text-[12.5px] transition-colors sm:px-2.5 sm:text-[13px] ${
           open ? 'text-ink' : 'text-muted hover:text-ink'
@@ -75,13 +79,14 @@ export function ContactMenu() {
           className="absolute right-0 top-full z-30 mt-2 w-[248px] rounded-lg border border-line bg-raised p-3 text-left shadow-lg"
         >
           <a
+            ref={firstItem}
             role="menuitem"
             href={ISSUE}
             target="_blank"
             // noopener가 없으면 열린 창이 window.opener로 이 페이지를 조작할 수 있다
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="flex min-h-[40px] items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface"
+            className="flex min-h-11 items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface"
           >
             GitHub에 이슈로 남기기
           </a>
@@ -102,7 +107,7 @@ export function ContactMenu() {
               href={`mailto:${MAIL}?subject=${SUBJECT}`}
               onClick={() => setOpen(false)}
               /* 메일 주소는 새 탭을 열지 않는다. 열면 빈 탭이 남아 사람이 직접 닫아야 한다 */
-              className="mt-1 flex min-h-[40px] items-center rounded-md px-2 text-[13px] text-muted hover:bg-surface hover:text-ink"
+              className="mt-1 flex min-h-11 items-center rounded-md px-2 text-[13px] text-muted hover:bg-surface hover:text-ink"
             >
               메일 앱으로 열기 →
             </a>
