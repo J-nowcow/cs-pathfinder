@@ -99,6 +99,12 @@ describe('AuthMenu · 로그인 후', () => {
       expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: '학습 기록으로' })),
     )
     expect(screen.getByRole('menuitem', { name: '로그아웃' })).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: '학습 기록으로' }).className).toContain(
+      'focus-visible:outline-2',
+    )
+    expect(screen.getByRole('menuitem', { name: '로그아웃' }).className).toContain(
+      'focus-visible:outline-2',
+    )
   })
 
   it('메뉴에서 누르면 로그아웃한다', async () => {

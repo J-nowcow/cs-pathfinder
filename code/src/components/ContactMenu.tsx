@@ -89,7 +89,7 @@ export function ContactMenu() {
             // noopener가 없으면 열린 창이 window.opener로 이 페이지를 조작할 수 있다
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="flex min-h-11 items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface"
+            className="flex min-h-11 items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             GitHub에 이슈로 남기기
           </a>
@@ -110,7 +110,7 @@ export function ContactMenu() {
               href={`mailto:${MAIL}?subject=${SUBJECT}`}
               onClick={() => setOpen(false)}
               /* 메일 주소는 새 탭을 열지 않는다. 열면 빈 탭이 남아 사람이 직접 닫아야 한다 */
-              className="mt-1 flex min-h-11 items-center rounded-md px-2 text-[13px] text-muted hover:bg-surface hover:text-ink"
+              className="mt-1 flex min-h-11 items-center rounded-md px-2 text-[13px] text-muted hover:bg-surface hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               메일 앱으로 열기 →
             </a>

@@ -131,7 +131,7 @@ export function AuthMenu() {
             role="menuitem"
             href="/me"
             onClick={() => setOpen(false)}
-            className="mt-2 flex min-h-11 items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface"
+            className="mt-2 flex min-h-11 items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             학습 기록으로
           </Link>
@@ -144,7 +144,7 @@ export function AuthMenu() {
                 setOpen(false)
                 authClient.signOut()
               }}
-              className="flex min-h-11 w-full items-center rounded-md px-2 text-left text-[13px] text-muted hover:bg-surface hover:text-ink"
+              className="flex min-h-11 w-full items-center rounded-md px-2 text-left text-[13px] text-muted hover:bg-surface hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               로그아웃
             </button>
