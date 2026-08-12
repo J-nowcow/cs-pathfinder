@@ -53,3 +53,11 @@ describe('질문 화면의 돌아가기 링크', () => {
     expect(cls).toContain('-my-[12px]')
   })
 })
+
+describe('질문 화면의 분류 정보', () => {
+  it('내부 의미 범위는 숨기고 사용자용 분야만 보여준다', () => {
+    render(<ReadingView initialNode={NODE} initialQuota={{ used: 0, limit: 5 }} />)
+    expect(screen.getByText('네트워크')).toBeTruthy()
+    expect(screen.queryByText('generic')).toBeNull()
+  })
+})

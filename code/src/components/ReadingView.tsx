@@ -401,9 +401,8 @@ export function ReadingView({
         </h1>
 
         <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-faint">
-          <span>
-            {node.category} <span className="font-mono">· {node.identityScope}</span>
-          </span>
+          {/* identityScope는 중복 판정용 내부 키다. generic·postgres 같은 값을 화면에 노출하지 않는다. */}
+          <span>{node.category}</span>
           {/*
             태그·난이도 칩. 링크가 /questions 필터로 간다 — "이 주제 더"가
             칩의 뜻이다. 확장으로 노드가 바뀌면 API 응답에 실려 온 값으로

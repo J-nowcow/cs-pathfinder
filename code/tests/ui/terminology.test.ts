@@ -40,4 +40,11 @@ describe('핵심 화면 용어', () => {
       expect(source).toContain(term)
     },
   )
+
+  it('전체 질문 지도와 개인 지도를 짧은 이름으로 구분한다', () => {
+    const header = readFileSync('src/components/SiteHeader.tsx', 'utf8')
+    const minimap = readFileSync('src/components/MinimapStrip.tsx', 'utf8')
+    expect(header).toContain("{ href: '/map', label: '지도' }")
+    expect(minimap).toContain('내 지도')
+  })
 })
