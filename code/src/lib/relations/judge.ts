@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { realCaller, MODEL_GATE, type StructuredCaller } from '@/lib/llm/client'
 import type { RelationKind } from '@/lib/db/relations'
+import { normalizeRelationReason } from '@/lib/relations/reason'
 
 /**
  * 두 질문이 관련 있는지 판정한다.
@@ -126,20 +127,11 @@ ${list}
  * 홀로 남아 더 이상해진다.
  */
 export function cleanReason(reason: string): string {
-  return reason
+  return normalizeRelationReason(
+    reason
     .replace(/\bq\d{1,4}(?:은|는|이|가|을|를|의|와|과|도|만|에)?\s*/g, '')
-    .replace(/(합니다|됩니다|있습니다|없습니다|입니다)([.!?]?)$/, (_, ending: string, mark: string) => {
-      const plain: Record<string, string> = {
-        합니다: '한다',
-        됩니다: '된다',
-        있습니다: '있다',
-        없습니다: '없다',
-        입니다: '이다',
-      }
-      return `${plain[ending]}${mark}`
-    })
     .replace(/\s{2,}/g, ' ')
-    .trim()
+  )
 }
 
 export type JudgeDeps = {

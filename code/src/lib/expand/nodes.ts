@@ -1,6 +1,7 @@
 import { getDb } from '@/lib/db/client'
 import { isMissingTable } from '@/lib/db/missing-table'
 import { MIN_RELATION_VOTES } from '@/lib/db/relations'
+import { normalizeRelationReason } from '@/lib/relations/reason'
 import {
   EMBED_DIM,
   EMBED_TOP_K,
@@ -447,7 +448,7 @@ async function relatedByRelation(nodeId: string, limit: number): Promise<Related
        * 빈 이유는 없는 것으로 친다. 컬럼 기본값이 `''`이라(`0009`) 근거 없이
        * 저장된 관계가 화면에 빈 줄을 남기는 것을 막는다.
        */
-      reason: r.reason && r.reason.trim().length > 0 ? r.reason : null,
+      reason: r.reason && r.reason.trim().length > 0 ? normalizeRelationReason(r.reason) : null,
     }))
   } catch (e) {
     /* 관련 질문은 덤이고 해설이 본체다. 표가 없으면 목록 없이 읽는다 */
