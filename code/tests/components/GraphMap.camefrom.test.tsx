@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
-import { render, cleanup, screen } from '@testing-library/react'
+import { render, cleanup, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { Sheet } from '@/components/GraphMap'
 
 /**
@@ -83,5 +84,21 @@ describe('지도의 점을 눌러 열었을 때', () => {
     expect(screen.getByRole('status').textContent).toContain('해설을 불러오는 중')
     expect(container.querySelector('[aria-busy="true"]')).toBeTruthy()
     expect(container.querySelector('.animate-spin')).toBeTruthy()
+  })
+
+  it('해설을 못 받으면 그 자리에서 다시 불러올 수 있다', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response('', { status: 503 }))
+      .mockResolvedValueOnce(new Response('{"body":"다시 받은 해설"}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    render(<Sheet node={NODE} links={LINKS} cameFrom={null} onClose={() => {}} onOpen={() => {}} />)
+    const retry = await screen.findByRole('button', { name: '다시 불러오기' })
+    await userEvent.click(retry)
+
+    await waitFor(() => expect(screen.getByText('다시 받은 해설')).toBeTruthy())
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(screen.queryByRole('button', { name: '다시 불러오기' })).toBeNull()
   })
 })

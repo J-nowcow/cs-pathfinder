@@ -679,6 +679,7 @@ export function Sheet({
    */
   const [body, setBody] = useState<string | null>(null)
   const [failed, setFailed] = useState(false)
+  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
     if (!node) return
@@ -695,7 +696,7 @@ export function Sheet({
         setFailed(true)
       })
     return () => ac.abort()
-  }, [node?.id])
+  }, [node?.id, attempt])
 
   if (!node) return null
 
@@ -733,9 +734,16 @@ export function Sheet({
           </p>
         )}
         {failed && (
-          <p className="text-[14px] leading-[1.75] text-muted">
-            해설을 불러오지 못했습니다. 아래에서 열어 보세요.
-          </p>
+          <div role="alert" className="text-[14px] leading-[1.75] text-muted">
+            <p>해설을 불러오지 못했습니다.</p>
+            <button
+              type="button"
+              onClick={() => setAttempt((value) => value + 1)}
+              className="mt-2 min-h-11 rounded-lg border border-line px-3 py-1.5 font-medium text-ink transition-colors hover:bg-line/40"
+            >
+              다시 불러오기
+            </button>
+          </div>
         )}
         {body !== null && (
           <div className="text-[14px] leading-[1.8]">
