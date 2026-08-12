@@ -24,6 +24,8 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
   const [title, setTitle] = useState('')
   const [copied, setCopied] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
 
   const root = journey.occurrences.find((o) => o.parentId === null)
 
@@ -36,7 +38,10 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
     setPhase({ kind: 'editing' })
   }
 
-  const close = () => setPhase({ kind: 'closed' })
+  const close = () => {
+    setPhase({ kind: 'closed' })
+    requestAnimationFrame(() => triggerRef.current?.focus())
+  }
 
   useEffect(() => {
     if (phase.kind === 'editing') inputRef.current?.focus()
@@ -45,7 +50,24 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
   useEffect(() => {
     if (phase.kind === 'closed') return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close()
+      if (e.key === 'Escape') {
+        close()
+        return
+      }
+      if (e.key !== 'Tab') return
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )
+      if (!focusable?.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -103,8 +125,10 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         onClick={open}
+        aria-haspopup="dialog"
         className="rounded-md border border-line bg-raised px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         공유
@@ -116,6 +140,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
           onClick={close}
         >
           <div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label="질문 지도 공유하기"
@@ -177,8 +202,19 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
                     type="button"
                     onClick={() => void create()}
                     disabled={phase.kind === 'creating'}
-                    className="rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    aria-busy={phase.kind === 'creating' || undefined}
+                    className={`inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                      phase.kind === 'creating'
+                        ? 'cursor-wait disabled:opacity-100'
+                        : 'disabled:opacity-60'
+                    }`}
                   >
+                    {phase.kind === 'creating' && (
+                      <span
+                        aria-hidden
+                        className="size-3.5 animate-spin rounded-full border-2 border-on-accent/35 border-t-on-accent"
+                      />
+                    )}
                     {phase.kind === 'creating' ? '만드는 중' : '링크 만들기'}
                   </button>
                 </div>
