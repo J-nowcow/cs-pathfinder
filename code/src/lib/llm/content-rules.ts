@@ -199,6 +199,18 @@ export function contentIssues(c: { body: string; suggestions: string[] }): Conte
    */
   const opened = [...c.body.matchAll(/^:::[ \t]*([A-Za-z가-힣_-]+)/gm)].map((m) => m[1])
 
+  /* 여러 화살표를 한 줄에 이으면 가운데 단계의 설명이 빠진다. */
+  const chainedFlow = [...c.body.matchAll(/^:::[ \t]*flow[^\n]*\n([\s\S]*?)^:::/gm)].some((fence) =>
+    fence[1].split('\n').some((line) => (line.match(/(?:->|→|=>)/g) ?? []).length > 1),
+  )
+  if (chainedFlow) {
+    out.push({
+      rule: '흐름사슬',
+      detail: '흐름 한 줄에 화살표가 여러 개다. 구간마다 한 줄씩 나누고 각 동작을 설명해라',
+      severity: 'note',
+    })
+  }
+
   /*
    * 모르는 이름을 먼저 가른다. `:::sequence`처럼 없는 종류를 쓰면 파서가
    * 통째로 버리는데, 아래 개수 비교만으로는 "문법이 틀렸다"로 읽혀 엉뚱한

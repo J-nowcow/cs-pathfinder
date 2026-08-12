@@ -502,4 +502,9 @@ describe('울타리가 먹혔는가', () => {
     const body = ['답이다.', '', ':::flow', '앱 -> DB: 요청', 'DB -> 앱: 응답', ':::'].join('\n')
     expect(rules(body)).not.toContain('울타리삼킴')
   })
+
+  it('흐름 한 줄에 여러 화살표를 이으면 기록한다', () => {
+    const body = ['답이다.', '', ':::flow', '앱 -> 서버 -> DB: 저장', ':::'].join('\n')
+    expect(contentIssues({ ...ok, body }).map((i) => i.rule)).toContain('흐름사슬')
+  })
 })
