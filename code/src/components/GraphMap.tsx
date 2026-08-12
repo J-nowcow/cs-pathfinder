@@ -609,7 +609,7 @@ function Layers({
               key={g.category}
               type="button"
               onClick={() => enter(g.category)}
-              className="pointer-events-none absolute -translate-x-1/2 rounded-lg text-center hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="group pointer-events-none absolute -translate-x-1/2 text-center hover:text-accent focus-visible:outline-none"
               style={{ left: g.x, top: g.y - labelGap }}
             >
               {/* 바깥 <p>는 줄을 쌓기 위한 것이라 블록으로 두고, 받는 것은 안쪽 글자다 */}
@@ -617,10 +617,10 @@ function Layers({
                 className="whitespace-nowrap font-extrabold tracking-[-0.02em]"
                 style={{ fontSize: labelSize, lineHeight: 1.2 }}
               >
-                <span className="pointer-events-auto">{g.category}</span>
+                <span className="pointer-events-auto rounded-md group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-accent">{g.category}</span>
               </p>
               <p className="text-faint" style={{ fontSize: labelSize * 0.62 }}>
-                <span className="pointer-events-auto">{g.count}개</span>
+                <span className="pointer-events-auto rounded-md group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-accent">{g.count}개</span>
               </p>
             </button>
           ))}

@@ -65,6 +65,12 @@ describe('작은 조작 요소의 터치 영역', () => {
     expect(source).toContain('outline: 2px solid var(--color-accent)')
   })
 
+  it('분야 버튼의 초점선은 큰 빈 상자가 아니라 글자에만 붙인다', () => {
+    const source = read('src/components/GraphMap.tsx')
+    expect(source).toContain('group pointer-events-none absolute')
+    expect(source.match(/group-focus-visible:outline-2/g)).toHaveLength(2)
+  })
+
   it('공유된 질문 지도의 질문 링크도 손끝 높이를 확보한다', () => {
     expect(read('src/components/SharedTree.tsx')).toContain('group flex min-h-11')
   })
