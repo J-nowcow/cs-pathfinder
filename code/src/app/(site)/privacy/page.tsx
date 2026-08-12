@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 }
 
 /** 이 방침이 마지막으로 사실과 대조된 날 */
-const REVIEWED = '2026년 8월 10일'
+const REVIEWED = '2026년 8월 13일'
 const CONTACT = 'wkdgusdn0321@naver.com'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -81,6 +81,12 @@ export default function PrivacyPage() {
           무엇을 검색했는지, 어떤 글을 얼마나 오래 봤는지는 여전히 적지 않습니다. 탈퇴하면 계정에
           저장된 기록도 그 자리에서 함께 지워집니다.
         </p>
+        <p>
+          <strong className="text-ink">레쥬메 원문은 저장하지 않습니다.</strong> 맞춤 질문을
+          만드는 요청 동안만 메모리에 있고 응답이 끝나면 남기지 않습니다. 만들어진
+          질문 5개와 질문 근거만 브라우저의 localStorage에 남습니다. 계정에 동기화하지
+          않으며 화면의 <strong className="text-ink">질문 지우기</strong>로 직접 지울 수 있습니다.
+        </p>
       </Section>
 
       <Section title="2. 왜 저장하는가">
@@ -123,6 +129,12 @@ export default function PrivacyPage() {
             <strong className="text-ink">Google (Gemini API)</strong> — 해설 생성과 질문
             임베딩(비슷한 질문을 찾으려고 문장을 숫자로 바꾸는 일). 두 경우 모두 질문의{' '}
             <em>내용</em>만 전달됩니다. IP나 쿠키 값은 보내지 않습니다.
+          </li>
+          <li>
+            <strong className="text-ink">Google (Gemini API, 맞춤 질문)</strong> — 레쥬메에서
+            CS 질문을 만들 때 입력한 내용을 전달합니다. 메일·전화번호·URL·자격 증명으로
+            보이는 값은 먼저 가립니다. 자동 검사가 모든 고유명사를 찾지는 못하므로 이름·회사
+            내부정보는 사용자가 먼저 지워야 합니다. IP, 쿠키, 계정 ID는 보내지 않습니다.
           </li>
           <li>
             <strong className="text-ink">Google (로그인)</strong> — 구글 계정으로 로그인할 때

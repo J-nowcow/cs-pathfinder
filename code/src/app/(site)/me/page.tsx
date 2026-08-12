@@ -5,6 +5,7 @@ import { getDb } from '@/lib/db/client'
 import { kstToday } from '@/lib/daily/date'
 import { MePanel } from '@/components/MePanel'
 import { AuthCard } from '@/components/AuthCard'
+import { ResumeQuestionMaker } from '@/components/ResumeQuestionMaker'
 import type { Candidate } from '@/lib/streak/suggest'
 
 /**
@@ -22,8 +23,8 @@ import type { Candidate } from '@/lib/streak/suggest'
  * 하고, 그건 계정 없이 하고 싶지 않은 일이다.
  */
 export const metadata: Metadata = {
-  title: '학습 기록',
-  description: '며칠에 몇 편을 학습했는지, 다음에 어떤 질문을 볼지.',
+  title: '마이페이지',
+  description: '내 경험에서 맞춤 질문을 만들고 학습 기록을 확인합니다.',
 }
 
 export const dynamic = 'force-dynamic'
@@ -53,21 +54,26 @@ export default async function MePage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <h1 className="text-2xl font-semibold">학습 기록</h1>
+      <h1 className="text-2xl font-semibold">마이페이지</h1>
       <p className="mt-2 text-muted">
-        로그인 없이 이 브라우저에 쌓인 기록입니다. 지금까지 올라온 질문은 {rows.length}개입니다.
+        내 경험에서 질문을 만들고, 지금까지의 학습 기록을 이어 보세요.
       </p>
 
       <div className="mt-8">
+        <ResumeQuestionMaker />
+      </div>
+
+      <section id="account" className="mt-10 scroll-mt-24" aria-labelledby="account-title">
+        <h2 id="account-title" className="mb-3 text-lg font-semibold">계정</h2>
+        <AuthCard />
+      </section>
+
+      <div className="mt-10 border-t border-line pt-10">
         <MePanel all={rows} />
       </div>
 
-      {/* 기록 아래에 둔다 — 로그인이 기록을 가로막는 것처럼 보이면 안 된다 */}
-      <div className="mt-8">
-        <AuthCard />
-      </div>
-
       <p className="mt-10 text-sm text-muted">
+        지금까지 올라온 질문은 {rows.length}개입니다.{' '}
         <Link href="/questions">질문 목록</Link>에서 직접 골라도 됩니다. 무엇을 저장하는지는{' '}
         <Link href="/privacy">개인정보처리방침</Link>에 적어 두었습니다.
       </p>

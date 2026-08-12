@@ -41,3 +41,9 @@ export function chatDailyLimit(): number {
   const raw = Number(process.env.QUOTA_CHAT_DAILY)
   return Number.isFinite(raw) && raw > 0 ? raw : 30
 }
+
+/** 로그인 사용자의 레쥬메 맞춤 질문 생성 한도. */
+export function resumeDailyLimit(): number {
+  const raw = Number(process.env.QUOTA_RESUME_DAILY)
+  return Number.isFinite(raw) && raw > 0 ? raw : 3
+}

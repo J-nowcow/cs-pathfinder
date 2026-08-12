@@ -1,4 +1,11 @@
-import { MODEL_GATE, MODEL_GENERATE, MODEL_DAILY, MODEL_CHAT, type StructuredCaller } from '@/lib/llm/client'
+import {
+  MODEL_GATE,
+  MODEL_GENERATE,
+  MODEL_DAILY,
+  MODEL_CHAT,
+  MODEL_PERSONALIZE,
+  type StructuredCaller,
+} from '@/lib/llm/client'
 
 /**
  * API 키 없이 화면을 만들고 검증하기 위한 가짜 LLM.
@@ -195,6 +202,18 @@ function chatResponse(prompt: string): { answer: string } {
   }
 }
 
+function resumeResponse() {
+  return {
+    questions: [
+      { text: '캐시 무효화 시점은 어떻게 정했는가?', basis: '캐시로 응답 지연을 줄인 경험', topic: '캐시' },
+      { text: '동시 요청의 정합성은 어떻게 지켰는가?', basis: '동시 요청을 처리하는 서버를 구현한 경험', topic: '동시성' },
+      { text: '장애 전파 범위는 어떻게 줄였는가?', basis: '외부 시스템 장애에 대응한 경험', topic: '장애 격리' },
+      { text: '성능 개선은 어떤 지표로 확인했는가?', basis: '처리 성능을 측정하고 개선한 경험', topic: '성능 측정' },
+      { text: '트래픽이 늘면 어디가 먼저 막히는가?', basis: '요청량 증가를 고려해 시스템을 설계한 경험', topic: '확장성' },
+    ],
+  }
+}
+
 export const stubCaller: StructuredCaller = async <T>({
   model,
   prompt,
@@ -206,6 +225,7 @@ export const stubCaller: StructuredCaller = async <T>({
   if (model === MODEL_GENERATE) return generateResponse(prompt) as T
   if (model === MODEL_DAILY) return dailyResponse(prompt) as T
   if (model === MODEL_CHAT) return chatResponse(prompt) as T
+  if (model === MODEL_PERSONALIZE) return resumeResponse() as T
 
   // 모르는 모델에 그럴듯한 껍데기를 돌려주면 호출부가 조용히 잘못된 값을 쓴다.
   throw new Error(`dev stub has no response shape for model: ${model}`)

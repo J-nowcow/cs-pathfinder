@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 }
 
 /** 이 약관이 마지막으로 사실과 대조된 날 */
-const REVIEWED = '2026년 8월 10일'
+const REVIEWED = '2026년 8월 13일'
 const CONTACT = 'wkdgusdn0321@naver.com'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -65,10 +65,11 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <Section title="3. '원하는 꼬리질문 만들기'에 적는 것">
+      <Section title="3. AI 입력란에 적는 것">
         <ul className="ml-4 list-disc space-y-2">
-          <li>적은 내용은 해설을 만드는 AI에 전달되고, AI 학습에 쓰일 수 있습니다. 입력 칸에도 같은 안내가 있습니다.</li>
+          <li>꼬리질문 입력과 레쥬메 내용은 질문을 만드는 AI에 전달됩니다. 입력란에도 같은 안내가 있습니다.</li>
           <li>이름·연락처 같은 개인정보는 적지 마시기 바랍니다. 자동 검사가 막기도 하지만 완전하지 않습니다.</li>
+          <li>레쥬메 원문은 서버에 저장하지 않습니다. 만든 질문은 현재 브라우저에만 남습니다.</li>
           <li>CS 학습과 무관한 요청(코드 대필·번역·잡담)은 거절됩니다.</li>
           <li>하루 사용 한도가 있습니다. 남은 횟수는 입력 칸 옆에 보입니다.</li>
         </ul>

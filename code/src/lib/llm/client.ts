@@ -14,6 +14,11 @@ export const MODEL_GATE = 'gemini-3.1-flash-lite'
 export const MODEL_GENERATE = 'gemini-3.6-flash'
 export const MODEL_DAILY = 'gemini-3.5-flash'
 /**
+ * 레쥬메 맞춤 질문 사슬 별칭. 생성 모델을 쓰지만 dev 스텁과
+ * 출력 형식이 일반 해설 생성과 달라 호출 의도를 따로 구분한다.
+ */
+export const MODEL_PERSONALIZE = 'resume-questions'
+/**
  * 노드 챗의 사슬 별칭. 실제 모델명이 아니다 — `buildAttempts`가 사슬을
  * 풀 때만 쓰는 열쇠라 API로 새지 않고, dev 스텁이 게이트 호출과 챗
  * 호출을 이 이름으로 가른다(둘 다 첫 실모델은 같은 flash-lite다).
@@ -49,6 +54,7 @@ export const MODEL_CHAIN: Record<string, string[]> = {
   [MODEL_GATE]: [MODEL_GATE, 'gemini-3.5-flash-lite', MODEL_GEMMA],
   [MODEL_GENERATE]: [MODEL_GENERATE, MODEL_DAILY, MODEL_GATE, MODEL_GEMMA],
   [MODEL_DAILY]: [MODEL_DAILY, MODEL_GENERATE, MODEL_GEMMA],
+  [MODEL_PERSONALIZE]: [MODEL_GENERATE, MODEL_DAILY, MODEL_GATE, MODEL_GEMMA],
   [MODEL_CHAT]: [MODEL_GATE, 'gemini-3.5-flash-lite', MODEL_GEMMA],
 }
 
