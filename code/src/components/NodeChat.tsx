@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { Turn } from '@/lib/chat/ask'
 
 const MAX = 300
@@ -24,6 +24,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<'quota' | 'failed' | null>(null)
   const [remaining, setRemaining] = useState<number | null>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const over = text.length > MAX
   const canSend = text.trim().length > 0 && !over && !pending && error !== 'quota'
@@ -33,7 +34,6 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
     if (!asked || pending) return
     setPending(true)
     setError(null)
-    setText('')
     const nextTurns: Turn[] = [...turns, { role: 'user', text: asked }]
     setTurns(nextTurns)
 
@@ -58,6 +58,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
       }
       const data = (await res.json()) as { answer: string; quota: { used: number; limit: number } }
       setTurns([...nextTurns, { role: 'assistant', text: data.answer }])
+      setText('')
       setRemaining(Math.max(0, data.quota.limit - data.quota.used))
     } catch {
       setError('failed')
@@ -71,8 +72,12 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
       <div className="mt-6">
         <button
           type="button"
-          onClick={() => setOpen(true)}
-          className="text-[13px] font-medium text-muted underline decoration-dotted underline-offset-4 hover:text-ink"
+          onClick={() => {
+            setOpen(true)
+            requestAnimationFrame(() => inputRef.current?.focus())
+          }}
+          aria-expanded="false"
+          className="inline-flex min-h-11 items-center text-[13px] font-medium text-muted underline decoration-dotted underline-offset-4 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           해설이 어렵나요? 이 해설에 대해 물어보기
         </button>
@@ -87,7 +92,8 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="text-[12px] text-faint hover:text-ink"
+          aria-expanded="true"
+          className="inline-flex min-h-11 items-center px-2 text-[12px] text-faint hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           접기
         </button>
@@ -136,8 +142,15 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
       >
         <div className="rounded-lg border border-line bg-surface focus-within:border-accent">
           <textarea
+            ref={inputRef}
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && canSend) {
+                e.preventDefault()
+                void send()
+              }
+            }}
             rows={2}
             placeholder="이 해설에서 이해가 안 되는 부분을 적어 주세요"
             aria-label="해설에 대한 질문"
@@ -150,9 +163,18 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
             <button
               type="submit"
               disabled={!canSend}
-              className="rounded-md bg-accent px-3 py-1.5 text-[13px] font-medium text-on-accent disabled:opacity-50"
+              aria-busy={pending || undefined}
+              className={`inline-flex min-h-11 items-center gap-2 rounded-md bg-accent px-3 text-[13px] font-medium text-on-accent ${
+                pending ? 'cursor-wait disabled:opacity-100' : 'disabled:cursor-not-allowed disabled:opacity-50'
+              }`}
             >
-              물어보기
+              {pending && (
+                <span
+                  aria-hidden
+                  className="size-3.5 animate-spin rounded-full border-2 border-on-accent/35 border-t-on-accent"
+                />
+              )}
+              {pending ? '답변 중' : '물어보기'}
             </button>
           </div>
         </div>

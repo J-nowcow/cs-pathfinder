@@ -40,6 +40,7 @@ describe('NodeChat', () => {
     expect(screen.getByRole('textbox')).toBeTruthy()
     expect(screen.getByText(/AI 학습에 쓰일 수 있습니다/)).toBeTruthy()
     expect(screen.getByText(/대화는 저장되지 않습니다/)).toBeTruthy()
+    expect(document.activeElement).toBe(screen.getByRole('textbox'))
   })
 
   it('물어보면 내 말과 도우미 답이 순서대로 쌓인다', async () => {
@@ -67,5 +68,41 @@ describe('NodeChat', () => {
     await waitFor(() => {
       expect(screen.getByText(/자정에 다시 채워집니다/)).toBeTruthy()
     })
+  })
+
+  it('응답에 실패하면 입력을 남겨 다시 보낼 수 있게 한다', async () => {
+    mockFetchOnce({ error: 'failed' }, 500)
+    const user = userEvent.setup()
+    render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.type(screen.getByRole('textbox'), '지워지면 안 됩니다')
+    await user.click(screen.getByRole('button', { name: '물어보기' }))
+
+    await waitFor(() => expect(screen.getByText(/답을 만들지 못했습니다/)).toBeTruthy())
+    expect((screen.getByRole('textbox') as HTMLTextAreaElement).value).toBe('지워지면 안 됩니다')
+  })
+
+  it('응답을 기다리는 동안 버튼에서 진행 상태를 보여준다', async () => {
+    vi.spyOn(globalThis, 'fetch').mockImplementationOnce(() => new Promise<Response>(() => {}))
+    const user = userEvent.setup()
+    render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.type(screen.getByRole('textbox'), '질문입니다')
+    await user.click(screen.getByRole('button', { name: '물어보기' }))
+
+    const button = await screen.findByRole('button', { name: /답변 중/ })
+    expect(button.getAttribute('aria-busy')).toBe('true')
+    expect(button.querySelector('.animate-spin')).toBeTruthy()
+  })
+
+  it('Ctrl+Enter로도 제출한다', async () => {
+    mockFetchOnce({ answer: '답입니다.', quota: { used: 1, limit: 30 } })
+    const user = userEvent.setup()
+    render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.type(screen.getByRole('textbox'), '키보드 질문')
+    await user.keyboard('{Control>}{Enter}{/Control}')
+
+    await waitFor(() => expect(screen.getByText('답입니다.')).toBeTruthy())
   })
 })
