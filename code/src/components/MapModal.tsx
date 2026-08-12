@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   ReactFlow,
   Background,
@@ -110,19 +110,50 @@ export function MapModal({
   onJump: (occurrenceId: string) => void
   onClose: () => void
 }) {
+  const dialog = useRef<HTMLDivElement>(null)
+  const closeButton = useRef<HTMLButtonElement>(null)
+
   useEffect(() => {
+    const returnFocus = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        onClose()
+        return
+      }
+      if (e.key !== 'Tab') return
+
+      const focusable = Array.from(
+        dialog.current?.querySelectorAll<HTMLElement>(
+          'button:not(:disabled), [href], [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      )
+      if (focusable.length === 0) return
+
+      const first = focusable[0]
+      const last = focusable.at(-1)!
+      if (e.shiftKey && (document.activeElement === first || !dialog.current?.contains(document.activeElement))) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     window.addEventListener('keydown', onKey)
+    const raf = requestAnimationFrame(() => closeButton.current?.focus())
 
     // 모달 뒤가 스크롤되면 닫았을 때 읽던 자리가 어긋난다.
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
     return () => {
+      cancelAnimationFrame(raf)
       window.removeEventListener('keydown', onKey)
       document.body.style.overflow = prev
+      returnFocus?.focus()
     }
   }, [onClose])
 
@@ -172,6 +203,7 @@ export function MapModal({
 
   return (
     <div
+      ref={dialog}
       role="dialog"
       aria-modal="true"
       aria-label="내 질문 지도"
@@ -187,9 +219,10 @@ export function MapModal({
         </div>
 
         <button
+          ref={closeButton}
           type="button"
           onClick={onClose}
-          className="rounded-md border border-strata-line px-3 py-1.5 text-[13px] font-medium text-strata-ink hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="min-h-11 rounded-md border border-strata-line px-3 py-1.5 text-[13px] font-medium text-strata-ink hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           닫기
         </button>
