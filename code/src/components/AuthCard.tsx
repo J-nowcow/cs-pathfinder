@@ -76,8 +76,20 @@ export function AuthCard() {
     )
   }
 
-  // 세션 확인 중에는 아무것도 안 그린다 — 로그인/로그아웃이 깜빡이며 바뀌는 것보다 낫다
-  if (isPending) return <div className="h-[72px]" aria-hidden />
+  if (isPending) {
+    return (
+      <div
+        className="flex min-h-[72px] items-center gap-2 rounded-xl border border-line bg-surface p-4 text-sm text-muted"
+        aria-busy="true"
+      >
+        <span
+          aria-hidden
+          className="size-3.5 animate-spin rounded-full border-2 border-faint/30 border-t-faint"
+        />
+        <span role="status">로그인 상태를 확인하는 중</span>
+      </div>
+    )
+  }
 
   if (session) {
     return (

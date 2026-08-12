@@ -15,11 +15,17 @@ import { AuthCard } from '@/components/AuthCard'
  * 브라우저에 따라 "이 사이트가 다시 묻지 않게 하기"로 통째로 꺼지며,
  * 그러면 첫 클릭이 곧 삭제가 된다.
  */
-const { signOut } = vi.hoisted(() => ({ signOut: vi.fn(async () => {}) }))
+const { signOut, sessionState } = vi.hoisted(() => ({
+  signOut: vi.fn(async () => {}),
+  sessionState: {
+    data: { user: { email: 'me@example.com' } } as null | { user: { email: string } },
+    isPending: false,
+  },
+}))
 
 vi.mock('@/lib/auth/client', () => ({
   authClient: {
-    useSession: () => ({ data: { user: { email: 'me@example.com' } }, isPending: false }),
+    useSession: () => sessionState,
     signOut,
     signIn: { social: vi.fn() },
   },
@@ -29,6 +35,8 @@ afterEach(() => {
   cleanup()
   vi.unstubAllGlobals()
   signOut.mockClear()
+  sessionState.data = { user: { email: 'me@example.com' } }
+  sessionState.isPending = false
 })
 
 /** 응답 코드만 다르게 주는 fetch */
@@ -41,6 +49,17 @@ function mockFetch(ok: boolean) {
 const openConfirm = async () => {
   await userEvent.click(screen.getByRole('button', { name: '계정 삭제' }))
 }
+
+describe('AuthCard · 로그인 상태 확인', () => {
+  it('확인이 끝날 때까지 로더와 상태 문구를 보여준다', () => {
+    sessionState.isPending = true
+    const { container } = render(<AuthCard />)
+
+    expect(screen.getByRole('status').textContent).toBe('로그인 상태를 확인하는 중')
+    expect(container.querySelector('[aria-busy="true"]')).toBeTruthy()
+    expect(screen.queryByRole('button')).toBeNull()
+  })
+})
 
 describe('AuthCard · 계정 삭제', () => {
   /** 첫 클릭이 곧 삭제이면, 오조작 한 번에 기록이 사라진다 */
