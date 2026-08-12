@@ -28,9 +28,10 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
     state.kind === 'ancestor_jump'
       ? 'border-accent/35 bg-accent-soft text-ink'
       : 'border-warn/30 bg-warn-soft text-ink'
+  const role = state.kind === 'ancestor_jump' ? 'status' : 'alert'
 
   return (
-    <div role="status" className={`rounded-lg border px-4 py-3 text-[14px] leading-[1.6] ${tone}`}>
+    <div role={role} className={`rounded-lg border px-4 py-3 text-[14px] leading-[1.6] ${tone}`}>
       {state.kind === 'rejected' && (
         <>
           <strong className="font-medium">질문으로 받기 어려운 내용입니다.</strong>

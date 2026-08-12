@@ -84,6 +84,17 @@ describe('Banner', () => {
     render(<Banner state={{ kind: 'rate_limited', retryAfter: 7 }} onRetry={() => {}} />)
     expect(screen.getByText(/7/)).toBeTruthy()
   })
+
+  it('실패와 제한은 바로 알린다', () => {
+    render(<Banner state={{ kind: 'error', message: '잠시 뒤 다시 시도해 주세요.' }} />)
+    expect(screen.getByRole('alert')).toBeTruthy()
+  })
+
+  it('이전 질문으로 이동한 안내는 방해하지 않고 알린다', () => {
+    render(<Banner state={{ kind: 'ancestor_jump', question: '프로세스란 무엇인가요?' }} />)
+    expect(screen.getByRole('status')).toBeTruthy()
+    expect(screen.queryByRole('alert')).toBeNull()
+  })
 })
 
 /**
