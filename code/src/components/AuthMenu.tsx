@@ -133,7 +133,7 @@ export function AuthMenu() {
             onClick={() => setOpen(false)}
             className="mt-2 flex min-h-11 items-center rounded-md px-2 text-[13px] text-ink hover:bg-surface"
           >
-            내 기록으로
+            학습 기록으로
           </Link>
 
           <div className="mt-1 border-t border-line pt-1">

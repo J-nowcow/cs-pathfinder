@@ -22,7 +22,7 @@ import type { Candidate } from '@/lib/streak/suggest'
  * 하고, 그건 계정 없이 하고 싶지 않은 일이다.
  */
 export const metadata: Metadata = {
-  title: '내 기록',
+  title: '학습 기록',
   description: '며칠에 몇 편을 학습했는지, 다음에 어떤 질문을 볼지.',
 }
 
@@ -53,7 +53,7 @@ export default async function MePage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <h1 className="text-2xl font-semibold">내 기록</h1>
+      <h1 className="text-2xl font-semibold">학습 기록</h1>
       <p className="mt-2 text-muted">
         로그인 없이 이 브라우저에 쌓인 기록입니다. 지금까지 올라온 질문은 {rows.length}개입니다.
       </p>

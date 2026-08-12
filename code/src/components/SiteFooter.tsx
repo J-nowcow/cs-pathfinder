@@ -47,7 +47,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link href="/me" className="text-[13px] text-muted hover:text-ink">
-                  내 기록
+                  학습 기록
                 </Link>
               </li>
               {/*

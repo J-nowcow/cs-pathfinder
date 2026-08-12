@@ -143,7 +143,7 @@ export function MinimapStrip({
           onClick={onOpenMap}
           className="flex shrink-0 items-center gap-1.5 border-l border-strata-line px-4 text-[12px] font-medium text-strata-ink transition-colors hover:text-white focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
         >
-          내 지도
+          내 질문 지도
           <span aria-hidden className="font-mono text-[11px] opacity-70">
             {layout.nodes.length}
           </span>

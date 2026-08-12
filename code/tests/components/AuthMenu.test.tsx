@@ -90,13 +90,13 @@ describe('AuthMenu · 로그인 후', () => {
     expect(screen.getByText('me@example.com')).toBeTruthy()
   })
 
-  it('내 기록으로 가는 길과 로그아웃을 함께 준다', async () => {
+  it('학습 기록으로 가는 길과 로그아웃을 함께 준다', async () => {
     login()
     render(<AuthMenu />)
     await userEvent.click(screen.getByRole('button', { name: '내 계정' }))
-    expect(screen.getByRole('menuitem', { name: '내 기록으로' }).getAttribute('href')).toBe('/me')
+    expect(screen.getByRole('menuitem', { name: '학습 기록으로' }).getAttribute('href')).toBe('/me')
     await waitFor(() =>
-      expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: '내 기록으로' })),
+      expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: '학습 기록으로' })),
     )
     expect(screen.getByRole('menuitem', { name: '로그아웃' })).toBeTruthy()
   })
@@ -116,7 +116,7 @@ describe('AuthMenu · 로그인 후', () => {
     const trigger = screen.getByRole('button', { name: '내 계정' })
     await userEvent.click(trigger)
     expect(screen.getByRole('menu')).toBeTruthy()
-    screen.getByRole('menuitem', { name: '내 기록으로' }).focus()
+    screen.getByRole('menuitem', { name: '학습 기록으로' }).focus()
     await userEvent.keyboard('{Escape}')
     expect(screen.queryByRole('menu')).toBeNull()
     await waitFor(() => expect(document.activeElement).toBe(trigger))

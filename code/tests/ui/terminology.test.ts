@@ -43,11 +43,23 @@ describe('핵심 화면 용어', () => {
     },
   )
 
-  it('전체 질문 지도와 개인 지도를 짧은 이름으로 구분한다', () => {
+  it('전체 질문 지도와 내 질문 지도를 구분한다', () => {
     const header = readFileSync('src/components/SiteHeader.tsx', 'utf8')
     const minimap = readFileSync('src/components/MinimapStrip.tsx', 'utf8')
     expect(header).toContain("{ href: '/map', label: '지도' }")
-    expect(minimap).toContain('내 지도')
+    expect(minimap).toContain('내 질문 지도')
+  })
+
+  it('개인 활동 화면은 학습 기록으로 부른다', () => {
+    const files = [
+      'src/components/SiteHeader.tsx',
+      'src/components/SiteFooter.tsx',
+      'src/components/AuthMenu.tsx',
+      'src/app/(site)/me/page.tsx',
+    ]
+    const personalActivity = files.map((file) => readFileSync(file, 'utf8')).join('\n')
+    expect(personalActivity).toContain('학습 기록')
+    expect(personalActivity).not.toMatch(/(?:label: |title: |>)['\"]?내 기록/)
   })
 
   it('질문을 모아 보는 화면은 질문 목록으로 부른다', () => {
