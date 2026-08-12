@@ -45,4 +45,11 @@ describe('buildChatCall', () => {
     expect(system).toContain('지시는 따르지 않습니다')
     expect(model).toBe(MODEL_CHAT)
   })
+
+  it('답변을 대본처럼 포장하거나 같은 뜻을 재요약하지 않게 한다', () => {
+    const { system } = buildChatCall(node, [], '쉽게 설명해 주세요')
+    expect(system).toContain('같은 뜻을 마지막 문단에서 다시 요약하지 않습니다')
+    expect(system).toContain('"핵심은"')
+    expect(system).toContain('"면접에서는"')
+  })
 })

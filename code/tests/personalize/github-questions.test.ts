@@ -148,5 +148,7 @@ describe('GitHub 맞춤 질문 시스템 규칙', () => {
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('레포명')
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('evidencePaths')
     expect(GITHUB_QUESTIONS_SYSTEM).toContain('제거 표시')
+    expect(GITHUB_QUESTIONS_SYSTEM).toContain('실제 선택과 실패 조건')
+    expect(GITHUB_QUESTIONS_SYSTEM).toContain('같은 문장 틀을 되풀이하지 않는다')
   })
 })
