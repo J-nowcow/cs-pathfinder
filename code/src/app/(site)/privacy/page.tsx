@@ -173,7 +173,7 @@ export default function PrivacyPage() {
           <a
             className="text-accent underline underline-offset-2"
             href="https://privacy.kisa.or.kr"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             target="_blank"
           >
             privacy.kisa.or.kr

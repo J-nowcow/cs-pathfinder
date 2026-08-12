@@ -87,5 +87,8 @@ describe('ShareSheet', () => {
     await userEvent.click(screen.getByRole('button', { name: '링크 만들기' }))
 
     expect(await screen.findByRole('textbox', { name: '공유 주소' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '열어보기' }).getAttribute('rel')).toBe(
+      'noopener noreferrer',
+    )
   })
 })
