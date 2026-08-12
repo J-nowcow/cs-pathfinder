@@ -96,6 +96,7 @@ describe('FreeInput — 길이', () => {
     await userEvent.paste('가'.repeat(301))
 
     expect(screen.getByRole('button').hasAttribute('disabled')).toBe(true)
+    expect(screen.getByRole('textbox').getAttribute('aria-invalid')).toBe('true')
   })
 })
 

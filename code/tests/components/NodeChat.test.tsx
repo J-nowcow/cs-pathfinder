@@ -132,6 +132,18 @@ describe('NodeChat', () => {
     expect(button.querySelector('.animate-spin')).toBeTruthy()
   })
 
+  it('너무 긴 입력을 오류 상태로 알린다', async () => {
+    const user = userEvent.setup()
+    render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    const textbox = screen.getByRole('textbox')
+    await user.click(textbox)
+    await user.paste('가'.repeat(301))
+
+    expect(textbox.getAttribute('aria-invalid')).toBe('true')
+    expect(screen.getByRole('button', { name: '물어보기' }).hasAttribute('disabled')).toBe(true)
+  })
+
   it('Ctrl+Enter로도 제출한다', async () => {
     mockFetchOnce({ answer: '답입니다.', quota: { used: 1, limit: 30 } })
     const user = userEvent.setup()

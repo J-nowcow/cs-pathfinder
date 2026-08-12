@@ -60,6 +60,7 @@ export function FreeInput({
           id="free-question"
           rows={2}
           value={text}
+          autoComplete="off"
           disabled={blocked}
           placeholder={
             quotaExceeded ? '오늘 몫은 다 쓰셨습니다' : '이 질문에서 더 궁금한 내용을 적어 주세요'
@@ -73,6 +74,7 @@ export function FreeInput({
           }}
           className="w-full resize-none bg-transparent px-4 pt-3 text-[15px] leading-[1.6] text-ink outline-none placeholder:text-faint disabled:cursor-not-allowed"
           aria-describedby="free-question-count free-question-notice"
+          aria-invalid={over || undefined}
         />
 
         <div className="flex items-center justify-between px-4 pb-2.5">

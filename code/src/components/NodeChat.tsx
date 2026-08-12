@@ -161,9 +161,11 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
               }
             }}
             rows={2}
+            autoComplete="off"
             placeholder="이 해설에서 이해가 안 되는 부분을 적어 주세요"
             aria-label="해설에 대한 질문"
             aria-describedby="node-chat-count node-chat-notice"
+            aria-invalid={over || undefined}
             className="block w-full resize-none bg-transparent px-3 py-2 text-[14px] leading-[1.65] text-ink placeholder:text-faint focus:outline-none"
           />
           <div className="flex items-center justify-between px-3 pb-2">
