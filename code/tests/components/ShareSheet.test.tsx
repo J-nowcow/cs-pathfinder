@@ -42,6 +42,10 @@ describe('ShareSheet', () => {
     const pending = screen.getByRole('button', { name: /만드는 중/ })
     expect(pending.getAttribute('aria-busy')).toBe('true')
     expect(pending.querySelector('.animate-spin')).toBeTruthy()
+    expect((screen.getByRole('button', { name: '닫기' }) as HTMLButtonElement).disabled).toBe(true)
+
+    await user.keyboard('{Escape}')
+    expect(screen.getByRole('dialog')).toBeTruthy()
   })
 
   it('Tab이 대화상자 밖으로 빠져나가지 않는다', async () => {

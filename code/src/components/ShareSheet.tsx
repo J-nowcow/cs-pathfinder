@@ -39,6 +39,8 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
   }
 
   const close = () => {
+    // 요청을 보낸 뒤 닫으면 응답이 돌아올 때 완료 화면이 다시 열려 깜빡인다.
+    if (phase.kind === 'creating') return
     setPhase({ kind: 'closed' })
     requestAnimationFrame(() => triggerRef.current?.focus())
   }
@@ -194,6 +196,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
                   <button
                     type="button"
                     onClick={close}
+                    disabled={phase.kind === 'creating'}
                     className="min-h-11 rounded-md px-4 py-2.5 text-[14px] font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     닫기
