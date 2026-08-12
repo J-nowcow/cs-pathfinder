@@ -109,7 +109,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
             />
             <p className="text-[15px] leading-[1.7] text-muted">
               아직 학습 기록이 없습니다. 질문 하나를 열어 보면 여기 잔디가 자라기 시작합니다.{' '}
-              <Link href="/" className="font-medium text-accent">
+              <Link href="/" className="rounded-sm font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                 오늘의 질문 보기
               </Link>
             </p>

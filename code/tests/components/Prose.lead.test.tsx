@@ -121,6 +121,8 @@ describe('Prose — 답 블록', () => {
 
     const lead = container.querySelector('.prose-lead')!
     expect(lead.querySelector('code')?.textContent).toBe('GIL')
-    expect(lead.querySelector('a[href^="/glossary#"]')?.textContent).toBe('스레드')
+    const link = lead.querySelector('a[href^="/glossary#"]')
+    expect(link?.textContent).toBe('스레드')
+    expect(link?.className).toContain('focus-visible:outline-2')
   })
 })

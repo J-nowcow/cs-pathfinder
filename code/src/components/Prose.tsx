@@ -52,7 +52,7 @@ function Tokens({ text, seen }: { text: string; seen: Set<string> }) {
             <a
               href={`/glossary#${encodeURIComponent(t.term)}`}
               title={t.short}
-              className="rounded-sm underline decoration-dotted underline-offset-2 hover:bg-surface"
+              className="rounded-sm underline decoration-dotted underline-offset-2 hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               {t.value}
             </a>

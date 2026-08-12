@@ -251,7 +251,7 @@ function Empty({ category }: { category: string | null }) {
           <p className="text-[15px] text-muted">{category} 질문 지도는 아직 공유되지 않았습니다.</p>
           <p className="mt-2 text-[13px] text-faint">
             여기는 사람이 공유한 질문 지도만 모입니다. 질문 자체를 찾는 것이라면{' '}
-            <Link href="/questions" className="text-accent hover:underline">
+            <Link href="/questions" className="rounded-sm text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
               질문 목록
             </Link>
             에 있습니다.
