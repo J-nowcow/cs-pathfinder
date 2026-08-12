@@ -38,7 +38,9 @@ describe('Suggestions', () => {
 
     const pending = screen.getByRole('button', { name: /추천 꼬리질문 3/ })
     expect(pending.getAttribute('data-pending')).toBe('true')
+    expect(pending.getAttribute('aria-busy')).toBe('true')
     expect(pending.textContent).toContain('새 질문과 해설을 만드는 중')
+    expect(screen.getByRole('status').textContent).toContain('새 질문과 해설을 만드는 중')
     expect(pending.className).toContain('border-accent')
     expect(pending.querySelector('.animate-spin')).toBeTruthy()
     expect(container.querySelectorAll('.animate-spin')).toHaveLength(1)

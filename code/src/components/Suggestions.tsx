@@ -39,6 +39,7 @@ export function Suggestions({
               disabled={disabled}
               onClick={() => onPick(s)}
               data-pending={pending || undefined}
+              aria-busy={pending || undefined}
               className={`group flex w-full items-start gap-3 rounded-lg border px-4 py-3.5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                 pending
                   ? 'cursor-wait border-accent bg-accent-soft'
@@ -55,7 +56,9 @@ export function Suggestions({
               <span className="min-w-0 flex-1">
                 <span className="block text-[15px] leading-[1.55] text-ink">{s.text}</span>
                 {pending ? (
-                  <span className="mt-1 block text-[12px] text-accent">새 질문과 해설을 만드는 중</span>
+                  <span role="status" className="mt-1 block text-[12px] text-accent">
+                    새 질문과 해설을 만드는 중
+                  </span>
                 ) : s.resolved ? (
                   <span className="mt-1 block text-[12px] text-accent">이미 만든 질문 · 바로 이동</span>
                 ) : null}
