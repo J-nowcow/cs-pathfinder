@@ -103,7 +103,7 @@ export function AuthCard() {
         <button
           type="button"
           onClick={() => authClient.signOut()}
-          className="mt-3 min-h-11 rounded-lg border border-line px-4 py-1.5 text-sm text-muted transition-colors hover:text-ink"
+          className="mt-3 min-h-11 rounded-lg border border-line px-4 py-1.5 text-sm text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           로그아웃
         </button>
@@ -117,7 +117,7 @@ export function AuthCard() {
             <button
               type="button"
               onClick={() => setPhase('confirming')}
-              className="min-h-11 text-sm text-faint transition-colors hover:text-warn"
+              className="min-h-11 rounded-md text-sm text-faint transition-colors hover:text-warn focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               계정 삭제
             </button>
@@ -143,7 +143,7 @@ export function AuthCard() {
                 type="button"
                 onClick={remove}
                 disabled={phase === 'working'}
-                className="min-h-11 rounded-md border border-warn/40 px-4 py-1.5 text-sm font-medium text-warn transition-opacity hover:opacity-80 disabled:opacity-50"
+                className="min-h-11 rounded-md border border-warn/40 px-4 py-1.5 text-sm font-medium text-warn transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warn disabled:opacity-50"
               >
                 지우기
               </button>
@@ -154,7 +154,7 @@ export function AuthCard() {
                   setFailed(false)
                 }}
                 disabled={phase === 'working'}
-                className="min-h-11 rounded-md px-4 py-1.5 text-sm text-muted transition-colors hover:text-ink disabled:opacity-50"
+                className="min-h-11 rounded-md px-4 py-1.5 text-sm text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50"
               >
                 취소
               </button>
@@ -176,7 +176,7 @@ export function AuthCard() {
       <button
         type="button"
         onClick={() => authClient.signIn.social({ provider: 'google', callbackURL: '/me' })}
-        className="mt-3 min-h-11 rounded-lg border border-line px-4 py-1.5 text-sm font-medium transition-colors hover:bg-line/40"
+        className="mt-3 min-h-11 rounded-lg border border-line px-4 py-1.5 text-sm font-medium transition-colors hover:bg-line/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         Google로 로그인
       </button>

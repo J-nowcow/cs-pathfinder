@@ -193,4 +193,18 @@ describe('AuthCard · 계정 삭제', () => {
     render(<AuthCard />)
     expect(screen.getByRole('button', { name: '계정 삭제' }).className).toContain('min-h-11')
   })
+
+  it('계정 조작 버튼은 키보드 초점을 또렷하게 표시한다', async () => {
+    render(<AuthCard />)
+    const deleteButton = screen.getByRole('button', { name: '계정 삭제' })
+    expect(deleteButton.className).toContain('focus-visible:outline-2')
+
+    await userEvent.click(deleteButton)
+    expect(screen.getByRole('button', { name: '지우기' }).className).toContain(
+      'focus-visible:outline-2',
+    )
+    expect(screen.getByRole('button', { name: '취소' }).className).toContain(
+      'focus-visible:outline-2',
+    )
+  })
 })
