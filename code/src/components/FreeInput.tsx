@@ -72,6 +72,7 @@ export function FreeInput({
             }
           }}
           className="w-full resize-none bg-transparent px-4 pt-3 text-[15px] leading-[1.6] text-ink outline-none placeholder:text-faint disabled:cursor-not-allowed"
+          aria-describedby="free-question-count free-question-notice"
         />
 
         <div className="flex items-center justify-between px-4 pb-2.5">
@@ -81,7 +82,10 @@ export function FreeInput({
 
             이미 만든 질문은 차감되지 않는다. 이 숫자가 세는 것은 새로 만드는 질문이다.
           */}
-          <span className={`font-mono text-[11px] ${over ? 'text-warn' : 'text-faint'}`}>
+          <span
+            id="free-question-count"
+            className={`font-mono text-[11px] ${over ? 'text-warn' : 'text-faint'}`}
+          >
             {text.length}/{MAX}
             {!quotaExceeded && remaining <= SHOW_REMAINING_AT && (
               <span className="ml-2">오늘 {remaining}번 남음</span>
@@ -117,7 +121,7 @@ export function FreeInput({
       </div>
 
       {/* 입력란만 흐려두면 왜 막혔는지 알 수 없다. 남은 길이 있다는 것도 함께 알린다 */}
-      <p className="mt-2 text-[12px] leading-[1.6] text-faint">
+      <p id="free-question-notice" className="mt-2 text-[12px] leading-[1.6] text-faint">
         {quotaExceeded
           ? '오늘 몫은 다 쓰셨습니다. 이미 만든 질문은 그대로 열 수 있습니다. 자정에 초기화됩니다.'
           : '적은 내용은 AI 학습에 쓰일 수 있습니다. 이름이나 연락처는 넣지 말아 주세요.'}

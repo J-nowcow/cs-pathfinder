@@ -41,6 +41,9 @@ describe('NodeChat', () => {
     expect(screen.getByText(/AI 학습에 쓰일 수 있습니다/)).toBeTruthy()
     expect(screen.getByText(/대화는 저장되지 않습니다/)).toBeTruthy()
     expect(document.activeElement).toBe(screen.getByRole('textbox'))
+    expect(screen.getByRole('textbox').getAttribute('aria-describedby')).toBe(
+      'node-chat-count node-chat-notice',
+    )
   })
 
   it('접은 뒤 다시 여는 버튼으로 초점이 돌아간다', async () => {

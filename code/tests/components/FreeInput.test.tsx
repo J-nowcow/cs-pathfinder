@@ -37,6 +37,13 @@ describe('FreeInput — 남은 횟수', () => {
     render(<FreeInput {...base} />)
     expect(screen.getByText(/이름이나 연락처는 넣지 말아 주세요/)).toBeTruthy()
   })
+
+  it('입력란이 글자 수와 개인정보 안내를 설명으로 연결한다', () => {
+    render(<FreeInput {...base} />)
+    expect(screen.getByRole('textbox').getAttribute('aria-describedby')).toBe(
+      'free-question-count free-question-notice',
+    )
+  })
 })
 
 describe('FreeInput — 보낼 수 있는가', () => {

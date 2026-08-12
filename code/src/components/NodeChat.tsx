@@ -162,10 +162,14 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
             rows={2}
             placeholder="이 해설에서 이해가 안 되는 부분을 적어 주세요"
             aria-label="해설에 대한 질문"
+            aria-describedby="node-chat-count node-chat-notice"
             className="block w-full resize-none bg-transparent px-3 py-2 text-[14px] leading-[1.65] text-ink placeholder:text-faint focus:outline-none"
           />
           <div className="flex items-center justify-between px-3 pb-2">
-            <span className={`text-[12px] tabular-nums ${over ? 'text-warn' : 'text-faint'}`}>
+            <span
+              id="node-chat-count"
+              className={`text-[12px] tabular-nums ${over ? 'text-warn' : 'text-faint'}`}
+            >
               {text.length}/{MAX}
             </span>
             <button
@@ -188,7 +192,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
         </div>
       </form>
 
-      <p className="mt-2 text-[12px] leading-[1.6] text-faint">
+      <p id="node-chat-notice" className="mt-2 text-[12px] leading-[1.6] text-faint">
         적은 내용은 AI 학습에 쓰일 수 있습니다. 이름이나 연락처는 넣지 말아 주세요. 대화는
         저장되지 않습니다 — 화면을 떠나면 사라집니다.
         {remaining !== null && remaining <= SHOW_REMAINING_AT && (
