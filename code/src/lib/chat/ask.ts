@@ -26,6 +26,16 @@ export const CHAT_ANSWER_SCHEMA = z.object({ answer: z.string() })
 
 export { MODEL_CHAT }
 
+/** 모델이 낸 답을 화면에 그대로 올리기 전에 최소한의 문체 결함을 확인한다. */
+export function chatAnswerIssues(answer: string): string[] {
+  const text = answer.trim()
+  const issues: string[] = []
+  if (!text) issues.push('empty')
+  if (/(?:^|\n)(?:핵심은|중요한 포인트는|면접에서는)/m.test(text)) issues.push('scripted')
+  if (/(?:^|\n)(?:따라서|결론적으로|요약하면)[,\s]/m.test(text)) issues.push('recap')
+  return issues
+}
+
 /**
  * 호출 한 번의 재료를 만든다. 순수 함수 — 시험이 여기를 잡는다.
  *

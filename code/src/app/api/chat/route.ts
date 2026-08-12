@@ -1,7 +1,13 @@
 import { z } from 'zod'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { loadNode } from '@/lib/expand/cache'
-import { buildChatCall, CHAT_ANSWER_SCHEMA, MAX_HISTORY_TURNS, MAX_TURN_CHARS } from '@/lib/chat/ask'
+import {
+  buildChatCall,
+  chatAnswerIssues,
+  CHAT_ANSWER_SCHEMA,
+  MAX_HISTORY_TURNS,
+  MAX_TURN_CHARS,
+} from '@/lib/chat/ask'
 import { realCaller, type StructuredCaller } from '@/lib/llm/client'
 import { resolveCaller } from '@/lib/llm/resolve'
 import { reserveQuota, commitQuota, releaseQuota, getQuota } from '@/lib/quota'
@@ -63,7 +69,21 @@ export async function POST(request: Request): Promise<Response> {
       parsed.history,
       parsed.text,
     )
-    const { answer } = await call({ ...args, schema: CHAT_ANSWER_SCHEMA })
+    const first = await call({ ...args, schema: CHAT_ANSWER_SCHEMA })
+    let answer = first.answer.trim()
+    const issues = chatAnswerIssues(answer)
+    if (issues.length > 0) {
+      try {
+        const revised = await call({
+          ...args,
+          schema: CHAT_ANSWER_SCHEMA,
+          prompt: `${args.prompt}\n\n[고칠 답]\n${answer}\n\n대본형 표현과 재요약을 빼고 기술 내용은 보존해 다시 답합니다.`,
+        })
+        if (chatAnswerIssues(revised.answer).length < issues.length) answer = revised.answer.trim()
+      } catch {
+        // 보조 재작성 실패로 원래 답까지 버리지는 않는다.
+      }
+    }
     await commitQuota(quotaKey)
     const used = (await getQuota(quotaKey)).used
     return json({ answer, quota: { used, limit } }, 200)

@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { buildChatCall, MAX_HISTORY_TURNS, MODEL_CHAT, type Turn } from '@/lib/chat/ask'
+import {
+  buildChatCall,
+  chatAnswerIssues,
+  MAX_HISTORY_TURNS,
+  MODEL_CHAT,
+  type Turn,
+} from '@/lib/chat/ask'
 
 /**
  * 챗 호출 재료.
@@ -51,5 +57,13 @@ describe('buildChatCall', () => {
     expect(system).toContain('같은 뜻을 마지막 문단에서 다시 요약하지 않습니다')
     expect(system).toContain('"핵심은"')
     expect(system).toContain('"면접에서는"')
+  })
+})
+
+describe('chatAnswerIssues', () => {
+  it('대본형 표현과 끝의 재요약을 찾는다', () => {
+    expect(chatAnswerIssues('핵심은 캐시 키다.')).toContain('scripted')
+    expect(chatAnswerIssues('답이다.\n결론적으로, 캐시 키가 중요하다.')).toContain('recap')
+    expect(chatAnswerIssues('캐시 키가 요청을 같은 결과에 묶는다.')).toEqual([])
   })
 })
