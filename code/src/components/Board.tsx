@@ -180,7 +180,7 @@ export function Board({ initial }: Props) {
             <button
               type="button"
               onClick={() => void fetchPage(sort, category, null)}
-              className="mt-4 rounded-md border border-line bg-raised px-4 py-2 text-[13px] font-medium text-ink hover:border-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="mt-4 min-h-11 rounded-md border border-line bg-raised px-4 py-2 text-[13px] font-medium text-ink hover:border-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               다시 시도
             </button>
@@ -201,7 +201,7 @@ export function Board({ initial }: Props) {
                   type="button"
                   disabled={loading}
                   onClick={() => void fetchPage(sort, category, cursor)}
-                  className="rounded-lg border border-line bg-raised px-5 py-2.5 text-[14px] font-medium text-ink transition-colors hover:border-accent hover:text-accent disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="min-h-11 rounded-lg border border-line bg-raised px-5 py-2.5 text-[14px] font-medium text-ink transition-colors hover:border-accent hover:text-accent disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   {loading ? '불러오는 중' : '더 보기'}
                 </button>

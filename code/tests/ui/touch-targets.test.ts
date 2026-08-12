@@ -22,4 +22,11 @@ describe('작은 조작 요소의 터치 영역', () => {
     expect(source).toContain("aria-current={activeTag === t.name ? 'true' : undefined}")
     expect(source).toContain("aria-current={activeLevel === l.name ? 'true' : undefined}")
   })
+
+  it('추천과 게시판 재시도 버튼도 손끝 높이를 확보한다', () => {
+    expect(read('src/components/VoteButton.tsx')).toContain('inline-flex min-h-11')
+    const board = read('src/components/Board.tsx')
+    expect(board).toContain('mt-4 min-h-11')
+    expect(board).toContain('className="min-h-11 rounded-lg')
+  })
 })

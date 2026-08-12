@@ -60,7 +60,8 @@ export function VoteButton({
         disabled={busy}
         aria-pressed={voted}
         aria-label={voted ? '추천 취소' : '추천'}
-        className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-[14px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60 ${
+        aria-busy={busy || undefined}
+        className={`inline-flex min-h-11 items-center gap-2 rounded-lg border px-4 py-2 text-[14px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60 ${
           voted
             ? 'border-accent bg-accent-soft text-accent'
             : 'border-line bg-raised text-muted hover:border-faint hover:text-ink'
