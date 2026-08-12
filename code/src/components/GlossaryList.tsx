@@ -28,18 +28,30 @@ export function GlossaryList() {
   return (
     <>
       <div className="mt-6">
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+        <div className="relative">
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           /*
            * 뜻으로도 찾힌다는 것을 여기서 알린다. 이름을 알면 본문 링크로
            * 오지, 사전을 뒤지지 않는다 — 검색하는 사람은 대개 이름을 모른다.
            */
-          placeholder="용어나 뜻으로 찾기"
-          aria-label="용어 검색"
-          className="min-h-11 w-full rounded-lg border border-line bg-surface px-3 text-[15px] text-ink placeholder:text-faint focus:border-ink focus:outline-none"
-        />
+            placeholder="용어나 뜻으로 찾기"
+            aria-label="용어 검색"
+            className="min-h-11 w-full rounded-lg border border-line bg-surface px-3 pr-14 text-[15px] text-ink placeholder:text-faint focus:border-ink focus:outline-none"
+          />
+          {searching && (
+            <button
+              type="button"
+              onClick={() => setQuery('')}
+              aria-label="용어 검색 지우기"
+              className="absolute inset-y-0 right-0 min-w-11 px-3 text-[12px] text-muted hover:text-ink focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
+            >
+              지우기
+            </button>
+          )}
+        </div>
 
         {/*
           찾은 개수를 말한다.

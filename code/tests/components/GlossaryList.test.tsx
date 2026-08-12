@@ -108,6 +108,15 @@ describe('용어 사전 검색', () => {
     render(<GlossaryList />)
     expect(screen.queryByRole('status')).toBeNull()
   })
+
+  it('검색어를 한 번에 지우고 전체 목록으로 돌아간다', async () => {
+    const { container } = render(<GlossaryList />)
+    await type('스레드')
+    await userEvent.click(screen.getByRole('button', { name: '용어 검색 지우기' }))
+    expect((screen.getByRole('searchbox') as HTMLInputElement).value).toBe('')
+    expect(anchors(container)).toHaveLength(GLOSSARY.length)
+    expect(screen.queryByRole('status')).toBeNull()
+  })
 })
 
 describe('용어 사전 초성 인덱스', () => {
