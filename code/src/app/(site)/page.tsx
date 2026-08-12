@@ -141,7 +141,7 @@ export default async function HomePage() {
               href="/questions"
               className="-my-[13px] inline-block py-[13px] text-[13px] text-accent hover:underline"
             >
-              카테고리별로 보기 →
+              질문 목록 보기 →
             </Link>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">

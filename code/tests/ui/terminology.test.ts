@@ -47,4 +47,11 @@ describe('핵심 화면 용어', () => {
     expect(header).toContain("{ href: '/map', label: '지도' }")
     expect(minimap).toContain('내 지도')
   })
+
+  it('질문을 모아 보는 화면은 질문 목록으로 부른다', () => {
+    const page = readFileSync('src/app/(site)/questions/page.tsx', 'utf8')
+    expect(page).toContain("title: '질문 목록'")
+    expect(page).toContain('질문 목록')
+    expect(page).not.toContain('title: \'카테고리별 질문\'')
+  })
 })

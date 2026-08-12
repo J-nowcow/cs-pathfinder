@@ -6,13 +6,14 @@ import { CATEGORIES, categoryAnchor } from '@/lib/tree/categories'
 import { socialMeta } from '@/lib/site'
 import { TAGS, TAG_NAMES } from '../../../../data/tags'
 import { LEVELS, LEVEL_NAMES } from '../../../../data/levels'
+import { MAX_CATALOG_QUERY, matchesCatalogQuery, normalizeCatalogQuery } from '@/lib/catalog/search'
 
 // 매 요청 실제 DB를 읽는다. 발행이 하나 늘면 여기도 같이 늘어야 한다
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = socialMeta({
-  title: '카테고리별 질문',
-  description: '지금까지 올라온 CS 질문을 카테고리로 묶어서 봅니다.',
+  title: '질문 목록',
+  description: '지금까지 올라온 CS 질문을 검색하고 분야·태그·난이도로 골라 봅니다.',
 })
 
 /**
@@ -28,7 +29,7 @@ export const metadata: Metadata = socialMeta({
 export default async function QuestionsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tag?: string; level?: string }>
+  searchParams: Promise<{ tag?: string; level?: string; q?: string }>
 }) {
   await ensureSeeded()
   const roots = await listRoots()
@@ -41,17 +42,21 @@ export default async function QuestionsPage({
    * 옛 링크가 온갖 것을 들고 오는 자리다. 두 축은 AND다 — "동시성이면서
    * 심화"를 고르는 것이 조합의 뜻이다.
    */
-  const { tag, level } = await searchParams
+  const { tag, level, q } = await searchParams
   const activeTag = tag && TAG_NAMES.has(tag) ? tag : null
   const activeLevel = level && LEVEL_NAMES.has(level) ? level : null
+  const query = normalizeCatalogQuery(q)
   const filtered = roots.filter(
     (r) =>
-      (!activeTag || r.tags.includes(activeTag)) && (!activeLevel || r.level === activeLevel),
+      (!activeTag || r.tags.includes(activeTag)) &&
+      (!activeLevel || r.level === activeLevel) &&
+      matchesCatalogQuery(r, query),
   )
 
   /** 지금 고른 필터를 유지한 채 한 축만 바꾼 주소 */
-  const href = (t: string | null, l: string | null) => {
+  const href = (t: string | null, l: string | null, search = query) => {
     const q = new URLSearchParams()
+    if (search) q.set('q', search)
     if (t) q.set('tag', t)
     if (l) q.set('level', l)
     const s = q.toString()
@@ -89,11 +94,13 @@ export default async function QuestionsPage({
       </Link>
 
       <h1 className="mt-6 text-[26px] font-extrabold leading-[1.35] tracking-[-0.02em] sm:text-[30px]">
-        카테고리별 질문
+        질문 목록
       </h1>
       <p className="mt-3 text-[15px] leading-[1.72] text-muted">
-        {activeTag || activeLevel ? (
+        {query || activeTag || activeLevel ? (
           <>
+            {query && <strong className="text-ink">&lsquo;{query}&rsquo;</strong>}
+            {query && (activeTag || activeLevel) && ' · '}
             {activeTag && <strong className="text-ink">{activeTag}</strong>}
             {activeTag && activeLevel && ' · '}
             {activeLevel && <strong className="text-ink">{activeLevel}</strong>} 질문{' '}
@@ -103,6 +110,37 @@ export default async function QuestionsPage({
           <>지금까지 올라온 질문 {roots.length}개. 궁금한 쪽부터 파고들면 됩니다.</>
         )}
       </p>
+
+      <form action="/questions" method="get" className="mt-5 flex gap-2" role="search">
+        {activeTag && <input type="hidden" name="tag" value={activeTag} />}
+        {activeLevel && <input type="hidden" name="level" value={activeLevel} />}
+        <label htmlFor="question-search" className="sr-only">
+          질문 검색
+        </label>
+        <input
+          id="question-search"
+          type="search"
+          name="q"
+          defaultValue={query}
+          maxLength={MAX_CATALOG_QUERY}
+          placeholder="질문이나 기술 키워드로 찾기"
+          className="min-h-11 min-w-0 flex-1 rounded-lg border border-line bg-surface px-3 text-[15px] text-ink outline-none placeholder:text-faint focus:border-accent"
+        />
+        <button
+          type="submit"
+          className="min-h-11 shrink-0 rounded-lg bg-accent px-4 text-[14px] font-medium text-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          검색
+        </button>
+        {query && (
+          <Link
+            href={href(activeTag, activeLevel, '')}
+            className="inline-flex min-h-11 items-center px-2 text-[13px] text-muted hover:text-ink"
+          >
+            지우기
+          </Link>
+        )}
+      </form>
 
       {/*
         태그 필터. 분야(아래 sticky 목차)와 다른 축이다 — 분야는 소속,
@@ -171,17 +209,22 @@ export default async function QuestionsPage({
         헤더가 이미 위에 붙어 있으므로 그 아래에 선다(top-14). 배경을 깔지
         않으면 아래 글이 비쳐 읽힌다.
       */}
-      <nav className="sticky top-14 z-10 -mx-5 mt-8 flex flex-wrap gap-2 bg-surface/95 px-5 py-3 backdrop-blur sm:-mx-8 sm:px-8">
-        {grouped.map((g) => (
-          <a
-            key={g.category}
-            href={`#${categoryAnchor(g.category)}`}
-            className="rounded-full border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-accent hover:text-ink"
-          >
-            {g.category} {g.items.length}
-          </a>
-        ))}
-      </nav>
+      {grouped.length > 0 && (
+        <nav
+          aria-label="분야별 질문 바로가기"
+          className="sticky top-14 z-10 -mx-5 mt-8 flex flex-wrap gap-2 bg-surface/95 px-5 py-3 backdrop-blur sm:-mx-8 sm:px-8"
+        >
+          {grouped.map((g) => (
+            <a
+              key={g.category}
+              href={`#${categoryAnchor(g.category)}`}
+              className="rounded-full border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-accent hover:text-ink"
+            >
+              {g.category} {g.items.length}
+            </a>
+          ))}
+        </nav>
+      )}
 
       {grouped.map((g) => (
         <section key={g.category} id={categoryAnchor(g.category)} className="mt-12 scroll-mt-16">
@@ -223,10 +266,16 @@ export default async function QuestionsPage({
 
       {grouped.length === 0 && (
         <div className="mt-12 rounded-lg border border-dashed border-line px-6 py-14 text-center">
-          <p className="text-[15px] text-muted">아직 올라온 질문이 없습니다.</p>
+          <p className="text-[15px] text-muted">
+            {query || activeTag || activeLevel ? '조건에 맞는 질문이 없습니다.' : '아직 올라온 질문이 없습니다.'}
+          </p>
+          {(query || activeTag || activeLevel) && (
+            <Link href="/questions" className="mt-4 inline-flex min-h-11 items-center text-[13px] font-medium text-accent">
+              검색과 필터 초기화
+            </Link>
+          )}
         </div>
       )}
     </main>
   )
 }
-
