@@ -151,7 +151,7 @@ export function SharedTree({ nodes }: Props) {
           >
             <Link
               href={`/q/${node.nodeId}`}
-              className="group flex items-start gap-2.5 rounded-md px-2 py-2 transition-colors hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="group flex min-h-11 items-start gap-2.5 rounded-md px-2 py-2.5 transition-colors hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               <span
                 aria-hidden
