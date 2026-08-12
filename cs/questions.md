@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 337개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 338개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -279,6 +279,7 @@
 - [useEffect 의존성 배열을 잘못 넣으면 어떤 문제가 생기는가?](https://cs-pathfinder.vercel.app/q/f369d7e3-bdcc-4ff7-a0f9-9896e5f6e903)
 - [브라우저가 화면을 그리기까지 무슨 일이 일어나는가?](https://cs-pathfinder.vercel.app/q/1f9fed87-b3c9-492a-95f2-33709bcd174c)
 - [리렌더링이 필요 이상으로 도는 이유는?](https://cs-pathfinder.vercel.app/q/c40eac52-7aa5-4447-ad08-2595e5f80928)
+- [useEffect 의존성 배열을 비워두면 언제 실행되는가?](https://cs-pathfinder.vercel.app/q/406b4418-da89-4d72-865c-d8377f1d435a) — 2026-08-13
 - [변경점을 비교하면 언제 비용이 줄어드는가?](https://cs-pathfinder.vercel.app/q/5c284b0c-1288-4a01-92bf-46fd2599c71b)
 - [계산 단계와 반영 단계를 왜 나누는가?](https://cs-pathfinder.vercel.app/q/39479b2f-fa91-4fa6-a268-0cce74ae001f)
 - [공유 상태는 어느 컴포넌트에 두는가?](https://cs-pathfinder.vercel.app/q/b281594f-2119-46c2-91b5-442eb478aade)
