@@ -46,6 +46,11 @@ describe('proseIssues', () => {
     expect(proseIssues('빠른 실패가 자원 고갈을 막는다.')).not.toContain('핵심을 선언하며 시작')
   })
 
+  it('핵심이라고 상투적으로 맺는 문장을 잡는다', () => {
+    expect(proseIssues('문맥 교환 비용을 줄이는 것이 핵심이다.')).toContain('핵심이라고 맺음')
+    expect(proseIssues('문맥 교환이 잦으면 처리량이 줄어든다.')).not.toContain('핵심이라고 맺음')
+  })
+
   it('catches an overlong sentence', () => {
     const long = `인덱스는 ${'가'.repeat(100)}이다.`
     expect(proseIssues(long).some((i) => i.startsWith('긴 문장'))).toBe(true)

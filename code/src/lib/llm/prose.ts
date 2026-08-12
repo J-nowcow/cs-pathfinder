@@ -60,6 +60,9 @@ const DIAGRAM_NARRATION = /(?:^|[.!?]\s+)(?:위|아래|이)\s+(?:표|도식|그�
 /** 문단 첫머리에서 중요도를 선언하는 상투 문형. 바로 기술 사실을 쓰면 된다. */
 const KEY_POINT_OPENER = /^(?:핵심은|중요한 (?:점|포인트)은)/
 
+/** 문장 끝에서 사실 대신 중요도를 덧붙이는 생성문. 판단 기준을 그대로 쓰면 된다. */
+const KEY_POINT_CLOSER = /(?:것|점|지점)이 핵심이다(?:[.!?]|$)/
+
 /** 혼자 쓰이면 괜찮지만 한 문단에 겹치면 무엇이 좋아지는지 숨기는 말들 */
 const VAGUE_BENEFIT = /(효율적|효과적|단순히|기반으로|활용)/g
 
@@ -82,6 +85,7 @@ export function proseIssues(text: string): ProseIssue[] {
   if (FORMULAIC_BRIDGE.test(text)) out.push('상투적 문제 해결 연결')
   if (DIAGRAM_NARRATION.test(text)) out.push('도식을 지칭하며 설명')
   if (KEY_POINT_OPENER.test(text.trim())) out.push('핵심을 선언하며 시작')
+  if (KEY_POINT_CLOSER.test(text)) out.push('핵심이라고 맺음')
 
   const vagueBenefitCount = [...text.matchAll(VAGUE_BENEFIT)].length
   if (vagueBenefitCount >= 2) out.push('상투적 이점 표현이 겹침')
