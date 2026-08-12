@@ -80,6 +80,13 @@ export function MePanel({ all }: { all: Candidate[] }) {
     const weeks = grassWeeks(emptyStreak(), todayKst(), 26)
     return (
       <div aria-busy="true">
+        <p role="status" className="mb-3 flex items-center gap-2 text-[13px] text-faint">
+          <span
+            aria-hidden
+            className="size-3.5 animate-spin rounded-full border-2 border-faint/30 border-t-faint"
+          />
+          학습 기록을 불러오는 중
+        </p>
         <Grass weeks={weeks} summary="기록을 읽는 중입니다." />
       </div>
     )
