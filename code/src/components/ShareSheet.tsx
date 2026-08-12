@@ -129,7 +129,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
         type="button"
         onClick={open}
         aria-haspopup="dialog"
-        className="rounded-md border border-line bg-raised px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="min-h-11 rounded-md border border-line bg-raised px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         공유
       </button>
@@ -194,7 +194,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
                   <button
                     type="button"
                     onClick={close}
-                    className="rounded-md px-4 py-2.5 text-[14px] font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="min-h-11 rounded-md px-4 py-2.5 text-[14px] font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     닫기
                   </button>
@@ -203,7 +203,7 @@ export function ShareSheet({ journey }: { journey: JourneyState }) {
                     onClick={() => void create()}
                     disabled={phase.kind === 'creating'}
                     aria-busy={phase.kind === 'creating' || undefined}
-                    className={`inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                    className={`inline-flex min-h-11 items-center gap-2 rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                       phase.kind === 'creating'
                         ? 'cursor-wait disabled:opacity-100'
                         : 'disabled:opacity-60'
@@ -264,7 +264,7 @@ function Done({
           href={url}
           target="_blank"
           rel="noreferrer"
-          className="rounded-md px-4 py-2.5 text-[14px] font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="inline-flex min-h-11 items-center rounded-md px-4 py-2.5 text-[14px] font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           열어보기
         </a>
@@ -273,7 +273,7 @@ function Done({
           <button
             type="button"
             onClick={() => void navigator.share({ url }).catch(() => undefined)}
-            className="rounded-md border border-line px-4 py-2.5 text-[14px] font-medium text-ink hover:border-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="min-h-11 rounded-md border border-line px-4 py-2.5 text-[14px] font-medium text-ink hover:border-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             보내기
           </button>
@@ -282,7 +282,7 @@ function Done({
         <button
           type="button"
           onClick={onCopy}
-          className="rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="min-h-11 rounded-md bg-accent px-4 py-2.5 text-[14px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           {copied ? '복사했습니다' : '주소 복사'}
         </button>
@@ -291,7 +291,7 @@ function Done({
       <button
         type="button"
         onClick={onClose}
-        className="mt-3 w-full text-[13px] text-faint hover:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="mt-3 min-h-11 w-full text-[13px] text-faint hover:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         계속 학습하기
       </button>

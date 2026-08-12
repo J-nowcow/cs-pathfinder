@@ -59,4 +59,9 @@ describe('ShareSheet', () => {
     await user.keyboard('{Shift>}{Tab}{/Shift}')
     expect(document.activeElement).toBe(make)
   })
+
+  it('공유 버튼은 손끝으로 누르기 충분한 높이를 가진다', () => {
+    render(<ShareSheet journey={journey()} />)
+    expect(screen.getByRole('button', { name: '공유' }).className).toContain('min-h-11')
+  })
 })
