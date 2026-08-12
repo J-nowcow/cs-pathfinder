@@ -68,6 +68,8 @@ describe('NodeChat', () => {
       expect(screen.getByText('쉽게 설명해 주세요')).toBeTruthy()
       expect(screen.getByText('이렇게 보면 쉽습니다.')).toBeTruthy()
     })
+    expect(screen.getByLabelText('내 질문').textContent).toBe('쉽게 설명해 주세요')
+    expect(screen.getByLabelText('답변').textContent).toBe('이렇게 보면 쉽습니다.')
   })
 
   it('한도가 다하면 자정 안내가 나온다', async () => {

@@ -112,6 +112,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
           {turns.map((t, i) => (
             <li
               key={i}
+              aria-label={t.role === 'user' ? '내 질문' : '답변'}
               className={
                 t.role === 'user'
                   ? 'ml-8 rounded-lg bg-surface px-3 py-2 text-[14px] leading-[1.65]'
