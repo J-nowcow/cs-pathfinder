@@ -78,7 +78,7 @@ export function Banner({ state, onRetry }: { state: BannerState; onRetry?: () =>
             <button
               type="button"
               onClick={onRetry}
-              className="shrink-0 rounded-md border border-line bg-raised px-3 py-1.5 text-[13px] font-medium text-ink hover:border-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="min-h-11 shrink-0 rounded-md border border-line bg-raised px-3 py-1.5 text-[13px] font-medium text-ink hover:border-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               다시 시도
             </button>

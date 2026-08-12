@@ -78,6 +78,9 @@ export default async function QuestionsPage({
     items: filtered.filter((r) => r.category === category),
   })).filter((g) => g.items.length > 0)
 
+  /* 보이는 크기는 유지하고 가상 요소로 위아래 판정 영역만 넓힌다. */
+  const filterChip = "relative rounded-full border px-3 py-1.5 text-[13px] transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-['']"
+
   return (
     <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
       {/*
@@ -154,7 +157,7 @@ export default async function QuestionsPage({
       <nav aria-label="태그" className="mt-5 flex flex-wrap gap-2">
         <Link
           href={href(null, activeLevel)}
-          className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
+          className={`${filterChip} ${
             activeTag
               ? 'border-line text-muted hover:border-accent hover:text-ink'
               : 'border-accent bg-accent-soft text-ink'
@@ -167,7 +170,7 @@ export default async function QuestionsPage({
             key={t.name}
             href={href(activeTag === t.name ? null : t.name, activeLevel)}
             title={t.scope}
-            className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
+            className={`${filterChip} ${
               activeTag === t.name
                 ? 'border-accent bg-accent-soft text-ink'
                 : 'border-line text-muted hover:border-accent hover:text-ink'
@@ -189,7 +192,7 @@ export default async function QuestionsPage({
             key={l.name}
             href={href(activeTag, activeLevel === l.name ? null : l.name)}
             title={l.rubric}
-            className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
+            className={`${filterChip} ${
               activeLevel === l.name
                 ? 'border-accent bg-accent-soft text-ink'
                 : 'border-line text-muted hover:border-accent hover:text-ink'
@@ -222,7 +225,7 @@ export default async function QuestionsPage({
             <a
               key={g.category}
               href={`#${categoryAnchor(g.category)}`}
-              className="rounded-full border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-accent hover:text-ink"
+              className={`${filterChip} border-line text-muted hover:border-accent hover:text-ink`}
             >
               {g.category} {g.items.length}
             </a>
