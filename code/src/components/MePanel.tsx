@@ -151,7 +151,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
               <li key={c.id}>
                 <Link
                   href={`/q/${c.number}`}
-                  className="block rounded-lg border border-line bg-raised p-3 no-underline"
+                  className="block rounded-lg border border-line bg-raised p-3 no-underline transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   <span className="text-sm text-muted">{c.category}</span>
                   <span className="mt-1 block">{c.question}</span>

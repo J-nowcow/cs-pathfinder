@@ -10,4 +10,8 @@ describe('MePanel 로딩 상태', () => {
     expect(source).toContain('animate-spin')
     expect(source).toContain('aria-busy="true"')
   })
+
+  it('추천 질문 링크에 키보드 초점 표시를 둔다', () => {
+    expect(source).toContain('hover:border-accent focus-visible:outline-2')
+  })
 })
