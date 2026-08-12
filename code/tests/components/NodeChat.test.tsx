@@ -43,6 +43,16 @@ describe('NodeChat', () => {
     expect(document.activeElement).toBe(screen.getByRole('textbox'))
   })
 
+  it('접은 뒤 다시 여는 버튼으로 초점이 돌아간다', async () => {
+    const user = userEvent.setup()
+    render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '접기' }))
+
+    const trigger = screen.getByRole('button', { name: /이 해설에 대해 물어보기/ })
+    await waitFor(() => expect(document.activeElement).toBe(trigger))
+  })
+
   it('물어보면 내 말과 도우미 답이 순서대로 쌓인다', async () => {
     mockFetchOnce({ answer: '이렇게 보면 쉽습니다.', quota: { used: 1, limit: 30 } })
     const user = userEvent.setup()

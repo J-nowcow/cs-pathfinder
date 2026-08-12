@@ -25,6 +25,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
   const [error, setError] = useState<'quota' | 'failed' | null>(null)
   const [remaining, setRemaining] = useState<number | null>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
   const over = text.length > MAX
   const canSend = text.trim().length > 0 && !over && !pending && error !== 'quota'
@@ -71,6 +72,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
     return (
       <div className="mt-6">
         <button
+          ref={triggerRef}
           type="button"
           onClick={() => {
             setOpen(true)
@@ -91,7 +93,10 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
         <h3 className="text-[13px] font-medium text-muted">이 해설에 대해 물어보기</h3>
         <button
           type="button"
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false)
+            requestAnimationFrame(() => triggerRef.current?.focus())
+          }}
           aria-expanded="true"
           className="inline-flex min-h-11 items-center px-2 text-[12px] text-faint hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
