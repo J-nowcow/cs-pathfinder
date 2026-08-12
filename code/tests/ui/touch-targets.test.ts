@@ -46,6 +46,12 @@ describe('작은 조작 요소의 터치 영역', () => {
     expect(source).toMatch(/href=\{`\/q\/\$\{node.id\}`\}[\s\S]{0,240}focus-visible:outline-2/)
   })
 
+  it('질문 지도의 점과 카드도 키보드 초점을 표시한다', () => {
+    const source = read('src/components/GraphMap.tsx')
+    expect(source).toMatch(/aria-label=\{p.question\}[\s\S]{0,360}focus-visible:outline-2/)
+    expect(source).toMatch(/hover:border-accent focus-visible:outline-2/)
+  })
+
   it('공유된 질문 지도의 질문 링크도 손끝 높이를 확보한다', () => {
     expect(read('src/components/SharedTree.tsx')).toContain('group flex min-h-11')
   })

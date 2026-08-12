@@ -541,7 +541,7 @@ function Layers({
                     e.preventDefault()
                     focus(p.id)
                   }}
-                  className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 grid place-items-center"
+                  className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   style={{ left: p.x, top: p.y, width: hit, height: hit }}
                 >
                   <span
@@ -567,7 +567,7 @@ function Layers({
                   e.preventDefault()
                   focus(p.id)
                 }}
-                className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-raised text-left text-ink no-underline shadow-sm transition-colors hover:border-accent"
+                className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-raised text-left text-ink no-underline shadow-sm transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 style={{
                   left: p.x,
                   top: p.y,
@@ -609,7 +609,7 @@ function Layers({
               key={g.category}
               type="button"
               onClick={() => enter(g.category)}
-              className="pointer-events-none absolute -translate-x-1/2 text-center hover:text-accent"
+              className="pointer-events-none absolute -translate-x-1/2 rounded-lg text-center hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               style={{ left: g.x, top: g.y - labelGap }}
             >
               {/* 바깥 <p>는 줄을 쌓기 위한 것이라 블록으로 두고, 받는 것은 안쪽 글자다 */}
