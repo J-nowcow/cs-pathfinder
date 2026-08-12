@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
+import { readFileSync } from 'node:fs'
 import { truncateAll } from '@/lib/db/client'
 import { insertNode } from '@/lib/expand/nodes'
 import { seedRelations } from '@/lib/db/bootstrap'
@@ -92,5 +93,11 @@ describe('관계 데이터', () => {
     )
 
     expect(missing).toEqual([])
+  })
+
+  it('관계 생성기가 사라진 질문을 다시 이어받지 않는다', () => {
+    const source = readFileSync('scripts/build-relations.ts', 'utf8')
+    expect(source).toContain('existing.has(`${row.fromScope}::${row.fromQuestion}`)')
+    expect(source).toContain('existing.has(`${row.toScope}::${row.toQuestion}`)')
   })
 })

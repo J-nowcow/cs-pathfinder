@@ -206,7 +206,12 @@ function mergeAll(): Row[] {
     const cur = best.get(key)
     if (!cur || r.votes > cur.votes) best.set(key, r)
   }
-  return [...best.values()]
+  const existing = new Set(ALL.map((node) => `${node.identityScope}::${node.question}`))
+  return [...best.values()].filter(
+    (row) =>
+      existing.has(`${row.fromScope}::${row.fromQuestion}`) &&
+      existing.has(`${row.toScope}::${row.toQuestion}`),
+  )
 }
 
 /*
