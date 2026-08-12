@@ -59,6 +59,12 @@ describe('작은 조작 요소의 터치 영역', () => {
     expect(source).toMatch(/hover:border-accent focus-visible:outline-2/)
   })
 
+  it('질문 지도의 확대·축소 버튼도 키보드 초점을 표시한다', () => {
+    const source = read('src/app/globals.css')
+    expect(source).toContain('.react-flow__controls .react-flow__controls-button:focus-visible')
+    expect(source).toContain('outline: 2px solid var(--color-accent)')
+  })
+
   it('공유된 질문 지도의 질문 링크도 손끝 높이를 확보한다', () => {
     expect(read('src/components/SharedTree.tsx')).toContain('group flex min-h-11')
   })

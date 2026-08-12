@@ -410,6 +410,12 @@ summary::-webkit-details-marker {
   background: var(--surface);
   color: var(--ink);
 }
+.react-flow__controls .react-flow__controls-button:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--color-accent);
+  outline-offset: -3px;
+}
 .react-flow__controls .react-flow__controls-button svg {
   max-width: 14px;
   max-height: 14px;
