@@ -44,7 +44,10 @@ export function AuthMenu() {
     if (!open) return
     /* 바깥을 누르거나 Esc면 닫는다. 닫는 길이 없으면 한 번 연 사람이 갇힌다 */
     const away = (e: MouseEvent) => {
-      if (!box.current?.contains(e.target as Node)) setOpen(false)
+      if (!box.current?.contains(e.target as Node)) {
+        setOpen(false)
+        window.setTimeout(() => trigger.current?.focus(), 0)
+      }
     }
     const esc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

@@ -128,6 +128,9 @@ describe('AuthMenu · 로그인 후', () => {
     await userEvent.click(screen.getByRole('button', { name: '내 계정' }))
     await userEvent.click(document.body)
     expect(screen.queryByRole('menu')).toBeNull()
+    await waitFor(() =>
+      expect(document.activeElement).toBe(screen.getByRole('button', { name: '내 계정' })),
+    )
   })
 })
 

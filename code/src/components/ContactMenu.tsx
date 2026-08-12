@@ -37,7 +37,10 @@ export function ContactMenu() {
      * 되돌아갈 X 버튼을 찾다가 뒤로 가기를 눌러 화면을 떠난다.
      */
     const away = (e: MouseEvent) => {
-      if (!box.current?.contains(e.target as Node)) setOpen(false)
+      if (!box.current?.contains(e.target as Node)) {
+        setOpen(false)
+        window.setTimeout(() => trigger.current?.focus(), 0)
+      }
     }
     const esc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

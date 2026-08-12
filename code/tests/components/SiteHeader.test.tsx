@@ -83,6 +83,14 @@ describe('SiteHeader · 바깥 링크', () => {
     await waitFor(() => expect(document.activeElement).toBe(trigger))
   })
 
+  it('바깥을 누르면 문의 버튼으로 초점이 돌아간다', async () => {
+    render(<SiteHeader />)
+    const trigger = screen.getByRole('button', { name: '문의' })
+    await userEvent.click(trigger)
+    await userEvent.click(document.body)
+    await waitFor(() => expect(document.activeElement).toBe(trigger))
+  })
+
   /*
    * 새 창을 여는 링크에 noopener가 없으면 열린 쪽이 window.opener로 이 페이지를
    * 건드릴 수 있다.
