@@ -48,6 +48,9 @@ const HYPE = /(?:(매우|아주|정말|굉장히|극도로)\s|압도적|강력�
 /** 내용 대신 채점 상황을 말하는 결말. 독자가 필요한 것은 평가자의 행동이 아니다 */
 const INTERVIEW_FRAME = /^(면접|실무)에서(?:는)?\s/
 
+/** 해설 본문은 질문과 같은 평어체를 쓴다. 경어체가 한 문단만 섞여도 다른 저자처럼 읽힌다. */
+const HONORIFIC_ENDING = /(?:합니다|됩니다|있습니다|없습니다|입니다|나뉩니다)(?:[.!?]|$)/
+
 /** 문제를 되받아 추상적으로 잇는 생성문. 해결 동작의 주어를 바로 쓰는 편이 짧다 */
 const FORMULAIC_BRIDGE = /이를 (해결|방지|최적화)하기 위해/
 
@@ -75,6 +78,7 @@ export function proseIssues(text: string): ProseIssue[] {
   if (CONNECTIVE_OPENER.test(text.trim())) out.push('접속부사로 시작')
   if (HYPE.test(text)) out.push('과장')
   if (INTERVIEW_FRAME.test(text.trim())) out.push('면접 상황으로 설명')
+  if (HONORIFIC_ENDING.test(text)) out.push('경어체 해설')
   if (FORMULAIC_BRIDGE.test(text)) out.push('상투적 문제 해결 연결')
   if (DIAGRAM_NARRATION.test(text)) out.push('도식을 지칭하며 설명')
   if (KEY_POINT_OPENER.test(text.trim())) out.push('핵심을 선언하며 시작')
