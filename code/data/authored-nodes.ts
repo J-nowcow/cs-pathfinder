@@ -781,7 +781,7 @@ export const AUTHORED_NODES: ExampleNode[] = [
       'Shared -> Invalid: 남이 그 줄에 썼다',
       ':::',
       '',
-      '핵심은 **쓸 때 나만 갖는다**는 것이다. Modified나 Exclusive면 나 혼자이므로 마음대로 써도 된다. Shared였다면 남의 것을 먼저 무효로 만들고 써야 한다.',
+      'Modified나 Exclusive 상태에서는 그 캐시 라인을 혼자 쓴다. Shared였다면 다른 코어의 사본을 먼저 무효로 만들고 써야 한다.',
       '',
       '그래서 여러 코어가 같은 줄을 번갈아 쓰면 값이 계속 오간다. 서로 다른 변수인데 한 줄에 붙어 있어도 그렇다.',
       '',

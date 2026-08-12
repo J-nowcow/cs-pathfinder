@@ -29,6 +29,11 @@ describe('proseIssues', () => {
     expect(proseIssues('요청은 인증을 거쳐 서버로 간다.')).not.toContain('도식을 지칭하며 설명')
   })
 
+  it('핵심이라고 선언하며 시작하는 문단을 잡는다', () => {
+    expect(proseIssues('핵심은 빠른 실패다.')).toContain('핵심을 선언하며 시작')
+    expect(proseIssues('빠른 실패가 자원 고갈을 막는다.')).not.toContain('핵심을 선언하며 시작')
+  })
+
   it('catches an overlong sentence', () => {
     const long = `인덱스는 ${'가'.repeat(100)}이다.`
     expect(proseIssues(long).some((i) => i.startsWith('긴 문장'))).toBe(true)

@@ -54,6 +54,9 @@ const FORMULAIC_BRIDGE = /이를 (해결|방지|최적화)하기 위해/
 /** 그림 자체를 주어로 설명하는 메타 문장. 기술 대상을 바로 쓰는 편이 자연스럽다 */
 const DIAGRAM_NARRATION = /(?:^|[.!?]\s+)(?:위|아래|이)\s+(?:표|도식|그림|흐름)(?:은|는|에서|처럼|의)/
 
+/** 문단 첫머리에서 중요도를 선언하는 상투 문형. 바로 기술 사실을 쓰면 된다. */
+const KEY_POINT_OPENER = /^(?:핵심은|중요한 (?:점|포인트)은)/
+
 /** 혼자 쓰이면 괜찮지만 한 문단에 겹치면 무엇이 좋아지는지 숨기는 말들 */
 const VAGUE_BENEFIT = /(효율적|효과적|단순히|기반으로|활용)/g
 
@@ -74,6 +77,7 @@ export function proseIssues(text: string): ProseIssue[] {
   if (INTERVIEW_FRAME.test(text.trim())) out.push('면접 상황으로 설명')
   if (FORMULAIC_BRIDGE.test(text)) out.push('상투적 문제 해결 연결')
   if (DIAGRAM_NARRATION.test(text)) out.push('도식을 지칭하며 설명')
+  if (KEY_POINT_OPENER.test(text.trim())) out.push('핵심을 선언하며 시작')
 
   const vagueBenefitCount = [...text.matchAll(VAGUE_BENEFIT)].length
   if (vagueBenefitCount >= 2) out.push('상투적 이점 표현이 겹침')
