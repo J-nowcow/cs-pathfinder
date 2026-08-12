@@ -4,7 +4,7 @@ import Link from 'next/link'
 import type { PublicRelated } from '@/lib/api/expand-client'
 
 /**
- * "이거 봤으면 이것도".
+ * 관련 질문.
  *
  * 해설을 다 읽은 사람에게 다음 자리를 준다. 추천 꼬리질문(`Suggestions`)과
  * 다른 일을 한다 — 저쪽은 **더 깊이** 파는 단추라 누르면 새 노드를 만들고
@@ -36,7 +36,7 @@ export function RelatedList({
 
   return (
     <section className="pt-2">
-      <h2 className="mb-3 text-[13px] font-medium text-muted">이거 봤으면 이것도</h2>
+      <h2 className="mb-3 text-[13px] font-medium text-muted">관련 질문</h2>
 
       <ul className="space-y-2">
         {items.map((item) => {

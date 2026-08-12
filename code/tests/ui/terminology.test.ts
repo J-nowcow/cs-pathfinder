@@ -17,6 +17,7 @@ const CORE_FILES = [
   'src/components/ShareSheet.tsx',
   'src/components/MapModal.tsx',
   'src/components/MinimapStrip.tsx',
+  'src/components/RelatedList.tsx',
 ]
 
 const source = CORE_FILES.map((file) => readFileSync(file, 'utf8')).join('\n')
@@ -30,11 +31,12 @@ describe('핵심 화면 용어', () => {
     '이 질문의 트리 보기',
     '파고든 길 공유하기',
     '파고든 지도',
+    '이거 봤으면 이것도',
   ])('예전 표현 %s 을 다시 쓰지 않는다', (legacy) => {
     expect(source).not.toContain(legacy)
   })
 
-  it.each(['오늘의 질문', '질문 읽기', '이어갈 꼬리질문', '원하는 꼬리질문 만들기', '질문 지도'])(
+  it.each(['오늘의 질문', '질문 읽기', '이어갈 꼬리질문', '원하는 꼬리질문 만들기', '질문 지도', '관련 질문'])(
     '기준 표현 %s 을 유지한다',
     (term) => {
       expect(source).toContain(term)

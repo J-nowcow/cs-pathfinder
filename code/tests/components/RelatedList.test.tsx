@@ -5,7 +5,7 @@ import { RelatedList } from '@/components/RelatedList'
 import type { PublicRelated } from '@/lib/api/expand-client'
 
 /**
- * "이거 봤으면 이것도".
+ * 관련 질문.
  *
  * 두 가지가 걸려 있다.
  *
@@ -31,6 +31,12 @@ const ITEMS: PublicRelated[] = [
 ]
 
 describe('관련 질문 목록', () => {
+  it('추천 꼬리질문과 구분되는 이름을 쓴다', () => {
+    render(<RelatedList items={ITEMS} readIds={new Set()} hydrated />)
+    expect(screen.getByRole('heading', { name: '관련 질문' })).toBeTruthy()
+    expect(screen.queryByText('이거 봤으면 이것도')).toBeNull()
+  })
+
   it('질문과 분류를 그리고 번호로 링크한다', () => {
     render(<RelatedList items={ITEMS} readIds={new Set()} hydrated />)
 
