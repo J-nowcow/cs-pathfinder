@@ -164,14 +164,14 @@ export default function PrivacyPage() {
           개인정보에 관한 문의는 아래로 받습니다. 서비스 운영자가 직접 답합니다.
         </p>
         <p>
-          <a className="text-accent underline underline-offset-2" href={`mailto:${CONTACT}`}>
+          <a className="rounded-sm text-accent underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" href={`mailto:${CONTACT}`}>
             {CONTACT}
           </a>
         </p>
         <p>
           개인정보 침해로 도움이 필요하면 개인정보침해신고센터(국번 없이 118,{' '}
           <a
-            className="text-accent underline underline-offset-2"
+            className="rounded-sm text-accent underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             href="https://privacy.kisa.or.kr"
             rel="noopener noreferrer"
             target="_blank"

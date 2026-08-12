@@ -51,7 +51,7 @@ export default function TermsPage() {
           <strong className="text-ink">해설 초안은 AI가 쓰고, 틀릴 수 있습니다.</strong> 얼마나
           틀리는지 재서{' '}
           <a
-            className="underline decoration-dotted underline-offset-2"
+            className="rounded-sm underline decoration-dotted underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             href="https://github.com/J-nowcow/cs-pathfinder/tree/main/code/docs/audit"
           >
             공개된 기록
@@ -78,7 +78,7 @@ export default function TermsPage() {
         <p>
           해설 전문과 코드는{' '}
           <a
-            className="underline decoration-dotted underline-offset-2"
+            className="rounded-sm underline decoration-dotted underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             href="https://github.com/J-nowcow/cs-pathfinder"
           >
             GitHub 저장소
@@ -106,11 +106,11 @@ export default function TermsPage() {
       <Section title="7. 문의">
         <p>
           약관에 대한 질문, 오류 신고, 그 밖의 무엇이든 —{' '}
-          <a className="underline decoration-dotted underline-offset-2" href={`mailto:${CONTACT}`}>
+          <a className="rounded-sm underline decoration-dotted underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" href={`mailto:${CONTACT}`}>
             {CONTACT}
           </a>{' '}
           또는 GitHub 이슈로 보내 주세요. 개인정보를 어떻게 다루는지는{' '}
-          <a className="underline decoration-dotted underline-offset-2" href="/privacy">
+          <a className="rounded-sm underline decoration-dotted underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" href="/privacy">
             개인정보처리방침
           </a>
           에 따로 있습니다.
