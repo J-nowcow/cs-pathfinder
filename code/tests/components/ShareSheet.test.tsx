@@ -48,6 +48,15 @@ describe('ShareSheet', () => {
     expect(screen.getByRole('dialog')).toBeTruthy()
   })
 
+  it('링크 생성 실패를 즉시 알린다', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(new Response('', { status: 503 }))
+    render(<ShareSheet journey={journey()} />)
+    await userEvent.click(screen.getByRole('button', { name: '공유' }))
+    await userEvent.click(screen.getByRole('button', { name: '링크 만들기' }))
+
+    expect(await screen.findByRole('alert')).toBeTruthy()
+  })
+
   it('Tab이 대화상자 밖으로 빠져나가지 않는다', async () => {
     const user = userEvent.setup()
     render(<ShareSheet journey={journey()} />)

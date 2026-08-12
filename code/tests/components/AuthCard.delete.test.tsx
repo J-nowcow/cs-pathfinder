@@ -142,7 +142,7 @@ describe('AuthCard · 계정 삭제', () => {
     await userEvent.click(screen.getByRole('button', { name: '지우기' }))
 
     await waitFor(() => {
-      expect(screen.getByRole('status').textContent).toMatch(/다시 로그인한 뒤 시도해 주세요/)
+      expect(screen.getByRole('alert').textContent).toMatch(/다시 로그인한 뒤 시도해 주세요/)
     })
     expect(screen.queryByText(/계정을 지웠습니다/)).toBeNull()
     expect(screen.getByRole('button', { name: '지우기' })).toBeTruthy()
@@ -160,7 +160,7 @@ describe('AuthCard · 계정 삭제', () => {
     await userEvent.click(screen.getByRole('button', { name: '지우기' }))
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toBeTruthy()
+      expect(screen.getByRole('alert')).toBeTruthy()
     })
     expect(signOut).not.toHaveBeenCalled()
   })

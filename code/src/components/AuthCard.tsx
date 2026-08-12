@@ -134,7 +134,7 @@ export function AuthCard() {
               않습니다.
             </p>
             {failed && (
-              <p role="status" className="mt-2 text-[13px] leading-[1.6] text-warn">
+              <p role="alert" className="mt-2 text-[13px] leading-[1.6] text-warn">
                 지우지 못했습니다. 다시 로그인한 뒤 시도해 주세요.
               </p>
             )}
