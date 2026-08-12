@@ -140,7 +140,7 @@ export function GraphMap({ data }: Props) {
         */}
         <Link
           href="/"
-          className="rounded-lg border border-line px-3 py-1.5 text-[13px] text-muted hover:text-ink"
+          className="inline-flex min-h-11 items-center rounded-lg border border-line px-3 py-1.5 text-[13px] text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           홈으로
         </Link>

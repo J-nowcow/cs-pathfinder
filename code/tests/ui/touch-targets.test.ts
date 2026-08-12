@@ -29,4 +29,9 @@ describe('작은 조작 요소의 터치 영역', () => {
     expect(board).toContain('mt-4 min-h-11')
     expect(board).toContain('className="min-h-11 rounded-lg')
   })
+
+  it('전체 질문 지도의 홈 링크도 손끝 높이를 확보한다', () => {
+    const source = read('src/components/GraphMap.tsx')
+    expect(source).toMatch(/href="\/"[\s\S]{0,180}className="inline-flex min-h-11/)
+  })
 })
