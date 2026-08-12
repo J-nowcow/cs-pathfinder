@@ -45,7 +45,9 @@ describe('AuthMenu · 로그인 전', () => {
   /* 그림뿐이라 낭독기에는 이름이 안 보인다. aria-label이 유일한 이름이다 */
   it('사람 그림에 이름을 남긴다', () => {
     render(<AuthMenu />)
-    expect(screen.getByRole('button', { name: 'Google로 로그인' })).toBeTruthy()
+    const button = screen.getByRole('button', { name: 'Google로 로그인' })
+    expect(button).toBeTruthy()
+    expect(button.className).toContain('focus-visible:outline-2')
   })
 
   it('누르면 구글 로그인을 시작한다', async () => {

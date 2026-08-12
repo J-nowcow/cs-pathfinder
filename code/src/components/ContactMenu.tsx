@@ -69,7 +69,7 @@ export function ContactMenu() {
           if (!open) requestAnimationFrame(() => firstItem.current?.focus())
         }}
         /* 헤더의 다른 항목과 같은 규격. 보이는 크기는 그대로 두고 누르는 자리만 44px로 */
-        className={`-my-2 rounded-lg px-1.5 py-[13px] text-[12.5px] transition-colors sm:px-2.5 sm:text-[13px] ${
+        className={`-my-2 rounded-lg px-1.5 py-[13px] text-[12.5px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-2.5 sm:text-[13px] ${
           open ? 'text-ink' : 'text-muted hover:text-ink'
         }`}
       >

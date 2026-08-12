@@ -41,6 +41,7 @@ describe('SiteHeader · 바깥 링크', () => {
     const btn = screen.getByRole('button', { name: '문의' })
     expect(btn.getAttribute('aria-expanded')).toBe('false')
     expect(screen.queryByRole('menu')).toBeNull()
+    expect(btn.className).toContain('focus-visible:outline-2')
   })
 
   /*

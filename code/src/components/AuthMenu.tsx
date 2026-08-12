@@ -31,7 +31,7 @@ function PersonIcon() {
 }
 
 /** 머리글의 다른 아이콘과 같은 규격. 폰에서만 한 칸 좁다 */
-const BUTTON = '-my-1.5 relative grid h-11 w-8 place-items-center rounded-lg transition-colors sm:w-9'
+const BUTTON = '-my-1.5 relative grid h-11 w-8 place-items-center rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-9'
 
 export function AuthMenu() {
   const { data: session, isPending } = authClient.useSession()
