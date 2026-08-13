@@ -93,4 +93,42 @@ describe('레쥬메 맞춤 질문 화면', () => {
     expect(window.localStorage.getItem(RESUME_QUESTIONS_STORAGE_KEY)).toBeNull()
     expect(screen.queryByText(questions[0].text)).toBeNull()
   })
+
+  it('맞춤 질문에 쓴 답을 현재 브라우저에 저장하고 함께 지운다', async () => {
+    window.localStorage.setItem(
+      RESUME_QUESTIONS_STORAGE_KEY,
+      JSON.stringify({ version: 1, createdAt: '2026-08-13T00:00:00.000Z', questions }),
+    )
+    const user = userEvent.setup()
+    render(<ResumeQuestionMaker />)
+    await screen.findByText(questions[0].text)
+    await user.click(screen.getAllByText('이 질문에 답해보기')[0])
+    await user.type(screen.getByLabelText(`${questions[0].text} 답변`), '선택 이유와 근거')
+
+    const saved = deserializeResumeQuestions(
+      window.localStorage.getItem(RESUME_QUESTIONS_STORAGE_KEY),
+    )
+    expect(saved?.answers?.['0'].text).toBe('선택 이유와 근거')
+    await user.click(screen.getAllByRole('button', { name: '초안 지우기' })[0])
+    expect(
+      deserializeResumeQuestions(window.localStorage.getItem(RESUME_QUESTIONS_STORAGE_KEY))?.answers,
+    ).toBeUndefined()
+  })
+
+  it('맞춤 답변을 브라우저에 저장하지 못하면 화면에 알린다', async () => {
+    window.localStorage.setItem(
+      RESUME_QUESTIONS_STORAGE_KEY,
+      JSON.stringify({ version: 1, createdAt: '2026-08-13T00:00:00.000Z', questions }),
+    )
+    vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+      throw new Error('quota exceeded')
+    })
+    const user = userEvent.setup()
+    render(<ResumeQuestionMaker />)
+    await screen.findByText(questions[0].text)
+    await user.click(screen.getAllByText('이 질문에 답해보기')[0])
+    await user.type(screen.getByLabelText(`${questions[0].text} 답변`), '저장 실패 답')
+
+    expect(screen.getByText('저장하지 못했습니다')).toBeTruthy()
+  })
 })

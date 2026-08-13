@@ -12,6 +12,8 @@ describe('면접 답변 초안의 저장 고지', () => {
     expect(privacy).toContain('서버나 계정에 보내지 않고 AI에도 전달하지 않습니다')
     expect(privacy).toContain('최근 100개')
     expect(privacy).toContain('초안 지우기')
+    expect(privacy).toContain('맞춤 질문에 적은 답변')
+    expect(privacy).toContain('맞춤 질문 5개와 그 답변')
   })
 
   it('질문을 연 기록을 실제 학습처럼 부르지 않는다', () => {

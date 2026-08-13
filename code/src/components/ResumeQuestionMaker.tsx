@@ -5,8 +5,11 @@ import { useEffect, useState } from 'react'
 import { authClient } from '@/lib/auth/client'
 import {
   deserializeResumeQuestions,
+  MAX_RESUME_ANSWER_LENGTH,
   RESUME_QUESTIONS_STORAGE_KEY,
   serializeResumeQuestions,
+  updateResumeAnswer,
+  type ResumeAnswer,
   type ResumeQuestion,
 } from '@/lib/personalize/resume-storage'
 import { MAX_RESUME_LENGTH, MIN_RESUME_LENGTH } from '@/lib/personalize/resume-constants'
@@ -34,8 +37,10 @@ export function ResumeQuestionMaker() {
   const [waitingIndex, setWaitingIndex] = useState(0)
   const [error, setError] = useState('')
   const [questions, setQuestions] = useState<ResumeQuestion[]>([])
+  const [answers, setAnswers] = useState<Record<string, ResumeAnswer>>({})
   const [createdAt, setCreatedAt] = useState('')
   const [quota, setQuota] = useState<{ used: number; limit: number } | null>(null)
+  const [failedAnswerIndex, setFailedAnswerIndex] = useState<number | null>(null)
 
   useEffect(() => {
     const saved = deserializeResumeQuestions(
@@ -44,6 +49,7 @@ export function ResumeQuestionMaker() {
     if (!saved) return
     setQuestions(saved.questions)
     setCreatedAt(saved.createdAt)
+    setAnswers(saved.answers ?? {})
   }, [])
 
   useEffect(() => {
@@ -87,6 +93,8 @@ export function ResumeQuestionMaker() {
       )
       setQuestions(data.questions)
       setCreatedAt(now)
+      setAnswers({})
+      setFailedAnswerIndex(null)
       setQuota(data.quota ?? null)
       setText('')
     } catch (caught) {
@@ -100,6 +108,29 @@ export function ResumeQuestionMaker() {
     window.localStorage.removeItem(RESUME_QUESTIONS_STORAGE_KEY)
     setQuestions([])
     setCreatedAt('')
+    setAnswers({})
+    setFailedAnswerIndex(null)
+  }
+
+  function saveAnswer(index: number, answerText: string) {
+    if (!createdAt || questions.length !== 5) return
+    const next = updateResumeAnswer(
+      { version: 1, createdAt, questions, ...(Object.keys(answers).length > 0 ? { answers } : {}) },
+      index,
+      answerText,
+      new Date().toISOString(),
+    )
+    const nextAnswers = next.answers ?? {}
+    setAnswers(nextAnswers)
+    try {
+      window.localStorage.setItem(
+        RESUME_QUESTIONS_STORAGE_KEY,
+        serializeResumeQuestions(questions, createdAt, nextAnswers),
+      )
+      setFailedAnswerIndex(null)
+    } catch {
+      setFailedAnswerIndex(index)
+    }
   }
 
   return (
@@ -222,6 +253,44 @@ export function ResumeQuestionMaker() {
                 <p className="mt-2 text-sm leading-[1.6] text-muted">
                   <span className="text-faint">질문 근거</span> · {question.basis}
                 </p>
+                <details className="group mt-3 rounded-lg border border-line bg-surface">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                    <span>이 질문에 답해보기</span>
+                    <span className="text-[12px] font-normal text-faint">
+                      {answers[String(index)]?.text ? '초안 있음' : '접힘'}
+                    </span>
+                  </summary>
+                  <div className="border-t border-line p-3">
+                    <label htmlFor={`resume-answer-${index}`} className="sr-only">
+                      {question.text} 답변
+                    </label>
+                    <textarea
+                      id={`resume-answer-${index}`}
+                      value={answers[String(index)]?.text ?? ''}
+                      maxLength={MAX_RESUME_ANSWER_LENGTH}
+                      rows={5}
+                      onChange={(event) => saveAnswer(index, event.target.value)}
+                      placeholder="결론 → 선택 이유 → 경험 근거 순으로 적어 보세요."
+                      className="w-full resize-y rounded-lg border border-line bg-raised px-3 py-3 text-[14px] leading-[1.65] outline-none placeholder:text-faint focus:border-accent focus:ring-2 focus:ring-accent/20"
+                    />
+                    <div className="mt-2 flex items-center justify-between gap-3 text-[12px] text-faint">
+                      <span aria-live="polite">
+                        {failedAnswerIndex === index
+                          ? '저장하지 못했습니다'
+                          : `이 브라우저에만 자동 저장 · ${(answers[String(index)]?.text.length ?? 0).toLocaleString('ko-KR')}자`}
+                      </span>
+                      {answers[String(index)]?.text && (
+                        <button
+                          type="button"
+                          onClick={() => saveAnswer(index, '')}
+                          className="min-h-11 rounded-sm px-1 hover:text-warn focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        >
+                          초안 지우기
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </details>
                 <Link
                   href={`/questions?q=${encodeURIComponent(question.topic)}`}
                   className="mt-3 inline-flex min-h-11 items-center rounded-md text-sm font-medium text-accent no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
