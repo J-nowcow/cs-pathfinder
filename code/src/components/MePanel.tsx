@@ -31,6 +31,7 @@ type View = {
   answered: number
   streak: number
   next: Candidate[]
+  drafts: Array<Candidate & { updatedAt: string }>
 }
 
 export function MePanel({ all }: { all: Candidate[] }) {
@@ -41,6 +42,13 @@ export function MePanel({ all }: { all: Candidate[] }) {
       const streak = loadStreak()
       const answerPractice = loadAnswerPractice()
       const today = todayKst()
+      const candidatesById = new Map(all.map((candidate) => [candidate.id, candidate]))
+      const drafts = Object.entries(answerPractice.drafts)
+        .sort(([, a], [, b]) => b.updatedAt.localeCompare(a.updatedAt))
+        .flatMap(([nodeId, draft]) => {
+          const candidate = candidatesById.get(nodeId)
+          return candidate ? [{ ...candidate, updatedAt: draft.updatedAt }] : []
+        })
 
       /* 무엇을 팠는지는 여정이 안다. 잔디는 언제 팠는지만 안다 */
       let readIds = new Set<string>()
@@ -66,6 +74,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
         answered: Object.keys(answerPractice.drafts).length,
         streak: streakLength(streak, today),
         next: suggestNext(all, readIds, readCategories, 5),
+        drafts,
       })
     }
 
@@ -126,6 +135,31 @@ export function MePanel({ all }: { all: Candidate[] }) {
         />
       </section>
 
+      {view.drafts.length > 0 && (
+        <section>
+          <h2 className="mb-1 text-lg font-semibold">답변 초안</h2>
+          <p className="mb-3 text-sm text-muted">
+            이 브라우저에 저장된 초안입니다. 질문을 열면 이어서 쓸 수 있습니다.
+          </p>
+          <ul className="flex list-none flex-col gap-2 p-0">
+            {view.drafts.slice(0, 5).map((draft) => (
+              <li key={draft.id}>
+                <Link
+                  href={`/q/${draft.number}`}
+                  className="block rounded-lg border border-line bg-raised p-3 no-underline transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  <span className="text-[12px] text-faint">{draft.category} · 초안 있음</span>
+                  <span className="mt-1 block text-[15px]">{draft.question}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          {view.drafts.length > 5 && (
+            <p className="mt-2 text-[13px] text-faint">최근 5개를 표시합니다. 전체 {view.drafts.length}개</p>
+          )}
+        </section>
+      )}
+
       <section>
         <h2 className="mb-3 text-lg font-semibold">숫자</h2>
         <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -168,8 +202,8 @@ export function MePanel({ all }: { all: Candidate[] }) {
       </section>
 
       <p className="text-sm text-muted">
-        로그인하지 않으면 이 기록은 <strong>이 브라우저에만</strong> 남습니다 — 기기를 바꾸거나
-        저장소를 지우면 사라집니다. 로그인하면 계정에 저장되어 다른 기기에서 로그인해도 이어집니다.
+        지도와 방문 기록은 로그인하면 다른 기기에서도 이어집니다. 답변 초안은 로그인해도{' '}
+        <strong>이 브라우저에만</strong> 남습니다. 브라우저 저장소를 지우면 사라집니다.
       </p>
     </div>
   )

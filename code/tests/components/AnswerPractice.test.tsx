@@ -42,6 +42,17 @@ describe('면접 답변 연습', () => {
     expect(state.drafts.q1).toBeUndefined()
   })
 
+  it('자동 저장을 기다리기 전에 화면을 떠나도 마지막 입력을 보존한다', async () => {
+    const user = userEvent.setup()
+    const view = render(<AnswerPractice nodeId="q1" modelAnswer="모범답안" />)
+    await user.click(screen.getByText('내 답변 적어보기'))
+    await user.type(screen.getByRole('textbox'), '떠나기 직전 답')
+    view.unmount()
+
+    const state = deserializeAnswerPractice(window.localStorage.getItem(ANSWER_PRACTICE_STORAGE_KEY))
+    expect(state.drafts.q1.text).toBe('떠나기 직전 답')
+  })
+
   it('설정을 켜면 다음 질문의 답변칸도 펼친다', async () => {
     const user = userEvent.setup()
     const first = render(<AnswerPractice nodeId="q1" modelAnswer="답" />)
