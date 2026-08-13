@@ -29,14 +29,19 @@ function mockFetchOnce(payload: unknown, status = 200) {
 describe('NodeChat', () => {
   it('처음에는 접혀 있고 여는 문이 보인다', () => {
     render(<NodeChat nodeId={NODE_ID} />)
-    expect(screen.getByText(/이 해설에 대해 물어보기/)).toBeTruthy()
+    const trigger = screen.getByRole('button', { name: '해설 질문 열기' })
+    expect(trigger.className).toContain('fixed')
+    expect(trigger.className).toContain('right-4')
+    expect(trigger.className).toContain('lg:right-0')
     expect(screen.queryByRole('textbox')).toBeNull()
   })
 
   it('펼치면 입력과 고지가 나온다', async () => {
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
+    expect(screen.getByRole('dialog', { name: '이 해설에 대해 물어보기' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: '해설 질문 닫기' })).toBeTruthy()
     expect(screen.getByRole('textbox')).toBeTruthy()
     expect(screen.getByText(/AI 학습에 쓰일 수 있습니다/)).toBeTruthy()
     expect(screen.getByText(/대화는 저장되지 않습니다/)).toBeTruthy()
@@ -49,10 +54,21 @@ describe('NodeChat', () => {
   it('접은 뒤 다시 여는 버튼으로 초점이 돌아간다', async () => {
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     await user.click(screen.getByRole('button', { name: '접기' }))
 
-    const trigger = screen.getByRole('button', { name: /이 해설에 대해 물어보기/ })
+    const trigger = screen.getByRole('button', { name: '해설 질문 열기' })
+    await waitFor(() => expect(document.activeElement).toBe(trigger))
+  })
+
+  it('Escape로 패널을 닫고 여는 탭으로 초점을 돌린다', async () => {
+    const user = userEvent.setup()
+    render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
+    await user.keyboard('{Escape}')
+
+    const trigger = screen.getByRole('button', { name: '해설 질문 열기' })
+    expect(screen.queryByRole('dialog')).toBeNull()
     await waitFor(() => expect(document.activeElement).toBe(trigger))
   })
 
@@ -60,7 +76,7 @@ describe('NodeChat', () => {
     mockFetchOnce({ answer: '이렇게 보면 쉽습니다.', quota: { used: 1, limit: 30 } })
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     await user.type(screen.getByRole('textbox'), '쉽게 설명해 주세요')
     await user.click(screen.getByRole('button', { name: '물어보기' }))
 
@@ -76,7 +92,7 @@ describe('NodeChat', () => {
     mockFetchOnce({ error: 'quota_exceeded' }, 429)
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     await user.type(screen.getByRole('textbox'), '질문입니다')
     await user.click(screen.getByRole('button', { name: '물어보기' }))
 
@@ -89,7 +105,7 @@ describe('NodeChat', () => {
     mockFetchOnce({ error: 'failed' }, 500)
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     await user.type(screen.getByRole('textbox'), '지워지면 안 됩니다')
     await user.click(screen.getByRole('button', { name: '물어보기' }))
 
@@ -109,7 +125,7 @@ describe('NodeChat', () => {
       )
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     await user.type(screen.getByRole('textbox'), '한 번만 보여야 합니다')
     await user.click(screen.getByRole('button', { name: '물어보기' }))
     await waitFor(() => expect(screen.getByText(/답을 만들지 못했습니다/)).toBeTruthy())
@@ -124,7 +140,7 @@ describe('NodeChat', () => {
     vi.spyOn(globalThis, 'fetch').mockImplementationOnce(() => new Promise<Response>(() => {}))
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     await user.type(screen.getByRole('textbox'), '질문입니다')
     await user.click(screen.getByRole('button', { name: '물어보기' }))
 
@@ -135,7 +151,7 @@ describe('NodeChat', () => {
 
   it('물어보기 버튼은 키보드 초점을 표시한다', async () => {
     render(<NodeChat nodeId={NODE_ID} />)
-    await userEvent.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await userEvent.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     expect(screen.getByRole('button', { name: '물어보기' }).className).toContain(
       'focus-visible:outline-2',
     )
@@ -144,7 +160,7 @@ describe('NodeChat', () => {
   it('너무 긴 입력을 오류 상태로 알린다', async () => {
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     const textbox = screen.getByRole('textbox')
     await user.click(textbox)
     await user.paste('가'.repeat(301))
@@ -157,7 +173,7 @@ describe('NodeChat', () => {
     mockFetchOnce({ answer: '답입니다.', quota: { used: 1, limit: 30 } })
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
-    await user.click(screen.getByText(/이 해설에 대해 물어보기/))
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     await user.type(screen.getByRole('textbox'), '키보드 질문')
     await user.keyboard('{Control>}{Enter}{/Control}')
 

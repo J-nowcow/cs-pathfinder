@@ -475,12 +475,6 @@ export function ReadingView({
           </div>
 
           {/*
-            해설에 대한 대화. 질문 만들기와 정반대(휘발·비공유)라 따로 산다 —
-            노드가 바뀌면 대화 맥락도 남으면 안 되므로 key로 갈아 끼운다.
-          */}
-          <NodeChat key={node.id} nodeId={node.id} />
-
-          {/*
             파고들 자리 다음에 옆으로 갈 자리를 둔다. 더 깊이 가는 것이
             이 서비스의 본체라 그쪽이 먼저다.
 
@@ -490,6 +484,12 @@ export function ReadingView({
           <RelatedList items={node.related ?? []} readIds={readIds} hydrated={hydrated} />
         </div>
       </main>
+
+      {/*
+        해설에 대한 대화. 본문 흐름을 늘리지 않는 고정 패널이라 main 밖에 둔다.
+        노드가 바뀌면 대화 맥락도 남으면 안 되므로 key로 갈아 끼운다.
+      */}
+      <NodeChat key={node.id} nodeId={node.id} />
 
       <MinimapStrip
         layout={layout}
