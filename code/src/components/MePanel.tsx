@@ -11,6 +11,7 @@ import { distinctRead, streakLength, totalRead, emptyStreak } from '@/lib/streak
 import { JOURNEY_STORAGE_KEY, deserializeJourney } from '@/lib/journey/storage'
 import { JOURNEY_SYNCED_EVENT, STREAK_SYNCED_EVENT } from '@/lib/journey/sync'
 import { suggestNext, type Candidate } from '@/lib/streak/suggest'
+import { loadAnswerPractice } from '@/lib/answer-practice/storage'
 
 /**
  * 내 기록.
@@ -27,6 +28,7 @@ type View = {
   summary: string
   total: number
   distinct: number
+  answered: number
   streak: number
   next: Candidate[]
 }
@@ -37,6 +39,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
   useEffect(() => {
     const compute = () => {
       const streak = loadStreak()
+      const answerPractice = loadAnswerPractice()
       const today = todayKst()
 
       /* 무엇을 팠는지는 여정이 안다. 잔디는 언제 팠는지만 안다 */
@@ -60,6 +63,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
         summary: grassSummary(weeks),
         total: totalRead(streak),
         distinct: distinctRead(streak),
+        answered: Object.keys(answerPractice.drafts).length,
         streak: streakLength(streak, today),
         next: suggestNext(all, readIds, readCategories, 5),
       })
@@ -124,10 +128,11 @@ export function MePanel({ all }: { all: Candidate[] }) {
 
       <section>
         <h2 className="mb-3 text-lg font-semibold">숫자</h2>
-        <dl className="grid grid-cols-3 gap-3">
+        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             { k: '연속 방문일', v: `${view.streak}일` },
             { k: '열어 본 질문', v: `${view.distinct}개` },
+            { k: '답변해 본 질문', v: `${view.answered}개` },
             { k: '열어 본 횟수', v: `${view.total}번` },
           ].map((it) => (
             <div key={it.k} className="rounded-lg border border-line bg-raised p-3">

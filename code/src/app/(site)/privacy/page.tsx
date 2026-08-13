@@ -45,7 +45,7 @@ export default function PrivacyPage() {
       <p className="mt-2 text-[13px] text-faint">사실과 대조한 날: {REVIEWED}</p>
 
       <Section title="1. 무엇을 저장하는가">
-        <p>지금 저장하는 것은 셋뿐입니다.</p>
+        <p>사용자를 구분하는 데 쓰는 정보는 다음 세 가지입니다.</p>
         <ul className="ml-4 list-disc space-y-2">
           <li>
             <strong className="text-ink">IP 주소</strong> — 하루에 새 해설을 몇 개까지 만들 수
@@ -87,6 +87,12 @@ export default function PrivacyPage() {
           질문 5개와 질문 근거만 브라우저의 localStorage에 남습니다. 계정에 동기화하지
           않으며 화면의 <strong className="text-ink">질문 지우기</strong>로 직접 지울 수 있습니다.
         </p>
+        <p>
+          <strong className="text-ink">직접 적은 면접 답변 초안</strong>은 현재 브라우저의
+          localStorage에만 남습니다. 서버나 계정에 보내지 않고 AI에도 전달하지 않습니다. 최근
+          100개까지만 보관하며 답변칸의 <strong className="text-ink">초안 지우기</strong> 또는
+          브라우저의 사이트 데이터 삭제로 지울 수 있습니다.
+        </p>
       </Section>
 
       <Section title="2. 왜 저장하는가">
@@ -110,6 +116,7 @@ export default function PrivacyPage() {
             계정에 저장된 학습 기록(지도·잔디) — 계정이 지워지면 함께 지워지도록 데이터베이스
             차원에서 묶여 있습니다.
           </li>
+          <li>면접 답변 초안 — 현재 브라우저에 최근 100개. 직접 지우거나 사이트 데이터를 지울 때까지.</li>
         </ul>
       </Section>
 

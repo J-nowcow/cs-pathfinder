@@ -6,6 +6,7 @@ import { kstToday } from '@/lib/daily/date'
 import { MePanel } from '@/components/MePanel'
 import { AuthCard } from '@/components/AuthCard'
 import { ResumeQuestionMaker } from '@/components/ResumeQuestionMaker'
+import { LearningSettings } from '@/components/LearningSettings'
 import type { Candidate } from '@/lib/streak/suggest'
 
 /**
@@ -66,6 +67,11 @@ export default async function MePage() {
       <section id="account" className="mt-10 scroll-mt-24" aria-labelledby="account-title">
         <h2 id="account-title" className="mb-3 text-lg font-semibold">계정</h2>
         <AuthCard />
+      </section>
+
+      <section id="settings" className="mt-10 scroll-mt-24" aria-labelledby="settings-title">
+        <h2 id="settings-title" className="mb-3 text-lg font-semibold">학습 설정</h2>
+        <LearningSettings />
       </section>
 
       <div className="mt-10 border-t border-line pt-10">

@@ -65,6 +65,7 @@ describe('핵심 화면 용어', () => {
   it('질문을 연 기록을 답변하거나 학습한 기록처럼 부르지 않는다', () => {
     const activity = readFileSync('src/components/MePanel.tsx', 'utf8')
     expect(activity).toContain('열어 본 질문')
+    expect(activity).toContain('답변해 본 질문')
     expect(activity).toContain('연속 방문일')
     expect(activity).not.toContain('학습한 질문')
     expect(activity).not.toContain('연속 학습일')

@@ -14,4 +14,11 @@ describe('MePanel 로딩 상태', () => {
   it('추천 질문 링크에 키보드 초점 표시를 둔다', () => {
     expect(source).toContain('hover:border-accent focus-visible:outline-2')
   })
+
+  it('열어 본 기록과 직접 답한 기록을 나눠 보여준다', () => {
+    expect(source).toContain("loadAnswerPractice()")
+    expect(source).toContain("k: '열어 본 질문'")
+    expect(source).toContain("k: '답변해 본 질문'")
+    expect(source).toContain('sm:grid-cols-4')
+  })
 })

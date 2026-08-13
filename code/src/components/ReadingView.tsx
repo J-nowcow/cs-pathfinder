@@ -31,7 +31,7 @@ import { Suggestions } from '@/components/Suggestions'
 import { RelatedList } from '@/components/RelatedList'
 import { FreeInput } from '@/components/FreeInput'
 import { NodeChat } from '@/components/NodeChat'
-import { Prose } from '@/components/Prose'
+import { AnswerPractice } from '@/components/AnswerPractice'
 import { Banner, GeneratingBody, ExpandingNote, type BannerState } from '@/components/Banners'
 import { MinimapStrip } from '@/components/MinimapStrip'
 import { ShareSheet } from '@/components/ShareSheet'
@@ -428,7 +428,11 @@ export function ReadingView({
         </p>
 
         <div className="mt-7">
-          {loadingNode ? <GeneratingBody /> : <Prose body={node.body} />}
+          {loadingNode ? (
+            <GeneratingBody />
+          ) : (
+            <AnswerPractice key={node.id} nodeId={node.id} modelAnswer={node.body} />
+          )}
         </div>
 
         <div className="mt-8 space-y-4">
