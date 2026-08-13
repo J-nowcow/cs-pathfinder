@@ -6,12 +6,14 @@ const resume = readFileSync(
   new URL('../../src/components/ResumeQuestionMaker.tsx', import.meta.url),
   'utf8',
 )
+const layout = readFileSync(new URL('../../src/app/layout.tsx', import.meta.url), 'utf8')
 
 describe('취준생의 첫 화면', () => {
   it('CS 면접 준비와 오늘 할 일을 먼저 말한다', () => {
     expect(home).toContain('CS 면접 공부')
     expect(home).toContain('오늘 질문부터')
     expect(home).toContain('먼저 답을 떠올려 보고')
+    expect(layout).toContain('취준생용 학습 지도')
   })
 
   it('키워드와 레쥬메에서 질문을 찾는 두 입구를 바로 제공한다', () => {
