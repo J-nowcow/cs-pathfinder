@@ -196,6 +196,20 @@ describe('NodeChat', () => {
 
     expect(textbox.getAttribute('aria-invalid')).toBe('true')
     expect(screen.getByRole('button', { name: '물어보기' }).hasAttribute('disabled')).toBe(true)
+    expect(screen.getByText('1자 초과')).toBeTruthy()
+  })
+
+  it('글자 수는 입력 한도가 가까울 때만 보여준다', async () => {
+    const user = userEvent.setup()
+    render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
+    const textbox = screen.getByRole('textbox')
+    const count = document.getElementById('node-chat-count')
+
+    expect(count?.textContent).toBe('')
+    await user.type(textbox, '가'.repeat(280))
+    expect(count?.textContent).toBe('20자 남음')
+    expect(count?.getAttribute('aria-live')).toBe('polite')
   })
 
   it('Ctrl+Enter로도 제출한다', async () => {

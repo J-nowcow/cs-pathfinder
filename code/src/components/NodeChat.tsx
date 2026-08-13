@@ -30,6 +30,11 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
   const requestRef = useRef<AbortController | null>(null)
 
   const over = text.length > MAX
+  const inputCount = over
+    ? `${text.length - MAX}자 초과`
+    : text.length >= MAX - SHOW_REMAINING_AT
+      ? `${MAX - text.length}자 남음`
+      : ''
   const canSend = text.trim().length > 0 && !over && !pending && error !== 'quota'
 
   const close = useCallback(() => {
@@ -223,9 +228,10 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
             <div className="flex items-center justify-between px-3 pb-2">
               <span
                 id="node-chat-count"
+                aria-live="polite"
                 className={`text-[12px] tabular-nums ${over ? 'text-warn' : 'text-faint'}`}
               >
-                {text.length}/{MAX}
+                {inputCount}
               </span>
               <button
                 type="submit"
