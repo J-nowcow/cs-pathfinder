@@ -70,6 +70,11 @@ export default async function QuestionsPage({
 
   /* 개수 0인 태그는 필터 줄에 안 세운다. 눌러 봐야 빈 화면이다 */
   const tagCounts = catalogTagCounts(searchMatches)
+  const displayedTags = TAGS.filter((t) => (tagCounts.get(t.name) ?? 0) > 0)
+  /* 폰의 한 줄이 처음으로 돌아와도 현재 선택이 전체 바로 옆에서 보이게 한다. */
+  if (activeTag) {
+    displayedTags.sort((a, b) => Number(b.name === activeTag) - Number(a.name === activeTag))
+  }
 
   // CATEGORIES 순서를 따른다. 개수순으로 세우면 발행 하나에 순서가 흔들려서
   // 어제 봤던 자리에 오늘 다른 게 있다
@@ -79,7 +84,7 @@ export default async function QuestionsPage({
   })).filter((g) => g.items.length > 0)
 
   /* 보이는 크기는 유지하고 가상 요소로 위아래 판정 영역만 넓힌다. */
-  const filterChip = "relative rounded-full border px-3 py-1.5 text-[13px] transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  const filterChip = "relative shrink-0 rounded-full border px-3 py-1.5 text-[13px] transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
 
   return (
     <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
@@ -153,8 +158,15 @@ export default async function QuestionsPage({
         태그 필터. 분야(아래 sticky 목차)와 다른 축이다 — 분야는 소속,
         태그는 주제. "운영체제이면서 동시성"을 분야 목차는 못 가르고
         여기가 가른다. 개수 0인 태그는 안 세운다.
+
+        320px에서 19개 태그가 282px 높이로 접혀 첫 질문을 화면 밖으로
+        밀어냈다. 폰에서는 한 줄로 옆으로 넘긴다. 넓은 화면에서만 다시
+        여러 줄로 펼쳐 한눈에 비교한다.
       */}
-      <nav aria-label="태그" className="mt-5 flex flex-wrap gap-2">
+      <nav
+        aria-label="태그"
+        className="-mx-5 mt-3 flex flex-nowrap gap-2 overflow-x-auto px-5 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:mt-5 sm:flex-wrap sm:overflow-visible sm:px-0 sm:py-0 sm:[scrollbar-width:auto] sm:[&::-webkit-scrollbar]:block"
+      >
         <Link
           href={href(null, activeLevel)}
           aria-current={!activeTag ? 'true' : undefined}
@@ -166,7 +178,7 @@ export default async function QuestionsPage({
         >
           전체 {searchMatches.length}
         </Link>
-        {TAGS.filter((t) => (tagCounts.get(t.name) ?? 0) > 0).map((t) => (
+        {displayedTags.map((t) => (
           <Link
             key={t.name}
             href={href(activeTag === t.name ? null : t.name, activeLevel)}

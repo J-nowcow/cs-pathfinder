@@ -14,4 +14,13 @@ describe('질문 목록의 모바일 분야 이동', () => {
     expect(page).toContain('shrink-0 border-line')
     expect(page).toContain('scroll-mt-32')
   })
+
+  it('태그 필터도 폰에서 한 줄로 넘기고 넓은 화면에서만 펼친다', () => {
+    expect(page).toContain('aria-label="태그"')
+    expect(page).toContain('-mx-5 mt-3 flex flex-nowrap')
+    expect(page).toContain('[scrollbar-width:none]')
+    expect(page).toContain('sm:flex-wrap sm:overflow-visible')
+    expect(page).toContain('relative shrink-0 rounded-full')
+    expect(page).toContain('Number(b.name === activeTag) - Number(a.name === activeTag)')
+  })
 })

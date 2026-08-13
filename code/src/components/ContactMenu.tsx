@@ -58,7 +58,7 @@ export function ContactMenu() {
   }, [open])
 
   return (
-    <div ref={box} className="relative">
+    <div ref={box} className="relative shrink-0">
       <button
         ref={trigger}
         type="button"

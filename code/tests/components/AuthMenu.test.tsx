@@ -151,12 +151,16 @@ describe('AuthMenu · 자리 잡기', () => {
     state.isPending = true
     const { container } = render(<AuthMenu />)
     expect(screen.queryByRole('button')).toBeNull()
-    expect(container.querySelector('.w-8')).toBeTruthy()
+    const placeholder = container.querySelector('.w-8')
+    expect(placeholder).toBeTruthy()
+    expect(placeholder?.className).toContain('shrink-0')
   })
 
   /* 폰에서 손끝이 닿아야 한다 — 머리글의 다른 항목과 같은 규칙 */
   it('누르는 자리가 44px다', () => {
     render(<AuthMenu />)
-    expect(screen.getByRole('button', { name: 'Google로 로그인' }).className).toContain('h-11')
+    const button = screen.getByRole('button', { name: 'Google로 로그인' })
+    expect(button.className).toContain('h-11')
+    expect(button.className).toContain('shrink-0')
   })
 })

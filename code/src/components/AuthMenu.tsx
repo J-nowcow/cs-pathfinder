@@ -31,7 +31,7 @@ function PersonIcon() {
 }
 
 /** 머리글의 다른 아이콘과 같은 규격. 폰에서만 한 칸 좁다 */
-const BUTTON = '-my-1.5 relative grid h-11 w-8 place-items-center rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-9'
+const BUTTON = '-my-1.5 relative grid h-11 w-8 shrink-0 place-items-center rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-9'
 
 export function AuthMenu() {
   const { data: session, isPending } = authClient.useSession()
@@ -70,7 +70,7 @@ export function AuthMenu() {
    * 아무것도 안 그리면 확인이 끝나는 순간 아이콘이 튀어나오며 옆 항목이
    * 밀린다. 이 줄은 폰에서 여유가 2px밖에 없어서 그 흔들림이 그대로 보인다.
    */
-  if (isPending) return <div className="h-11 w-8 sm:w-9" aria-hidden />
+  if (isPending) return <div className="h-11 w-8 shrink-0 sm:w-9" aria-hidden />
 
   if (!session) {
     return (
@@ -88,7 +88,7 @@ export function AuthMenu() {
   }
 
   return (
-    <div ref={box} className="relative">
+    <div ref={box} className="relative shrink-0">
       <button
         ref={trigger}
         type="button"

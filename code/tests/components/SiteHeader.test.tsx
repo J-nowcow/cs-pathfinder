@@ -128,7 +128,9 @@ describe('SiteHeader · 현재 위치', () => {
     pathname = '/questions'
     render(<SiteHeader />)
     expect(screen.getByText('질문 목록').className).toContain('focus-visible:outline-2')
-    expect(screen.getByText('CS 길라잡이').className).toContain('focus-visible:outline-2')
+    expect(screen.getByRole('link', { name: 'CS 길라잡이 홈' }).className).toContain(
+      'focus-visible:outline-2',
+    )
   })
 })
 
@@ -185,5 +187,16 @@ describe('SiteHeader · 폰에서 접는 것', () => {
     const nav = container.querySelector('nav')!
     expect(nav.className).toContain('flex-nowrap')
     expect(nav.className).toContain('whitespace-nowrap')
+  })
+
+  it('작은 폰에서는 브랜드만 줄이고 주요 화면 이름은 그대로 둔다', () => {
+    render(<SiteHeader />)
+    expect(screen.getByText('CS', { selector: 'span' }).className).toContain('min-[375px]:hidden')
+    expect(screen.getByText('CS 길라잡이', { selector: 'span' }).className).toContain(
+      'hidden min-[375px]:inline',
+    )
+    for (const label of ['오늘의 질문', '질문 목록', '지도', '학습 기록']) {
+      expect(screen.getByText(label).className).toContain('shrink-0')
+    }
   })
 })

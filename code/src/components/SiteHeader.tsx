@@ -108,7 +108,7 @@ export function SiteHeader() {
     글자 사이는 8px이 남아 폰에서 옆 것이 눌리지 않는다.
   */
   const linkClass = (here: boolean) =>
-    `-my-2 rounded-lg px-1 py-[13px] text-[12.5px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-2.5 sm:text-[13px] ${
+    `-my-2 shrink-0 rounded-lg px-1 py-[13px] text-[12.5px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-2.5 sm:text-[13px] ${
       here ? 'font-medium text-ink' : 'text-muted hover:text-ink'
     }`
 
@@ -127,10 +127,20 @@ export function SiteHeader() {
         버티는 칸을 줄이는 것이라 GitHub 아이콘이 36px에서 **17px로 눌려**
         있었다. 줄이 안 넘쳤으니 화면으로도 안 보이고 숫자로도 안 잡힌다.
         항목마다 붙은 `px`가 이미 사이를 벌리고 있어서 `gap`은 없어도 된다.
+
+        320px에서는 이름을 그대로 둔 브랜드와 계정까지 합쳐 354px가 됐다.
+        페이지가 34px 옆으로 밀리고 계정 버튼은 17px로 찌그러졌다. 주요 화면
+        이름은 학습 동선이라 줄이지 않는다. 375px 미만에서 브랜드만 `CS`로
+        줄이고 구분선을 감춰 320px 안에 10px 여유를 남긴다.
       */}
       <nav className="mx-auto flex max-w-3xl flex-nowrap items-center gap-0 whitespace-nowrap px-5 py-3 sm:gap-1 sm:px-8">
-        <Link href="/" className="-my-3 mr-auto rounded-md py-3 text-[14px] font-bold tracking-[-0.01em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-          CS 길라잡이
+        <Link
+          href="/"
+          aria-label="CS 길라잡이 홈"
+          className="-my-3 mr-auto shrink-0 rounded-md py-3 text-[14px] font-bold tracking-[-0.01em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <span aria-hidden className="min-[375px]:hidden">CS</span>
+          <span aria-hidden className="hidden min-[375px]:inline">CS 길라잡이</span>
         </Link>
 
         {LINKS.map((l) => (
@@ -156,7 +166,7 @@ export function SiteHeader() {
         ))}
 
         {/* 안쪽 길과 바깥 길을 선으로 가른다. 섞이면 어디로 나가는지 안 보인다 */}
-        <span aria-hidden className="mx-1 h-4 w-px bg-line" />
+        <span aria-hidden className="mx-1 hidden h-4 w-px shrink-0 bg-line sm:block" />
 
         <OutLink href={REPO} label="GitHub에서 보기 (별을 눌러주세요)">
           <svg viewBox="0 0 16 16" width="17" height="17" fill="currentColor" aria-hidden>
