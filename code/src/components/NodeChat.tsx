@@ -98,7 +98,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
         }}
         aria-label="해설 질문 열기"
         aria-expanded="false"
-        className="fixed bottom-20 right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-ink shadow-lg transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:bottom-auto lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:rounded-l-xl lg:rounded-r-none lg:border-r-0 lg:px-3 lg:py-4"
+        className="fixed bottom-20 right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-ink shadow-lg transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent xl:bottom-auto xl:right-0 xl:top-1/2 xl:-translate-y-1/2 xl:rounded-l-xl xl:rounded-r-none xl:border-r-0 xl:px-3 xl:py-4"
       >
         <span aria-hidden className="grid size-5 place-items-center rounded-full bg-accent text-[12px] text-on-accent">?</span>
         해설 질문
@@ -112,12 +112,12 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
         type="button"
         aria-label="해설 질문 닫기"
         onClick={close}
-        className="fixed inset-0 z-40 cursor-default bg-black/25 lg:hidden"
+        className="fixed inset-0 z-40 cursor-default bg-black/25 xl:hidden"
       />
       <section
         role="dialog"
         aria-label="이 해설에 대해 물어보기"
-        className="fixed inset-x-0 bottom-0 z-50 max-h-[82dvh] overflow-y-auto rounded-t-2xl border border-line bg-raised p-4 shadow-2xl lg:inset-x-auto lg:bottom-20 lg:right-4 lg:top-20 lg:w-[360px] lg:max-h-none lg:rounded-2xl"
+        className="fixed inset-x-0 bottom-0 z-50 max-h-[82dvh] overflow-y-auto rounded-t-2xl border border-line bg-raised p-4 shadow-2xl xl:inset-x-auto xl:bottom-20 xl:right-4 xl:top-20 xl:w-[360px] xl:max-h-none xl:rounded-2xl"
       >
         <div className="sticky top-0 z-10 flex items-baseline justify-between bg-raised pb-2">
           <h3 className="text-[13px] font-medium text-muted">이 해설에 대해 물어보기</h3>

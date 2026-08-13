@@ -32,7 +32,7 @@ describe('NodeChat', () => {
     const trigger = screen.getByRole('button', { name: '해설 질문 열기' })
     expect(trigger.className).toContain('fixed')
     expect(trigger.className).toContain('right-4')
-    expect(trigger.className).toContain('lg:right-0')
+    expect(trigger.className).toContain('xl:right-0')
     expect(screen.queryByRole('textbox')).toBeNull()
   })
 
@@ -41,7 +41,8 @@ describe('NodeChat', () => {
     render(<NodeChat nodeId={NODE_ID} />)
     await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
     expect(screen.getByRole('dialog', { name: '이 해설에 대해 물어보기' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: '해설 질문 닫기' })).toBeTruthy()
+    const backdrop = screen.getByRole('button', { name: '해설 질문 닫기' })
+    expect(backdrop.className).toContain('xl:hidden')
     expect(screen.getByRole('textbox')).toBeTruthy()
     expect(screen.getByText(/AI 학습에 쓰일 수 있습니다/)).toBeTruthy()
     expect(screen.getByText(/대화는 저장되지 않습니다/)).toBeTruthy()
