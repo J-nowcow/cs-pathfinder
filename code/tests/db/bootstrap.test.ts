@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { getDb, truncateAll } from '@/lib/db/client'
 import { derivedUuid } from '@/lib/db/uuid'
 import { seedExampleNodes, ensureSeeded, resetSeedCache } from '@/lib/db/bootstrap'
-import { listRoots } from '@/lib/db/roots'
+import { listRoots, listSearchableRoots } from '@/lib/db/roots'
 import { EXAMPLE_NODES } from '../../data/example-nodes'
 import { GENERATED_NODES } from '../../data/generated-nodes'
 import { AUTHORED_NODES } from '../../data/authored-nodes'
@@ -153,5 +153,15 @@ describe('listRoots', () => {
     const target = roots.find((r) => r.question === EXAMPLE_NODES[0].question)
 
     expect(target!.excerpt).toBe(EXAMPLE_NODES[0].body.split('\n\n')[0])
+  })
+
+  it('개념 역탐색에서만 전체 해설을 함께 돌려준다', async () => {
+    await seedExampleNodes()
+    const roots = await listSearchableRoots()
+    const target = roots.find((r) => r.question === EXAMPLE_NODES[0].question)
+
+    expect(target!.excerpt).toBe(EXAMPLE_NODES[0].body.split('\n\n')[0])
+    expect(target!.searchText).toBe(EXAMPLE_NODES[0].body)
+    expect('searchText' in (await listRoots())[0]).toBe(false)
   })
 })

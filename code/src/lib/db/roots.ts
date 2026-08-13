@@ -14,6 +14,9 @@ export type RootSummary = {
   level: string | null
 }
 
+/** 개념 역탐색에서만 쓰는 전체 해설. 일반 목록 응답에는 싣지 않는다. */
+export type SearchableRootSummary = RootSummary & { searchText: string }
+
 type Row = {
   id: string
   normalized_question: string
@@ -22,6 +25,8 @@ type Row = {
   tags: string[]
   level: string | null
 }
+
+type SearchableRow = Row & { search_text: string }
 
 /**
  * 배치로 발행된 루트 노드 목록.
@@ -62,6 +67,40 @@ export async function listRoots(opts: { limit?: number } = {}): Promise<RootSumm
     question: r.normalized_question,
     category: r.primary_category,
     excerpt: r.excerpt,
+    tags: r.tags ?? [],
+    level: r.level,
+  }))
+}
+
+/**
+ * 용어에서 질문을 역으로 찾을 때만 전체 해설을 읽는다.
+ *
+ * `listRoots`에 body를 붙이면 홈과 질문 목록까지 300편의 본문을 매번 읽는다.
+ * 이 질의는 개념 페이지에서만 호출해 그 비용을 역탐색 경로 안에 가둔다.
+ */
+export async function listSearchableRoots(): Promise<SearchableRootSummary[]> {
+  const db = await getDb()
+  const rows = await db.query<SearchableRow>(
+    `select id, normalized_question, primary_category, body as search_text, tags, level,
+            split_part(body, E'\n\n', 1) as excerpt
+       from qnode
+      where origin = 'batch' and status = 'ready'
+        and ${NOT_FOLDED_SQL('qnode')}
+        and not exists (
+          select 1 from tree t
+           where t.root_node_id = qnode.id
+             and t.publish_date > $1::date
+        )
+      order by created_at asc, normalized_question asc`,
+    [kstToday()],
+  )
+
+  return rows.map((r) => ({
+    id: r.id,
+    question: r.normalized_question,
+    category: r.primary_category,
+    excerpt: r.excerpt,
+    searchText: r.search_text,
     tags: r.tags ?? [],
     level: r.level,
   }))

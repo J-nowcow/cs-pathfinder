@@ -3,8 +3,12 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { GLOSSARY } from '../../../../../data/glossary'
 import { ensureSeeded } from '@/lib/db/bootstrap'
-import { listRoots } from '@/lib/db/roots'
-import { findGlossaryEntry, questionsForConcept } from '@/lib/glossary/questions'
+import { listSearchableRoots } from '@/lib/db/roots'
+import {
+  findGlossaryEntry,
+  questionsForConcept,
+  relatedConceptsForConcept,
+} from '@/lib/glossary/questions'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,7 +30,9 @@ export default async function ConceptPage({ params }: PageProps) {
   if (!entry) notFound()
 
   await ensureSeeded()
-  const questions = questionsForConcept(entry, await listRoots(), 5)
+  const roots = await listSearchableRoots()
+  const questions = questionsForConcept(entry, roots, 5)
+  const relatedConcepts = relatedConceptsForConcept(entry, GLOSSARY, roots, 5)
   const search = `/questions?q=${encodeURIComponent(entry.term)}`
 
   return (
@@ -94,6 +100,37 @@ export default async function ConceptPage({ params }: PageProps) {
           ‘{entry.term}’ 전체 검색 결과 보기 →
         </Link>
       </section>
+
+      {relatedConcepts.length > 0 && (
+        <section className="mt-10 border-t border-line pt-8" aria-labelledby="related-concepts">
+          <h2 id="related-concepts" className="text-[20px] font-bold tracking-[-0.01em]">
+            함께 볼 개념
+          </h2>
+          <p className="mt-2 text-[14px] leading-[1.7] text-muted">
+            위 질문의 제목과 해설에서 함께 나온 개념입니다.
+          </p>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {relatedConcepts.map((concept) => (
+              <li key={concept.term}>
+                <Link
+                  href={`/concept/${encodeURIComponent(concept.term)}`}
+                  className="block rounded-lg border border-line p-3 no-underline hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  <span className="flex items-baseline justify-between gap-3">
+                    <strong className="text-[14px] text-ink">{concept.term}</strong>
+                    <span className="shrink-0 text-[11px] text-faint">
+                      질문 {concept.sharedQuestionCount}개
+                    </span>
+                  </span>
+                  <span className="mt-1 block text-[13px] leading-[1.55] text-muted">
+                    {concept.short}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </main>
   )
 }

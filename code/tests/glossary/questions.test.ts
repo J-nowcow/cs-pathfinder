@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import type { RootSummary } from '@/lib/db/roots'
-import { findGlossaryEntry, questionsForConcept } from '@/lib/glossary/questions'
+import {
+  findGlossaryEntry,
+  questionsForConcept,
+  relatedConceptsForConcept,
+} from '@/lib/glossary/questions'
 
 const entry = { term: '멱등성', english: 'Idempotency', short: '여러 번 보내도 결과가 같다.' }
 const root = (overrides: Partial<RootSummary>): RootSummary => ({
@@ -58,6 +62,17 @@ describe('개념에서 면접 질문 찾기', () => {
     expect(questionsForConcept(db, roots).map((question) => question.id)).toEqual(['db'])
   })
 
+  it('첫 문단 뒤에 나온 개념도 전체 해설이 있으면 찾는다', () => {
+    const roots = [
+      {
+        ...root({ id: 'later', excerpt: '첫 문단에는 용어가 없다.' }),
+        searchText: '첫 문단에는 용어가 없다.\n\n재시도에는 멱등성이 필요하다.',
+      },
+    ]
+
+    expect(questionsForConcept(entry, roots).map((question) => question.id)).toEqual(['later'])
+  })
+
   it('원래 순서는 같은 점수의 안정적인 타이브레이커다', () => {
     const roots = [
       root({ id: 'first', question: '멱등성 첫 질문' }),
@@ -66,6 +81,26 @@ describe('개념에서 면접 질문 찾기', () => {
     expect(questionsForConcept(entry, roots).map((question) => question.id)).toEqual([
       'first',
       'second',
+    ])
+  })
+})
+
+describe('함께 볼 개념 찾기', () => {
+  it('추천 질문에서 실제로 함께 나온 개념을 빈도순으로 고른다', () => {
+    const entries = [
+      entry,
+      { term: '재시도', short: '실패한 일을 다시 시도한다.' },
+      { term: '백오프', short: '다시 시도하기 전에 기다린다.' },
+      { term: '캐시', short: '결과를 가까이 보관한다.' },
+    ]
+    const roots = [
+      root({ id: 'one', question: '멱등성과 재시도는 어떤 관계인가?', excerpt: '백오프도 둔다.' }),
+      root({ id: 'two', question: '멱등성은 왜 필요한가?', excerpt: '재시도에는 멱등성이 필요하다.' }),
+    ]
+
+    expect(relatedConceptsForConcept(entry, entries, roots)).toEqual([
+      { term: '재시도', short: '실패한 일을 다시 시도한다.', sharedQuestionCount: 2 },
+      { term: '백오프', short: '다시 시도하기 전에 기다린다.', sharedQuestionCount: 1 },
     ])
   })
 })
