@@ -91,7 +91,7 @@ describe('Prose — 콜아웃', () => {
 
     const box = container.querySelector('.callout')!
     expect(box.querySelector('code')?.textContent).toBe('GIL')
-    expect(box.querySelector('a[href^="/glossary#"]')?.textContent).toBe('스레드')
+    expect(box.querySelector('a[href^="/concept/"]')?.textContent).toBe('스레드')
   })
 
   /* 용어의 첫 등장은 본문 단위다. 콜아웃이 그 셈을 따로 돌리면 링크가 두 번 생긴다 */
@@ -100,7 +100,7 @@ describe('Prose — 콜아웃', () => {
       <Prose body={'스레드가 답이다.\n\n:::note\n스레드를 다시 말한다.\n:::'} />,
     )
 
-    expect(container.querySelectorAll('a[href^="/glossary#"]')).toHaveLength(1)
+    expect(container.querySelectorAll('a[href^="/concept/"]')).toHaveLength(1)
   })
 
   /**

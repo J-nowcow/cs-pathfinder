@@ -42,11 +42,17 @@ describe('sitemap', () => {
   it('주요 화면도 함께 넣는다', async () => {
     const map = await loadSitemap(async () => ({ date: '', entries: [], byCategory: [] }))
     const urls = map.map((m) => m.url)
-    expect(urls).toEqual([
-      'https://example.test',
-      'https://example.test/questions',
-      'https://example.test/map',
-    ])
+    expect(urls).toContain('https://example.test')
+    expect(urls).toContain('https://example.test/questions')
+    expect(urls).toContain('https://example.test/map')
+    expect(urls).toContain('https://example.test/glossary')
+  })
+
+  it('용어별 면접 질문 입구를 함께 알린다', async () => {
+    const map = await loadSitemap(async () => ({ date: '', entries: [], byCategory: [] }))
+    const urls = map.map((m) => m.url)
+    expect(urls).toContain(`https://example.test/concept/${encodeURIComponent('멱등성')}`)
+    expect(urls.filter((url) => url.includes('/concept/'))).toHaveLength(75)
   })
 
   /*

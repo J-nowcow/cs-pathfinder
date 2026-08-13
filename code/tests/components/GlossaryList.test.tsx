@@ -47,6 +47,14 @@ describe('용어 사전 목록', () => {
     expect(ids.at(-1)).toBe('XSS')
     expect(ids.indexOf('힙')).toBeLessThan(ids.indexOf('ACK'))
   })
+
+  it('각 용어에서 관련 면접 질문으로 이어진다', () => {
+    const { container } = render(<GlossaryList />)
+    const link = container.querySelector('[id="멱등성"] a[href^="/concept/"]')
+    expect(link?.textContent).toContain('관련 면접 질문')
+    expect(link?.getAttribute('href')).toContain(encodeURIComponent('멱등성'))
+    expect(link?.getAttribute('aria-label')).toBe('멱등성 관련 면접 질문 보기')
+  })
 })
 
 describe('용어 사전 검색', () => {

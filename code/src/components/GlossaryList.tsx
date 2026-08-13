@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { ALL_ENTRIES, filterEntries, groupByInitial, groupAnchor } from '@/lib/glossary/catalog'
 
 /**
@@ -119,7 +120,16 @@ export function GlossaryList() {
                     <span className="ml-2 text-[13px] font-normal text-faint">{e.english}</span>
                   )}
                 </dt>
-                <dd className="mt-1 text-[15px] leading-[1.75] text-muted">{e.short}</dd>
+                <dd className="mt-1 text-[15px] leading-[1.75] text-muted">
+                  {e.short}
+                  <Link
+                    href={`/concept/${encodeURIComponent(e.term)}`}
+                    aria-label={`${e.term} 관련 면접 질문 보기`}
+                    className="ml-2 inline-flex min-h-11 items-center rounded-sm align-middle text-[13px] font-medium text-accent no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  >
+                    관련 면접 질문 보기 →
+                  </Link>
+                </dd>
               </div>
             ))}
           </dl>

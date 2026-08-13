@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+import { StrictMode } from 'react'
 import { describe, it, expect, afterEach } from 'vitest'
 import { render, cleanup } from '@testing-library/react'
 import { Prose } from '@/components/Prose'
@@ -121,8 +122,19 @@ describe('Prose — 답 블록', () => {
 
     const lead = container.querySelector('.prose-lead')!
     expect(lead.querySelector('code')?.textContent).toBe('GIL')
-    const link = lead.querySelector('a[href^="/glossary#"]')
+    const link = lead.querySelector('a[href^="/concept/"]')
     expect(link?.textContent).toBe('스레드')
     expect(link?.className).toContain('focus-visible:outline-2')
+  })
+
+  it('React가 렌더를 다시 시도해도 용어 링크가 사라지지 않는다', () => {
+    const { container } = render(
+      <StrictMode>
+        <Prose body={'프로세스와 스레드는 함께 동작한다.\n\n프로세스는 자원을 가진다.'} />
+      </StrictMode>,
+    )
+
+    const links = [...container.querySelectorAll('a[href^="/concept/"]')]
+    expect(links.map((link) => link.textContent)).toEqual(['프로세스', '스레드'])
   })
 })

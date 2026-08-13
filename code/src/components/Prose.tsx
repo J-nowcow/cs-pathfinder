@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { parseInline } from '@/lib/markdown/inline'
 import { parseBlocks } from '@/lib/markdown/blocks'
-import { linkifyTokens } from '@/lib/glossary/linkify'
+import { linkifyTokens, type LinkedToken } from '@/lib/glossary/linkify'
 import {
   FlowDiagram,
   StateDiagram,
@@ -29,13 +29,13 @@ import {
  * 코드가 조용히 사라진다 — 답 블록에서 한 번 겪을 뻔한 함정이라 처음부터
  * 한 곳으로 모은다.
  *
- * `seen`은 **본문 단위**로 받는다. 여기서 새로 만들면 문단 수만큼 같은 링크가
- * 생긴다.
+ * 링크 판정은 부모가 본문 순서대로 끝내서 토큰으로 넘긴다. 이 컴포넌트는
+ * 렌더 중 공유 상태를 바꾸지 않는다.
  */
-function Tokens({ text, seen }: { text: string; seen: Set<string> }) {
+function Tokens({ tokens }: { tokens: LinkedToken[] }) {
   return (
     <>
-      {linkifyTokens(parseInline(text), seen).map((t, j) => (
+      {tokens.map((t, j) => (
         <Fragment key={j}>
           {t.type === 'bold' ? (
             <strong>{t.value}</strong>
@@ -46,11 +46,11 @@ function Tokens({ text, seen }: { text: string; seen: Set<string> }) {
           ) : t.type === 'term' ? (
             /*
              * 낭독기는 링크 텍스트(용어 자체)를 읽는다. title은 마우스
-             * 올림에서 뜻을 보여 주는 덤이고, 뜻 전체는 링크가 닿는 사전
-             * 페이지에 있다.
+             * 올림에서 뜻을 보여 주는 덤이고, 뜻과 관련 면접 질문은 링크가
+             * 닿는 개념 페이지에 있다.
              */
             <a
-              href={`/glossary#${encodeURIComponent(t.term)}`}
+              href={`/concept/${encodeURIComponent(t.term)}`}
               title={t.short}
               className="rounded-sm underline decoration-dotted underline-offset-2 hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
@@ -80,18 +80,16 @@ const CALLOUT_LABEL = { note: '핵심 정리', warn: '주의' } as const
 function Callout({
   kind,
   paragraphs,
-  seen,
 }: {
   kind: 'note' | 'warn'
-  paragraphs: string[]
-  seen: Set<string>
+  paragraphs: LinkedToken[][]
 }) {
   return (
     <div className={`callout callout-${kind}`}>
       <p className="cl-label">{CALLOUT_LABEL[kind]}</p>
-      {paragraphs.map((text, j) => (
+      {paragraphs.map((tokens, j) => (
         <p key={j}>
-          <Tokens text={text} seen={seen} />
+          <Tokens tokens={tokens} />
         </p>
       ))}
     </div>
@@ -107,6 +105,27 @@ export function Prose({ body }: { body: string }) {
   const seenTerms = new Set<string>()
 
   const blocks = parseBlocks(body)
+
+  /*
+   * 링크 판정은 자식 컴포넌트를 그리기 전에 한 번 끝낸다.
+   *
+   * `Tokens`가 렌더 중 Set을 바꾸면 React가 자식 렌더를 다시 시도할 때 같은
+   * Set을 본다. 첫 시도에서 이미 본 용어가 되어 서버 HTML에는 링크가 있고
+   * 클라이언트 첫 화면에는 평문이 나오는 hydration mismatch가 실제로 났다.
+   * 여기서 순서대로 토큰을 확정해 두면 자식 렌더는 읽기만 한다.
+   */
+  const paragraphTokens = new Map<number, LinkedToken[]>()
+  const calloutTokens = new Map<number, LinkedToken[][]>()
+  blocks.forEach((block, index) => {
+    if (block.type === 'paragraph') {
+      paragraphTokens.set(index, linkifyTokens(parseInline(block.text), seenTerms))
+    } else if (block.type === 'note' || block.type === 'warn') {
+      calloutTokens.set(
+        index,
+        block.paragraphs.map((text) => linkifyTokens(parseInline(text), seenTerms)),
+      )
+    }
+  })
 
   /**
    * 첫 문단이 답이다.
@@ -148,12 +167,12 @@ export function Prose({ body }: { body: string }) {
           case 'note':
           case 'warn':
             return (
-              <Callout key={i} kind={block.type} paragraphs={block.paragraphs} seen={seenTerms} />
+              <Callout key={i} kind={block.type} paragraphs={calloutTokens.get(i) ?? []} />
             )
           case 'paragraph':
             return (
               <p key={i} className={i === leadIndex ? 'prose-lead' : undefined}>
-                <Tokens text={block.text} seen={seenTerms} />
+                <Tokens tokens={paragraphTokens.get(i) ?? []} />
               </p>
             )
         }

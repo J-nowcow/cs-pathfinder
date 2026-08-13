@@ -3,6 +3,7 @@ import { siteUrl } from '@/lib/site'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { loadCatalog } from '@/lib/db/catalog'
 import { isMissingTable } from '@/lib/db/missing-table'
+import { GLOSSARY } from '../../data/glossary'
 
 /**
  * 어떤 주소가 있는지 알린다.
@@ -28,7 +29,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: base, changeFrequency: 'daily', priority: 1 },
     { url: `${base}/questions`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${base}/map`, changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${base}/glossary`, changeFrequency: 'monthly', priority: 0.6 },
   ]
+
+  /*
+   * 용어 75개는 질문으로 들어오는 또 하나의 입구다. 사전 한 장만 알리면
+   * `멱등성 면접 질문`처럼 구체적인 검색에는 개념 페이지가 드러나지 않는다.
+   * 정적 목록이라 DB가 잠시 없어도 이 주소들은 안전하게 내놓을 수 있다.
+   */
+  const concepts: MetadataRoute.Sitemap = GLOSSARY.map((entry) => ({
+    url: `${base}/concept/${encodeURIComponent(entry.term)}`,
+    changeFrequency: 'monthly' as const,
+    priority: 0.65,
+  }))
 
   /*
    * 질문을 못 읽어도 sitemap 자체는 나가야 한다.
@@ -53,5 +66,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!isMissingTable(e)) throw e
   }
 
-  return [...fixed, ...entries]
+  return [...fixed, ...concepts, ...entries]
 }
