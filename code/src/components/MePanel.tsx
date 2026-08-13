@@ -11,7 +11,7 @@ import { distinctRead, streakLength, totalRead, emptyStreak } from '@/lib/streak
 import { JOURNEY_STORAGE_KEY, deserializeJourney } from '@/lib/journey/storage'
 import { JOURNEY_SYNCED_EVENT, STREAK_SYNCED_EVENT } from '@/lib/journey/sync'
 import { suggestNext, type Candidate } from '@/lib/streak/suggest'
-import { loadAnswerPractice } from '@/lib/answer-practice/storage'
+import { loadAnswerPractice, type AnswerReviewStatus } from '@/lib/answer-practice/storage'
 
 /**
  * 내 기록.
@@ -29,9 +29,10 @@ type View = {
   total: number
   distinct: number
   answered: number
+  needsReview: number
   streak: number
   next: Candidate[]
-  drafts: Array<Candidate & { updatedAt: string }>
+  drafts: Array<Candidate & { updatedAt: string; reviewStatus?: AnswerReviewStatus }>
 }
 
 export function MePanel({ all }: { all: Candidate[] }) {
@@ -47,7 +48,9 @@ export function MePanel({ all }: { all: Candidate[] }) {
         .sort(([, a], [, b]) => b.updatedAt.localeCompare(a.updatedAt))
         .flatMap(([nodeId, draft]) => {
           const candidate = candidatesById.get(nodeId)
-          return candidate ? [{ ...candidate, updatedAt: draft.updatedAt }] : []
+          return candidate
+            ? [{ ...candidate, updatedAt: draft.updatedAt, reviewStatus: draft.reviewStatus }]
+            : []
         })
 
       /* 무엇을 팠는지는 여정이 안다. 잔디는 언제 팠는지만 안다 */
@@ -72,6 +75,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
         total: totalRead(streak),
         distinct: distinctRead(streak),
         answered: Object.keys(answerPractice.drafts).length,
+        needsReview: drafts.filter((draft) => draft.reviewStatus === 'needs-review').length,
         streak: streakLength(streak, today),
         next: suggestNext(all, readIds, readCategories, 5),
         drafts,
@@ -137,25 +141,42 @@ export function MePanel({ all }: { all: Candidate[] }) {
 
       {view.drafts.length > 0 && (
         <section>
-          <h2 className="mb-1 text-lg font-semibold">답변 초안</h2>
+          <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-lg font-semibold">답변 기록</h2>
+            {view.needsReview > 0 && (
+              <span className="rounded-full bg-accent-soft px-2.5 py-1 text-[12px] font-medium text-accent">
+                다시 볼 답 {view.needsReview}개
+              </span>
+            )}
+          </div>
           <p className="mb-3 text-sm text-muted">
-            이 브라우저에 저장된 초안입니다. 질문을 열면 이어서 쓸 수 있습니다.
+            다시 볼 답을 먼저 모았습니다. 질문을 열면 초안을 이어 쓸 수 있습니다.
           </p>
           <ul className="flex list-none flex-col gap-2 p-0">
-            {view.drafts.slice(0, 5).map((draft) => (
-              <li key={draft.id}>
-                <Link
-                  href={`/q/${draft.number}`}
-                  className="block rounded-lg border border-line bg-raised p-3 no-underline transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                >
-                  <span className="text-[12px] text-faint">{draft.category} · 초안 있음</span>
-                  <span className="mt-1 block text-[15px]">{draft.question}</span>
-                </Link>
-              </li>
-            ))}
+            {[...view.drafts]
+              .sort((a, b) => Number(b.reviewStatus === 'needs-review') - Number(a.reviewStatus === 'needs-review'))
+              .slice(0, 5)
+              .map((draft) => (
+                <li key={draft.id}>
+                  <Link
+                    href={`/q/${draft.number}`}
+                    className="block rounded-lg border border-line bg-raised p-3 no-underline transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  >
+                    <span className="text-[12px] text-faint">
+                      {draft.category} ·{' '}
+                      {draft.reviewStatus === 'needs-review'
+                        ? '다시 볼 답'
+                        : draft.reviewStatus === 'understood'
+                          ? '설명할 수 있음'
+                          : '아직 비교하지 않음'}
+                    </span>
+                    <span className="mt-1 block text-[15px]">{draft.question}</span>
+                  </Link>
+                </li>
+              ))}
           </ul>
           {view.drafts.length > 5 && (
-            <p className="mt-2 text-[13px] text-faint">최근 5개를 표시합니다. 전체 {view.drafts.length}개</p>
+            <p className="mt-2 text-[13px] text-faint">복습 우선 5개를 표시합니다. 전체 {view.drafts.length}개</p>
           )}
         </section>
       )}

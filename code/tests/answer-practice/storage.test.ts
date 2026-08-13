@@ -3,6 +3,7 @@ import {
   MAX_ANSWER_DRAFTS,
   deserializeAnswerPractice,
   emptyAnswerPractice,
+  markAnswerReview,
   serializeAnswerPractice,
   updateAnswerDraft,
 } from '@/lib/answer-practice/storage'
@@ -39,5 +40,24 @@ describe('면접 답변 초안 저장', () => {
     const state = deserializeAnswerPractice(JSON.stringify({ version: 1, drafts }))
     expect(Object.keys(state.drafts)).toHaveLength(MAX_ANSWER_DRAFTS)
     expect(state.drafts.q0).toBeUndefined()
+  })
+
+  it('모범답안과 비교한 자기 점검을 초안에 남긴다', () => {
+    const draft = updateAnswerDraft(emptyAnswerPractice(), 'q1', '내 답', '2026-08-13T00:00:00Z')
+    const reviewed = markAnswerReview(draft, 'q1', 'needs-review', '2026-08-13T00:01:00Z')
+
+    expect(reviewed.drafts.q1.reviewStatus).toBe('needs-review')
+    expect(reviewed.drafts.q1.reviewedAt).toBe('2026-08-13T00:01:00Z')
+    expect(deserializeAnswerPractice(serializeAnswerPractice(reviewed))).toEqual(reviewed)
+    expect(markAnswerReview(reviewed, '없는 질문', 'understood', 'now')).toBe(reviewed)
+  })
+
+  it('답을 고쳐 쓰면 이전 자기 점검은 초기화한다', () => {
+    const draft = updateAnswerDraft(emptyAnswerPractice(), 'q1', '첫 답', '1')
+    const reviewed = markAnswerReview(draft, 'q1', 'understood', '2')
+    const rewritten = updateAnswerDraft(reviewed, 'q1', '고친 답', '3')
+
+    expect(rewritten.drafts.q1.reviewStatus).toBeUndefined()
+    expect(rewritten.drafts.q1.reviewedAt).toBeUndefined()
   })
 })

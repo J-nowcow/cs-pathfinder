@@ -6,6 +6,7 @@ import {
   MAX_ANSWER_LENGTH,
   emptyAnswerPractice,
   loadAnswerPractice,
+  markAnswerReview,
   saveAnswerPractice,
   updateAnswerDraft,
   type AnswerPracticeState,
@@ -35,6 +36,7 @@ export function AnswerPractice({ nodeId, modelAnswer }: { nodeId: string; modelA
   )
 
   const text = state.drafts[nodeId]?.text ?? ''
+  const reviewStatus = state.drafts[nodeId]?.reviewStatus
   const persist = (next: AnswerPracticeState, deferred = false) => {
     setState(next)
     if (saveTimer.current) clearTimeout(saveTimer.current)
@@ -134,6 +136,34 @@ export function AnswerPractice({ nodeId, modelAnswer }: { nodeId: string; modelA
         </summary>
         <div className="border-t border-line px-4 py-5 sm:px-5">
           <Prose body={modelAnswer} />
+          {text && (
+            <div className="mt-5 border-t border-line pt-4">
+              <p className="text-[13px] font-medium">내 답과 비교해 보니 어떤가요?</p>
+              <p className="mt-1 text-[12px] text-muted">점수 대신 다음 복습에 필요한 표시만 남깁니다.</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  aria-pressed={reviewStatus === 'needs-review'}
+                  onClick={() =>
+                    persist(markAnswerReview(state, nodeId, 'needs-review', new Date().toISOString()))
+                  }
+                  className="min-h-11 rounded-lg border border-line px-3 text-[13px] aria-pressed:border-accent aria-pressed:bg-accent-soft aria-pressed:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  다시 볼래요
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={reviewStatus === 'understood'}
+                  onClick={() =>
+                    persist(markAnswerReview(state, nodeId, 'understood', new Date().toISOString()))
+                  }
+                  className="min-h-11 rounded-lg border border-line px-3 text-[13px] aria-pressed:border-accent aria-pressed:bg-accent-soft aria-pressed:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  설명할 수 있어요
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </details>
     </section>

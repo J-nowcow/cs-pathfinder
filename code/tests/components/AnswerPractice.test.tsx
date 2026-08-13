@@ -73,4 +73,18 @@ describe('면접 답변 연습', () => {
     expect(details.open).toBe(true)
     expect(screen.getByText('검증된 모범답안')).toBeTruthy()
   })
+
+  it('모범답안과 비교한 결과를 점수 없이 복습 표시로 남긴다', async () => {
+    const user = userEvent.setup()
+    render(<AnswerPractice nodeId="q1" modelAnswer="검증된 모범답안" />)
+    await user.click(screen.getByText('내 답변 적어보기'))
+    await user.type(screen.getByRole('textbox'), '내 답')
+    await user.click(screen.getByText('모범답안 확인하기'))
+    await user.click(screen.getByRole('button', { name: '다시 볼래요' }))
+
+    const state = deserializeAnswerPractice(window.localStorage.getItem(ANSWER_PRACTICE_STORAGE_KEY))
+    expect(state.drafts.q1.reviewStatus).toBe('needs-review')
+    expect(screen.getByRole('button', { name: '다시 볼래요' }).getAttribute('aria-pressed')).toBe('true')
+    expect(screen.queryByText(/점$/)).toBeNull()
+  })
 })

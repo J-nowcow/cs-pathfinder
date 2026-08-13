@@ -2,7 +2,13 @@ export const ANSWER_PRACTICE_STORAGE_KEY = 'csqt.answer-practice.v1'
 export const MAX_ANSWER_LENGTH = 6000
 export const MAX_ANSWER_DRAFTS = 100
 
-export type AnswerDraft = { text: string; updatedAt: string }
+export type AnswerReviewStatus = 'needs-review' | 'understood'
+export type AnswerDraft = {
+  text: string
+  updatedAt: string
+  reviewStatus?: AnswerReviewStatus
+  reviewedAt?: string
+}
 export type AnswerPracticeState = {
   alwaysOpen: boolean
   drafts: Record<string, AnswerDraft>
@@ -29,6 +35,10 @@ export function deserializeAnswerPractice(raw: string | null): AnswerPracticeSta
       drafts[nodeId] = {
         text: draft.text.slice(0, MAX_ANSWER_LENGTH),
         updatedAt: draft.updatedAt,
+        ...(draft.reviewStatus === 'needs-review' || draft.reviewStatus === 'understood'
+          ? { reviewStatus: draft.reviewStatus }
+          : {}),
+        ...(typeof draft.reviewedAt === 'string' ? { reviewedAt: draft.reviewedAt } : {}),
       }
     }
     const recent = Object.entries(drafts)
@@ -61,6 +71,24 @@ export function updateAnswerDraft(
     .sort(([, a], [, b]) => b.updatedAt.localeCompare(a.updatedAt))
     .slice(0, MAX_ANSWER_DRAFTS)
   return { ...state, drafts: Object.fromEntries(recent) }
+}
+
+/** 모범답안과 비교한 뒤 남기는 자기 점검. 점수나 AI 평가는 저장하지 않는다. */
+export function markAnswerReview(
+  state: AnswerPracticeState,
+  nodeId: string,
+  reviewStatus: AnswerReviewStatus,
+  reviewedAt: string,
+): AnswerPracticeState {
+  const draft = state.drafts[nodeId]
+  if (!draft) return state
+  return {
+    ...state,
+    drafts: {
+      ...state.drafts,
+      [nodeId]: { ...draft, reviewStatus, reviewedAt },
+    },
+  }
 }
 
 export function loadAnswerPractice(): AnswerPracticeState {

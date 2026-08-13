@@ -88,7 +88,7 @@ export default function PrivacyPage() {
           않으며 화면의 <strong className="text-ink">질문 지우기</strong>로 직접 지울 수 있습니다.
         </p>
         <p>
-          <strong className="text-ink">직접 적은 면접 답변 초안</strong>은 현재 브라우저의
+          <strong className="text-ink">직접 적은 면접 답변 초안과 복습 표시</strong>는 현재 브라우저의
           localStorage에만 남습니다. 서버나 계정에 보내지 않고 AI에도 전달하지 않습니다. 최근
           100개까지만 보관하며 답변칸의 <strong className="text-ink">초안 지우기</strong> 또는
           브라우저의 사이트 데이터 삭제로 지울 수 있습니다.
@@ -116,7 +116,7 @@ export default function PrivacyPage() {
             계정에 저장된 학습 기록(지도·잔디) — 계정이 지워지면 함께 지워지도록 데이터베이스
             차원에서 묶여 있습니다.
           </li>
-          <li>면접 답변 초안 — 현재 브라우저에 최근 100개. 직접 지우거나 사이트 데이터를 지울 때까지.</li>
+          <li>면접 답변 초안·복습 표시 — 현재 브라우저에 최근 100개. 직접 지우거나 사이트 데이터를 지울 때까지.</li>
         </ul>
       </Section>
 
