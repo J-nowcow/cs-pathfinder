@@ -218,17 +218,20 @@ export default async function QuestionsPage({
 
         헤더가 이미 위에 붙어 있으므로 그 아래에 선다(top-14). 배경을 깔지
         않으면 아래 글이 비쳐 읽힌다.
+
+        폰에서는 한 줄로 옆으로 넘긴다. 열 개를 줄바꿈하면 목차가 화면 절반을
+        덮은 채 따라다닌다. 넓은 화면에서만 다시 여러 줄을 허용한다.
       */}
       {grouped.length > 0 && (
         <nav
           aria-label="분야별 질문 바로가기"
-          className="sticky top-14 z-10 -mx-5 mt-8 flex flex-wrap gap-2 bg-surface/95 px-5 py-3 backdrop-blur sm:-mx-8 sm:px-8"
+          className="sticky top-14 z-10 -mx-5 mt-8 flex flex-nowrap gap-2 overflow-x-auto bg-surface/95 px-5 py-3 backdrop-blur sm:-mx-8 sm:flex-wrap sm:overflow-visible sm:px-8"
         >
           {grouped.map((g) => (
             <a
               key={g.category}
               href={`#${categoryAnchor(g.category)}`}
-              className={`${filterChip} border-line text-muted hover:border-accent hover:text-ink`}
+              className={`${filterChip} shrink-0 border-line text-muted hover:border-accent hover:text-ink`}
             >
               {g.category} {g.items.length}
             </a>
@@ -237,7 +240,8 @@ export default async function QuestionsPage({
       )}
 
       {grouped.map((g) => (
-        <section key={g.category} id={categoryAnchor(g.category)} className="mt-12 scroll-mt-16">
+        /* 머리글과 붙박이 목차 높이만큼 내려야 누른 분야 제목이 그 뒤에 숨지 않는다. */
+        <section key={g.category} id={categoryAnchor(g.category)} className="mt-12 scroll-mt-32">
           <h2 className="mb-4 flex items-baseline gap-2 border-b border-line pb-2">
             <span className="text-[17px] font-bold tracking-[-0.01em]">{g.category}</span>
             <span className="text-[13px] text-faint">{g.items.length}개</span>
