@@ -74,4 +74,12 @@ describe('작은 조작 요소의 터치 영역', () => {
   it('공유된 질문 지도의 질문 링크도 손끝 높이를 확보한다', () => {
     expect(read('src/components/SharedTree.tsx')).toContain('group flex min-h-11')
   })
+
+  it('답변 연습의 접기와 자기 점검도 손끝·키보드로 조작할 수 있다', () => {
+    const source = read('src/components/AnswerPractice.tsx')
+    expect(source.match(/<summary className="flex min-h-12/g)).toHaveLength(2)
+    expect(source.match(/className="min-h-11 rounded-lg border border-line/g)).toHaveLength(2)
+    expect(source).toContain('focus-visible:outline-2')
+    expect(source).toContain('aria-pressed={reviewStatus ===')
+  })
 })

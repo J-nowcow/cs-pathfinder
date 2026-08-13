@@ -1,12 +1,15 @@
 // @vitest-environment happy-dom
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { AnswerPractice } from '@/components/AnswerPractice'
 import { ANSWER_PRACTICE_STORAGE_KEY, deserializeAnswerPractice } from '@/lib/answer-practice/storage'
 
 beforeEach(() => window.localStorage.clear())
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  vi.restoreAllMocks()
+})
 
 describe('면접 답변 연습', () => {
   it('답변칸과 모범답안은 처음에 접혀 있다', () => {
@@ -51,6 +54,30 @@ describe('면접 답변 연습', () => {
 
     const state = deserializeAnswerPractice(window.localStorage.getItem(ANSWER_PRACTICE_STORAGE_KEY))
     expect(state.drafts.q1.text).toBe('떠나기 직전 답')
+  })
+
+  it('탭을 닫는 순간에도 기다리던 자동 저장을 마친다', async () => {
+    const user = userEvent.setup()
+    render(<AnswerPractice nodeId="q1" modelAnswer="모범답안" />)
+    await user.click(screen.getByText('내 답변 적어보기'))
+    await user.type(screen.getByRole('textbox'), '탭 닫기 직전 답')
+    window.dispatchEvent(new Event('pagehide'))
+
+    const state = deserializeAnswerPractice(window.localStorage.getItem(ANSWER_PRACTICE_STORAGE_KEY))
+    expect(state.drafts.q1.text).toBe('탭 닫기 직전 답')
+    await waitFor(() => expect(screen.getByText(/이 브라우저에 자동 저장/)).toBeTruthy())
+  })
+
+  it('브라우저 저장소가 막히면 저장 실패를 숨기지 않는다', async () => {
+    vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+      throw new Error('quota exceeded')
+    })
+    const user = userEvent.setup()
+    render(<AnswerPractice nodeId="q1" modelAnswer="모범답안" />)
+    await user.click(screen.getByText('내 답변 적어보기'))
+    await user.type(screen.getByRole('textbox'), '저장할 답')
+
+    await waitFor(() => expect(screen.getByText('저장하지 못했습니다')).toBeTruthy())
   })
 
   it('설정을 켜면 다음 질문의 답변칸도 펼친다', async () => {

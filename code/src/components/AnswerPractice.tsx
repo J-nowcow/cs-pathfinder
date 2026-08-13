@@ -28,9 +28,21 @@ export function AnswerPractice({ nodeId, modelAnswer }: { nodeId: string; modelA
   }, [nodeId])
 
   useEffect(
-    () => () => {
-      if (saveTimer.current) clearTimeout(saveTimer.current)
-      if (pendingState.current) saveAnswerPractice(pendingState.current)
+    () => {
+      const flushPendingSave = (showResult: boolean) => {
+        if (saveTimer.current) clearTimeout(saveTimer.current)
+        saveTimer.current = null
+        if (!pendingState.current) return
+        const saved = saveAnswerPractice(pendingState.current)
+        pendingState.current = null
+        if (showResult) setSaveStatus(saved ? 'saved' : 'failed')
+      }
+      const handlePageHide = () => flushPendingSave(true)
+      window.addEventListener('pagehide', handlePageHide)
+      return () => {
+        window.removeEventListener('pagehide', handlePageHide)
+        flushPendingSave(false)
+      }
     },
     [],
   )
