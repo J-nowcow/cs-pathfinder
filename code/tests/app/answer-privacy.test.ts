@@ -13,4 +13,9 @@ describe('면접 답변 초안의 저장 고지', () => {
     expect(privacy).toContain('최근 100개')
     expect(privacy).toContain('초안 지우기')
   })
+
+  it('질문을 연 기록을 실제 학습처럼 부르지 않는다', () => {
+    expect(privacy).toContain('날짜별로 열어 본 질문 수')
+    expect(privacy).not.toContain('몇 편을 파고들었는지')
+  })
 })

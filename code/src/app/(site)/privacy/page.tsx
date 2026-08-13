@@ -69,15 +69,15 @@ export default function PrivacyPage() {
           생년월일, 성별, 결제 정보. 로그인은 선택이고, 로그인해도 이메일 밖의 것은 받지 않습니다.
         </p>
         <p>
-          어떤 질문을 눌러 어디까지 파고들었는지를 나타내는 <strong className="text-ink">지도</strong>와,
-          날짜별로 몇 편을 파고들었는지 나타내는 <strong className="text-ink">학습 기록(잔디)</strong>은 기본적으로
+          어떤 질문을 눌러 어디까지 이어 갔는지를 나타내는 <strong className="text-ink">지도</strong>와,
+          날짜별로 열어 본 질문 수를 나타내는 <strong className="text-ink">학습 기록의 잔디</strong>는 기본적으로
           브라우저 안(localStorage)에 있습니다. <strong className="text-ink">로그인하지 않으면 서버로
           보내지 않습니다.</strong> 브라우저 저장소를 비우면 같이 사라지고, 다른 기기에서는 보이지
           않습니다.
         </p>
         <p>
           <strong className="text-ink">로그인하면 이 두 기록을 계정에 저장합니다</strong> — 기기를
-          바꿔도 이어보게 하기 위해서입니다. 저장하는 것은 질문 번호·날짜·파고든 경로의 모양뿐입니다.
+          바꿔도 이어보게 하기 위해서입니다. 저장하는 것은 질문 번호·날짜·이어 간 경로의 모양뿐입니다.
           무엇을 검색했는지, 어떤 글을 얼마나 오래 봤는지는 여전히 적지 않습니다. 탈퇴하면 계정에
           저장된 기록도 그 자리에서 함께 지워집니다.
         </p>
