@@ -4,6 +4,8 @@ import { render, screen, cleanup, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { NodeChat } from '@/components/NodeChat'
 
+const originalScrollIntoView = Element.prototype.scrollIntoView
+
 /**
  * 이 해설에 대해 물어보기.
  *
@@ -13,6 +15,8 @@ import { NodeChat } from '@/components/NodeChat'
 afterEach(() => {
   cleanup()
   vi.restoreAllMocks()
+  if (originalScrollIntoView) Element.prototype.scrollIntoView = originalScrollIntoView
+  else delete (Element.prototype as { scrollIntoView?: Element['scrollIntoView'] }).scrollIntoView
 })
 
 const NODE_ID = '00000000-0000-4000-8000-000000000001'
@@ -33,6 +37,7 @@ describe('NodeChat', () => {
     expect(trigger.className).toContain('fixed')
     expect(trigger.className).toContain('right-4')
     expect(trigger.className).toContain('xl:right-0')
+    expect(trigger.getAttribute('aria-controls')).toBe('node-chat-dialog')
     expect(screen.queryByRole('textbox')).toBeNull()
   })
 
@@ -40,10 +45,12 @@ describe('NodeChat', () => {
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
     await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
-    expect(screen.getByRole('dialog', { name: '이 해설에 대해 물어보기' })).toBeTruthy()
+    const dialog = screen.getByRole('dialog', { name: '이 해설에 대해 물어보기' })
+    expect(dialog.className).toContain('flex')
+    expect(dialog.className).toContain('overflow-hidden')
     const backdrop = screen.getByRole('button', { name: '해설 질문 닫기' })
     expect(backdrop.className).toContain('xl:hidden')
-    expect(screen.getByRole('textbox')).toBeTruthy()
+    expect(screen.getByRole('textbox').closest('form')?.className).toContain('shrink-0')
     expect(screen.getByText(/AI 학습에 쓰일 수 있습니다/)).toBeTruthy()
     expect(screen.getByText(/대화는 저장되지 않습니다/)).toBeTruthy()
     expect(document.activeElement).toBe(screen.getByRole('textbox'))
@@ -74,6 +81,8 @@ describe('NodeChat', () => {
   })
 
   it('물어보면 내 말과 도우미 답이 순서대로 쌓인다', async () => {
+    const scrollIntoView = vi.fn()
+    Element.prototype.scrollIntoView = scrollIntoView
     mockFetchOnce({ answer: '이렇게 보면 쉽습니다.', quota: { used: 1, limit: 30 } })
     const user = userEvent.setup()
     render(<NodeChat nodeId={NODE_ID} />)
@@ -85,8 +94,11 @@ describe('NodeChat', () => {
       expect(screen.getByText('쉽게 설명해 주세요')).toBeTruthy()
       expect(screen.getByText('이렇게 보면 쉽습니다.')).toBeTruthy()
     })
+    expect(screen.getByRole('log').getAttribute('aria-live')).toBe('polite')
+    expect(screen.getByRole('log').parentElement?.className).toContain('overflow-y-auto')
     expect(screen.getByLabelText('내 질문').textContent).toBe('쉽게 설명해 주세요')
     expect(screen.getByLabelText('답변').textContent).toBe('이렇게 보면 쉽습니다.')
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalled())
   })
 
   it('한도가 다하면 자정 안내가 나온다', async () => {
@@ -148,6 +160,22 @@ describe('NodeChat', () => {
     const button = await screen.findByRole('button', { name: /답변 중/ })
     expect(button.getAttribute('aria-busy')).toBe('true')
     expect(button.querySelector('.animate-spin')).toBeTruthy()
+  })
+
+  it('다른 질문으로 떠나면 남아 있던 요청을 취소한다', async () => {
+    let signal: AbortSignal | undefined
+    vi.spyOn(globalThis, 'fetch').mockImplementationOnce((_, init) => {
+      signal = init?.signal as AbortSignal
+      return new Promise<Response>(() => {})
+    })
+    const user = userEvent.setup()
+    const view = render(<NodeChat nodeId={NODE_ID} />)
+    await user.click(screen.getByRole('button', { name: '해설 질문 열기' }))
+    await user.type(screen.getByRole('textbox'), '질문입니다')
+    await user.click(screen.getByRole('button', { name: '물어보기' }))
+
+    view.unmount()
+    expect(signal?.aborted).toBe(true)
   })
 
   it('물어보기 버튼은 키보드 초점을 표시한다', async () => {

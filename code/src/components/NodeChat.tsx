@@ -26,6 +26,8 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
   const [remaining, setRemaining] = useState<number | null>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const conversationEndRef = useRef<HTMLDivElement>(null)
+  const requestRef = useRef<AbortController | null>(null)
 
   const over = text.length > MAX
   const canSend = text.trim().length > 0 && !over && !pending && error !== 'quota'
@@ -46,11 +48,24 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [close, open])
 
+  /* 답이 길어져도 새 답과 다음 입력칸을 찾아 스크롤할 필요가 없게 한다. */
+  useEffect(() => {
+    if (!open || (turns.length === 0 && !pending && !error)) return
+    requestAnimationFrame(() =>
+      conversationEndRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' }),
+    )
+  }, [error, open, pending, turns.length])
+
+  /* 다른 질문으로 떠난 뒤 끝난 응답이 사라진 패널을 갱신하지 않게 한다. */
+  useEffect(() => () => requestRef.current?.abort(), [])
+
   async function send() {
     const asked = text.trim()
     if (!asked || pending) return
     setPending(true)
     setError(null)
+    const controller = new AbortController()
+    requestRef.current = controller
     const nextTurns: Turn[] = [...turns, { role: 'user', text: asked }]
     setTurns(nextTurns)
 
@@ -58,6 +73,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           node_id: nodeId,
           /* 방금 친 질문은 text로 가므로 이력에서는 뺀다 */
@@ -80,10 +96,12 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
       setText('')
       setRemaining(Math.max(0, data.quota.limit - data.quota.used))
     } catch {
+      if (controller.signal.aborted) return
       setTurns(turns)
       setError('failed')
     } finally {
-      setPending(false)
+      if (requestRef.current === controller) requestRef.current = null
+      if (!controller.signal.aborted) setPending(false)
     }
   }
 
@@ -97,6 +115,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
           requestAnimationFrame(() => inputRef.current?.focus())
         }}
         aria-label="해설 질문 열기"
+        aria-controls="node-chat-dialog"
         aria-expanded="false"
         className="fixed bottom-20 right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-ink shadow-lg transition-colors hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent xl:bottom-auto xl:right-0 xl:top-1/2 xl:-translate-y-1/2 xl:rounded-l-xl xl:rounded-r-none xl:border-r-0 xl:px-3 xl:py-4"
       >
@@ -115,59 +134,68 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
         className="fixed inset-0 z-40 cursor-default bg-black/25 xl:hidden"
       />
       <section
+        id="node-chat-dialog"
         role="dialog"
         aria-label="이 해설에 대해 물어보기"
-        className="fixed inset-x-0 bottom-0 z-50 max-h-[82dvh] overflow-y-auto rounded-t-2xl border border-line bg-raised p-4 shadow-2xl xl:inset-x-auto xl:bottom-20 xl:right-4 xl:top-20 xl:w-[360px] xl:max-h-none xl:rounded-2xl"
+        className="fixed inset-x-0 bottom-0 z-50 flex max-h-[82dvh] flex-col overflow-hidden rounded-t-2xl border border-line bg-raised p-4 shadow-2xl xl:inset-x-auto xl:bottom-20 xl:right-4 xl:top-20 xl:w-[360px] xl:max-h-none xl:rounded-2xl"
       >
-        <div className="sticky top-0 z-10 flex items-baseline justify-between bg-raised pb-2">
+        <div className="z-10 flex shrink-0 items-baseline justify-between bg-raised pb-2">
           <h3 className="text-[13px] font-medium text-muted">이 해설에 대해 물어보기</h3>
           <button
             type="button"
             onClick={close}
-            aria-expanded="true"
             className="inline-flex min-h-11 items-center px-2 text-[12px] text-faint hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             접기
           </button>
         </div>
 
-        {turns.length > 0 && (
-          <ol className="mt-3 flex list-none flex-col gap-2 p-0">
-            {turns.map((t, i) => (
-              <li
-                key={i}
-                aria-label={t.role === 'user' ? '내 질문' : '답변'}
-                className={
-                  t.role === 'user'
-                    ? 'ml-8 rounded-lg bg-surface px-3 py-2 text-[14px] leading-[1.65]'
-                    : 'mr-4 rounded-lg border border-line px-3 py-2 text-[14px] leading-[1.7] text-muted'
-                }
-              >
-                {t.text}
-              </li>
-            ))}
-          </ol>
-        )}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          {turns.length > 0 && (
+            <ol
+              role="log"
+              aria-live="polite"
+              aria-relevant="additions"
+              className="mt-3 flex list-none flex-col gap-2 p-0"
+            >
+              {turns.map((t, i) => (
+                <li
+                  key={i}
+                  aria-label={t.role === 'user' ? '내 질문' : '답변'}
+                  className={
+                    t.role === 'user'
+                      ? 'ml-8 rounded-lg bg-surface px-3 py-2 text-[14px] leading-[1.65]'
+                      : 'mr-4 rounded-lg border border-line px-3 py-2 text-[14px] leading-[1.7] text-muted'
+                  }
+                >
+                  {t.text}
+                </li>
+              ))}
+            </ol>
+          )}
 
-        {pending && (
-          <p role="status" className="mt-2 text-[13px] text-faint">
-            답을 쓰는 중…
-          </p>
-        )}
+          {pending && (
+            <p role="status" className="mt-2 text-[13px] text-faint">
+              답을 쓰는 중…
+            </p>
+          )}
 
-        {error === 'quota' && (
-          <p role="alert" className="mt-2 text-[13px] text-muted">
-            오늘 물어볼 몫을 다 쓰셨습니다. 자정에 다시 채워집니다.
-          </p>
-        )}
-        {error === 'failed' && (
-          <p role="alert" className="mt-2 text-[13px] text-muted">
-            답을 만들지 못했습니다. 다시 시도해 주세요.
-          </p>
-        )}
+          {error === 'quota' && (
+            <p role="alert" className="mt-2 text-[13px] text-muted">
+              오늘 물어볼 몫을 다 쓰셨습니다. 자정에 다시 채워집니다.
+            </p>
+          )}
+          {error === 'failed' && (
+            <p role="alert" className="mt-2 text-[13px] text-muted">
+              답을 만들지 못했습니다. 다시 시도해 주세요.
+            </p>
+          )}
+
+          <div ref={conversationEndRef} aria-hidden />
+        </div>
 
         <form
-          className="mt-3"
+          className="mt-3 shrink-0"
           onSubmit={(e) => {
             e.preventDefault()
             if (canSend) void send()
@@ -219,7 +247,7 @@ export function NodeChat({ nodeId }: { nodeId: string }) {
           </div>
         </form>
 
-        <p id="node-chat-notice" className="mt-2 text-[12px] leading-[1.6] text-faint">
+        <p id="node-chat-notice" className="mt-2 shrink-0 text-[12px] leading-[1.6] text-faint">
           적은 내용은 AI 학습에 쓰일 수 있습니다. 이름이나 연락처는 넣지 말아 주세요. 대화는
           저장되지 않습니다 — 화면을 떠나면 사라집니다.
           {remaining !== null && remaining <= SHOW_REMAINING_AT && (
