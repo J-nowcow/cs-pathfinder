@@ -103,7 +103,7 @@ export function ResumeQuestionMaker() {
   }
 
   return (
-    <section aria-labelledby="resume-question-title">
+    <section id="resume-questions" aria-labelledby="resume-question-title" className="scroll-mt-24">
       <h2 id="resume-question-title" className="text-lg font-semibold">
         내 경험에서 질문 만들기
       </h2>

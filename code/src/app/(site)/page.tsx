@@ -100,15 +100,28 @@ export default async function HomePage() {
       <header className="relative mb-10 overflow-hidden sm:mb-12">
         <HeroBackdrop />
         <h1 className="relative text-[30px] font-extrabold leading-[1.32] tracking-[-0.025em] sm:text-[34px]">
-          꼬리에 꼬리를 무는
+          CS 면접 공부,
           <br />
-          CS 공부
+          오늘 질문부터
         </h1>
         <p className="relative mt-4 max-w-lg text-[15px] leading-[1.72] text-muted">
-          하루에 질문 하나. 어디로 파고들지는 직접 고르면 됩니다.
-          <br />
-          파고든 만큼 지도가 그려집니다.
+          먼저 답을 떠올려 보고, 막힌 개념은 용어와 꼬리질문으로 이어서 공부하세요.
+          읽은 길은 내 질문 지도에 남습니다.
         </p>
+        <nav aria-label="학습 시작 방법" className="relative mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[13px]">
+          <Link
+            href="/glossary"
+            className="-my-2 inline-flex min-h-11 items-center rounded-sm font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            키워드로 질문 찾기 →
+          </Link>
+          <Link
+            href="/me#resume-questions"
+            className="-my-2 inline-flex min-h-11 items-center rounded-sm font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            레쥬메에서 질문 만들기 →
+          </Link>
+        </nav>
       </header>
 
       {/*
