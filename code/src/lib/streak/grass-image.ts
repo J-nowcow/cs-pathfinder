@@ -166,5 +166,5 @@ export function drawGrassImage(
 
   ctx.fillStyle = GRASS_IMAGE_PALETTE.muted
   ctx.font = `400 12px ${FAMILY}`
-  ctx.fillText(`모두 ${stats.total}번 팠다 · ${SITE_HOST}`, left, footY)
+  ctx.fillText(`모두 ${stats.total}번 열어 봄 · ${SITE_HOST}`, left, footY)
 }

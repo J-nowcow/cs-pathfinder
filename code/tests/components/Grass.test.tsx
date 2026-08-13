@@ -25,7 +25,7 @@ describe('잔디 칸 누르기', () => {
     const cell = container.querySelector('button')!
     await user.click(cell)
     expect(queryByText(/2026년 8월 9일/)).toBeTruthy()
-    expect(queryByText(/2편 학습했습니다/)).toBeTruthy()
+    expect(queryByText(/질문 2개를 열어 봤습니다/)).toBeTruthy()
 
     await user.click(cell)
     expect(queryByText(/2026년 8월 9일/)).toBeNull()

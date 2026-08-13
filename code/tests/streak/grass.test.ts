@@ -56,11 +56,11 @@ describe('낭독기가 읽을 문장', () => {
     s = recordRead(s, '2026-08-07', 'c')
     const text = grassSummary(grassWeeks(s, TODAY, 4))
     expect(text).toContain('2일')
-    expect(text).toContain('3편')
+    expect(text).toContain('3개')
     expect(text).toContain('2026-08-07')
   })
 
   it('아무것도 없으면 없다고 말한다', () => {
-    expect(grassSummary(grassWeeks(emptyStreak(), TODAY, 4))).toBe('아직 판 날이 없다.')
+    expect(grassSummary(grassWeeks(emptyStreak(), TODAY, 4))).toBe('아직 열어 본 질문이 없다.')
   })
 })

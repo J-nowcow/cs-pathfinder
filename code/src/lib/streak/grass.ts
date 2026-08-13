@@ -69,8 +69,8 @@ export function grassWeeks(
 export function grassSummary(weeks: Array<Array<Cell | null>>): string {
   const cells = weeks.flat().filter((c): c is Cell => c !== null)
   const active = cells.filter((c) => c.count > 0)
-  if (active.length === 0) return '아직 판 날이 없다.'
+  if (active.length === 0) return '아직 열어 본 질문이 없다.'
   const total = active.reduce((n, c) => n + c.count, 0)
   const best = active.reduce((a, b) => (b.count > a.count ? b : a))
-  return `최근 ${cells.length}일 가운데 ${active.length}일 팠고 모두 ${total}편이다. 가장 많이 판 날은 ${best.day}로 ${best.count}편이다.`
+  return `최근 ${cells.length}일 가운데 ${active.length}일에 질문을 열었고 모두 ${total}개를 봤다. 가장 많이 본 날은 ${best.day}로 ${best.count}개다.`
 }

@@ -71,7 +71,7 @@ export function Grass({
                       outline: picked?.day === cell.day ? '2px solid var(--color-accent)' : 'none',
                       outlineOffset: '1px',
                     }}
-                    title={`${cell.day} · ${cell.count}편`}
+                    title={`${cell.day} · 질문 ${cell.count}개`}
                   />
                 ),
               )}
@@ -82,7 +82,9 @@ export function Grass({
       {picked && (
         <p className="mt-2 text-sm">
           <span className="font-medium">{readableDay(picked.day)}</span> —{' '}
-          {picked.count === 0 ? '이날 학습한 질문이 없습니다.' : `${picked.count}편 학습했습니다.`}
+          {picked.count === 0
+            ? '이날 열어 본 질문이 없습니다.'
+            : `질문 ${picked.count}개를 열어 봤습니다.`}
         </p>
       )}
       <figcaption className="mt-2 text-sm text-muted">{summary}</figcaption>
