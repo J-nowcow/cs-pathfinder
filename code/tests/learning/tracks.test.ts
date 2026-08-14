@@ -89,6 +89,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(http2).not.toContain('연결 하나로 충분해진다')
   })
 
+  it('URL 입력 과정을 TCP 하나의 고정 경로로 그리지 않는다', () => {
+    const navigation = corpus.find((node) => node.question === '브라우저에 URL을 입력하면 어떤 과정을 거치는가?')?.body ?? ''
+
+    expect(navigation).toContain('TCP와 TLS 또는 QUIC으로 보안 연결')
+    expect(navigation).toContain('TLS 1.3 핸드셰이크가 QUIC 연결 설정에 통합')
+    expect(navigation).toContain('서비스 워커나 HTTP 캐시')
+    expect(navigation).not.toContain('브라우저 -> 서버: TCP 3-Way Handshake')
+    expect(navigation).not.toContain('OS로 부터')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 

@@ -2268,7 +2268,7 @@ export const GENERATED_NODES: ExampleNode[] = [
     identityScope: "network",
     category: "네트워크",
     question: "브라우저에 URL을 입력하면 어떤 과정을 거치는가?",
-    body: "DNS로 IP를 찾고 연결을 맺은 뒤 요청과 응답을 주고받는 과정이다. 연결은 HTTP 버전에 따라 TCP일 수도 QUIC일 수도 있다.\n\n:::flow\n브라우저 -> DNS: 도메인으로 IP 조회\nDNS -> 브라우저: IP 주소 반환\n브라우저 -> 서버: TCP 3-Way Handshake\n브라우저 -> 서버: HTTP 요청\n서버 -> 브라우저: HTTP 응답\n:::\n\n먼저 브라우저와 OS로 부터 캐시된 IP를 확인한다. 없으면 DNS 서버에 재귀적으로 요청하여 서버의 IP 주소를 알아낸다.\n\n그 후 연결을 맺는다. HTTP/1.1과 HTTP/2는 TCP로 세 번 악수하고, HTTP/3은 UDP 위의 QUIC을 쓴다. HTTPS의 경우 TLS Handshake 과정이 추가되어 데이터 암호화 세션을 구축한다.\n\n마지막으로 HTTP 요청 메시지를 생성해 전송하고, 서버는 이를 처리해 HTML 문서와 같은 리소스를 반환한다. 브라우저는 이를 렌더링하여 화면에 표시한다.",
+    body: "URL을 해석하고 캐시와 기존 연결을 확인한 뒤, 필요할 때 이름 조회와 보안 연결을 거쳐 HTTP 요청을 보낸다. 이미 가진 답과 연결이 있으면 모든 단계를 매번 반복하지 않는다.\n\n:::flow\n브라우저 -> 캐시: 이 요청에 쓸 응답이나 연결이 남아 있는가\n브라우저 -> DNS: 필요하면 도메인으로 IP를 찾는다\n브라우저 -> 서버: TCP와 TLS 또는 QUIC으로 보안 연결을 맺는다\n브라우저 -> 서버: HTTP 요청을 보낸다\n서버 -> 브라우저: HTTP 응답을 돌려준다\n:::\n\n브라우저와 운영체제의 DNS 캐시에 주소가 없으면 설정된 재귀 리졸버에 묻는다. 서비스 워커나 HTTP 캐시가 요청을 만족시키면 네트워크에 나가지 않고 응답할 수도 있다.\n\nHTTP/1.1과 HTTP/2의 HTTPS 연결은 보통 TCP를 맺은 뒤 TLS로 서버와 키를 확인한다. HTTP/3은 UDP 위의 QUIC을 쓰며 TLS 1.3 핸드셰이크가 QUIC 연결 설정에 통합돼 있다.\n\nUDP가 막히면 클라이언트는 TCP 기반 HTTP 버전으로 돌아갈 수 있다.\n\n응답을 받으면 브라우저는 상태 코드와 헤더를 처리한다. HTML을 파싱하고 필요한 CSS·JavaScript·이미지를 추가로 요청한 뒤 레이아웃과 그리기를 거쳐 화면을 만든다.\n\n리다이렉트나 인증서 오류가 있으면 이 흐름의 중간에서 다음 주소로 가거나 멈춘다.",
     suggestions: [
       "DNS 캐싱은 어디서 단계별로 일어나는가?",
       "TCP 3-Way Handshake의 목적은 무엇인가?",
