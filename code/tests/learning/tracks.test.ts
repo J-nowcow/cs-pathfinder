@@ -139,6 +139,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(breaker).not.toContain('30초를 기다렸다 실패')
   })
 
+  it('멱등 키 저장과 업무 변경 사이의 경쟁을 다룬다', () => {
+    const idempotency = corpus.find((node) => node.question === '재시도가 있는 시스템에서 멱등성이 필요한 이유는?')?.body ?? ''
+
+    expect(idempotency).toContain('호출자·키·요청 내용을 원자적으로 선점')
+    expect(idempotency).toContain('같은 요청 두 개가 동시에 그 틈을 지나갈 수 있다')
+    expect(idempotency).toContain('같은 키에 다른 요청 내용')
+    expect(idempotency).toContain('HTTP 메서드 이름만 보고 업무의 멱등성을 단정하지 않는다')
+    expect(idempotency).not.toContain('조회와 삭제는 원래 멱등이다')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
