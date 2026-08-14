@@ -34,4 +34,25 @@ describe('학습 기록의 답변 초안', () => {
     expect(screen.getByText('1개')).toBeTruthy()
     expect(screen.getByText(/답변 초안은 로그인해도/)).toBeTruthy()
   })
+
+  it('밀린 복습은 다섯 문제 뒤부터 접어 두되 모두 이어 갈 수 있다', async () => {
+    let practice = emptyAnswerPractice()
+    const all = Array.from({ length: 7 }, (_, index) => ({
+      id: `q${index}`,
+      number: index + 1,
+      question: `복습 질문 ${index + 1}`,
+      category: '운영체제',
+    }))
+    for (const candidate of all) {
+      practice = updateAnswerDraft(practice, candidate.id, '내 답', '2026-08-01')
+      practice = markAnswerReview(practice, candidate.id, 'needs-review', '2026-08-01T00:00:00Z')
+    }
+    saveAnswerPractice(practice)
+
+    render(<MePanel all={all} />)
+
+    await waitFor(() => expect(screen.getByText('오늘 복습')).toBeTruthy())
+    expect(screen.getByText('밀린 복습 2문제 더 보기')).toBeTruthy()
+    expect(screen.getByText('복습 질문 7')).toBeTruthy()
+  })
 })

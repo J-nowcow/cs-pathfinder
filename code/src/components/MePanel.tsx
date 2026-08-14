@@ -33,14 +33,36 @@ type View = {
   streak: number
   next: Candidate[]
   drafts: Array<Candidate & { updatedAt: string; reviewStatus?: AnswerReviewStatus }>
-  dueReviews: Array<Candidate & { nextReviewOn: string; reviewStatus: AnswerReviewStatus }>
+  dueReviews: DueReview[]
   trackReviewed: number
 }
+
+type DueReview = Candidate & { nextReviewOn: string; reviewStatus: AnswerReviewStatus }
 
 type TrackSummary = {
   title: string
   total: number
   questionIds: string[]
+}
+
+function DueReviewList({ reviews, today }: { reviews: DueReview[]; today: string }) {
+  return (
+    <ul className="flex list-none flex-col gap-2 p-0">
+      {reviews.map((review) => (
+        <li key={review.id}>
+          <Link
+            href={`/q/${review.number}`}
+            className="block rounded-lg border border-line bg-raised p-3 no-underline transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <span className="text-[12px] text-faint">
+              {review.category} · {review.nextReviewOn < today ? `${review.nextReviewOn}부터 밀림` : '오늘 복습'}
+            </span>
+            <span className="mt-1 block text-[15px]">{review.question}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 export function MePanel({ all, track }: { all: Candidate[]; track?: TrackSummary }) {
@@ -130,6 +152,10 @@ export function MePanel({ all, track }: { all: Candidate[]; track?: TrackSummary
     )
   }
 
+  const today = todayKst()
+  const firstDueReviews = view.dueReviews.slice(0, 5)
+  const remainingDueReviews = view.dueReviews.slice(5)
+
   return (
     <div className="flex flex-col gap-8">
       <section>
@@ -189,21 +215,17 @@ export function MePanel({ all, track }: { all: Candidate[]; track?: TrackSummary
             </span>
           </div>
           <p className="mb-3 text-sm text-muted">복습일이 지난 질문입니다. 오래 밀린 순서로 모았습니다.</p>
-          <ul className="flex list-none flex-col gap-2 p-0">
-            {view.dueReviews.map((review) => (
-              <li key={review.id}>
-                <Link
-                  href={`/q/${review.number}`}
-                  className="block rounded-lg border border-line bg-raised p-3 no-underline transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                >
-                  <span className="text-[12px] text-faint">
-                    {review.category} · {review.nextReviewOn < todayKst() ? `${review.nextReviewOn}부터 밀림` : '오늘 복습'}
-                  </span>
-                  <span className="mt-1 block text-[15px]">{review.question}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <DueReviewList reviews={firstDueReviews} today={today} />
+          {remainingDueReviews.length > 0 && (
+            <details className="mt-3 rounded-lg border border-line bg-surface px-3 py-2">
+              <summary className="cursor-pointer text-sm font-medium text-muted">
+                밀린 복습 {remainingDueReviews.length}문제 더 보기
+              </summary>
+              <div className="mt-3">
+                <DueReviewList reviews={remainingDueReviews} today={today} />
+              </div>
+            </details>
+          )}
         </section>
       )}
 
