@@ -220,6 +220,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(container).toContain('하나만 고르는 관계가 아니다')
   })
 
+  it('SQL 인젝션 방어를 값 바인딩과 동적 구조 허용 목록으로 나눈다', () => {
+    const injection = corpus.find((node) => node.question === 'SQL 인젝션은 무엇으로 막는가?')?.body ?? ''
+
+    expect(injection).toContain('prepared statement의 값 바인딩')
+    expect(injection).toContain('열·표 이름')
+    expect(injection).toContain('raw query에 문자열을 합치면')
+    expect(injection).toContain('저장 프로시저도 내부에서 동적 SQL')
+    expect(injection).toContain('권한을 줄였다고 인젝션 자체가 막히는 것은 아니다')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
