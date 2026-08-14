@@ -3,7 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { AnswerPractice } from '@/components/AnswerPractice'
-import { ANSWER_PRACTICE_STORAGE_KEY, deserializeAnswerPractice } from '@/lib/answer-practice/storage'
+import {
+  ANSWER_PRACTICE_STORAGE_KEY,
+  LEGACY_ANSWER_PRACTICE_STORAGE_KEY,
+  deserializeAnswerPractice,
+} from '@/lib/answer-practice/storage'
 
 beforeEach(() => window.localStorage.clear())
 afterEach(() => {
@@ -31,6 +35,31 @@ describe('면접 답변 연습', () => {
       expect(state.drafts.q1.text).toBe('핵심 답변')
     })
     expect(screen.getByText(/이 브라우저에 자동 저장/)).toBeTruthy()
+  })
+
+  it('이전 버전 초안과 자기 점검을 잃지 않고 이어 쓴다', async () => {
+    window.localStorage.setItem(LEGACY_ANSWER_PRACTICE_STORAGE_KEY, JSON.stringify({
+      version: 1,
+      drafts: {
+        q1: {
+          text: '예전 답',
+          updatedAt: '2026-08-13T00:00:00Z',
+          reviewStatus: 'needs-review',
+          reviewedAt: '2026-08-13T00:01:00Z',
+        },
+      },
+    }))
+    const user = userEvent.setup()
+    render(<AnswerPractice nodeId="q1" modelAnswer="모범답안" />)
+
+    await user.click(screen.getByText('내 답변 적어보기'))
+    expect((screen.getByRole('textbox') as HTMLTextAreaElement).value).toBe('예전 답')
+    await user.type(screen.getByRole('textbox'), ' 이어쓰기')
+    await waitFor(() => {
+      const state = deserializeAnswerPractice(window.localStorage.getItem(ANSWER_PRACTICE_STORAGE_KEY))
+      expect(state.drafts.q1.text).toBe('예전 답 이어쓰기')
+      expect(state.reviews.q1.status).toBe('needs-review')
+    })
   })
 
   it('초안을 직접 지울 수 있다', async () => {
@@ -110,8 +139,9 @@ describe('면접 답변 연습', () => {
     await user.click(screen.getByRole('button', { name: '다시 볼래요' }))
 
     const state = deserializeAnswerPractice(window.localStorage.getItem(ANSWER_PRACTICE_STORAGE_KEY))
-    expect(state.drafts.q1.reviewStatus).toBe('needs-review')
+    expect(state.reviews.q1.status).toBe('needs-review')
     expect(screen.getByRole('button', { name: '다시 볼래요' }).getAttribute('aria-pressed')).toBe('true')
+    expect(screen.getByRole('status').textContent).toMatch(/다음 복습일 \d{4}년 \d{1,2}월 \d{1,2}일/)
     expect(screen.queryByText(/점$/)).toBeNull()
   })
 })

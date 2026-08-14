@@ -49,7 +49,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
         .flatMap(([nodeId, draft]) => {
           const candidate = candidatesById.get(nodeId)
           return candidate
-            ? [{ ...candidate, updatedAt: draft.updatedAt, reviewStatus: draft.reviewStatus }]
+            ? [{ ...candidate, updatedAt: draft.updatedAt, reviewStatus: answerPractice.reviews[nodeId]?.status }]
             : []
         })
 

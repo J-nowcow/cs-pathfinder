@@ -12,6 +12,11 @@ import {
   type AnswerPracticeState,
 } from '@/lib/answer-practice/storage'
 
+function reviewDateLabel(day: string): string {
+  const [year, month, date] = day.split('-').map(Number)
+  return `${year}년 ${month}월 ${date}일`
+}
+
 /** 면접 질문에 먼저 답하고, 필요할 때만 검증된 해설을 여는 자리. */
 export function AnswerPractice({ nodeId, modelAnswer }: { nodeId: string; modelAnswer: string }) {
   const [state, setState] = useState<AnswerPracticeState>(emptyAnswerPractice)
@@ -48,7 +53,8 @@ export function AnswerPractice({ nodeId, modelAnswer }: { nodeId: string; modelA
   )
 
   const text = state.drafts[nodeId]?.text ?? ''
-  const reviewStatus = state.drafts[nodeId]?.reviewStatus
+  const reviewStatus = state.reviews[nodeId]?.status
+  const nextReviewOn = state.reviews[nodeId]?.nextReviewOn
   const persist = (next: AnswerPracticeState, deferred = false) => {
     setState(next)
     if (saveTimer.current) clearTimeout(saveTimer.current)
@@ -178,6 +184,11 @@ export function AnswerPractice({ nodeId, modelAnswer }: { nodeId: string; modelA
           )}
         </div>
       </details>
+      {nextReviewOn && (
+        <p role="status" aria-live="polite" className="px-1 text-[12px] text-muted">
+          다음 복습일 {reviewDateLabel(nextReviewOn)}
+        </p>
+      )}
     </section>
   )
 }
