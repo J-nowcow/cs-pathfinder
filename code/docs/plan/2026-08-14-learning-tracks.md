@@ -52,6 +52,8 @@
 - 검수 근거: [Google SRE Book의 Addressing Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/)
 - 검수 완료: 캐시 무효화에 저장소 간 실패, 이전 값 재삽입 경쟁, TTL·jitter·동시 요청 병합과 캐시 장애 시험을 반영
 - 검수 근거: [AWS Builders' Library의 Caching challenges and strategies](https://aws.amazon.com/builders-library/caching-challenges-and-strategies/)
+- 검수 완료: 인덱스 선택을 연산·열 순서·선택도와 실제 실행 계획으로 판단하고 쓰기·공간·HOT 비용을 함께 반영
+- 검수 근거: [PostgreSQL Indexes](https://www.postgresql.org/docs/current/indexes.html), [PostgreSQL Examining Index Usage](https://www.postgresql.org/docs/current/indexes-examine.html)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

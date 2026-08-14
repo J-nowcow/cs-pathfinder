@@ -190,6 +190,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(cache).toContain('동시 재조회는 하나로 합친다')
   })
 
+  it('인덱스 효용을 실제 질의와 쓰기 비용으로 판단한다', () => {
+    const index = corpus.find((node) => node.question === '인덱스 생성 시 읽기 성능과 쓰기 성능의 트레이드오프는 무엇인가?')?.body ?? ''
+
+    expect(index).toContain('선택도')
+    expect(index).toContain('복합 B-tree는 앞쪽 열의 조건')
+    expect(index).toContain('heap-only tuple 최적화')
+    expect(index).toContain('모든 삽입마다 일어나는 과정은 아니다')
+    expect(index).toContain('`EXPLAIN ANALYZE`')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
