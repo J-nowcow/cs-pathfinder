@@ -68,6 +68,8 @@
 - 검수 근거: [Linux man-pages의 pthreads(7)](https://man7.org/linux/man-pages/man7/pthreads.7.html), [Linux man-pages의 clone(2)](https://man7.org/linux/man-pages/man2/clone.2.html)
 - 검수 완료: 가상 메모리의 보호·공유·demand paging을 분리하고 page fault를 디스크 I/O로 축약하지 않으며 TLB 태그와 자원 한계를 반영
 - 검수 근거: [Linux Kernel Memory Management Concepts](https://docs.kernel.org/admin-guide/mm/concepts.html), [Linux Kernel Page Tables](https://docs.kernel.org/mm/page_tables.html)
+- 검수 완료: 컨텍스트 스위칭의 직접 커널 비용과 working set 비용을 분리하고 TLB 태그·자발/비자발 전환·run queue 측정을 반영
+- 검수 근거: [Linux man-pages의 getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html), [Linux man-pages의 perf-sched(1)](https://man7.org/linux/man-pages/man1/perf-sched.1.html)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

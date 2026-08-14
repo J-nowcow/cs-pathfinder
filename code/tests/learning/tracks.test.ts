@@ -270,6 +270,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(virtualMemory).toContain('page fault가 모두 디스크 I/O는 아니다')
   })
 
+  it('컨텍스트 스위칭의 직접 비용과 working set 비용을 구분한다', () => {
+    const switchCost = corpus.find((node) => node.question === '컨텍스트 스위칭은 왜 비용이 발생하는가?')?.body ?? ''
+
+    expect(switchCost).toContain('직접 드는 커널 작업')
+    expect(switchCost).toContain('CPU가 아무 일도 안 하는 것은 아니다')
+    expect(switchCost).toContain('TLB를 통째로 비운다고 단정하지 않는다')
+    expect(switchCost).toContain('voluntary switch')
+    expect(switchCost).toContain('run queue 대기')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
