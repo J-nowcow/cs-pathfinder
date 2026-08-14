@@ -250,6 +250,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(normalization).toContain('조인이 있다는 이유만으로 느리다고 단정하지 않는다')
   })
 
+  it('프로세스와 스레드를 보호 경계와 실행 흐름으로 구분한다', () => {
+    const process = corpus.find((node) => node.question === '프로세스와 스레드의 핵심 차이는 무엇인가?')?.body ?? ''
+
+    expect(process).toContain('프로세스는 자원과 보호의 경계')
+    expect(process).toContain('스레드는 그 안에서 스케줄되는 실행 흐름')
+    expect(process).toContain('스레드 ID, 레지스터와 스케줄링 상태')
+    expect(process).toContain('프로세스 경계도 완전한 독립을 뜻하지 않는다')
+    expect(process).toContain('항상 무겁고 스레드 전환은 항상 싸다고 고정하지 않는다')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 

@@ -64,6 +64,8 @@
 - 검수 근거: [RFC 9110 HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods), [RFC 5789 PATCH Method](https://www.rfc-editor.org/rfc/rfc5789.html)
 - 검수 완료: 정규화를 중복 제거가 아닌 사실의 의존 관계와 변경 단위로 설명하고 제약 조건·비정규화 운영 계약을 분리
 - 검수 근거: [Microsoft의 Database normalization description](https://learn.microsoft.com/office/troubleshoot/access/database-normalization-description), [PostgreSQL Constraints](https://www.postgresql.org/docs/current/ddl-constraints.html)
+- 검수 완료: 프로세스와 스레드를 보호 경계와 실행 흐름으로 구분하고 스레드별 상태·공유 자원·실패 전파·전환 비용의 예외를 반영
+- 검수 근거: [Linux man-pages의 pthreads(7)](https://man7.org/linux/man-pages/man7/pthreads.7.html), [Linux man-pages의 clone(2)](https://man7.org/linux/man-pages/man2/clone.2.html)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 
