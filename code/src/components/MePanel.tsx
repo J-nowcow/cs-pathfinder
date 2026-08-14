@@ -33,9 +33,17 @@ type View = {
   streak: number
   next: Candidate[]
   drafts: Array<Candidate & { updatedAt: string; reviewStatus?: AnswerReviewStatus }>
+  dueReviews: Array<Candidate & { nextReviewOn: string; reviewStatus: AnswerReviewStatus }>
+  trackReviewed: number
 }
 
-export function MePanel({ all }: { all: Candidate[] }) {
+type TrackSummary = {
+  title: string
+  total: number
+  questionIds: string[]
+}
+
+export function MePanel({ all, track }: { all: Candidate[]; track?: TrackSummary }) {
   const [view, setView] = useState<View | null>(null)
 
   useEffect(() => {
@@ -52,6 +60,17 @@ export function MePanel({ all }: { all: Candidate[] }) {
             ? [{ ...candidate, updatedAt: draft.updatedAt, reviewStatus: answerPractice.reviews[nodeId]?.status }]
             : []
         })
+      const dueReviews = Object.entries(answerPractice.reviews)
+        .flatMap(([nodeId, review]) => {
+          const candidate = candidatesById.get(nodeId)
+          return candidate && review.nextReviewOn <= today
+            ? [{ ...candidate, nextReviewOn: review.nextReviewOn, reviewStatus: review.status }]
+            : []
+        })
+        .sort((a, b) =>
+          a.nextReviewOn.localeCompare(b.nextReviewOn)
+          || Number(b.reviewStatus === 'needs-review') - Number(a.reviewStatus === 'needs-review'),
+        )
 
       /* 무엇을 팠는지는 여정이 안다. 잔디는 언제 팠는지만 안다 */
       let readIds = new Set<string>()
@@ -79,6 +98,8 @@ export function MePanel({ all }: { all: Candidate[] }) {
         streak: streakLength(streak, today),
         next: suggestNext(all, readIds, readCategories, 5),
         drafts,
+        dueReviews,
+        trackReviewed: track?.questionIds.filter((id) => answerPractice.reviews[id]).length ?? 0,
       })
     }
 
@@ -90,7 +111,7 @@ export function MePanel({ all }: { all: Candidate[] }) {
       window.removeEventListener(JOURNEY_SYNCED_EVENT, compute)
       window.removeEventListener(STREAK_SYNCED_EVENT, compute)
     }
-  }, [all])
+  }, [all, track])
 
   if (!view) {
     /* 첫 렌더. 자리를 잡아 둬야 값이 들어올 때 화면이 안 튄다 */
@@ -138,6 +159,53 @@ export function MePanel({ all }: { all: Candidate[] }) {
           stats={{ total: view.total, distinct: view.distinct, streak: view.streak }}
         />
       </section>
+
+      {track && (
+        <section aria-labelledby="track-progress-heading">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-[12px] font-medium text-faint">목표 트랙</p>
+              <h2 id="track-progress-heading" className="mt-1 text-lg font-semibold">{track.title}</h2>
+            </div>
+            <span className="shrink-0 text-sm font-medium tabular-nums text-muted">
+              {view.trackReviewed}/{track.total}문제 자기 점검
+            </span>
+          </div>
+          <progress
+            className="h-2 w-full overflow-hidden rounded-full accent-accent"
+            max={track.total}
+            value={view.trackReviewed}
+            aria-label={`${track.title} ${track.total}문제 중 ${view.trackReviewed}문제 자기 점검`}
+          />
+        </section>
+      )}
+
+      {view.dueReviews.length > 0 && (
+        <section aria-labelledby="due-review-heading">
+          <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+            <h2 id="due-review-heading" className="text-lg font-semibold">오늘 복습</h2>
+            <span className="rounded-full bg-accent-soft px-2.5 py-1 text-[12px] font-medium text-accent">
+              {view.dueReviews.length}문제
+            </span>
+          </div>
+          <p className="mb-3 text-sm text-muted">복습일이 지난 질문입니다. 오래 밀린 순서로 모았습니다.</p>
+          <ul className="flex list-none flex-col gap-2 p-0">
+            {view.dueReviews.map((review) => (
+              <li key={review.id}>
+                <Link
+                  href={`/q/${review.number}`}
+                  className="block rounded-lg border border-line bg-raised p-3 no-underline transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  <span className="text-[12px] text-faint">
+                    {review.category} · {review.nextReviewOn < todayKst() ? `${review.nextReviewOn}부터 밀림` : '오늘 복습'}
+                  </span>
+                  <span className="mt-1 block text-[15px]">{review.question}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {view.drafts.length > 0 && (
         <section>

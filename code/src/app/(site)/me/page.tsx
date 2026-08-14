@@ -8,6 +8,7 @@ import { AuthCard } from '@/components/AuthCard'
 import { ResumeQuestionMaker } from '@/components/ResumeQuestionMaker'
 import { LearningSettings } from '@/components/LearningSettings'
 import type { Candidate } from '@/lib/streak/suggest'
+import { BACKEND_INTERVIEW_30 } from '../../../../data/learning-tracks'
 
 /**
  * 내 기록.
@@ -52,6 +53,12 @@ export default async function MePage() {
       order by n.number asc`,
     [kstToday()],
   )
+  const trackQuestions = new Set<string>(BACKEND_INTERVIEW_30.questionKeys)
+  const track = {
+    title: BACKEND_INTERVIEW_30.title,
+    total: BACKEND_INTERVIEW_30.questionKeys.length,
+    questionIds: rows.filter((row) => trackQuestions.has(row.question)).map((row) => row.id),
+  }
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
@@ -75,7 +82,7 @@ export default async function MePage() {
       </section>
 
       <div className="mt-10 border-t border-line pt-10">
-        <MePanel all={rows} />
+        <MePanel all={rows} track={track} />
       </div>
 
       <p className="mt-10 text-sm text-muted">
