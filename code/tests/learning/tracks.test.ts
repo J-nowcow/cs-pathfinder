@@ -180,6 +180,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(overload).toContain('부하 시험')
   })
 
+  it('캐시 무효화의 실패와 경쟁 조건을 함께 다룬다', () => {
+    const cache = corpus.find((node) => node.question === '캐시를 지우는 일이 어려운 이유는?')?.body ?? ''
+
+    expect(cache).toContain('서로 다른 실패 단위')
+    expect(cache).toContain('뒤늦게 이전 값을 캐시에 채우면')
+    expect(cache).toContain('버전 비교나 조건부 쓰기')
+    expect(cache).toContain('TTL은 그 시간을 넘기지 않는 안전망')
+    expect(cache).toContain('동시 재조회는 하나로 합친다')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
