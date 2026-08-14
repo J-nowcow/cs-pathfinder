@@ -21,4 +21,9 @@ describe('취준생의 첫 화면', () => {
     expect(home).toContain('href="/me#resume-questions"')
     expect(resume).toContain('id="resume-questions"')
   })
+
+  it('읽기 전에 오늘 답할 세 문제를 먼저 제시한다', () => {
+    expect(home).toContain('<DailyLearningCard')
+    expect(home.indexOf('<DailyLearningCard')).toBeLessThan(home.indexOf('<TodayCard'))
+  })
 })

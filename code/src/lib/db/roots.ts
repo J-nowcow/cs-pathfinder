@@ -17,6 +17,8 @@ export type RootSummary = {
 /** 개념 역탐색에서만 쓰는 전체 해설. 일반 목록 응답에는 싣지 않는다. */
 export type SearchableRootSummary = RootSummary & { searchText: string }
 
+export type RootQuestionSummary = Pick<RootSummary, 'id' | 'question' | 'category' | 'level'>
+
 type Row = {
   id: string
   normalized_question: string
@@ -103,6 +105,42 @@ export async function listSearchableRoots(): Promise<SearchableRootSummary[]> {
     searchText: r.search_text,
     tags: r.tags ?? [],
     level: r.level,
+  }))
+}
+
+/**
+ * 학습 트랙이 참조하는 질문만 가볍게 읽는다.
+ *
+ * 홈에 트랙 30개를 보여 주려고 전체 본문을 다시 싣지 않는다. 입력
+ * 순서는 resolver가 트랙 정의에 맞게 다시 정렬하므로 여기서 보장하지 않는다.
+ */
+export async function listRootsByQuestions(
+  questions: readonly string[],
+): Promise<RootQuestionSummary[]> {
+  const normalized = [...new Set(questions.map((question) => question.trim()).filter(Boolean))]
+  if (normalized.length === 0) return []
+
+  const db = await getDb()
+  const rows = await db.query<Pick<Row, 'id' | 'normalized_question' | 'primary_category' | 'level'>>(
+    `select id, normalized_question, primary_category, level
+       from qnode
+      where origin = 'batch' and status = 'ready'
+        and ${NOT_FOLDED_SQL('qnode')}
+        and normalized_question = any($2)
+        and not exists (
+          select 1 from tree t
+           where t.root_node_id = qnode.id
+             and t.publish_date > $1::date
+        )
+      order by normalized_question asc`,
+    [kstToday(), normalized],
+  )
+
+  return rows.map((row) => ({
+    id: row.id,
+    question: row.normalized_question,
+    category: row.primary_category,
+    level: row.level,
   }))
 }
 

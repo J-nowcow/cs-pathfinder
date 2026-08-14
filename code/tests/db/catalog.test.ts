@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { getDb, truncateAll } from '@/lib/db/client'
 import { insertNode } from '@/lib/expand/nodes'
 import { loadCatalog, renderCatalog } from '@/lib/db/catalog'
-import { listRoots, countRoots } from '@/lib/db/roots'
+import { listRoots, countRoots, listRootsByQuestions } from '@/lib/db/roots'
 
 /**
  * 레포에 올릴 질문 목록.
@@ -191,6 +191,25 @@ describe('listRoots 상한', () => {
     await node('지난 질문은?')
 
     expect(await countRoots(TODAY)).toBe(1)
+  })
+})
+
+describe('학습 트랙 질문 조회', () => {
+  beforeEach(truncateAll)
+
+  it('요청한 질문의 가벼운 메타데이터만 돌려준다', async () => {
+    await node('트랙 질문은?')
+    await node('제외할 질문은?')
+
+    const roots = await listRootsByQuestions(['트랙 질문은?', '트랙 질문은?'])
+
+    expect(roots).toHaveLength(1)
+    expect(roots[0].question).toBe('트랙 질문은?')
+    expect(roots[0]).not.toHaveProperty('excerpt')
+  })
+
+  it('빈 요청은 DB 조회 없이 빈 목록으로 끝낸다', async () => {
+    expect(await listRootsByQuestions([])).toEqual([])
   })
 })
 

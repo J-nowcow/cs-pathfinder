@@ -1,7 +1,7 @@
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { webSiteJsonLd, serializeJsonLd } from '@/lib/seo/jsonld'
 import { siteUrl } from '@/lib/site'
-import { listRoots, countRoots } from '@/lib/db/roots'
+import { listRoots, countRoots, listRootsByQuestions } from '@/lib/db/roots'
 import { listTrees, BOARD_PAGE_SIZE } from '@/lib/db/trees'
 import { getTodayTree } from '@/lib/daily/today'
 import { RootCard } from '@/components/RootCard'
@@ -10,6 +10,9 @@ import { TodayCard, type TodayFeature } from '@/components/TodayCard'
 import Link from 'next/link'
 import { Board } from '@/components/Board'
 import { ResumeLine } from '@/components/ResumeLine'
+import { DailyLearningCard } from '@/components/DailyLearningCard'
+import { BACKEND_INTERVIEW_30 } from '../../../data/learning-tracks'
+import { resolveTrackQuestions } from '@/lib/learning/tracks'
 
 // PGlite가 인메모리라 매 요청 실제 DB를 읽는다. 정적 생성 대상이 아니다.
 export const dynamic = 'force-dynamic'
@@ -75,11 +78,13 @@ const FIRST_PAINT = 12
 export default async function HomePage() {
   await ensureSeeded()
 
-  const [{ feature, roots }, board, total] = await Promise.all([
+  const [{ feature, roots }, board, total, trackRoots] = await Promise.all([
     loadFeature(),
     listTrees({ sort: 'popular', limit: BOARD_PAGE_SIZE }),
     countRoots(),
+    listRootsByQuestions(BACKEND_INTERVIEW_30.questionKeys),
   ])
+  const trackQuestions = resolveTrackQuestions(BACKEND_INTERVIEW_30, trackRoots)
 
   // 주인공 카드가 이미 맡은 질문은 목록에서 뺀다. 같은 화면에 두 번 나오면
   // 목록이 아니라 중복으로 읽힌다
@@ -131,8 +136,12 @@ export default async function HomePage() {
       */}
       <ResumeLine />
 
+      <DailyLearningCard track={BACKEND_INTERVIEW_30} questions={trackQuestions} />
+
       {feature ? (
-        <TodayCard feature={feature} />
+        <div className="mt-12">
+          <TodayCard feature={feature} />
+        </div>
       ) : (
         <div className="rounded-lg border border-dashed border-line px-6 py-14 text-center">
           <p className="text-[15px] text-muted">아직 올라온 질문이 없습니다.</p>
