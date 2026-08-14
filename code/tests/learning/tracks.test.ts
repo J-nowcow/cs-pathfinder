@@ -54,6 +54,15 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(isolation).not.toContain('금융권이나 결제 로직')
   })
 
+  it('낙관적 방식도 대기 없이 공짜로 동작한다고 설명하지 않는다', () => {
+    const locking = corpus.find((node) => node.question === '낙관적 락과 비관적 락은 무엇으로 고르는가?')?.body ?? ''
+
+    expect(locking).toContain('낙관적 방식도 최종 UPDATE에서 데이터베이스 잠금을 쓰고 기다릴 수 있다')
+    expect(locking).toContain('원자적 조건부 갱신, 고유 제약, 멱등 키')
+    expect(locking).not.toContain('대기 시간 | 없음')
+    expect(locking).not.toContain('데이터 정확성이 절대적인 곳에 비관적 락')
+  })
+
   it('DNS 조회 계층과 전송 방식을 구분한다', () => {
     const dns = corpus.find((node) => node.question === 'DNS 조회는 어떤 순서로 도는가?')?.body ?? ''
 
