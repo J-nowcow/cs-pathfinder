@@ -260,6 +260,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(process).toContain('항상 무겁고 스레드 전환은 항상 싸다고 고정하지 않는다')
   })
 
+  it('가상 메모리의 변환과 page fault를 디스크 하나로 축약하지 않는다', () => {
+    const virtualMemory = corpus.find((node) => node.question === '가상 메모리는 무엇을 해결하는가?')?.body ?? ''
+
+    expect(virtualMemory).toContain('주소 범위마다 읽기·쓰기·실행 권한')
+    expect(virtualMemory).toContain('파일·swap·새 페이지·COW')
+    expect(virtualMemory).toContain('물리 메모리가 이미 확보되거나 끝까지 성공한다는 뜻은 아니다')
+    expect(virtualMemory).toContain('모든 TLB 항목을 매번 비우지 않을 수 있다')
+    expect(virtualMemory).toContain('page fault가 모두 디스크 I/O는 아니다')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
