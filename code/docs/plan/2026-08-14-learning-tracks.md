@@ -46,6 +46,8 @@
 - 검수 근거: [AWS Builders' Library의 Making retries safe with idempotent APIs](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/)
 - 검수 완료: 호출 제한을 상위의 절대 마감 시각과 남은 시간으로 전파하고 연결·요청 제한과 취소를 분리
 - 검수 근거: [Google SRE Book의 Addressing Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/)
+- 검수 완료: 분산 추적에 W3C `traceparent`·`tracestate`, 비동기 문맥 전파, head·tail sampling의 비용과 개인정보 경계를 반영
+- 검수 근거: [W3C Trace Context](https://www.w3.org/TR/trace-context/), [OpenTelemetry Probability Sampling](https://opentelemetry.io/docs/specs/otel/trace/tracestate-probability-sampling/)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 
