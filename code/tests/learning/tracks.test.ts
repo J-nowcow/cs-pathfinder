@@ -37,6 +37,18 @@ describe('백엔드 CS 면접 30 트랙', () => {
   it('문제당 예상 시간으로 전체 시간을 계산한다', () => {
     expect(estimatedTrackMinutes(BACKEND_INTERVIEW_30)).toBe(150)
   })
+
+  it('데이터베이스 선택을 낡은 제품 이분법으로 설명하지 않는다', () => {
+    const byQuestion = new Map(corpus.map((node) => [node.question, node.body]))
+    const databaseChoice = byQuestion.get('RDB와 NoSQL 중 무엇을 기준으로 선택하는가?')!
+    const isolation = byQuestion.get('트랜잭션 격리 수준을 결정하는 기준은 무엇인가?')!
+
+    expect(databaseChoice).toContain('관계형은 수직 확장만 하고 NoSQL은 수평 확장만 한다는 구분은 맞지 않는다')
+    expect(databaseChoice).toContain('MongoDB도 스키마 검증')
+    expect(isolation).toContain('PostgreSQL의 기본값은 Read Committed')
+    expect(isolation).toContain('InnoDB의 기본값은 Repeatable Read')
+    expect(isolation).not.toContain('금융권이나 결제 로직')
+  })
 })
 
 describe('학습 트랙 검증과 해석', () => {
