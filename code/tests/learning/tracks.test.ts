@@ -240,6 +240,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(method).toContain('강한 ETag와 `If-Match`')
   })
 
+  it('정규화를 중복 개수보다 사실의 의존 관계로 설명한다', () => {
+    const normalization = corpus.find((node) => node.question === '데이터베이스 정규화를 수행하는 이유는 무엇인가?')?.body ?? ''
+
+    expect(normalization).toContain('사실을 결정하는 키')
+    expect(normalization).toContain('고객과 주문을 나누고')
+    expect(normalization).toContain('표를 나눴다고 무결성이 저절로 생기지는 않는다')
+    expect(normalization).toContain('고유 제약·외래 키·NOT NULL')
+    expect(normalization).toContain('조인이 있다는 이유만으로 느리다고 단정하지 않는다')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
