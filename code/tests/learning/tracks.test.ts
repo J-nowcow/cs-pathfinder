@@ -129,6 +129,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(hashing).not.toContain('`1/n`만')
   })
 
+  it('서킷 브레이커의 차단 기준과 회복 탐색을 구분한다', () => {
+    const breaker = corpus.find((node) => node.question === '서킷 브레이커는 무엇을 막아주는가?')?.body ?? ''
+
+    expect(breaker).toContain('최소 표본을 채운 뒤 실패율이나 느린 호출 비율')
+    expect(breaker).toContain('반열림 호출 수도 제한한다')
+    expect(breaker).toContain('동시 호출 수 자체를 제한하는 일은 벌크헤드의 몫')
+    expect(breaker).toContain('열린 서킷의 거절은 재시도하지 않는다')
+    expect(breaker).not.toContain('30초를 기다렸다 실패')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 

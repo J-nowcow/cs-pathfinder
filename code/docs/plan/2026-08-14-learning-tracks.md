@@ -40,6 +40,8 @@
 - 검수 근거: [RabbitMQ Reliability Guide](https://www.rabbitmq.com/docs/reliability), [RabbitMQ Consumer Acknowledgements and Publisher Confirms](https://www.rabbitmq.com/docs/next/confirms)
 - 검수 완료: 일관된 해싱의 이동량을 새 전체 노드 수 기준으로 명확히 하고 최소 이동과 부하 균등성을 분리
 - 검수 근거: [Karger 등의 Consistent Hashing and Random Trees](https://people.csail.mit.edu/karger/Papers/web.pdf), [Jump Consistent Hash](https://arxiv.org/abs/1406.2294)
+- 검수 완료: 서킷 브레이커의 실패·지연 윈도와 최소 표본, 반열림 호출 제한, 재시도 적용 순서를 반영
+- 검수 근거: [Resilience4j CircuitBreaker](https://resilience4j.readme.io/docs/circuitbreaker), [Resilience4j Aspect Order](https://resilience4j.readme.io/docs/getting-started-3)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 
