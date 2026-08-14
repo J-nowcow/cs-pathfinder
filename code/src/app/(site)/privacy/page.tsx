@@ -94,6 +94,11 @@ export default function PrivacyPage() {
           브라우저의 사이트 데이터 삭제로 지울 수 있습니다.
         </p>
         <p>
+          <strong className="text-ink">오늘 고른 질문 3개와 순서</strong>도 새로고침할 때 바뀌지 않게
+          localStorage에만 남습니다. 서버나 계정에 보내지 않으며 다음 날 새 학습 목록을
+          만들 때 덮어씁니다.
+        </p>
+        <p>
           <strong className="text-ink">맞춤 질문에 적은 답변</strong>도 현재 브라우저에만
           남습니다. 맞춤 질문을 지우면 그 질문에 적은 답변도 함께 지워집니다.
         </p>
@@ -121,6 +126,7 @@ export default function PrivacyPage() {
             차원에서 묶여 있습니다.
           </li>
           <li>면접 답변 초안·복습 표시 — 현재 브라우저에 최근 100개. 직접 지우거나 사이트 데이터를 지울 때까지.</li>
+          <li>오늘의 3문제 — 현재 브라우저에 하루치. 다음 날 새 목록으로 덮어쓰거나 사이트 데이터를 지울 때까지.</li>
           <li>맞춤 질문 5개와 그 답변 — 현재 브라우저에 다음 맞춤 질문을 만들거나 직접 지울 때까지.</li>
         </ul>
       </Section>

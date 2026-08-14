@@ -20,4 +20,10 @@ describe('면접 답변 초안의 저장 고지', () => {
     expect(privacy).toContain('날짜별로 열어 본 질문 수')
     expect(privacy).not.toContain('몇 편을 파고들었는지')
   })
+
+  it('오늘의 세 문제 스냅샷도 로컬 저장이라고 알린다', () => {
+    expect(privacy).toContain('오늘 고른 질문 3개와 순서')
+    expect(privacy).toContain('다음 날 새 학습 목록')
+    expect(privacy).toContain('오늘의 3문제')
+  })
 })
