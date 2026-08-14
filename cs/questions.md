@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 339개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 340개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -273,6 +273,7 @@
 - [남의 서버에 일이 생긴 것을 어떻게 아는가?](https://cs-pathfinder.vercel.app/q/81f81144-b784-453c-99a2-b0ffd6ee95cf)
 - [서버마다 시계가 다르면 무엇이 깨지는가?](https://cs-pathfinder.vercel.app/q/c08c3c2d-6035-4b02-bec3-560c5e4ce85b)
 - [메시지 형식을 바꾸면 옛 소비자는 어떻게 되는가?](https://cs-pathfinder.vercel.app/q/37c38eb6-ab27-41f9-8827-70edbf2c741a)
+- [포트와 어댑터 구조에서 경계를 나누는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/b190ca7c-608a-428b-b5b6-0c948e3e6aa3) — 2026-08-15
 
 ## 프론트엔드
 
