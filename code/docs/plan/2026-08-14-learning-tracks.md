@@ -48,6 +48,8 @@
 - 검수 근거: [Google SRE Book의 Addressing Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/)
 - 검수 완료: 분산 추적에 W3C `traceparent`·`tracestate`, 비동기 문맥 전파, head·tail sampling의 비용과 개인정보 경계를 반영
 - 검수 근거: [W3C Trace Context](https://www.w3.org/TR/trace-context/), [OpenTelemetry Probability Sampling](https://opentelemetry.io/docs/specs/otel/trace/tracestate-probability-sampling/)
+- 검수 완료: 요청 급증 대응에서 호출자별 rate limit과 실제 자원 기반 진입 제어·부하 차단을 분리
+- 검수 근거: [Google SRE Book의 Addressing Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

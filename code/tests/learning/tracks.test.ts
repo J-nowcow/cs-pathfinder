@@ -169,6 +169,17 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(tracing).not.toContain('느린 요청과 실패한 요청은 반드시 남기도록')
   })
 
+  it('사용량 제한과 서버 과부하 보호를 구분한다', () => {
+    const overload = corpus.find((node) => node.question === '요청이 한꺼번에 몰릴 때 어떻게 막는가?')?.body ?? ''
+
+    expect(overload).toContain('rate limit을 둔다')
+    expect(overload).toContain('동시 처리 수와 대기열 길이를 제한')
+    expect(overload).toContain('초당 요청 수가 낮아도 자원은 바닥난다')
+    expect(overload).toContain('`429`가 맞다')
+    expect(overload).toContain('과부하는 `503`으로 구분')
+    expect(overload).toContain('부하 시험')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
