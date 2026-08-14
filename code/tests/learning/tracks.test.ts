@@ -280,6 +280,17 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(switchCost).toContain('run queue 대기')
   })
 
+  it('데드락의 예방과 탐지를 실행 환경별로 구분한다', () => {
+    const deadlock = corpus.find((node) => node.question === '데드락은 어떤 조건이 모두 모여야 생기는가?')?.body ?? ''
+
+    expect(deadlock).toContain('필요 조건')
+    expect(deadlock).toContain('같은 전역 순서')
+    expect(deadlock).toContain('livelock')
+    expect(deadlock).toContain('Java 언어는 데드락 탐지를 요구하지 않는다')
+    expect(deadlock).toContain('PostgreSQL은 잠금의 기다림 고리를 탐지')
+    expect(deadlock).toContain('오래 기다린다는 사실만으로 데드락은 아니다')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
