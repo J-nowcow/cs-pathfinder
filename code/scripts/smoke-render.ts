@@ -54,6 +54,7 @@ for (const r of rows) {
     else if (b.type === 'tree') texts.push(...b.nodes.map((n) => `${n.name} ${n.note}`))
     else if (b.type === 'memory') texts.push(...b.areas.map((a) => `${a.name} ${a.note}`))
     else if (b.type === 'timeline') texts.push(...b.rows.map((t) => `${t.actor} ${t.slots.join(' ')}`))
+    else if (b.type === 'note' || b.type === 'warn') texts.push(...b.paragraphs)
   }
 
   const joined = texts.join('\n')
