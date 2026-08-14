@@ -49,6 +49,14 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(isolation).toContain('InnoDB의 기본값은 Repeatable Read')
     expect(isolation).not.toContain('금융권이나 결제 로직')
   })
+
+  it('DNS 조회 계층과 전송 방식을 구분한다', () => {
+    const dns = corpus.find((node) => node.question === 'DNS 조회는 어떤 순서로 도는가?')?.body ?? ''
+
+    expect(dns).toContain('전송은 UDP 하나로 고정되지 않는다')
+    expect(dns).toContain('DoT, DoH, DoQ')
+    expect(dns).not.toContain('DNS는 짧은 질의마다 연결을 맺는 비용을 피하려고 UDP를 쓴다')
+  })
 })
 
 describe('학습 트랙 검증과 해석', () => {
