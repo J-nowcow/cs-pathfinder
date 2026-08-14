@@ -36,6 +36,8 @@
 - 검수 근거: [RFC 8446 TLS 1.3](https://www.rfc-editor.org/rfc/rfc8446), [RFC 9849 ECH](https://www.rfc-editor.org/rfc/rfc9849)
 - 검수 완료: TIME_WAIT의 2MSL 목적과 능동 종료·임시 포트 고갈 진단을 분리하고 설정 변경의 위험을 반영
 - 검수 근거: [RFC 9293 TCP](https://www.rfc-editor.org/rfc/rfc9293), [RFC 1337 TIME-WAIT 위험](https://www.rfc-editor.org/rfc/rfc1337)
+- 검수 완료: 메시지 큐의 전달 보장을 제품 속성으로 단정하지 않고 영속·복제 저장·publisher confirm·consumer ack·멱등성의 결합으로 교정
+- 검수 근거: [RabbitMQ Reliability Guide](https://www.rabbitmq.com/docs/reliability), [RabbitMQ Consumer Acknowledgements and Publisher Confirms](https://www.rabbitmq.com/docs/next/confirms)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

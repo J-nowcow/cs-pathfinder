@@ -108,6 +108,17 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(timeWait).not.toContain('트래픽이 많은 서버에서 TIME_WAIT 소켓이 쌓여 포트가 고갈')
   })
 
+  it('메시지 큐 자체가 유실 방지와 최소 1회 전달을 보장한다고 단정하지 않는다', () => {
+    const queue = corpus.find((node) => node.question === '메시지 큐를 두면 무엇을 얻고 무엇을 잃는가?')?.body ?? ''
+
+    expect(queue).toContain('publisher confirm')
+    expect(queue).toContain('업무 처리 완료 후 consumer ack')
+    expect(queue).toContain('confirm이 유실되면')
+    expect(queue).toContain('안전하게 재전송하면 중복이 생길 수 있다')
+    expect(queue).not.toContain('배포 중에도 요청이 유실되지 않는다')
+    expect(queue).not.toContain('대부분의 큐는 최소 한 번 전달을 보장')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
