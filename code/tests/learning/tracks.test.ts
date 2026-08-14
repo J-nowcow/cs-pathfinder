@@ -210,6 +210,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(pool).toContain('세션 상태를 초기화')
   })
 
+  it('컨테이너와 가상 머신의 격리 층과 권한 경계를 구분한다', () => {
+    const container = corpus.find((node) => node.question === '컨테이너는 가상 머신과 무엇이 다른가?')?.body ?? ''
+
+    expect(container).toContain('가상 하드웨어 위에 게스트 커널')
+    expect(container).toContain('호스트 커널이 격리한 프로세스')
+    expect(container).toContain('CPU 아키텍처와 호스트 커널')
+    expect(container).toContain('privileged 실행')
+    expect(container).toContain('하나만 고르는 관계가 아니다')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 

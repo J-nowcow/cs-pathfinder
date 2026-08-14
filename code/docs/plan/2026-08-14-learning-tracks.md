@@ -56,6 +56,8 @@
 - 검수 근거: [PostgreSQL Indexes](https://www.postgresql.org/docs/current/indexes.html), [PostgreSQL Examining Index Usage](https://www.postgresql.org/docs/current/indexes-examine.html)
 - 검수 완료: 커넥션 풀을 연결 재사용뿐 아니라 데이터베이스 진입 제어로 설명하고 전체 인스턴스 예산·대기 제한·반납 계약을 반영
 - 검수 근거: [PostgreSQL Connections and Authentication](https://www.postgresql.org/docs/current/runtime-config-connection.html), [HikariCP Configuration](https://github.com/brettwooldridge/HikariCP#gear-configuration-knobs-baby)
+- 검수 완료: 컨테이너와 가상 머신의 격리 층, 이미지의 호스트 의존성, privileged·capability 경계와 조합 운영을 반영
+- 검수 근거: [Docker Docs의 What is a container?](https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-a-container/), [Docker Docs의 What is an image?](https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-an-image/)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 
