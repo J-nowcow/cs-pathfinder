@@ -28,6 +28,8 @@
 - 검수 근거: [Gilbert·Lynch CAP 증명](https://www.comp.nus.edu.sg/~gilbert/pubs/BrewersConjecture-SigAct.pdf)
 - 검수 완료: HTTP/1.1 파이프라이닝의 응답 순서와 HTTP/2 스트림 멀티플렉싱·TCP 줄서기를 분리
 - 검수 근거: [RFC 9112 HTTP/1.1](https://www.rfc-editor.org/rfc/rfc9112), [RFC 9113 HTTP/2](https://www.rfc-editor.org/rfc/rfc9113)
+- 검수 완료: JWT 형식과 세션 관리 방식을 분리하고 즉시 무효화·claim 노출·검증 정책 비용을 반영
+- 검수 근거: [RFC 7519 JWT](https://www.rfc-editor.org/rfc/rfc7519), [RFC 8725 JWT BCP](https://www.rfc-editor.org/rfc/rfc8725), [RFC 7009 토큰 폐기](https://www.rfc-editor.org/rfc/rfc7009)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

@@ -89,6 +89,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(http2).not.toContain('연결 하나로 충분해진다')
   })
 
+  it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
+    const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
+
+    expect(jwt).toContain('JWT는 토큰 형식이고 세션은 로그인 상태를 관리하는 방식')
+    expect(jwt).toContain('검증 키·issuer·audience 정책 공유 필요')
+    expect(jwt).toContain('JWT 서명은 claim을 숨기지 않는다')
+    expect(jwt).not.toContain('서버끼리 공유할 것이 없다')
+    expect(jwt).not.toContain('판단 기준은 규모다')
+  })
+
   it('뮤텍스와 바이너리 세마포어를 수만으로 구분하지 않는다', () => {
     const synchronization = corpus.find((node) => node.question === '뮤텍스와 세마포어는 무엇으로 구분하는가?')?.body ?? ''
 
