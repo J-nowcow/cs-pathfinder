@@ -34,6 +34,8 @@
 - 검수 근거: [RFC 9000 QUIC](https://www.rfc-editor.org/rfc/rfc9000), [RFC 9114 HTTP/3](https://www.rfc-editor.org/rfc/rfc9114)
 - 검수 완료: HTTPS 해설을 TLS 1.3의 인증된 키 교환·AEAD와 암호화 DNS·ECH가 있는 현재 경로로 교정
 - 검수 근거: [RFC 8446 TLS 1.3](https://www.rfc-editor.org/rfc/rfc8446), [RFC 9849 ECH](https://www.rfc-editor.org/rfc/rfc9849)
+- 검수 완료: TIME_WAIT의 2MSL 목적과 능동 종료·임시 포트 고갈 진단을 분리하고 설정 변경의 위험을 반영
+- 검수 근거: [RFC 9293 TCP](https://www.rfc-editor.org/rfc/rfc9293), [RFC 1337 TIME-WAIT 위험](https://www.rfc-editor.org/rfc/rfc1337)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

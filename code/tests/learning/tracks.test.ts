@@ -99,6 +99,15 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(navigation).not.toContain('OS로 부터')
   })
 
+  it('TIME_WAIT 개수 자체를 서버 포트 고갈로 단정하지 않는다', () => {
+    const timeWait = corpus.find((node) => node.question === 'TCP 연결을 끊을 때 TIME_WAIT 상태가 필요한 이유는?')?.body ?? ''
+
+    expect(timeWait).toContain('TIME_WAIT이 많다는 사실만으로 장애는 아니다')
+    expect(timeWait).toContain('로컬 임시 포트나 연결 추적 자원')
+    expect(timeWait).toContain('반복되는 목적지 4-tuple')
+    expect(timeWait).not.toContain('트래픽이 많은 서버에서 TIME_WAIT 소켓이 쌓여 포트가 고갈')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
