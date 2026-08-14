@@ -63,6 +63,15 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(locking).not.toContain('데이터 정확성이 절대적인 곳에 비관적 락')
   })
 
+  it('CAP의 가용성을 오래된 값을 주는 성질로 축약하지 않는다', () => {
+    const cap = corpus.find((node) => node.question === '분산 시스템에서 CAP 중 무엇을 포기하게 되는가?')?.body ?? ''
+
+    expect(cap).toContain('장애가 나지 않은 노드가 받은 모든 요청에 유한한 시간 안에 응답')
+    expect(cap).toContain('선택은 데이터베이스 제품 전체보다 연산과 업무 규칙에 가깝다')
+    expect(cap).not.toContain('옛 값이라도 답한다')
+    expect(cap).not.toContain('실제 선택은 CP냐 AP냐다')
+  })
+
   it('DNS 조회 계층과 전송 방식을 구분한다', () => {
     const dns = corpus.find((node) => node.question === 'DNS 조회는 어떤 순서로 도는가?')?.body ?? ''
 

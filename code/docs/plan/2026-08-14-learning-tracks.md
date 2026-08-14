@@ -24,6 +24,8 @@
 - 검수 근거: [POSIX pthread_mutex_lock](https://pubs.opengroup.org/onlinepubs/9799919799/functions/pthread_mutex_lock.html), [POSIX sem_post](https://pubs.opengroup.org/onlinepubs/9799919799/functions/sem_post.html)
 - 검수 완료: 낙관적·비관적 락 선택을 제품군이나 정확성 대신 충돌 시점·재시도 범위·대기 비용으로 구분
 - 검수 근거: [Jakarta Persistence 3.1](https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1.pdf), [PostgreSQL 명시적 잠금](https://www.postgresql.org/docs/current/explicit-locking.html)
+- 검수 완료: CAP의 일관성·가용성 정의와 분단 중 선택 범위를 제품 단위가 아닌 연산 단위로 교정
+- 검수 근거: [Gilbert·Lynch CAP 증명](https://www.comp.nus.edu.sg/~gilbert/pubs/BrewersConjecture-SigAct.pdf)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 
