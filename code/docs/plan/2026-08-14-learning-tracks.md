@@ -60,6 +60,8 @@
 - 검수 근거: [Docker Docs의 What is a container?](https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-a-container/), [Docker Docs의 What is an image?](https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-an-image/)
 - 검수 완료: SQL 인젝션 방어에서 값 바인딩과 동적 식별자 허용 목록을 분리하고 ORM·저장 프로시저·2차 사용·최소 권한의 경계를 반영
 - 검수 근거: [OWASP SQL Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html)
+- 검수 완료: HTTP 메서드를 CRUD 관습이 아닌 표준 요청 의미로 설명하고 안전·멱등의 범위와 PUT·POST·PATCH·조건부 요청을 구분
+- 검수 근거: [RFC 9110 HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods), [RFC 5789 PATCH Method](https://www.rfc-editor.org/rfc/rfc5789.html)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

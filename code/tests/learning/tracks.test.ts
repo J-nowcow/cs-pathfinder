@@ -230,6 +230,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(injection).toContain('권한을 줄였다고 인젝션 자체가 막히는 것은 아니다')
   })
 
+  it('HTTP 메서드를 CRUD 관습과 표준 의미로 구분한다', () => {
+    const method = corpus.find((node) => node.question === 'HTTP 메서드 선택의 기준은 무엇인가?')?.body ?? ''
+
+    expect(method).toContain('생성은 무조건 POST라는 규칙은 없다')
+    expect(method).toContain('클라이언트가 대상 URI를 알고')
+    expect(method).toContain('응답 코드나 로그까지 같다는 뜻은 아니다')
+    expect(method).toContain('PATCH 자체는 비멱등으로 정의')
+    expect(method).toContain('강한 ETag와 `If-Match`')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
