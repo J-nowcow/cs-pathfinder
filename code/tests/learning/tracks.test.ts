@@ -41,10 +41,14 @@ describe('백엔드 CS 면접 30 트랙', () => {
   it('데이터베이스 선택을 낡은 제품 이분법으로 설명하지 않는다', () => {
     const byQuestion = new Map(corpus.map((node) => [node.question, node.body]))
     const databaseChoice = byQuestion.get('RDB와 NoSQL 중 무엇을 기준으로 선택하는가?')!
+    const sqlChoice = byQuestion.get('SQL과 NoSQL은 어떤 기준으로 선택하는가?')!
     const isolation = byQuestion.get('트랜잭션 격리 수준을 결정하는 기준은 무엇인가?')!
 
     expect(databaseChoice).toContain('관계형은 수직 확장만 하고 NoSQL은 수평 확장만 한다는 구분은 맞지 않는다')
     expect(databaseChoice).toContain('MongoDB도 스키마 검증')
+    expect(sqlChoice).toContain('스키마 유연성이 곧 스키마 부재를 뜻하지는 않는다')
+    expect(sqlChoice).not.toContain('수직 확장 (Scale-up)')
+    expect(sqlChoice).not.toContain('NoSQL은 정해진 틀 없이')
     expect(isolation).toContain('PostgreSQL의 기본값은 Read Committed')
     expect(isolation).toContain('InnoDB의 기본값은 Repeatable Read')
     expect(isolation).not.toContain('금융권이나 결제 로직')
