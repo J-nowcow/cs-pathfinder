@@ -200,6 +200,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(index).toContain('`EXPLAIN ANALYZE`')
   })
 
+  it('커넥션 풀을 재사용과 데이터베이스 진입 제어로 설명한다', () => {
+    const pool = corpus.find((node) => node.question === '커넥션 풀을 사용하는 이유는 무엇인가?')?.body ?? ''
+
+    expect(pool).toContain('동시 작업 수를 제한')
+    expect(pool).toContain('풀을 크게 하면 처리량이 계속 오른다는 보장은 없다')
+    expect(pool).toContain('배포 중 겹쳐 뜨는 수')
+    expect(pool).toContain('사용자 요청의 남은 시간보다 짧게')
+    expect(pool).toContain('세션 상태를 초기화')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
