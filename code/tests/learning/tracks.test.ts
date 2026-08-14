@@ -149,6 +149,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(idempotency).not.toContain('조회와 삭제는 원래 멱등이다')
   })
 
+  it('호출 제한을 절대 마감 시각과 취소 전파로 설명한다', () => {
+    const deadline = corpus.find((node) => node.question === '호출 시간 제한은 무엇을 기준으로 정하는가?')?.body ?? ''
+
+    expect(deadline).toContain('요청의 절대 마감 시각')
+    expect(deadline).toContain('지연 분포와 허용할 거짓 타임아웃 비율')
+    expect(deadline).toContain('연결 수립 제한과 요청 전체의 deadline도 구분')
+    expect(deadline).toContain('deadline이 지났다고 이미 시작한 일이 저절로 취소되지는 않는다')
+    expect(deadline).not.toContain('사용자 응답 3초')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
