@@ -72,6 +72,8 @@
 - 검수 근거: [Linux man-pages의 getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html), [Linux man-pages의 perf-sched(1)](https://man7.org/linux/man-pages/man1/perf-sched.1.html)
 - 검수 완료: 데드락 필요 조건과 전역 잠금 순서를 설명하고 livelock·starvation·긴 대기와 구분하며 Java·PostgreSQL 탐지 차이를 반영
 - 검수 근거: [Java Language Specification 17장](https://docs.oracle.com/javase/specs/jls/se24/html/jls-17.html), [PostgreSQL Explicit Locking](https://www.postgresql.org/docs/current/explicit-locking.html)
+- 검수 완료: 오프셋·커서 페이징의 복합 인덱스와 결정적 정렬 계약을 명시하고 커서가 스냅샷을 보장하지 않음을 반영
+- 검수 근거: [PostgreSQL LIMIT·OFFSET](https://www.postgresql.org/docs/current/queries-limit.html), [PostgreSQL ORDER BY](https://www.postgresql.org/docs/current/queries-order.html)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

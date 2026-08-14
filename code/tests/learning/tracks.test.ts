@@ -291,6 +291,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(deadlock).toContain('오래 기다린다는 사실만으로 데드락은 아니다')
   })
 
+  it('커서 페이징의 정렬·인덱스·스냅샷 계약을 드러낸다', () => {
+    const pagination = corpus.find((node) => node.question === '목록을 나눌 때 번호와 커서는 무엇이 다른가?')?.body ?? ''
+
+    expect(pagination).toContain('(created_at, id) > (?, ?)')
+    expect(pagination).toContain('복합 인덱스')
+    expect(pagination).toContain('결정적이어야')
+    expect(pagination).toContain('커서도 스냅샷은 아니다')
+    expect(pagination).toContain('늘 일정 시간')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
