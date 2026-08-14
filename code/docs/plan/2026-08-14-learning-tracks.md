@@ -20,6 +20,8 @@
 - 검수 근거: [PostgreSQL 트랜잭션 격리](https://www.postgresql.org/docs/current/transaction-iso.html), [InnoDB 격리 수준](https://dev.mysql.com/doc/refman/8.4/en/innodb-transaction-isolation-levels.html), [MongoDB 트랜잭션](https://www.mongodb.com/docs/manual/core/transactions/), [MongoDB 샤딩](https://www.mongodb.com/docs/manual/sharding/)
 - 검수 완료: DNS 조회의 위임 계층과 UDP·TCP·암호화 전송을 구분하고 브라우저 자체 캐시·DoH 경로를 반영
 - 검수 근거: [RFC 1035](https://www.rfc-editor.org/rfc/rfc1035), [RFC 7766](https://www.rfc-editor.org/rfc/rfc7766), [RFC 8484](https://www.rfc-editor.org/rfc/rfc8484), [RFC 9250](https://www.rfc-editor.org/rfc/rfc9250)
+- 검수 완료: 뮤텍스와 세마포어를 동시 진입 수 대신 소유권·용량 제한·신호 용도로 구분
+- 검수 근거: [POSIX pthread_mutex_lock](https://pubs.opengroup.org/onlinepubs/9799919799/functions/pthread_mutex_lock.html), [POSIX sem_post](https://pubs.opengroup.org/onlinepubs/9799919799/functions/sem_post.html)
 - 그다음: 트랙 진도와 기한이 된 전체 복습을 내 학습 기록에 연결
 
 ## 결론

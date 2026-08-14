@@ -57,6 +57,15 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(dns).toContain('DoT, DoH, DoQ')
     expect(dns).not.toContain('DNS는 짧은 질의마다 연결을 맺는 비용을 피하려고 UDP를 쓴다')
   })
+
+  it('뮤텍스와 바이너리 세마포어를 수만으로 구분하지 않는다', () => {
+    const synchronization = corpus.find((node) => node.question === '뮤텍스와 세마포어는 무엇으로 구분하는가?')?.body ?? ''
+
+    expect(synchronization).toContain('획득한 스레드가 해제')
+    expect(synchronization).toContain('카운트를 1로 둔 바이너리 세마포어')
+    expect(synchronization).not.toContain('무조건 1개')
+    expect(synchronization).not.toContain('뮤텍스가 더 가볍고')
+  })
 })
 
 describe('학습 트랙 검증과 해석', () => {
