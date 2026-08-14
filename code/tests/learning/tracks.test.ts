@@ -119,6 +119,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(queue).not.toContain('대부분의 큐는 최소 한 번 전달을 보장')
   })
 
+  it('일관된 해싱의 이동량과 부하 균등성을 구분한다', () => {
+    const hashing = corpus.find((node) => node.question === '노드를 늘릴 때 일관된 해싱이 필요한 이유는?')?.body ?? ''
+
+    expect(hashing).toContain('새 전체 노드 수의 역수 안팎')
+    expect(hashing).toContain('키 이동이 적다고 부하가 자동으로 고르지는 않다')
+    expect(hashing).toContain('복제본 배치, 핫 키, 재배치 중 읽기·쓰기')
+    expect(hashing).not.toContain('적중률이 0에 가까워진다')
+    expect(hashing).not.toContain('`1/n`만')
+  })
+
   it('JWT 형식과 세션 상태 관리 방식을 같은 축으로 단정하지 않는다', () => {
     const jwt = corpus.find((node) => node.question === 'JWT를 세션 대신 쓸 때 무엇을 잃는가?')?.body ?? ''
 
