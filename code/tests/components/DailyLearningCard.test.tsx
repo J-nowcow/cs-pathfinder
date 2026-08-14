@@ -2,7 +2,8 @@
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { cleanup, render, screen } from '@testing-library/react'
-import { DailyLearningCard, DAILY_LEARNING_STORAGE_KEY } from '@/components/DailyLearningCard'
+import { DailyLearningCard } from '@/components/DailyLearningCard'
+import { DAILY_LEARNING_STORAGE_KEY } from '@/lib/learning/storage'
 import { emptyAnswerPractice, markAnswerReview, saveAnswerPractice, updateAnswerDraft } from '@/lib/answer-practice/storage'
 import { kstToday } from '@/lib/daily/date'
 import type { LearningTrack, ResolvedTrackQuestion } from '@/lib/learning/tracks'

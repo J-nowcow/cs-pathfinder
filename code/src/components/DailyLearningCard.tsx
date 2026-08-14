@@ -10,30 +10,11 @@ import {
 } from '@/lib/learning/session'
 import { kstToday } from '@/lib/daily/date'
 import { loadAnswerPractice } from '@/lib/answer-practice/storage'
-
-export const DAILY_LEARNING_STORAGE_KEY = 'csqt.daily-learning.v1'
+import { loadDailySession, saveDailySession } from '@/lib/learning/storage'
 
 type Props = {
   track: LearningTrack
   questions: readonly ResolvedTrackQuestion[]
-}
-
-function readSnapshot(): DailySessionSnapshot | null {
-  try {
-    const value = JSON.parse(window.localStorage.getItem(DAILY_LEARNING_STORAGE_KEY) ?? 'null') as unknown
-    if (!value || typeof value !== 'object') return null
-    const snapshot = value as DailySessionSnapshot
-    if (typeof snapshot.date !== 'string' || typeof snapshot.trackId !== 'string') return null
-    if (typeof snapshot.createdAt !== 'string' || !Array.isArray(snapshot.items)) return null
-    if (!snapshot.items.every((item) =>
-      item && (item.kind === 'review' || item.kind === 'new')
-      && typeof item.questionId === 'string' && typeof item.question === 'string'
-      && typeof item.reason === 'string',
-    )) return null
-    return snapshot
-  } catch {
-    return null
-  }
 }
 
 export function DailyLearningCard({ track, questions }: Props) {
@@ -57,15 +38,11 @@ export function DailyLearningCard({ track, questions }: Props) {
       trackQuestions: questions,
       reviews,
       completedQuestionIds,
-    }, readSnapshot())
+    }, loadDailySession())
 
     setCompleted(new Set(practice.practiceDays[today] ?? []))
     setSnapshot(next)
-    try {
-      window.localStorage.setItem(DAILY_LEARNING_STORAGE_KEY, JSON.stringify(next))
-    } catch {
-      // 저장을 못 해도 이번 세션의 질문은 보여 준다.
-    }
+    saveDailySession(next)
   }, [questions, track.id])
 
   if (!snapshot) {
