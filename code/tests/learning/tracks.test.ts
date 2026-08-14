@@ -80,6 +80,15 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(dns).not.toContain('DNS는 짧은 질의마다 연결을 맺는 비용을 피하려고 UDP를 쓴다')
   })
 
+  it('HTTP/1.1 파이프라이닝과 HTTP/2 멀티플렉싱을 구분한다', () => {
+    const http2 = corpus.find((node) => node.question === 'HTTP/2는 HTTP/1.1의 무엇을 고쳤는가?')?.body ?? ''
+
+    expect(http2).toContain('HTTP/1.1 파이프라이닝은 요청을 기다리지 않고 연달아 보낼 수 있다')
+    expect(http2).toContain('각 스트림 안에서는 프레임 순서를 지키지만')
+    expect(http2).not.toContain('한 연결에서 요청 하나가 끝나야 다음이 나가던 제약')
+    expect(http2).not.toContain('연결 하나로 충분해진다')
+  })
+
   it('뮤텍스와 바이너리 세마포어를 수만으로 구분하지 않는다', () => {
     const synchronization = corpus.find((node) => node.question === '뮤텍스와 세마포어는 무엇으로 구분하는가?')?.body ?? ''
 

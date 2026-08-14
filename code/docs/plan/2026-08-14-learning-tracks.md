@@ -26,6 +26,8 @@
 - 검수 근거: [Jakarta Persistence 3.1](https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1.pdf), [PostgreSQL 명시적 잠금](https://www.postgresql.org/docs/current/explicit-locking.html)
 - 검수 완료: CAP의 일관성·가용성 정의와 분단 중 선택 범위를 제품 단위가 아닌 연산 단위로 교정
 - 검수 근거: [Gilbert·Lynch CAP 증명](https://www.comp.nus.edu.sg/~gilbert/pubs/BrewersConjecture-SigAct.pdf)
+- 검수 완료: HTTP/1.1 파이프라이닝의 응답 순서와 HTTP/2 스트림 멀티플렉싱·TCP 줄서기를 분리
+- 검수 근거: [RFC 9112 HTTP/1.1](https://www.rfc-editor.org/rfc/rfc9112), [RFC 9113 HTTP/2](https://www.rfc-editor.org/rfc/rfc9113)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 
