@@ -32,6 +32,8 @@
 - 검수 근거: [RFC 7519 JWT](https://www.rfc-editor.org/rfc/rfc7519), [RFC 8725 JWT BCP](https://www.rfc-editor.org/rfc/rfc8725), [RFC 7009 토큰 폐기](https://www.rfc-editor.org/rfc/rfc7009)
 - 검수 완료: URL 입력 흐름에서 캐시·연결 재사용과 TCP+TLS·QUIC 분기를 반영하고 고정 TCP 도식을 제거
 - 검수 근거: [RFC 9000 QUIC](https://www.rfc-editor.org/rfc/rfc9000), [RFC 9114 HTTP/3](https://www.rfc-editor.org/rfc/rfc9114)
+- 검수 완료: HTTPS 해설을 TLS 1.3의 인증된 키 교환·AEAD와 암호화 DNS·ECH가 있는 현재 경로로 교정
+- 검수 근거: [RFC 8446 TLS 1.3](https://www.rfc-editor.org/rfc/rfc8446), [RFC 9849 ECH](https://www.rfc-editor.org/rfc/rfc9849)
 - 완료: 내 학습 기록에서 트랙 자기 점검 진도와 기한이 된 전체 복습을 확인하고 질문으로 돌아가는 흐름
 - 그다음: 트랙 30편의 나머지 해설을 공식 1차 출처와 함께 수동 검수
 

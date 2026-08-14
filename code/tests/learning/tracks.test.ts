@@ -109,6 +109,16 @@ describe('백엔드 CS 면접 30 트랙', () => {
     expect(jwt).not.toContain('판단 기준은 규모다')
   })
 
+  it('HTTPS를 공개 키로 대칭키를 전달하는 옛 설명에 가두지 않는다', () => {
+    const https = corpus.find((node) => node.question === 'HTTPS는 무엇을 보장하고 무엇을 못 하는가?')?.body ?? ''
+
+    expect(https).toContain('임시 (EC)DHE 값으로 양쪽이 같은 비밀을 만들고')
+    expect(https).toContain('암호화 DNS와 ECH는 이 노출을 줄이지만')
+    expect(https).toContain('세션 키와 AEAD')
+    expect(https).not.toContain('비대칭키로 대칭키만 주고받고')
+    expect(https).not.toContain('도메인의 주인이 맞다')
+  })
+
   it('뮤텍스와 바이너리 세마포어를 수만으로 구분하지 않는다', () => {
     const synchronization = corpus.find((node) => node.question === '뮤텍스와 세마포어는 무엇으로 구분하는가?')?.body ?? ''
 
