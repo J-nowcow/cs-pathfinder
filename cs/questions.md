@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 342개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 343개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -91,6 +91,7 @@
 - [집 안의 여러 기기가 IP 하나로 어떻게 나가는가?](https://cs-pathfinder.vercel.app/q/2b791b01-ac8a-4437-a509-84cf84aee58b)
 - [브라우저가 캐시를 쓸지 말지 어떻게 정하는가?](https://cs-pathfinder.vercel.app/q/f77e5584-6af6-44d2-95ef-315de61dd583)
 - [응답을 압축하면 무엇을 치르는가?](https://cs-pathfinder.vercel.app/q/86cee3be-7152-48a1-a1c1-b2b8988f1888)
+- [TLS 핸드셰이크 비용은 어떻게 줄이는가?](https://cs-pathfinder.vercel.app/q/f2b936bd-8525-41f4-ac16-d78f1c91b6a1) — 2026-08-18
 
 ## 언어 · 런타임
 
