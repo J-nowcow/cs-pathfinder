@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 343개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 344개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -180,6 +180,7 @@
 - [읽은 파일이 두 번째부터 빨라지는 이유는?](https://cs-pathfinder.vercel.app/q/93b1c472-c606-4045-9b0d-b23e50531d81)
 - [큰 파일을 통째로 읽으면 무엇이 문제인가?](https://cs-pathfinder.vercel.app/q/3fa7893e-1d02-41ba-9ec8-a8fefe1e6445)
 - [프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?](https://cs-pathfinder.vercel.app/q/6ecf2ded-2ca1-47bd-8dc3-e29c3fc198ec)
+- [멀티프로세스와 멀티스레드는 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/69bd9c69-44c8-4185-90b7-d56832cfabec) — 2026-08-19
 
 ## 자료구조 · 알고리즘
 
