@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 344개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 345개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -214,6 +214,7 @@
 - [우선순위 큐를 힙으로 구현하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/9ac88a5c-11c3-4a52-b642-09a97936fdfa)
 - [B-tree는 왜 디스크에 유리한가?](https://cs-pathfinder.vercel.app/q/212ffacb-9cca-4c8f-9cb5-906568c356b3)
 - [B-Tree가 디스크에 맞는 이유는?](https://cs-pathfinder.vercel.app/q/35514c0e-b8ee-4fd5-b3cb-420077bd0b3c)
+- [위상 정렬을 적용하려면 그래프가 어떤 조건을 만족해야 하는가?](https://cs-pathfinder.vercel.app/q/eac19107-d34b-4cca-ae4d-b74c5f51ad7e) — 2026-08-20
 
 ## 프레임워크
 
