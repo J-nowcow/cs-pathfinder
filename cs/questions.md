@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 345개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 346개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -248,6 +248,7 @@
 - [단위 시험과 통합 시험은 무엇으로 가르는가?](https://cs-pathfinder.vercel.app/q/2a1ae829-21b3-42da-8593-599384cd6ec3)
 - [목록 하나 읽었는데 쿼리가 백 번 나가는 이유는?](https://cs-pathfinder.vercel.app/q/374cf387-4019-4a55-82e4-63e3f0057085)
 - [수정 메서드를 안 불렀는데 UPDATE가 나가는 이유는?](https://cs-pathfinder.vercel.app/q/8f957463-4d9f-4b08-9730-a3aa2ebf771b)
+- [부모 트랜잭션과 무관하게 동작하려면 어떤 전파 속성을 쓰는가?](https://cs-pathfinder.vercel.app/q/6b9cd8db-5ef0-4d94-8fe4-63001cd1885a) — 2026-08-21
 
 ## 아키텍처 · 분산시스템
 
