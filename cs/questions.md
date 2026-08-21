@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 346개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 347개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -347,6 +347,7 @@
 - [인코딩과 암호화와 해싱은 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/179b5c31-2873-4831-b21a-b30c7bfbed07)
 - [무작위 값은 어디서 만들어야 안전한가?](https://cs-pathfinder.vercel.app/q/bdc03c03-fa02-46ae-aaa3-c35f96281650)
 - [사용자 입력을 왜 전부 의심해야 하는가?](https://cs-pathfinder.vercel.app/q/a0783c56-8cdc-49e2-a270-707fc6e540a4)
+- [CSRF 토큰은 쿠키 세션 방식에서 왜 필수인가?](https://cs-pathfinder.vercel.app/q/380c077d-8da7-4a43-80ce-4ad0927f50e7) — 2026-08-22
 
 ## 모바일
 
