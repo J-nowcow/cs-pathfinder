@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 348개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 349개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -383,3 +383,4 @@
 - [안드로이드에서 메모리 누수가 발생하는 주원인은 무엇인가?](https://cs-pathfinder.vercel.app/q/031700b2-742f-49a5-a571-e64f7034fda4)
 - [코루틴의 구조적 동시성은 무엇을 해결하는가?](https://cs-pathfinder.vercel.app/q/faa53301-ae3e-434d-9f2a-c08d4ec69c78)
 - [오프라인 우선 앱에서 로컬과 서버의 데이터 일관성은 어떻게 유지하는가?](https://cs-pathfinder.vercel.app/q/3e75120a-b161-4e11-9986-e939f291afa9) — 2026-08-14
+- [WorkManager는 어떤 방식으로 작업 실행을 보장하는가?](https://cs-pathfinder.vercel.app/q/3916f81a-229d-4a73-85f1-5b1d03f77679) — 2026-08-24
