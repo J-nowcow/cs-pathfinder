@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 350개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 351개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -138,6 +138,7 @@
 - [0.1을 더했는데 왜 딱 안 떨어지는가?](https://cs-pathfinder.vercel.app/q/31dc816a-bae1-4aa0-9b1b-b4c0bf587aea)
 - [정규식 하나가 서버를 멈추게 하는가?](https://cs-pathfinder.vercel.app/q/5487a800-f726-4b85-ab6d-9369eaf24d83)
 - [클래스 내 정적 변수와 정적 블록의 초기화 순서는 무엇으로 결정되는가?](https://cs-pathfinder.vercel.app/q/66979236-02fe-455d-b7be-8b47af9b9821) — 2026-08-16
+- [싱글 스레드인 JS에서 비동기 작업이 멈추지 않고 도는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/7560ea60-aacf-483f-aa47-3167e88019dc) — 2026-08-26
 
 ## 운영체제
 
