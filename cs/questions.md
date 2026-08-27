@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 351개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 352개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -46,6 +46,7 @@
 - [데이터가 한 대에 안 들어가면 어떻게 나누는가?](https://cs-pathfinder.vercel.app/q/2c52b510-2586-4cbf-9c7d-266338fb2a10)
 - [목록을 나눌 때 번호와 커서는 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/c45a74f0-5788-463f-a246-c52724f98476)
 - [낙관적 락과 비관적 락은 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/af935dba-bdcf-4095-9045-c89345f49594) — 2026-08-17
+- [RDBMS 대신 NoSQL을 도입하는 판단 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/18737efb-f4a9-45d6-a5eb-99d3138d06e7) — 2026-08-27
 
 ## 네트워크
 
