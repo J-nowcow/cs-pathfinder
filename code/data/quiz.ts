@@ -2929,9 +2929,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '속성이 더 많으면 대입이 막히는가?',
         choices: [
           { text: '대체로 허용된다. 새 객체 리터럴을 바로 넣을 때만 검사한다', correct: true },
-          { text: '언제나 막힌다', leadsTo: 0 },
-          { text: '언제나 허용된다', leadsTo: 0 },
-          { text: '선택 속성일 때만 허용된다', leadsTo: 1 },
+          { text: '언제나 막힌다. 속성 수가 다르면 대입이 안 된다', leadsTo: 0 },
+          { text: '언제나 허용된다. 속성 수는 검사하지 않는다', leadsTo: 0 },
+          { text: '선택 속성으로 선언한 경우에만 허용된다', leadsTo: 1 },
         ],
         rationale:
           '초과 속성 검사는 오타 가능성을 잡으려고 리터럴을 바로 대입하는 자리에만 걸린다.',
@@ -6342,10 +6342,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '만료된 소유자의 뒤늦은 쓰기를 막으려면?',
         choices: [
-          { text: '만료 시간을 늘린다', leadsTo: 1 },
+          { text: '만료 시간을 넉넉히 늘려 겹치지 않게 한다', leadsTo: 1 },
           { text: '보호 대상이 fencing token을 검증해 거부해야 한다', correct: true },
-          { text: '락을 다시 잡는다', leadsTo: 2 },
-          { text: '막을 방법이 없다', leadsTo: 1 },
+          { text: '쓰기 직전에 락을 다시 잡아 확인한다', leadsTo: 2 },
+          { text: '락이 만료된 뒤에는 막을 방법이 없다', leadsTo: 1 },
         ],
         rationale:
           '토큰을 발급하는 것만으로는 완성되지 않는다. 쓰기를 받는 쪽이 검증해야 한다.',
@@ -7116,9 +7116,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '두 도구가 각각 지키는 것은?',
         choices: [
-          { text: '반대다', leadsTo: 0 },
-          { text: '둘 다 값만 지킨다', leadsTo: 0 },
-          { text: '둘 다 참조만 지킨다', leadsTo: 0 },
+          { text: 'useMemo는 함수 참조, useCallback은 계산한 값', leadsTo: 0 },
+          { text: '둘 다 계산한 값만 지키고 참조는 안 지킨다', leadsTo: 0 },
+          { text: '둘 다 함수 참조만 지키고 값은 안 지킨다', leadsTo: 0 },
           { text: 'useMemo는 계산한 값, useCallback은 함수 참조', correct: true },
         ],
         rationale:
@@ -8148,10 +8148,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '먼저 묻는 단계를 건너뛰는 조건은?',
         choices: [
-          { text: '같은 주소로 보낼 때', leadsTo: 0 },
+          { text: '같은 주소와 같은 포트로 보낼 때', leadsTo: 0 },
           { text: 'GET·HEAD·POST이면서 허용된 헤더와 본문 종류만 쓸 때', correct: true },
-          { text: '응답이 작을 때', leadsTo: 0 },
-          { text: '자격 증명을 함께 보낼 때', leadsTo: 1 },
+          { text: '응답 본문이 충분히 작을 때', leadsTo: 0 },
+          { text: '쿠키 같은 자격 증명을 함께 보낼 때', leadsTo: 1 },
         ],
         rationale:
           'application/json으로 보내거나 Authorization을 붙이면 먼저 묻는다.',
@@ -8862,10 +8862,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '클릭 처리에서 위치를 어떻게 다루는가?',
         choices: [
-          { text: '실행 시점의 bindingAdapterPosition을 확인하거나 항목을 콜백에 넘긴다', correct: true },
+          { text: '실행 시점의 bindingAdapterPosition을 확인한다', correct: true },
           { text: '바인딩 때 받은 position을 저장해 쓴다', leadsTo: 2 },
           { text: '리스너를 한 번만 붙이고 위치는 고정한다', leadsTo: 2 },
-          { text: '위치 대신 화면 좌표를 쓴다', leadsTo: 2 },
+          { text: '위치 대신 화면 좌표로 항목을 찾아 쓴다', leadsTo: 2 },
         ],
         rationale:
           '바인딩 시점과 클릭 시점 사이에 목록이 바뀔 수 있다.',
@@ -12096,10 +12096,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '같은 주문의 순서가 필요하면?',
         choices: [
-          { text: '컨슈머를 하나만 둔다', leadsTo: 2 },
-          { text: '같은 키를 같은 파티션으로 보내고 처리 병렬성을 그 범위에서 제한한다', correct: true },
-          { text: '파티션을 늘린다', leadsTo: 2 },
-          { text: '큐가 알아서 순서를 지킨다', leadsTo: 2 },
+          { text: '컨슈머를 하나만 둬 처리 순서를 직렬로 만든다', leadsTo: 2 },
+          { text: '같은 키를 같은 파티션으로 보내고 병렬성을 제한한다', correct: true },
+          { text: '파티션을 늘려 각 주문이 따로 흐르게 한다', leadsTo: 2 },
+          { text: '큐가 전역 순서를 지키므로 손댈 것이 없다', leadsTo: 2 },
         ],
         rationale:
           '순서는 파티션 수와 컨슈머 병렬성에 따라 달라진다.',
@@ -12138,10 +12138,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '같은 시각에 많은 키가 만료되지 않게 하려면?',
         choices: [
-          { text: 'TTL을 아예 없앤다', leadsTo: 1 },
-          { text: 'TTL을 모두 같게 맞춘다', leadsTo: 0 },
-          { text: 'TTL에 jitter를 주고 같은 키의 동시 재조회는 하나로 합친다', correct: true },
-          { text: '캐시를 통째로 비운다', leadsTo: 0 },
+          { text: 'TTL을 없애고 쓰기가 있을 때만 지운다', leadsTo: 1 },
+          { text: 'TTL을 모두 같게 맞춰 만료를 예측 가능하게 한다', leadsTo: 0 },
+          { text: 'TTL에 jitter를 주고 동시 재조회는 하나로 합친다', correct: true },
+          { text: '주기적으로 캐시를 통째로 비운다', leadsTo: 0 },
         ],
         rationale:
           '캐시는 성능을 돕는 계층이지 원본을 쓰러뜨리는 단일 실패점이 되면 안 된다.',
@@ -12264,10 +12264,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '반열림에서 확인 호출 수를 제한하는 이유는?',
         choices: [
-          { text: '서킷이 닫히는 것을 늦추려고', leadsTo: 0 },
+          { text: '서킷이 너무 빨리 닫히는 것을 늦추려고', leadsTo: 0 },
           { text: '대기 요청을 한꺼번에 보내면 회복 중인 의존성을 다시 무너뜨린다', correct: true },
-          { text: '실패율을 낮추려고', leadsTo: 1 },
-          { text: '재시도를 늘리려고', leadsTo: 4 },
+          { text: '확인 호출이 실패율 계산을 흐리지 않게 하려고', leadsTo: 1 },
+          { text: '회복이 빠른지 재시도 횟수로 재려고', leadsTo: 4 },
         ],
         rationale:
           '동시 호출 수 자체를 제한하는 일은 벌크헤드의 몫이다.',
@@ -13440,10 +13440,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '로그인 성공 시 토큰을 새로 만드는 이유는?',
         choices: [
-          { text: '만료를 연장하려고', leadsTo: 3 },
-          { text: '토큰 길이를 늘리려고', leadsTo: 2 },
-          { text: '미리 심어 둔 토큰이 로그인 뒤에도 통하는 세션 고정 공격을 끊는다', correct: true },
-          { text: '스크립트 접근을 막으려고', leadsTo: 0 },
+          { text: '로그인 시점부터 만료를 다시 세려고', leadsTo: 3 },
+          { text: '토큰 길이를 늘려 추측을 어렵게 하려고', leadsTo: 2 },
+          { text: '미리 심어 둔 토큰이 로그인 뒤에도 통하는 것을 끊는다', correct: true },
+          { text: '스크립트가 토큰을 읽지 못하게 막으려고', leadsTo: 0 },
         ],
         rationale:
           '이전 것을 함께 폐기해야 효과가 있다.',
@@ -14088,9 +14088,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '씨앗을 시각으로 정하면 무엇이 가능해지는가?',
         choices: [
-          { text: '중복이 생긴다', leadsTo: 2 },
-          { text: '난수가 고르게 퍼지지 않는다', leadsTo: 0 },
-          { text: '값이 짧아진다', leadsTo: 1 },
+          { text: '같은 값이 자주 나와 중복이 생긴다', leadsTo: 2 },
+          { text: '난수가 한쪽에 몰려 고르게 퍼지지 않는다', leadsTo: 0 },
+          { text: '만들어지는 값의 길이가 짧아진다', leadsTo: 1 },
           { text: '만든 때를 아는 공격자가 씨앗 후보를 좁혀 수열을 재현한다', correct: true },
         ],
         rationale:
