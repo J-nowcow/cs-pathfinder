@@ -9463,4 +9463,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'mobile',
+    question: '모바일 요청은 실패할 때마다 다시 보내도 되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '재시도 후보가 되는 응답은?',
+        choices: [
+          { text: '타임아웃과 일부 5xx와 429', correct: true },
+          { text: '대부분의 4xx', leadsTo: 2 },
+          { text: '사용자 취소', leadsTo: 2 },
+          { text: '모든 오류', leadsTo: 2 },
+        ],
+        rationale:
+          '상태 코드만 보지 말고 API 계약과 Retry-After를 따른다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '백오프만 걸면 재시도가 안전한가?',
+        choices: [
+          { text: '아니다. 지터가 없으면 여러 기기가 동시에 깨어 서버를 다시 압박한다', correct: true },
+          { text: '그렇다. 간격만 늘리면 충분하다', leadsTo: 1 },
+          { text: '그렇다. 지터는 지연만 늘린다', leadsTo: 1 },
+          { text: '아니다. 백오프 자체가 필요 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '지수 백오프는 간격을 늘리고 지터는 재시도 폭주를 흩는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '꼭 전달해야 하는 작업은 어디에 두는가?',
+        choices: [
+          { text: '영속 큐에 넣고 최대 횟수와 만료 시점을 둔다', correct: true },
+          { text: '메모리에 두고 앱이 살아 있는 동안 재시도한다', leadsTo: 4 },
+          { text: '실패하면 사용자에게 다시 누르게 한다', leadsTo: 3 },
+          { text: '횟수 제한 없이 계속 재시도한다', leadsTo: 4 },
+        ],
+        rationale:
+          '앱이 백그라운드로 가거나 연결이 바뀌면 예약을 다시 판단한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '백그라운드 제약을 피하는 방법은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '포그라운드 서비스가 오래 사는 이유는?',
+        choices: [
+          { text: '알림이 떠 있어 시스템이 중요도를 높게 보고 종료 우선순위를 늦춘다', correct: true },
+          { text: '시스템이 종료하지 못하도록 잠근다', leadsTo: 2 },
+          { text: '메모리를 미리 확보해 둔다', leadsTo: 3 },
+          { text: '별도 프로세스로 분리되기 때문이다', leadsTo: 2 },
+        ],
+        rationale:
+          '사용자에게 앱이 동작 중임을 알리는 대가로 얻는 우선순위다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이 둘을 쓰면 앱이 죽지 않는가?',
+        choices: [
+          { text: '아니다. 둘 다 강제 종료를 막지는 못한다', correct: true },
+          { text: '그렇다. 포그라운드 서비스는 종료되지 않는다', leadsTo: 2 },
+          { text: '그렇다. WorkManager가 프로세스를 살려 둔다', leadsTo: 1 },
+          { text: '아니다. 대신 배터리 최적화 예외를 받으면 된다', leadsTo: 0 },
+        ],
+        rationale:
+          'WorkManager는 끊겨도 조건이 맞을 때 다시 돌도록 예약할 뿐이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'Android 14 이상에서 API 34를 겨냥한 앱이 지켜야 할 것은?',
+        choices: [
+          { text: '포그라운드 서비스마다 타입을 적어야 한다', correct: true },
+          { text: '포그라운드 서비스를 하나만 둬야 한다', leadsTo: 4 },
+          { text: '알림을 숨겨야 한다', leadsTo: 2 },
+          { text: 'WorkManager로만 실행해야 한다', leadsTo: 1 },
+        ],
+        rationale:
+          '타입을 명시하지 않거나 부적절한 타입을 쓰면 앱이 비정상 종료된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '푸시 알림의 전달 보장을 위해 무엇을 설계하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '플랫폼이 성공으로 응답하는 시점은?',
+        choices: [
+          { text: '메시지를 큐에 넣었을 때', correct: true },
+          { text: '단말기가 받았을 때', leadsTo: 2 },
+          { text: '사용자가 알림을 열었을 때', leadsTo: 2 },
+          { text: '앱이 처리를 끝냈을 때', leadsTo: 2 },
+        ],
+        rationale:
+          '그래서 응답만으로는 실제 단말기 도달 여부를 알 수 없다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '재시도만 붙이면 전달이 보장되는가?',
+        choices: [
+          { text: '아니다. 단말이 수신 확인을 보내는 피드백 루프가 있어야 누락을 안다', correct: true },
+          { text: '그렇다. 실패 응답만 보고 다시 보내면 된다', leadsTo: 1 },
+          { text: '그렇다. 백오프면 충분하다', leadsTo: 1 },
+          { text: '아니다. 재시도는 오히려 해롭다', leadsTo: 3 },
+        ],
+        rationale:
+          '수신 확인이 없으면 누락된 알림을 다시 보낼 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '재시도가 만드는 부작용은 무엇으로 막는가?',
+        choices: [
+          { text: '메시지 ID로 중복 수신을 막는 멱등성 처리', correct: true },
+          { text: '재시도 횟수를 1로 줄인다', leadsTo: 1 },
+          { text: '알림을 무음으로 보낸다', leadsTo: 4 },
+          { text: '수신 확인을 생략한다', leadsTo: 2 },
+        ],
+        rationale:
+          '네트워크가 불안정하면 같은 알림이 여러 번 뜰 수 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '안드로이드 메인 스레드에서 무거운 작업을 하면 왜 ANR이 발생하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '메인 스레드 하나가 전담하는 일은?',
+        choices: [
+          { text: 'UI 갱신과 사용자 입력 처리', correct: true },
+          { text: '네트워크 요청과 DB 조회', leadsTo: 1 },
+          { text: '메모리 회수', leadsTo: 4 },
+          { text: '알림 표시', leadsTo: 0 },
+        ],
+        rationale:
+          '여기서 무거운 작업을 하면 큐에 쌓인 다음 이벤트를 처리하지 못한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ANR이 뜬 순간 메인 스레드는 멈춰 있는가?',
+        choices: [
+          { text: '아니다. 여전히 작업 중이지만 인터랙션이 불가능한 상태다', correct: true },
+          { text: '그렇다. 스레드가 정지된 것이다', leadsTo: 4 },
+          { text: '그렇다. 시스템이 스레드를 강제로 끊는다', leadsTo: 0 },
+          { text: '아니다. 이미 종료된 상태다', leadsTo: 4 },
+        ],
+        rationale:
+          '입력을 5초쯤 처리하지 못하면 ANR로 본다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '기준 시간은 모든 경우에 같은가?',
+        choices: [
+          { text: '아니다. 브로드캐스트나 서비스는 따로 있다', correct: true },
+          { text: '그렇다. 어디서나 5초다', leadsTo: 0 },
+          { text: '그렇다. 기기 성능에 따라 자동 조정된다', leadsTo: 0 },
+          { text: '아니다. 기준 시간 자체가 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '오래 걸리는 작업은 Worker 스레드나 Coroutine으로 분리해야 한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '안드로이드에서 메모리 누수가 발생하는 주원인은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '익명 클래스나 내부 클래스가 위험한 이유는?',
+        choices: [
+          { text: '외부 클래스에 대한 숨은 참조를 가진다', correct: true },
+          { text: '메모리를 두 배로 쓴다', leadsTo: 4 },
+          { text: '가비지 컬렉터가 인식하지 못한다', leadsTo: 0 },
+          { text: '생명주기 콜백을 가로챈다', leadsTo: 3 },
+        ],
+        rationale:
+          '내부 클래스가 살아 있으면 파괴된 Activity도 사슬에 매달려 남는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '누수가 걱정되면 약한 참조부터 쓰면 되는가?',
+        choices: [
+          { text: '아니다. 먼저 오래 사는 작업과 콜백을 수명에 맞춰 끊는다', correct: true },
+          { text: '그렇다. 약한 참조가 근본 해결이다', leadsTo: 0 },
+          { text: '그렇다. 모든 참조를 약하게 두면 된다', leadsTo: 0 },
+          { text: '아니다. 정적 변수에 담으면 해결된다', leadsTo: 2 },
+        ],
+        rationale:
+          '그래도 남는 자리에만 정적 중첩 클래스나 약한 참조를 쓴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '핸들러나 비동기 작업이 특히 위험한 때는?',
+        choices: [
+          { text: 'Activity보다 오래 실행될 때', correct: true },
+          { text: '동시에 여러 개 실행될 때', leadsTo: 4 },
+          { text: '메인 스레드에서 실행될 때', leadsTo: 3 },
+          { text: '결과를 반환하지 않을 때', leadsTo: 3 },
+        ],
+        rationale:
+          '작업이 끝나기 전까지 Activity 참조를 붙잡고 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '코루틴의 구조적 동시성은 무엇을 해결하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '보통의 Job 아래에서 자식이 실패하면?',
+        choices: [
+          { text: '예외가 부모로 올라가 형제까지 취소된다', correct: true },
+          { text: '그 자식만 끝나고 형제는 계속 돈다', leadsTo: 0 },
+          { text: '부모가 대신 재시도한다', leadsTo: 2 },
+          { text: '아무 일도 일어나지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          'supervisorScope 아래에서라야 그 자식만 실패하고 형제가 계속 돈다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '화면이 닫히면 실행 중인 코루틴을 하나씩 취소해야 하는가?',
+        choices: [
+          { text: '아니다. ViewModelScope를 쓰면 한 번에 중단된다', correct: true },
+          { text: '그렇다. 각각 취소해야 한다', leadsTo: 1 },
+          { text: '그렇다. 취소하지 않으면 영원히 돈다', leadsTo: 4 },
+          { text: '아니다. 코루틴은 취소할 수 없다', leadsTo: 3 },
+        ],
+        rationale:
+          'Scope로 묶여 있으면 한 번에 취소할 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '구조적 동시성이 막는 것은?',
+        choices: [
+          { text: '부모가 끝났는데 자식이 남아 계속 도는 것', correct: true },
+          { text: '자식이 예외를 던지는 것', leadsTo: 2 },
+          { text: '코루틴이 여러 개 만들어지는 것', leadsTo: 1 },
+          { text: '취소가 전파되는 것', leadsTo: 3 },
+        ],
+        rationale:
+          '자식을 부모의 수명에 묶고 예외와 취소가 어디로 갈지도 함께 정한다.',
+      },
+    ],
+  },
 ]
