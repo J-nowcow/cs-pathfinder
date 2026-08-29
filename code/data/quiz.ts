@@ -7699,4 +7699,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'css',
+    question: '폰트 표시 지연과 깜빡임을 어떻게 줄이는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'swap과 optional은 무엇이 갈리는가?',
+        choices: [
+          { text: '느리게 도착한 글꼴을 교체하느냐 생략하느냐', correct: true },
+          { text: '첫 표시에 대체 글꼴을 쓰느냐 마느냐', leadsTo: 2 },
+          { text: '서브셋을 만드느냐 마느냐', leadsTo: 1 },
+          { text: '자체 호스팅이냐 외부냐', leadsTo: 0 },
+        ],
+        rationale:
+          '둘 다 첫 표시는 대체 글꼴로 하고, 교체 시점에서만 갈린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '글꼴을 전부 preload하면 표시가 빨라지는가?',
+        choices: [
+          { text: '아니다. 핵심 이미지와 스크립트의 다운로드가 늦어진다', correct: true },
+          { text: '그렇다. 우선순위가 올라가니 항상 이득이다', leadsTo: 0 },
+          { text: '그렇다. 브라우저가 남는 대역만 쓴다', leadsTo: 0 },
+          { text: '아니다. preload는 글꼴에 쓸 수 없다', leadsTo: 0 },
+        ],
+        rationale:
+          'preload는 첫 화면에 반드시 쓰는 파일에만 적용한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '교체 순간의 레이아웃 이동은 무엇으로 줄이는가?',
+        choices: [
+          { text: '대체 글꼴의 글자 폭과 행간을 실제 글꼴에 맞춘다', correct: true },
+          { text: '글꼴 파일을 더 잘게 서브셋한다', leadsTo: 1 },
+          { text: '교체를 아예 생략한다', leadsTo: 2 },
+          { text: '글자 크기를 줄인다', leadsTo: 4 },
+        ],
+        rationale:
+          'size-adjust 같은 기술로 대체 글꼴의 크기를 맞추면 이동이 줄어든다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'accessibility',
+    question: '화면이 바뀐 뒤 포커스는 어디로 보내는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '모달을 닫을 때 포커스는 어디로 가야 하는가?',
+        choices: [
+          { text: '모달을 연 요소로 돌려보낸다', correct: true },
+          { text: '문서 맨 처음으로 보낸다', leadsTo: 1 },
+          { text: '아무 데도 보내지 않고 둔다', leadsTo: 2 },
+          { text: '다음 상호작용 요소로 넘긴다', leadsTo: 1 },
+        ],
+        rationale:
+          '열기 버튼으로 되돌려야 사용자가 원래 있던 자리를 잃지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '모달이 열려 있으면 Tab이 배경으로 나가도 괜찮은가?',
+        choices: [
+          { text: '아니다. Tab 이동은 모달 안에 머물러야 한다', correct: true },
+          { text: '괜찮다. 배경도 화면에 보이니 이동할 수 있어야 한다', leadsTo: 0 },
+          { text: '괜찮다. 시각적으로 가려져 있으면 문제없다', leadsTo: 2 },
+          { text: '아니다. 대신 Tab 자체를 막아야 한다', leadsTo: 0 },
+        ],
+        rationale:
+          '배경은 키보드와 보조 기술에서 비활성화하고 Esc로 닫는 경로도 준다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '포커스를 자동으로 옮겨도 되는 때는?',
+        choices: [
+          { text: '화면 변화로 현재 맥락이 끊길 때', correct: true },
+          { text: '입력이 끝났다고 판단될 때마다', leadsTo: 4 },
+          { text: '페이지를 처음 열 때마다', leadsTo: 1 },
+          { text: '마우스가 요소 위로 올 때', leadsTo: 3 },
+        ],
+        rationale:
+          '자동 이동은 맥락이 끊길 때만 쓰고, DOM 순서는 시각적 순서와 맞춘다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'html',
+    question: 'div만 쓰면 어떤 비용이 드는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'button을 div로 흉내 내면 무엇을 직접 해야 하는가?',
+        choices: [
+          { text: 'Enter와 Space 처리, 비활성 상태', correct: true },
+          { text: '색과 여백만 다시 잡으면 된다', leadsTo: 2 },
+          { text: '클릭 이벤트만 붙이면 된다', leadsTo: 0 },
+          { text: '아무것도 없다. 동작은 같다', leadsTo: 2 },
+        ],
+        rationale:
+          '네이티브 요소는 기본 역할과 키보드 동작을 함께 제공한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ARIA를 붙이면 시맨틱 요소와 같아지는가?',
+        choices: [
+          { text: '아니다. 역할만 알릴 뿐 키보드 동작은 따라오지 않는다', correct: true },
+          { text: '그렇다. 역할을 지정하면 동작도 생긴다', leadsTo: 2 },
+          { text: '그렇다. 보조 기술이 알아서 처리한다', leadsTo: 2 },
+          { text: '아니다. ARIA는 아무 효과가 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '구조 인식은 지정할 수 있어도 키보드 동작은 직접 구현해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '요소를 고르는 기준은 무엇인가?',
+        choices: [
+          { text: '콘텐츠의 의미와 동작을 먼저 정한다', correct: true },
+          { text: '원하는 화면 모양에 가까운 것을 고른다', leadsTo: 0 },
+          { text: '가장 짧게 쓰이는 태그를 고른다', leadsTo: 3 },
+          { text: '기본 스타일이 없는 것을 고른다', leadsTo: 0 },
+        ],
+        rationale:
+          '표현은 CSS로 바꾸면 되고, 그래야 접근성과 유지보수가 함께 좋아진다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'web-performance',
+    question: '체감 성능은 어떤 세 지표로 판단하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '레이아웃 이동을 드러내는 지표는?',
+        choices: [
+          { text: 'CLS', correct: true },
+          { text: 'LCP', leadsTo: 0 },
+          { text: 'INP', leadsTo: 1 },
+          { text: '세 지표 모두 함께 반영한다', leadsTo: 2 },
+        ],
+        rationale:
+          'LCP는 주요 콘텐츠 표시 속도, INP는 상호작용 지연을 본다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '평균값이 좋으면 사용자 경험도 좋다고 볼 수 있는가?',
+        choices: [
+          { text: '아니다. 방문의 75번째 백분위에서 본다', correct: true },
+          { text: '그렇다. 평균이 전체를 대표한다', leadsTo: 4 },
+          { text: '그렇다. 최빈값이면 더 정확하다', leadsTo: 4 },
+          { text: '아니다. 최악값만 봐야 한다', leadsTo: 4 },
+        ],
+        rationale:
+          '모바일과 데스크톱도 나눠 봐야 느린 쪽이 가려지지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '현장 데이터와 실험실 데이터는 어떻게 쓰는가?',
+        choices: [
+          { text: '개선 전후에 둘을 함께 본다', correct: true },
+          { text: '현장 데이터만 신뢰한다', leadsTo: 3 },
+          { text: '실험실 데이터만으로 판정한다', leadsTo: 3 },
+          { text: '둘 중 좋은 쪽을 고른다', leadsTo: 3 },
+        ],
+        rationale:
+          '현장은 실제 기기와 네트워크를, 실험실은 재현과 원인 분석을 맡는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'browser',
+    question: '클라이언트 데이터는 어디에 보관해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '쿠키와 IndexedDB의 결정적 차이는?',
+        choices: [
+          { text: '쿠키는 서버로 자동 전송되고 IndexedDB는 아니다', correct: true },
+          { text: '쿠키만 만료를 가진다', leadsTo: 0 },
+          { text: 'IndexedDB만 탭 사이에서 공유된다', leadsTo: 3 },
+          { text: '둘 다 동기 API다', leadsTo: 2 },
+        ],
+        rationale:
+          '그래서 작은 서버 연동 값은 쿠키에, 큰 구조화 데이터는 IndexedDB에 둔다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'localStorage에 큰 데이터를 담아도 괜찮은가?',
+        choices: [
+          { text: '아니다. 동기 API라 메인 스레드를 막는다', correct: true },
+          { text: '괜찮다. 용량 제한만 넘지 않으면 된다', leadsTo: 1 },
+          { text: '괜찮다. 브라우저가 뒤에서 처리한다', leadsTo: 1 },
+          { text: '아니다. localStorage는 문자열을 못 담는다', leadsTo: 1 },
+        ],
+        rationale:
+          'localStorage는 단순한 장기 설정에 맞고 큰 값은 IndexedDB로 보낸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '세션 식별자는 어디에 두는가?',
+        choices: [
+          { text: 'Secure와 HttpOnly를 적용한 쿠키를 우선 검토한다', correct: true },
+          { text: 'localStorage에 두고 만료를 직접 관리한다', leadsTo: 4 },
+          { text: 'sessionStorage에 두면 탭과 함께 사라져 안전하다', leadsTo: 4 },
+          { text: 'IndexedDB에 암호화해 둔다', leadsTo: 4 },
+        ],
+        rationale:
+          '자바스크립트로 읽을 수 있는 저장소에 두면 XSS에 노출된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'pwa',
+    question: '응답 특성에 따라 캐시 방식을 어떻게 고르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'Stale While Revalidate는 어떻게 동작하는가?',
+        choices: [
+          { text: '캐시를 즉시 보여주고 뒤에서 갱신한다', correct: true },
+          { text: '네트워크를 먼저 보고 실패하면 캐시를 쓴다', leadsTo: 3 },
+          { text: '캐시가 만료됐을 때만 네트워크로 간다', leadsTo: 0 },
+          { text: '항상 네트워크만 쓴다', leadsTo: 2 },
+        ],
+        rationale:
+          '빠른 표시와 적당한 최신성이 모두 필요한 이미지나 목록에 맞는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '오프라인을 위해 모든 응답을 캐시하면 되는가?',
+        choices: [
+          { text: '아니다. 실패 응답을 저장하지 않는다', correct: true },
+          { text: '그렇다. 많이 담을수록 오프라인에 강하다', leadsTo: 1 },
+          { text: '그렇다. 만료만 걸어 두면 된다', leadsTo: 0 },
+          { text: '아니다. 캐시는 정적 자산에만 쓸 수 있다', leadsTo: 2 },
+        ],
+        rationale:
+          '요청 종류별로 만료와 최대 개수도 제한해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '최신성이 중요한 API에는 무엇을 쓰는가?',
+        choices: [
+          { text: 'Network First나 Network Only', correct: true },
+          { text: 'Cache First', leadsTo: 0 },
+          { text: 'Stale While Revalidate만', leadsTo: 2 },
+          { text: '캐시를 아예 쓰지 않는 것 외엔 방법이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '정적 자산은 Cache First가 맞지만 최신성이 걸리면 네트워크가 먼저다.',
+      },
+    ],
+  },
 ]
