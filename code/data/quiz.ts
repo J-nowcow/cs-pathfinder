@@ -2803,4 +2803,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'javascript',
+    question: '함수가 끝난 뒤 지역 변수가 남는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '변수가 남는 까닭은?',
+        choices: [
+          { text: '내부 함수가 그 렉시컬 환경을 계속 참조해서', correct: true },
+          { text: '전역으로 옮겨져서', leadsTo: 2 },
+          { text: '가비지 컬렉터가 지역 변수를 못 봐서', leadsTo: 3 },
+          { text: '값이 상수로 바뀌어서', leadsTo: 0 },
+        ],
+        rationale:
+          '바깥 함수 호출이 끝나도 내부 함수가 살아 있으면 캡처한 바인딩도 유지된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '클로저가 잡는 것은 값인가 바인딩인가?',
+        choices: [
+          { text: '바인딩이라 나중 변경도 함께 본다', correct: true },
+          { text: '만든 시점의 복사본이다', leadsTo: 0 },
+          { text: '원시값만 복사한다', leadsTo: 1 },
+          { text: '호출할 때마다 새로 읽는다', leadsTo: 1 },
+        ],
+        rationale:
+          '같은 바인딩을 공유한 함수들은 변경을 함께 본다. let의 블록별 바인딩이 루프 문제를 피하는 이유가 여기 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '클로저가 메모리에 부담이 되는 때는?',
+        choices: [
+          { text: '큰 객체를 캡처한 채 리스너나 타이머가 남아 있을 때', correct: true },
+          { text: '함수가 작을 때', leadsTo: 2 },
+          { text: '중첩이 두 단계를 넘을 때', leadsTo: 0 },
+          { text: '부담이 되는 경우가 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '참조된 객체는 도달 가능한 동안 메모리에 남는다. 이벤트 리스너와 타이머를 해제해 불필요한 참조를 끊어야 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'javascript',
+    question: '속성이 없을 때 엔진은 어디까지 찾는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '자체 속성에 없으면 어디를 보는가?',
+        choices: [
+          { text: '프로토타입을 따라 null에 닿을 때까지', correct: true },
+          { text: '전역 객체', leadsTo: 3 },
+          { text: '같은 파일의 다른 객체', leadsTo: 1 },
+          { text: '더 찾지 않고 바로 오류를 낸다', leadsTo: 0 },
+        ],
+        rationale:
+          '체인의 끝인 null에 닿으면 undefined가 된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '속성 대입은 언제나 자체 속성을 만드는가?',
+        choices: [
+          { text: '상속된 setter나 쓰기 금지 속성이 있으면 결과가 달라진다', correct: true },
+          { text: '언제나 자체 속성을 만든다', leadsTo: 4 },
+          { text: '언제나 프로토타입을 고친다', leadsTo: 1 },
+          { text: '읽기와 같은 경로를 탄다', leadsTo: 0 },
+        ],
+        rationale:
+          '하위 객체에 같은 키가 있으면 상속 속성을 가린다. 다만 대입 경로는 읽기와 규칙이 다르다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'class의 static 메서드는 어디에 놓이는가?',
+        choices: [
+          { text: '클래스 생성자 자체', correct: true },
+          { text: 'prototype', leadsTo: 2 },
+          { text: '인스턴스마다 하나씩', leadsTo: 2 },
+          { text: '전역 객체', leadsTo: 3 },
+        ],
+        rationale:
+          '인스턴스 메서드는 prototype에 둔다. 각 위치에서 같은 속성 탐색 규칙을 따른다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'javascript',
+    question: 'let도 끌어올려지는데 왜 바로 읽지 못하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '스코프 시작 시점의 let 바인딩 상태는?',
+        choices: [
+          { text: '만들어졌지만 초기화되지 않았다', correct: true },
+          { text: 'undefined로 초기화됐다', leadsTo: 0 },
+          { text: '아직 존재하지 않는다', leadsTo: 1 },
+          { text: '선언한 값으로 채워져 있다', leadsTo: 1 },
+        ],
+        rationale:
+          '선언문을 평가하기 전에는 초기화되지 않는다. 이 시간적 사각지대에서 읽으면 ReferenceError가 난다. var는 undefined로 초기화된다는 점이 다르다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '호이스팅은 코드를 위로 옮기는가?',
+        choices: [
+          { text: '옮기지 않는다. 선언 등록과 초기화 시점을 설명하는 모델이다', correct: true },
+          { text: '실제로 소스가 위로 이동한다', leadsTo: 1 },
+          { text: 'var만 이동한다', leadsTo: 0 },
+          { text: '컴파일러가 파일을 다시 쓴다', leadsTo: 4 },
+        ],
+        rationale:
+          '실행 컨텍스트를 만들 때 선언을 등록하고 각 종류의 초기화 시점을 달리한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '사각지대의 let에 typeof를 쓰면?',
+        choices: [
+          { text: 'ReferenceError가 난다', correct: true },
+          { text: 'undefined가 나온다', leadsTo: 3 },
+          { text: '"let"이 나온다', leadsTo: 3 },
+          { text: '선언한 타입이 나온다', leadsTo: 1 },
+        ],
+        rationale:
+          '아예 선언되지 않은 이름에 typeof를 썼을 때 undefined가 나오는 것과 다르다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'javascript',
+    question: '같은 함수를 불렀는데 this가 달라지는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '일반 함수의 this를 정하는 것은?',
+        choices: [
+          { text: '호출 형태', correct: true },
+          { text: '함수를 정의한 위치', leadsTo: 4 },
+          { text: '파일의 모듈 종류', leadsTo: 3 },
+          { text: '선언 순서', leadsTo: 0 },
+        ],
+        rationale:
+          '메서드 호출과 일반 호출은 수신자가 다르다. 화살표 함수만 바깥 this를 캡처한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '객체에서 메서드를 떼어 콜백으로 넘기면?',
+        choices: [
+          { text: '수신자 정보가 사라진다', correct: true },
+          { text: '원래 객체가 그대로 따라간다', leadsTo: 2 },
+          { text: '자동으로 bind된다', leadsTo: 0 },
+          { text: '오류가 나서 넘길 수 없다', leadsTo: 2 },
+        ],
+        rationale:
+          'bind로 고정하거나 수신자를 보존하는 래퍼를 써야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '화살표 함수로 할 수 없는 것은?',
+        choices: [
+          { text: 'call로 this를 바꾸거나 new로 생성하는 것', correct: true },
+          { text: '콜백으로 넘기는 것', leadsTo: 2 },
+          { text: '값을 반환하는 것', leadsTo: 1 },
+          { text: '인자를 받는 것', leadsTo: 1 },
+        ],
+        rationale:
+          '화살표 함수에는 자체 this와 arguments가 없다. 동적 수신자가 필요한 메서드에는 일반 함수가 맞다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'typescript',
+    question: '이름이 다른 두 타입이 호환되는 기준은?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '호환을 판정하는 기준은?',
+        choices: [
+          { text: '대상이 요구하는 멤버를 갖췄는가', correct: true },
+          { text: '같은 이름으로 선언됐는가', leadsTo: 2 },
+          { text: '같은 파일에 있는가', leadsTo: 2 },
+          { text: '같은 인터페이스를 구현한다고 적었는가', leadsTo: 2 },
+        ],
+        rationale:
+          '이름이나 선언 계보가 달라도 구조가 맞으면 대입할 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '속성이 더 많으면 대입이 막히는가?',
+        choices: [
+          { text: '대체로 허용된다. 새 객체 리터럴을 바로 넣을 때만 검사한다', correct: true },
+          { text: '언제나 막힌다', leadsTo: 0 },
+          { text: '언제나 허용된다', leadsTo: 0 },
+          { text: '선택 속성일 때만 허용된다', leadsTo: 1 },
+        ],
+        rationale:
+          '초과 속성 검사는 오타 가능성을 잡으려고 리터럴을 바로 대입하는 자리에만 걸린다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '구조가 우연히 같은 식별자 타입을 가르려면?',
+        choices: [
+          { text: '브랜드 필드를 더해 명목적 구분을 흉내 낸다', correct: true },
+          { text: '이름만 다르게 짓는다', leadsTo: 0 },
+          { text: 'readonly를 붙인다', leadsTo: 3 },
+          { text: '가를 방법이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '타입 검사는 컴파일 시 사라진다. 외부 입력의 실제 구조는 런타임 검증이 따로 필요하다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'kotlin',
+    question: '널 검사를 했는데도 안전 호출이 필요한 때는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '스마트 캐스트가 보장되지 않는 조건은?',
+        choices: [
+          { text: '검사와 사용 사이에 값이 바뀔 수 있을 때', correct: true },
+          { text: '값이 원시 타입일 때', leadsTo: 1 },
+          { text: '함수가 길 때', leadsTo: 2 },
+          { text: '검사를 두 번 했을 때', leadsTo: 4 },
+        ],
+        rationale:
+          '지역 val로 고정하거나 안전 호출로 접근해야 한다. getter 결과가 달라질 수 있는 프로퍼티가 대표적이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'Java에서 온 값의 널 가능성은?',
+        choices: [
+          { text: '플랫폼 타입이라 타입에 확정되지 않는다', correct: true },
+          { text: '항상 널이 아닌 것으로 확정된다', leadsTo: 0 },
+          { text: '항상 널 가능으로 확정된다', leadsTo: 0 },
+          { text: '컴파일러가 자동으로 검사를 넣는다', leadsTo: 1 },
+        ],
+        rationale:
+          '경계에서 어노테이션과 검증으로 불확실성을 좁혀야 내부의 널 안전성이 유지된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '안전 호출을 길게 잇는 방식의 문제는?',
+        choices: [
+          { text: '실패 원인을 숨긴다', correct: true },
+          { text: '성능이 크게 나빠진다', leadsTo: 1 },
+          { text: '컴파일이 안 된다', leadsTo: 2 },
+          { text: '문제가 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '반드시 있어야 하는 값은 초기에 검사하고 의미 있는 오류로 바꾸는 편이 낫다.',
+      },
+    ],
+  },
 ]
