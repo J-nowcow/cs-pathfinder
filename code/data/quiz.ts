@@ -826,15 +826,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'Level 3이 모든 API가 지향할 목표인가?',
+        stem: 'Level 3이 아닌 API도 좋은 API일 수 있는가?',
         choices: [
-          { text: '그렇다. 높을수록 좋은 API다', leadsTo: 1 },
-          { text: '단계는 성능 순위를 뜻한다', leadsTo: 4 },
-          { text: 'Level 3이 아니면 REST가 아니다', leadsTo: 0 },
-          { text: '아니다. 복잡성의 이득이 있는지 따져야 한다', correct: true },
+          { text: '그렇다. 복잡성의 이득이 있는지 따져 정한다', correct: true },
+          { text: '아니다. 단계가 높을수록 좋은 API다', leadsTo: 1 },
+          { text: '아니다. Level 3이 아니면 REST가 아니다', leadsTo: 0 },
+          { text: '아니다. 단계는 성능 순위라 낮으면 느리다', leadsTo: 4 },
         ],
         rationale:
-          '높은 단계가 모든 API의 품질 순위는 아니다. 조직의 클라이언트 통제 범위와 변경 빈도에 비해 복잡성의 이득이 있는지 판단해야 한다.',
+          '조직의 클라이언트 통제 범위와 변경 빈도에 비해 복잡성의 이득이 있는지 판단해야 한다.',
       },
       {
         kind: 'boundary',
@@ -3094,15 +3094,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'volatile은 캐시를 건너뛰게 만드는가?',
+        stem: 'volatile을 붙여도 캐시는 그대로 쓰이는가?',
         choices: [
-          { text: '아니다. 메모리 장벽으로 가시성과 순서를 강제한다', correct: true },
-          { text: '그렇다. 캐시를 완전히 우회한다', leadsTo: 4 },
-          { text: '캐시를 매번 비운다', leadsTo: 4 },
-          { text: '캐시를 읽기 전용으로 만든다', leadsTo: 0 },
+          { text: '아니다. 캐시를 완전히 우회한다', leadsTo: 4 },
+          { text: '그렇다. 메모리 장벽으로 가시성과 순서만 강제한다', correct: true },
+          { text: '아니다. 캐시를 매번 비운다', leadsTo: 4 },
+          { text: '아니다. 캐시를 읽기 전용으로 만든다', leadsTo: 0 },
         ],
         rationale:
-          '메모리 모델이 정한 가시성과 순서를 지키도록 강제하고, 캐시를 실제로 어떻게 다룰지는 JVM과 CPU가 정한다.',
+          '캐시를 실제로 어떻게 다룰지는 JVM과 CPU가 정한다.',
       },
       {
         kind: 'boundary',
@@ -3766,12 +3766,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '오래 기다리면 데드락인가?',
+        stem: '긴 작업이나 자원 고갈은 데드락과 따로 구분해야 하는가?',
         choices: [
-          { text: '그렇다. 기다림이 길면 데드락이다', leadsTo: 1 },
-          { text: '아니다. 긴 작업·자원 고갈·경합과 따로 구분해야 한다', correct: true },
-          { text: '스레드가 둘 이상이면 데드락이다', leadsTo: 2 },
-          { text: '타임아웃이 나면 데드락이다', leadsTo: 4 },
+          { text: '아니다. 기다림이 길면 데드락이다', leadsTo: 1 },
+          { text: '아니다. 스레드가 둘 이상이면 데드락이다', leadsTo: 2 },
+          { text: '그렇다. 기다림이 길다고 데드락은 아니다', correct: true },
+          { text: '아니다. 타임아웃이 나면 데드락이다', leadsTo: 4 },
         ],
         rationale:
           'wait-for graph의 고리, 스레드 덤프나 데이터베이스 잠금 정보를 확인해야 한다.',
@@ -3808,12 +3808,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'page fault는 모두 디스크 읽기인가?',
+        stem: '디스크를 읽지 않는 page fault도 있는가?',
         choices: [
-          { text: '아니다. 익명 페이지와 copy-on-write도 fault다', correct: true },
-          { text: '그렇다. fault가 나면 언제나 디스크를 읽는다', leadsTo: 1 },
-          { text: '스왑이 켜져 있을 때만 fault가 난다', leadsTo: 2 },
-          { text: 'fault는 오류라서 프로그램이 죽는다', leadsTo: 1 },
+          { text: '아니다. fault가 나면 언제나 디스크를 읽는다', leadsTo: 1 },
+          { text: '아니다. 스왑이 켜져 있을 때만 fault가 난다', leadsTo: 2 },
+          { text: '아니다. fault는 오류라서 프로그램이 죽는다', leadsTo: 1 },
+          { text: '그렇다. 익명 페이지와 copy-on-write도 fault다', correct: true },
         ],
         rationale:
           '매핑이 없거나 권한 처리가 필요할 때 커널로 넘어가는 것이고, 해결 방법은 여러 가지다.',
@@ -4102,15 +4102,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '시스템 콜은 하드웨어 인터럽트인가?',
+        stem: '시스템 콜은 프로그램이 스스로 일으키는가?',
         choices: [
-          { text: '그렇다. 하드웨어가 일으킨다', leadsTo: 2 },
-          { text: '아니다. 프로그램이 스스로 일으키는 전환이다', correct: true },
-          { text: '타이머가 대신 일으킨다', leadsTo: 2 },
-          { text: '커널이 주기적으로 검사한다', leadsTo: 0 },
+          { text: '그렇다. 전용 명령으로 커널 모드에 들어간다', correct: true },
+          { text: '아니다. 하드웨어가 일으킨다', leadsTo: 2 },
+          { text: '아니다. 타이머가 대신 일으킨다', leadsTo: 2 },
+          { text: '아니다. 커널이 주기적으로 검사한다', leadsTo: 0 },
         ],
         rationale:
-          '시스템 콜을 부르면 CPU가 전용 명령으로 커널 모드에 들어간다.',
+          '하드웨어 인터럽트는 바깥에서 들어오지만 시스템 콜은 안에서 부른다.',
       },
       {
         kind: 'boundary',
@@ -6034,15 +6034,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '스키마 유연성은 스키마가 없다는 뜻인가?',
+        stem: '문서 데이터베이스도 검증 규칙을 둘 수 있는가?',
         choices: [
-          { text: '아니다. 문서 데이터베이스도 검증 규칙을 둘 수 있다', correct: true },
-          { text: '그렇다. 아무 형태나 넣을 수 있다', leadsTo: 2 },
-          { text: '스키마는 관계형에만 있는 개념이다', leadsTo: 2 },
-          { text: '검증은 애플리케이션만 할 수 있다', leadsTo: 2 },
+          { text: '아니다. 아무 형태나 넣을 수 있다', leadsTo: 2 },
+          { text: '아니다. 스키마는 관계형에만 있는 개념이다', leadsTo: 2 },
+          { text: '그렇다. 스키마 유연성이 규칙 없음은 아니다', correct: true },
+          { text: '아니다. 검증은 애플리케이션만 할 수 있다', leadsTo: 2 },
         ],
         rationale:
-          '관계형도 복제와 파티셔닝으로 수평 확장할 수 있다. 실제 차이는 분할 경계를 넘는 질의와 트랜잭션의 비용에서 드러난다.',
+          '유연하다는 것은 규칙을 나중에 바꿀 수 있다는 뜻이지 규칙이 없다는 뜻이 아니다.',
       },
       {
         kind: 'boundary',
