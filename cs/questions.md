@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 338개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 354개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -45,6 +45,8 @@
 - [인덱스를 어느 칸부터 놓아야 하는가?](https://cs-pathfinder.vercel.app/q/78cf3a60-5d0e-4493-8dfc-302528460643)
 - [데이터가 한 대에 안 들어가면 어떻게 나누는가?](https://cs-pathfinder.vercel.app/q/2c52b510-2586-4cbf-9c7d-266338fb2a10)
 - [목록을 나눌 때 번호와 커서는 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/c45a74f0-5788-463f-a246-c52724f98476)
+- [낙관적 락과 비관적 락은 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/af935dba-bdcf-4095-9045-c89345f49594) — 2026-08-17
+- [RDBMS 대신 NoSQL을 도입하는 판단 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/18737efb-f4a9-45d6-a5eb-99d3138d06e7) — 2026-08-27
 
 ## 네트워크
 
@@ -90,6 +92,8 @@
 - [집 안의 여러 기기가 IP 하나로 어떻게 나가는가?](https://cs-pathfinder.vercel.app/q/2b791b01-ac8a-4437-a509-84cf84aee58b)
 - [브라우저가 캐시를 쓸지 말지 어떻게 정하는가?](https://cs-pathfinder.vercel.app/q/f77e5584-6af6-44d2-95ef-315de61dd583)
 - [응답을 압축하면 무엇을 치르는가?](https://cs-pathfinder.vercel.app/q/86cee3be-7152-48a1-a1c1-b2b8988f1888)
+- [TLS 핸드셰이크 비용은 어떻게 줄이는가?](https://cs-pathfinder.vercel.app/q/f2b936bd-8525-41f4-ac16-d78f1c91b6a1) — 2026-08-18
+- [브라우저는 왜 실제 요청 전에 Preflight 요청을 보내는가?](https://cs-pathfinder.vercel.app/q/f986556f-2519-4ba4-8e5c-ba0d532373d8) — 2026-08-28
 
 ## 언어 · 런타임
 
@@ -135,6 +139,8 @@
 - [한글이 깨져 보이는 이유는?](https://cs-pathfinder.vercel.app/q/8be3f11b-baa4-4f08-9684-87440551b4a3)
 - [0.1을 더했는데 왜 딱 안 떨어지는가?](https://cs-pathfinder.vercel.app/q/31dc816a-bae1-4aa0-9b1b-b4c0bf587aea)
 - [정규식 하나가 서버를 멈추게 하는가?](https://cs-pathfinder.vercel.app/q/5487a800-f726-4b85-ab6d-9369eaf24d83)
+- [클래스 내 정적 변수와 정적 블록의 초기화 순서는 무엇으로 결정되는가?](https://cs-pathfinder.vercel.app/q/66979236-02fe-455d-b7be-8b47af9b9821) — 2026-08-16
+- [싱글 스레드인 JS에서 비동기 작업이 멈추지 않고 도는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/7560ea60-aacf-483f-aa47-3167e88019dc) — 2026-08-26
 
 ## 운영체제
 
@@ -177,6 +183,8 @@
 - [읽은 파일이 두 번째부터 빨라지는 이유는?](https://cs-pathfinder.vercel.app/q/93b1c472-c606-4045-9b0d-b23e50531d81)
 - [큰 파일을 통째로 읽으면 무엇이 문제인가?](https://cs-pathfinder.vercel.app/q/3fa7893e-1d02-41ba-9ec8-a8fefe1e6445)
 - [프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?](https://cs-pathfinder.vercel.app/q/6ecf2ded-2ca1-47bd-8dc3-e29c3fc198ec)
+- [멀티프로세스와 멀티스레드는 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/69bd9c69-44c8-4185-90b7-d56832cfabec) — 2026-08-19
+- [스래싱을 막기 위해 워킹셋을 어떻게 활용하는가?](https://cs-pathfinder.vercel.app/q/3ab0da9f-bbc2-4cb1-969d-7ccd8048cd16) — 2026-08-29
 
 ## 자료구조 · 알고리즘
 
@@ -210,6 +218,7 @@
 - [우선순위 큐를 힙으로 구현하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/9ac88a5c-11c3-4a52-b642-09a97936fdfa)
 - [B-tree는 왜 디스크에 유리한가?](https://cs-pathfinder.vercel.app/q/212ffacb-9cca-4c8f-9cb5-906568c356b3)
 - [B-Tree가 디스크에 맞는 이유는?](https://cs-pathfinder.vercel.app/q/35514c0e-b8ee-4fd5-b3cb-420077bd0b3c)
+- [위상 정렬을 적용하려면 그래프가 어떤 조건을 만족해야 하는가?](https://cs-pathfinder.vercel.app/q/eac19107-d34b-4cca-ae4d-b74c5f51ad7e) — 2026-08-20
 
 ## 프레임워크
 
@@ -243,6 +252,7 @@
 - [단위 시험과 통합 시험은 무엇으로 가르는가?](https://cs-pathfinder.vercel.app/q/2a1ae829-21b3-42da-8593-599384cd6ec3)
 - [목록 하나 읽었는데 쿼리가 백 번 나가는 이유는?](https://cs-pathfinder.vercel.app/q/374cf387-4019-4a55-82e4-63e3f0057085)
 - [수정 메서드를 안 불렀는데 UPDATE가 나가는 이유는?](https://cs-pathfinder.vercel.app/q/8f957463-4d9f-4b08-9730-a3aa2ebf771b)
+- [부모 트랜잭션과 무관하게 동작하려면 어떤 전파 속성을 쓰는가?](https://cs-pathfinder.vercel.app/q/6b9cd8db-5ef0-4d94-8fe4-63001cd1885a) — 2026-08-21
 
 ## 아키텍처 · 분산시스템
 
@@ -273,6 +283,8 @@
 - [남의 서버에 일이 생긴 것을 어떻게 아는가?](https://cs-pathfinder.vercel.app/q/81f81144-b784-453c-99a2-b0ffd6ee95cf)
 - [서버마다 시계가 다르면 무엇이 깨지는가?](https://cs-pathfinder.vercel.app/q/c08c3c2d-6035-4b02-bec3-560c5e4ce85b)
 - [메시지 형식을 바꾸면 옛 소비자는 어떻게 되는가?](https://cs-pathfinder.vercel.app/q/37c38eb6-ab27-41f9-8827-70edbf2c741a)
+- [포트와 어댑터 구조에서 경계를 나누는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/b190ca7c-608a-428b-b5b6-0c948e3e6aa3) — 2026-08-15
+- [쓰기와 읽기 모델을 분리하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/c52ae533-3dd7-4591-8185-60dc45132a76) — 2026-08-25
 
 ## 프론트엔드
 
@@ -312,6 +324,7 @@
 - [스타일을 바꿨을 뿐인데 왜 느려지는가?](https://cs-pathfinder.vercel.app/q/d32cc10b-eadc-4b30-9939-57447d055fff)
 - [화면이 안 바뀌는데 값은 바뀌어 있는 경우가 있는가?](https://cs-pathfinder.vercel.app/q/11d2c118-26e3-4110-ba9a-85c30187173f)
 - [브라우저는 화면을 어떤 순서로 그리는가?](https://cs-pathfinder.vercel.app/q/74f64264-fecc-4cbc-9fa0-a595ac13a012)
+- [SSR에서 하이드레이션이 필요한 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/43109666-79c3-4847-a7d6-6d52d2c5351b) — 2026-08-23
 
 ## 인프라 · 보안
 
@@ -340,6 +353,7 @@
 - [인코딩과 암호화와 해싱은 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/179b5c31-2873-4831-b21a-b30c7bfbed07)
 - [무작위 값은 어디서 만들어야 안전한가?](https://cs-pathfinder.vercel.app/q/bdc03c03-fa02-46ae-aaa3-c35f96281650)
 - [사용자 입력을 왜 전부 의심해야 하는가?](https://cs-pathfinder.vercel.app/q/a0783c56-8cdc-49e2-a270-707fc6e540a4)
+- [CSRF 토큰은 쿠키 세션 방식에서 왜 필수인가?](https://cs-pathfinder.vercel.app/q/380c077d-8da7-4a43-80ce-4ad0927f50e7) — 2026-08-22
 
 ## 모바일
 
@@ -373,3 +387,5 @@
 - [안드로이드 메인 스레드에서 무거운 작업을 하면 왜 ANR이 발생하는가?](https://cs-pathfinder.vercel.app/q/3ccdd4cf-917c-4b03-83e2-72432d2bc735)
 - [안드로이드에서 메모리 누수가 발생하는 주원인은 무엇인가?](https://cs-pathfinder.vercel.app/q/031700b2-742f-49a5-a571-e64f7034fda4)
 - [코루틴의 구조적 동시성은 무엇을 해결하는가?](https://cs-pathfinder.vercel.app/q/faa53301-ae3e-434d-9f2a-c08d4ec69c78)
+- [오프라인 우선 앱에서 로컬과 서버의 데이터 일관성은 어떻게 유지하는가?](https://cs-pathfinder.vercel.app/q/3e75120a-b161-4e11-9986-e939f291afa9) — 2026-08-14
+- [WorkManager는 어떤 방식으로 작업 실행을 보장하는가?](https://cs-pathfinder.vercel.app/q/3916f81a-229d-4a73-85f1-5b1d03f77679) — 2026-08-24
