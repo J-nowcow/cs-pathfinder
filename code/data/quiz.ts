@@ -8455,4 +8455,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'android',
+    question: '화면을 돌리면 데이터가 사라지는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '구성이 바뀌면 액티비티는 어떻게 되는가?',
+        choices: [
+          { text: '파괴되고 새로 만들어진다', correct: true },
+          { text: '그대로 유지되고 화면만 다시 그린다', leadsTo: 3 },
+          { text: '잠시 멈췄다가 이어서 실행된다', leadsTo: 3 },
+          { text: '백그라운드로 내려간다', leadsTo: 1 },
+        ],
+        rationale:
+          '가로와 세로가 다른 리소스를 쓰므로 처음부터 다시 만드는 것이 가장 확실하다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ViewModel에 담으면 어떤 종료에도 살아남는가?',
+        choices: [
+          { text: '아니다. 프로세스가 죽으면 함께 사라진다', correct: true },
+          { text: '그렇다. 앱을 지울 때까지 남는다', leadsTo: 1 },
+          { text: '그렇다. 시스템이 따로 저장해 둔다', leadsTo: 2 },
+          { text: '아니다. 구성 변경도 못 견딘다', leadsTo: 0 },
+        ],
+        rationale:
+          '그 자리를 SavedStateHandle이 메운다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'onSaveInstanceState에 담기 좋은 것은?',
+        choices: [
+          { text: '작고 직렬화 가능한 값', correct: true },
+          { text: '진행 중인 작업', leadsTo: 0 },
+          { text: '오래 남겨야 하는 것', leadsTo: 0 },
+          { text: '큰 목록 전체', leadsTo: 0 },
+        ],
+        rationale:
+          '세 층을 가르는 축은 무엇을 견뎌야 하느냐다. 오래 남길 것은 파일이나 DB로 내린다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '푸시 알림이 안 오는 이유는 대개 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '도즈 모드에서 네트워크와 예약 작업은 어떻게 처리되는가?',
+        choices: [
+          { text: '일정 간격으로 몰아서 처리된다', correct: true },
+          { text: '완전히 차단된다', leadsTo: 0 },
+          { text: '평소보다 빠르게 처리된다', leadsTo: 0 },
+          { text: '앱마다 따로 예외가 적용된다', leadsTo: 4 },
+        ],
+        rationale:
+          '배터리를 아끼려는 설계이고 그 대가로 알림이 몇 분씩 늦을 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '급한 알림은 높은 우선순위를 항상 붙이면 되는가?',
+        choices: [
+          { text: '아니다. 남용하면 할당량이 깎여 오히려 더 늦어진다', correct: true },
+          { text: '그렇다. 무제한으로 절전을 뚫는다', leadsTo: 1 },
+          { text: '그렇다. 비용만 더 들 뿐 손해는 없다', leadsTo: 1 },
+          { text: '아니다. 우선순위는 아무 효과가 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '진짜 사용자를 깨워야 하는 메시지에만 쓴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '놓치면 안 되는 정보는 어떻게 다루는가?',
+        choices: [
+          { text: '앱이 열릴 때 서버에서 다시 확인하는 경로를 함께 둔다', correct: true },
+          { text: '같은 알림을 여러 번 보낸다', leadsTo: 2 },
+          { text: '우선순위를 최고로 올린다', leadsTo: 1 },
+          { text: '전송 성공 응답을 도착으로 기록한다', leadsTo: 2 },
+        ],
+        rationale:
+          '푸시는 최선 노력이라 유실될 수 있고, 전송 성공만으로 단말 도착을 보장하지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '앱이 백그라운드에서 죽는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '시스템이 가장 먼저 거둬가는 것은?',
+        choices: [
+          { text: '캐시된 상태', correct: true },
+          { text: '포그라운드', leadsTo: 1 },
+          { text: '보이는 상태', leadsTo: 1 },
+          { text: '서비스', leadsTo: 1 },
+        ],
+        rationale:
+          '앞에 보이는 앱을 살리는 것이 우선이라 안 보이는 프로세스부터 순서대로 거둔다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '백그라운드에서 죽는 것은 고쳐야 할 사고인가?',
+        choices: [
+          { text: '아니다. 설계다. 언제 죽어도 이어지도록 만들어야 한다', correct: true },
+          { text: '그렇다. 메모리 누수를 잡으면 안 죽는다', leadsTo: 4 },
+          { text: '그렇다. 예외 처리를 넣으면 막을 수 있다', leadsTo: 0 },
+          { text: '아니다. 대신 죽기 전에 알림이 온다', leadsTo: 0 },
+        ],
+        rationale:
+          '죽을 때 알림이 없다는 점이 문제라서 화면을 떠날 때 저장해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '업로드나 동기화는 어디에 맡기는가?',
+        choices: [
+          { text: '작업 관리자에 맡겨 프로세스가 죽어도 다시 실행되게 한다', correct: true },
+          { text: '앱 프로세스에 매달아 끝까지 붙잡는다', leadsTo: 2 },
+          { text: '사용자가 앱을 열 때마다 처음부터 다시 한다', leadsTo: 2 },
+          { text: '메모리 부족 신호를 받고 그때 시작한다', leadsTo: 4 },
+        ],
+        rationale:
+          '오래 걸리는 일을 앱 프로세스에 매달면 프로세스와 함께 사라진다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '백그라운드 전환 때 어디서 자원을 해제하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '화면 전용 자원은 어디서 멈추는가?',
+        choices: [
+          { text: 'onStop', correct: true },
+          { text: 'onPause', leadsTo: 1 },
+          { text: 'onDestroy', leadsTo: 0 },
+          { text: 'onResume', leadsTo: 1 },
+        ],
+        rationale:
+          'onPause에는 포커스를 잃을 때 꼭 필요한 짧은 처리만 둔다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'onPause면 화면이 안 보이는 상태인가?',
+        choices: [
+          { text: '아니다. 멀티 윈도우나 반투명 화면 뒤로 보일 수 있다', correct: true },
+          { text: '그렇다. 포커스를 잃으면 가려진 것이다', leadsTo: 1 },
+          { text: '그렇다. onPause와 onStop은 같이 온다', leadsTo: 1 },
+          { text: '아니다. onPause에서는 오히려 더 잘 보인다', leadsTo: 1 },
+        ],
+        rationale:
+          '그래서 무거운 종료 작업을 onPause에 넣으면 전환이 느려진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '작은 UI 상태 저장을 onDestroy에 맡기면 왜 위험한가?',
+        choices: [
+          { text: 'onStop 뒤에 프로세스가 종료될 수 있어 호출을 보장받지 못한다', correct: true },
+          { text: 'onDestroy가 너무 자주 불려서', leadsTo: 1 },
+          { text: 'onDestroy에서는 저장 API를 쓸 수 없어서', leadsTo: 3 },
+          { text: '저장 순서가 뒤바뀌어서', leadsTo: 3 },
+        ],
+        rationale:
+          '저장 상태 API로 남겨야 프로세스가 죽어도 화면을 복원할 수 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '뷰 바인딩은 왜 onDestroyView에서 비우는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'Fragment 수명과 View 수명은 어떻게 다른가?',
+        choices: [
+          { text: 'Fragment가 남아도 뷰는 먼저 파괴될 수 있다', correct: true },
+          { text: '둘은 항상 함께 시작하고 함께 끝난다', leadsTo: 0 },
+          { text: '뷰가 Fragment보다 오래 산다', leadsTo: 0 },
+          { text: 'Fragment에는 수명이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          'Fragment는 onCreate부터 onDestroy까지, 뷰는 onCreateView부터 onDestroyView까지다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '바인딩을 계속 들고 있으면 재사용해서 이득인가?',
+        choices: [
+          { text: '아니다. 폐기된 뷰가 수집되지 않고 잘못 접근할 수도 있다', correct: true },
+          { text: '그렇다. 다시 찾는 비용을 아낀다', leadsTo: 0 },
+          { text: '그렇다. 백 스택 복원이 빨라진다', leadsTo: 3 },
+          { text: '아니다. 대신 매번 새로 만들면 된다', leadsTo: 0 },
+        ],
+        rationale:
+          'Fragment 필드에는 새 뷰가 생기기 전까지 뷰 참조를 남기지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '뷰를 갱신하는 관찰은 무엇에 묶는가?',
+        choices: [
+          { text: 'viewLifecycleOwner', correct: true },
+          { text: 'Fragment 자신', leadsTo: 1 },
+          { text: '액티비티', leadsTo: 1 },
+          { text: '애플리케이션', leadsTo: 1 },
+        ],
+        rationale:
+          '그러면 뷰가 파괴될 때 관찰도 멈춘다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '회전 뒤에도 남겨야 할 상태는 어디에 두는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '구성 변경 동안 ViewModel과 저장 상태는 어떻게 다르게 동작하는가?',
+        choices: [
+          { text: 'ViewModel은 같은 인스턴스를 잇고 저장 상태는 값으로 복원한다', correct: true },
+          { text: '둘 다 같은 인스턴스를 잇는다', leadsTo: 4 },
+          { text: '둘 다 값으로 복원한다', leadsTo: 4 },
+          { text: 'ViewModel만 값으로 복원한다', leadsTo: 4 },
+        ],
+        rationale:
+          'ViewModel은 재생성 동안 메모리 데이터를 그대로 유지한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '안전하게 하려고 목록 전체를 저장 상태에 넣어도 되는가?',
+        choices: [
+          { text: '아니다. 큰 목록이나 비즈니스 데이터는 넣지 않는다', correct: true },
+          { text: '그렇다. 클수록 복원이 정확해진다', leadsTo: 1 },
+          { text: '그렇다. 용량 제한이 없다', leadsTo: 1 },
+          { text: '아니다. 대신 ViewModel에 Bundle을 넣는다', leadsTo: 4 },
+        ],
+        rationale:
+          'ID나 검색어만 남기고 데이터 계층에서 다시 읽는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '프로세스가 죽은 뒤 복원에 필요한 것은?',
+        choices: [
+          { text: '화면을 다시 만드는 최소 키', correct: true },
+          { text: '화면에 그려져 있던 전체 데이터', leadsTo: 1 },
+          { text: 'ViewModel 인스턴스', leadsTo: 3 },
+          { text: '아무것도 필요 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '시스템이 프로세스를 죽이면 ViewModel도 사라지므로 Bundle 기반 저장 상태에서 되살린다.',
+      },
+    ],
+  },
 ]
