@@ -2029,4 +2029,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'java',
+    question: 'equals 재정의 시 hashCode도 바꿔야 하는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'HashMap이 값을 찾는 순서는?',
+        choices: [
+          { text: 'hashCode로 버킷을 정하고 그 안에서 equals로 견준다', correct: true },
+          { text: 'equals로 전체를 훑고 hashCode로 정렬한다', leadsTo: 0 },
+          { text: 'equals만으로 찾는다', leadsTo: 0 },
+          { text: 'hashCode만으로 찾는다', leadsTo: 3 },
+        ],
+        rationale:
+          'equals만 재정의하면 논리적으로 같은 두 객체가 서로 다른 버킷으로 흩어진다. equals 비교까지 가지도 못하므로 조회가 실패한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '규약은 어느 방향으로 성립하는가?',
+        choices: [
+          { text: 'equals가 true면 hashCode도 같아야 한다', correct: true },
+          { text: 'hashCode가 같으면 equals도 true여야 한다', leadsTo: 0 },
+          { text: '양방향으로 모두 성립해야 한다', leadsTo: 0 },
+          { text: '둘은 서로 무관하다', leadsTo: 4 },
+        ],
+        rationale:
+          '규약은 단방향이다. hashCode가 같아도 equals는 false일 수 있고 이게 해시 충돌이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가변 필드를 hashCode에 쓰면?',
+        choices: [
+          { text: '컬렉션에 넣은 뒤 그 필드를 바꾸면 다시 찾지 못한다', correct: true },
+          { text: '성능만 조금 떨어진다', leadsTo: 3 },
+          { text: '컬렉션이 알아서 다시 계산한다', leadsTo: 2 },
+          { text: '아무 문제가 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '컬렉션에 넣은 뒤 필드를 바꾸면 그 객체는 사실상 사라진다. JPA 엔티티의 식별자가 영속화 시점에 채워지는 것도 같은 함정이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'javascript',
+    question: 'setTimeout(0)이 즉시 실행되지 않는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '여기서 0이 뜻하는 것은?',
+        choices: [
+          { text: '가능한 가장 이른 다음 차례', correct: true },
+          { text: '지금 이 자리에서 바로', leadsTo: 0 },
+          { text: '0밀리초 뒤 정확히', leadsTo: 0 },
+          { text: '우선순위가 가장 높다는 표시', leadsTo: 1 },
+        ],
+        rationale:
+          '콜백이 큐에 들어갈 뿐이고, 지금 돌고 있는 코드가 끝나야 이벤트 루프가 그것을 꺼낸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'setTimeout(0) 뒤에 등록한 Promise.then은 언제 도는가?',
+        choices: [
+          { text: '나중에 등록했어도 먼저 돈다', correct: true },
+          { text: '등록 순서대로 나중에 돈다', leadsTo: 0 },
+          { text: '둘은 같은 큐라 순서가 보장되지 않는다', leadsTo: 1 },
+          { text: '동기 코드보다도 먼저 돈다', leadsTo: 0 },
+        ],
+        rationale:
+          '마이크로태스크 큐는 매크로태스크보다 먼저, 그리고 스택이 빌 때마다 전부 비워진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'setTimeout(0)의 쓸모가 실제로 드러나는 자리는?',
+        choices: [
+          { text: '무거운 작업을 잘라 사이사이 화면이 숨 쉬게 할 때', correct: true },
+          { text: '가장 빨리 실행하고 싶을 때', leadsTo: 0 },
+          { text: '애니메이션 프레임을 맞출 때', leadsTo: 3 },
+          { text: '서버 응답을 기다릴 때', leadsTo: 4 },
+        ],
+        rationale:
+          '무거운 계산이 한 덩어리로 돌면 그동안 렌더링도 입력도 처리되지 않는다. 작업을 잘라 큐에 나눠 넣으면 사이사이에 화면이 숨을 쉰다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'jvm',
+    question: '가비지 컬렉션이 멈춤을 만드는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '수집 중 실행을 세우는 까닭은?',
+        choices: [
+          { text: '세는 동안 참조 관계가 바뀌면 이미 확인한 것이 틀려져서', correct: true },
+          { text: '메모리를 물리적으로 지워야 해서', leadsTo: 1 },
+          { text: '스레드를 새로 만들어야 해서', leadsTo: 1 },
+          { text: '디스크에 기록해야 해서', leadsTo: 4 },
+        ],
+        rationale:
+          '살아 있는 객체를 세는 동안 애플리케이션이 참조를 바꾸면 앞서 확인한 결과가 무너진다. 그 구간만 실행을 세운다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '힙을 키우면 멈춤 문제가 해결되는가?',
+        choices: [
+          { text: '빈도는 줄지만 한 번의 멈춤은 길어진다', correct: true },
+          { text: '빈도도 길이도 모두 준다', leadsTo: 2 },
+          { text: '아무 영향이 없다', leadsTo: 2 },
+          { text: '젊은 영역만 영향을 받는다', leadsTo: 0 },
+        ],
+        rationale:
+          '총량과 최악값의 맞바꿈이다. 늙은 영역은 대상이 많고 흩어져 있어 한 번 손대면 오래 걸린다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '동시 수집기를 쓰면 멈춤이 사라지는가?',
+        choices: [
+          { text: '줄일 뿐 완전히 없애지는 못한다', correct: true },
+          { text: '완전히 사라진다', leadsTo: 1 },
+          { text: '오히려 늘어난다', leadsTo: 1 },
+          { text: '젊은 영역에서만 사라진다', leadsTo: 0 },
+        ],
+        rationale:
+          '요즘 수집기는 세는 일 대부분을 실행과 겹쳐서 한다. 멈추는 구간을 시작과 끝의 짧은 두 번으로 줄이는 방식이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'jvm',
+    question: '객체와 호출 프레임은 왜 따로 저장하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 기준은?',
+        choices: [
+          { text: '여러 스레드가 공유하는가, 스레드마다 따로인가', correct: true },
+          { text: '크기가 큰가 작은가', leadsTo: 4 },
+          { text: '오래 사는가 짧게 사는가', leadsTo: 0 },
+          { text: '기본형인가 참조형인가', leadsTo: 3 },
+        ],
+        rationale:
+          '객체는 여러 스레드가 공유할 수 있어 힙에 두고, 호출 프레임은 스레드마다 독립된 실행 상태라 각 JVM 스택에 둔다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '호출 프레임도 GC가 회수하는가?',
+        choices: [
+          { text: '메서드가 끝나면 사라져 별도 회수가 필요 없다', correct: true },
+          { text: '힙 객체와 똑같이 회수된다', leadsTo: 0 },
+          { text: '스레드가 끝날 때 한꺼번에 회수된다', leadsTo: 0 },
+          { text: '수집기 종류에 따라 다르다', leadsTo: 4 },
+        ],
+        rationale:
+          '프레임에는 지역 변수, 피연산자 스택, 반환 정보가 있다. 메서드가 끝나면 프레임이 사라진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '힙 객체는 참조가 끊기면 어떻게 되는가?',
+        choices: [
+          { text: '바로 사라지지 않고 도달 불가 판정 뒤에 회수된다', correct: true },
+          { text: '즉시 메모리에서 지워진다', leadsTo: 1 },
+          { text: '스택으로 옮겨진다', leadsTo: 3 },
+          { text: '영원히 남는다', leadsTo: 1 },
+        ],
+        rationale:
+          'GC가 도달 불가능하다고 판단한 뒤 회수한다. 참조를 끊는 것과 메모리가 비는 것은 같은 순간이 아니다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'jvm',
+    question: '순환 참조 객체도 회수할 수 있는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '생존을 판정하는 기준은?',
+        choices: [
+          { text: 'GC 루트에서 도달할 수 있는가', correct: true },
+          { text: '참조하는 개수가 0인가', leadsTo: 0 },
+          { text: '마지막으로 쓰인 지 얼마나 됐는가', leadsTo: 2 },
+          { text: '객체 크기가 얼마인가', leadsTo: 4 },
+        ],
+        rationale:
+          '서로 가리켜도 루트에서 닿지 않으면 둘 다 회수 대상이다. 참조 횟수를 세는 방식이 아니라서 순환이 문제가 되지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '서로를 가리키는 두 객체는 어떻게 되는가?',
+        choices: [
+          { text: '루트에서 안 닿으면 둘 다 회수된다', correct: true },
+          { text: '서로 참조하므로 영원히 남는다', leadsTo: 0 },
+          { text: '하나만 회수된다', leadsTo: 0 },
+          { text: '약한 참조로 바꿔야 회수된다', leadsTo: 1 },
+        ],
+        rationale:
+          '추적식 수집기는 참조 횟수가 아니라 도달 가능성을 본다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'GC 루트에 해당하는 것은?',
+        choices: [
+          { text: '실행 중인 스레드의 스택 참조와 정적 참조', correct: true },
+          { text: '힙에 있는 모든 객체', leadsTo: 0 },
+          { text: '가장 최근에 만든 객체', leadsTo: 2 },
+          { text: '크기가 가장 큰 객체', leadsTo: 4 },
+        ],
+        rationale:
+          '루트가 살아 있으면 그 경로의 객체도 살아 있다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'jvm',
+    question: '수집기는 처리량과 지연 중 무엇으로 고르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '무엇을 우선할지 정하는 기준은?',
+        choices: [
+          { text: '배치는 처리량, 응답형 서비스는 최악 지연', correct: true },
+          { text: '언제나 처리량이 우선이다', leadsTo: 1 },
+          { text: '언제나 짧은 정지가 우선이다', leadsTo: 2 },
+          { text: '힙 크기만 보고 정한다', leadsTo: 3 },
+        ],
+        rationale:
+          '힙 크기, CPU 여유, 할당률과 실제 지원 범위도 함께 본다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '짧은 정지를 목표로 하는 수집기는 공짜인가?',
+        choices: [
+          { text: '장벽 비용과 충분한 힙 여유가 필요하다', correct: true },
+          { text: '아무 대가 없이 정지만 줄인다', leadsTo: 2 },
+          { text: '처리량도 함께 올라간다', leadsTo: 0 },
+          { text: '힙을 줄여도 된다', leadsTo: 3 },
+        ],
+        rationale:
+          'ZGC는 표시와 재배치 대부분을 동시에 수행하지만 그만큼 자원을 쓴다. Parallel GC는 처리량이 높은 대신 살아 있는 집합이 크면 정지가 길어진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '고르기 전에 반드시 할 일은?',
+        choices: [
+          { text: '운영과 같은 부하에서 지연·처리량·GC CPU를 재 본다', correct: true },
+          { text: '가장 최신 수집기를 고른다', leadsTo: 2 },
+          { text: '힙을 최대로 잡는다', leadsTo: 0 },
+          { text: '기본값을 그대로 쓴다', leadsTo: 4 },
+        ],
+        rationale:
+          'G1은 리전 단위로 수집해 처리량과 정지 목표를 절충한다. 어느 쪽이든 선택 전 같은 부하에서 재 봐야 한다.',
+      },
+    ],
+  },
 ]
