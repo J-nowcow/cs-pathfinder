@@ -1866,10 +1866,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '무엇을 함께 봐야 하는가?',
         choices: [
-          { text: '전체 소켓 수만', leadsTo: 1 },
-          { text: '목적지별 소켓 수, 에페머럴 포트 범위, 발생한 오류', correct: true },
-          { text: 'CPU 사용률만', leadsTo: 3 },
-          { text: '커널 버전만', leadsTo: 0 },
+          { text: '열려 있는 전체 소켓 수만', leadsTo: 1 },
+          { text: '목적지별 소켓 수와 포트 범위, 오류', correct: true },
+          { text: '그 시각의 CPU 사용률만', leadsTo: 3 },
+          { text: '커널 버전과 배포판만', leadsTo: 0 },
         ],
         rationale:
           'netstat이나 ss로 목적지별로 세고, 포트 범위와 EADDRNOTAVAIL 발생 여부를 함께 본다.',
@@ -2466,9 +2466,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '체크 예외를 넓게 쓰면 더 안전해지는가?',
         choices: [
-          { text: '넓게 쓸수록 안전하다', leadsTo: 3 },
-          { text: '호출 계층마다 의미 없는 catch와 throws가 퍼진다', correct: true },
-          { text: '성능만 조금 나빠진다', leadsTo: 2 },
+          { text: '처리를 강제하니 넓게 쓸수록 안전하다', leadsTo: 3 },
+          { text: '계층마다 의미 없는 catch가 퍼진다', correct: true },
+          { text: '스택 추적 비용으로 성능만 조금 나빠진다', leadsTo: 2 },
           { text: '컴파일러가 알아서 걸러 준다', leadsTo: 0 },
         ],
         rationale:
@@ -5059,9 +5059,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '역전이 일어나는 구조는?',
         choices: [
           { text: '급한 일의 우선순위를 잘못 매겼을 때', leadsTo: 1 },
-          { text: '급한 쪽이 기다리는 잠금을 느린 쪽이 쥐었는데 그마저 밀릴 때', correct: true },
-          { text: '스케줄러가 고장 났을 때', leadsTo: 0 },
-          { text: '잠금을 안 썼을 때', leadsTo: 4 },
+          { text: '급한 쪽이 기다리는 잠금을 느린 쪽이 쥐었을 때', correct: true },
+          { text: '스케줄러가 우선순위를 잘못 읽었을 때', leadsTo: 0 },
+          { text: '잠금 없이 공유 자원을 함께 만질 때', leadsTo: 4 },
         ],
         rationale:
           '느린 일이 중간 일에 밀려 돌지 못하면 결국 급한 일이 중간 일에 밀린 셈이 된다.',
@@ -5281,9 +5281,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '강제 종료로 죽이면 커널 자원도 안 회수되는가?',
         choices: [
           { text: '자원도 회수되지 않는다', leadsTo: 2 },
-          { text: '자원 회수는 그대로 일어난다. 못 도는 것은 정리 코드다', correct: true },
-          { text: '메모리만 남는다', leadsTo: 0 },
-          { text: '재부팅해야 회수된다', leadsTo: 2 },
+          { text: '자원 회수는 된다. 못 도는 것은 정리 코드다', correct: true },
+          { text: '파일은 닫히고 메모리만 남는다', leadsTo: 0 },
+          { text: '재부팅해야 커널이 회수한다', leadsTo: 2 },
         ],
         rationale:
           '잡을 수 없는 신호로 죽이면 종료 훅과 임시 파일 정리는 못 돌지만, 커널 자원 회수는 그와 무관하다.',
@@ -6972,10 +6972,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '가상 트리를 무조건 빠른 기술로 볼 수 있는가?',
         choices: [
-          { text: '속도와 무관한 개념이다', leadsTo: 0 },
-          { text: '언제나 더 빠르다', leadsTo: 3 },
-          { text: '언제나 더 느리다', leadsTo: 3 },
-          { text: '없다. 상태 기반 UI를 예측 가능하게 만드는 절충이다', correct: true },
+          { text: '속도와는 아무 상관 없는 개념이다', leadsTo: 0 },
+          { text: '직접 만지는 것보다 언제나 더 빠르다', leadsTo: 3 },
+          { text: '한 겹을 더 거치므로 언제나 더 느리다', leadsTo: 3 },
+          { text: '없다. 상태 기반 UI를 위한 절충이다', correct: true },
         ],
         rationale:
           '업데이트가 작고 구조가 단순하면 직접 조작이 더 싸다.',
@@ -8502,10 +8502,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '구성 변경 동안 ViewModel과 저장 상태는 어떻게 다르게 동작하는가?',
         choices: [
-          { text: '둘 다 값으로 복원한다', leadsTo: 4 },
-          { text: '둘 다 같은 인스턴스를 잇는다', leadsTo: 4 },
-          { text: 'ViewModel은 같은 인스턴스를 잇고 저장 상태는 값으로 복원한다', correct: true },
-          { text: 'ViewModel만 값으로 복원한다', leadsTo: 4 },
+          { text: '둘 다 값을 꺼내 새로 복원한다', leadsTo: 4 },
+          { text: '둘 다 같은 인스턴스를 그대로 이어 쓴다', leadsTo: 4 },
+          { text: 'ViewModel은 인스턴스를, 저장 상태는 값을 잇는다', correct: true },
+          { text: 'ViewModel이 값을, 저장 상태가 인스턴스를 잇는다', leadsTo: 4 },
         ],
         rationale:
           'ViewModel은 재생성 동안 메모리 데이터를 그대로 유지한다.',
@@ -8820,9 +8820,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '업무상 전달 확인이 필요하면 어떻게 하는가?',
         choices: [
-          { text: '높은 우선순위로 올린다', leadsTo: 2 },
-          { text: '메시지를 여러 번 보낸다', leadsTo: 4 },
-          { text: '앱이 처리 ACK를 보내고 서버는 이벤트 ID로 중복을 제거한다', correct: true },
+          { text: '높은 우선순위로 올려 즉시 전달시킨다', leadsTo: 2 },
+          { text: '같은 메시지를 여러 번 보내 도착 확률을 올린다', leadsTo: 4 },
+          { text: '앱이 처리 ACK를 보내고 서버가 중복을 제거한다', correct: true },
           { text: '접수 응답을 도착으로 기록한다', leadsTo: 4 },
         ],
         rationale:
@@ -9114,10 +9114,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '클로저가 고리를 만드는 조건은?',
         choices: [
-          { text: '비동기로 실행될 때만', leadsTo: 3 },
+          { text: '나중에 비동기로 실행되는 클로저일 때만', leadsTo: 3 },
           { text: '클로저를 쓰기만 하면 언제나', leadsTo: 1 },
-          { text: 'self를 강하게 캡처하고 self가 그 클로저를 보관할 때', correct: true },
-          { text: '캡처 목록을 쓸 때만', leadsTo: 1 },
+          { text: 'self를 강하게 캡처하고 self가 그것을 보관할 때', correct: true },
+          { text: '캡처 목록을 명시해 값을 붙잡을 때만', leadsTo: 1 },
         ],
         rationale:
           '캡처 목록은 수명과 비동기 실행 시점을 따져 정한다.',
@@ -9313,8 +9313,8 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '백오프만 걸면 재시도가 안전한가?',
         choices: [
           { text: '그렇다. 간격만 늘리면 충분하다', leadsTo: 1 },
-          { text: '아니다. 지터가 없으면 여러 기기가 동시에 깨어 서버를 다시 압박한다', correct: true },
-          { text: '그렇다. 지터는 지연만 늘린다', leadsTo: 1 },
+          { text: '아니다. 지터가 없으면 동시에 깨어 다시 몰린다', correct: true },
+          { text: '그렇다. 지터는 평균 지연만 늘릴 뿐이다', leadsTo: 1 },
           { text: '아니다. 백오프 자체가 필요 없다', leadsTo: 1 },
         ],
         rationale:
@@ -9396,10 +9396,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '재시도만 붙이면 전달이 보장되는가?',
         choices: [
-          { text: '아니다. 단말이 수신 확인을 보내는 피드백 루프가 있어야 누락을 안다', correct: true },
+          { text: '아니다. 단말이 수신 확인을 보내야 누락을 안다', correct: true },
           { text: '그렇다. 실패 응답만 보고 다시 보내면 된다', leadsTo: 1 },
-          { text: '그렇다. 백오프면 충분하다', leadsTo: 1 },
-          { text: '아니다. 재시도는 오히려 해롭다', leadsTo: 3 },
+          { text: '그렇다. 백오프를 붙이면 결국 도착한다', leadsTo: 1 },
+          { text: '아니다. 재시도가 오히려 중복만 늘린다', leadsTo: 3 },
         ],
         rationale:
           '수신 확인이 없으면 누락된 알림을 다시 보낼 수 있다.',
@@ -9774,9 +9774,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '클래스 기반 프록시면 무엇이든 가로챌 수 있는가?',
         choices: [
-          { text: '그렇다. 상속과 무관하게 동작한다', leadsTo: 1 },
+          { text: '그렇다. 상속과 무관하게 바이트코드를 고친다', leadsTo: 1 },
           { text: '그렇다. 인터페이스가 없어도 전부 가능하다', leadsTo: 1 },
-          { text: '아니다. 상속을 쓰므로 final 클래스와 final 메서드는 못 가로챈다', correct: true },
+          { text: '아니다. 상속을 쓰므로 final은 못 가로챈다', correct: true },
           { text: '아니다. 공개 메서드도 못 가로챈다', leadsTo: 0 },
         ],
         rationale:
@@ -9859,8 +9859,8 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: 'preHandle이 거짓을 내도 뒷정리 콜백은 도는가?',
         choices: [
           { text: '그렇다. afterCompletion은 항상 실행된다', leadsTo: 3 },
-          { text: '아니다. postHandle도 afterCompletion도 돌지 않는다', correct: true },
-          { text: '그렇다. 둘 다 실행된다', leadsTo: 3 },
+          { text: '아니다. 뒤의 두 콜백 모두 돌지 않는다', correct: true },
+          { text: '그렇다. 뒤의 두 콜백 모두 실행된다', leadsTo: 3 },
           { text: '아니다. 대신 필터가 대신 처리한다', leadsTo: 0 },
         ],
         rationale:
@@ -10207,9 +10207,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: 'REQUIRES_NEW를 남용하면 무엇이 위험한가?',
         choices: [
           { text: '트랜잭션이 아예 열리지 않는다', leadsTo: 1 },
-          { text: '외부 연결을 잡은 채 새 연결을 요구해 풀이 고갈될 수 있다', correct: true },
-          { text: '커밋 순서가 뒤바뀐다', leadsTo: 2 },
-          { text: '아무 부담이 없다', leadsTo: 1 },
+          { text: '외부 연결을 쥔 채 새 연결을 또 요구한다', correct: true },
+          { text: '안쪽이 먼저 커밋돼 순서가 뒤바뀐다', leadsTo: 2 },
+          { text: '트랜잭션만 하나 더 열릴 뿐 부담이 없다', leadsTo: 1 },
         ],
         rationale:
           '동시 요청 수에 비해 풀이 작으면 교착 위험도 커진다.',
@@ -10602,10 +10602,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: 'ORM이 해결하려는 문제는?',
         choices: [
-          { text: '쿼리 실행 속도', leadsTo: 0 },
-          { text: '데이터베이스 연결 비용', leadsTo: 2 },
-          { text: '객체지향 설계와 관계형 데이터베이스의 패러다임 불일치', correct: true },
-          { text: '트랜잭션 격리', leadsTo: 2 },
+          { text: '직접 쓴 쿼리보다 느린 실행 속도', leadsTo: 0 },
+          { text: '매번 새로 맺는 데이터베이스 연결 비용', leadsTo: 2 },
+          { text: '객체지향과 관계형의 패러다임 불일치', correct: true },
+          { text: '동시 접근에서의 트랜잭션 격리', leadsTo: 2 },
         ],
         rationale:
           '반복적인 CRUD SQL을 줄여 객체 쪽 로직에 집중하게 한다.',
@@ -11022,10 +11022,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '체이닝과 개방 주소법의 저장 방식 차이는?',
         choices: [
-          { text: '체이닝은 외부 리스트를 엮고 개방 주소법은 내부 빈 슬롯을 찾는다', correct: true },
-          { text: '둘 다 외부 리스트를 쓴다', leadsTo: 4 },
-          { text: '둘 다 내부 슬롯만 쓴다', leadsTo: 4 },
-          { text: '체이닝이 내부 슬롯을 쓴다', leadsTo: 2 },
+          { text: '체이닝은 외부 리스트, 개방 주소법은 내부 슬롯', correct: true },
+          { text: '둘 다 버킷 밖 외부 리스트에 이어 붙인다', leadsTo: 4 },
+          { text: '둘 다 배열 안의 빈 슬롯만 찾아 쓴다', leadsTo: 4 },
+          { text: '체이닝이 내부 슬롯, 개방 주소법이 외부 리스트', leadsTo: 2 },
         ],
         rationale:
           '체이닝은 추가 메모리가 들고 개방 주소법은 미리 할당된 공간을 쓴다.',
@@ -11035,8 +11035,8 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '자바 8은 버킷이 길어지면 바로 트리로 바꾸는가?',
         choices: [
           { text: '그렇다. 임계치만 넘으면 바꾼다', leadsTo: 1 },
-          { text: '아니다. 표 용량이 64 이상일 때만 바꾸고 아니면 표를 먼저 키운다', correct: true },
-          { text: '그렇다. 용량과 무관하다', leadsTo: 1 },
+          { text: '아니다. 표 용량이 64 이상일 때만 바꾼다', correct: true },
+          { text: '그렇다. 표 용량과 무관하게 바꾼다', leadsTo: 1 },
           { text: '아니다. 트리로는 절대 바꾸지 않는다', leadsTo: 3 },
         ],
         rationale:
@@ -12180,10 +12180,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '분리된 양쪽이 모두 쓰기를 받으면?',
         choices: [
-          { text: '가용성도 함께 잃는다', leadsTo: 4 },
+          { text: '일관성과 함께 가용성도 잃는다', leadsTo: 4 },
           { text: '나중에 자동으로 합쳐진다', leadsTo: 3 },
-          { text: '한쪽이 자동으로 멈춘다', leadsTo: 4 },
-          { text: '서로의 최신 값을 알 수 없어 선형 일관성을 보장할 수 없다', correct: true },
+          { text: '권한이 없는 한쪽이 자동으로 멈춘다', leadsTo: 4 },
+          { text: '서로의 최신 값을 알 수 없어 갈라진다', correct: true },
         ],
         rationale:
           '한쪽을 멈추면 일관성은 지키지만 멈춘 쪽의 가용성을 잃는다.',
@@ -12253,9 +12253,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '실패율 기준 하나만 정하면 되는가?',
         choices: [
           { text: '아니다. 대신 시간만 보면 된다', leadsTo: 1 },
-          { text: '그렇다. 비율만 보면 충분하다', leadsTo: 1 },
-          { text: '그렇다. 표본 수는 상관없다', leadsTo: 1 },
-          { text: '아니다. 최소 호출 수가 없으면 트래픽이 적을 때 한두 번으로 열린다', correct: true },
+          { text: '그렇다. 실패 비율만 보면 충분하다', leadsTo: 1 },
+          { text: '그렇다. 몇 번을 불렀는지는 상관없다', leadsTo: 1 },
+          { text: '아니다. 최소 호출 수가 없으면 한두 번으로 열린다', correct: true },
         ],
         rationale:
           '윈도와 최소 호출 수, 실패로 셀 예외, 느린 호출 기준을 함께 정한다.',
@@ -12390,10 +12390,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '나누지 않는 편이 나은 자리는?',
         choices: [
-          { text: '읽기와 쓰기 비율이 비슷하거나 즉시 일관성이 필요한 곳', correct: true },
-          { text: '읽기가 압도적으로 많은 곳', leadsTo: 0 },
-          { text: '화면이 복잡한 곳', leadsTo: 0 },
-          { text: '조인이 많은 곳', leadsTo: 0 },
+          { text: '읽기와 쓰기 비율이 비슷한 곳', correct: true },
+          { text: '읽기가 압도적으로 많아 조회가 잦은 곳', leadsTo: 0 },
+          { text: '화면이 복잡해 조인이 여러 번 필요한 곳', leadsTo: 0 },
+          { text: '조인이 많아 조회가 느린 곳', leadsTo: 0 },
         ],
         rationale:
           '그런 자리에서는 복잡도만 늘어난다.',
@@ -12558,10 +12558,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '로드 밸런서와 어떻게 갈리는가?',
         choices: [
-          { text: '완전히 같은 것이다', leadsTo: 1 },
-          { text: '로드 밸런서는 트래픽을 나누고 게이트웨이는 인증과 정책까지 맡는다', correct: true },
+          { text: '이름만 다른 완전히 같은 것이다', leadsTo: 1 },
+          { text: '로드 밸런서는 트래픽, 게이트웨이는 정책', correct: true },
           { text: '게이트웨이는 트래픽을 나누지 못한다', leadsTo: 1 },
-          { text: '로드 밸런서가 인증을 맡는다', leadsTo: 3 },
+          { text: '로드 밸런서가 인증까지 맡고 나눈다', leadsTo: 3 },
         ],
         rationale:
           'L7 로드 밸런서도 경로와 헤더를 보므로 겹치는 자리가 있다.',
@@ -12936,10 +12936,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '백프레셔가 하는 일은?',
         choices: [
-          { text: '받는 쪽 처리량을 늘린다', leadsTo: 3 },
-          { text: '느린 쪽의 속도가 앞으로 전해져 전체가 감당할 속도로 맞춰진다', correct: true },
+          { text: '받는 쪽 처리량을 자동으로 늘려 준다', leadsTo: 3 },
+          { text: '느린 쪽의 속도가 앞으로 전해진다', correct: true },
           { text: '큐 크기를 자동으로 키운다', leadsTo: 0 },
-          { text: '오래된 메시지를 버린다', leadsTo: 1 },
+          { text: '자리가 없으면 오래된 메시지를 버린다', leadsTo: 1 },
         ],
         rationale:
           '사이에 낀 큐가 먼저 터지는 것을 막는 방식이다.',
@@ -13020,10 +13020,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '우리 서버가 꺼져 있던 동안의 알림은?',
         choices: [
-          { text: '복구할 방법이 없다', leadsTo: 3 },
+          { text: '그 사이 알림은 복구할 방법이 없다', leadsTo: 3 },
           { text: '상대가 반드시 다시 보낸다', leadsTo: 3 },
-          { text: '자동으로 복구된다', leadsTo: 3 },
-          { text: '상대의 재시도 정책에 달렸고 안 되면 따로 조회해 맞춘다', correct: true },
+          { text: '다시 켜지면 자동으로 복구된다', leadsTo: 3 },
+          { text: '상대의 재시도 정책에 달렸다', correct: true },
         ],
         rationale:
           '못 받은 구간을 다시 맞추는 경로가 필요하다.',
@@ -13398,10 +13398,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: 'TLS 1.3이 1-RTT로 줄인 방법은?',
         choices: [
-          { text: '인증서 검증을 생략한다', leadsTo: 3 },
-          { text: '쓸 방식을 미리 좁혀 두고 첫 왕복에 키 재료까지 함께 보낸다', correct: true },
-          { text: '대칭키를 미리 공유해 둔다', leadsTo: 4 },
-          { text: '핸드셰이크를 건너뛴다', leadsTo: 2 },
+          { text: '인증서 검증을 생략해 왕복을 줄인다', leadsTo: 3 },
+          { text: '첫 왕복에 키 재료까지 함께 보낸다', correct: true },
+          { text: '양쪽이 대칭키를 미리 나눠 갖고 시작한다', leadsTo: 4 },
+          { text: '핸드셰이크 자체를 건너뛰고 바로 보낸다', leadsTo: 2 },
         ],
         rationale:
           '한 번 붙었던 서버에는 0-RTT로 더 줄일 수도 있다.',
@@ -13524,10 +13524,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '키는 어떻게 전달하는가?',
         choices: [
-          { text: '별도 브랜치에 둔다', leadsTo: 3 },
+          { text: '코드와 분리해 별도 브랜치에 둔다', leadsTo: 3 },
           { text: '설정 파일에 적어 함께 커밋한다', leadsTo: 3 },
-          { text: '주석으로 남긴다', leadsTo: 3 },
-          { text: '배포 환경이 환경 변수로 주입하거나 시크릿 매니저를 쓴다', correct: true },
+          { text: '찾기 쉽게 주석으로 남긴다', leadsTo: 3 },
+          { text: '환경 변수나 시크릿 매니저로 주입한다', correct: true },
         ],
         rationale:
           '코드에는 어떤 키가 필요한지만 남는다.',
@@ -14016,9 +14016,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '역할을 잘게 쪼갤수록 정밀해지는가?',
         choices: [
-          { text: '그렇다. 세분화가 항상 낫다', leadsTo: 1 },
-          { text: '아니다. 사람마다 역할이 하나씩 생기면 권한을 직접 붙인 것과 같다', correct: true },
-          { text: '그렇다. 역할 수는 상관없다', leadsTo: 1 },
+          { text: '그렇다. 잘게 나눌수록 정밀해서 낫다', leadsTo: 1 },
+          { text: '아니다. 사람마다 역할이 하나씩 생기면 같아진다', correct: true },
+          { text: '그렇다. 역할이 몇 개든 관리 비용은 같다', leadsTo: 1 },
           { text: '아니다. 대신 역할을 하나만 둔다', leadsTo: 3 },
         ],
         rationale:
@@ -14184,9 +14184,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '이미지를 줄이면 빌드 시간도 주는가?',
         choices: [
-          { text: '아니다. 다단계 빌드가 한 단계를 더 도는 탓에 오히려 늘 수 있다', correct: true },
+          { text: '아니다. 다단계 빌드 탓에 오히려 늘 수 있다', correct: true },
           { text: '그렇다. 작을수록 빨리 만든다', leadsTo: 1 },
-          { text: '그렇다. 층이 줄어 빨라진다', leadsTo: 1 },
+          { text: '그렇다. 층이 줄어 빌드도 빨라진다', leadsTo: 1 },
           { text: '아니다. 대신 배포도 느려진다', leadsTo: 2 },
         ],
         rationale:
