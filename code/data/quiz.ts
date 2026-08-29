@@ -13747,4 +13747,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '컨테이너는 가상 머신과 무엇이 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '컨테이너가 쓰는 커널은?',
+        choices: [
+          { text: '호스트 커널을 여러 컨테이너가 공유한다', correct: true },
+          { text: '컨테이너마다 게스트 커널을 띄운다', leadsTo: 0 },
+          { text: '커널 없이 동작한다', leadsTo: 0 },
+          { text: '런타임이 커널을 대신한다', leadsTo: 1 },
+        ],
+        rationale:
+          '가상 머신은 가상 하드웨어 위에 게스트 커널을 띄운다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이미지만 같으면 어느 호스트에서나 똑같이 실행되는가?',
+        choices: [
+          { text: '아니다. CPU 아키텍처와 호스트 커널의 시스템 호출에 맞아야 한다', correct: true },
+          { text: '그렇다. 이미지가 모든 것을 담는다', leadsTo: 2 },
+          { text: '그렇다. 커널도 이미지에 들어 있다', leadsTo: 2 },
+          { text: '아니다. 대신 런타임이 변환해 준다', leadsTo: 1 },
+        ],
+        rationale:
+          '이미지에는 커널이 없어 보통 가상 머신 이미지보다 작다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '격리 강도는 무엇으로 정해지는가?',
+        choices: [
+          { text: '포장 형식이 아니라 설정까지 봐야 한다', correct: true },
+          { text: '컨테이너냐 가상 머신이냐로 정해진다', leadsTo: 3 },
+          { text: '이미지 크기로 정해진다', leadsTo: 2 },
+          { text: 'cgroup 제한만 보면 된다', leadsTo: 1 },
+        ],
+        rationale:
+          '과한 Linux capability와 privileged 실행, 호스트 파일 시스템 마운트가 경계를 약하게 만든다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: 'SQL 인젝션은 무엇으로 막는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '값 바인딩이 안전한 이유는?',
+        choices: [
+          { text: 'SQL 문법을 먼저 고정하고 입력은 별도 값으로 전달한다', correct: true },
+          { text: '위험한 문자를 자동으로 지운다', leadsTo: 0 },
+          { text: '입력 길이를 제한한다', leadsTo: 0 },
+          { text: '권한을 낮춰 실행한다', leadsTo: 4 },
+        ],
+        rationale:
+          '따옴표나 연산자가 있어도 문법으로 해석되지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ORM을 쓰면 자동으로 안전한가?',
+        choices: [
+          { text: '아니다. raw query에 문자열을 합치면 같은 취약점이 생긴다', correct: true },
+          { text: '그렇다. ORM이 모든 질의를 검사한다', leadsTo: 1 },
+          { text: '그렇다. 저장 프로시저도 안전하다', leadsTo: 2 },
+          { text: '아니다. 대신 ORM은 더 위험하다', leadsTo: 1 },
+        ],
+        rationale:
+          '저장 프로시저도 내부에서 동적 SQL을 이어 붙이면 위험하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '열 이름처럼 값으로 바인딩할 수 없는 자리는?',
+        choices: [
+          { text: '코드의 허용 목록에서 매핑한다', correct: true },
+          { text: '이스케이프해서 이어 붙인다', leadsTo: 0 },
+          { text: '입력 검증만 통과시키면 된다', leadsTo: 0 },
+          { text: '읽기 전용 계정으로 실행한다', leadsTo: 4 },
+        ],
+        rationale:
+          '최소 권한은 피해를 줄이는 두 번째 방어선이지 인젝션 자체를 막지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '죽은 파드는 누가 다시 만드는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '사용자가 남기는 것은?',
+        choices: [
+          { text: '"셋이어야 한다"는 상태', correct: true },
+          { text: '"파드를 만들어라"는 명령', leadsTo: 0 },
+          { text: '재시작 스크립트', leadsTo: 1 },
+          { text: '노드 배치 계획', leadsTo: 3 },
+        ],
+        rationale:
+          '그 차이를 메우는 일은 컨트롤러가 되풀이한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '컨트롤러는 주기마다 API 서버에 묻는가?',
+        choices: [
+          { text: '아니다. 바뀔 때 알려주고 컨트롤러는 사본을 기준으로 맞춘다', correct: true },
+          { text: '그렇다. 짧은 주기로 계속 조회한다', leadsTo: 1 },
+          { text: '그렇다. 파드마다 확인한다', leadsTo: 1 },
+          { text: '아니다. 대신 kubelet이 알려준다', leadsTo: 2 },
+        ],
+        rationale:
+          'API 서버가 변경을 알리는 방식이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '다시 만들어지지 않는 경우는?',
+        choices: [
+          { text: '상위 컨트롤러 없이 만든 파드', correct: true },
+          { text: 'Deployment가 만든 파드', leadsTo: 0 },
+          { text: 'ReplicaSet이 만든 파드', leadsTo: 0 },
+          { text: '컨테이너만 죽은 경우', leadsTo: 2 },
+        ],
+        rationale:
+          '컨테이너만 죽으면 kubelet이 같은 파드 안에서 다시 띄운다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '이미지를 고쳐도 조금만 받는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '이미 가진 층을 안 받는 근거는?',
+        choices: [
+          { text: '층마다 고유한 지문이 있다', correct: true },
+          { text: '층 이름이 같으면 건너뛴다', leadsTo: 0 },
+          { text: '크기를 비교한다', leadsTo: 0 },
+          { text: '수정 시각을 본다', leadsTo: 0 },
+        ],
+        rationale:
+          '바뀐 층만 새로 내려온다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 명령에서 캐시를 못 쓰면 그 명령만 다시 도는가?',
+        choices: [
+          { text: '아니다. 그 명령과 뒤따르는 명령이 전부 다시 실행된다', correct: true },
+          { text: '그렇다. 해당 층만 다시 만든다', leadsTo: 1 },
+          { text: '그렇다. 앞뒤와 무관하다', leadsTo: 1 },
+          { text: '아니다. 대신 전체가 처음부터 다시 돈다', leadsTo: 0 },
+        ],
+        rationale:
+          '그래서 자주 바뀌는 것을 뒤에 둔다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '다음 층에서 지운 비밀값은?',
+        choices: [
+          { text: '아래층에 그대로 남아 이미지 안에 있다', correct: true },
+          { text: '완전히 사라진다', leadsTo: 2 },
+          { text: '압축되어 읽을 수 없다', leadsTo: 2 },
+          { text: '빌드가 실패한다', leadsTo: 3 },
+        ],
+        rationale:
+          '지운 파일도 아래층에 남는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '빌드는 통과했는데 배포에서 깨지는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '결과물은 몇 번 만드는가?',
+        choices: [
+          { text: '한 번만 만들어 끝까지 들고 간다', correct: true },
+          { text: '단계마다 다시 만든다', leadsTo: 2 },
+          { text: '시험과 배포에서 각각 만든다', leadsTo: 2 },
+          { text: '환경마다 하나씩 만든다', leadsTo: 1 },
+        ],
+        rationale:
+          '배포에서 다시 빌드하면 시험이 확인한 것은 배포된 것이 아니게 된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 소스면 언제 빌드해도 같은 결과물인가?',
+        choices: [
+          { text: '아니다. 그사이 바뀐 의존성이 섞여 들어갈 수 있다', correct: true },
+          { text: '그렇다. 소스가 결과를 결정한다', leadsTo: 2 },
+          { text: '그렇다. 잠금 파일이 있으면 항상 같다', leadsTo: 2 },
+          { text: '아니다. 대신 매번 다르게 나온다', leadsTo: 2 },
+        ],
+        rationale:
+          '시험한 것과 배포한 것이 달라지는 지점이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '이 방식으로도 남는 차이는?',
+        choices: [
+          { text: '시험 환경과 운영 환경의 자원·권한·이웃 서비스', correct: true },
+          { text: '결과물의 내용', leadsTo: 0 },
+          { text: '의존성 버전', leadsTo: 2 },
+          { text: '남는 차이가 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '설정을 결과물 밖에 둬도 환경 자체의 차이는 남는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '비밀번호를 앱에 안 주고 로그인하는 방법은?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '인가 서버가 앱 서버에 먼저 주는 것은?',
+        choices: [
+          { text: '인가 코드', correct: true },
+          { text: '토큰', leadsTo: 3 },
+          { text: '비밀번호', leadsTo: 0 },
+          { text: '갱신 토큰', leadsTo: 2 },
+        ],
+        rationale:
+          '앱 서버는 코드와 앱 비밀키를 주고 토큰으로 바꾼다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '코드와 토큰을 나누는 것이 절차상 형식인가?',
+        choices: [
+          { text: '아니다. 코드는 주소 기록이나 referrer에 남을 수 있다', correct: true },
+          { text: '그렇다. 한 번에 토큰을 줘도 같다', leadsTo: 3 },
+          { text: '그렇다. 표준이라 따를 뿐이다', leadsTo: 0 },
+          { text: '아니다. 대신 코드만으로도 토큰이 된다', leadsTo: 0 },
+        ],
+        rationale:
+          '그래서 코드만으로는 토큰이 되지 않게 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '비밀키를 숨길 데가 없는 앱은?',
+        choices: [
+          { text: 'PKCE로 묶는다', correct: true },
+          { text: '비밀키를 코드에 넣는다', leadsTo: 0 },
+          { text: '토큰을 주소창으로 바로 받는다', leadsTo: 3 },
+          { text: '인가 코드를 생략한다', leadsTo: 0 },
+        ],
+        rationale:
+          '지금 권고는 어느 쪽이든 PKCE를 쓰는 것이다.',
+      },
+    ],
+  },
 ]
