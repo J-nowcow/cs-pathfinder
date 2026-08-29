@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import type { LearningTrack, ResolvedTrackQuestion } from '@/lib/learning/tracks'
 import {
@@ -54,10 +55,29 @@ export function DailyLearningCard({ track, questions }: Props) {
   return (
     <section aria-labelledby="daily-learning-heading" className="rounded-xl border border-line bg-raised p-5 sm:p-6">
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-[12px] font-medium text-faint">{track.title}</p>
-          <h2 id="daily-learning-heading" className="mt-1 text-[21px] font-semibold tracking-[-0.02em]">오늘의 3문제</h2>
-          <p className="mt-1 text-[13px] text-muted">복습부터 채우고 남는 자리에 새 질문을 넣었어요. 약 15분</p>
+        <div className="flex min-w-0 items-start gap-3">
+          {/*
+            다 풀었으면 찾아낸 얼굴로 바꾼다. 폰에서는 히어로의 두더지가 제목을
+            가려 빼 두었으므로, 첫 화면에서 마스코트를 만나는 자리가 여기다.
+          */}
+          <Image
+            src={done === snapshot.items.length ? '/mascot/mole-found.png' : '/mascot/mole-curious.png'}
+            alt=""
+            aria-hidden
+            width={44}
+            height={44}
+            /*
+             * 이 카드는 저장소를 읽은 뒤에야 붙는다. 기본 lazy로 두면 이미
+             * 지나간 자리로 취급돼 영영 안 불러온다 — 실제로 빈 자리만 남았다.
+             */
+            priority
+            className="mt-0.5 size-11 shrink-0 select-none"
+          />
+          <div className="min-w-0">
+            <p className="text-[12px] font-medium text-faint">{track.title}</p>
+            <h2 id="daily-learning-heading" className="mt-1 text-[21px] font-semibold tracking-[-0.02em]">오늘의 3문제</h2>
+            <p className="mt-1 text-[13px] text-muted">복습부터 채우고 남는 자리에 새 질문을 넣었어요. 약 15분</p>
+          </div>
         </div>
         <span className="shrink-0 rounded-full bg-surface px-3 py-1 text-[12px] font-medium text-muted" aria-label={`${snapshot.items.length}문제 중 ${done}문제 완료`}>
           {done}/{snapshot.items.length}
