@@ -10723,4 +10723,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'java',
+    question: '스트림의 지연 연산은 왜 필요한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '중간 연산을 부르면 무슨 일이 일어나는가?',
+        choices: [
+          { text: '파이프라인이라는 설계도만 만들어진다', correct: true },
+          { text: '즉시 결과가 계산된다', leadsTo: 1 },
+          { text: '임시 컬렉션이 생긴다', leadsTo: 1 },
+          { text: '데이터가 한 번 흐른다', leadsTo: 2 },
+        ],
+        rationale:
+          '터미널 연산이 호출되어야만 데이터가 흐르기 시작한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '지연 연산이면 데이터가 항상 끊김 없이 흐르는가?',
+        choices: [
+          { text: '아니다. 정렬이나 중복 제거처럼 앞을 다 봐야 하는 연산에서 고인다', correct: true },
+          { text: '그렇다. 모든 연산이 한 건씩 통과한다', leadsTo: 3 },
+          { text: '그렇다. 파이프라인은 멈추지 않는다', leadsTo: 3 },
+          { text: '아니다. 대신 매번 임시 컬렉션이 생긴다', leadsTo: 1 },
+        ],
+        rationale:
+          '이어 붙일 수 있는 연산만 한 번에 흘려보낸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '즉시 연산했다면 무엇을 치르는가?',
+        choices: [
+          { text: '중간 단계마다 임시 컬렉션이 생겨 메모리와 CPU를 쓴다', correct: true },
+          { text: '결과가 달라진다', leadsTo: 3 },
+          { text: '연산 순서를 못 바꾼다', leadsTo: 3 },
+          { text: '무한 데이터를 다룰 수 있다', leadsTo: 4 },
+        ],
+        rationale:
+          '불필요한 계산을 줄이는 것이 지연 연산의 목적이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'spring',
+    question: 'ORM을 사용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'ORM이 해결하려는 문제는?',
+        choices: [
+          { text: '객체지향 설계와 관계형 데이터베이스의 패러다임 불일치', correct: true },
+          { text: '데이터베이스 연결 비용', leadsTo: 2 },
+          { text: '쿼리 실행 속도', leadsTo: 0 },
+          { text: '트랜잭션 격리', leadsTo: 2 },
+        ],
+        rationale:
+          '반복적인 CRUD SQL을 줄여 객체 쪽 로직에 집중하게 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ORM을 쓰면 유지보수가 무조건 쉬워지는가?',
+        choices: [
+          { text: '아니다. 엔티티를 고치고 DB 마이그레이션도 따로 해야 한다', correct: true },
+          { text: '그렇다. 스키마가 자동으로 맞춰진다', leadsTo: 2 },
+          { text: '그렇다. SQL을 볼 일이 없어진다', leadsTo: 3 },
+          { text: '아니다. 대신 SQL 매퍼가 항상 낫다', leadsTo: 4 },
+        ],
+        rationale:
+          'SQL 매퍼는 SQL과 매핑을 손보고 ORM은 엔티티와 마이그레이션을 손본다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'ORM에서 자주 나오는 성능 문제는?',
+        choices: [
+          { text: 'N+1 문제', correct: true },
+          { text: '커넥션 누수', leadsTo: 2 },
+          { text: '트랜잭션 교착', leadsTo: 2 },
+          { text: '인덱스 미사용', leadsTo: 4 },
+        ],
+        rationale:
+          '페치 조인이나 @EntityGraph로 필요한 연관을 한 번에 읽어 줄인다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '단위 시험과 통합 시험은 무엇으로 가르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 기준은?',
+        choices: [
+          { text: '무엇을 함께 확인하는지', correct: true },
+          { text: '가짜 객체를 쓰는지', leadsTo: 0 },
+          { text: '실행 속도', leadsTo: 1 },
+          { text: '시험 코드의 길이', leadsTo: 2 },
+        ],
+        rationale:
+          '단위는 동작 하나를, 통합은 조각들이 만나는 곳을 본다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '가짜 객체를 쓰면 단위 시험인가?',
+        choices: [
+          { text: '아니다. 경향이지 정의가 아니다', correct: true },
+          { text: '그렇다. 가짜를 쓰는 것이 단위의 정의다', leadsTo: 0 },
+          { text: '그렇다. 실제 객체를 쓰면 통합이다', leadsTo: 0 },
+          { text: '아니다. 단위 시험은 가짜를 쓰면 안 된다', leadsTo: 0 },
+        ],
+        rationale:
+          '단위 시험이 실제 협력 객체를 써도 되고 통합 시험이 바깥만 가짜로 둬도 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '시험이 쓸모 있는지 무엇으로 확인하는가?',
+        choices: [
+          { text: '고친 자리를 되돌렸을 때 빨간불이 뜨는지', correct: true },
+          { text: '커버리지 숫자', leadsTo: 3 },
+          { text: '단위와 통합의 비율', leadsTo: 3 },
+          { text: '전체 실행 시간', leadsTo: 1 },
+        ],
+        rationale:
+          '되돌려도 통과하면 그 시험은 적어도 이 회귀를 못 잡는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'orm',
+    question: '목록 하나 읽었는데 쿼리가 백 번 나가는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '연결된 것은 언제 읽어 오는가?',
+        choices: [
+          { text: '실제로 쓸 때 그때 읽어 오도록 미뤄 둔다', correct: true },
+          { text: '목록을 읽을 때 함께 읽는다', leadsTo: 0 },
+          { text: '트랜잭션이 끝날 때 읽는다', leadsTo: 4 },
+          { text: '전혀 읽지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '그래서 목록을 화면에 뿌리는 순간 항목 수만큼 더 나간다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '개발할 때 안 느렸으면 괜찮은가?',
+        choices: [
+          { text: '아니다. 데이터가 적을 때는 표가 안 나고 늘어난 뒤에 느려진다', correct: true },
+          { text: '그렇다. 느리지 않으면 문제가 없다', leadsTo: 4 },
+          { text: '그렇다. 캐시가 알아서 막아 준다', leadsTo: 1 },
+          { text: '아니다. 대신 지연 로딩을 끄면 된다', leadsTo: 2 },
+        ],
+        rationale:
+          '쿼리가 몇 번 나갔는지 세어 봐야 드러난다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '조인으로 한 번에 가져올 때 조심할 것은?',
+        choices: [
+          { text: '하나에 여럿이 달린 관계를 여러 개 겹치면 행이 곱해진다', correct: true },
+          { text: '조인은 항상 안전하다', leadsTo: 3 },
+          { text: '쿼리가 오히려 늘어난다', leadsTo: 0 },
+          { text: '지연 로딩이 꺼진다', leadsTo: 2 },
+        ],
+        rationale:
+          '필요한 것을 모아 in으로 한 번에 묻는 길도 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'orm',
+    question: '수정 메서드를 안 불렀는데 UPDATE가 나가는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '읽어 올 때 무엇을 함께 해 두는가?',
+        choices: [
+          { text: '읽은 그대로 사본을 떠 둔다', correct: true },
+          { text: '변경 이력을 기록한다', leadsTo: 2 },
+          { text: '행을 잠근다', leadsTo: 3 },
+          { text: '아무것도 하지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '반영하는 시점에 지금 값과 견줘 달라진 것만 내보낸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '화면용으로 잠깐 고치는 것은 안전한가?',
+        choices: [
+          { text: '아니다. 조회해 온 것을 고치면 DB까지 바뀐다', correct: true },
+          { text: '그렇다. 저장을 안 부르면 반영되지 않는다', leadsTo: 0 },
+          { text: '그렇다. 트랜잭션 밖이면 안전하다', leadsTo: 1 },
+          { text: '아니다. 대신 조회 자체가 막힌다', leadsTo: 3 },
+        ],
+        rationale:
+          '핵심 위험이 바로 이 의도치 않은 수정이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '많은 행을 읽기만 할 때는?',
+        choices: [
+          { text: '읽기 전용으로 열면 사본을 안 떠 그만큼 가볍다', correct: true },
+          { text: '한 번에 다 읽어 두면 된다', leadsTo: 3 },
+          { text: '트랜잭션을 길게 잡는다', leadsTo: 0 },
+          { text: '차이가 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '사본을 뜨는 만큼 메모리를 쓴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'spring',
+    question: '스프링 AOP의 프록시 자기 호출 시 무엇이 문제인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '프록시로 진입하는 것은 어떤 호출인가?',
+        choices: [
+          { text: '외부에서 들어오는 호출', correct: true },
+          { text: '클래스 안에서 this로 부르는 호출', leadsTo: 0 },
+          { text: '모든 호출', leadsTo: 0 },
+          { text: '애너테이션이 붙은 호출', leadsTo: 0 },
+        ],
+        rationale:
+          '내부에서 다른 메서드를 부를 때는 this로 직접 호출한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '@Cacheable은 애너테이션이라 내부 호출에도 붙는가?',
+        choices: [
+          { text: '아니다. 프록시의 가로채기를 건너뛰어 적용되지 않는다', correct: true },
+          { text: '그렇다. 애너테이션은 위치와 무관하다', leadsTo: 0 },
+          { text: '그렇다. 캐시는 트랜잭션과 달리 항상 동작한다', leadsTo: 0 },
+          { text: '아니다. 대신 예외가 발생한다', leadsTo: 0 },
+        ],
+        rationale:
+          '@Transactional도 같은 이유로 내부 호출에서는 전파가 적용되지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '자기 자신을 다시 주입하는 방식은?',
+        choices: [
+          { text: '가능하지만 결합도가 높아진다', correct: true },
+          { text: '스프링이 금지한다', leadsTo: 3 },
+          { text: '가장 권장되는 해법이다', leadsTo: 0 },
+          { text: '프록시를 없애 버린다', leadsTo: 1 },
+        ],
+        rationale:
+          '로직을 별도 서비스로 빼서 프록시를 거치게 하는 편이 낫다.',
+      },
+    ],
+  },
 ]
