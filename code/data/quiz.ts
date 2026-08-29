@@ -7189,4 +7189,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'react',
+    question: '공유 상태는 어느 컴포넌트에 두는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '어디에 두는가?',
+        choices: [
+          { text: '읽거나 바꾸는 컴포넌트들의 가장 가까운 공통 조상', correct: true },
+          { text: '최상위 루트', leadsTo: 1 },
+          { text: '가장 자주 쓰는 자식', leadsTo: 0 },
+          { text: '각 자식이 따로 보관', leadsTo: 0 },
+        ],
+        rationale:
+          '한 출처에서 값을 내려주고 변경 의도를 올려보낸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '각 자식이 같은 값을 따로 들면?',
+        choices: [
+          { text: '동기화 코드가 생기고 상태 불일치가 난다', correct: true },
+          { text: '독립적이라 더 안전하다', leadsTo: 0 },
+          { text: '성능이 좋아진다', leadsTo: 1 },
+          { text: '차이가 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '한쪽 갱신이 빠지면 화면마다 다른 값을 보여준다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '너무 높이 올리면?',
+        choices: [
+          { text: '관련 없는 자식까지 의존하고 전달 경로가 길어진다', correct: true },
+          { text: '문제가 없다. 높을수록 안전하다', leadsTo: 1 },
+          { text: '상태가 사라진다', leadsTo: 3 },
+          { text: '렌더가 멈춘다', leadsTo: 1 },
+        ],
+        rationale:
+          '상태가 넓게 공유되면 Context나 외부 저장소가 더 적합할 수 있다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'react',
+    question: '목록 항목의 정체성을 어떻게 보존하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '키가 하는 일은?',
+        choices: [
+          { text: '기존 인스턴스와 상태를 새 항목에 대응시킨다', correct: true },
+          { text: '정렬 순서를 정한다', leadsTo: 2 },
+          { text: '항목을 화면에 표시한다', leadsTo: 1 },
+          { text: '중복을 걸러낸다', leadsTo: 3 },
+        ],
+        rationale:
+          '같은 부모 아래에서 키와 타입이 같으면 기존 컴포넌트와 DOM을 재사용한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '인덱스 키는 언제 안전한가?',
+        choices: [
+          { text: '이미 있는 항목의 자리가 안 바뀔 때만', correct: true },
+          { text: '언제나 안전하다', leadsTo: 2 },
+          { text: '절대 쓰면 안 된다', leadsTo: 2 },
+          { text: '항목이 적을 때만', leadsTo: 2 },
+        ],
+        rationale:
+          '끝에만 붙이는 목록이면 괜찮고, 중간에 끼우거나 지우거나 정렬하면 어긋난다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '매번 난수로 키를 만들면?',
+        choices: [
+          { text: '전부 다시 마운트해 입력 상태까지 잃는다', correct: true },
+          { text: '고유하니 가장 안전하다', leadsTo: 4 },
+          { text: '성능이 좋아진다', leadsTo: 4 },
+          { text: '경고만 뜬다', leadsTo: 3 },
+        ],
+        rationale:
+          '키가 바뀌면 새로 마운트해 내부 상태도 초기화된다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'react',
+    question: '계산 결과와 함수 참조는 언제 기억해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '두 도구가 각각 지키는 것은?',
+        choices: [
+          { text: 'useMemo는 계산한 값, useCallback은 함수 참조', correct: true },
+          { text: '둘 다 값만 지킨다', leadsTo: 0 },
+          { text: '둘 다 참조만 지킨다', leadsTo: 0 },
+          { text: '반대다', leadsTo: 0 },
+        ],
+        rationale:
+          '의존성이 같을 때 이전 결과나 참조를 재사용한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이것들은 동작을 보장하는 장치인가?',
+        choices: [
+          { text: '아니다. 성능 최적화이지 의미 보장이 아니다', correct: true },
+          { text: '보장 장치라 믿고 써도 된다', leadsTo: 1 },
+          { text: '렌더 횟수를 확정한다', leadsTo: 0 },
+          { text: '의존성을 자동으로 채운다', leadsTo: 1 },
+        ],
+        rationale:
+          '값 계산이 싸거나 소비자가 참조를 비교하지 않으면 메모리와 의존성 관리 비용만 늘어난다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '의존성을 빠뜨리면?',
+        choices: [
+          { text: '함수가 오래된 상태를 잡는다', correct: true },
+          { text: '즉시 오류가 난다', leadsTo: 1 },
+          { text: '매번 새로 계산된다', leadsTo: 1 },
+          { text: '아무 일도 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '비교는 의존성만 보므로 빠진 값은 옛것에 묶인다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'react',
+    question: '클라이언트 경계는 어디에 두는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '클라이언트로 두어야 하는 것은?',
+        choices: [
+          { text: '상호작용과 브라우저 API가 필요한 최소 영역', correct: true },
+          { text: '데이터 조회 전부', leadsTo: 0 },
+          { text: '무거운 의존성', leadsTo: 0 },
+          { text: '가능한 한 많은 영역', leadsTo: 0 },
+        ],
+        rationale:
+          '서버 컴포넌트 코드는 브라우저 번들에 포함되지 않아 자바스크립트를 줄인다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '서버에서 클라이언트로 아무 값이나 넘길 수 있는가?',
+        choices: [
+          { text: '직렬화할 수 있어야 한다', correct: true },
+          { text: '무엇이든 넘길 수 있다', leadsTo: 1 },
+          { text: '원시값만 넘길 수 있다', leadsTo: 1 },
+          { text: '넘길 수 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '함수처럼 직렬화되지 않는 값은 경계를 넘지 못한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '서버로 옮겨도 남는 비용은?',
+        choices: [
+          { text: '요청 지연', correct: true },
+          { text: '번들 크기', leadsTo: 0 },
+          { text: '클라이언트 메모리', leadsTo: 0 },
+          { text: '남는 비용이 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '서버 자원에 직접 접근할 수 있다는 이점과 맞바꾸는 값이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'browser',
+    question: '첫 화면을 막는 리소스는 어떻게 줄이는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'CSS와 스크립트가 각각 막는 지점은?',
+        choices: [
+          { text: 'CSS는 렌더 트리 구성, 스크립트는 HTML 파싱', correct: true },
+          { text: '둘 다 HTML 파싱', leadsTo: 1 },
+          { text: '둘 다 렌더 트리', leadsTo: 1 },
+          { text: '반대다', leadsTo: 1 },
+        ],
+        rationale:
+          '외부 스타일시트는 CSSOM이 준비될 때까지 첫 페인트를 늦춘다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'defer와 async의 차이는?',
+        choices: [
+          { text: 'defer는 문서 순서대로, async는 순서를 보장하지 않는다', correct: true },
+          { text: '둘 다 순서를 지킨다', leadsTo: 0 },
+          { text: '둘 다 순서를 안 지킨다', leadsTo: 0 },
+          { text: '실행 시점만 다르고 순서는 같다', leadsTo: 0 },
+        ],
+        rationale:
+          'async는 다운로드 즉시 실행하므로 독립적인 코드에 알맞다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'CSS의 차단 범위를 줄이는 방법은?',
+        choices: [
+          { text: '안 쓰는 것을 빼고 미디어 조건으로 나눈다', correct: true },
+          { text: '한 파일로 합친다', leadsTo: 3 },
+          { text: '전부 인라인으로 넣는다', leadsTo: 3 },
+          { text: '줄일 방법이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '필수 CSS만 먼저 제공하고 나머지는 늦게 불러온다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'browser',
+    question: '레이아웃 계산과 픽셀 갱신은 언제 생기는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '레이아웃 계산이 생기는 조건은?',
+        choices: [
+          { text: '크기나 위치가 바뀔 때', correct: true },
+          { text: '색상이 바뀔 때', leadsTo: 1 },
+          { text: '스크롤할 때마다', leadsTo: 0 },
+          { text: '항상 매 프레임', leadsTo: 0 },
+        ],
+        rationale:
+          '기하에 영향 없는 속성이 바뀌면 픽셀만 다시 그린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '쓰기 뒤 곧바로 크기를 읽으면?',
+        choices: [
+          { text: '미뤄 둔 계산을 즉시 끝내야 한다', correct: true },
+          { text: '캐시된 값을 준다', leadsTo: 0 },
+          { text: '다음 프레임까지 미룬다', leadsTo: 2 },
+          { text: '값이 틀리게 나온다', leadsTo: 0 },
+        ],
+        rationale:
+          '읽기와 쓰기를 섞어 반복하면 레이아웃 스래싱이 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '합성으로 처리하는 애니메이션의 대가는?',
+        choices: [
+          { text: '레이어 메모리가 늘 수 있다', correct: true },
+          { text: '레이아웃이 매번 돈다', leadsTo: 1 },
+          { text: '색을 못 바꾼다', leadsTo: 0 },
+          { text: '대가가 없다', leadsTo: 3 },
+        ],
+        rationale:
+          'transform과 opacity는 별도 레이어에서 합성할 수 있어 레이아웃과 페인트를 피한다.',
+      },
+    ],
+  },
 ]
