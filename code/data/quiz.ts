@@ -5641,4 +5641,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'sql',
+    question: '데이터베이스 스키마를 설계할 때 고려할 점은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '정규화가 막아 주는 것은?',
+        choices: [
+          { text: '삽입·수정·삭제에서 생기는 이상 현상', correct: true },
+          { text: '조회 속도 저하', leadsTo: 0 },
+          { text: '디스크 용량 초과', leadsTo: 2 },
+          { text: '동시 접근 충돌', leadsTo: 3 },
+        ],
+        rationale:
+          '중복을 없애 테이블을 쪼개면 데이터 신뢰도가 올라간다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '비정규화는 언제 선택하는가?',
+        choices: [
+          { text: '읽기가 훨씬 많고 조인 비용이 실제 병목일 때', correct: true },
+          { text: '테이블이 많아 보일 때', leadsTo: 0 },
+          { text: '쓰기가 많을 때', leadsTo: 1 },
+          { text: '언제나 성능에 유리하다', leadsTo: 1 },
+        ],
+        rationale:
+          '쓰기가 많다면 중복된 값을 함께 고치는 비용이 더 커진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '비정규화가 늘리는 비용은?',
+        choices: [
+          { text: '중복 갱신 비용', correct: true },
+          { text: '조회 복잡도', leadsTo: 0 },
+          { text: '인덱스 개수', leadsTo: 2 },
+          { text: '늘어나는 비용이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '조회는 단순해지지만 같은 값을 여러 곳에서 맞춰야 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: 'JOIN 연산의 성능을 결정하는 핵심 요소는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '인덱스가 있는 소량 데이터에 맞는 방식은?',
+        choices: [
+          { text: 'Nested Loop', correct: true },
+          { text: 'Hash Join', leadsTo: 1 },
+          { text: 'Merge Join', leadsTo: 0 },
+          { text: '방식과 무관하다', leadsTo: 2 },
+        ],
+        rationale:
+          '바깥쪽 행마다 안쪽을 탐색하는데, 안쪽 조인 컬럼에 인덱스가 있으면 행마다 찾는 비용이 작다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'Hash Join은 어느 쪽으로 해시 맵을 만드는가?',
+        choices: [
+          { text: '두 테이블 중 작은 쪽', correct: true },
+          { text: '큰 쪽', leadsTo: 2 },
+          { text: '먼저 쓴 쪽', leadsTo: 0 },
+          { text: '인덱스가 있는 쪽', leadsTo: 1 },
+        ],
+        rationale:
+          '이후 큰 테이블을 읽으며 해시 맵에서 일치하는 값을 찾는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '방식을 고르는 주체는?',
+        choices: [
+          { text: '통계 정보를 보는 옵티마이저', correct: true },
+          { text: '개발자가 쿼리에 적는다', leadsTo: 0 },
+          { text: '무작위로 정해진다', leadsTo: 2 },
+          { text: '항상 같은 방식만 쓴다', leadsTo: 3 },
+        ],
+        rationale:
+          '데이터 양과 인덱스 상태를 보고 가장 싼 비용의 방식을 결정한다. 정렬 상태에 따라 Merge Join이 뽑히기도 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '인덱스 생성 시 읽기 성능과 쓰기 성능의 트레이드오프는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '인덱스가 읽기에서 하는 일은?',
+        choices: [
+          { text: '후보 행을 빨리 좁힌다', correct: true },
+          { text: '데이터를 미리 계산해 둔다', leadsTo: 4 },
+          { text: '결과를 캐시한다', leadsTo: 4 },
+          { text: '테이블을 압축한다', leadsTo: 2 },
+        ],
+        rationale:
+          '맞는 연산과 열 순서면 읽을 범위가 줄어든다. 일부 행만 찾을수록 유리하다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '인덱스가 있으면 모든 읽기가 빨라지는가?',
+        choices: [
+          { text: '아니다. 연산과 열 순서, 선택도가 맞아야 한다', correct: true },
+          { text: '모든 읽기가 빨라진다', leadsTo: 0 },
+          { text: '조회 컬럼과 무관하게 빨라진다', leadsTo: 0 },
+          { text: '개수가 많을수록 빨라진다', leadsTo: 2 },
+        ],
+        rationale:
+          '복합 인덱스는 앞쪽 열의 조건이 탐색 범위를 줄이는 데 특히 중요하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '인덱스를 둘지 결정하는 방법은?',
+        choices: [
+          { text: '실제 크기와 값 분포에서 계획과 실행 시간을 본다', correct: true },
+          { text: '테이블당 개수 상한을 정해 둔다', leadsTo: 0 },
+          { text: '조회에 쓰는 모든 컬럼에 만든다', leadsTo: 1 },
+          { text: '경험으로 감을 잡는다', leadsTo: 4 },
+        ],
+        rationale:
+          '사용 빈도·쓰기 지연·인덱스 크기도 함께 재고 거의 쓰이지 않는 인덱스는 제거한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: 'DBSCAN은 K-means보다 어떤 상황에서 더 유리한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'DBSCAN이 묶는 기준은?',
+        choices: [
+          { text: '밀도', correct: true },
+          { text: '중심점과의 거리', leadsTo: 0 },
+          { text: '클러스터 개수', leadsTo: 0 },
+          { text: '데이터 순서', leadsTo: 4 },
+        ],
+        rationale:
+          '설정한 거리 안에 최소 점 개수가 있으면 연결한다. 그래서 길쭉하거나 휘어진 모양도 잡는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'K-means는 외곽의 드문 점을 어떻게 다루는가?',
+        choices: [
+          { text: '모든 점을 강제로 클러스터에 넣는다', correct: true },
+          { text: '노이즈로 빼 둔다', leadsTo: 1 },
+          { text: '새 클러스터를 만든다', leadsTo: 0 },
+          { text: '무시하고 버린다', leadsTo: 1 },
+        ],
+        rationale:
+          '밀도가 낮은 외곽의 점들이 중심점과 묶여 클러스터의 모양을 왜곡시킨다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '두 방식이 요구하는 파라미터의 차이는?',
+        choices: [
+          { text: 'K-means는 클러스터 개수, DBSCAN은 밀도 기준', correct: true },
+          { text: '둘 다 클러스터 개수', leadsTo: 0 },
+          { text: '둘 다 파라미터가 없다', leadsTo: 1 },
+          { text: 'DBSCAN이 개수를 받는다', leadsTo: 0 },
+        ],
+        rationale:
+          '데이터 모양을 미리 정하기 어렵거나 이상치를 따로 가려야 할 때 밀도 기준이 맞다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '테이블 설계 시 기본키를 설정하는 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '기본키가 갖춰야 할 성질은?',
+        choices: [
+          { text: '유일하고 바뀌지 않을 것', correct: true },
+          { text: '사람이 읽기 쉬울 것', leadsTo: 4 },
+          { text: '업무 의미를 담을 것', leadsTo: 4 },
+          { text: '길이가 길 것', leadsTo: 3 },
+        ],
+        rationale:
+          '후보키 중에서 짧고 변하지 않으며 중복이 없는 키를 고른다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이메일이나 전화번호를 기본키로 쓰면?',
+        choices: [
+          { text: '바뀔 수 있어 참조가 흔들린다', correct: true },
+          { text: '유일하니 적합하다', leadsTo: 4 },
+          { text: '인덱스가 빨라진다', leadsTo: 3 },
+          { text: '문제가 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '대리 키를 쓰면 실제 데이터가 바뀌어도 외래 키 참조는 그대로 유지된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '기본키가 크면 왜 불리한가?',
+        choices: [
+          { text: '한 페이지에 적게 담겨 훑을 페이지가 는다', correct: true },
+          { text: '유일성이 깨진다', leadsTo: 0 },
+          { text: '외래 키를 못 만든다', leadsTo: 1 },
+          { text: '불리하지 않다', leadsTo: 3 },
+        ],
+        rationale:
+          'B-Tree에서는 키가 작을수록 한 페이지에 더 많이 담긴다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '인덱스 생성 시 조회 성능과 쓰기 성능의 트레이드오프는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '쓰기가 느려지는 까닭은?',
+        choices: [
+          { text: '넣을 때마다 인덱스의 순서를 유지해야 해서', correct: true },
+          { text: '디스크에 두 번 쓰기 때문에만', leadsTo: 3 },
+          { text: '잠금을 더 걸어서', leadsTo: 4 },
+          { text: '느려지지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '삽입, 수정, 삭제 시 관련 인덱스를 함께 고쳐야 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '모든 인덱스가 키를 정렬해 두는가?',
+        choices: [
+          { text: '해시 인덱스는 정렬하지 않는다', correct: true },
+          { text: '모두 정렬해 둔다', leadsTo: 0 },
+          { text: '클러스터형만 정렬한다', leadsTo: 3 },
+          { text: '정렬은 조회할 때만 한다', leadsTo: 4 },
+        ],
+        rationale:
+          'B-Tree 계열 보조 인덱스는 키를 정렬해 따로 두고, 클러스터형은 데이터 자체가 그 순서다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '인덱스를 무분별하게 만들면?',
+        choices: [
+          { text: '디스크 입출력이 늘어 전체 성능이 떨어진다', correct: true },
+          { text: '조회만 계속 빨라진다', leadsTo: 1 },
+          { text: '쓰기만 느려지고 나머지는 같다', leadsTo: 0 },
+          { text: '옵티마이저가 알아서 무시한다', leadsTo: 2 },
+        ],
+        rationale:
+          '데이터 분포와 쿼리 패턴을 보고 필요한 컬럼에만 둔다.',
+      },
+    ],
+  },
 ]
