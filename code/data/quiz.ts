@@ -12487,4 +12487,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'distributed',
+    question: '메시지 순서는 어디까지 보장되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '순서가 지켜지는 범위는?',
+        choices: [
+          { text: '같은 파티션 안', correct: true },
+          { text: '토픽 전체', leadsTo: 0 },
+          { text: '같은 소비자 그룹 안', leadsTo: 2 },
+          { text: '브로커 전체', leadsTo: 0 },
+        ],
+        rationale:
+          '여러 파티션에 흩어진 메시지 사이에는 전역 순서가 없다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 파티션이면 처리 순서까지 안전한가?',
+        choices: [
+          { text: '아니다. 여러 스레드가 나눠 처리하면 끝난 순서가 달라진다', correct: true },
+          { text: '그렇다. 읽은 순서가 곧 처리 순서다', leadsTo: 2 },
+          { text: '그렇다. 브로커가 처리까지 직렬화한다', leadsTo: 2 },
+          { text: '아니다. 대신 읽는 순서도 보장되지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '소비자 쪽에서도 순서가 깨질 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '순서 요구 자체를 없애는 방법은?',
+        choices: [
+          { text: '상태를 순서 대신 버전으로 판단해 늦게 온 이벤트를 버린다', correct: true },
+          { text: '파티션 하나로 몰아 전역 순서를 만든다', leadsTo: 0 },
+          { text: '소비자를 하나만 둔다', leadsTo: 2 },
+          { text: '번호를 매기는 자리를 따로 둔다', leadsTo: 3 },
+        ],
+        rationale:
+          '전역 순서를 만들면 병목이 생겨 병렬로 얻던 것을 내놓게 된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '읽기와 쓰기 모델을 나누면 무엇을 얻고 잃는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '읽기를 분리해 얻는 것은?',
+        choices: [
+          { text: '조회가 조인 없이 끝난다', correct: true },
+          { text: '즉시 일관성이 강해진다', leadsTo: 1 },
+          { text: '복잡도가 줄어든다', leadsTo: 4 },
+          { text: '쓰기가 빨라진다', leadsTo: 0 },
+        ],
+        rationale:
+          '읽기를 화면이 필요한 모양으로 미리 만들어 두기 때문이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '읽기를 분리하면 저장소도 반드시 나눠야 하는가?',
+        choices: [
+          { text: '아니다. 저장소까지 나눌지는 선택이다', correct: true },
+          { text: '그렇다. 저장소 분리가 전제다', leadsTo: 0 },
+          { text: '그렇다. 같은 저장소면 의미가 없다', leadsTo: 0 },
+          { text: '아니다. 대신 절대 나누면 안 된다', leadsTo: 2 },
+        ],
+        rationale:
+          '쓰기는 바꾸기 좋은 모양으로, 읽기는 화면 모양으로 두는 것이 핵심이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '나누지 않는 편이 나은 자리는?',
+        choices: [
+          { text: '읽기와 쓰기 비율이 비슷하거나 즉시 일관성이 필요한 곳', correct: true },
+          { text: '읽기가 압도적으로 많은 곳', leadsTo: 0 },
+          { text: '화면이 복잡한 곳', leadsTo: 0 },
+          { text: '조인이 많은 곳', leadsTo: 0 },
+        ],
+        rationale:
+          '그런 자리에서는 복잡도만 늘어난다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '여러 서비스를 거친 요청은 어떻게 따라가는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '호출 경계를 넘을 때 함께 보내는 것은?',
+        choices: [
+          { text: '같은 trace-id와 현재 부모 span 정보', correct: true },
+          { text: '사용자 식별자', leadsTo: 1 },
+          { text: '요청 원문 전체', leadsTo: 3 },
+          { text: '수집기 주소', leadsTo: 2 },
+        ],
+        rationale:
+          '각 서비스는 자기 작업을 새 span으로 기록해 경로를 다시 조립한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'tail sampling을 쓰면 중요한 trace가 다 남는가?',
+        choices: [
+          { text: '아니다. 어떤 방식도 무조건 보존한다고 가정하지 않는다', correct: true },
+          { text: '그렇다. 결과를 보고 고르니 빠짐이 없다', leadsTo: 0 },
+          { text: '그렇다. 오류는 전부 남는다', leadsTo: 0 },
+          { text: '아니다. 대신 head sampling이 더 정확하다', leadsTo: 0 },
+        ],
+        rationale:
+          'tail sampling은 수집기의 메모리와 처리량, 결정 지연을 치른다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'span 속성에 넣지 말아야 할 것은?',
+        choices: [
+          { text: '개인정보나 인증 토큰', correct: true },
+          { text: '시작과 끝 시각', leadsTo: 1 },
+          { text: '호출 상태', leadsTo: 1 },
+          { text: '부모 span 정보', leadsTo: 1 },
+        ],
+        rationale:
+          'trace-id는 사용자 식별자가 아니며 높은 카디널리티 값도 비용과 유출 위험을 키운다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'deploy',
+    question: '배포 방식은 무엇을 기준으로 고르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '가장 먼저 보는 기준은?',
+        choices: [
+          { text: '문제가 생겼을 때 몇 명이 겪느냐', correct: true },
+          { text: '자원 비용', leadsTo: 2 },
+          { text: '배포 소요 시간', leadsTo: 0 },
+          { text: '팀 규모', leadsTo: 2 },
+        ],
+        rationale:
+          '되돌리는 속도와 자원 비용이 그다음이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '블루그린은 되돌리기가 빠르니 노출 위험도 작은가?',
+        choices: [
+          { text: '아니다. 전환하는 순간 모든 사용자가 새 버전을 만난다', correct: true },
+          { text: '그렇다. 일부부터 노출된다', leadsTo: 0 },
+          { text: '그렇다. 되돌리기가 빠르면 위험도 작다', leadsTo: 0 },
+          { text: '아니다. 대신 되돌리기도 느리다', leadsTo: 0 },
+        ],
+        rationale:
+          '카나리는 5%부터 늘려 겪는 사람 수를 제한한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '무중단 배포에서 컬럼을 지우는 순서는?',
+        choices: [
+          { text: '읽기를 끊고, 쓰기를 끊고, 그다음에 지운다', correct: true },
+          { text: '지우고 나서 코드를 바꾼다', leadsTo: 1 },
+          { text: '한 번에 지운다', leadsTo: 1 },
+          { text: '쓰기를 먼저 끊고 바로 지운다', leadsTo: 1 },
+        ],
+        rationale:
+          '구버전과 신버전이 같은 스키마를 함께 써야 한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '호출 시간 제한은 무엇을 기준으로 정하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '아래 호출로 무엇을 전달하는가?',
+        choices: [
+          { text: '남은 시간', correct: true },
+          { text: '새로 초기화한 타이머', leadsTo: 3 },
+          { text: '평균 지연 시간', leadsTo: 0 },
+          { text: '재시도 횟수만', leadsTo: 1 },
+        ],
+        rationale:
+          '서비스마다 새 타이머를 주면 이미 끝난 요청에 자원을 계속 쓴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'deadline이 지나면 시작한 일이 알아서 취소되는가?',
+        choices: [
+          { text: '아니다. 취소 신호를 호출 사슬에 전파해야 한다', correct: true },
+          { text: '그렇다. 시간이 지나면 중단된다', leadsTo: 0 },
+          { text: '그렇다. 라이브러리가 처리한다', leadsTo: 2 },
+          { text: '아니다. 대신 재시도로 정리된다', leadsTo: 1 },
+        ],
+        rationale:
+          '외부 효과가 시작된 작업은 멱등 키와 결과 조회로 최종 상태를 확인한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '여러 계층이 각자 재시도하면?',
+        choices: [
+          { text: '시도 횟수가 곱으로 늘어난다', correct: true },
+          { text: '합으로 늘어난다', leadsTo: 1 },
+          { text: '가장 안쪽 계층만 재시도한다', leadsTo: 3 },
+          { text: '변화가 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '재시도할 한 계층을 정하고 전체 예산 안에서 관리한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '게이트웨이를 두면 무엇을 얻고 무엇을 걱정해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '특히 값진 이득은?',
+        choices: [
+          { text: '클라이언트가 내부 구조를 모르게 되는 것', correct: true },
+          { text: '트래픽을 고르게 나누는 것', leadsTo: 1 },
+          { text: '서비스 수를 줄이는 것', leadsTo: 2 },
+          { text: '배포가 빨라지는 것', leadsTo: 0 },
+        ],
+        rationale:
+          '서비스를 쪼개거나 합쳐도 바깥 주소는 그대로 둘 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '게이트웨이의 대가는 성능 지연뿐인가?',
+        choices: [
+          { text: '아니다. 단일 장애점과 배포 병목이 따라온다', correct: true },
+          { text: '그렇다. 한 홉이 늘어날 뿐이다', leadsTo: 0 },
+          { text: '그렇다. 이중화하면 대가가 없다', leadsTo: 0 },
+          { text: '아니다. 대신 대가가 전혀 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '모든 팀의 라우팅 규칙이 한 저장소에 모이면 고치는 순서가 줄서기가 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '로드 밸런서와 어떻게 갈리는가?',
+        choices: [
+          { text: '로드 밸런서는 트래픽을 나누고 게이트웨이는 인증과 정책까지 맡는다', correct: true },
+          { text: '완전히 같은 것이다', leadsTo: 1 },
+          { text: '게이트웨이는 트래픽을 나누지 못한다', leadsTo: 1 },
+          { text: '로드 밸런서가 인증을 맡는다', leadsTo: 3 },
+        ],
+        rationale:
+          'L7 로드 밸런서도 경로와 헤더를 보므로 겹치는 자리가 있다.',
+      },
+    ],
+  },
 ]
