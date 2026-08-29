@@ -6415,4 +6415,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'mysql',
+    question: '커넥션 풀 크기를 CPU 코어 수로 잡는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '코어 수가 기준이 되는 까닭은?',
+        choices: [
+          { text: '동시에 돌릴 수 있는 CPU 작업 수를 정하기 때문', correct: true },
+          { text: '연결 하나가 코어 하나를 쓰기 때문', leadsTo: 2 },
+          { text: '메모리가 코어 수에 비례하기 때문', leadsTo: 0 },
+          { text: '디스크 수와 같기 때문', leadsTo: 0 },
+        ],
+        rationale:
+          '서버의 CPU는 실행 계획을 짜고 데이터를 연산한다. 그것이 연산 처리의 실제 한계다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'I/O 대기가 긴 작업도 코어 수로 묶이는가?',
+        choices: [
+          { text: '아니다. 다른 병목이 없다면 더 크게 잡을 수 있다', correct: true },
+          { text: '언제나 코어 수를 넘으면 안 된다', leadsTo: 4 },
+          { text: 'I/O 작업은 풀을 쓰지 않는다', leadsTo: 4 },
+          { text: '대기 시간과 무관하다', leadsTo: 0 },
+        ],
+        rationale:
+          '풀 크기는 코어 수와 디스크 대기 시간을 함께 보고 정한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '공식으로 나온 값을 그대로 쓰는가?',
+        choices: [
+          { text: '출발점일 뿐이고 부하 시험으로 확정한다', correct: true },
+          { text: '그대로 쓰면 된다', leadsTo: 3 },
+          { text: '두 배로 늘려 쓴다', leadsTo: 3 },
+          { text: '공식이 유일한 근거다', leadsTo: 1 },
+        ],
+        rationale:
+          '연결 한도와 서비스 인스턴스 수까지 반영해야 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'mysql',
+    question: 'DB 락은 분산 환경에서 무엇이 한계인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'DB 락이 지켜 주지 못하는 것은?',
+        choices: [
+          { text: '그 DB가 모르는 캐시나 외부 자원', correct: true },
+          { text: '같은 DB의 다른 테이블', leadsTo: 3 },
+          { text: '같은 트랜잭션 안의 행', leadsTo: 3 },
+          { text: '지켜 주지 못하는 것이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '서버가 여러 대여도 DB가 하나면 그 DB가 관리하는 자원은 막힌다. 문제는 DB 밖이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '외부 저장소로 락을 옮기면 안전이 보장되는가?',
+        choices: [
+          { text: '저장소의 일관성 모델과 락 알고리즘만큼만 강하다', correct: true },
+          { text: '옮기기만 하면 완전히 안전하다', leadsTo: 1 },
+          { text: '오히려 더 위험해진다', leadsTo: 0 },
+          { text: '알고리즘과 무관하다', leadsTo: 1 },
+        ],
+        rationale:
+          '모든 서버가 같은 저장소를 바라보고 누가 락을 쥐었는지 한 자리에서 정한다는 것이 요점이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '만료된 소유자의 뒤늦은 쓰기를 막으려면?',
+        choices: [
+          { text: '보호 대상이 fencing token을 검증해 거부해야 한다', correct: true },
+          { text: '만료 시간을 늘린다', leadsTo: 1 },
+          { text: '락을 다시 잡는다', leadsTo: 2 },
+          { text: '막을 방법이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '토큰을 발급하는 것만으로는 완성되지 않는다. 쓰기를 받는 쪽이 검증해야 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'redis',
+    question: 'Redis 분산 락의 스핀과 Pub/Sub 방식 차이는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '두 방식의 차이는?',
+        choices: [
+          { text: '풀릴 때까지 두드리는가, 풀릴 때 깨우는가', correct: true },
+          { text: '락을 거는 곳이 다르다', leadsTo: 4 },
+          { text: '만료 시간이 다르다', leadsTo: 1 },
+          { text: '알고리즘이 다르다', leadsTo: 4 },
+        ],
+        rationale:
+          '스핀은 반복 요청으로 Redis 부하를 키우고, Pub/Sub은 해제할 때 알림을 발행해 헛된 왕복을 줄인다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'Pub/Sub 방식은 알림만 기다리면 되는가?',
+        choices: [
+          { text: '알림이 유실될 수 있어 시간 제한을 두고 다시 확인한다', correct: true },
+          { text: '알림은 반드시 도착한다', leadsTo: 2 },
+          { text: '알림을 못 받으면 영원히 기다린다', leadsTo: 2 },
+          { text: '확인이 필요 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '대신 구독을 관리하는 비용이 붙는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '두 방식 모두 따로 확인해야 하는 것은?',
+        choices: [
+          { text: '만료 시간과 장애 시 락 안전성', correct: true },
+          { text: '네트워크 대역폭', leadsTo: 3 },
+          { text: '키 이름 규칙', leadsTo: 0 },
+          { text: '확인할 것이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '경합이 심할수록 Pub/Sub의 이점이 커지지만 안전성은 별개 문제다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '낙관적 락 충돌은 어떻게 재시도하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '재시도는 어디에서 도는가?',
+        choices: [
+          { text: '트랜잭션 바깥에서, 매 시도가 새 트랜잭션으로', correct: true },
+          { text: '예외가 난 트랜잭션 안에서', leadsTo: 1 },
+          { text: '같은 트랜잭션을 이어서', leadsTo: 1 },
+          { text: '데이터베이스가 알아서 한다', leadsTo: 4 },
+        ],
+        rationale:
+          '예외가 난 트랜잭션 안에서 루프를 돌면 그 트랜잭션이 롤백 전용으로 표시돼 재시도가 먹지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '충돌하면 바로 다시 걸어도 되는가?',
+        choices: [
+          { text: '같은 충돌이 연달아 나므로 백오프와 지터를 둔다', correct: true },
+          { text: '바로 거는 편이 빠르다', leadsTo: 2 },
+          { text: '기다리면 오히려 나빠진다', leadsTo: 2 },
+          { text: '순서를 정해 두면 된다', leadsTo: 4 },
+        ],
+        rationale:
+          '무작위 지터를 섞어 몰리는 것을 흩는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '상한을 반드시 두는 까닭은?',
+        choices: [
+          { text: '무한 재시도가 몰리면 커넥션을 다 써 버린다', correct: true },
+          { text: '코드가 길어져서', leadsTo: 3 },
+          { text: '예외가 쌓여서', leadsTo: 0 },
+          { text: '상한은 없어도 된다', leadsTo: 3 },
+        ],
+        rationale:
+          '상한을 넘기면 실패로 알리거나 큐로 넘겨 보상한다. 무엇을 고를지는 업무가 정한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '데이터베이스 격리 수준을 높이면 전체 처리량은 어떻게 변화하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '처리량이 깎이는 까닭은?',
+        choices: [
+          { text: '동시성 제어에 드는 비용이 늘어서', correct: true },
+          { text: '질의 자체가 느려져서', leadsTo: 1 },
+          { text: '인덱스를 못 써서', leadsTo: 1 },
+          { text: '디스크 입출력이 늘어서', leadsTo: 0 },
+        ],
+        rationale:
+          '잠금 방식이면 잠금 범위와 유지 시간이, 스냅샷 방식이면 관리와 충돌 검사 비용이 는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '얼마나 깎이는지는 정해져 있는가?',
+        choices: [
+          { text: '구현과 부딪히는 빈도에 달렸다', correct: true },
+          { text: '수준마다 정해진 비율이 있다', leadsTo: 1 },
+          { text: '항상 절반으로 준다', leadsTo: 1 },
+          { text: '전혀 깎이지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '충돌이 드물면 높은 수준을 써도 체감이 작을 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '충돌이 잦아지면 무엇이 늘어나는가?',
+        choices: [
+          { text: '롤백과 대기 시간', correct: true },
+          { text: '캐시 적중률', leadsTo: 3 },
+          { text: '인덱스 크기', leadsTo: 0 },
+          { text: '늘어나는 것이 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '단위 시간당 처리량이 그만큼 떨어진다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '서브쿼리를 언제 조인으로 재작성해야 성능이 향상되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '조인 쪽이 유리할 수 있는 근거는?',
+        choices: [
+          { text: '옵티마이저가 살펴볼 경로가 넓어진다', correct: true },
+          { text: '읽는 행 수가 줄어든다', leadsTo: 3 },
+          { text: '인덱스가 자동으로 생긴다', leadsTo: 0 },
+          { text: '결과가 더 정확해진다', leadsTo: 1 },
+        ],
+        rationale:
+          '서브쿼리로 두면 언네스팅되지 않는 한 블록 안으로 최적화가 제한된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '있는지만 보는 서브쿼리를 단순 조인으로 바꾸면?',
+        choices: [
+          { text: '안쪽 중복 탓에 바깥 행이 늘어 중복 제거가 필요해진다', correct: true },
+          { text: '결과가 똑같다', leadsTo: 1 },
+          { text: '항상 빨라진다', leadsTo: 3 },
+          { text: '문법 오류가 난다', leadsTo: 1 },
+        ],
+        rationale:
+          'IN이나 EXISTS는 안쪽에 중복이 있어도 바깥 행 수를 안 늘린다. DISTINCT나 GROUP BY를 붙이면 오히려 느려질 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '손으로 바꾸기 전에 할 일은?',
+        choices: [
+          { text: '실행 계획을 보고 자동 최적화 여부를 확인한다', correct: true },
+          { text: '무조건 조인으로 바꾼다', leadsTo: 0 },
+          { text: '서브쿼리를 없앤다', leadsTo: 3 },
+          { text: '인덱스를 먼저 추가한다', leadsTo: 2 },
+        ],
+        rationale:
+          '옵티마이저는 조건이 맞는 서브쿼리를 언네스팅해 조인으로 바꿀 수 있다. 실측에서 이득이 확인될 때만 손으로 바꾼다.',
+      },
+    ],
+  },
 ]
