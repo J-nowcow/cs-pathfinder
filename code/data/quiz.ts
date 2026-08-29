@@ -10219,4 +10219,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'jpa',
+    question: '외래 키 변경은 어느 쪽에서 반영해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '연관관계의 주인은 어느 쪽인가?',
+        choices: [
+          { text: '외래 키나 조인 테이블 값을 쓰는 매핑', correct: true },
+          { text: 'mappedBy를 지정한 쪽', leadsTo: 1 },
+          { text: '도메인상 더 중요한 쪽', leadsTo: 1 },
+          { text: '먼저 저장되는 쪽', leadsTo: 1 },
+        ],
+        rationale:
+          '주인이라는 말은 도메인상 중요도가 아니라 쓰기 권한을 뜻한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'mappedBy 쪽 컬렉션에 넣으면 저장되는가?',
+        choices: [
+          { text: '아니다. 외래 키 SQL에 반영되지 않는다', correct: true },
+          { text: '그렇다. 양쪽 어디서 바꿔도 같다', leadsTo: 0 },
+          { text: '그렇다. 컬렉션이 우선한다', leadsTo: 1 },
+          { text: '아니다. 대신 객체 탐색도 불가능해진다', leadsTo: 1 },
+        ],
+        rationale:
+          '객체 탐색은 양쪽 다 되지만 쓰기는 주인 쪽만 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'cascade는 주인 여부와 어떤 관계인가?',
+        choices: [
+          { text: '별도 규칙이며 연산 전파를 정한다', correct: true },
+          { text: '주인 쪽에서만 쓸 수 있다', leadsTo: 3 },
+          { text: '주인을 정하는 설정이다', leadsTo: 3 },
+          { text: '고아 삭제를 정하는 설정이다', leadsTo: 3 },
+        ],
+        rationale:
+          'orphanRemoval이 고아 삭제를 맡는 별개 규칙이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'jpa',
+    question: '즉시 로딩을 기본값처럼 쓰면 왜 위험한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '즉시 로딩은 조인을 보장하는가?',
+        choices: [
+          { text: '아니다. 보조 쿼리가 반복될 수 있다', correct: true },
+          { text: '그렇다. 항상 하나의 조인으로 읽는다', leadsTo: 0 },
+          { text: '그렇다. 그래서 N+1이 사라진다', leadsTo: 0 },
+          { text: '아니다. 대신 아무것도 읽지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '사용하지 않는 연관관계까지 읽어 과조회와 메모리 낭비가 생긴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '지연 로딩으로 두면 그다음은 신경 쓸 게 없는가?',
+        choices: [
+          { text: '아니다. 응답 직렬화가 연관관계를 순회하면 예기치 않은 쿼리가 난다', correct: true },
+          { text: '그렇다. 접근하지 않으면 아무 일도 없다', leadsTo: 2 },
+          { text: '그렇다. 프록시가 알아서 처리한다', leadsTo: 2 },
+          { text: '아니다. 대신 즉시 로딩으로 돌려야 한다', leadsTo: 0 },
+        ],
+        rationale:
+          '지연 프록시를 영속성 컨텍스트 밖에서 건드리면 초기화에 실패한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '컬렉션과 페이징이 함께 필요하면?',
+        choices: [
+          { text: '먼저 루트 식별자를 페이지로 구한 뒤 별도로 조회한다', correct: true },
+          { text: '컬렉션 fetch join으로 한 번에 읽는다', leadsTo: 3 },
+          { text: '즉시 로딩으로 바꾼다', leadsTo: 0 },
+          { text: '페이징을 포기한다', leadsTo: 4 },
+        ],
+        rationale:
+          '컬렉션 fetch join은 중복 행을 만들고 페이징을 깨뜨릴 수 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'querydsl',
+    question: '동적 조건이 많을 때 문자열 쿼리는 왜 약한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '문자열 결합의 문제는 무엇인가?',
+        choices: [
+          { text: '문법과 타입 오류를 실행 전까지 놓치기 쉽다', correct: true },
+          { text: '조건을 여러 개 붙일 수 없다', leadsTo: 0 },
+          { text: '항상 더 느린 SQL을 만든다', leadsTo: 3 },
+          { text: '페이징을 지원하지 않는다', leadsTo: 4 },
+        ],
+        rationale:
+          'QueryDSL은 타입이 있는 식을 조합해 많은 오류를 컴파일 때 드러낸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '타입 안전하면 쿼리 성능도 보장되는가?',
+        choices: [
+          { text: '아니다. 조인 수와 인덱스와 실행 계획은 따로 검증해야 한다', correct: true },
+          { text: '그렇다. 생성된 쿼리가 최적이다', leadsTo: 3 },
+          { text: '그렇다. 컴파일러가 계획까지 본다', leadsTo: 3 },
+          { text: '아니다. 대신 성능은 항상 더 나쁘다', leadsTo: 3 },
+        ],
+        rationale:
+          '타입 안전성이 SQL의 정확성과 성능까지 보장하지는 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '어디에서 이점이 커지는가?',
+        choices: [
+          { text: '복잡한 검색과 통계 조회', correct: true },
+          { text: '단순 CRUD', leadsTo: 1 },
+          { text: '단건 조회', leadsTo: 1 },
+          { text: '모든 경우에 똑같이', leadsTo: 1 },
+        ],
+        rationale:
+          'Q 타입 생성과 빌드 설정이라는 비용이 있어 단순 CRUD에는 파생 쿼리가 더 작다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'springtx',
+    question: '외부 롤백과 무관한 기록은 어떻게 남기는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'REQUIRES_NEW는 기존 트랜잭션을 어떻게 하는가?',
+        choices: [
+          { text: '보류하고 새 트랜잭션에서 독립 커밋한다', correct: true },
+          { text: '합류해 함께 커밋한다', leadsTo: 0 },
+          { text: 'savepoint를 찍고 이어간다', leadsTo: 2 },
+          { text: '기존 것을 즉시 커밋한다', leadsTo: 1 },
+        ],
+        rationale:
+          'REQUIRED는 기존 트랜잭션에 합류한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '내부 예외를 잡으면 바깥은 정상 커밋되는가?',
+        choices: [
+          { text: '아니다. 이미 rollback-only가 됐다면 마지막 커밋에서 롤백된다', correct: true },
+          { text: '그렇다. 잡은 예외는 전파되지 않는다', leadsTo: 0 },
+          { text: '그렇다. 트랜잭션은 예외와 무관하다', leadsTo: 0 },
+          { text: '아니다. 대신 즉시 예외가 다시 난다', leadsTo: 0 },
+        ],
+        rationale:
+          'REQUIRED로 합류한 내부에서 표시된 롤백 의사는 남는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'REQUIRES_NEW를 남용하면 무엇이 위험한가?',
+        choices: [
+          { text: '외부 연결을 잡은 채 새 연결을 요구해 풀이 고갈될 수 있다', correct: true },
+          { text: '트랜잭션이 아예 열리지 않는다', leadsTo: 1 },
+          { text: '커밋 순서가 뒤바뀐다', leadsTo: 2 },
+          { text: '아무 부담이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '동시 요청 수에 비해 풀이 작으면 교착 위험도 커진다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'architecture',
+    question: '엔티티를 API 응답에 바로 쓰면 무엇이 새는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '엔티티를 그대로 노출하면 무엇이 샌는가?',
+        choices: [
+          { text: '영속성 구조와 내부 필드가 외부 계약으로 샌다', correct: true },
+          { text: '검증 규칙이 사라진다', leadsTo: 2 },
+          { text: '트랜잭션 경계가 흐려진다', leadsTo: 0 },
+          { text: '아무것도 새지 않는다', leadsTo: 3 },
+        ],
+        rationale:
+          '엔티티 변경이 API 변경으로 번지고 직렬화가 지연 쿼리와 순환 참조를 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '요청과 응답에 같은 객체를 써도 되는가?',
+        choices: [
+          { text: '아니다. 요청은 입력 형식과 검증을, 응답은 공개 필드를 맡는다', correct: true },
+          { text: '그렇다. 필드가 같으면 하나면 충분하다', leadsTo: 2 },
+          { text: '그렇다. 매핑 중복을 줄일 수 있다', leadsTo: 4 },
+          { text: '아니다. 대신 엔티티를 쓰면 된다', leadsTo: 3 },
+        ],
+        rationale:
+          '맡는 일이 달라 함께 두면 한쪽 요구가 다른 쪽을 흔든다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '분리의 대가는 언제 감수할 만한가?',
+        choices: [
+          { text: '계약이 자주 변하거나 외부에 공개될 때', correct: true },
+          { text: '언제나 예외 없이', leadsTo: 4 },
+          { text: '내부 기능이 작을수록', leadsTo: 4 },
+          { text: '테이블이 많을수록', leadsTo: 0 },
+        ],
+        rationale:
+          '매핑 코드와 중복 비용이 따르므로 작은 내부 기능은 복잡도와 함께 판단한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'architecture',
+    question: '서비스 계층이 모든 일을 맡으면 무엇이 무너지는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '유스케이스와 트랜잭션을 조정하는 계층은?',
+        choices: [
+          { text: '응용', correct: true },
+          { text: '표현', leadsTo: 0 },
+          { text: '도메인', leadsTo: 1 },
+          { text: '인프라', leadsTo: 0 },
+        ],
+        rationale:
+          '표현은 프로토콜 변환, 도메인은 상태 전이와 핵심 규칙을 맡는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '계층 경계는 호출 수를 줄이면 되는 장식인가?',
+        choices: [
+          { text: '아니다. 변경 이유와 의존 방향을 고정하는 규칙이다', correct: true },
+          { text: '그렇다. 성능을 위해 건너뛰면 된다', leadsTo: 2 },
+          { text: '그렇다. 코드가 짧아지는 것이 목적이다', leadsTo: 3 },
+          { text: '아니다. 대신 예외를 허용하면 안 된다', leadsTo: 2 },
+        ],
+        rationale:
+          '예외를 허용할 때도 근거와 범위를 명시해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '상위 정책이 구현 기술을 직접 알지 않게 하려면?',
+        choices: [
+          { text: '인터페이스 경계를 둔다', correct: true },
+          { text: '인프라 코드를 응용 계층에 합친다', leadsTo: 3 },
+          { text: '도메인에서 저장소를 직접 부른다', leadsTo: 3 },
+          { text: '계층을 하나로 줄인다', leadsTo: 4 },
+        ],
+        rationale:
+          '교체와 테스트가 쉬워진다.',
+      },
+    ],
+  },
 ]
