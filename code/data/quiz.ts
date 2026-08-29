@@ -7951,4 +7951,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'web-rendering',
+    question: '렌더링 방식은 어떤 요구로 결정하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '요청마다 달라지는 데이터에 맞는 방식은?',
+        choices: [
+          { text: 'SSR', correct: true },
+          { text: 'SSG', leadsTo: 1 },
+          { text: 'CSR', leadsTo: 2 },
+          { text: '어느 쪽이든 같다', leadsTo: 4 },
+        ],
+        rationale:
+          '정적 콘텐츠는 미리 생성하는 SSG, 앱형 상호작용은 브라우저가 그리는 CSR이 유리하다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'SSG는 빠르니 어디에나 쓰면 되는가?',
+        choices: [
+          { text: '아니다. 갱신이 늦을 수 있다', correct: true },
+          { text: '그렇다. 응답이 빠르고 서버 부하도 작다', leadsTo: 1 },
+          { text: '그렇다. 재생성이 항상 즉시 반영된다', leadsTo: 1 },
+          { text: '아니다. 검색 노출이 나빠진다', leadsTo: 2 },
+        ],
+        rationale:
+          '미리 만들어 두는 대가로 최신 데이터가 늦는다. SSR은 반대로 요청마다 비용과 장애 지점이 생긴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '실제 서비스에서는 방식을 어떻게 쓰는가?',
+        choices: [
+          { text: '경로와 컴포넌트마다 섞고 캐시나 재생성으로 약점을 보완한다', correct: true },
+          { text: '서비스 전체를 한 방식으로 통일한다', leadsTo: 4 },
+          { text: '트래픽이 늘면 CSR로 전부 옮긴다', leadsTo: 2 },
+          { text: '검색 노출이 필요하면 SSR로만 짠다', leadsTo: 0 },
+        ],
+        rationale:
+          '콘텐츠 갱신 주기와 개인화, 검색 노출, 서버 비용이 경로마다 다르다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'ssr',
+    question: '서버 HTML과 첫 렌더가 다르면 왜 문제인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '서버 HTML과 첫 트리가 같으면 브라우저는 무엇을 하는가?',
+        choices: [
+          { text: '기존 DOM을 두고 이벤트만 연결한다', correct: true },
+          { text: '트리를 다시 그린 뒤 교체한다', leadsTo: 3 },
+          { text: '서버 HTML을 버리고 새로 만든다', leadsTo: 3 },
+          { text: '두 트리를 합쳐 새 트리를 만든다', leadsTo: 3 },
+        ],
+        rationale:
+          '다르면 일부 트리를 다시 그리는 복구 비용이 생긴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '불일치는 화면이 잠깐 깜빡이는 정도의 문제인가?',
+        choices: [
+          { text: '아니다. 상태 손실과 이벤트 연결 오류로도 이어진다', correct: true },
+          { text: '그렇다. 결국 올바른 화면으로 수렴한다', leadsTo: 3 },
+          { text: '그렇다. 경고만 나올 뿐 동작은 같다', leadsTo: 3 },
+          { text: '아니다. 렌더가 아예 중단된다', leadsTo: 2 },
+        ],
+        rationale:
+          '하이드레이션이 기존 DOM을 안전하게 재사용하지 못해 생기는 문제들이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '브라우저에만 있는 값은 언제 읽어야 하는가?',
+        choices: [
+          { text: '마운트 뒤에 읽는다', correct: true },
+          { text: '렌더 함수 안에서 바로 읽는다', leadsTo: 1 },
+          { text: '서버에서 기본값을 추측해 채운다', leadsTo: 1 },
+          { text: '읽지 않고 포기한다', leadsTo: 1 },
+        ],
+        rationale:
+          '렌더 중 window나 저장소를 읽으면 서버에 없던 값이 생겨 불일치가 된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '로그 레벨을 구분하여 설정하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'INFO 레벨로 설정하면 무엇이 출력되는가?',
+        choices: [
+          { text: 'INFO 이상의 레벨만 출력되고 DEBUG는 무시된다', correct: true },
+          { text: 'INFO 레벨만 정확히 출력된다', leadsTo: 1 },
+          { text: 'DEBUG를 포함한 모든 레벨이 출력된다', leadsTo: 1 },
+          { text: 'ERROR만 출력된다', leadsTo: 1 },
+        ],
+        rationale:
+          '로그 레벨은 계층 구조라 설정한 레벨 아래는 걸러진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '안전하게 가려면 ERROR만 남기면 되는가?',
+        choices: [
+          { text: '아니다. 장애 원인을 찾을 맥락 정보가 부족해진다', correct: true },
+          { text: '그렇다. 디스크를 아끼고 장애도 놓치지 않는다', leadsTo: 4 },
+          { text: '그렇다. 운영에서는 ERROR 외에 볼 것이 없다', leadsTo: 4 },
+          { text: '아니다. ERROR는 운영에서 끄는 것이 맞다', leadsTo: 0 },
+        ],
+        rationale:
+          '맥락이 없으면 복구 시간이 길어진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '운영 서버에 DEBUG를 켜 두면 무슨 일이 벌어지는가?',
+        choices: [
+          { text: '디스크 I/O가 폭증해 성능이 급격히 떨어질 수 있다', correct: true },
+          { text: '로그 파일만 커질 뿐 성능은 그대로다', leadsTo: 2 },
+          { text: '프레임워크가 자동으로 레벨을 올린다', leadsTo: 0 },
+          { text: '개발자에게만 보이고 서버에는 남지 않는다', leadsTo: 1 },
+        ],
+        rationale:
+          'DEBUG는 출력 빈도가 매우 높아 운영 환경에서 부담이 크다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: 'CSRF와 XSS의 결정적인 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'CSRF는 세션을 어떻게 다루는가?',
+        choices: [
+          { text: '가로채지 않고 이미 로그인해 있다는 점을 그대로 이용한다', correct: true },
+          { text: '세션 ID를 훔쳐 재사용한다', leadsTo: 0 },
+          { text: '스크립트를 삽입해 세션을 새로 만든다', leadsTo: 0 },
+          { text: '서버의 세션 저장소를 직접 읽는다', leadsTo: 1 },
+        ],
+        rationale:
+          '핵심 원인이 자동 전송되는 쿠키라서 위조된 요청만으로 상태가 바뀐다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'HttpOnly 쿠키를 쓰면 XSS 피해가 사라지는가?',
+        choices: [
+          { text: '아니다. 쿠키는 못 읽어도 그 자리에서 요청을 대신 보낼 수 있다', correct: true },
+          { text: '그렇다. 세션을 못 훔치면 할 수 있는 게 없다', leadsTo: 4 },
+          { text: '그렇다. 스크립트 삽입 자체가 막힌다', leadsTo: 3 },
+          { text: '아니다. HttpOnly는 스크립트도 읽을 수 있다', leadsTo: 2 },
+        ],
+        rationale:
+          'XSS는 그 출처의 권한으로 남의 스크립트를 돌린다는 점이 본질이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '두 공격의 피해 범위는 어떻게 다른가?',
+        choices: [
+          { text: 'CSRF는 상태 변경 요청에, XSS는 탈취와 변조까지 넓게 미친다', correct: true },
+          { text: '둘 다 상태 변경에만 해당한다', leadsTo: 1 },
+          { text: 'XSS는 읽기만, CSRF는 쓰기만 가능하다', leadsTo: 4 },
+          { text: 'CSRF 쪽이 항상 더 위험하다', leadsTo: 4 },
+        ],
+        rationale:
+          'CSRF는 비밀번호 변경 같은 상태 변경 요청에 치명적이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'react',
+    question: '프론트엔드 성능 최적화 시 번들 크기를 무엇으로 판단하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '번들을 볼 때 파일 용량 말고 무엇을 함께 보는가?',
+        choices: [
+          { text: '런타임 실행 시간과 파싱 시간', correct: true },
+          { text: '파일 개수', leadsTo: 0 },
+          { text: '의존성 목록의 길이', leadsTo: 1 },
+          { text: '압축률만', leadsTo: 2 },
+        ],
+        rationale:
+          '네트워크 성능과 런타임 성능은 서로 다른 요소다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '파일이 작으면 TBT도 작다고 볼 수 있는가?',
+        choices: [
+          { text: '아니다. 복잡한 로직이 많으면 늘어난다', correct: true },
+          { text: '그렇다. 용량이 실행 시간을 결정한다', leadsTo: 3 },
+          { text: '그렇다. 다운로드가 끝나면 실행은 즉시다', leadsTo: 3 },
+          { text: '아니다. TBT는 용량과 무관하게 항상 일정하다', leadsTo: 2 },
+        ],
+        rationale:
+          '초기 JS가 줄어야 메인 스레드 점유 시간도 짧아진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '트리 쉐이킹이 잘 듣는 라이브러리는?',
+        choices: [
+          { text: 'ESM을 지원하는 라이브러리', correct: true },
+          { text: '용량이 작은 라이브러리', leadsTo: 1 },
+          { text: '의존성이 없는 라이브러리', leadsTo: 1 },
+          { text: '어떤 라이브러리든 똑같이 듣는다', leadsTo: 1 },
+        ],
+        rationale:
+          'ESM이면 사용하지 않은 내보내기를 제거하기 쉽다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '웹 서버와 WAS의 역할 분담은 왜 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '앞단의 웹 서버가 맡는 일은?',
+        choices: [
+          { text: 'HTML, CSS, 이미지 같은 정적 파일 처리', correct: true },
+          { text: 'DB 조회', leadsTo: 3 },
+          { text: '비즈니스 로직 수행', leadsTo: 3 },
+          { text: '동적 콘텐츠 생성', leadsTo: 1 },
+        ],
+        rationale:
+          '정적 파일을 앞에서 걸러 주면 WAS는 무거운 로직에만 집중할 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '역할을 나누는 이유가 성능뿐인가?',
+        choices: [
+          { text: '아니다. WAS 장애 때 웹 서버가 에러 페이지를 대신 보여준다', correct: true },
+          { text: '그렇다. 응답 속도 외에 얻는 것은 없다', leadsTo: 1 },
+          { text: '그렇다. 보안은 별개 계층에서 다룬다', leadsTo: 2 },
+          { text: '아니다. 오히려 장애 지점이 늘 뿐이다', leadsTo: 1 },
+        ],
+        rationale:
+          '여러 대의 WAS를 뒤에 두고 부하를 나누는 구조도 짜기 쉬워진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '요청은 무엇을 기준으로 나뉘는가?',
+        choices: [
+          { text: '요청의 성격에 따라 처리 주체를 나눈다', correct: true },
+          { text: '요청량이 많은 순서대로 나눈다', leadsTo: 2 },
+          { text: '사용자 위치에 따라 나눈다', leadsTo: 2 },
+          { text: '무작위로 분산한다', leadsTo: 2 },
+        ],
+        rationale:
+          '정적이냐 동적이냐로 갈라 전체 응답 속도를 높인다.',
+      },
+    ],
+  },
 ]
