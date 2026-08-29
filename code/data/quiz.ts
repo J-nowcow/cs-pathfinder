@@ -8203,4 +8203,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'react',
+    question: 'React Hook을 사용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '훅이 해결한 클래스 컴포넌트의 문제는?',
+        choices: [
+          { text: '로직 재사용이 어렵고 코드가 비대해지는 것', correct: true },
+          { text: '렌더링이 느린 것', leadsTo: 2 },
+          { text: '타입을 붙일 수 없는 것', leadsTo: 1 },
+          { text: '상태를 아예 가질 수 없는 것', leadsTo: 3 },
+        ],
+        rationale:
+          '상태 관련 로직을 함수로 분리해 여러 컴포넌트에서 공유할 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '훅은 함수형 컴포넌트를 빠르게 만들어 주는가?',
+        choices: [
+          { text: '아니다. 상태 관리와 생명주기 기능을 쓸 수 있게 해 준다', correct: true },
+          { text: '그렇다. 렌더링 비용을 자동으로 줄인다', leadsTo: 2 },
+          { text: '그렇다. 리렌더를 건너뛴다', leadsTo: 2 },
+          { text: '아니다. 문법만 짧게 바꾼 것이다', leadsTo: 1 },
+        ],
+        rationale:
+          '클래스에서 this.state와 lifecycle methods로 하던 일을 함수형에서 하게 만든 도구다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'useEffect가 통합해 다루는 시점은?',
+        choices: [
+          { text: '마운트·업데이트·언마운트', correct: true },
+          { text: '마운트만', leadsTo: 0 },
+          { text: '업데이트만', leadsTo: 0 },
+          { text: '렌더 직전만', leadsTo: 0 },
+        ],
+        rationale:
+          '세 시점을 하나의 훅으로 모아 응집도와 가독성을 높인다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'http',
+    question: '브라우저에서 FTP 지원을 중단하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'FTP의 전송 방식이 위험한 이유는?',
+        choices: [
+          { text: '평문으로 주고받아 계정 정보와 파일 내용이 새어 나간다', correct: true },
+          { text: '전송 속도가 느려 중간에 끊긴다', leadsTo: 1 },
+          { text: '파일 크기 제한이 있다', leadsTo: 3 },
+          { text: '한 번에 한 파일만 보낸다', leadsTo: 2 },
+        ],
+        rationale:
+          'HTTPS는 TLS로 암호화해 표준으로 정착했다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '중단 이유가 보안 하나뿐인가?',
+        choices: [
+          { text: '아니다. 방화벽과 프록시 환경에서 포트 제어가 까다롭다', correct: true },
+          { text: '그렇다. 암호화만 붙이면 계속 쓸 수 있었다', leadsTo: 0 },
+          { text: '그렇다. 다른 문제는 없었다', leadsTo: 2 },
+          { text: '아니다. 속도가 유일한 이유다', leadsTo: 1 },
+        ],
+        rationale:
+          '포트 범위 지정이 까다로워 사용자 경험과 개발 효율을 함께 떨어뜨렸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '지금 파일 전송의 표준은?',
+        choices: [
+          { text: 'HTTP/S 기반의 업로드·다운로드 API', correct: true },
+          { text: '브라우저 내장 FTP 클라이언트', leadsTo: 3 },
+          { text: '별도 전용 프로그램만', leadsTo: 3 },
+          { text: '표준이 아직 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '브라우저가 직접 FTP를 동작시키는 기능은 더 이상 필요하지 않다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '브라우저가 요청을 미리 한 번 더 보내는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '단순한 요청이 거절될 때 서버는 어떻게 되는가?',
+        choices: [
+          { text: '서버까지 가서 처리되고 브라우저가 응답만 못 읽게 막는다', correct: true },
+          { text: '요청이 서버에 닿지 않는다', leadsTo: 4 },
+          { text: '서버가 요청을 거부해 되돌린다', leadsTo: 4 },
+          { text: '서버가 빈 응답을 만들어 보낸다', leadsTo: 4 },
+        ],
+        rationale:
+          '막는 쪽이 브라우저라서 서버 로그에는 남는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '거절되면 서버는 항상 아무 일도 안 하는가?',
+        choices: [
+          { text: '아니다. 먼저 묻는 경우에만 진짜 요청이 아예 안 간다', correct: true },
+          { text: '그렇다. 어느 경우든 서버에 닿지 않는다', leadsTo: 4 },
+          { text: '그렇다. 브라우저가 항상 먼저 묻는다', leadsTo: 0 },
+          { text: '아니다. 두 경우 모두 서버가 처리한다', leadsTo: 0 },
+        ],
+        rationale:
+          '사전 요청이 거절되면 그 뒤 요청은 보내지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '먼저 묻는 단계를 건너뛰는 조건은?',
+        choices: [
+          { text: 'GET·HEAD·POST이면서 허용된 헤더와 본문 종류만 쓸 때', correct: true },
+          { text: '같은 주소로 보낼 때', leadsTo: 0 },
+          { text: '응답이 작을 때', leadsTo: 0 },
+          { text: '자격 증명을 함께 보낼 때', leadsTo: 1 },
+        ],
+        rationale:
+          'application/json으로 보내거나 Authorization을 붙이면 먼저 묻는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'browser',
+    question: '스타일을 바꿨을 뿐인데 왜 느려지는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '색만 바꾸면 무엇을 건너뛰는가?',
+        choices: [
+          { text: '어디 있는지 다시 재는 일', correct: true },
+          { text: '칠하는 일', leadsTo: 2 },
+          { text: '합성', leadsTo: 3 },
+          { text: '아무것도 건너뛰지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '위치가 그대로이므로 칠하기만 다시 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'transform을 쓰면 언제나 합성만 다시 하는가?',
+        choices: [
+          { text: '아니다. 그 요소가 따로 떼어져 있지 않으면 다시 칠한다', correct: true },
+          { text: '그렇다. 속성 자체가 단계를 건너뛰게 한다', leadsTo: 3 },
+          { text: '그렇다. 브라우저가 항상 레이어를 만든다', leadsTo: 3 },
+          { text: '아니다. transform은 배치부터 다시 한다', leadsTo: 2 },
+        ],
+        rationale:
+          '떼어져 있으면 이미 그려 둔 것을 옮기기만 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '반복문 안에서 크기를 물어보면 무슨 일이 생기는가?',
+        choices: [
+          { text: '밀린 계산을 그 자리에서 끝내야 해서 매번 다시 잰다', correct: true },
+          { text: '값이 캐시돼 두 번째부터는 공짜다', leadsTo: 1 },
+          { text: '읽기는 비용이 없다', leadsTo: 1 },
+          { text: '브라우저가 반복문을 합쳐 처리한다', leadsTo: 4 },
+        ],
+        rationale:
+          '읽기와 쓰기를 번갈아 하는 것이 최악이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'react',
+    question: '화면이 안 바뀌는데 값은 바뀌어 있는 경우가 있는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '상태가 바뀌었는지는 무엇으로 판단하는가?',
+        choices: [
+          { text: '같은 것을 가리키는지', correct: true },
+          { text: '안의 값을 하나하나 견줘서', leadsTo: 0 },
+          { text: '길이가 달라졌는지', leadsTo: 0 },
+          { text: '마지막으로 고친 시각으로', leadsTo: 2 },
+        ],
+        rationale:
+          '넘긴 값은 한 겹만 벗겨 견준다. 그래야 빠르기 때문이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '깊이 중첩된 곳은 안쪽만 새로 만들면 되는가?',
+        choices: [
+          { text: '아니다. 바깥까지 새로 만들어야 바깥을 보는 쪽이 알아챈다', correct: true },
+          { text: '그렇다. 안쪽이 바뀌면 바깥도 바뀐 것으로 본다', leadsTo: 1 },
+          { text: '그렇다. 어느 깊이든 하나만 갈면 된다', leadsTo: 1 },
+          { text: '아니다. 아예 전부 깊이 견준다', leadsTo: 0 },
+        ],
+        rationale:
+          '바깥을 그대로 두면 그 바깥을 보는 쪽에서는 같은 것으로 보인다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '참조 비교를 쓰는 대가는?',
+        choices: [
+          { text: '안이 바뀌어도 겉이 같으면 못 알아챈다', correct: true },
+          { text: '비교가 느려진다', leadsTo: 0 },
+          { text: '메모리를 더 쓴다', leadsTo: 3 },
+          { text: '대가가 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '깊이 견주면 정확하지만 값을 바꿀 때마다 전부 훑어야 한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'react',
+    question: 'useEffect 의존성 배열을 비워두면 언제 실행되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '배열 자체를 생략하면 언제 실행되는가?',
+        choices: [
+          { text: '매 렌더링마다', correct: true },
+          { text: '마운트 시 1회', leadsTo: 4 },
+          { text: '한 번도 실행되지 않는다', leadsTo: 4 },
+          { text: '언마운트 시에만', leadsTo: 3 },
+        ],
+        rationale:
+          '빈 배열은 마운트 시 1회, 값을 넣으면 그 값이 변할 때 추가로 실행된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '빈 배열인데 두 번 실행되면 버그인가?',
+        choices: [
+          { text: '아니다. 개발 모드의 Strict Mode가 정리를 확인하려고 일부러 두 번 실행한다', correct: true },
+          { text: '그렇다. 의존성 배열이 잘못됐다', leadsTo: 0 },
+          { text: '그렇다. 컴포넌트가 두 번 마운트된 것이다', leadsTo: 3 },
+          { text: '아니다. 원래 항상 두 번 실행된다', leadsTo: 4 },
+        ],
+        rationale:
+          '정리가 제대로 되는지 보려는 개발 모드의 동작이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '함수나 객체를 의존성 배열에 넣을 때 조심할 점은?',
+        choices: [
+          { text: '렌더링마다 주소값이 바뀌어 무한 루프에 빠질 수 있다', correct: true },
+          { text: '배열에는 원시값만 넣을 수 있다', leadsTo: 0 },
+          { text: '함수는 자동으로 무시된다', leadsTo: 1 },
+          { text: '객체를 넣으면 이펙트가 실행되지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '배열이 비어 있지 않은데도 매번 달라 보여 이펙트가 계속 다시 호출된다.',
+      },
+    ],
+  },
 ]
