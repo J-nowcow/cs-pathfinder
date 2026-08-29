@@ -15,6 +15,7 @@
     "seed": "tsx scripts/seed.ts",
     "publish:daily": "tsx scripts/publish-daily.ts",
     "verify:match": "tsx scripts/verify-gate-match.ts",
+    "verify:quiz": "tsx scripts/verify-quiz.ts",
     "measure:match": "tsx scripts/measure-match.ts",
     "measure:diagrams": "tsx scripts/measure-diagrams.ts",
     "verify:scale": "tsx scripts/verify-match-scale.ts",

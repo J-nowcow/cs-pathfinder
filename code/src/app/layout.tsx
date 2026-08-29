@@ -60,21 +60,45 @@ export const viewport: Viewport = {
    * 폰 브라우저의 주소창 색.
    *
    * 지금까지 아무 값도 안 줘서 사이트는 어두운데 주소창만 흰 띠로 남았다.
-   * `globals.css`가 `prefers-color-scheme`로 갈리므로 여기도 둘로 준다 —
-   * 하나만 주면 반대 테마에서 오히려 더 튄다.
+   * 여기 media 조건은 **시스템 선호**만 볼 수 있어서, 사용자가 헤더에서 고른
+   * 테마와는 어긋날 수 있다. 그래서 토글이 meta[name=theme-color]를 직접
+   * 갱신한다(`ThemeToggle`). 여기 값은 그 전까지의 첫 화면용이다.
    *
    * 값은 `--surface`와 같아야 한다. 다르면 화면 위쪽에 경계선이 생긴다.
    */
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f3f5f6' },
-    { media: '(prefers-color-scheme: dark)', color: '#101317' },
+    { media: '(prefers-color-scheme: light)', color: '#fbf8f3' },
+    { media: '(prefers-color-scheme: dark)', color: '#191512' },
   ],
 }
 
+/*
+ * 그리기 전에 테마를 박는다.
+ *
+ * `globals.css`가 `data-theme`으로 갈리므로 이 속성이 없으면 시스템 다크
+ * 사용자에게도 라이트가 나간다. 그래서 첫 픽셀보다 먼저 동기로 돌아야 한다.
+ *
+ * body의 첫 자식에 둔다. App Router에서 `<head>`를 직접 여는 것은 권장되지
+ * 않고, 여기서는 파서가 만나는 즉시 동기로 돌기만 하면 되므로 이 자리가
+ * 목적에 맞다.
+ *
+ * 저장값이 없으면 그때 시스템 선호를 읽는다. 즉 기본은 여전히 시스템을 따르고,
+ * 사용자가 고른 뒤에만 그 선택이 이긴다.
+ */
+const THEME_BOOT = `(function(){try{var s=localStorage.getItem('csqt.theme');var d=s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})()`
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
-      <body className="font-sans antialiased">{children}</body>
+    /*
+     * 아래 부트 스크립트가 하이드레이션 전에 data-theme을 박는다. 리액트가
+     * 서버에서 그린 <html>에는 그 속성이 없어 불일치로 잡히므로, 이 요소에
+     * 한해 경고를 끈다. 끄지 않으면 매 방문마다 복구 불가 오류가 남는다.
+     */
+    <html lang="ko" suppressHydrationWarning>
+      <body className="font-sans antialiased">
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+        {children}
+      </body>
     </html>
   )
 }

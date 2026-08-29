@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { listRoots } from '@/lib/db/roots'
@@ -292,6 +293,15 @@ export default async function QuestionsPage({
 
       {grouped.length === 0 && (
         <div className="mt-12 rounded-lg border border-dashed border-line px-6 py-14 text-center">
+          {/* 찾아봤지만 없었다는 뜻. 장식이라 낭독기에는 안 읽힌다 */}
+          <Image
+            src="/mascot/mole-digging.png"
+            alt=""
+            aria-hidden
+            width={88}
+            height={88}
+            className="mx-auto mb-4 select-none"
+          />
           <p className="text-[15px] text-muted">
             {query || activeTag || activeLevel ? '조건에 맞는 질문이 없습니다.' : '아직 올라온 질문이 없습니다.'}
           </p>

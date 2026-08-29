@@ -52,66 +52,101 @@
  * 값을 바꾸면 대비를 다시 계산할 것. 큰 글씨는 3:1이지만 여기 토큰들은
  * 전부 작은 글씨에 쓰인다.
  */
+/*
+ * 온도를 마스코트에 맞췄다.
+ *
+ * 두더지는 흙을 파고, 헤드랜턴은 노랗고, 찾아낸 지식 노드는 청록이다.
+ * 그런데 화면은 차가운 청회색(#f3f5f6 / #101317)이라 마스코트만 따로 놀았다.
+ * 바탕을 종이빛으로, 회색을 흙기 도는 중성으로 바꿔 둘의 온도를 맞춘다.
+ *
+ * 색상만 옮긴 것이 아니라 대비는 다시 계산했다. 라이트 램프는 예전이
+ * 4.19~4.30으로 AA에 못 미쳤는데 이번에 5.0을 넘겼다.
+ */
 :root {
-  --surface: #f3f5f6;
+  /* 종이빛. 흙 기운을 아주 옅게만 넣는다 */
+  --surface: #fbf8f3;
   --raised: #ffffff;
-  --ink: #191c20;
-  --muted: #565d66;
-  /* surface 위 4.78 (was #8a919a → 2.91) */
-  --faint: #666d77;
-  --line: #dde1e5;
+  /* 따뜻한 먹. surface 위 14.15 */
+  --ink: #2b2620;
+  --muted: #6f6558;
+  /* surface 위 4.74 · 흰 카드 위 5.02 (차가운 #666d77을 대체) */
+  --faint: #786e5c;
+  --line: #ece5d9;
 
-  /* accent 글씨를 얹는 자리라 4.5를 넘겨야 한다. #e0efec은 4.41이었다 */
-  --accent-soft: #e9f4f2;
-  /* 라이트 accent(#0f7a6c)는 어두워서 흰 글씨로 5.22가 나온다 */
+  /* accent 글씨를 얹는 자리라 4.5를 넘겨야 한다. 여기서 4.86 */
+  --accent-soft: #e4f2ef;
+  /* 라이트 accent(#0a7568) 위 흰 글씨 5.59 */
   --on-accent: #ffffff;
-  --warn: #a8452f;
-  --warn-soft: #f8ebe7;
+  /* soft 위 5.01 · 종이빛 위 5.52 */
+  --warn: #ad4229;
+  --warn-soft: #fbeae4;
 
-  /* 깊이 램프. 5단을 넘으면 마지막 색으로 고정한다 */
-  --d0: #0f7a6c;
+  /*
+   * 깊이 램프. 5단을 넘으면 마지막 색으로 고정한다.
+   * 종이빛 위에서 5.00~5.97 — 라벨 글씨로 써도 AA를 넘는다.
+   */
+  --d0: #0a7568;
   --d1: #3d7d52;
-  --d2: #6f7936;
-  --d3: #996d2c;
-  --d4: #b35c33;
-  --d5: #b5433d;
+  --d2: #656e30;
+  --d3: #8c6427;
+  --d4: #a5522c;
+  --d5: #a83a34;
 
-  --strata: #191d23;
-  --strata-line: #313842;
-  --strata-ink: #aeb6c0;
+  /* 지하 단면은 파 내려간 흙이다. 청회색에서 갈색으로 */
+  --strata: #2b2118;
+  --strata-line: #453626;
+  --strata-ink: #c5b8a5;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface: #101317;
-    --raised: #191d22;
-    --ink: #e5e8ec;
-    --muted: #9aa2ac;
-    /* raised 위 4.85 (was #6f7883 → 3.78) */
-    --faint: #828a95;
-    --line: #272c33;
+/*
+ * 다크는 `prefers-color-scheme`가 아니라 `data-theme`으로 켠다.
+ *
+ * 사용자가 헤더에서 직접 고를 수 있어야 해서다. 미디어 쿼리로 두면 시스템이
+ * 다크인 사람은 라이트를 고를 방법이 없다.
+ *
+ * 대신 `layout.tsx`의 첫 스크립트가 그리기 전에 `data-theme`을 반드시 박는다 —
+ * 저장된 선택이 없으면 그때 시스템 선호를 읽는다. 그 스크립트가 빠지면
+ * 시스템 다크 사용자에게 라이트가 나가므로 둘은 한 벌이다.
+ */
+:root[data-theme='dark'] {
+  /* 흙 속. 차가운 청회색이 아니라 젖은 흙에 가깝게 */
+  --surface: #191512;
+  --raised: #221d18;
+  --ink: #f0eae1;
+  --muted: #b0a596;
+  /* surface 위 5.23 · raised 위 4.81 */
+  --faint: #948877;
+  --line: #332c25;
 
-    --accent-soft: #10302c;
-    /* 다크 accent(#34c0ac)가 밝아서 흰 글씨는 2.26이다. 어두운 청록으로 7.34 */
-    --on-accent: #04231e;
-    --warn: #d5836a;
-    --warn-soft: #2e1d18;
+  --accent-soft: #0f2e29;
+  /* 다크 accent(#3cc9b4)가 밝아서 흰 글씨는 묻힌다. 어두운 청록으로 8.07 */
+  --on-accent: #04231e;
+  --warn: #e08a6d;
+  --warn-soft: #2e1d18;
 
-    --d0: #34c0ac;
-    --d1: #6cbe7c;
-    --d2: #a8bb5c;
-    --d3: #d0a24d;
-    --d4: #e08a56;
-    --d5: #e2695f;
+  /* 마스코트 스파클과 같은 청록에서 시작한다 */
+  --d0: #3cc9b4;
+  --d1: #6cbe7c;
+  --d2: #a8bb5c;
+  --d3: #d0a24d;
+  --d4: #e08a56;
+  --d5: #e2695f;
 
-    --strata: #0b0e12;
-    --strata-line: #262d36;
-    --strata-ink: #939ba6;
-  }
+  --strata: #0f0c0a;
+  --strata-line: #2b231b;
+  --strata-ink: #9e9280;
 }
 
-html {
-  color-scheme: light dark;
+/*
+ * 스크롤바·폼 컨트롤처럼 브라우저가 직접 그리는 것도 같이 넘긴다.
+ * `light dark`로 두면 시스템 선호를 따라가서 사용자가 고른 것과 어긋난다.
+ */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+:root:not([data-theme='dark']) {
+  color-scheme: light;
 }
 
 body {

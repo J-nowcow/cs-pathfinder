@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ContactMenu } from '@/components/ContactMenu'
 import { AuthMenu } from '@/components/AuthMenu'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 /**
  * 화면 맨 위의 길잡이.
@@ -185,6 +186,9 @@ export function SiteHeader() {
           "누르면 무언가 열린다"가 안 읽혀서 글자로 바꿨다.
         */}
         <ContactMenu />
+
+        {/* 읽는 조건이라 읽을거리(안쪽 길) 다음, 계정(나) 앞에 둔다 */}
+        <ThemeToggle />
 
         {/*
           계정은 맨 끝이다.

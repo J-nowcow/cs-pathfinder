@@ -38,22 +38,46 @@ export function HeroBackdrop() {
     <svg
       viewBox="0 0 400 160"
       aria-hidden
-      className="pointer-events-none absolute right-0 top-0 h-[160px] w-[400px] max-w-full opacity-[0.16]"
+      className="pointer-events-none absolute right-0 top-0 h-[160px] w-[400px] max-w-full"
     >
-      {EDGES.map(([a, b]) => (
-        <line
-          key={`${a}-${b}`}
-          x1={NODES[a].x}
-          y1={NODES[a].y}
-          x2={NODES[b].x}
-          y2={NODES[b].y}
-          stroke="currentColor"
-          strokeWidth={1}
-        />
-      ))}
-      {NODES.map((n, i) => (
-        <circle key={i} cx={n.x} cy={n.y} r={n.r} fill="currentColor" />
-      ))}
+      {/*
+        선과 점만 흐리게 깐다. 예전에는 svg 전체에 opacity를 걸었는데,
+        그러면 아래 두더지까지 같이 흐려진다.
+      */}
+      <g className="opacity-[0.16]">
+        {EDGES.map(([a, b]) => (
+          <line
+            key={`${a}-${b}`}
+            x1={NODES[a].x}
+            y1={NODES[a].y}
+            x2={NODES[b].x}
+            y2={NODES[b].y}
+            stroke="currentColor"
+            strokeWidth={1}
+          />
+        ))}
+        {NODES.map((n, i) => (
+          <circle key={i} cx={n.x} cy={n.y} r={n.r} fill="currentColor" />
+        ))}
+      </g>
+
+      {/*
+        두더지를 뿌리 노드(18,62) 자리에 앉힌다.
+        "여기서 파서 오른쪽으로 뻗었다"가 되어 배경이 설명하는 바가 또렷해진다.
+        같은 좌표계 안이라 화면이 줄어도 그래프와 같이 줄고 어긋나지 않는다.
+
+        **좁은 화면에서는 안 그린다.** svg가 줄면서 뿌리가 제목 쪽으로 밀려
+        "오늘 질문부터"의 첫 글자를 덮었다. 폰에서 두더지는 오늘의 학습 카드가
+        맡는다 — 거기는 가릴 글자가 없다.
+      */}
+      <image
+        href="/mascot/mole-digging.png"
+        x={-14}
+        y={28}
+        width={68}
+        height={68}
+        className="hidden sm:block"
+      />
     </svg>
   )
 }

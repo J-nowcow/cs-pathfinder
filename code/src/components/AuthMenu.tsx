@@ -36,6 +36,14 @@ const BUTTON = '-my-1.5 relative grid h-11 w-8 shrink-0 place-items-center round
 export function AuthMenu() {
   const { data: session, isPending } = authClient.useSession()
   const [open, setOpen] = useState(false)
+  /*
+   * 서버는 누가 로그인했는지 모르고 브라우저는 저장된 세션을 즉시 안다.
+   * 그 차이를 그대로 그리면 서버가 그린 것과 첫 그림이 어긋나 하이드레이션이
+   * 깨진다 — 리액트가 화면을 통째로 다시 그리고 콘솔에 복구 불가 오류가 남는다.
+   * 그래서 첫 그림은 세션과 무관하게 자리표시자로 고정한다.
+   */
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
   const box = useRef<HTMLDivElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
   const firstItem = useRef<HTMLAnchorElement>(null)
@@ -70,7 +78,7 @@ export function AuthMenu() {
    * 아무것도 안 그리면 확인이 끝나는 순간 아이콘이 튀어나오며 옆 항목이
    * 밀린다. 이 줄은 폰에서 여유가 2px밖에 없어서 그 흔들림이 그대로 보인다.
    */
-  if (isPending) return <div className="h-11 w-8 shrink-0 sm:w-9" aria-hidden />
+  if (!mounted || isPending) return <div className="h-11 w-8 shrink-0 sm:w-9" aria-hidden />
 
   if (!session) {
     return (

@@ -1,5 +1,5 @@
 import { getDb } from '@/lib/db/client'
-import { NOT_FOLDED_SQL } from '@/lib/db/equivalence'
+import { NOT_FOLDED_SQL, CANONICAL_JOIN_SQL } from '@/lib/db/equivalence'
 import { kstToday } from '@/lib/daily/date'
 
 export type RootSummary = {
@@ -121,18 +121,34 @@ export async function listRootsByQuestions(
   if (normalized.length === 0) return []
 
   const db = await getDb()
+  /*
+   * **접힌 질문도 찾아 준다.** 여기서 `NOT_FOLDED_SQL`을 쓰면 안 된다 —
+   * 이 함수는 화면에 목록을 뿌리는 것이 아니라 **부르는 쪽이 이미 아는 문장**을
+   * 노드로 바꿔 주는 자리다. 잉여를 빼면 옛 문장을 든 학습 트랙이 자기 질문을
+   * 잃고, 실제로 홈이 통째로 500이 났다.
+   *
+   * 문장은 물어본 그대로 돌려주고 id·분류만 정본 것으로 바꾼다. 부르는 쪽은
+   * 문장으로 짝을 맞추고, 링크는 정리된 쪽으로 가야 한다.
+   *
+   * `distinct on`은 같은 문장이 여러 노드에 있을 때 한 줄만 남긴다. 30개짜리
+   * 트랙에서 31행이 나오던 자리다.
+   */
   const rows = await db.query<Pick<Row, 'id' | 'normalized_question' | 'primary_category' | 'level'>>(
-    `select id, normalized_question, primary_category, level
-       from qnode
-      where origin = 'batch' and status = 'ready'
-        and ${NOT_FOLDED_SQL('qnode')}
-        and normalized_question = any($2)
+    `select distinct on (n.normalized_question)
+            coalesce(canon.id, n.id) as id,
+            n.normalized_question,
+            coalesce(canon.primary_category, n.primary_category) as primary_category,
+            coalesce(canon.level, n.level) as level
+       from qnode n
+       ${CANONICAL_JOIN_SQL('n')}
+      where n.origin = 'batch' and n.status = 'ready'
+        and n.normalized_question = any($2)
         and not exists (
           select 1 from tree t
-           where t.root_node_id = qnode.id
+           where t.root_node_id = coalesce(canon.id, n.id)
              and t.publish_date > $1::date
         )
-      order by normalized_question asc`,
+      order by n.normalized_question asc, coalesce(canon.id, n.id) asc`,
     [kstToday(), normalized],
   )
 
