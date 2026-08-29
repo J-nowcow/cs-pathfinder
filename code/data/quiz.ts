@@ -12739,4 +12739,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '리팩토링과 기능 추가를 나눠서 하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '리팩토링 단계에서 기존 테스트는 어떻게 되어야 하는가?',
+        choices: [
+          { text: '계속 통과해야 한다', correct: true },
+          { text: '새로 써야 한다', leadsTo: 1 },
+          { text: '일부는 깨져도 된다', leadsTo: 1 },
+          { text: '잠시 꺼 둔다', leadsTo: 1 },
+        ],
+        rationale:
+          '구조만 바꾸고 외부 동작은 그대로 두는 작업이기 때문이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 번에 같이 하면 시간이 절약되는가?',
+        choices: [
+          { text: '아니다. 섞이면 어디서 버그가 났는지 찾기 힘들다', correct: true },
+          { text: '그렇다. 어차피 같은 파일을 만진다', leadsTo: 0 },
+          { text: '그렇다. 테스트가 한 번에 끝난다', leadsTo: 1 },
+          { text: '아니다. 대신 리팩토링을 나중으로 미룬다', leadsTo: 4 },
+        ],
+        rationale:
+          '수정 범위와 영향도를 구분해야 버그 가능성이 낮아진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '커밋 단위로 나누면 리뷰어에게 무엇이 달라지는가?',
+        choices: [
+          { text: '구조 개선인지 동작 변경인지 명확해져 인지 부하가 준다', correct: true },
+          { text: '리뷰할 코드 양이 줄어든다', leadsTo: 2 },
+          { text: '테스트를 안 봐도 된다', leadsTo: 1 },
+          { text: '차이가 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '무엇을 검증해야 하는지가 갈려 검증 효율이 높아진다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '팩토리 메소드 패턴을 언제 사용하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '클라이언트가 알아야 하는 것은?',
+        choices: [
+          { text: '팩토리 인터페이스만', correct: true },
+          { text: '구체 클래스의 생성자', leadsTo: 0 },
+          { text: '모든 자식 클래스 목록', leadsTo: 3 },
+          { text: '생성 순서', leadsTo: 1 },
+        ],
+        rationale:
+          '어떤 구체 클래스가 생성되는지 몰라도 기능을 수행할 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '새 제품이 생기면 부르는 쪽 코드를 고쳐야 하는가?',
+        choices: [
+          { text: '아니다. Creator를 상속한 클래스를 하나 더 만들어 붙인다', correct: true },
+          { text: '그렇다. 조건 분기를 추가해야 한다', leadsTo: 0 },
+          { text: '그렇다. 인터페이스를 바꿔야 한다', leadsTo: 0 },
+          { text: '아니다. 대신 팩토리를 없애야 한다', leadsTo: 3 },
+        ],
+        rationale:
+          '생성자를 직접 부르면 새 타입 추가마다 코드를 고쳐야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '추상 팩토리와 갈리는 지점은?',
+        choices: [
+          { text: '단일 제품의 생성 책임을 분리하는 데 집중한다', correct: true },
+          { text: '여러 제품군을 함께 만든다', leadsTo: 0 },
+          { text: '인스턴스를 하나만 만든다', leadsTo: 2 },
+          { text: '상속을 쓰지 않는다', leadsTo: 4 },
+        ],
+        rationale:
+          '객체 생성 로직을 자식 클래스에서 결정하게 하는 것이 목적이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '객체 지향의 5대 원칙을 지키는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '절차 지향과 객체 지향은 무엇이 중심인가?',
+        choices: [
+          { text: '절차 지향은 순서와 로직, 객체 지향은 데이터와 행위', correct: true },
+          { text: '둘 다 순서와 로직', leadsTo: 3 },
+          { text: '둘 다 데이터와 행위', leadsTo: 3 },
+          { text: '객체 지향은 순서 중심', leadsTo: 3 },
+        ],
+        rationale:
+          '서로 관련된 데이터와 행위를 한 객체에 모은다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '내부 로직을 바꾸면 호출하는 쪽도 바꿔야 하는가?',
+        choices: [
+          { text: '아니다. 인터페이스로 분리하면 영향을 받지 않는다', correct: true },
+          { text: '그렇다. 구현이 바뀌면 호출도 바뀐다', leadsTo: 2 },
+          { text: '그렇다. 상속을 쓰면 반드시 함께 바뀐다', leadsTo: 1 },
+          { text: '아니다. 대신 상속으로만 가능하다', leadsTo: 1 },
+        ],
+        rationale:
+          '인터페이스가 구현체와 사용자를 갈라놓는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '객체 사이의 의존을 줄이면?',
+        choices: [
+          { text: '한 기능의 변경이 다른 곳으로 번지는 범위가 작아진다', correct: true },
+          { text: '실행 속도가 빨라진다', leadsTo: 4 },
+          { text: '객체 수가 줄어든다', leadsTo: 3 },
+          { text: '상속이 필요 없어진다', leadsTo: 1 },
+        ],
+        rationale:
+          '유지보수 비용을 낮추는 것이 원칙을 지키는 이유다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '스트레티지 패턴을 사용하는 판단 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '조건문 구조와 갈리는 결정적 지점은?',
+        choices: [
+          { text: '실행 중에 동적으로 교체할 수 있다', correct: true },
+          { text: '코드가 짧아진다', leadsTo: 4 },
+          { text: '클래스 수가 준다', leadsTo: 4 },
+          { text: '인터페이스가 필요 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '조건문은 로직을 추가할 때마다 코드를 고쳐야 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '조건문이 보이면 전략으로 바꾸는 편이 나은가?',
+        choices: [
+          { text: '아니다. 전략이 적거나 거의 안 바뀌면 클래스 수만 늘어난다', correct: true },
+          { text: '그렇다. 조건문은 항상 나쁘다', leadsTo: 0 },
+          { text: '그렇다. 확장성이 언제나 우선이다', leadsTo: 0 },
+          { text: '아니다. 대신 상태 패턴으로 바꾼다', leadsTo: 1 },
+        ],
+        rationale:
+          '구조가 복잡해지는 오버헤드가 이득보다 클 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '전략을 인터페이스에 의존시키면 무엇을 얻는가?',
+        choices: [
+          { text: '기존 코드를 고치지 않고 전략을 추가할 수 있다', correct: true },
+          { text: '전략 사이의 공통 코드가 사라진다', leadsTo: 0 },
+          { text: '런타임 비용이 준다', leadsTo: 4 },
+          { text: '전략을 하나로 합칠 수 있다', leadsTo: 2 },
+        ],
+        rationale:
+          '결제 수단이 늘어날 때 각각을 전략 클래스로 분리하는 식이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '컴포지트 패턴을 어떤 상황에서 사용하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '공통 인터페이스를 부르면 각각 무엇을 하는가?',
+        choices: [
+          { text: '리프는 자기 일을 하고 컴포지트는 자식들을 돌며 같은 일을 시킨다', correct: true },
+          { text: '둘 다 자식을 순회한다', leadsTo: 0 },
+          { text: '둘 다 자기 일만 한다', leadsTo: 0 },
+          { text: '컴포지트만 동작하고 리프는 무시된다', leadsTo: 0 },
+        ],
+        rationale:
+          '클라이언트는 형변환도 타입 구분도 하지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 인터페이스로 다루니 제약도 쉽게 걸 수 있는가?',
+        choices: [
+          { text: '아니다. 자식 요소 제약은 런타임에 확인해야 한다', correct: true },
+          { text: '그렇다. 타입으로 막을 수 있다', leadsTo: 4 },
+          { text: '그렇다. 인터페이스가 제약을 표현한다', leadsTo: 1 },
+          { text: '아니다. 대신 제약을 걸 방법이 아예 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '인터페이스가 모든 메서드를 지원해야 해서 생기는 단점이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '이 패턴이 잘 맞는 데이터 모양은?',
+        choices: [
+          { text: '트리 구조', correct: true },
+          { text: '평평한 목록', leadsTo: 0 },
+          { text: '순환 그래프', leadsTo: 2 },
+          { text: '키-값 쌍', leadsTo: 0 },
+        ],
+        rationale:
+          '폴더와 파일로 구성된 파일 시스템이나 UI 컴포넌트 계층이 대표적이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: 'Raft는 왜 과반수를 요구하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '과반수를 요구하면 무엇이 보장되는가?',
+        choices: [
+          { text: '어떤 두 무리를 잡아도 최소 하나를 공유한다', correct: true },
+          { text: '모든 노드가 같은 값을 본다', leadsTo: 3 },
+          { text: '쓰기가 빨라진다', leadsTo: 2 },
+          { text: '리더가 절대 바뀌지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '겹치는 표가 있어야 두 무리가 동시에 결정을 내리지 못한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '겹침만 있으면 결정이 갈리지 않는가?',
+        choices: [
+          { text: '아니다. 한 임기에 한 번만 투표한다는 규칙이 함께 있어야 한다', correct: true },
+          { text: '그렇다. 과반수면 충분하다', leadsTo: 0 },
+          { text: '그렇다. 임기 번호는 부수적이다', leadsTo: 0 },
+          { text: '아니다. 대신 만장일치가 필요하다', leadsTo: 1 },
+        ],
+        rationale:
+          '임기 번호는 오래된 리더를 밀어내는 역할을 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '복제본을 늘리면 쓰기가 빨라지는가?',
+        choices: [
+          { text: '아니다. 과반수를 채우는 마지막 응답만큼 걸린다', correct: true },
+          { text: '그렇다. 병렬로 써서 빨라진다', leadsTo: 3 },
+          { text: '그렇다. 가장 빠른 응답으로 끝난다', leadsTo: 3 },
+          { text: '아니다. 대신 모든 응답을 기다린다', leadsTo: 1 },
+        ],
+        rationale:
+          '느린 소수는 안 기다리지만 과반수는 채워야 한다.',
+      },
+    ],
+  },
 ]
