@@ -13243,4 +13243,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'distributed',
+    question: '메시지 형식을 바꾸면 옛 소비자는 어떻게 되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '생산자가 새 형식만 보내기 시작하면 소비자는?',
+        choices: [
+          { text: '큐에 남은 옛 메시지 때문에 아직 둘 다 읽어야 한다', correct: true },
+          { text: '새 형식만 읽으면 된다', leadsTo: 4 },
+          { text: '옛 형식만 읽으면 된다', leadsTo: 1 },
+          { text: '읽기를 잠시 멈춘다', leadsTo: 1 },
+        ],
+        rationale:
+          '보내는 쪽과 받는 쪽을 같은 순간에 바꿀 수 없다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이름을 그대로 두고 뜻만 바꾸면 호환이 유지되는가?',
+        choices: [
+          { text: '아니다. 형식은 통과하는데 값이 틀려 조용히 잘못된 결과가 나온다', correct: true },
+          { text: '그렇다. 이름이 같으니 안전하다', leadsTo: 0 },
+          { text: '그렇다. 칸을 지우는 것보다 낫다', leadsTo: 0 },
+          { text: '아니다. 대신 오류가 바로 난다', leadsTo: 0 },
+        ],
+        rationale:
+          '새 이름을 쓰는 편이 낫다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '옛 소비자가 못 읽는 변경이면 배포 순서는?',
+        choices: [
+          { text: '소비자를 먼저 배포한다', correct: true },
+          { text: '생산자를 먼저 배포한다', leadsTo: 1 },
+          { text: '동시에 배포한다', leadsTo: 1 },
+          { text: '순서는 상관없다', leadsTo: 1 },
+        ],
+        rationale:
+          '뒤집히면 아직 안 바뀐 소비자가 못 읽는 메시지가 쌓인다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '이벤트 소싱을 도입할 때의 트레이드오프는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '현재 상태를 알려면 무엇을 해야 하는가?',
+        choices: [
+          { text: '이벤트를 순차적으로 재생해야 한다', correct: true },
+          { text: '최종 상태 테이블을 읽는다', leadsTo: 0 },
+          { text: '마지막 이벤트만 본다', leadsTo: 1 },
+          { text: '스냅샷만 본다', leadsTo: 1 },
+        ],
+        rationale:
+          '데이터를 최종 상태가 아니라 발생한 모든 이벤트로 저장하기 때문이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '과거 이벤트를 고쳐서 형식 변경에 대응하면 되는가?',
+        choices: [
+          { text: '아니다. 수정할 수 없어 업캐스팅 같은 진화 전략이 필요하다', correct: true },
+          { text: '그렇다. 저장소를 일괄 갱신하면 된다', leadsTo: 2 },
+          { text: '그렇다. 스냅샷만 다시 만들면 된다', leadsTo: 1 },
+          { text: '아니다. 대신 형식을 바꾸면 안 된다', leadsTo: 2 },
+        ],
+        rationale:
+          '새 버전의 이벤트 스키마로 하위 호환성을 유지해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '재생 비용이 커지면 무엇으로 줄이는가?',
+        choices: [
+          { text: '특정 시점의 상태를 스냅샷으로 저장한다', correct: true },
+          { text: '오래된 이벤트를 지운다', leadsTo: 2 },
+          { text: '이벤트를 합쳐 하나로 만든다', leadsTo: 2 },
+          { text: '재생을 생략한다', leadsTo: 0 },
+        ],
+        rationale:
+          '조회용 모델을 따로 두는 CQRS와 함께 쓰는 경우가 많다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: 'JWT를 세션 대신 쓸 때 무엇을 잃는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '권한을 회수해도 이미 발급한 토큰은?',
+        choices: [
+          { text: '만료 전까지 통과할 수 있다', correct: true },
+          { text: '즉시 무효가 된다', leadsTo: 1 },
+          { text: '다음 요청에서 갱신된다', leadsTo: 0 },
+          { text: '서명 검증에서 걸린다', leadsTo: 1 },
+        ],
+        rationale:
+          '발급 때 넣은 claim이 만료까지 남기 때문이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'JWT와 세션은 서로 반대되는 선택지인가?',
+        choices: [
+          { text: '아니다. 세션 식별자를 JWT에 담을 수도 있다', correct: true },
+          { text: '그렇다. 둘 중 하나만 고른다', leadsTo: 4 },
+          { text: '그렇다. JWT는 무상태 전용이다', leadsTo: 0 },
+          { text: '아니다. 대신 둘은 같은 것이다', leadsTo: 4 },
+        ],
+        rationale:
+          'JWT는 토큰 형식이고 세션은 로그인 상태를 관리하는 방식이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '서명 검증만 하면 충분한가?',
+        choices: [
+          { text: '아니다. 허용 알고리즘과 issuer, audience, 만료 시간도 확인한다', correct: true },
+          { text: '그렇다. 서명이 맞으면 신뢰할 수 있다', leadsTo: 3 },
+          { text: '그렇다. 서명이 내용을 숨겨 준다', leadsTo: 3 },
+          { text: '아니다. 대신 서명은 볼 필요가 없다', leadsTo: 3 },
+        ],
+        rationale:
+          'JWT 서명은 claim을 숨기지 않아 암호화하지 않은 내용은 가진 사람이 읽는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: 'HTTPS는 무엇을 보장하고 무엇을 못 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'HTTPS가 지키는 구간은?',
+        choices: [
+          { text: '이동 중', correct: true },
+          { text: '서버에 저장된 뒤까지', leadsTo: 2 },
+          { text: '브라우저 메모리 안까지', leadsTo: 2 },
+          { text: '전체 생애주기', leadsTo: 2 },
+        ],
+        rationale:
+          '비밀번호를 평문으로 저장하는 서버는 HTTPS를 써도 털린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '자물쇠가 붙었으면 안전한 사이트인가?',
+        choices: [
+          { text: '아니다. 피싱 사이트도 자기 도메인에는 유효한 인증서를 받는다', correct: true },
+          { text: '그렇다. 인증서가 사이트의 정직함을 보증한다', leadsTo: 0 },
+          { text: '그렇다. 검증을 통과했으니 안전하다', leadsTo: 3 },
+          { text: '아니다. 대신 인증서는 의미가 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '서버가 접속한 이름에 유효한 인증서와 개인 키를 가졌는지를 확인할 뿐이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'TLS 1.3의 일반적인 인증서 방식에서 키는 어떻게 정해지는가?',
+        choices: [
+          { text: '임시 (EC)DHE 값으로 양쪽이 같은 비밀을 만든다', correct: true },
+          { text: '서버 공개 키로 대칭키를 암호화해 보낸다', leadsTo: 1 },
+          { text: '인증서 안에 대칭키가 들어 있다', leadsTo: 0 },
+          { text: '클라이언트가 정해 평문으로 알린다', leadsTo: 1 },
+        ],
+        rationale:
+          'HKDF로 트래픽 키를 유도하고 실제 데이터는 그 키로 AEAD 보호한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: 'CORS는 무엇을 막는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'CORS가 막는 것은 정확히 무엇인가?',
+        choices: [
+          { text: '다른 출처 스크립트가 응답을 읽는 것', correct: true },
+          { text: '요청이 서버에 도착하는 것', leadsTo: 4 },
+          { text: '쿠키가 전송되는 것', leadsTo: 2 },
+          { text: '서버가 응답을 만드는 것', leadsTo: 4 },
+        ],
+        rationale:
+          '서버에는 도착하고 브라우저가 결과를 스크립트에 안 넘긴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'CORS를 걸면 서버가 보호되는가?',
+        choices: [
+          { text: '아니다. 사용자의 브라우저에 있는 자격 증명을 지키는 장치다', correct: true },
+          { text: '그렇다. 허용 목록이 서버를 지킨다', leadsTo: 4 },
+          { text: '그렇다. 인증을 대신한다', leadsTo: 4 },
+          { text: '아니다. 대신 CSRF까지 막아 준다', leadsTo: 1 },
+        ],
+        rationale:
+          '서버 인증은 따로 있어야 하고 폼 전송 공격은 CSRF 토큰의 몫이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '쿠키를 함께 보내려면 무엇이 달라지는가?',
+        choices: [
+          { text: '출처를 *로 열 수 없고 정확한 주소를 적어야 한다', correct: true },
+          { text: '예비 확인을 건너뛴다', leadsTo: 0 },
+          { text: '메서드 제한이 사라진다', leadsTo: 0 },
+          { text: '달라지는 것이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '개발 중에 *로 열어놓고 배포에서 막히는 일이 여기서 나온다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: '공개키와 비밀키는 무엇으로 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'A의 공개키로 암호화한 데이터는 무엇으로 푸는가?',
+        choices: [
+          { text: 'A의 비밀키', correct: true },
+          { text: 'A의 공개키', leadsTo: 1 },
+          { text: '보낸 사람의 비밀키', leadsTo: 1 },
+          { text: '둘 중 아무거나', leadsTo: 1 },
+        ],
+        rationale:
+          '서로 다른 키로 암호화와 복호화를 수행하는 방식이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '대칭키는 빠르니 그것만 쓰면 되는가?',
+        choices: [
+          { text: '아니다. 키를 안전하게 전달하는 과정에서 탈취될 위험이 크다', correct: true },
+          { text: '그렇다. 속도가 가장 중요하다', leadsTo: 2 },
+          { text: '그렇다. 키 전달은 문제가 아니다', leadsTo: 2 },
+          { text: '아니다. 대신 공개키만 쓴다', leadsTo: 0 },
+        ],
+        rationale:
+          '양쪽이 같은 키 하나를 나눠 갖기 때문이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '실제로는 둘을 어떻게 섞어 쓰는가?',
+        choices: [
+          { text: '대칭키를 공개키로 암호화해 전달하고 데이터는 대칭키로 처리한다', correct: true },
+          { text: '데이터를 공개키로 직접 암호화한다', leadsTo: 0 },
+          { text: '대칭키를 평문으로 전달한다', leadsTo: 2 },
+          { text: '둘을 섞어 쓰지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '전달받은 대칭키로 실제 통신을 빠르게 처리한다.',
+      },
+    ],
+  },
 ]
