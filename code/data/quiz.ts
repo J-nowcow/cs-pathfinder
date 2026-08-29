@@ -2545,4 +2545,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'java',
+    question: '중간 연산을 바로 실행하지 않는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '미뤄서 얻는 것은?',
+        choices: [
+          { text: '여러 중간 연산을 한 번의 순회로 결합한다', correct: true },
+          { text: '메모리를 항상 덜 쓴다', leadsTo: 0 },
+          { text: '자동으로 병렬 처리된다', leadsTo: 2 },
+          { text: '순서가 보장된다', leadsTo: 3 },
+        ],
+        rationale:
+          '종료 연산이 요구할 때까지 미루면 단계를 합칠 수 있고, 단락 종료로 필요한 원소만 처리할 수도 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '지연 실행이면 버퍼를 안 쓰는가?',
+        choices: [
+          { text: '상태 있는 연산은 지연이어도 버퍼를 쓸 수 있다', correct: true },
+          { text: '지연이면 절대 버퍼를 쓰지 않는다', leadsTo: 0 },
+          { text: '모든 연산이 버퍼를 쓴다', leadsTo: 0 },
+          { text: '병렬일 때만 버퍼를 쓴다', leadsTo: 2 },
+        ],
+        rationale:
+          'filter와 map 같은 상태 없는 연산은 원소 하나씩 이어서 처리하지만, sorted와 distinct는 앞선 원소를 들고 있어야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '무한 스트림이 유한 시간에 끝나려면?',
+        choices: [
+          { text: '전체 입력을 요구하는 연산 없이 단락 종료가 걸려야 한다', correct: true },
+          { text: '병렬로 돌리면 된다', leadsTo: 2 },
+          { text: '무한 스트림은 언제나 끝나지 않는다', leadsTo: 1 },
+          { text: '중간 연산 개수를 줄이면 된다', leadsTo: 0 },
+        ],
+        rationale:
+          'findFirst와 anyMatch는 답이 정해지면 순회를 멈춘다. 그 앞에 sorted 같은 연산이 있으면 전체를 요구한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: '락보다 높은 수준의 도구를 먼저 고르는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '높은 수준 도구를 먼저 보는 까닭은?',
+        choices: [
+          { text: '검증된 원자 연산과 대기 정책을 재사용해 위험을 줄인다', correct: true },
+          { text: '언제나 더 빠르기 때문', leadsTo: 3 },
+          { text: '메모리를 덜 쓰기 때문', leadsTo: 3 },
+          { text: '락은 더 이상 쓰이지 않기 때문', leadsTo: 4 },
+        ],
+        rationale:
+          '작업 성격에 맞는 가장 높은 수준의 도구를 고르면 경쟁 조건과 교착 위험이 준다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '동시 컬렉션에서 get 뒤 put은 안전한가?',
+        choices: [
+          { text: '두 번의 연산이라 그 사이에 경쟁이 생긴다', correct: true },
+          { text: '동시 컬렉션이니 안전하다', leadsTo: 0 },
+          { text: '값이 작으면 안전하다', leadsTo: 1 },
+          { text: '같은 스레드면 안전하다', leadsTo: 0 },
+        ],
+        rationale:
+          'ConcurrentHashMap의 computeIfAbsent처럼 의도를 한 원자 연산으로 표현해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '원자 변수로 부족해지는 지점은?',
+        choices: [
+          { text: '여러 필드에 걸친 불변식을 함께 지켜야 할 때', correct: true },
+          { text: '값이 정수가 아닐 때', leadsTo: 1 },
+          { text: '스레드가 넷을 넘을 때', leadsTo: 3 },
+          { text: '읽기가 쓰기보다 많을 때', leadsTo: 4 },
+        ],
+        rationale:
+          'AtomicInteger는 한 값의 갱신에는 맞지만 여러 필드를 한 묶음으로 지키지 못한다. 그런 경우 임계 구역이 필요하다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: 'volatile은 무엇을 보장하고 놓치는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'volatile이 보장하는 것은?',
+        choices: [
+          { text: '해당 접근을 경계로 한 가시성과 재정렬 제약', correct: true },
+          { text: '복합 연산의 원자성', leadsTo: 3 },
+          { text: '교착 상태 예방', leadsTo: 1 },
+          { text: '스레드 수 제한', leadsTo: 1 },
+        ],
+        rationale:
+          'volatile 쓰기는 뒤따르는 같은 변수의 읽기보다 먼저 일어난다. 다만 복합 연산을 원자화하지는 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'volatile 변수에 count++는 안전한가?',
+        choices: [
+          { text: '읽기·계산·쓰기 세 단계라 갱신을 잃을 수 있다', correct: true },
+          { text: 'volatile이므로 안전하다', leadsTo: 3 },
+          { text: '한 줄이라 원자적이다', leadsTo: 3 },
+          { text: '스레드가 둘 이하면 안전하다', leadsTo: 0 },
+        ],
+        rationale:
+          '경쟁 갱신에는 AtomicInteger나 잠금이 필요하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'volatile 쓰기 앞의 일반 쓰기는 어떻게 되는가?',
+        choices: [
+          { text: '그 값을 읽은 스레드에 함께 보인다', correct: true },
+          { text: '보이지 않는다', leadsTo: 0 },
+          { text: 'volatile 필드만 보인다', leadsTo: 0 },
+          { text: '순서가 뒤바뀐다', leadsTo: 1 },
+        ],
+        rationale:
+          '이 happens-before 관계가 다른 상태의 전달까지 만든다. 완전히 생성된 객체 참조를 게시할 때 쓰는 이유다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'python',
+    question: '스레드를 늘려도 CPU 병렬성이 없는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '스레드를 늘려도 안 빨라지는 까닭은?',
+        choices: [
+          { text: '한 시점에 스레드 하나만 바이트코드를 실행한다', correct: true },
+          { text: '스레드 생성 비용이 커서', leadsTo: 2 },
+          { text: '코어가 부족해서', leadsTo: 2 },
+          { text: '메모리가 부족해서', leadsTo: 2 },
+        ],
+        rationale:
+          'CPU 연산 스레드를 늘리면 GIL 경합과 전환 비용만 커질 수 있다. 늘린 만큼 기다리는 줄만 길어진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'GIL이 있으면 데이터 경쟁도 막아 주는가?',
+        choices: [
+          { text: '복합 연산의 논리적 경쟁은 막지 못한다', correct: true },
+          { text: '모든 경쟁을 막아 준다', leadsTo: 3 },
+          { text: '읽기 경쟁만 막는다', leadsTo: 3 },
+          { text: '멀티프로세스에서만 경쟁이 생긴다', leadsTo: 2 },
+        ],
+        rationale:
+          '공유 상태는 GIL과 별개로 따로 동기화해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '스레드가 효과를 내는 작업은?',
+        choices: [
+          { text: '대기가 긴 I/O와 GIL을 놓는 네이티브 확장', correct: true },
+          { text: '순수 CPU 연산', leadsTo: 2 },
+          { text: '모든 종류의 작업', leadsTo: 0 },
+          { text: '효과를 내는 작업이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '대기하는 많은 I/O 호출과 일부 네이티브 확장은 GIL을 놓는다. 그래서 그 구간은 스레드로도 겹쳐 실행된다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'python',
+    question: '참조 횟수가 0이 아닌 객체도 왜 수거되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '참조 카운팅만으로 못 푸는 것은?',
+        choices: [
+          { text: '서로를 가리키는 순환', correct: true },
+          { text: '큰 객체', leadsTo: 1 },
+          { text: '전역 변수', leadsTo: 0 },
+          { text: '지역 변수', leadsTo: 0 },
+        ],
+        rationale:
+          '외부에서 닿지 않는 순환은 별도 순환 수집기가 찾아 수거한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '자동 순환 수집을 끄면 메모리 회수가 멈추는가?',
+        choices: [
+          { text: '참조 카운팅은 계속 동작한다', correct: true },
+          { text: '모든 회수가 멈춘다', leadsTo: 2 },
+          { text: '즉시 메모리가 새기 시작한다', leadsTo: 2 },
+          { text: '수집기가 다시 켜진다', leadsTo: 2 },
+        ],
+        rationale:
+          '수집 빈도를 낮추면 정지는 줄지만 순환 객체의 메모리 회수는 늦어진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '순환 수집기가 회수를 정하는 기준은?',
+        choices: [
+          { text: '외부에서 도달할 수 없는가', correct: true },
+          { text: '참조 수가 0인가', leadsTo: 0 },
+          { text: '생성된 지 오래됐는가', leadsTo: 1 },
+          { text: '크기가 큰가', leadsTo: 1 },
+        ],
+        rationale:
+          '추적 대상 컨테이너를 세대별 정책으로 검사한다. 오래 살아남은 객체는 덜 자주 본다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'javascript',
+    question: 'Promise와 타이머 중 무엇이 먼저 실행되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '같은 턴에 예약됐을 때 순서는?',
+        choices: [
+          { text: 'Promise 콜백이 타이머보다 먼저', correct: true },
+          { text: '타이머가 먼저', leadsTo: 2 },
+          { text: '예약한 순서대로', leadsTo: 2 },
+          { text: '매번 달라진다', leadsTo: 3 },
+        ],
+        rationale:
+          '현재 태스크가 끝난 뒤 마이크로태스크 큐를 비우고, 그 다음에 타이머 태스크를 하나 꺼낸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'await 뒤의 코드는 어느 큐로 재개되는가?',
+        choices: [
+          { text: '마이크로태스크로 재개된다', correct: true },
+          { text: '타이머와 같은 태스크로 재개된다', leadsTo: 3 },
+          { text: '동기적으로 이어진다', leadsTo: 0 },
+          { text: '렌더링 뒤에 재개된다', leadsTo: 0 },
+        ],
+        rationale:
+          'Promise.then과 queueMicrotask도 마이크로태스크다. setTimeout 콜백만 태스크다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '마이크로태스크가 계속 새 작업을 넣으면?',
+        choices: [
+          { text: '렌더링과 타이머가 굶는다', correct: true },
+          { text: '자동으로 중단된다', leadsTo: 0 },
+          { text: '타이머가 우선권을 가져간다', leadsTo: 2 },
+          { text: '아무 영향이 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '마이크로태스크 큐는 비워질 때까지 렌더링 기회로 넘어가지 않는다. 긴 동기 코드도 같은 결과를 만든다.',
+      },
+    ],
+  },
 ]
