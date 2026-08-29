@@ -14209,4 +14209,172 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'security',
+    question: '인코딩과 암호화와 해싱은 무엇이 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '셋을 가르는 기준은?',
+        choices: [
+          { text: '되돌릴 수 있는지와 무엇을 위해 쓰는지', correct: true },
+          { text: '결과 문자열의 길이', leadsTo: 4 },
+          { text: '연산 속도', leadsTo: 1 },
+          { text: '표준화 여부', leadsTo: 3 },
+        ],
+        rationale:
+          '인코딩은 옮기려고, 암호화는 감추려고, 해싱은 같은지 확인하려고 모양을 바꾼다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'base64로 담으면 내용이 감춰지는가?',
+        choices: [
+          { text: '아니다. 누구나 원래대로 되돌려 읽는다', correct: true },
+          { text: '그렇다. 사람이 못 읽는 형태가 된다', leadsTo: 0 },
+          { text: '그렇다. 열쇠가 있어야 되돌린다', leadsTo: 0 },
+          { text: '아니다. 대신 되돌리는 계산이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '바이너리를 글자만 다루는 통로로 보내려고 모양을 바꾼 것이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '되돌리는 계산이 없다는 것이 못 알아낸다는 뜻인가?',
+        choices: [
+          { text: '아니다. 후보가 적으면 하나씩 넣어 보며 찾는다', correct: true },
+          { text: '그렇다. 수학적으로 불가능하다', leadsTo: 1 },
+          { text: '그렇다. 같은 값이 안 나온다', leadsTo: 4 },
+          { text: '아니다. 대신 열쇠로 되돌린다', leadsTo: 2 },
+        ],
+        rationale:
+          '비밀번호에 소금과 느린 해시를 쓰는 이유가 이것이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: '무작위 값은 어디서 만들어야 안전한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '씨앗을 시각으로 정하면 무엇이 가능해지는가?',
+        choices: [
+          { text: '만든 때를 아는 공격자가 씨앗 후보를 좁혀 수열을 재현한다', correct: true },
+          { text: '난수가 고르게 퍼지지 않는다', leadsTo: 0 },
+          { text: '값이 짧아진다', leadsTo: 1 },
+          { text: '중복이 생긴다', leadsTo: 2 },
+        ],
+        rationale:
+          '씨앗에 예측하기 어려운 값이 섞이면 이 재현이 안 된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '흔히 쓰는 난수 함수도 맞히기 어려운가?',
+        choices: [
+          { text: '아니다. 몇 개만 보면 다음 값을 계산할 수 있는 것도 있다', correct: true },
+          { text: '그렇다. 무작위면 예측할 수 없다', leadsTo: 0 },
+          { text: '그렇다. 고르게 퍼지면 안전하다', leadsTo: 0 },
+          { text: '아니다. 대신 느려서 못 쓴다', leadsTo: 0 },
+        ],
+        rationale:
+          '빠르고 고르게 퍼지도록 만들어졌지 맞히기 어렵게 만들어지지 않았다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '원천이 좋으면 그것으로 충분한가?',
+        choices: [
+          { text: '아니다. 짧으면 전부 시도해 볼 수 있어 길이도 함께 본다', correct: true },
+          { text: '그렇다. 원천이 전부다', leadsTo: 1 },
+          { text: '그렇다. 길이는 상관없다', leadsTo: 1 },
+          { text: '아니다. 대신 순번을 섞으면 된다', leadsTo: 4 },
+        ],
+        rationale:
+          '주소에 순번이 드러나면 남의 자원을 순서대로 훑을 수 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: '사용자 입력을 왜 전부 의심해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'SQL 인젝션과 XSS가 공유하는 구조는?',
+        choices: [
+          { text: '데이터가 코드로 해석되는 것', correct: true },
+          { text: '입력이 너무 긴 것', leadsTo: 3 },
+          { text: '인증을 건너뛰는 것', leadsTo: 3 },
+          { text: '권한이 넓은 것', leadsTo: 3 },
+        ],
+        rationale:
+          '해석기는 어디까지가 데이터인지 모른다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이스케이프 한 번이면 어디서나 안전한가?',
+        choices: [
+          { text: '아니다. HTML과 자바스크립트 문자열과 URL은 위험한 글자가 다르다', correct: true },
+          { text: '그렇다. 한 번의 치환으로 전부 막는다', leadsTo: 2 },
+          { text: '그렇다. 문맥과 무관하다', leadsTo: 2 },
+          { text: '아니다. 대신 바인딩으로 화면도 처리한다', leadsTo: 2 },
+        ],
+        rationale:
+          'HTML 자체를 허용한다면 치환이 아니라 정화 도구가 필요하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '의심할 범위는 어디까지인가?',
+        choices: [
+          { text: '헤더와 쿠키, URL 경로, 업로드된 파일 이름까지', correct: true },
+          { text: '폼 입력만', leadsTo: 4 },
+          { text: '쿼리 문자열까지만', leadsTo: 4 },
+          { text: '화면에서 검증을 통과하지 못한 것만', leadsTo: 3 },
+        ],
+        rationale:
+          '신뢰 경계 밖에서 온 것은 전부 같은 자격이고 클라이언트 검증은 보안이 아니다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'docker',
+    question: '컨테이너 이미지를 최소화해야 하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '셸이나 도구가 많으면 무엇이 쉬워지는가?',
+        choices: [
+          { text: '침투 후 내부망 탐색과 추가 악성 코드 설치', correct: true },
+          { text: '이미지 빌드', leadsTo: 1 },
+          { text: '취약점 스캔', leadsTo: 4 },
+          { text: '컨테이너 시작', leadsTo: 2 },
+        ],
+        rationale:
+          'Distroless 이미지는 침투한 뒤 쓸 수 있는 도구를 줄인다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이미지를 줄이면 빌드 시간도 주는가?',
+        choices: [
+          { text: '아니다. 다단계 빌드가 한 단계를 더 도는 탓에 오히려 늘 수 있다', correct: true },
+          { text: '그렇다. 작을수록 빨리 만든다', leadsTo: 1 },
+          { text: '그렇다. 층이 줄어 빨라진다', leadsTo: 1 },
+          { text: '아니다. 대신 배포도 느려진다', leadsTo: 2 },
+        ],
+        rationale:
+          '줄어드는 것은 저장 공간과 내려받는 양이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '오토스케일링 환경에서 특히 중요한 이유는?',
+        choices: [
+          { text: '노드에 이미지를 빠르게 풀링하는 것이 가용성에 직결된다', correct: true },
+          { text: '빌드를 자주 하기 때문이다', leadsTo: 1 },
+          { text: '취약점이 더 많아지기 때문이다', leadsTo: 4 },
+          { text: '런타임 의존성이 늘기 때문이다', leadsTo: 2 },
+        ],
+        rationale:
+          '새 노드가 뜰 때마다 내려받는 양이 그대로 지연이 된다.',
+      },
+    ],
+  },
 ]
