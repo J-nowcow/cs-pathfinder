@@ -5899,4 +5899,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'sql',
+    question: '조인으로 인해 성능 저하가 발생하는 원인은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '조인 결과의 크기를 정하는 것은?',
+        choices: [
+          { text: '키가 얼마나 겹치느냐', correct: true },
+          { text: '조인한 테이블 개수', leadsTo: 3 },
+          { text: '컬럼 개수', leadsTo: 0 },
+          { text: '인덱스 개수', leadsTo: 0 },
+        ],
+        rationale:
+          '겹침이 많으면 중간 결과가 부풀고 정렬과 병합이 따라 는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'Hash Join은 언제나 대량 데이터에 유리한가?',
+        choices: [
+          { text: '메모리가 모자라면 디스크 입출력이 생겨 느려진다', correct: true },
+          { text: '데이터 양과 무관하게 언제나 빠르다', leadsTo: 1 },
+          { text: '인덱스가 있어야만 쓸 수 있다', leadsTo: 0 },
+          { text: '정렬이 필요하다', leadsTo: 4 },
+        ],
+        rationale:
+          '작은 테이블을 메모리에 해시 테이블로 올린 뒤 큰 테이블을 스캔하는 방식이라 그 메모리가 전제다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'Merge Join이 유리한 자리는?',
+        choices: [
+          { text: '이미 정렬돼 있거나 범위 조인을 할 때', correct: true },
+          { text: '한쪽이 아주 작을 때', leadsTo: 2 },
+          { text: '인덱스가 전혀 없을 때', leadsTo: 1 },
+          { text: '언제나 유리하다', leadsTo: 3 },
+        ],
+        rationale:
+          '양쪽을 조인 키로 정렬한 뒤 순차적으로 읽으며 병합한다. 정렬 비용이 이미 치러졌다면 그만큼 이득이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '커넥션 풀을 사용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '풀이 하는 일 둘은?',
+        choices: [
+          { text: '연결 재사용과 동시 작업 수 제한', correct: true },
+          { text: '질의 결과 캐시와 재사용', leadsTo: 0 },
+          { text: '자동 재시도와 로드 밸런싱', leadsTo: 1 },
+          { text: '인덱스 관리와 통계 갱신', leadsTo: 3 },
+        ],
+        rationale:
+          '연결 비용을 줄이는 것과 과부하를 막는 것 모두가 목적이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '풀을 크게 하면 처리량이 계속 오르는가?',
+        choices: [
+          { text: '데이터베이스가 감당할 수를 넘으면 경합이 커진다', correct: true },
+          { text: '크게 할수록 계속 오른다', leadsTo: 0 },
+          { text: '크기와 처리량은 무관하다', leadsTo: 0 },
+          { text: '연결 수는 제한이 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '풀에 연결이 있다는 이유만으로 느린 질의가 빨라지지도 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '풀 대기 제한을 어떻게 두는가?',
+        choices: [
+          { text: '사용자 요청의 남은 시간보다 짧게', correct: true },
+          { text: '가능한 한 길게', leadsTo: 1 },
+          { text: '제한을 두지 않는다', leadsTo: 1 },
+          { text: '질의 실행 시간과 같게', leadsTo: 0 },
+        ],
+        rationale:
+          '오래 기다린 뒤 질의를 시작하면 이미 응답할 시간이 없다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: 'RDB와 NoSQL 중 무엇을 기준으로 선택하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '무엇부터 적어야 하는가?',
+        choices: [
+          { text: '데이터 관계, 함께 지킬 규칙, 주로 읽는 모양', correct: true },
+          { text: '제품 이름과 버전', leadsTo: 1 },
+          { text: '팀이 익숙한 기술', leadsTo: 1 },
+          { text: '예상 데이터 크기', leadsTo: 2 },
+        ],
+        rationale:
+          'NoSQL은 하나의 방식이 아니라 문서·키-값·와이드 컬럼·그래프 모델을 묶어 부르는 이름이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '관계형은 수직 확장, NoSQL은 수평 확장인가?',
+        choices: [
+          { text: '맞지 않는 구분이다. 둘 다 복제와 분할을 쓴다', correct: true },
+          { text: '정확한 구분이다', leadsTo: 2 },
+          { text: '반대로 알려져 있다', leadsTo: 2 },
+          { text: '제품마다 다르다고만 할 수 있다', leadsTo: 4 },
+        ],
+        rationale:
+          '차이는 그 경계를 넘는 조인·트랜잭션·질의에 드는 비용이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '스키마와 트랜잭션을 제품 분류로 단정할 수 있는가?',
+        choices: [
+          { text: '없다. 문서 데이터베이스도 검증과 트랜잭션을 제공한다', correct: true },
+          { text: '분류만 알면 단정할 수 있다', leadsTo: 1 },
+          { text: '관계형만 트랜잭션이 있다', leadsTo: 1 },
+          { text: '스키마는 관계형 전용 개념이다', leadsTo: 1 },
+        ],
+        rationale:
+          '그 보장의 범위와 운영 비용은 데이터 모델에 달려 있다. 팀이 안전하게 운영할 수 있는지까지 보고 고른다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '데이터베이스 복제와 클러스터링의 선택 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '복제의 주된 쓰임은?',
+        choices: [
+          { text: '사본을 두어 가용성과 읽기를 늘린다', correct: true },
+          { text: '쓰기 처리량을 늘린다', leadsTo: 1 },
+          { text: '저장 공간을 줄인다', leadsTo: 2 },
+          { text: '질의를 자동으로 최적화한다', leadsTo: 4 },
+        ],
+        rationale:
+          '주로 읽기 전용 복제본을 늘려 읽기 트래픽을 분산시킨다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '복제하면 모든 사본이 즉시 같은 값을 갖는가?',
+        choices: [
+          { text: '복제를 동기로 걸었는지에 따라 다르다', correct: true },
+          { text: '언제나 즉시 같다', leadsTo: 0 },
+          { text: '영원히 어긋난 채로 남는다', leadsTo: 0 },
+          { text: '읽기 요청이 있어야 맞춰진다', leadsTo: 4 },
+        ],
+        rationale:
+          '데이터가 복사되는 시점차로 복제 지연이 생긴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '쓰기가 잦고 중단 없는 운영이 우선이면?',
+        choices: [
+          { text: '클러스터링을 검토한다', correct: true },
+          { text: '복제본을 더 늘린다', leadsTo: 0 },
+          { text: '읽기 전용으로 바꾼다', leadsTo: 4 },
+          { text: '둘 다 도움이 안 된다', leadsTo: 2 },
+        ],
+        rationale:
+          '노드 하나가 죽어도 서비스가 중단되지 않는 고가용성이 클러스터링의 핵심이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '낙관적 락과 비관적 락은 무엇으로 고르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '두 방식의 진짜 차이는?',
+        choices: [
+          { text: '충돌을 언제 발견하고 누가 기다리거나 다시 시도하느냐', correct: true },
+          { text: '데이터 정확성', leadsTo: 0 },
+          { text: '지원하는 데이터베이스', leadsTo: 3 },
+          { text: '트랜잭션 사용 여부', leadsTo: 3 },
+        ],
+        rationale:
+          '정확성은 두 방식 모두 만들 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '낙관적 방식은 잠금을 전혀 쓰지 않는가?',
+        choices: [
+          { text: '최종 갱신에서 데이터베이스 잠금을 쓰고 기다릴 수 있다', correct: true },
+          { text: '잠금을 전혀 쓰지 않는다', leadsTo: 0 },
+          { text: '읽을 때만 잠근다', leadsTo: 1 },
+          { text: '잠금 대신 격리 수준을 올린다', leadsTo: 3 },
+        ],
+        rationale:
+          '이름이 낙관적일 뿐 갱신 순간에는 같은 자원을 두고 겨룬다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '재고나 결제라면 비관적 방식으로 고정하는가?',
+        choices: [
+          { text: '고정하지 않는다. 조건부 갱신·고유 제약·멱등 키와 비교한다', correct: true },
+          { text: '반드시 비관적이어야 한다', leadsTo: 1 },
+          { text: '반드시 낙관적이어야 한다', leadsTo: 0 },
+          { text: '분산 락만이 답이다', leadsTo: 2 },
+        ],
+        rationale:
+          '무엇이 업무 규칙을 더 작고 분명하게 지키는지로 고른다. 잠금을 잡은 채 외부 호출을 하면 대기와 교착 위험이 커진다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '인덱스 범위 스캔과 전체 스캔 중 무엇을 선택하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '두 방식의 입출력이 갈리는 지점은?',
+        choices: [
+          { text: '흩어진 읽기인가 순차 읽기인가', correct: true },
+          { text: '읽는 총 바이트 수', leadsTo: 2 },
+          { text: '컬럼 개수', leadsTo: 1 },
+          { text: '테이블 이름 길이', leadsTo: 3 },
+        ],
+        rationale:
+          '인덱스만으로 필요한 칸이 다 채워지지 않으면 데이터 페이지를 따로 읽어야 하고 그 자리에서 흩어진 읽기가 생긴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '읽을 양이 많아도 인덱스가 유리한가?',
+        choices: [
+          { text: '일정 비율을 넘으면 전체 스캔이 빠르다', correct: true },
+          { text: '언제나 인덱스가 빠르다', leadsTo: 2 },
+          { text: '언제나 전체 스캔이 빠르다', leadsTo: 2 },
+          { text: '데이터 양과 무관하다', leadsTo: 0 },
+        ],
+        rationale:
+          '흩어진 읽기의 오버헤드가 순차적으로 읽는 쪽보다 커지는 지점이 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '엉뚱한 스캔이 선택됐을 때 먼저 볼 것은?',
+        choices: [
+          { text: '통계 정보를 새로 모은다', correct: true },
+          { text: '힌트부터 붙인다', leadsTo: 3 },
+          { text: '인덱스를 지운다', leadsTo: 1 },
+          { text: '테이블을 나눈다', leadsTo: 4 },
+        ],
+        rationale:
+          '통계가 오래되면 옵티마이저의 비용 계산이 틀어진다. 통계를 갱신하고 쿼리와 인덱스를 살핀 뒤에야 힌트를 본다.',
+      },
+    ],
+  },
 ]
