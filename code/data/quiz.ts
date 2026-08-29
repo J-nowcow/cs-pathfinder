@@ -10471,4 +10471,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'java',
+    question: '정적 클래스 내부에 정적 메서드를 정의하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '정적 메서드에 this가 없는 이유는?',
+        choices: [
+          { text: '자기를 부른 객체가 없기 때문이다', correct: true },
+          { text: '컴파일러가 금지하기 때문이다', leadsTo: 3 },
+          { text: '메모리 영역이 다르기 때문이다', leadsTo: 2 },
+          { text: '상속할 수 없기 때문이다', leadsTo: 4 },
+        ],
+        rationale:
+          '그래서 인스턴스 변수에 접근할 수 없다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '정적 메서드는 바깥 상태를 건드리지 못하는가?',
+        choices: [
+          { text: '아니다. 참조를 받으면 그 객체의 필드도 보고 바깥 상태도 쓴다', correct: true },
+          { text: '그렇다. 인자만 쓰고 끝난다', leadsTo: 0 },
+          { text: '그렇다. 항상 같은 입력이면 같은 결과다', leadsTo: 2 },
+          { text: '아니다. 대신 인스턴스 변수만 못 읽는다', leadsTo: 2 },
+        ],
+        rationale:
+          '상태 없는 로직으로 쓰겠다는 의도일 뿐 언어가 막아 주지는 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '정적 메서드를 쓸 때 감수하는 것은?',
+        choices: [
+          { text: '테스트에서 모킹이 어렵다', correct: true },
+          { text: '호출 비용이 더 크다', leadsTo: 3 },
+          { text: '스레드에서 쓸 수 없다', leadsTo: 2 },
+          { text: '상태를 가질 수 없어 느리다', leadsTo: 3 },
+        ],
+        rationale:
+          'new로 인스턴스를 만들지 못하게 막는 대신 갈아 끼울 자리도 사라진다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'jvm',
+    question: 'JVM GC의 효율을 높이는 튜닝 포인트는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '튜닝은 무엇을 먼저 정하고 시작하는가?',
+        choices: [
+          { text: '서비스가 허용할 수 있는 지연 시간과 처리량', correct: true },
+          { text: '힙 크기의 최댓값', leadsTo: 2 },
+          { text: '사용할 수집기 이름', leadsTo: 1 },
+          { text: '객체 생성 횟수', leadsTo: 4 },
+        ],
+        rationale:
+          '그 목표에 맞춰 힙 크기와 GC 알고리즘 두 값을 조정한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '힙을 크게 잡으면 GC 부담이 줄어드는가?',
+        choices: [
+          { text: '아니다. Full GC의 처리 시간이 길어진다', correct: true },
+          { text: '그렇다. 클수록 항상 유리하다', leadsTo: 0 },
+          { text: '그렇다. Stop-the-world가 사라진다', leadsTo: 0 },
+          { text: '아니다. 대신 CPU 사용률이 내려간다', leadsTo: 2 },
+        ],
+        rationale:
+          '반대로 너무 작으면 GC가 빈번해져 CPU 사용률이 올라간다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'G1은 힙을 어떻게 다루는가?',
+        choices: [
+          { text: '작은 조각으로 쪼개고 조각마다 Young인지 Old인지를 붙인다', correct: true },
+          { text: 'Young과 Old를 한 덩어리로 붙여 둔다', leadsTo: 1 },
+          { text: '세대 구분 없이 하나로 관리한다', leadsTo: 4 },
+          { text: 'Old 영역만 관리한다', leadsTo: 1 },
+        ],
+        rationale:
+          '한 덩어리로 붙은 배치는 옛 수집기 쪽이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'jvm',
+    question: 'JVM의 핵심 역할은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '컴파일러와 JVM은 각각 무엇을 하는가?',
+        choices: [
+          { text: '컴파일러는 소스를 바이트코드로, JVM은 바이트코드를 각 OS의 기계어로 바꾼다', correct: true },
+          { text: '컴파일러가 기계어까지 만들고 JVM은 실행만 한다', leadsTo: 2 },
+          { text: 'JVM이 소스를 직접 읽는다', leadsTo: 0 },
+          { text: '둘 다 바이트코드를 만든다', leadsTo: 2 },
+        ],
+        rationale:
+          '이 구조가 Write Once, Run Anywhere를 실현한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '가비지 컬렉션이 있으면 메모리 누수가 없는가?',
+        choices: [
+          { text: '아니다. 안 쓰는 객체를 어딘가에서 붙들고 있으면 걷히지 않는다', correct: true },
+          { text: '그렇다. 자동 관리라 누수가 불가능하다', leadsTo: 3 },
+          { text: '그렇다. 직접 해제할 일이 없어졌다', leadsTo: 3 },
+          { text: '아니다. 대신 직접 해제해야 한다', leadsTo: 3 },
+        ],
+        rationale:
+          '개발자가 직접 해제할 일이 줄어들 뿐이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'JIT 컴파일러가 하는 일은?',
+        choices: [
+          { text: '자주 실행되는 코드를 기계어로 바꿔 저장해 해석 단계를 건너뛴다', correct: true },
+          { text: '실행 전에 전체를 기계어로 바꾼다', leadsTo: 1 },
+          { text: '바이트코드를 압축한다', leadsTo: 1 },
+          { text: '메모리를 회수한다', leadsTo: 3 },
+        ],
+        rationale:
+          '이후 같은 코드는 해석 없이 바로 돈다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'java',
+    question: '체크 예외와 언체크 예외의 선택 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 기준은?',
+        choices: [
+          { text: '복구 가능 여부', correct: true },
+          { text: '예외의 심각도', leadsTo: 3 },
+          { text: '발생 빈도', leadsTo: 3 },
+          { text: '메시지의 유무', leadsTo: 3 },
+        ],
+        rationale:
+          '호출자가 대처할 수 있으면 체크 예외, 실수나 시스템 장애면 언체크 예외다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '체크 예외를 쓰면 예외가 덜 나는가?',
+        choices: [
+          { text: '아니다. 처리든 전파든 하나를 강제할 뿐이다', correct: true },
+          { text: '그렇다. 컴파일러가 예외를 막아 준다', leadsTo: 1 },
+          { text: '그렇다. 시그니처에 적으면 안전해진다', leadsTo: 1 },
+          { text: '아니다. 대신 성능이 나빠진다', leadsTo: 0 },
+        ],
+        rationale:
+          '컴파일러가 강제하는 것은 처리 의무지 예외 발생 자체가 아니다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '널 포인터 참조를 try-catch로 잡으면 되는가?',
+        choices: [
+          { text: '아니다. 코드를 수정해야 풀리는 문제다', correct: true },
+          { text: '그렇다. 잡으면 정상 동작한다', leadsTo: 0 },
+          { text: '그렇다. 체크 예외로 바꾸면 더 안전하다', leadsTo: 1 },
+          { text: '아니다. 대신 상위로 전파해야 한다', leadsTo: 1 },
+        ],
+        rationale:
+          '논리적 오류는 잡는다고 해결되지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'java',
+    question: '톰캣은 서블릿 컨테이너로서 어떤 일을 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '톰캣이 요청을 받아 하는 일은?',
+        choices: [
+          { text: '서블릿으로 전달하고 결과를 응답하며 생명주기와 멀티스레딩을 관리한다', correct: true },
+          { text: '정적 파일만 골라 응답한다', leadsTo: 4 },
+          { text: '요청을 웹 서버로 되돌린다', leadsTo: 0 },
+          { text: '데이터베이스 연결만 관리한다', leadsTo: 0 },
+        ],
+        rationale:
+          '비즈니스 로직이 필요한 요청을 처리해 동적인 응답을 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '톰캣은 정적 파일을 처리하지 못하는가?',
+        choices: [
+          { text: '아니다. 성능이 좋아져 단독으로 쓰기도 한다', correct: true },
+          { text: '그렇다. 서블릿만 실행할 수 있다', leadsTo: 0 },
+          { text: '그렇다. 웹 서버가 반드시 앞에 있어야 한다', leadsTo: 4 },
+          { text: '아니다. 대신 웹 서버보다 항상 빠르다', leadsTo: 4 },
+        ],
+        rationale:
+          '그래도 보안과 로드밸런싱을 위해 앞단에 웹 서버를 두는 구조가 일반적이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '웹 서버와 WAS의 대표 예는?',
+        choices: [
+          { text: '웹 서버는 Apache와 Nginx, WAS는 Tomcat과 Jetty', correct: true },
+          { text: '웹 서버는 Tomcat, WAS는 Nginx', leadsTo: 0 },
+          { text: '둘 다 Tomcat이 겸한다', leadsTo: 4 },
+          { text: '웹 서버는 Jetty, WAS는 Apache', leadsTo: 0 },
+        ],
+        rationale:
+          '웹 서버는 정적 리소스, WAS는 서블릿 실행과 DB 연동을 맡는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'java',
+    question: '인터페이스와 추상 클래스는 무엇으로 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘의 관계 성격은?',
+        choices: [
+          { text: '인터페이스는 can-do, 추상 클래스는 is-a', correct: true },
+          { text: '둘 다 is-a', leadsTo: 3 },
+          { text: '둘 다 can-do', leadsTo: 1 },
+          { text: '인터페이스는 is-a, 추상 클래스는 can-do', leadsTo: 3 },
+        ],
+        rationale:
+          '인터페이스는 무엇을 하는지, 추상 클래스는 무엇인지를 정의한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '추상 클래스도 여러 개를 상속할 수 있는가?',
+        choices: [
+          { text: '아니다. 다중 상속은 인터페이스만 가능하다', correct: true },
+          { text: '그렇다. 개수 제한이 없다', leadsTo: 1 },
+          { text: '그렇다. 추상 메서드만 있으면 가능하다', leadsTo: 0 },
+          { text: '아니다. 인터페이스도 하나만 구현할 수 있다', leadsTo: 1 },
+        ],
+        rationale:
+          '서로 다른 계층의 클래스들이 공통 인터페이스로 소통하게 하는 것이 목적이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '추상 클래스를 쓰는 이유는?',
+        choices: [
+          { text: '공통된 상태와 기본 구현을 공유해 중복을 줄인다', correct: true },
+          { text: '행위 규격만 정하려고', leadsTo: 0 },
+          { text: '다중 상속을 얻으려고', leadsTo: 1 },
+          { text: '인스턴스를 만들려고', leadsTo: 3 },
+        ],
+        rationale:
+          '자식 클래스가 추상 메서드를 구현해 실제 동작을 정한다.',
+      },
+    ],
+  },
 ]
