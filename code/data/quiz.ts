@@ -12991,4 +12991,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '처리에 실패한 메시지는 어디로 가는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '재시도와 실패 큐 이동은 어떻게 정해지는가?',
+        choices: [
+          { text: '큐와 소비자 설정으로 정해 두는 것이다', correct: true },
+          { text: '브로커가 알아서 한다', leadsTo: 0 },
+          { text: '소비자가 죽으면 자동으로 옮겨진다', leadsTo: 0 },
+          { text: '메시지 내용에 따라 정해진다', leadsTo: 4 },
+        ],
+        rationale:
+          '저절로 되는 것이 아니라 횟수와 간격을 정해 두는 일이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '순서를 지키는 자리에서는 실패한 것을 계속 다시 주면 되는가?',
+        choices: [
+          { text: '아니다. 맨 앞이 계속 실패하면 뒤엣것이 영영 처리되지 않는다', correct: true },
+          { text: '그렇다. 순서를 지키려면 옮기면 안 된다', leadsTo: 3 },
+          { text: '그렇다. 뒤엣것은 건너뛰고 처리된다', leadsTo: 3 },
+          { text: '아니다. 대신 순서를 포기하면 그만이다', leadsTo: 3 },
+        ],
+        rationale:
+          '다만 옮기는 순간 원래 순서는 깨진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '실패 큐로 옮긴 뒤에 해야 할 일은?',
+        choices: [
+          { text: '쌓이면 알리도록 걸어 둔다', correct: true },
+          { text: '주기적으로 비운다', leadsTo: 1 },
+          { text: '원래 큐로 자동 반환한다', leadsTo: 1 },
+          { text: '아무것도 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '쌓인 것을 아무도 안 보면 조용히 잃은 것과 같다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '부하가 늘면 서버를 어떻게 늘리는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '오토스케일러가 동작하는 방식은?',
+        choices: [
+          { text: '주기마다 지표를 읽어 필요한 대수를 다시 셈한다', correct: true },
+          { text: '지표가 기준을 넘는 순간 곧바로 반응한다', leadsTo: 1 },
+          { text: '관리자가 정한 일정대로 움직인다', leadsTo: 4 },
+          { text: '요청 하나마다 판단한다', leadsTo: 1 },
+        ],
+        rationale:
+          '상태를 보고 판단하는 것이 아니라 고리를 돈다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '늘릴 때 0초, 줄일 때 300초는 모든 오토스케일러의 규칙인가?',
+        choices: [
+          { text: '아니다. 쿠버네티스의 기본 설정값일 뿐이다', correct: true },
+          { text: '그렇다. 표준으로 정해져 있다', leadsTo: 1 },
+          { text: '그렇다. 바꿀 수 없는 값이다', leadsTo: 1 },
+          { text: '아니다. 대신 양쪽 다 0초가 맞다', leadsTo: 1 },
+        ],
+        rationale:
+          '바로 반응하면 잠깐 튄 값에 늘렸다 줄이기를 되풀이한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '진짜 제약이 되는 것은?',
+        choices: [
+          { text: '서버가 뜨고 받을 준비를 마칠 때까지 걸리는 시간', correct: true },
+          { text: '지표를 읽는 주기', leadsTo: 0 },
+          { text: '완충 시간의 길이', leadsTo: 1 },
+          { text: '최대 대수 설정', leadsTo: 4 },
+        ],
+        rationale:
+          '그 몇 분은 이미 밀린다. 미리 늘려 두는 편이 나은 자리가 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '보내는 쪽이 받는 쪽보다 빠르면 무엇이 터지는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '큐 길이에 한도가 없으면?',
+        choices: [
+          { text: '겉으로는 다 받아 주다가 메모리가 바닥난다', correct: true },
+          { text: '보내는 쪽이 자동으로 느려진다', leadsTo: 2 },
+          { text: '오래된 것부터 버려진다', leadsTo: 1 },
+          { text: '받는 쪽이 빨라진다', leadsTo: 3 },
+        ],
+        rationale:
+          '문제가 늦게 드러나는 것이 한도가 없을 때의 위험이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '자리가 없으면 멈추게 하는 것이 유일한 선택인가?',
+        choices: [
+          { text: '아니다. 버리거나 거절하는 선택도 있다', correct: true },
+          { text: '그렇다. 백프레셔뿐이다', leadsTo: 2 },
+          { text: '그렇다. 버리면 데이터가 사라져 안 된다', leadsTo: 1 },
+          { text: '아니다. 대신 한도를 없애면 된다', leadsTo: 0 },
+        ],
+        rationale:
+          '실시간 지표처럼 늦은 값이 쓸모없으면 오래된 것부터 버리는 편이 낫다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '백프레셔가 하는 일은?',
+        choices: [
+          { text: '느린 쪽의 속도가 앞으로 전해져 전체가 감당할 속도로 맞춰진다', correct: true },
+          { text: '받는 쪽 처리량을 늘린다', leadsTo: 3 },
+          { text: '큐 크기를 자동으로 키운다', leadsTo: 0 },
+          { text: '오래된 메시지를 버린다', leadsTo: 1 },
+        ],
+        rationale:
+          '사이에 낀 큐가 먼저 터지는 것을 막는 방식이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '단계마다 타임아웃을 5초씩 주면 무엇이 잘못되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '단계가 셋이고 각각 5초면 최악에 얼마인가?',
+        choices: [
+          { text: '15초', correct: true },
+          { text: '5초', leadsTo: 0 },
+          { text: '10초', leadsTo: 0 },
+          { text: '단계 수와 무관하다', leadsTo: 0 },
+        ],
+        rationale:
+          '따로 주면 시간이 더해진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '사용자가 떠나면 서버 일도 멈추는가?',
+        choices: [
+          { text: '아니다. 아무도 안 볼 답을 만드느라 자원을 쓴다', correct: true },
+          { text: '그렇다. 연결이 끊기면 중단된다', leadsTo: 1 },
+          { text: '그렇다. 타임아웃이 정리해 준다', leadsTo: 1 },
+          { text: '아니다. 대신 재시도가 멈춘다', leadsTo: 2 },
+        ],
+        rationale:
+          '취소 신호도 아래 단계까지 전해져야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '남은 것이 없으면 각 단계는 어떻게 하는가?',
+        choices: [
+          { text: '아예 시작하지 않는다', correct: true },
+          { text: '새 타이머로 시작한다', leadsTo: 0 },
+          { text: '절반의 시간으로 시작한다', leadsTo: 0 },
+          { text: '재시도부터 한다', leadsTo: 2 },
+        ],
+        rationale:
+          '남은 시간을 안 보고 재시도하면 예산을 넘긴 채로 계속 두드린다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '남의 서버에 일이 생긴 것을 어떻게 아는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '알림을 받으면 무엇을 먼저 하는가?',
+        choices: [
+          { text: '큐에 넣고 받았다고 바로 답한다', correct: true },
+          { text: '무거운 처리를 끝내고 답한다', leadsTo: 2 },
+          { text: '상대에게 다시 조회한다', leadsTo: 3 },
+          { text: '서명 확인을 생략하고 처리한다', leadsTo: 1 },
+        ],
+        rationale:
+          '그 자리에서 무거운 일을 하면 상대의 제한 시간을 넘겨 다시 보내게 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '등록한 주소로 온 요청이면 믿어도 되는가?',
+        choices: [
+          { text: '아니다. 그 주소는 누구나 부를 수 있어 서명을 확인해야 한다', correct: true },
+          { text: '그렇다. 등록한 상대만 안다', leadsTo: 1 },
+          { text: '그렇다. 내용이 맞으면 진짜다', leadsTo: 1 },
+          { text: '아니다. 대신 주소를 자주 바꾼다', leadsTo: 1 },
+        ],
+        rationale:
+          '확인 없이 믿으면 남이 결제 성공을 지어낼 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '우리 서버가 꺼져 있던 동안의 알림은?',
+        choices: [
+          { text: '상대의 재시도 정책에 달렸고 안 되면 따로 조회해 맞춘다', correct: true },
+          { text: '상대가 반드시 다시 보낸다', leadsTo: 3 },
+          { text: '자동으로 복구된다', leadsTo: 3 },
+          { text: '복구할 방법이 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '못 받은 구간을 다시 맞추는 경로가 필요하다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '서버마다 시계가 다르면 무엇이 깨지는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '어긋난 폭이 두 사건 사이의 간격보다 크면?',
+        choices: [
+          { text: '나중 일이 먼저 일어난 것으로 기록된다', correct: true },
+          { text: '두 사건이 같은 시각으로 기록된다', leadsTo: 0 },
+          { text: '기록이 남지 않는다', leadsTo: 1 },
+          { text: '순서는 그대로 유지된다', leadsTo: 0 },
+        ],
+        rationale:
+          '여러 서버의 로그를 시각순으로 모으면 그 뒤집힘이 사실처럼 읽힌다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '시계를 맞추면 문제가 사라지는가?',
+        choices: [
+          { text: '아니다. 맞추는 순간 튀어 같은 시각이 두 번 지나갈 수 있다', correct: true },
+          { text: '그렇다. 동기화하면 정확해진다', leadsTo: 2 },
+          { text: '그렇다. 오차가 0이 된다', leadsTo: 1 },
+          { text: '아니다. 대신 시계를 아예 쓰지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '뒤로 당겨지면 시각을 섞어 만든 식별자가 겹칠 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '순서가 중요한 곳에서는 무엇을 쓰는가?',
+        choices: [
+          { text: '사건마다 세는 값을 따로 두거나 한 곳에서 번호를 받아 온다', correct: true },
+          { text: '가장 정확한 서버의 시각을 쓴다', leadsTo: 1 },
+          { text: '시각을 더 잘게 쪼갠다', leadsTo: 0 },
+          { text: '기록 시각 대신 도착 시각을 쓴다', leadsTo: 0 },
+        ],
+        rationale:
+          '시각은 사람이 읽는 값이고 순서를 정하는 값은 따로 두는 것이 안전하다.',
+      },
+    ],
+  },
 ]
