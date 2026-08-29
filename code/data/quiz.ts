@@ -1992,10 +1992,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: 'HashMap이 값을 찾는 순서는?',
         choices: [
-          { text: 'hashCode로 버킷을 정하고 그 안에서 equals로 견준다', correct: true },
+          { text: 'hashCode로 버킷을 정하고 equals로 견준다', correct: true },
           { text: 'equals로 전체를 훑고 hashCode로 정렬한다', leadsTo: 0 },
-          { text: 'equals만으로 찾는다', leadsTo: 0 },
-          { text: 'hashCode만으로 찾는다', leadsTo: 3 },
+          { text: 'equals로 하나씩 견줘 찾는다', leadsTo: 0 },
+          { text: 'hashCode가 같으면 같은 값으로 본다', leadsTo: 3 },
         ],
         rationale:
           'equals만 재정의하면 논리적으로 같은 두 객체가 서로 다른 버킷으로 흩어진다. equals 비교까지 가지도 못하므로 조회가 실패한다.',
@@ -2226,10 +2226,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '고르기 전에 반드시 할 일은?',
         choices: [
-          { text: '운영과 같은 부하에서 지연·처리량·GC CPU를 재 본다', correct: true },
-          { text: '가장 최신 수집기를 고른다', leadsTo: 2 },
-          { text: '힙을 최대로 잡는다', leadsTo: 0 },
-          { text: '기본값을 그대로 쓴다', leadsTo: 4 },
+          { text: '운영과 같은 부하에서 지연과 처리량을 잰다', correct: true },
+          { text: '가장 최신 수집기를 골라 기본값으로 둔다', leadsTo: 2 },
+          { text: '힙을 장비가 허용하는 최대로 잡는다', leadsTo: 0 },
+          { text: '손대지 않고 기본값을 그대로 쓴다', leadsTo: 4 },
         ],
         rationale:
           'G1은 리전 단위로 수집해 처리량과 정지 목표를 절충한다. 어느 쪽이든 선택 전 같은 부하에서 재 봐야 한다.',
@@ -2352,10 +2352,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '소거 때문에 막히는 것은?',
         choices: [
-          { text: '와일드카드 사용', leadsTo: 2 },
-          { text: '제네릭 메서드 선언', leadsTo: 0 },
-          { text: '구체 타입 인자를 붙인 타입의 instanceof 검사', correct: true },
-          { text: '상속받은 제네릭 타입', leadsTo: 0 },
+          { text: '물음표를 쓰는 와일드카드', leadsTo: 2 },
+          { text: '타입 변수를 두는 제네릭 메서드', leadsTo: 0 },
+          { text: '타입 인자를 붙인 instanceof 검사', correct: true },
+          { text: '부모에게서 상속받은 제네릭 타입', leadsTo: 0 },
         ],
         rationale:
           '타입 변수의 직접 인스턴스화와 배열 생성도 제한되고, 소거형이 같은 메서드를 오버로드할 수도 없다.',
@@ -2803,9 +2803,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '속성 대입은 언제나 자체 속성을 만드는가?',
         choices: [
           { text: '언제나 자체 속성을 만든다', leadsTo: 4 },
-          { text: '상속된 setter나 쓰기 금지 속성이 있으면 결과가 달라진다', correct: true },
+          { text: '상속된 setter가 있으면 결과가 달라진다', correct: true },
           { text: '언제나 프로토타입을 고친다', leadsTo: 1 },
-          { text: '읽기와 같은 경로를 탄다', leadsTo: 0 },
+          { text: '읽을 때와 똑같은 경로를 그대로 탄다', leadsTo: 0 },
         ],
         rationale:
           '하위 객체에 같은 키가 있으면 상속 속성을 가린다. 다만 대입 경로는 읽기와 규칙이 다르다.',
@@ -5965,9 +5965,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '재고나 결제라면 비관적 방식으로 고정하는가?',
         choices: [
           { text: '반드시 낙관적이어야 한다', leadsTo: 0 },
-          { text: '반드시 비관적이어야 한다', leadsTo: 1 },
-          { text: '고정하지 않는다. 조건부 갱신·고유 제약·멱등 키와 비교한다', correct: true },
-          { text: '분산 락만이 답이다', leadsTo: 2 },
+          { text: '돈이 걸렸으니 반드시 비관적이어야 한다', leadsTo: 1 },
+          { text: '고정하지 않는다. 조건부 갱신과도 비교한다', correct: true },
+          { text: '여러 서버라면 분산 락만이 답이다', leadsTo: 2 },
         ],
         rationale:
           '무엇이 업무 규칙을 더 작고 분명하게 지키는지로 고른다. 잠금을 잡은 채 외부 호출을 하면 대기와 교착 위험이 커진다.',
@@ -7434,8 +7434,8 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '지연 로딩을 걸 때 함께 해야 하는 일은?',
         choices: [
-          { text: '자리 표시자를 지우고 여백을 없앤다', leadsTo: 2 },
-          { text: 'width와 height 또는 aspect-ratio로 자리를 예약한다', correct: true },
+          { text: '자리 표시자를 지워 여백을 없앤다', leadsTo: 2 },
+          { text: 'width와 height로 자리를 예약한다', correct: true },
           { text: '이미지를 모두 같은 크기로 자른다', leadsTo: 3 },
           { text: '아무것도 없다. 로드되면 자연히 자리가 잡힌다', leadsTo: 2 },
         ],
@@ -7938,10 +7938,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '두 공격의 피해 범위는 어떻게 다른가?',
         choices: [
-          { text: '둘 다 상태 변경에만 해당한다', leadsTo: 1 },
-          { text: 'CSRF는 상태 변경 요청에, XSS는 탈취와 변조까지 넓게 미친다', correct: true },
+          { text: '둘 다 상태를 바꾸는 요청에만 해당한다', leadsTo: 1 },
+          { text: 'CSRF는 상태 변경에, XSS는 더 넓게 미친다', correct: true },
           { text: 'XSS는 읽기만, CSRF는 쓰기만 가능하다', leadsTo: 4 },
-          { text: 'CSRF 쪽이 항상 더 위험하다', leadsTo: 4 },
+          { text: '돈이 움직이는 CSRF가 항상 더 위험하다', leadsTo: 4 },
         ],
         rationale:
           'CSRF는 비밀번호 변경 같은 상태 변경 요청에 치명적이다.',
@@ -9258,10 +9258,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: 'App Bundle은 무엇인가?',
         choices: [
-          { text: '기능 모듈을 내려받는 방식이다', leadsTo: 3 },
+          { text: '필요할 때 기능 모듈을 내려받는 방식이다', leadsTo: 3 },
           { text: '기기에 그대로 설치되는 파일이다', leadsTo: 0 },
-          { text: '게시 형식이며 스토어가 기기에 맞는 분할 APK를 만들어 전달한다', correct: true },
-          { text: '자원을 압축하는 방식이다', leadsTo: 2 },
+          { text: '게시 형식이며 스토어가 분할 APK를 만든다', correct: true },
+          { text: '자원을 더 세게 압축하는 방식이다', leadsTo: 2 },
         ],
         rationale:
           '사용자가 모든 언어와 밀도 자원을 받을 필요가 없어진다.',
@@ -9618,10 +9618,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '페이징이 함께 필요한 화면에서는 무엇을 쓰는가?',
         choices: [
-          { text: 'batch size로 IN 절에 묶어 몇 번에 나눠 읽는다', correct: true },
-          { text: '컬렉션 fetch join', leadsTo: 1 },
-          { text: '즉시 로딩', leadsTo: 2 },
-          { text: '@EntityGraph', leadsTo: 0 },
+          { text: 'batch size로 묶어 나눠 읽는다', correct: true },
+          { text: '컬렉션까지 fetch join으로 한 번에', leadsTo: 1 },
+          { text: '연관을 즉시 로딩으로 바꾼다', leadsTo: 2 },
+          { text: '@EntityGraph로 연관을 지정한다', leadsTo: 0 },
         ],
         rationale:
           '컬렉션을 조인하면 행이 곱해져 페이징을 데이터베이스에 맡길 수 없다.',
@@ -9954,9 +9954,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '세션 방식과 무상태 토큰 방식은 어떻게 다른가?',
         choices: [
-          { text: '세션은 문맥을 요청 사이에 복원하고 토큰은 매 요청 검증한다', correct: true },
-          { text: '둘 다 매 요청 검증한다', leadsTo: 2 },
-          { text: '둘 다 문맥을 복원한다', leadsTo: 2 },
+          { text: '세션은 문맥을 복원하고 토큰은 매번 검증한다', correct: true },
+          { text: '둘 다 요청마다 다시 검증한다', leadsTo: 2 },
+          { text: '둘 다 저장해 둔 문맥을 복원한다', leadsTo: 2 },
           { text: '토큰 방식은 보안 문맥을 쓰지 않는다', leadsTo: 2 },
         ],
         rationale:
@@ -10195,7 +10195,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '내부 예외를 잡으면 바깥은 정상 커밋되는가?',
         choices: [
           { text: '그렇다. 잡은 예외는 전파되지 않는다', leadsTo: 0 },
-          { text: '아니다. 이미 rollback-only가 됐다면 마지막 커밋에서 롤백된다', correct: true },
+          { text: '아니다. rollback-only가 찍혔으면 롤백된다', correct: true },
           { text: '그렇다. 트랜잭션은 예외와 무관하다', leadsTo: 0 },
           { text: '아니다. 대신 즉시 예외가 다시 난다', leadsTo: 0 },
         ],
@@ -10710,10 +10710,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '조인으로 한 번에 가져올 때 조심할 것은?',
         choices: [
-          { text: '지연 로딩이 꺼진다', leadsTo: 2 },
-          { text: '조인은 항상 안전하다', leadsTo: 3 },
-          { text: '쿼리가 오히려 늘어난다', leadsTo: 0 },
-          { text: '하나에 여럿이 달린 관계를 여러 개 겹치면 행이 곱해진다', correct: true },
+          { text: '다른 연관의 지연 로딩까지 꺼진다', leadsTo: 2 },
+          { text: '조인은 행 수를 바꾸지 않아 안전하다', leadsTo: 3 },
+          { text: '조인마다 쿼리가 오히려 하나씩 는다', leadsTo: 0 },
+          { text: '하나에 여럿이 달린 관계를 겹치면 행이 곱해진다', correct: true },
         ],
         rationale:
           '필요한 것을 모아 in으로 한 번에 묻는 길도 있다.',
