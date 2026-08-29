@@ -8554,11 +8554,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'SavedStateHandle이면 무엇이든 넣어도 되는가?',
+        stem: 'SavedStateHandle에는 다시 만들 단서만 넣어야 하는가?',
         choices: [
-          { text: '그렇다. 시스템이 알아서 압축한다', leadsTo: 2 },
-          { text: '그렇다. 크기 제한이 없다', leadsTo: 2 },
-          { text: '아니다. Bundle 기반이라 큰 객체 대신 단서만 저장한다', correct: true },
+          { text: '아니다. 시스템이 알아서 압축한다', leadsTo: 2 },
+          { text: '아니다. 크기 제한이 없어 무엇이든 된다', leadsTo: 2 },
+          { text: '그렇다. Bundle 기반이라 큰 객체는 못 담는다', correct: true },
           { text: '아니다. 원시값만 넣을 수 있다', leadsTo: 0 },
         ],
         rationale:
@@ -8596,12 +8596,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '백그라운드에 있는 동안 메모리의 싱글턴 값은 안전한가?',
+        stem: '백그라운드에서 싱글턴 값이 사라질 것을 전제해야 하는가?',
         choices: [
-          { text: '아니다. 대신 등급을 올리면 된다', leadsTo: 1 },
-          { text: '그렇다. 프로세스가 살아 있는 한 유지된다', leadsTo: 4 },
-          { text: '그렇다. 정적 필드는 시스템이 보존한다', leadsTo: 4 },
-          { text: '아니다. 사라질 수 있으므로 복원 가능하게 만든다', correct: true },
+          { text: '그렇다. 언제든 사라지므로 복원 가능하게 만든다', correct: true },
+          { text: '아니다. 프로세스가 살아 있는 한 유지된다', leadsTo: 4 },
+          { text: '아니다. 정적 필드는 시스템이 보존한다', leadsTo: 4 },
+          { text: '아니다. 등급을 올리면 지킬 수 있다', leadsTo: 1 },
         ],
         rationale:
           '백그라운드 프로세스의 수명을 전제로 설계하면 안 된다.',
@@ -8638,15 +8638,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '스레드나 일반 서비스를 띄우면 백그라운드에서 계속 도는가?',
+        stem: 'Doze와 앱 대기가 스레드와 일반 서비스도 제한하는가?',
         choices: [
-          { text: '그렇다. 스레드는 제한 밖이다', leadsTo: 0 },
-          { text: '그렇다. 프로세스가 살아 있으면 계속 돈다', leadsTo: 0 },
-          { text: '아니다. Doze와 앱 대기가 실행을 제한한다', correct: true },
-          { text: '아니다. 대신 배터리 최적화 예외를 받으면 된다', leadsTo: 4 },
+          { text: '아니다. 스레드는 제한 밖이다', leadsTo: 0 },
+          { text: '아니다. 프로세스가 살아 있으면 계속 돈다', leadsTo: 0 },
+          { text: '아니다. 배터리 최적화 예외를 받으면 계속 돈다', leadsTo: 4 },
+          { text: '그렇다. 네트워크와 알람과 함께 실행도 미룬다', correct: true },
         ],
         rationale:
-          'Doze와 앱 대기는 네트워크와 알람을 미루고 백그라운드 서비스 실행도 제한한다.',
+          '지연 가능한 일은 WorkManager, 즉시 체감할 일은 포그라운드 서비스로 간다.',
       },
       {
         kind: 'boundary',
@@ -8680,12 +8680,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '예약했으니 Worker는 정확히 한 번만 도는가?',
+        stem: 'Worker가 여러 번 시작될 수 있다고 봐야 하는가?',
         choices: [
-          { text: '아니다. 항상 두 번 돈다', leadsTo: 1 },
-          { text: '그렇다. 고유 작업으로 예약하면 한 번이다', leadsTo: 0 },
-          { text: '그렇다. 성공하면 다시 돌지 않는다', leadsTo: 2 },
-          { text: '아니다. 재시도와 중단 때문에 여러 번 시작될 수 있다', correct: true },
+          { text: '아니다. 고유 작업으로 예약하면 한 번이다', leadsTo: 0 },
+          { text: '그렇다. 재시도와 중단 때문에 다시 시작된다', correct: true },
+          { text: '아니다. 성공하면 다시 돌지 않는다', leadsTo: 2 },
+          { text: '아니다. 실패해도 그 자리에서 끝난다', leadsTo: 1 },
         ],
         rationale:
           '외부 부수 효과는 멱등하게 만들어야 한다.',
@@ -8722,12 +8722,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '작업을 다른 스레드로 보냈으면 안전한가?',
+        stem: '다른 스레드로 보내도 메인이 막힐 수 있는가?',
         choices: [
-          { text: '그렇다. 잠금은 메인과 무관하다', leadsTo: 2 },
-          { text: '그렇다. 옮긴 순간 메인은 자유롭다', leadsTo: 1 },
-          { text: '아니다. 메인 스레드가 결과나 잠금을 기다리면 막힌다', correct: true },
-          { text: '아니다. 스레드를 옮기면 오히려 느려진다', leadsTo: 3 },
+          { text: '아니다. 잠금은 메인과 무관하다', leadsTo: 2 },
+          { text: '아니다. 옮긴 순간 메인은 자유롭다', leadsTo: 1 },
+          { text: '그렇다. 결과나 잠금을 기다리면 막힌다', correct: true },
+          { text: '아니다. 스레드를 옮기면 오히려 느려질 뿐이다', leadsTo: 3 },
         ],
         rationale:
           '느린 Binder 호출과 과도한 그리기도 입력 처리를 지연시킨다.',
@@ -8764,12 +8764,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'ViewModel에 Activity 참조를 두면 편한가?',
+        stem: 'ViewModel이 Activity보다 오래 살아 누수가 되는가?',
         choices: [
-          { text: '그렇다. 수명이 같아 문제없다', leadsTo: 2 },
-          { text: '아니다. 화면보다 오래 살아 누수가 된다', correct: true },
-          { text: '그렇다. 구성 변경 때 함께 정리된다', leadsTo: 2 },
-          { text: '아니다. 대신 View 참조는 괜찮다', leadsTo: 0 },
+          { text: '아니다. 수명이 같아 문제없다', leadsTo: 2 },
+          { text: '그렇다. 그래서 참조를 두지 않는다', correct: true },
+          { text: '아니다. 구성 변경 때 함께 정리된다', leadsTo: 2 },
+          { text: '아니다. View 참조라면 괜찮다', leadsTo: 0 },
         ],
         rationale:
           'UI가 필요 없는 객체에는 Application Context를 사용한다.',
@@ -8848,12 +8848,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'DiffUtil과 stable ID를 붙이면 재사용 문제가 해결되는가?',
+        stem: 'DiffUtil을 붙여도 바인딩은 직접 제대로 해야 하는가?',
         choices: [
           { text: '아니다. 오히려 바인딩을 건너뛰게 한다', leadsTo: 3 },
-          { text: '그렇다. 변경 계산이 상태까지 맞춰 준다', leadsTo: 0 },
-          { text: '그렇다. 재사용 자체를 막아 준다', leadsTo: 4 },
-          { text: '아니다. 올바른 바인딩을 대신하지 않는다', correct: true },
+          { text: '아니다. 변경 계산이 상태까지 맞춰 준다', leadsTo: 0 },
+          { text: '아니다. 재사용 자체를 막아 준다', leadsTo: 4 },
+          { text: '그렇다. 올바른 바인딩을 대신하지 않는다', correct: true },
         ],
         rationale:
           '잘못된 ID는 화면 상태를 엉뚱한 항목에 붙인다.',
