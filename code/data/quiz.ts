@@ -6157,4 +6157,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'sql',
+    question: 'SQL과 NoSQL은 어떤 기준으로 선택하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'SQL과 NoSQL은 같은 층위의 말인가?',
+        choices: [
+          { text: '아니다. 하나는 질의 언어, 하나는 여러 모델을 묶은 이름', correct: true },
+          { text: '같은 층위의 두 제품군이다', leadsTo: 1 },
+          { text: '둘 다 질의 언어다', leadsTo: 1 },
+          { text: '둘 다 저장 엔진 이름이다', leadsTo: 3 },
+        ],
+        rationale:
+          '둘을 하나의 성질로 단정하면 선택 기준이 흐려진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '스키마 유연성은 스키마가 없다는 뜻인가?',
+        choices: [
+          { text: '아니다. 문서 데이터베이스도 검증 규칙을 둘 수 있다', correct: true },
+          { text: '그렇다. 아무 형태나 넣을 수 있다', leadsTo: 2 },
+          { text: '스키마는 관계형에만 있는 개념이다', leadsTo: 2 },
+          { text: '검증은 애플리케이션만 할 수 있다', leadsTo: 2 },
+        ],
+        rationale:
+          '관계형도 복제와 파티셔닝으로 수평 확장할 수 있다. 실제 차이는 분할 경계를 넘는 질의와 트랜잭션의 비용에서 드러난다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '용도만 보고 고를 수 있는가?',
+        choices: [
+          { text: '없다. 대표 읽기·쓰기를 작게 시험해 비교한다', correct: true },
+          { text: '로그는 무조건 비관계형이다', leadsTo: 1 },
+          { text: '결제는 무조건 관계형이다', leadsTo: 1 },
+          { text: '팀 취향대로 고르면 된다', leadsTo: 0 },
+        ],
+        rationale:
+          '지연 시간, 충돌률, 운영 복잡도를 함께 비교한다. 여러 저장소를 쓰면 동기화와 장애 대응 비용도 늘어난다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'transaction',
+    question: '갑자기 꺼져도 커밋한 것이 남는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '무엇을 먼저 디스크에 내리는가?',
+        choices: [
+          { text: '무엇을 고칠지 적은 로그', correct: true },
+          { text: '고쳐진 데이터 페이지', leadsTo: 3 },
+          { text: '인덱스', leadsTo: 0 },
+          { text: '둘을 동시에', leadsTo: 2 },
+        ],
+        rationale:
+          '데이터를 고치기 전에 바꿀 내용을 로그에 적고 그 로그를 먼저 내린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '커밋이 끝났다고 답하는 시점은?',
+        choices: [
+          { text: '로그가 디스크에 닿은 시점', correct: true },
+          { text: '데이터 페이지가 디스크에 닿은 시점', leadsTo: 2 },
+          { text: '메모리에서 고친 시점', leadsTo: 2 },
+          { text: '체크포인트가 돈 시점', leadsTo: 0 },
+        ],
+        rationale:
+          '데이터는 아직 메모리에만 있어도 된다. 여기저기 흩어진 페이지를 매번 내리는 대신 로그를 한 줄로 이어 붙이는 편이 빠르다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '체크포인트가 없으면?',
+        choices: [
+          { text: '재시작 때 처음부터 다 읽어야 해 복구가 길어진다', correct: true },
+          { text: '커밋한 것이 사라진다', leadsTo: 1 },
+          { text: '로그를 못 쓴다', leadsTo: 1 },
+          { text: '아무 차이가 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '체크포인트는 다시 읽기 시작할 지점을 앞으로 당긴다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'db',
+    question: '읽기만 하는데도 잠금이 걸리는 경우가 있는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '읽기가 남을 기다리게 만드는 조건은?',
+        choices: [
+          { text: '고른 격리 수준', correct: true },
+          { text: '읽는 행의 개수', leadsTo: 1 },
+          { text: '테이블 크기', leadsTo: 4 },
+          { text: '인덱스 유무', leadsTo: 1 },
+        ],
+        rationale:
+          '위로 갈수록 남을 더 많이 막고 대신 이상한 현상이 줄어든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '요즘 데이터베이스는 읽을 때 잠그는가?',
+        choices: [
+          { text: '대부분 옛 버전을 남겨 두고 자기 시점을 읽는다', correct: true },
+          { text: '언제나 잠근다', leadsTo: 2 },
+          { text: '쓰기만 잠근다면 읽기도 막힌다', leadsTo: 2 },
+          { text: '격리 수준과 무관하게 안 잠근다', leadsTo: 0 },
+        ],
+        rationale:
+          '그래서 읽기가 쓰기를 안 막는다. 다만 가장 높은 수준에서는 겹치면 잠그거나 커밋 때 검사해 어긋난 쪽을 되돌린다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가장 먼저 확인할 것은?',
+        choices: [
+          { text: '쓰는 데이터베이스의 기본 격리 수준', correct: true },
+          { text: '표준이 정한 기본값', leadsTo: 3 },
+          { text: '테이블마다의 설정', leadsTo: 0 },
+          { text: '확인할 것이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '표준이 정한 기본은 SERIALIZABLE인데 그대로 쓰는 제품은 드물다. MySQL InnoDB는 REPEATABLE READ, PostgreSQL은 READ COMMITTED다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'db',
+    question: '인덱스를 어느 칸부터 놓아야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '앞에 놓아야 하는 칸은?',
+        choices: [
+          { text: '등호로 걸리는 칸', correct: true },
+          { text: '범위로 걸리는 칸', leadsTo: 0 },
+          { text: '정렬에 쓰는 칸', leadsTo: 2 },
+          { text: '값이 가장 큰 칸', leadsTo: 4 },
+        ],
+        rationale:
+          '거기서 범위를 좁히고, 범위로 걸리는 칸을 뒤에 둔다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '범위 조건 뒤의 칸은 어떻게 되는가?',
+        choices: [
+          { text: '찾아 들어갈 범위를 더 못 좁힌다', correct: true },
+          { text: '똑같이 범위를 좁힌다', leadsTo: 0 },
+          { text: '인덱스에서 아예 무시된다', leadsTo: 0 },
+          { text: '정렬에만 쓰인다', leadsTo: 2 },
+        ],
+        rationale:
+          '읽어 온 것을 거르는 데는 쓰이고, 제품에 따라 건너뛰며 훑어 살려 쓰기도 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '인덱스를 늘릴수록 커지는 위험은?',
+        choices: [
+          { text: '쓰기 비용과 옵티마이저의 선택 오류', correct: true },
+          { text: '조회 속도 저하만', leadsTo: 4 },
+          { text: '정렬 실패', leadsTo: 2 },
+          { text: '위험이 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '쓰기마다 인덱스를 다 손봐야 하고, 고를 후보가 늘어 엉뚱한 것을 고르기도 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'db',
+    question: '데이터가 한 대에 안 들어가면 어떻게 나누는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '어느 조각으로 보낼지 정하는 값은?',
+        choices: [
+          { text: '샤드 키', correct: true },
+          { text: '기본 키의 크기', leadsTo: 0 },
+          { text: '조각의 남은 용량', leadsTo: 3 },
+          { text: '요청이 온 시각', leadsTo: 0 },
+        ],
+        rationale:
+          '이것을 잘못 고르면 한쪽만 뜨거워진다. 가입일로 나누면 최근 가입자가 몰린 조각만 일한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '나눈 뒤에도 모든 질의가 똑같이 싼가?',
+        choices: [
+          { text: '조각을 걸치는 질의는 모든 조각에 묻고 합쳐야 한다', correct: true },
+          { text: '똑같이 싸다', leadsTo: 1 },
+          { text: '오히려 더 싸진다', leadsTo: 1 },
+          { text: '라우터가 알아서 하나로 만든다', leadsTo: 1 },
+        ],
+        rationale:
+          '사용자로 나눴는데 상품별 집계를 물으면 그렇게 된다. 조각 사이의 트랜잭션도 어렵다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '조각 수를 바꾸면?',
+        choices: [
+          { text: '키를 다시 배치해야 한다', correct: true },
+          { text: '새 조각만 채우면 된다', leadsTo: 2 },
+          { text: '아무 영향이 없다', leadsTo: 2 },
+          { text: '샤드 키를 바꿔야 한다', leadsTo: 0 },
+        ],
+        rationale:
+          '나머지 연산으로 나눴다면 대수가 바뀔 때 키가 대거 옮겨 간다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'db',
+    question: '목록을 나눌 때 번호와 커서는 무엇이 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '번호 방식이 뒤로 갈수록 느린 까닭은?',
+        choices: [
+          { text: '건너뛰는 행도 읽어야 하기 때문', correct: true },
+          { text: '정렬을 매번 다시 하기 때문', leadsTo: 1 },
+          { text: '인덱스를 쓸 수 없기 때문', leadsTo: 4 },
+          { text: '전체 개수를 세기 때문', leadsTo: 2 },
+        ],
+        rationale:
+          '백만 번째부터 스무 개를 달라고 하면 백만 개를 세고 버린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '커서 방식은 그 자체로 싼가?',
+        choices: [
+          { text: '인덱스를 쓸 수 있게 묻는 방식이라 싼 것이다', correct: true },
+          { text: '방식 자체가 싸다', leadsTo: 4 },
+          { text: '언제나 일정한 시간이 걸린다', leadsTo: 4 },
+          { text: '인덱스와 무관하게 빠르다', leadsTo: 4 },
+        ],
+        rationale:
+          '인덱스가 안 받쳐 주면 커서도 처음부터 훑는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '정렬 키 값이 겹칠 때 해야 할 일은?',
+        choices: [
+          { text: '고유한 값을 함께 묶어 총순서를 만든다', correct: true },
+          { text: '겹치는 행을 지운다', leadsTo: 0 },
+          { text: '정렬을 포기한다', leadsTo: 3 },
+          { text: '페이지 크기를 늘린다', leadsTo: 2 },
+        ],
+        rationale:
+          '커서에도 두 값을 모두 담아야 경계에서 겹치거나 빠지지 않는다.',
+      },
+    ],
+  },
 ]
