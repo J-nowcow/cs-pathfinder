@@ -32,6 +32,8 @@ import { RelatedList } from '@/components/RelatedList'
 import { FreeInput } from '@/components/FreeInput'
 import { NodeChat } from '@/components/NodeChat'
 import { AnswerPractice } from '@/components/AnswerPractice'
+import { QuizGate } from '@/components/QuizGate'
+import { findQuiz, rankSuggestions } from '@/lib/quiz'
 import { Banner, GeneratingBody, ExpandingNote, type BannerState } from '@/components/Banners'
 import { MinimapStrip } from '@/components/MinimapStrip'
 import { ShareSheet } from '@/components/ShareSheet'
@@ -59,6 +61,17 @@ export function ReadingView({
   const [journey, setJourney] = useState<JourneyState>(() => startJourney(toVisited(initialNode)))
   const [node, setNode] = useState<ReadingNode>(initialNode)
   const [pendingId, setPendingId] = useState<string | null>(null)
+  /*
+   * 진단에서 틀린 자리가 겨냥한 꼬리질문.
+   *
+   * nodeId를 함께 들고 있는 이유는 문제 없는 노드로 이동할 때다. 그때는
+   * QuizGate가 아예 안 그려져 onGrade도 안 불리므로, 값만 들고 있으면 앞
+   * 노드의 결과가 남아 엉뚱한 추천을 올린다.
+   */
+  const [quizLift, setQuizLift] = useState<{ nodeId: string; leadsTo: number[] }>({
+    nodeId: '',
+    leadsTo: [],
+  })
   const [expanding, setExpanding] = useState(false)
   const [loadingNode, setLoadingNode] = useState(false)
   const [banner, setBanner] = useState<BannerState>({ kind: 'none' })
@@ -358,6 +371,15 @@ export function ReadingView({
   )
 
   const busy = expanding || loadingNode
+  const quiz = findQuiz(node.identityScope, node.question)
+  /*
+   * 순서만 바꾼다. 다섯 개는 그대로 있고 읽는 순서만 달라진다 — 진단이
+   * 추천을 좁히면 사용자가 원래 보던 선택지가 사라진다.
+   */
+  const rankedSuggestions =
+    quizLift.nodeId === node.id
+      ? rankSuggestions(node.suggestions, quizLift.leadsTo)
+      : node.suggestions
 
   return (
     <>
@@ -427,6 +449,21 @@ export function ReadingView({
           ))}
         </p>
 
+        {/*
+          진단 문제는 해설보다 먼저 온다. 틀린 자리가 아래 추천 순서를 바꾼다.
+          문제가 붙지 않은 노드가 아직 대부분이고, 그때는 그냥 안 그린다.
+        */}
+        {!loadingNode && quiz && (
+          <div className="mt-7">
+            <QuizGate
+              key={node.id}
+              nodeId={node.id}
+              items={quiz.items}
+              onGrade={(leadsTo) => setQuizLift({ nodeId: node.id, leadsTo })}
+            />
+          </div>
+        )}
+
         <div className="mt-7">
           {loadingNode ? (
             <GeneratingBody />
@@ -450,7 +487,7 @@ export function ReadingView({
           <section aria-busy={expanding || undefined}>
             <h2 className="mb-3 text-[13px] font-medium text-muted">추천 꼬리질문</h2>
             <Suggestions
-              suggestions={node.suggestions}
+              suggestions={rankedSuggestions}
               pendingId={pendingId}
               disabled={busy}
               onPick={(s) => void run({ mode: 'suggestion', suggestion: s })}
