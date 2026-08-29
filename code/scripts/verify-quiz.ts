@@ -151,6 +151,29 @@ function main() {
     problems.push(...checkQuiz(quiz, nodes))
   }
 
+  /*
+   * 정답이 한 자리에 쏠리면 읽지 않고 찍어도 맞는다. 처음 쓴 1,011문제는
+   * 94.6%가 1번이었다 — 손으로 쓰면 정답을 맨 위에 적게 된다.
+   * 여기서 재려는 것은 무엇을 아는지이므로 찍어서 맞힌 답은 쓸모가 없다.
+   */
+  const positions = new Map<number, number>()
+  for (const quiz of NODE_QUIZZES) {
+    for (const item of quiz.items) {
+      const at = item.choices.findIndex((c) => c.correct)
+      positions.set(at, (positions.get(at) ?? 0) + 1)
+    }
+  }
+  const answered = [...positions.values()].reduce((a, b) => a + b, 0)
+  for (const [at, count] of [...positions].sort((a, b) => a[0] - b[0])) {
+    const share = count / answered
+    if (share > 0.4) {
+      problems.push({
+        where: '전체',
+        what: `정답이 ${at + 1}번에 쏠려 있다 (${(share * 100).toFixed(1)}%)`,
+      })
+    }
+  }
+
   const itemCount = NODE_QUIZZES.reduce((n, q) => n + q.items.length, 0)
   console.log(`노드 ${NODE_QUIZZES.length}개 · 문제 ${itemCount}개 검사`)
   console.log(`전체 노드 ${nodes.size}개 중 ${NODE_QUIZZES.length}개에 문제가 붙어 있다`)
