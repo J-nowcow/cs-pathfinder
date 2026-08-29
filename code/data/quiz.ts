@@ -1794,9 +1794,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '언제나 네 단계로 끝나는가?',
         choices: [
-          { text: '언제나 네 단계다', leadsTo: 0 },
-          { text: 'ACK와 FIN이 합쳐지면 세 단계로 끝나기도 한다', correct: true },
-          { text: '언제나 세 단계다', leadsTo: 0 },
+          { text: '양쪽이 각각 닫으니 언제나 네 단계다', leadsTo: 0 },
+          { text: 'ACK와 FIN이 합쳐지면 세 단계도 된다', correct: true },
+          { text: '연결과 마찬가지로 언제나 세 단계다', leadsTo: 0 },
           { text: '연결을 강제로 끊으면 다섯 단계다', leadsTo: 4 },
         ],
         rationale:
@@ -2898,10 +2898,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '화살표 함수로 할 수 없는 것은?',
         choices: [
-          { text: '인자를 받는 것', leadsTo: 1 },
-          { text: '콜백으로 넘기는 것', leadsTo: 2 },
-          { text: '값을 반환하는 것', leadsTo: 1 },
-          { text: 'call로 this를 바꾸거나 new로 생성하는 것', correct: true },
+          { text: '매개변수로 인자를 받는 것', leadsTo: 1 },
+          { text: '다른 함수에 콜백으로 넘기는 것', leadsTo: 2 },
+          { text: '계산한 값을 반환하는 것', leadsTo: 1 },
+          { text: 'call로 this를 바꾸거나 new로 만드는 것', correct: true },
         ],
         rationale:
           '화살표 함수에는 자체 this와 arguments가 없다. 동적 수신자가 필요한 메서드에는 일반 함수가 맞다.',
@@ -3138,8 +3138,8 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '클로저가 변수를 붙잡고 있는 것은 메모리 누수인가?',
         choices: [
-          { text: '누수라서 영원히 남는다', leadsTo: 1 },
-          { text: '누수가 아니라 붙잡고 있는 것이다. 닿을 길이 끊기면 걷힌다', correct: true },
+          { text: '누수라서 프로세스가 끝날 때까지 남는다', leadsTo: 1 },
+          { text: '누수가 아니다. 닿을 길이 끊기면 걷힌다', correct: true },
           { text: '엔진이 자동으로 끊어 준다', leadsTo: 3 },
           { text: '클로저는 변수를 붙잡지 않는다', leadsTo: 0 },
         ],
@@ -3810,8 +3810,8 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: 'page fault는 모두 디스크 읽기인가?',
         choices: [
-          { text: '아니다. 처음 쓰는 익명 페이지와 copy-on-write도 fault다', correct: true },
-          { text: '그렇다. 언제나 디스크를 읽는다', leadsTo: 1 },
+          { text: '아니다. 익명 페이지와 copy-on-write도 fault다', correct: true },
+          { text: '그렇다. fault가 나면 언제나 디스크를 읽는다', leadsTo: 1 },
           { text: '스왑이 켜져 있을 때만 fault가 난다', leadsTo: 2 },
           { text: 'fault는 오류라서 프로그램이 죽는다', leadsTo: 1 },
         ],
@@ -4986,10 +4986,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '고아 프로세스는 좀비인가?',
         choices: [
-          { text: '아니다. 부모가 먼저 죽은 것뿐이고 init이 거둔다', correct: true },
-          { text: '같은 말이다', leadsTo: 4 },
-          { text: '고아가 더 위험하다', leadsTo: 4 },
-          { text: '고아는 영원히 남는다', leadsTo: 4 },
+          { text: '아니다. 부모가 먼저 죽어 init이 거둔다', correct: true },
+          { text: '부모가 없다는 점에서 같은 말이다', leadsTo: 4 },
+          { text: '거둘 부모가 없어 고아가 더 위험하다', leadsTo: 4 },
+          { text: '거두는 쪽이 없어 고아는 영원히 남는다', leadsTo: 4 },
         ],
         rationale:
           '좀비는 오히려 부모가 살아서 방치할 때 남는다.',
@@ -5670,9 +5670,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '두 방식이 요구하는 파라미터의 차이는?',
         choices: [
-          { text: 'K-means는 클러스터 개수, DBSCAN은 밀도 기준', correct: true },
-          { text: '둘 다 클러스터 개수', leadsTo: 0 },
-          { text: '둘 다 파라미터가 없다', leadsTo: 1 },
+          { text: 'K-means는 개수, DBSCAN은 밀도 기준', correct: true },
+          { text: '둘 다 나눌 클러스터 개수를 받는다', leadsTo: 0 },
+          { text: '둘 다 알아서 정하므로 파라미터가 없다', leadsTo: 1 },
           { text: 'DBSCAN이 개수를 받는다', leadsTo: 0 },
         ],
         rationale:
@@ -5940,10 +5940,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '두 방식의 진짜 차이는?',
         choices: [
-          { text: '충돌을 언제 발견하고 누가 기다리거나 다시 시도하느냐', correct: true },
-          { text: '데이터 정확성', leadsTo: 0 },
-          { text: '지원하는 데이터베이스', leadsTo: 3 },
-          { text: '트랜잭션 사용 여부', leadsTo: 3 },
+          { text: '충돌을 언제 발견하고 누가 기다리느냐', correct: true },
+          { text: '최종 데이터의 정확성', leadsTo: 0 },
+          { text: '쓸 수 있는 데이터베이스 종류', leadsTo: 3 },
+          { text: '트랜잭션을 쓰는지 여부', leadsTo: 3 },
         ],
         rationale:
           '정확성은 두 방식 모두 만들 수 있다.',
@@ -11455,8 +11455,8 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '희소 그래프가 많으니 행렬은 쓸 일이 없는가?',
         choices: [
           { text: '그렇다. 리스트가 언제나 낫다', leadsTo: 0 },
-          { text: '아니다. 모든 정점이 서로 연결된 완전 그래프라면 행렬이 유리하다', correct: true },
-          { text: '그렇다. 행렬은 메모리만 쓴다', leadsTo: 0 },
+          { text: '아니다. 완전 그래프라면 행렬이 유리하다', correct: true },
+          { text: '그렇다. 행렬은 빈칸에 메모리만 쓴다', leadsTo: 0 },
           { text: '아니다. 대신 행렬이 항상 낫다', leadsTo: 0 },
         ],
         rationale:
@@ -11970,10 +11970,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '최악에도 O(log n)을 지키는 이유는?',
         choices: [
-          { text: '캐시가 채워져 있어서', leadsTo: 2 },
+          { text: '위쪽 노드가 캐시에 채워져 있어서', leadsTo: 2 },
           { text: '노드가 커서 균형이 필요 없다', leadsTo: 0 },
-          { text: '디스크가 블록 단위로 읽어서', leadsTo: 3 },
-          { text: '넣고 지울 때 노드를 쪼개거나 합쳐 모든 잎을 같은 깊이에 둔다', correct: true },
+          { text: '디스크가 한 번에 블록 단위로 읽어서', leadsTo: 3 },
+          { text: '노드를 쪼개고 합쳐 잎을 같은 깊이에 둔다', correct: true },
         ],
         rationale:
           '메모리만 쓰는 색인에서는 블록 이점이 줄어든다.',
@@ -13314,10 +13314,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '실제로는 둘을 어떻게 섞어 쓰는가?',
         choices: [
-          { text: '둘을 섞어 쓰지 않는다', leadsTo: 2 },
+          { text: '둘 중 하나만 골라 쓰고 섞지 않는다', leadsTo: 2 },
           { text: '데이터를 공개키로 직접 암호화한다', leadsTo: 0 },
-          { text: '대칭키를 평문으로 전달한다', leadsTo: 2 },
-          { text: '대칭키를 공개키로 암호화해 전달하고 데이터는 대칭키로 처리한다', correct: true },
+          { text: '대칭키를 평문으로 보내고 본문만 암호화한다', leadsTo: 2 },
+          { text: '대칭키를 공개키로 전달하고 데이터는 대칭키로', correct: true },
         ],
         rationale:
           '전달받은 대칭키로 실제 통신을 빠르게 처리한다.',
@@ -13626,10 +13626,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '값 바인딩이 안전한 이유는?',
         choices: [
-          { text: '권한을 낮춰 실행한다', leadsTo: 4 },
+          { text: '읽기 전용 권한으로 낮춰 실행한다', leadsTo: 4 },
           { text: '위험한 문자를 자동으로 지운다', leadsTo: 0 },
-          { text: '입력 길이를 제한한다', leadsTo: 0 },
-          { text: 'SQL 문법을 먼저 고정하고 입력은 별도 값으로 전달한다', correct: true },
+          { text: '입력 길이를 제한해 긴 구문을 막는다', leadsTo: 0 },
+          { text: '문법을 먼저 고정하고 입력은 값으로 넘긴다', correct: true },
         ],
         rationale:
           '따옴표나 연산자가 있어도 문법으로 해석되지 않는다.',
@@ -14028,10 +14028,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '"자기가 쓴 글만 고칠 수 있다"는 왜 역할로 안 되는가?',
         choices: [
-          { text: '역할 수가 부족해서', leadsTo: 1 },
-          { text: '누구냐와 그 글이 누구 것이냐의 관계에 달렸기 때문이다', correct: true },
-          { text: '인증이 안 되어서', leadsTo: 0 },
-          { text: '권한 이름이 길어서', leadsTo: 1 },
+          { text: '쓸 수 있는 역할 수가 부족해서', leadsTo: 1 },
+          { text: '누구냐와 그 글이 누구 것이냐의 관계라서', correct: true },
+          { text: '누구인지 인증이 안 되어서', leadsTo: 0 },
+          { text: '붙일 권한 이름이 너무 길어서', leadsTo: 1 },
         ],
         rationale:
           '역할 이름만으로는 못 적어 조건을 함께 보는 방식을 쓴다.',
