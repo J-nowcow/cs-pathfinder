@@ -4093,4 +4093,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'os',
+    question: '데드락을 해결하기 위한 회피 전략은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '회피가 매 요청마다 따지는 것은?',
+        choices: [
+          { text: '지금 내주고도 모두가 끝날 수 있는 순서가 남는가', correct: true },
+          { text: '요청한 자원이 지금 비어 있는가', leadsTo: 3 },
+          { text: '요청한 프로세스의 우선순위가 높은가', leadsTo: 2 },
+          { text: '이미 고리가 생겼는가', leadsTo: 2 },
+        ],
+        rationale:
+          '남을 때만 준다. 남지 않으면 줄 수 있는 자원이어도 기다리게 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '회피와 예방은 같은 것인가?',
+        choices: [
+          { text: '예방은 조건을 막고, 회피는 조건을 둔 채 그때그때 판단한다', correct: true },
+          { text: '같은 말이다', leadsTo: 1 },
+          { text: '회피가 조건을 없앤다', leadsTo: 1 },
+          { text: '둘 다 탐지 뒤에 하는 일이다', leadsTo: 2 },
+        ],
+        rationale:
+          '회피는 네 조건을 그대로 둔 채 요청마다 따진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '은행원 알고리즘의 쓰임이 좁은 까닭은?',
+        choices: [
+          { text: '프로세스마다 최대 사용량을 미리 알아야 해서', correct: true },
+          { text: '계산이 너무 느려서', leadsTo: 3 },
+          { text: '자원이 하나뿐일 때만 되어서', leadsTo: 0 },
+          { text: '탐지를 함께 해야 해서', leadsTo: 2 },
+        ],
+        rationale:
+          '그 값을 내놓을 수 없는 환경이 많다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '가상 메모리를 사용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '운영체제가 물리 메모리에 올리는 것은?',
+        choices: [
+          { text: '필요한 페이지만', correct: true },
+          { text: '프로세스 전체', leadsTo: 1 },
+          { text: '실행 파일 전체', leadsTo: 0 },
+          { text: '스왑에 있는 것 전부', leadsTo: 4 },
+        ],
+        rationale:
+          '나머지는 스왑에 있을 수도, 실행 파일이나 매핑한 파일에 그대로 있을 수도, 아직 아무 데도 없을 수도 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '메모리가 넉넉하면 페이지 폴트가 안 나는가?',
+        choices: [
+          { text: '아직 안 올렸으면 넉넉해도 난다', correct: true },
+          { text: '넉넉하면 나지 않는다', leadsTo: 0 },
+          { text: '스왑이 꽉 찼을 때만 난다', leadsTo: 4 },
+          { text: '폴트는 오류라서 프로그램이 죽는다', leadsTo: 0 },
+        ],
+        rationale:
+          '건드린 가상 페이지가 지금 물리 메모리에 없으면 난다. 그때 운영체제가 가져온다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '프로세스 간 격리가 성립하는 근거는?',
+        choices: [
+          { text: '각자 독립된 주소 공간을 가지기 때문', correct: true },
+          { text: '페이지 크기가 같기 때문', leadsTo: 1 },
+          { text: '스왑이 분리돼 있기 때문', leadsTo: 4 },
+          { text: '커널이 매번 검사하기 때문', leadsTo: 3 },
+        ],
+        rationale:
+          '서로의 영역을 침범할 수 있는 주소 자체가 없다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '사용자 모드와 커널 모드 전환의 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '두 모드를 가르는 것은?',
+        choices: [
+          { text: 'CPU의 모드 비트', correct: true },
+          { text: '프로세스 우선순위', leadsTo: 3 },
+          { text: '메모리 영역 크기', leadsTo: 1 },
+          { text: '실행 파일 형식', leadsTo: 0 },
+        ],
+        rationale:
+          '사용자 모드는 제한된 권한, 커널 모드는 하드웨어 제어와 메모리 보호까지 맡는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '시스템 콜은 하드웨어 인터럽트인가?',
+        choices: [
+          { text: '아니다. 프로그램이 스스로 일으키는 전환이다', correct: true },
+          { text: '그렇다. 하드웨어가 일으킨다', leadsTo: 2 },
+          { text: '타이머가 대신 일으킨다', leadsTo: 2 },
+          { text: '커널이 주기적으로 검사한다', leadsTo: 0 },
+        ],
+        rationale:
+          '시스템 콜을 부르면 CPU가 전용 명령으로 커널 모드에 들어간다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '잦은 시스템 콜을 줄이려고 쓰는 것은?',
+        choices: [
+          { text: 'io_uring 같은 기술', correct: true },
+          { text: '스레드 수를 늘리는 것', leadsTo: 3 },
+          { text: '커널 모드로 계속 머무는 것', leadsTo: 1 },
+          { text: '버퍼를 없애는 것', leadsTo: 4 },
+        ],
+        rationale:
+          '전환마다 비용이 붙으므로 호출 횟수 자체를 줄이는 쪽이 답이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: 'CPU 스케줄러의 단계별 역할은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '준비 큐에서 CPU를 줄 프로세스를 고르는 것은?',
+        choices: [
+          { text: '단기 스케줄러', correct: true },
+          { text: '장기 스케줄러', leadsTo: 0 },
+          { text: '중기 스케줄러', leadsTo: 1 },
+          { text: '셋이 번갈아 한다', leadsTo: 2 },
+        ],
+        rationale:
+          '장기는 메모리로 올릴 프로세스를, 중기는 내보낼 프로세스를 정한다. 셋은 결정 범위와 호출 주기가 다르다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '실행 결정을 자주 내릴수록 좋은가?',
+        choices: [
+          { text: '너무 자주면 문맥 교환 비용이 처리량을 깎는다', correct: true },
+          { text: '자주 내릴수록 언제나 낫다', leadsTo: 3 },
+          { text: '주기와 처리량은 무관하다', leadsTo: 3 },
+          { text: '장기 스케줄러가 조절해 준다', leadsTo: 0 },
+        ],
+        rationale:
+          '단기 스케줄러는 밀리초 단위로 동작하며 응답 시간과 처리량에 가장 큰 영향을 미친다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '중기 스케줄러가 메모리를 확보하는 방법은?',
+        choices: [
+          { text: '프로세스를 잠시 디스크로 내린다', correct: true },
+          { text: '프로세스를 강제 종료한다', leadsTo: 1 },
+          { text: '페이지 크기를 줄인다', leadsTo: 0 },
+          { text: '우선순위를 낮춘다', leadsTo: 4 },
+        ],
+        rationale:
+          '스와핑으로 물리 메모리 자리를 확보한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '소스 코드가 실행 파일로 변하는 과정은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '여러 오브젝트 파일을 하나로 합치는 단계는?',
+        choices: [
+          { text: '링커', correct: true },
+          { text: '전처리기', leadsTo: 2 },
+          { text: '컴파일러', leadsTo: 2 },
+          { text: '어셈블러', leadsTo: 2 },
+        ],
+        rationale:
+          '외부 함수 호출부의 실제 메모리 주소를 연결해 최종 실행 파일을 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '컴파일러가 잡아 주는 오류의 범위는?',
+        choices: [
+          { text: '구문과 타입 같은 정적 오류까지. 논리는 못 잡는다', correct: true },
+          { text: '논리 오류까지 모두 잡는다', leadsTo: 1 },
+          { text: '실행 중 오류도 잡는다', leadsTo: 1 },
+          { text: '아무 오류도 안 잡는다', leadsTo: 1 },
+        ],
+        rationale:
+          '전처리된 코드를 어셈블리로 바꾸면서 정적 오류를 잡고 최적화한다. 의도가 틀린 것은 그 범위 밖이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '어셈블러가 만든 파일에 없는 것은?',
+        choices: [
+          { text: '다른 모듈과의 연결 정보', correct: true },
+          { text: '기계어', leadsTo: 2 },
+          { text: '함수 본문', leadsTo: 2 },
+          { text: '없는 것이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '그래서 링커가 필요하다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '가상 메모리 관리 시 페이징과 세그멘테이션은 무엇으로 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 기준은?',
+        choices: [
+          { text: '고정 크기로 나누는가, 논리적 단위로 나누는가', correct: true },
+          { text: '가상인가 물리인가', leadsTo: 3 },
+          { text: '읽기인가 쓰기인가', leadsTo: 1 },
+          { text: '커널이 하는가 사용자가 하는가', leadsTo: 2 },
+        ],
+        rationale:
+          '페이징은 같은 크기로, 세그멘테이션은 코드·데이터·스택처럼 의미론적 단위로 나눈다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '페이징에서 생기는 단편화는?',
+        choices: [
+          { text: '마지막 페이지에 남는 내부 단편화', correct: true },
+          { text: '조각 사이에 생기는 외부 단편화', leadsTo: 0 },
+          { text: '단편화가 없다', leadsTo: 0 },
+          { text: '둘 다 심하게 생긴다', leadsTo: 0 },
+        ],
+        rationale:
+          '크기가 같으니 사이에 못 쓰는 틈은 안 생긴다. 대신 마지막으로 할당된 페이지에 공간이 남는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '세그멘테이션이 보호와 공유에 유리한 까닭은?',
+        choices: [
+          { text: '논리적 구조를 그대로 반영하기 때문', correct: true },
+          { text: '크기가 고정이기 때문', leadsTo: 0 },
+          { text: '단편화가 없기 때문', leadsTo: 0 },
+          { text: '주소 변환이 필요 없기 때문', leadsTo: 3 },
+        ],
+        rationale:
+          '코드와 데이터가 각각 한 조각이라 권한을 조각 단위로 줄 수 있다. 대신 크기가 달라 사이에 빈틈이 생긴다.',
+      },
+    ],
+  },
 ]
