@@ -6673,4 +6673,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'sql',
+    question: '서브쿼리 언네스팅은 언제 발생하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '언네스팅으로 얻는 것은?',
+        choices: [
+          { text: '조인 순서와 기법을 고를 자유', correct: true },
+          { text: '읽는 행 수 감소', leadsTo: 1 },
+          { text: '중복 자동 제거', leadsTo: 1 },
+          { text: '인덱스 자동 생성', leadsTo: 4 },
+        ],
+        rationale:
+          '서브쿼리가 메인쿼리와 동등한 조인 대상이 되면 옵티마이저의 선택지가 넓어진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '어떤 서브쿼리든 펼 수 있는가?',
+        choices: [
+          { text: '뜻이 보존될 때만, 그리고 DBMS마다 범위가 다르다', correct: true },
+          { text: '모든 서브쿼리를 펼 수 있다', leadsTo: 3 },
+          { text: '상관 서브쿼리만 펼 수 있다', leadsTo: 3 },
+          { text: '제품과 무관하게 같다', leadsTo: 0 },
+        ],
+        rationale:
+          '집계나 LIMIT 같은 요소가 끼면 제약에 걸린다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '1:N 관계인 서브쿼리를 펼 때 옵티마이저가 쓰는 방법은?',
+        choices: [
+          { text: '있는지만 보는 세미 조인으로 바꾼다', correct: true },
+          { text: '단순 조인 뒤 중복을 제거한다', leadsTo: 1 },
+          { text: '펴지 않고 그대로 둔다', leadsTo: 2 },
+          { text: '결과가 부푼 채로 둔다', leadsTo: 1 },
+        ],
+        rationale:
+          '그러면 따로 중복을 걷어내지 않아도 바깥 행이 안 늘어난다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '서브쿼리 언네스팅과 뷰 병합의 차이는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '두 기법이 다루는 자리는?',
+        choices: [
+          { text: '언네스팅은 WHERE·HAVING절, 뷰 병합은 FROM절', correct: true },
+          { text: '둘 다 FROM절', leadsTo: 2 },
+          { text: '둘 다 WHERE절', leadsTo: 0 },
+          { text: '언네스팅이 FROM절', leadsTo: 2 },
+        ],
+        rationale:
+          '변환 대상절이 다르다는 것이 두 기법을 가르는 첫 기준이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '두 기법의 목적이 같은가?',
+        choices: [
+          { text: '언네스팅은 반복 수행 방지, 뷰 병합은 중간 집합 방지', correct: true },
+          { text: '완전히 같은 목적이다', leadsTo: 2 },
+          { text: '둘 다 인덱스를 만들려는 것이다', leadsTo: 0 },
+          { text: '둘 다 중복 제거가 목적이다', leadsTo: 1 },
+        ],
+        rationale:
+          '언네스팅은 서브쿼리를 조인 구조로 흡수하고, 뷰 병합은 뷰의 쿼리 블록을 메인 쿼리로 흡수한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '두 기법의 공통점은?',
+        choices: [
+          { text: '쿼리 블록을 단순화해 최적화 공간을 넓힌다', correct: true },
+          { text: '임시 테이블을 만든다', leadsTo: 2 },
+          { text: '반드시 함께 적용된다', leadsTo: 1 },
+          { text: '공통점이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '작동하는 대상절과 조인 구조 생성 방식에서는 명확히 구분된다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: 'EXISTS와 IN을 조인으로 바꾸면 무엇이 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'IN과 EXISTS가 갖는 의미는?',
+        choices: [
+          { text: '있는지만 보는 세미 조인', correct: true },
+          { text: '모든 짝을 만드는 내부 조인', leadsTo: 0 },
+          { text: '없는 것만 고르는 안티 조인', leadsTo: 2 },
+          { text: '중복을 제거하는 연산', leadsTo: 3 },
+        ],
+        rationale:
+          '그래서 서브쿼리에 중복이 있어도 결과 행이 늘지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '중복을 막으려면 언제나 중복 제거를 붙여야 하는가?',
+        choices: [
+          { text: '우측 키가 유일하면 안 붙여도 된다', correct: true },
+          { text: '언제나 붙여야 한다', leadsTo: 3 },
+          { text: '붙이면 항상 빨라진다', leadsTo: 3 },
+          { text: '붙일 수 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '최신 옵티마이저는 IN과 EXISTS를 세미 조인으로 자동 최적화하므로 무조건 바꿀 필요도 없다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'NOT IN 서브쿼리에 NULL이 섞이면?',
+        choices: [
+          { text: '결과가 전부 비어 버릴 수 있다', correct: true },
+          { text: 'NULL만 빠지고 나머지는 정상이다', leadsTo: 1 },
+          { text: '오류가 난다', leadsTo: 1 },
+          { text: 'NOT EXISTS와 결과가 같다', leadsTo: 1 },
+        ],
+        rationale:
+          'NOT EXISTS는 NULL 비교를 일치로 세지 않아 기대대로 평가된다. LEFT OUTER JOIN 변환은 NULL이 될 수 없는 우측 컬럼으로 검사해야 같은 결과가 된다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: 'ANTI JOIN과 SEMI JOIN의 차이는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘의 차이는?',
+        choices: [
+          { text: '일치하는 행을 내보내느냐, 일치하지 않는 행을 내보내느냐', correct: true },
+          { text: '조인 알고리즘이 다르다', leadsTo: 4 },
+          { text: '읽는 테이블 순서가 다르다', leadsTo: 3 },
+          { text: '결과에 붙는 컬럼이 다르다', leadsTo: 2 },
+        ],
+        rationale:
+          '두 조인 모두 우측 데이터를 결과에 붙이지 않고 일치 여부만 검사한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '두 조인에 중복 제거가 필요한가?',
+        choices: [
+          { text: '필요 없다. 메인 테이블의 고유성이 유지된다', correct: true },
+          { text: '언제나 필요하다', leadsTo: 2 },
+          { text: 'ANTI JOIN에만 필요하다', leadsTo: 2 },
+          { text: 'SEMI JOIN에만 필요하다', leadsTo: 2 },
+        ],
+        rationale:
+          '일반 INNER JOIN처럼 중복 행이 늘어나지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'ANTI JOIN에서 특히 조심할 것은?',
+        choices: [
+          { text: '우측 컬럼의 NULL 의미론', correct: true },
+          { text: '조인 순서', leadsTo: 0 },
+          { text: '인덱스 유무', leadsTo: 4 },
+          { text: '조심할 것이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '우측에 NULL이 있으면 NOT IN 서브쿼리가 변환될 때 전체 결과가 빈 집합이 될 수 있다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: 'Hash Anti Join은 내부에서 어떻게 동작하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '해시 표를 만드는 쪽은?',
+        choices: [
+          { text: '우측 집합', correct: true },
+          { text: '좌측 집합', leadsTo: 1 },
+          { text: '더 큰 쪽', leadsTo: 1 },
+          { text: '둘 다', leadsTo: 2 },
+        ],
+        rationale:
+          'Build 단계에서 조인 키 기준으로 표를 만들고, Probe 단계에서 좌측 행을 읽으며 탐색한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '좌측 행에서 키를 찾으면 어떻게 되는가?',
+        choices: [
+          { text: '즉시 검색을 멈추고 그 행을 버린다', correct: true },
+          { text: '결과에 포함한다', leadsTo: 4 },
+          { text: '끝까지 탐색한 뒤 판단한다', leadsTo: 1 },
+          { text: '해시 표에 추가한다', leadsTo: 0 },
+        ],
+        rationale:
+          '안티 조인은 없는 행만 내보내므로 찾은 순간 결론이 난다. 이 조기 종료 덕에 등가 조건의 NOT EXISTS를 빠르게 처리한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'NOT IN이 그대로 이 방식을 타지 못하는 까닭은?',
+        choices: [
+          { text: 'NULL 의미론을 따로 다뤄야 해서', correct: true },
+          { text: '해시 함수를 못 써서', leadsTo: 1 },
+          { text: '메모리를 더 써서', leadsTo: 2 },
+          { text: '탈 수 있다. 제약이 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '메모리가 모자라면 나눠 디스크로 흘리는 것과는 별개의 제약이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '뷰 쿼리의 성능 저하는 무엇을 확인해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '가장 먼저 의심할 것은?',
+        choices: [
+          { text: '옵티마이저의 뷰 병합 실패', correct: true },
+          { text: '뷰에 인덱스가 없는 것', leadsTo: 0 },
+          { text: '뷰 정의가 긴 것', leadsTo: 4 },
+          { text: '뷰를 여러 번 쓴 것', leadsTo: 1 },
+        ],
+        rationale:
+          '병합하지 못하면 별도 쿼리 블록으로 처리하고, 계획에 따라 결과를 구체화하기도 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '병합에 실패하면 조건도 뷰 안으로 못 들어가는가?',
+        choices: [
+          { text: '병합과 푸시다운은 별개라 전달될 수 있다', correct: true },
+          { text: '실패하면 조건도 못 들어간다', leadsTo: 2 },
+          { text: '조건은 언제나 들어간다', leadsTo: 2 },
+          { text: '조건 전달은 없는 개념이다', leadsTo: 2 },
+        ],
+        rationale:
+          '푸시다운에 실패하면 뷰 전체를 가져온 뒤 필터링하므로 그것도 따로 확인한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '병합을 어렵게 만드는 요소는?',
+        choices: [
+          { text: 'GROUP BY나 DISTINCT', correct: true },
+          { text: '단순 WHERE 조건', leadsTo: 2 },
+          { text: '컬럼 개수', leadsTo: 0 },
+          { text: '뷰 이름 길이', leadsTo: 3 },
+        ],
+        rationale:
+          '뷰 결과를 먼저 만들어야 하고, 집계가 크거나 디스크로 흘리면 부담이 늘어난다.',
+      },
+    ],
+  },
 ]
