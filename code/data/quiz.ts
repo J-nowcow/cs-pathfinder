@@ -11983,4 +11983,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '이진 탐색 트리를 사용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '정렬된 배열과 비교했을 때 이진 탐색 트리가 나은 연산은?',
+        choices: [
+          { text: '삽입과 삭제', correct: true },
+          { text: '탐색', leadsTo: 3 },
+          { text: '순회', leadsTo: 1 },
+          { text: '모든 연산', leadsTo: 0 },
+        ],
+        rationale:
+          '균형이 잡혀 있으면 탐색은 정렬된 배열의 이진 탐색과 같은 O(log n)이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '트리로 바꾸면 정렬된 배열보다 항상 빠른가?',
+        choices: [
+          { text: '아니다. 기울면 O(n)이 되어 오히려 느리다', correct: true },
+          { text: '그렇다. 구조가 더 유연해서 빠르다', leadsTo: 0 },
+          { text: '그렇다. 탐색이 늘 절반씩 줄어든다', leadsTo: 0 },
+          { text: '아니다. 대신 삽입만 느려진다', leadsTo: 4 },
+        ],
+        rationale:
+          '데이터가 정렬된 순서로 들어오면 편향 트리가 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '편향을 스스로 막는 트리는?',
+        choices: [
+          { text: 'AVL 트리나 레드-블랙 트리', correct: true },
+          { text: '완전 이진 트리', leadsTo: 2 },
+          { text: '편향 트리', leadsTo: 0 },
+          { text: '이진 탐색 트리 자체가 막는다', leadsTo: 2 },
+        ],
+        rationale:
+          '넣고 지울 때 높이를 조절해 최악을 O(log n)으로 묶는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '재귀 함수 사용 시 스택 오버플로가 발생하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '호출할 때마다 쌓이는 것은?',
+        choices: [
+          { text: '스택 프레임', correct: true },
+          { text: '힙에 할당된 객체', leadsTo: 4 },
+          { text: '전역 변수', leadsTo: 4 },
+          { text: '프로그램의 기계어', leadsTo: 4 },
+        ],
+        rationale:
+          '각 호출은 이전 상태를 기억해야 하므로 공간을 계속 점유한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '스택이 힙에 부딪혀서 터지는가?',
+        choices: [
+          { text: '아니다. 미리 정해진 스택 크기를 넘는 순간 걸린다', correct: true },
+          { text: '그렇다. 두 영역이 만나면 터진다', leadsTo: 4 },
+          { text: '그렇다. 힙이 비어 있으면 안 터진다', leadsTo: 4 },
+          { text: '아니다. 대신 전체 메모리가 다 차야 터진다', leadsTo: 4 },
+        ],
+        rationale:
+          '스택마다 쓸 수 있는 크기가 미리 정해져 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '반복문이 항상 나은가?',
+        choices: [
+          { text: '아니다. 트리나 그래프 같은 계층 구조 탐색에는 재귀가 읽기 좋다', correct: true },
+          { text: '그렇다. 메모리 효율이 높으니 늘 낫다', leadsTo: 1 },
+          { text: '그렇다. 재귀는 쓸 이유가 없다', leadsTo: 1 },
+          { text: '아니다. 대신 재귀가 항상 빠르다', leadsTo: 3 },
+        ],
+        rationale:
+          '반복문은 추가 스택 프레임이 없어 메모리 효율이 높다는 것이 맞바꾸는 지점이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '우선순위 큐를 힙으로 구현하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '힙에서 삽입과 삭제의 시간 복잡도는?',
+        choices: [
+          { text: '둘 다 O(log N)', correct: true },
+          { text: '삽입 O(1), 삭제 O(N)', leadsTo: 2 },
+          { text: '둘 다 O(N)', leadsTo: 2 },
+          { text: '둘 다 O(1)', leadsTo: 2 },
+        ],
+        rationale:
+          '완전 이진 트리 구조라 높이가 눌려 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '정렬해 두면 우선순위 큐로 충분한가?',
+        choices: [
+          { text: '아니다. 넣을 자리를 만드느라 O(N)이 든다', correct: true },
+          { text: '그렇다. 꺼내기만 하면 되니 빠르다', leadsTo: 0 },
+          { text: '그렇다. 삽입도 상수 시간이다', leadsTo: 0 },
+          { text: '아니다. 대신 꺼내기가 O(N)이 된다', leadsTo: 1 },
+        ],
+        rationale:
+          '정렬하지 않으면 넣기는 싸지만 가장 급한 것을 찾는 데 O(N)이 든다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '힙이 맞는 환경은?',
+        choices: [
+          { text: '우선순위가 계속 바뀌는 곳', correct: true },
+          { text: '한 번 정렬하고 읽기만 하는 곳', leadsTo: 1 },
+          { text: '순서가 상관없는 곳', leadsTo: 0 },
+          { text: '데이터가 아주 적은 곳', leadsTo: 2 },
+        ],
+        rationale:
+          '다익스트라 알고리즘이나 OS의 스케줄러가 그런 자리다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: 'B-tree는 왜 디스크에 유리한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '갈래를 백으로 늘리면 백만 건에 몇 번이면 닿는가?',
+        choices: [
+          { text: '셋', correct: true },
+          { text: '스물', leadsTo: 0 },
+          { text: '백', leadsTo: 0 },
+          { text: '천', leadsTo: 0 },
+        ],
+        rationale:
+          '균형 잡힌 이진 트리도 백만 건이면 깊이가 스물이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '읽기 횟수가 항상 깊이만큼인가?',
+        choices: [
+          { text: '아니다. 위쪽 노드는 대개 버퍼 캐시에 남아 실제 읽기는 더 적다', correct: true },
+          { text: '그렇다. 매번 깊이만큼 읽는다', leadsTo: 2 },
+          { text: '그렇다. 캐시는 색인에 쓰이지 않는다', leadsTo: 2 },
+          { text: '아니다. 대신 항상 한 번만 읽는다', leadsTo: 0 },
+        ],
+        rationale:
+          '캐시가 비어 있을 때라야 깊이만큼 디스크를 읽는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '최악에도 O(log n)을 지키는 이유는?',
+        choices: [
+          { text: '넣고 지울 때 노드를 쪼개거나 합쳐 모든 잎을 같은 깊이에 둔다', correct: true },
+          { text: '노드가 커서 균형이 필요 없다', leadsTo: 0 },
+          { text: '디스크가 블록 단위로 읽어서', leadsTo: 3 },
+          { text: '캐시가 채워져 있어서', leadsTo: 2 },
+        ],
+        rationale:
+          '메모리만 쓰는 색인에서는 블록 이점이 줄어든다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'datastructure',
+    question: 'B-Tree가 디스크에 맞는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '노드 하나의 크기를 무엇에 맞추는가?',
+        choices: [
+          { text: '디스크 블록 크기', correct: true },
+          { text: '키 하나의 크기', leadsTo: 1 },
+          { text: '캐시 라인 크기', leadsTo: 1 },
+          { text: '전체 트리 크기', leadsTo: 1 },
+        ],
+        rationale:
+          '한 번 읽어 온 블록 안에서 여러 번 비교하므로 내려가는 횟수가 준다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'B-Tree는 비교 횟수도 줄여 주는가?',
+        choices: [
+          { text: '아니다. 총 비교 횟수는 오히려 늘 수도 있다', correct: true },
+          { text: '그렇다. 높이가 낮으니 비교도 준다', leadsTo: 1 },
+          { text: '그렇다. 둘은 같은 말이다', leadsTo: 1 },
+          { text: '아니다. 대신 디스크 읽기도 늘어난다', leadsTo: 1 },
+        ],
+        rationale:
+          '줄이는 것은 디스크 읽기 횟수다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '메모리 안에서만 논다면?',
+        choices: [
+          { text: '이점이 거의 없어 다른 구조를 쓴다', correct: true },
+          { text: '이점이 더 커진다', leadsTo: 4 },
+          { text: '똑같다', leadsTo: 4 },
+          { text: '아예 쓸 수 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '읽어 오는 값이 싸기 때문이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '메모리보다 큰 데이터를 정렬할 때 무엇을 쓰는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '메모리에 올릴 만큼 읽어 정렬해 저장한 조각을 무엇이라 하는가?',
+        choices: [
+          { text: '런', correct: true },
+          { text: '블록', leadsTo: 0 },
+          { text: '버퍼', leadsTo: 3 },
+          { text: '페이지', leadsTo: 0 },
+        ],
+        rationale:
+          '이후 여러 런을 동시에 읽으며 가장 작은 값을 결과 파일에 쓴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '전체 시간을 좌우하는 것은 비교 횟수인가?',
+        choices: [
+          { text: '아니다. 디스크를 읽고 쓰는 횟수다', correct: true },
+          { text: '그렇다. 정렬은 비교가 전부다', leadsTo: 3 },
+          { text: '그렇다. 힙 연산 비용이 지배한다', leadsTo: 1 },
+          { text: '아니다. 대신 런의 개수만 본다', leadsTo: 0 },
+        ],
+        rationale:
+          '메모리 버퍼를 키우고 한 번에 병합할 런 수를 조절해 병합 단계 수를 줄인다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '병합 단계에서 최소 힙을 쓰는 이유는?',
+        choices: [
+          { text: '여러 런에서 가장 작은 값을 빠르게 고르려고', correct: true },
+          { text: '런을 정렬하려고', leadsTo: 0 },
+          { text: '메모리를 아끼려고', leadsTo: 3 },
+          { text: '디스크 쓰기를 미루려고', leadsTo: 3 },
+        ],
+        rationale:
+          '병합 속도가 힙으로 올라간다.',
+      },
+    ],
+  },
 ]
