@@ -1303,12 +1303,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '세션이 쿠키보다 보안성이 높은 이유는?',
         choices: [
           { text: '전송 구간이 암호화되기 때문이다', leadsTo: 2 },
-          { text: '실제 데이터를 서버가 관리해 조작이 어렵다', correct: true },
-          { text: '세션 ID는 탈취될 수 없기 때문이다', leadsTo: 0 },
-          { text: '용량 제한이 없기 때문이다', leadsTo: 4 },
+          { text: '실제 데이터를 서버가 관리하기 때문이다', correct: true },
+          { text: '세션 ID는 탈취될 수 없기 때문이다', leadsTo: 3 },
+          { text: '저장할 수 있는 용량에 제한이 없기 때문이다', leadsTo: 1 },
         ],
         rationale:
-          '세션은 클라이언트에 세션 ID만 전달한다. 쿠키는 클라이언트가 데이터를 직접 수정할 수 있어 보안에 취약하다.',
+          '클라이언트에는 세션 ID만 전달하고 실제 데이터는 서버가 들고 있다.',
       },
     ],
   },
@@ -5209,12 +5209,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '성능을 잴 때 이 자리를 잊으면?',
         choices: [
           { text: '두 번째 측정이 빠른 것을 코드 덕으로 착각한다', correct: true },
-          { text: '측정값이 항상 느려진다', leadsTo: 2 },
-          { text: '측정이 실패한다', leadsTo: 2 },
-          { text: '아무 영향이 없다', leadsTo: 1 },
+          { text: '측정값이 처음부터 끝까지 느려진다', leadsTo: 0 },
+          { text: '측정 자체가 실패해 값이 안 나온다', leadsTo: 2 },
+          { text: '측정에는 아무 영향이 없다', leadsTo: 0 },
         ],
         rationale:
-          '쓰기도 일단 이 자리에 적어 두고 나중에 모아 내리므로 빨라 보인다. 갑자기 꺼지면 아직 안 내려간 것이 사라진다.',
+          '두 번째가 빠른 것은 코드가 좋아져서가 아니라 내용이 메모리에 남아 있어서다.',
       },
     ],
   },
