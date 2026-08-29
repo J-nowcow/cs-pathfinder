@@ -12082,11 +12082,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '큐 제품을 고르면 전달 보장이 따라오는가?',
+        stem: '전달 보장은 여러 설정을 합쳐 만드는 것인가?',
         choices: [
-          { text: '그렇다. 제품의 고정 속성이다', leadsTo: 0 },
-          { text: '아니다. 영속·복제 설정과 확인과 재전송과 멱등성을 합친 결과다', correct: true },
-          { text: '그렇다. 브로커가 알아서 보장한다', leadsTo: 1 },
+          { text: '아니다. 제품의 고정 속성이다', leadsTo: 0 },
+          { text: '그렇다. 영속·복제와 확인과 재전송을 합친 결과다', correct: true },
+          { text: '아니다. 브로커가 알아서 보장한다', leadsTo: 1 },
           { text: '아니다. 어떤 설정으로도 보장할 수 없다', leadsTo: 0 },
         ],
         rationale:
@@ -12124,12 +12124,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '삭제가 성공했으면 낡은 값이 다시 들어오지 않는가?',
+        stem: '삭제한 뒤에도 낡은 값이 다시 채워질 수 있는가?',
         choices: [
-          { text: '그렇다. 캐시가 순서를 보장한다', leadsTo: 3 },
-          { text: '그렇다. 삭제 뒤에는 새 값만 들어온다', leadsTo: 3 },
-          { text: '아니다. 먼저 이전 값을 읽은 요청이 뒤늦게 채울 수 있다', correct: true },
-          { text: '아니다. 대신 삭제 자체가 무의미하다', leadsTo: 1 },
+          { text: '아니다. 캐시가 순서를 보장한다', leadsTo: 3 },
+          { text: '아니다. 삭제 뒤에는 새 값만 들어온다', leadsTo: 3 },
+          { text: '그렇다. 먼저 읽은 요청이 뒤늦게 채운다', correct: true },
+          { text: '아니다. 그래서 삭제 자체가 무의미하다', leadsTo: 1 },
         ],
         rationale:
           '버전 비교나 조건부 쓰기로 오래된 채우기를 막아야 한다.',
@@ -12166,12 +12166,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '셋 중 둘을 제품 차원에서 한 번 고르는 것인가?',
+        stem: '선택은 제품이 아니라 연산마다 달라지는가?',
         choices: [
-          { text: '아니다. 대신 셋 다 가질 수 있다', leadsTo: 0 },
-          { text: '그렇다. 데이터베이스를 고르면 정해진다', leadsTo: 4 },
-          { text: '그렇다. 평상시에도 둘만 갖는다', leadsTo: 0 },
-          { text: '아니다. 연산과 업무 규칙에 가깝다', correct: true },
+          { text: '그렇다. 업무 규칙에 따라 달라진다', correct: true },
+          { text: '아니다. 데이터베이스를 고르면 정해진다', leadsTo: 4 },
+          { text: '아니다. 평상시에도 둘만 갖는다', leadsTo: 0 },
+          { text: '아니다. 셋 다 가질 수 있다', leadsTo: 0 },
         ],
         rationale:
           '상품 설명 조회와 남은 좌석 확정은 분단 중 다르게 대응할 수 있다.',
@@ -12208,12 +12208,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '키가 없는지 확인한 뒤 처리하고 키를 기록하면 되는가?',
+        stem: '확인과 기록 사이의 틈으로 같은 요청이 지나갈 수 있는가?',
         choices: [
-          { text: '아니다. 같은 요청 둘이 동시에 그 틈을 지나갈 수 있다', correct: true },
-          { text: '그렇다. 순서만 지키면 안전하다', leadsTo: 3 },
-          { text: '그렇다. 확인이 먼저면 충분하다', leadsTo: 3 },
-          { text: '아니다. 대신 키를 먼저 기록하면 된다', leadsTo: 3 },
+          { text: '그렇다. 둘이 동시에 그 틈을 지난다', correct: true },
+          { text: '아니다. 순서만 지키면 안전하다', leadsTo: 3 },
+          { text: '아니다. 확인이 먼저면 충분하다', leadsTo: 3 },
+          { text: '아니다. 키를 먼저 기록하면 없어진다', leadsTo: 3 },
         ],
         rationale:
           '키 선점과 업무 변경을 하나의 원자적 경계에 둬야 한다.',
@@ -12250,12 +12250,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '실패율 기준 하나만 정하면 되는가?',
+        stem: '최소 호출 수도 함께 정해야 하는가?',
         choices: [
-          { text: '아니다. 대신 시간만 보면 된다', leadsTo: 1 },
-          { text: '그렇다. 실패 비율만 보면 충분하다', leadsTo: 1 },
-          { text: '그렇다. 몇 번을 불렀는지는 상관없다', leadsTo: 1 },
-          { text: '아니다. 최소 호출 수가 없으면 한두 번으로 열린다', correct: true },
+          { text: '아니다. 실패 비율만 보면 충분하다', leadsTo: 1 },
+          { text: '아니다. 몇 번을 불렀는지는 상관없다', leadsTo: 1 },
+          { text: '그렇다. 없으면 한두 번으로 열린다', correct: true },
+          { text: '아니다. 시간만 보면 된다', leadsTo: 1 },
         ],
         rationale:
           '윈도와 최소 호출 수, 실패로 셀 예외, 느린 호출 기준을 함께 정한다.',
@@ -12292,12 +12292,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '키 이동이 적으면 부하도 고른가?',
+        stem: '이동량과 부하 분포는 따로 봐야 하는가?',
         choices: [
-          { text: '그렇다. 링 구조가 보장한다', leadsTo: 3 },
-          { text: '그렇다. 해시가 균등하니 자동으로 고르다', leadsTo: 0 },
-          { text: '아니다. 링의 노드 지점이 적으면 구간 크기가 들쭉날쭉하다', correct: true },
-          { text: '아니다. 대신 이동량이 늘어난다', leadsTo: 0 },
+          { text: '아니다. 링 구조가 둘 다 보장한다', leadsTo: 3 },
+          { text: '아니다. 해시가 균등하니 자동으로 고르다', leadsTo: 0 },
+          { text: '아니다. 이동량이 적으면 부하도 는다', leadsTo: 0 },
+          { text: '그렇다. 노드 지점이 적으면 구간이 들쭉날쭉하다', correct: true },
         ],
         rationale:
           '가상 노드를 여러 개 두거나 용량에 따라 가중치를 줘 분포를 보정한다.',
@@ -12334,15 +12334,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '같은 파티션이면 처리 순서까지 안전한가?',
+        stem: '소비자 쪽에서도 순서가 깨질 수 있는가?',
         choices: [
-          { text: '그렇다. 읽은 순서가 곧 처리 순서다', leadsTo: 2 },
-          { text: '아니다. 여러 스레드가 나눠 처리하면 끝난 순서가 달라진다', correct: true },
-          { text: '그렇다. 브로커가 처리까지 직렬화한다', leadsTo: 2 },
-          { text: '아니다. 대신 읽는 순서도 보장되지 않는다', leadsTo: 0 },
+          { text: '그렇다. 여러 스레드가 나눠 처리하면 달라진다', correct: true },
+          { text: '아니다. 읽은 순서가 곧 처리 순서다', leadsTo: 2 },
+          { text: '아니다. 브로커가 처리까지 직렬화한다', leadsTo: 2 },
+          { text: '그렇다. 읽는 순서조차 보장되지 않는다', leadsTo: 0 },
         ],
         rationale:
-          '소비자 쪽에서도 순서가 깨질 수 있다.',
+          '같은 파티션 안에서 읽는 순서는 지켜지지만 처리는 별개다.',
       },
       {
         kind: 'boundary',
@@ -12376,12 +12376,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '읽기를 분리하면 저장소도 반드시 나눠야 하는가?',
+        stem: '저장소를 그대로 두고도 읽기 모델을 나눌 수 있는가?',
         choices: [
-          { text: '아니다. 저장소까지 나눌지는 선택이다', correct: true },
-          { text: '그렇다. 저장소 분리가 전제다', leadsTo: 0 },
-          { text: '그렇다. 같은 저장소면 의미가 없다', leadsTo: 0 },
-          { text: '아니다. 대신 절대 나누면 안 된다', leadsTo: 2 },
+          { text: '그렇다. 저장소까지 나눌지는 선택이다', correct: true },
+          { text: '아니다. 저장소 분리가 전제다', leadsTo: 0 },
+          { text: '아니다. 같은 저장소면 의미가 없다', leadsTo: 0 },
+          { text: '아니다. 나누면 오히려 손해다', leadsTo: 2 },
         ],
         rationale:
           '쓰기는 바꾸기 좋은 모양으로, 읽기는 화면 모양으로 두는 것이 핵심이다.',

@@ -189,6 +189,29 @@ function main() {
     }
   }
 
+  /*
+   * 그렇다/아니다로 묻는 문항에서 답이 늘 "아니다"면 내용을 몰라도 맞힌다.
+   * 처음에는 180문항 중 179개가 아니다였다 — 오개념 문항이 "이 오해가
+   * 맞는가?"를 묻기 때문에 자연히 그렇게 된다. 질문을 뒤집으면 같은 것을
+   * 물으면서 답이 그렇다가 된다.
+   */
+  let yesNo = 0
+  let answerIsNo = 0
+  for (const quiz of NODE_QUIZZES) {
+    for (const item of quiz.items) {
+      const texts = item.choices.map((c) => c.text)
+      if (!texts.some((t) => t.startsWith('그렇다')) || !texts.some((t) => t.startsWith('아니다'))) continue
+      yesNo++
+      if (item.choices.find((c) => c.correct)?.text.startsWith('아니다')) answerIsNo++
+    }
+  }
+  if (yesNo > 0 && answerIsNo / yesNo > 0.85) {
+    problems.push({
+      where: '전체',
+      what: `그렇다/아니다 문항의 답이 아니다에 쏠려 있다 (${((answerIsNo / yesNo) * 100).toFixed(1)}%)`,
+    })
+  }
+
   const itemCount = NODE_QUIZZES.reduce((n, q) => n + q.items.length, 0)
   console.log(`노드 ${NODE_QUIZZES.length}개 · 문제 ${itemCount}개 검사`)
   console.log(`전체 노드 ${nodes.size}개 중 ${NODE_QUIZZES.length}개에 문제가 붙어 있다`)
@@ -200,6 +223,11 @@ function main() {
   console.log(
     `정답이 가장 긴 보기인 문항 ${((longestIsCorrect / itemCount) * 100).toFixed(1)}% (낮을수록 좋다)`,
   )
+  if (yesNo > 0) {
+    console.log(
+      `그렇다/아니다 ${yesNo}문항 중 답이 아니다 ${((answerIsNo / yesNo) * 100).toFixed(1)}%`,
+    )
+  }
 
   if (!problems.length) {
     console.log('\n문제 없음')
