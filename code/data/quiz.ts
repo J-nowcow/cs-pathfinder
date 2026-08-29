@@ -3835,4 +3835,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'os',
+    question: '데드락은 어떤 조건이 모두 모여야 생기는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '실무에서 가장 없애기 쉬운 조건은?',
+        choices: [
+          { text: '순환 대기', correct: true },
+          { text: '상호 배제', leadsTo: 4 },
+          { text: '비선점', leadsTo: 4 },
+          { text: '점유하며 대기', leadsTo: 3 },
+        ],
+        rationale:
+          '여러 자원을 잡는 모든 경로가 같은 전역 순서를 따르면 기다림 고리를 만들지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '오래 기다리면 데드락인가?',
+        choices: [
+          { text: '아니다. 긴 작업·자원 고갈·경합과 따로 구분해야 한다', correct: true },
+          { text: '그렇다. 기다림이 길면 데드락이다', leadsTo: 1 },
+          { text: '스레드가 둘 이상이면 데드락이다', leadsTo: 2 },
+          { text: '타임아웃이 나면 데드락이다', leadsTo: 4 },
+        ],
+        rationale:
+          'wait-for graph의 고리, 스레드 덤프나 데이터베이스 잠금 정보를 확인해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '재시도에 무작위 지연이 없으면 생기는 것은?',
+        choices: [
+          { text: '두 작업이 계속 양보하는 livelock', correct: true },
+          { text: '데드락이 확정된다', leadsTo: 0 },
+          { text: '아무 일도 없다', leadsTo: 2 },
+          { text: '자원이 자동 회수된다', leadsTo: 4 },
+        ],
+        rationale:
+          '한쪽만 계속 실패하면 starvation이다. 둘 다 데드락과는 다른 상태다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '가상 메모리는 무엇을 해결하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '프로그램이 하지 않아도 되게 만든 일은?',
+        choices: [
+          { text: '물리 메모리의 배치와 수명을 직접 관리하는 일', correct: true },
+          { text: '메모리를 해제하는 일', leadsTo: 1 },
+          { text: '디스크에 저장하는 일', leadsTo: 4 },
+          { text: '스레드를 만드는 일', leadsTo: 0 },
+        ],
+        rationale:
+          '커널은 주소 범위마다 권한과 어떤 데이터를 연결할지 정한다. 서로 다른 프로세스의 같은 가상 주소가 다른 물리 페이지를 가리킬 수 있어 격리도 쉬워진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'page fault는 모두 디스크 읽기인가?',
+        choices: [
+          { text: '아니다. 처음 쓰는 익명 페이지와 copy-on-write도 fault다', correct: true },
+          { text: '그렇다. 언제나 디스크를 읽는다', leadsTo: 1 },
+          { text: '스왑이 켜져 있을 때만 fault가 난다', leadsTo: 2 },
+          { text: 'fault는 오류라서 프로그램이 죽는다', leadsTo: 1 },
+        ],
+        rationale:
+          '매핑이 없거나 권한 처리가 필요할 때 커널로 넘어가는 것이고, 해결 방법은 여러 가지다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '큰 가상 주소 범위를 잡으면?',
+        choices: [
+          { text: '그만큼 물리 메모리가 확보된 것은 아니다', correct: true },
+          { text: '그만큼 물리 메모리가 즉시 잡힌다', leadsTo: 2 },
+          { text: '스왑이 그만큼 늘어난다', leadsTo: 2 },
+          { text: '반드시 성공이 보장된다', leadsTo: 2 },
+        ],
+        rationale:
+          'demand paging은 실제로 접근한 페이지만 올린다. 작업 집합이 자원 한도를 넘으면 할당이 실패할 수 있다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '사용자 모드에서 커널 모드로 진입하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '모드를 나눈 목적은?',
+        choices: [
+          { text: '사용자 프로그램이 하드웨어를 직접 건드리지 못하게 하려고', correct: true },
+          { text: '실행 속도를 높이려고', leadsTo: 3 },
+          { text: '메모리를 아끼려고', leadsTo: 3 },
+          { text: '스레드를 나누려고', leadsTo: 1 },
+        ],
+        rationale:
+          '권한을 분리해 하드웨어 제어권을 독점한다. 커널 모드만 모든 하드웨어 권한을 가진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '허락받지 않은 메모리를 건드리면 어떻게 되는가?',
+        choices: [
+          { text: 'CPU가 예외를 일으켜 커널에 붙잡힌다', correct: true },
+          { text: '커널 권한을 얻는다', leadsTo: 0 },
+          { text: '조용히 무시된다', leadsTo: 1 },
+          { text: '자동으로 시스템 콜로 바뀐다', leadsTo: 0 },
+        ],
+        rationale:
+          '권한을 얻는 것이 아니라 붙잡히는 것이다. 시스템 콜도 커널이 요청의 정당성을 검사한 뒤 대신 수행한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '모드 전환은 컨텍스트 스위칭인가?',
+        choices: [
+          { text: '다른 프로세스로 넘어가지 않으면 아니다', correct: true },
+          { text: '언제나 컨텍스트 스위칭이다', leadsTo: 3 },
+          { text: '비용이 없어서 구분할 필요가 없다', leadsTo: 3 },
+          { text: '인터럽트일 때만 스위칭이다', leadsTo: 1 },
+        ],
+        rationale:
+          '모드를 바꾸고 상태를 갈무리하는 비용은 들지만 그것과 프로세스 교체는 다른 일이다. 그래도 비용이 있으니 호출 횟수는 줄여야 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '프로세스 주소공간을 나누어 사용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '영역을 나누는 근거는?',
+        choices: [
+          { text: '데이터의 성격과 생명주기가 다르기 때문', correct: true },
+          { text: '크기가 다르기 때문', leadsTo: 0 },
+          { text: '접근 속도가 다르기 때문', leadsTo: 0 },
+          { text: '언어마다 다르기 때문', leadsTo: 2 },
+        ],
+        rationale:
+          '메모리 사용 목적에 따라 영역을 구분하고 각각 다르게 관리한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '스택과 힙의 시작 위치는 어디인가?',
+        choices: [
+          { text: '운영체제와 규약에 따라 다르다', correct: true },
+          { text: '언제나 스택이 위, 힙이 아래다', leadsTo: 1 },
+          { text: '언제나 힙이 위, 스택이 아래다', leadsTo: 1 },
+          { text: '주소가 고정돼 있다', leadsTo: 2 },
+        ],
+        rationale:
+          '흔한 배치에서 둘이 마주 보고 자라 가용 공간을 유동적으로 나눠 쓴다는 것이 요점이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '한 프로세스의 오류가 다른 프로세스를 오염시키지 않는 근거는?',
+        choices: [
+          { text: '가상 메모리로 독립된 주소 공간을 가지기 때문', correct: true },
+          { text: '영역을 넷으로 나눴기 때문', leadsTo: 4 },
+          { text: '스택이 아래로 자라기 때문', leadsTo: 1 },
+          { text: '오염은 실제로 일어난다', leadsTo: 3 },
+        ],
+        rationale:
+          '영역 구분은 한 주소 공간 안의 정리이고, 프로세스 사이의 격리는 주소 공간 자체가 다르기 때문에 성립한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '스레드 풀을 사용하는 주된 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '풀이 없애는 비용은?',
+        choices: [
+          { text: '요청마다 스레드를 만들고 없애는 비용', correct: true },
+          { text: '작업 큐를 유지하는 비용', leadsTo: 0 },
+          { text: '컨텍스트 스위칭 비용', leadsTo: 1 },
+          { text: '메모리 할당 비용 전부', leadsTo: 1 },
+        ],
+        rationale:
+          '처리가 끝나면 스레드는 소멸하지 않고 다시 풀로 돌아가 다음 작업을 기다린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '풀을 크게 잡으면 처리량이 계속 오르는가?',
+        choices: [
+          { text: '컨텍스트 스위칭 비용이 커져 오히려 떨어진다', correct: true },
+          { text: '크게 잡을수록 항상 좋다', leadsTo: 1 },
+          { text: '크기와 처리량은 무관하다', leadsTo: 1 },
+          { text: '큐 크기만 맞추면 된다', leadsTo: 0 },
+        ],
+        rationale:
+          '너무 작으면 요청이 큐에 쌓여 응답이 느려지고, 너무 크면 전환 비용이 이긴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '풀이 너무 작으면 무엇이 나빠지는가?',
+        choices: [
+          { text: '요청이 큐에 쌓여 응답 시간이 느려진다', correct: true },
+          { text: '전체 처리량이 올라간다', leadsTo: 1 },
+          { text: '스레드가 저절로 늘어난다', leadsTo: 0 },
+          { text: '아무 차이가 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '큰 쪽과 작은 쪽이 각각 다른 값을 깎는다. 그래서 적절한 크기를 찾는 일이 남는다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '프로세스 주소 공간을 나누는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '코드 영역을 읽기 전용으로 두는 까닭은?',
+        choices: [
+          { text: '실행 파일의 내용을 그대로 지키기 위해', correct: true },
+          { text: '더 빨리 읽기 위해', leadsTo: 1 },
+          { text: '크기를 줄이기 위해', leadsTo: 4 },
+          { text: '스택과 구분하기 위해', leadsTo: 0 },
+        ],
+        rationale:
+          '데이터 영역은 프로그램 시작부터 종료까지 유지되는 상태를 담고, 힙은 런타임에 크기가 결정된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '함수가 끝나면 스택이 사라지는가?',
+        choices: [
+          { text: '사라지는 것은 스택이 아니라 그 위의 프레임이다', correct: true },
+          { text: '스택 전체가 사라진다', leadsTo: 0 },
+          { text: '스택이 절반으로 준다', leadsTo: 0 },
+          { text: '힙으로 옮겨진다', leadsTo: 1 },
+        ],
+        rationale:
+          '스택은 스레드마다 하나씩 있다. 함수를 부를 때마다 그 위에 프레임이 쌓이고 돌아올 때 걷힌다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '스택은 무엇마다 하나씩 있는가?',
+        choices: [
+          { text: '스레드', correct: true },
+          { text: '프로세스', leadsTo: 2 },
+          { text: '함수', leadsTo: 0 },
+          { text: '코어', leadsTo: 1 },
+        ],
+        rationale:
+          '그래서 스레드를 늘리면 그만큼 스택 공간도 함께 늘어난다.',
+      },
+    ],
+  },
 ]
