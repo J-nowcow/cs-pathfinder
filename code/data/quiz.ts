@@ -3061,4 +3061,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'types',
+    question: '대입 뒤 한쪽을 바꿀 때 결과가 갈리는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '참조 타입을 대입하면 복사되는 것은?',
+        choices: [
+          { text: '같은 객체를 가리키는 참조', correct: true },
+          { text: '객체 전체', leadsTo: 1 },
+          { text: '객체의 첫 필드만', leadsTo: 1 },
+          { text: '아무것도 복사되지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '값 타입 대입은 값 자체를 복사한다. 값 안의 참조 필드는 여전히 같은 객체를 가리킬 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '값 의미론과 참조 의미론은 저장 위치와 같은 구분인가?',
+        choices: [
+          { text: '다르다. 값도 힙에 놓일 수 있다', correct: true },
+          { text: '같다. 값은 스택, 참조는 힙이다', leadsTo: 0 },
+          { text: '언어마다 항상 스택에만 둔다', leadsTo: 4 },
+          { text: '컴파일러가 정하므로 구분이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '값도 최적화나 캡처에 따라 힙에 놓일 수 있고, 참조 값 자체는 스택 프레임에 놓일 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '인자를 항상 값으로 전달하는 언어에서 호출자가 보는 것은?',
+        choices: [
+          { text: '같은 객체의 변경은 보지만 재대입은 안 보인다', correct: true },
+          { text: '변경도 재대입도 모두 보인다', leadsTo: 0 },
+          { text: '둘 다 안 보인다', leadsTo: 1 },
+          { text: '재대입만 보인다', leadsTo: 0 },
+        ],
+        rationale:
+          '객체 참조 값을 복사해 넘기기 때문이다. 참조를 통한 변경은 공유되지만 변수 자체를 바꾸는 것은 지역적이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '고정 소수점과 부동 소수점은 무엇으로 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 기준은?',
+        choices: [
+          { text: '소수점 위치를 고정하는가, 값에 따라 옮기는가', correct: true },
+          { text: '정수인가 실수인가', leadsTo: 1 },
+          { text: '비트 수가 몇인가', leadsTo: 1 },
+          { text: '하드웨어가 지원하는가', leadsTo: 3 },
+        ],
+        rationale:
+          '고정 소수점은 정수부와 소수부의 비트 수를 미리 정해둔다. 부동 소수점은 가수부와 지수부를 나눈다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '2진 부동 소수점으로 정확히 표현되는 값은?',
+        choices: [
+          { text: '0.5는 정확하지만 0.1은 아니다', correct: true },
+          { text: '10진 소수는 모두 정확하다', leadsTo: 0 },
+          { text: '10진 소수는 모두 부정확하다', leadsTo: 0 },
+          { text: '비트를 늘리면 모두 정확해진다', leadsTo: 1 },
+        ],
+        rationale:
+          '10진 소수 가운데 2진수로 딱 떨어지지 않는 것이 있다. 그 자리에서 반올림 오차가 생긴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '금융 계산에서 고르는 쪽은?',
+        choices: [
+          { text: '고정 소수점이나 임의 정밀도 타입', correct: true },
+          { text: '더 넓은 부동 소수점', leadsTo: 0 },
+          { text: '정수만 쓴다', leadsTo: 2 },
+          { text: '어느 쪽이든 상관없다', leadsTo: 0 },
+        ],
+        rationale:
+          '오차를 허용하기 어려운 곳에서는 표현 범위보다 정확성이 먼저다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: 'volatile 키워드는 가시성 문제를 어떻게 해결하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '가시성 문제가 생기는 까닭은?',
+        choices: [
+          { text: '각 스레드가 값을 캐시에 복사해 쓰기 때문', correct: true },
+          { text: '스레드가 너무 많아서', leadsTo: 4 },
+          { text: '메모리가 부족해서', leadsTo: 4 },
+          { text: '컴파일러가 변수를 지워서', leadsTo: 0 },
+        ],
+        rationale:
+          '여러 스레드가 같은 변수를 수정할 때 각자 캐시만 보면 다른 값을 가지게 된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'volatile은 캐시를 건너뛰게 만드는가?',
+        choices: [
+          { text: '아니다. 메모리 장벽으로 가시성과 순서를 강제한다', correct: true },
+          { text: '그렇다. 캐시를 완전히 우회한다', leadsTo: 4 },
+          { text: '캐시를 매번 비운다', leadsTo: 4 },
+          { text: '캐시를 읽기 전용으로 만든다', leadsTo: 0 },
+        ],
+        rationale:
+          '메모리 모델이 정한 가시성과 순서를 지키도록 강제하고, 캐시를 실제로 어떻게 다룰지는 JVM과 CPU가 정한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'volatile로 해결되지 않는 것은?',
+        choices: [
+          { text: '읽기·수정·쓰기로 나뉘는 연산의 원자성', correct: true },
+          { text: '값의 가시성', leadsTo: 0 },
+          { text: '명령 재정렬', leadsTo: 0 },
+          { text: '해결되지 않는 것이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          'count++ 같은 연산은 세 단계로 나뉘어 여전히 데이터 경쟁이 발생한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'javascript',
+    question: '클로저를 사용해 상태를 은닉하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '은닉으로 얻는 것은?',
+        choices: [
+          { text: '정의된 함수만 통해 접근하게 해 무결성을 지킨다', correct: true },
+          { text: '메모리를 아낀다', leadsTo: 1 },
+          { text: '실행 속도가 빨라진다', leadsTo: 3 },
+          { text: '타입 검사가 생긴다', leadsTo: 0 },
+        ],
+        rationale:
+          '내부 함수로 변수에 접근하는 통로만 열어두면 외부에서는 값을 직접 바꿀 수 없다. 객체 지향의 캡슐화와 유사한 효과다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '클로저가 변수를 붙잡고 있는 것은 메모리 누수인가?',
+        choices: [
+          { text: '누수가 아니라 붙잡고 있는 것이다. 닿을 길이 끊기면 걷힌다', correct: true },
+          { text: '누수라서 영원히 남는다', leadsTo: 1 },
+          { text: '엔진이 자동으로 끊어 준다', leadsTo: 3 },
+          { text: '클로저는 변수를 붙잡지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '클로저가 오래 살아 있으면 그것이 잡은 값도 같이 남는다. 문제는 붙잡은 채로 오래 사는 구조다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '전역 변수 대신 클로저를 쓰면 함께 줄어드는 것은?',
+        choices: [
+          { text: '이름 충돌', correct: true },
+          { text: '함수 호출 횟수', leadsTo: 3 },
+          { text: '코드 길이', leadsTo: 2 },
+          { text: '비동기 처리 비용', leadsTo: 4 },
+        ],
+        rationale:
+          '불필요한 전역 변수 사용을 줄여 상태 변화를 예측 가능하게 만든다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'typescript',
+    question: '타입스크립트의 구조적 타이핑은 무엇을 기준으로 판별하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '판별 근거는?',
+        choices: [
+          { text: '객체의 형태와 멤버 타입', correct: true },
+          { text: '선언된 이름', leadsTo: 0 },
+          { text: '선언 순서', leadsTo: 1 },
+          { text: '파일 경로', leadsTo: 4 },
+        ],
+        rationale:
+          '이름이 달라도 가지고 있는 멤버의 타입과 형태가 같다면 동일한 타입으로 간주한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '인터페이스를 명시적으로 상속해야 통과하는가?',
+        choices: [
+          { text: '요구 속성만 갖추면 상속 없이도 통과한다', correct: true },
+          { text: '반드시 상속해야 한다', leadsTo: 1 },
+          { text: '같은 파일에 있어야 한다', leadsTo: 4 },
+          { text: '이름이 같아야 한다', leadsTo: 0 },
+        ],
+        rationale:
+          '덕분에 외부 라이브러리와의 타입 호환성을 확보하기 쉽다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '구조적 타이핑이 만드는 위험은?',
+        choices: [
+          { text: '뜻이 다른 타입이 우연히 일치해 섞인다', correct: true },
+          { text: '컴파일이 느려진다', leadsTo: 3 },
+          { text: '런타임 성능이 나빠진다', leadsTo: 3 },
+          { text: '상속을 쓸 수 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '뜻이 다른 타입에는 브랜드 태그나 고유 식별자를 붙여 구분한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'jvm',
+    question: 'JVM 메모리 영역은 어떻게 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '나누는 기준은?',
+        choices: [
+          { text: '스레드 간 공유 여부', correct: true },
+          { text: '데이터 크기', leadsTo: 0 },
+          { text: '읽기 전용인지 여부', leadsTo: 2 },
+          { text: '생성 순서', leadsTo: 3 },
+        ],
+        rationale:
+          '공유 영역은 모든 스레드가 접근 가능하고, 개별 영역은 스레드 생성 시 함께 생기고 종료 시 사라진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '개별 영역에서 동기화가 필요한가?',
+        choices: [
+          { text: '그 스레드만 접근하므로 필요 없다', correct: true },
+          { text: '공유 영역과 똑같이 필요하다', leadsTo: 1 },
+          { text: '읽을 때만 필요하다', leadsTo: 1 },
+          { text: '스레드가 넷을 넘으면 필요하다', leadsTo: 3 },
+        ],
+        rationale:
+          'Stack과 PC Register는 스레드마다 따로 생긴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '클래스 메타데이터까지 회수되는가?',
+        choices: [
+          { text: 'JVM과 설정에 따라 다르다', correct: true },
+          { text: '언제나 회수된다', leadsTo: 2 },
+          { text: '절대 회수되지 않는다', leadsTo: 2 },
+          { text: '힙과 함께 항상 회수된다', leadsTo: 0 },
+        ],
+        rationale:
+          '힙이 가비지 컬렉션의 주된 대상이다. Method Area에 담긴 것의 회수는 그와 별개다.',
+      },
+    ],
+  },
 ]
