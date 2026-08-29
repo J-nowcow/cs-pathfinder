@@ -12235,4 +12235,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '메시지 큐를 두면 무엇을 얻고 무엇을 잃는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '큐를 두어 얻는 가장 큰 이득은?',
+        choices: [
+          { text: '트래픽이 몰려도 받는 쪽이 자기 속도로 처리한다', correct: true },
+          { text: '메시지가 절대 유실되지 않는다', leadsTo: 0 },
+          { text: '처리 순서가 항상 보장된다', leadsTo: 2 },
+          { text: '중복이 사라진다', leadsTo: 1 },
+        ],
+        rationale:
+          '보내는 쪽과 받는 쪽의 시간을 떼어내는 것이 핵심이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '큐 제품을 고르면 전달 보장이 따라오는가?',
+        choices: [
+          { text: '아니다. 영속·복제 설정과 확인과 재전송과 멱등성을 합친 결과다', correct: true },
+          { text: '그렇다. 제품의 고정 속성이다', leadsTo: 0 },
+          { text: '그렇다. 브로커가 알아서 보장한다', leadsTo: 1 },
+          { text: '아니다. 어떤 설정으로도 보장할 수 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '먼저 ack하고 죽으면 유실되고, 안전하게 재전송하면 중복이 생긴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '같은 주문의 순서가 필요하면?',
+        choices: [
+          { text: '같은 키를 같은 파티션으로 보내고 처리 병렬성을 그 범위에서 제한한다', correct: true },
+          { text: '컨슈머를 하나만 둔다', leadsTo: 2 },
+          { text: '파티션을 늘린다', leadsTo: 2 },
+          { text: '큐가 알아서 순서를 지킨다', leadsTo: 2 },
+        ],
+        rationale:
+          '순서는 파티션 수와 컨슈머 병렬성에 따라 달라진다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '캐시를 지우는 일이 어려운 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '원본 반영과 캐시 삭제가 어긋나면?',
+        choices: [
+          { text: '이전 값이 캐시에 남는다', correct: true },
+          { text: '원본도 함께 되돌아간다', leadsTo: 3 },
+          { text: '캐시가 비워진다', leadsTo: 1 },
+          { text: '아무 일도 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '둘이 서로 다른 실패 단위를 갖기 때문이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '삭제가 성공했으면 낡은 값이 다시 들어오지 않는가?',
+        choices: [
+          { text: '아니다. 먼저 이전 값을 읽은 요청이 뒤늦게 채울 수 있다', correct: true },
+          { text: '그렇다. 삭제 뒤에는 새 값만 들어온다', leadsTo: 3 },
+          { text: '그렇다. 캐시가 순서를 보장한다', leadsTo: 3 },
+          { text: '아니다. 대신 삭제 자체가 무의미하다', leadsTo: 1 },
+        ],
+        rationale:
+          '버전 비교나 조건부 쓰기로 오래된 채우기를 막아야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '같은 시각에 많은 키가 만료되지 않게 하려면?',
+        choices: [
+          { text: 'TTL에 jitter를 주고 같은 키의 동시 재조회는 하나로 합친다', correct: true },
+          { text: 'TTL을 모두 같게 맞춘다', leadsTo: 0 },
+          { text: 'TTL을 아예 없앤다', leadsTo: 1 },
+          { text: '캐시를 통째로 비운다', leadsTo: 0 },
+        ],
+        rationale:
+          '캐시는 성능을 돕는 계층이지 원본을 쓰러뜨리는 단일 실패점이 되면 안 된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '분산 시스템에서 CAP 중 무엇을 포기하게 되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '충돌이 실제로 나타나는 구간은?',
+        choices: [
+          { text: '네트워크 분단이 이어지는 동안', correct: true },
+          { text: '평상시 모든 요청', leadsTo: 0 },
+          { text: '노드를 늘릴 때', leadsTo: 2 },
+          { text: '쓰기가 몰릴 때', leadsTo: 1 },
+        ],
+        rationale:
+          '분단이 없을 때의 지연과 일관성 절충은 PACELC 같은 별도 관점으로 본다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '셋 중 둘을 제품 차원에서 한 번 고르는 것인가?',
+        choices: [
+          { text: '아니다. 연산과 업무 규칙에 가깝다', correct: true },
+          { text: '그렇다. 데이터베이스를 고르면 정해진다', leadsTo: 4 },
+          { text: '그렇다. 평상시에도 둘만 갖는다', leadsTo: 0 },
+          { text: '아니다. 대신 셋 다 가질 수 있다', leadsTo: 0 },
+        ],
+        rationale:
+          '상품 설명 조회와 남은 좌석 확정은 분단 중 다르게 대응할 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '분리된 양쪽이 모두 쓰기를 받으면?',
+        choices: [
+          { text: '서로의 최신 값을 알 수 없어 선형 일관성을 보장할 수 없다', correct: true },
+          { text: '나중에 자동으로 합쳐진다', leadsTo: 3 },
+          { text: '한쪽이 자동으로 멈춘다', leadsTo: 4 },
+          { text: '가용성도 함께 잃는다', leadsTo: 4 },
+        ],
+        rationale:
+          '한쪽을 멈추면 일관성은 지키지만 멈춘 쪽의 가용성을 잃는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '재시도가 있는 시스템에서 멱등성이 필요한 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '응답이 오지 않았다는 사실이 뜻하는 것은?',
+        choices: [
+          { text: '서버가 처리했는지 알 수 없다는 것', correct: true },
+          { text: '서버가 처리하지 않았다는 것', leadsTo: 1 },
+          { text: '서버가 처리했다는 것', leadsTo: 1 },
+          { text: '요청이 도착하지 않았다는 것', leadsTo: 1 },
+        ],
+        rationale:
+          '그래서 같은 의도의 요청이 다시 와도 추가 효과를 만들지 않는 계약이 필요하다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '키가 없는지 확인한 뒤 처리하고 키를 기록하면 되는가?',
+        choices: [
+          { text: '아니다. 같은 요청 둘이 동시에 그 틈을 지나갈 수 있다', correct: true },
+          { text: '그렇다. 순서만 지키면 안전하다', leadsTo: 3 },
+          { text: '그렇다. 확인이 먼저면 충분하다', leadsTo: 3 },
+          { text: '아니다. 대신 키를 먼저 기록하면 된다', leadsTo: 3 },
+        ],
+        rationale:
+          '키 선점과 업무 변경을 하나의 원자적 경계에 둬야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '같은 키에 다른 요청 내용이 오면?',
+        choices: [
+          { text: '재시도로 취급하지 않고 불일치 오류를 낸다', correct: true },
+          { text: '새 내용으로 덮어쓴다', leadsTo: 0 },
+          { text: '이전 결과를 그대로 돌려준다', leadsTo: 0 },
+          { text: '새 작업으로 처리한다', leadsTo: 0 },
+        ],
+        rationale:
+          '요청 본문만 해시하면 똑같은 주문을 두 번 하려는 경우와 재시도를 구분하지 못한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '서킷 브레이커는 무엇을 막아주는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '서킷이 열린 동안 얻는 것은?',
+        choices: [
+          { text: '스레드와 커넥션을 오래 붙잡지 않는다', correct: true },
+          { text: '의존성이 복구된다', leadsTo: 0 },
+          { text: '요청이 큐에 쌓인다', leadsTo: 3 },
+          { text: '재시도가 자동으로 돈다', leadsTo: 4 },
+        ],
+        rationale:
+          '서킷 브레이커가 의존성을 복구하는 것은 아니다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '실패율 기준 하나만 정하면 되는가?',
+        choices: [
+          { text: '아니다. 최소 호출 수가 없으면 트래픽이 적을 때 한두 번으로 열린다', correct: true },
+          { text: '그렇다. 비율만 보면 충분하다', leadsTo: 1 },
+          { text: '그렇다. 표본 수는 상관없다', leadsTo: 1 },
+          { text: '아니다. 대신 시간만 보면 된다', leadsTo: 1 },
+        ],
+        rationale:
+          '윈도와 최소 호출 수, 실패로 셀 예외, 느린 호출 기준을 함께 정한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '반열림에서 확인 호출 수를 제한하는 이유는?',
+        choices: [
+          { text: '대기 요청을 한꺼번에 보내면 회복 중인 의존성을 다시 무너뜨린다', correct: true },
+          { text: '서킷이 닫히는 것을 늦추려고', leadsTo: 0 },
+          { text: '실패율을 낮추려고', leadsTo: 1 },
+          { text: '재시도를 늘리려고', leadsTo: 4 },
+        ],
+        rationale:
+          '동시 호출 수 자체를 제한하는 일은 벌크헤드의 몫이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'distributed',
+    question: '노드를 늘릴 때 일관된 해싱이 필요한 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '나머지 연산으로 노드를 고르면 노드 추가 때 무슨 일이 생기는가?',
+        choices: [
+          { text: '분모가 바뀌어 대부분의 키가 재배치된다', correct: true },
+          { text: '새 노드가 맡을 분량만 옮겨진다', leadsTo: 0 },
+          { text: '아무 키도 옮겨지지 않는다', leadsTo: 1 },
+          { text: '키 절반이 사라진다', leadsTo: 1 },
+        ],
+        rationale:
+          '일관된 해싱은 옮겨야 하는 키를 새 노드가 맡을 분량으로 줄인다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '키 이동이 적으면 부하도 고른가?',
+        choices: [
+          { text: '아니다. 링의 노드 지점이 적으면 구간 크기가 들쭉날쭉하다', correct: true },
+          { text: '그렇다. 해시가 균등하니 자동으로 고르다', leadsTo: 0 },
+          { text: '그렇다. 링 구조가 보장한다', leadsTo: 3 },
+          { text: '아니다. 대신 이동량이 늘어난다', leadsTo: 0 },
+        ],
+        rationale:
+          '가상 노드를 여러 개 두거나 용량에 따라 가중치를 줘 분포를 보정한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '해싱 알고리즘 밖에서 따로 설계해야 하는 것은?',
+        choices: [
+          { text: '복제본 배치와 핫 키와 재배치 중 읽기·쓰기', correct: true },
+          { text: '노드가 맡을 구간 계산', leadsTo: 0 },
+          { text: '키의 해시 값', leadsTo: 2 },
+          { text: '가상 노드 개수', leadsTo: 0 },
+        ],
+        rationale:
+          '노드 증감이 잦은 분산 캐시와 저장소, 로드 밸런서에 잘 맞는 방식이다.',
+      },
+    ],
+  },
 ]
