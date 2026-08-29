@@ -11227,4 +11227,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '일반 이진트리 대신 이진탐색트리를 사용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '이진탐색트리의 노드 배치 규칙은?',
+        choices: [
+          { text: '왼쪽 < 부모 < 오른쪽', correct: true },
+          { text: '규칙 없이 채운다', leadsTo: 3 },
+          { text: '항상 왼쪽부터 채운다', leadsTo: 3 },
+          { text: '높이 순으로 배치한다', leadsTo: 1 },
+        ],
+        rationale:
+          '이 규칙 덕분에 탐색 범위를 지속해서 줄일 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이진탐색트리면 탐색이 O(log N)인가?',
+        choices: [
+          { text: '아니다. 높이에 비례하므로 기울면 O(N)이 된다', correct: true },
+          { text: '그렇다. 구조 자체가 보장한다', leadsTo: 1 },
+          { text: '그렇다. 노드 수만 적으면 된다', leadsTo: 1 },
+          { text: '아니다. 항상 O(N)이다', leadsTo: 0 },
+        ],
+        rationale:
+          '정렬된 데이터가 순서대로 들어오면 편향 트리가 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '편향을 막는 방법은?',
+        choices: [
+          { text: 'Red-Black 트리나 AVL 트리처럼 스스로 균형을 맞추는 트리를 쓴다', correct: true },
+          { text: '삽입 전에 데이터를 섞는다', leadsTo: 1 },
+          { text: '일반 이진트리로 바꾼다', leadsTo: 4 },
+          { text: '노드 수를 제한한다', leadsTo: 1 },
+        ],
+        rationale:
+          '단순 이진트리는 모든 노드를 확인해야 해 O(N)이 걸린다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '그래프를 인접 행렬과 인접 리스트 중 어떤 방식으로 구현해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '두 정점의 연결 여부를 상수 시간에 보는 쪽은?',
+        choices: [
+          { text: '인접 행렬', correct: true },
+          { text: '인접 리스트', leadsTo: 3 },
+          { text: '둘 다 상수 시간이다', leadsTo: 3 },
+          { text: '둘 다 O(V)다', leadsTo: 3 },
+        ],
+        rationale:
+          '인접 리스트는 리스트를 순회해야 해서 degree(V)만큼 걸린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '인접 행렬이 조회가 빠르니 기본으로 쓰면 되는가?',
+        choices: [
+          { text: '아니다. 정점이 많고 간선이 적으면 메모리 낭비가 크다', correct: true },
+          { text: '그렇다. 조회 속도가 가장 중요하다', leadsTo: 0 },
+          { text: '그렇다. 공간 복잡도가 더 낫다', leadsTo: 3 },
+          { text: '아니다. 대신 인접 행렬은 쓸 일이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '공간 복잡도가 O(V²)라 희소 그래프에서는 대부분이 빈칸이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '실무에서 인접 리스트를 주로 쓰는 이유는?',
+        choices: [
+          { text: '정점 수에 비해 간선 수가 적은 희소 그래프가 많다', correct: true },
+          { text: '구현이 항상 더 쉬워서', leadsTo: 1 },
+          { text: '간선 존재 확인이 더 빨라서', leadsTo: 0 },
+          { text: '정점 수 제한이 없어서', leadsTo: 1 },
+        ],
+        rationale:
+          '간선의 밀도와 주된 연산 목적으로 고른다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '다익스트라와 벨만-포드 알고리즘은 언제 구분하여 쓰는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '다익스트라가 음수 가중치에서 오동작하는 이유는?',
+        choices: [
+          { text: '이미 방문한 노드의 거리는 변하지 않는다고 가정하기 때문이다', correct: true },
+          { text: '우선순위 큐가 음수를 못 담기 때문이다', leadsTo: 0 },
+          { text: '간선을 한 번만 보기 때문이다', leadsTo: 3 },
+          { text: '사이클을 감지하지 못하기 때문이다', leadsTo: 1 },
+        ],
+        rationale:
+          '음수 간선이 있으면 확정한 거리가 나중에 더 줄어들 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '벨만-포드를 돌리면 모든 음수 사이클을 찾는가?',
+        choices: [
+          { text: '아니다. 시작점에서 닿을 수 있는 것만 찾는다', correct: true },
+          { text: '그렇다. 그래프 전체를 검사한다', leadsTo: 1 },
+          { text: '그렇다. V번 반복하면 전부 드러난다', leadsTo: 1 },
+          { text: '아니다. 음수 사이클은 못 찾는다', leadsTo: 1 },
+        ],
+        rationale:
+          'V번째 완화에서도 값이 바뀌면 닿을 수 있는 음수 사이클로 본다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '다익스트라가 더 빠른 이유는?',
+        choices: [
+          { text: '우선순위 큐로 모든 간선을 거듭 도는 비용을 피한다', correct: true },
+          { text: '간선을 한 번씩만 보기 때문이다', leadsTo: 0 },
+          { text: '정점 수와 무관하기 때문이다', leadsTo: 3 },
+          { text: '사이클을 건너뛰기 때문이다', leadsTo: 1 },
+        ],
+        rationale:
+          '벨만-포드는 매 단계 모든 간선을 확인하고 이를 노드 수만큼 반복한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '재귀 호출 대신 반복문을 써야 하는 순간은 언제인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '재귀가 스택에 쌓는 것은?',
+        choices: [
+          { text: '매개변수와 지역 변수와 복귀 주소', correct: true },
+          { text: '결과값만', leadsTo: 2 },
+          { text: '함수 코드 전체', leadsTo: 2 },
+          { text: '아무것도 쌓지 않는다', leadsTo: 1 },
+        ],
+        rationale:
+          '반복문은 동일 스택 프레임 안에서 변수만 갱신한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '재귀는 언제나 반복문으로 바꾸는 편이 나은가?',
+        choices: [
+          { text: '아니다. 깊이가 얕으면 그대로 두는 편이 읽기 좋다', correct: true },
+          { text: '그렇다. 재귀는 항상 느리다', leadsTo: 0 },
+          { text: '그렇다. 오버플로우 위험이 늘 있다', leadsTo: 2 },
+          { text: '아니다. 대신 재귀가 항상 낫다', leadsTo: 2 },
+        ],
+        rationale:
+          '가독성은 높지만 호출마다 오버헤드가 붙는다는 것이 맞바꾸는 지점이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '반복문으로 바꿔야 하는 조건은?',
+        choices: [
+          { text: '꼬리 재귀 최적화가 없고 호출 깊이가 스택 한도를 넘길 수 있을 때', correct: true },
+          { text: '재귀 함수의 줄 수가 많을 때', leadsTo: 1 },
+          { text: '기저 조건이 여러 개일 때', leadsTo: 1 },
+          { text: '입력이 정렬돼 있을 때', leadsTo: 4 },
+        ],
+        rationale:
+          '호출 횟수가 입력 크기에 비례해 커지면 스택 영역 한도를 넘길 수 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '최소 신장 트리(MST)를 구성하는 알고리즘으로 무엇을 선택하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '크루스칼이 사이클을 검사하는 도구는?',
+        choices: [
+          { text: 'Union-Find', correct: true },
+          { text: '우선순위 큐', leadsTo: 1 },
+          { text: '깊이 우선 탐색만', leadsTo: 0 },
+          { text: '인접 행렬', leadsTo: 0 },
+        ],
+        rationale:
+          '크루스칼은 가중치가 낮은 간선부터 연결하며 사이클을 피한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '프림은 정점 위주라 정점의 값을 보고 고르는가?',
+        choices: [
+          { text: '아니다. 트리 안팎을 잇는 간선의 가중치를 본다', correct: true },
+          { text: '그렇다. 정점 가중치가 기준이다', leadsTo: 1 },
+          { text: '그렇다. 정점 번호 순으로 고른다', leadsTo: 3 },
+          { text: '아니다. 대신 간선을 정렬해 둔다', leadsTo: 0 },
+        ],
+        rationale:
+          '가장 작은 간선을 골라 그 바깥 정점을 끌어들인다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '밀집 그래프에 유리한 쪽은?',
+        choices: [
+          { text: '프림', correct: true },
+          { text: '크루스칼', leadsTo: 0 },
+          { text: '둘이 같다', leadsTo: 1 },
+          { text: '어느 쪽도 쓸 수 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '간선 수가 적은 희소 그래프에서는 크루스칼이 구현과 계산 면에서 유리하다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '문자열 검색 효율을 높이는 최적의 자료구조는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '트라이의 탐색 시간은 무엇에 비례하는가?',
+        choices: [
+          { text: '검색하려는 문자열의 길이', correct: true },
+          { text: '저장된 단어 수', leadsTo: 3 },
+          { text: '트리의 높이와 무관하다', leadsTo: 0 },
+          { text: '알파벳 크기', leadsTo: 0 },
+        ],
+        rationale:
+          'O(L)이며 데이터셋의 크기와 상관없이 일정하게 유지된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '문자열 검색이면 트라이가 정답인가?',
+        choices: [
+          { text: '아니다. 텍스트 안에서 패턴을 찾을 때는 KMP나 라빈-카프를 쓴다', correct: true },
+          { text: '그렇다. 모든 문자열 검색에 트라이가 낫다', leadsTo: 3 },
+          { text: '그렇다. 해시 맵보다 항상 빠르다', leadsTo: 3 },
+          { text: '아니다. 대신 해시 맵이 항상 낫다', leadsTo: 3 },
+        ],
+        rationale:
+          '트라이는 여러 단어를 빠르게 검색하거나 자동완성에 적합하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '트라이가 탐색을 줄이는 원리는?',
+        choices: [
+          { text: '공통 접두사를 노드로 공유해 중복 탐색을 피한다', correct: true },
+          { text: '전체 문자열을 키로 해싱한다', leadsTo: 3 },
+          { text: '문자열을 정렬해 둔다', leadsTo: 0 },
+          { text: '가장 긴 문자열을 먼저 본다', leadsTo: 4 },
+        ],
+        rationale:
+          '같은 시작 문자를 가진 단어들은 같은 경로를 따라간다.',
+      },
+    ],
+  },
 ]
