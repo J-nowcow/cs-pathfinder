@@ -9967,4 +9967,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'springboot',
+    question: '자동 구성은 어떤 조건에서 물러나는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '사용자가 같은 역할의 빈을 선언하면?',
+        choices: [
+          { text: '기본 구성이 물러난다', correct: true },
+          { text: '둘 다 등록돼 충돌한다', leadsTo: 1 },
+          { text: '기본 구성이 사용자 빈을 덮어쓴다', leadsTo: 1 },
+          { text: '시작이 실패한다', leadsTo: 1 },
+        ],
+        rationale:
+          'ConditionalOnMissingBean이 사용자 정의를 존중하는 핵심 장치다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '넓은 타입의 빈을 하나 선언하는 것은 안전한가?',
+        choices: [
+          { text: '아니다. 예상치 못한 기본 구성까지 꺼질 수 있다', correct: true },
+          { text: '그렇다. 선언한 것만 정확히 대체한다', leadsTo: 1 },
+          { text: '그렇다. 타입 범위는 영향이 없다', leadsTo: 1 },
+          { text: '아니다. 대신 시작이 느려질 뿐이다', leadsTo: 2 },
+        ],
+        rationale:
+          '조건 평가는 사용자 빈 유무를 타입으로 확인한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '구성이 빠졌을 때 무엇을 보는가?',
+        choices: [
+          { text: '조건 평가 보고서의 일치와 불일치 이유', correct: true },
+          { text: '빈 목록만', leadsTo: 0 },
+          { text: '제외 설정을 먼저 추가한다', leadsTo: 3 },
+          { text: '의존성을 하나씩 지워 본다', leadsTo: 0 },
+        ],
+        rationale:
+          '제외 설정은 의도와 영향 범위를 알 때만 쓴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'springmvc',
+    question: '요청 공통 처리는 어느 지점에 두는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '선택된 컨트롤러 정보가 필요한 일은 어디에 두는가?',
+        choices: [
+          { text: '인터셉터', correct: true },
+          { text: '필터', leadsTo: 2 },
+          { text: '서비스', leadsTo: 3 },
+          { text: '컨트롤러 본문', leadsTo: 3 },
+        ],
+        rationale:
+          '필터는 서블릿 체인 경계라 핸들러 정보를 모른다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'preHandle이 거짓을 내도 뒷정리 콜백은 도는가?',
+        choices: [
+          { text: '아니다. postHandle도 afterCompletion도 돌지 않는다', correct: true },
+          { text: '그렇다. afterCompletion은 항상 실행된다', leadsTo: 3 },
+          { text: '그렇다. 둘 다 실행된다', leadsTo: 3 },
+          { text: '아니다. 대신 필터가 대신 처리한다', leadsTo: 0 },
+        ],
+        rationale:
+          '거짓을 내면 거기서 끊긴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '필터에서 난 예외는 어떻게 다루는가?',
+        choices: [
+          { text: '필터 체인에서 응답으로 바꾸거나 서블릿 오류 처리로 넘긴다', correct: true },
+          { text: 'ControllerAdvice가 잡는다', leadsTo: 0 },
+          { text: '인터셉터가 잡는다', leadsTo: 0 },
+          { text: '컨트롤러에서 다시 던진다', leadsTo: 0 },
+        ],
+        rationale:
+          '필터 예외는 보통 ControllerAdvice 범위 밖이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'springmvc',
+    question: '예외를 어디서 HTTP 응답으로 바꾸는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '예상 밖 예외는 어떻게 응답하는가?',
+        choices: [
+          { text: '500으로 감춘다', correct: true },
+          { text: '원래 메시지를 그대로 내보낸다', leadsTo: 4 },
+          { text: '400으로 바꾼다', leadsTo: 2 },
+          { text: '응답하지 않고 끊는다', leadsTo: 4 },
+        ],
+        rationale:
+          '도메인 예외는 안정된 오류 코드와 HTTP 상태로 매핑한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '저장소 예외를 그대로 올려도 되는가?',
+        choices: [
+          { text: '아니다. API가 내부 기술에 묶인다', correct: true },
+          { text: '그렇다. 원인이 정확히 전달된다', leadsTo: 4 },
+          { text: '그렇다. 매핑 코드를 줄일 수 있다', leadsTo: 2 },
+          { text: '아니다. 대신 메시지만 바꾸면 된다', leadsTo: 2 },
+        ],
+        rationale:
+          '예상 가능한 실패는 의미가 드러나는 예외로 표현한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '응답과 로그는 어떻게 나누는가?',
+        choices: [
+          { text: '응답에는 추적 ID와 코드만, 스택 트레이스와 민감한 메시지는 숨긴다', correct: true },
+          { text: '응답에도 스택 트레이스를 실어 디버깅을 돕는다', leadsTo: 4 },
+          { text: '로그를 각 계층마다 남긴다', leadsTo: 4 },
+          { text: '로그를 남기지 않는다', leadsTo: 4 },
+        ],
+        rationale:
+          '로그는 한 경계에서 한 번 남긴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'springsecurity',
+    question: '인증 정보는 어떻게 보안 문맥에 들어가는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '인증 결과를 SecurityContext에 넣는 것은 누구인가?',
+        choices: [
+          { text: '인증 필터', correct: true },
+          { text: 'AuthenticationManager', leadsTo: 0 },
+          { text: 'AuthenticationProvider', leadsTo: 0 },
+          { text: '인가 필터', leadsTo: 1 },
+        ],
+        rationale:
+          'Manager는 검증을 위임하고 결과를 돌려줄 뿐이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '인증만 되면 접근이 허용되는가?',
+        choices: [
+          { text: '아니다. 인가 필터가 권한으로 다시 판정한다', correct: true },
+          { text: '그렇다. 인증이 곧 인가다', leadsTo: 1 },
+          { text: '그렇다. 권한은 컨트롤러가 본다', leadsTo: 1 },
+          { text: '아니다. 인증만으로 401이 난다', leadsTo: 1 },
+        ],
+        rationale:
+          '인증이 없으면 401, 인증은 됐지만 권한이 부족하면 403이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '세션 방식과 무상태 토큰 방식은 어떻게 다른가?',
+        choices: [
+          { text: '세션은 문맥을 요청 사이에 복원하고 토큰은 매 요청 검증한다', correct: true },
+          { text: '둘 다 매 요청 검증한다', leadsTo: 2 },
+          { text: '둘 다 문맥을 복원한다', leadsTo: 2 },
+          { text: '토큰 방식은 보안 문맥을 쓰지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '저장 정책과 필터 위치가 흐름을 바꾼다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'jpa',
+    question: '같은 엔티티를 두 번 조회하면 왜 같은 객체인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '1차 캐시가 인스턴스를 구분하는 기준은?',
+        choices: [
+          { text: '엔티티 타입과 식별자', correct: true },
+          { text: '조회한 순서', leadsTo: 0 },
+          { text: '쿼리 문자열', leadsTo: 0 },
+          { text: '테이블 이름', leadsTo: 0 },
+        ],
+        rationale:
+          '이미 관리 중이면 1차 캐시에서 같은 객체를 반환한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '1차 캐시가 있으니 트랜잭션 격리는 신경 안 써도 되는가?',
+        choices: [
+          { text: '아니다. 격리를 대신하지 않는다', correct: true },
+          { text: '그렇다. 캐시가 일관성을 보장한다', leadsTo: 3 },
+          { text: '그렇다. 여러 요청이 같은 캐시를 본다', leadsTo: 3 },
+          { text: '아니다. 대신 2차 캐시가 대신한다', leadsTo: 3 },
+        ],
+        rationale:
+          '이 캐시는 EntityManager 범위 안에서만 유효하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '긴 범위에 많은 엔티티를 쌓으면?',
+        choices: [
+          { text: '메모리와 낡은 상태 문제가 커져 주기적으로 비워야 한다', correct: true },
+          { text: '조회가 계속 빨라진다', leadsTo: 4 },
+          { text: '자동으로 오래된 것부터 제거된다', leadsTo: 4 },
+          { text: '아무 영향이 없다', leadsTo: 4 },
+        ],
+        rationale:
+          'clear나 detach 뒤에는 관리가 끊긴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'jpa',
+    question: '수정 메서드 없이 UPDATE가 나가는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '변경 감지는 무엇을 비교하는가?',
+        choices: [
+          { text: '관리 엔티티의 최초 상태와 현재 상태', correct: true },
+          { text: '데이터베이스의 현재 행과 객체', leadsTo: 0 },
+          { text: '이전 트랜잭션의 값과 현재 값', leadsTo: 0 },
+          { text: '같은 타입의 다른 인스턴스들', leadsTo: 1 },
+        ],
+        rationale:
+          'flush 때 달라진 속성이 있으면 UPDATE SQL을 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'SQL이 보였으면 반영된 것인가?',
+        choices: [
+          { text: '아니다. 롤백하면 변경은 사라진다', correct: true },
+          { text: '그렇다. flush가 곧 커밋이다', leadsTo: 0 },
+          { text: '그렇다. SQL 실행은 되돌릴 수 없다', leadsTo: 0 },
+          { text: '아니다. flush는 커밋 뒤에만 일어난다', leadsTo: 0 },
+        ],
+        rationale:
+          'flush는 커밋 직전이나 쿼리 실행 전에 일어날 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '벌크 UPDATE 뒤에 무엇을 해야 하는가?',
+        choices: [
+          { text: 'flush 후 clear하거나 다시 조회한다', correct: true },
+          { text: '아무것도 안 해도 된다', leadsTo: 2 },
+          { text: 'merge로 다시 붙인다', leadsTo: 1 },
+          { text: '트랜잭션을 다시 연다', leadsTo: 2 },
+        ],
+        rationale:
+          '벌크 UPDATE는 영속성 컨텍스트를 건너뛰어 관리 중인 객체가 낡는다.',
+      },
+    ],
+  },
 ]
