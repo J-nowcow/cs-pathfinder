@@ -9211,4 +9211,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'ios',
+    question: '앱이 백그라운드로 가면 무엇을 중단해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'active에서 inactive로 바뀌면 무엇을 멈추는가?',
+        choices: [
+          { text: '상호작용과 화면 갱신', correct: true },
+          { text: '모든 네트워크 요청', leadsTo: 1 },
+          { text: '저장소 기록', leadsTo: 2 },
+          { text: '아무것도 멈추지 않는다', leadsTo: 3 },
+        ],
+        rationale:
+          'background로 바뀌면 카메라와 타이머 같은 자원을 놓고 복구할 상태를 기록한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '종료 콜백에 저장을 맡겨도 되는가?',
+        choices: [
+          { text: '아니다. 백그라운드에서 프로세스가 예고 없이 종료될 수 있다', correct: true },
+          { text: '그렇다. 종료 전에 항상 불린다', leadsTo: 4 },
+          { text: '그렇다. 시스템이 저장 시간을 보장한다', leadsTo: 1 },
+          { text: '아니다. 대신 실행 중에는 저장하면 안 된다', leadsTo: 2 },
+        ],
+        rationale:
+          '중요한 변경 시점마다 내구성 있게 기록해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '백그라운드에서 계속 실행할 작업은 어떻게 다루는가?',
+        choices: [
+          { text: '목적에 맞는 백그라운드 API로 요청하고 허용 시간은 시스템이 정한다', correct: true },
+          { text: '스레드를 띄워 두면 계속 돈다', leadsTo: 1 },
+          { text: '예약해 두면 그 시각에 반드시 실행된다', leadsTo: 1 },
+          { text: '백그라운드에서는 아무 작업도 못 한다', leadsTo: 1 },
+        ],
+        rationale:
+          '예약 작업은 실행 시점과 호출 여부도 보장되지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'swift',
+    question: '자동 참조 계산인데 왜 메모리가 남는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '강한 참조 고리에서 무슨 일이 벌어지는가?',
+        choices: [
+          { text: '각 객체의 참조 수가 0이 되지 않는다', correct: true },
+          { text: '참조 수가 음수가 된다', leadsTo: 4 },
+          { text: '수집기가 고리를 따로 찾아 해제한다', leadsTo: 4 },
+          { text: '외부 소유자가 놓으면 함께 사라진다', leadsTo: 0 },
+        ],
+        rationale:
+          '외부 소유자가 놓아도 서로를 붙잡고 있어 남는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '순환이 걱정되면 weak를 넉넉히 붙이면 되는가?',
+        choices: [
+          { text: '아니다. 작업 중 객체가 사라지는 다른 버그를 만들 수 있다', correct: true },
+          { text: '그렇다. weak는 부작용이 없다', leadsTo: 0 },
+          { text: '그렇다. unowned보다 항상 안전하다', leadsTo: 0 },
+          { text: '아니다. 대신 unowned를 넉넉히 붙인다', leadsTo: 0 },
+        ],
+        rationale:
+          'unowned는 대상이 먼저 사라지지 않는다는 수명 보장이 있을 때만 쓴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '클로저가 고리를 만드는 조건은?',
+        choices: [
+          { text: 'self를 강하게 캡처하고 self가 그 클로저를 보관할 때', correct: true },
+          { text: '클로저를 쓰기만 하면 언제나', leadsTo: 1 },
+          { text: '비동기로 실행될 때만', leadsTo: 3 },
+          { text: '캡처 목록을 쓸 때만', leadsTo: 1 },
+        ],
+        rationale:
+          '캡처 목록은 수명과 비동기 실행 시점을 따져 정한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'swiftui',
+    question: '상태 소유자를 잘못 두면 어떤 버그가 생기는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '하위 뷰가 같은 값을 편집해야 하면 무엇을 넘기는가?',
+        choices: [
+          { text: 'Binding', correct: true },
+          { text: '값의 복사본', leadsTo: 0 },
+          { text: '새 State', leadsTo: 0 },
+          { text: 'Environment 주입', leadsTo: 2 },
+        ],
+        rationale:
+          '작은 값은 가장 가까운 뷰가 State로 소유하고 변경 통로만 아래로 준다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ObservableObject 모델은 어디서든 ObservedObject로 받으면 되는가?',
+        choices: [
+          { text: '아니다. 뷰가 만들고 유지하는 모델은 StateObject를 쓴다', correct: true },
+          { text: '그렇다. 둘은 같은 것이다', leadsTo: 1 },
+          { text: '그렇다. ObservedObject가 더 안전하다', leadsTo: 1 },
+          { text: '아니다. 외부에서 받은 모델도 StateObject로 받는다', leadsTo: 1 },
+        ],
+        rationale:
+          '외부에서 받은 모델은 ObservedObject로 관찰해 소유와 관찰을 분리한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'Environment로 넓게 주입하는 대가는?',
+        choices: [
+          { text: '데이터 흐름과 테스트 의존성이 숨는다', correct: true },
+          { text: '갱신이 느려진다', leadsTo: 3 },
+          { text: '값이 복사되어 어긋난다', leadsTo: 0 },
+          { text: '대가가 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '편리하더라도 범위를 넓히면 무엇이 어디서 오는지 보이지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'mobile',
+    question: '오프라인 수정이 서버 값과 충돌하면 누가 이기는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '마지막 쓰기 승리의 대가는?',
+        choices: [
+          { text: '데이터 손실을 숨기기 쉽다', correct: true },
+          { text: '구현이 복잡하다', leadsTo: 2 },
+          { text: '충돌을 사용자에게 드러낸다', leadsTo: 2 },
+          { text: '오프라인 읽기가 막힌다', leadsTo: 0 },
+        ],
+        rationale:
+          '버전 기반 병합은 복잡한 대신 충돌을 드러낸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 가지 충돌 정책을 앱 전체에 적용하면 되는가?',
+        choices: [
+          { text: '아니다. 데이터 의미와 되돌릴 수 있는지를 기준으로 정한다', correct: true },
+          { text: '그렇다. 일관성이 가장 중요하다', leadsTo: 2 },
+          { text: '그렇다. 서버 값을 항상 따르면 된다', leadsTo: 2 },
+          { text: '아니다. 항상 사용자에게 물어야 한다', leadsTo: 3 },
+        ],
+        rationale:
+          '장바구니는 항목 병합이 가능하지만 결제 상태는 서버 권위가 필요하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '재전송에 멱등 키와 서버 버전을 함께 쓰는 이유는?',
+        choices: [
+          { text: '성공 응답을 잃어도 중복 반영을 막고 오래된 덮어쓰기를 거절한다', correct: true },
+          { text: '전송 속도를 높이려고', leadsTo: 1 },
+          { text: '순서를 보장하려고', leadsTo: 1 },
+          { text: '오프라인 읽기를 위해', leadsTo: 0 },
+        ],
+        rationale:
+          '변경은 outbox에 기록해 연결이 돌아왔을 때 순서대로 보낸다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'mobile',
+    question: '외부 링크를 곧바로 화면에 열어도 되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '링크를 받은 뒤 화면에 넘기기 전 순서는?',
+        choices: [
+          { text: '스킴과 호스트를 확인하고 세션과 권한을 본 뒤 검증된 인자만 넘긴다', correct: true },
+          { text: '화면을 먼저 열고 그 안에서 권한을 본다', leadsTo: 4 },
+          { text: '세션만 확인하면 충분하다', leadsTo: 4 },
+          { text: '스킴만 맞으면 바로 넘긴다', leadsTo: 4 },
+        ],
+        rationale:
+          '허용 목록으로 스킴과 호스트와 경로를 검증한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '커스텀 스킴을 쓰면 우리 앱만 그 링크를 받는가?',
+        choices: [
+          { text: '아니다. 다른 앱이 선점할 수 있다', correct: true },
+          { text: '그렇다. 스킴은 앱마다 고유하다', leadsTo: 3 },
+          { text: '그렇다. 스토어가 중복을 막는다', leadsTo: 3 },
+          { text: '아니다. 대신 사용자가 매번 고른다', leadsTo: 0 },
+        ],
+        rationale:
+          'Android App Links와 iOS Universal Links는 도메인 소유를 검증해 탈취 위험을 줄인다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '링크가 다른 웹 주소로 다시 보내는 값을 담고 있으면?',
+        choices: [
+          { text: '대상 도메인을 제한해 오픈 리다이렉트를 막는다', correct: true },
+          { text: '인코딩만 풀어 그대로 넘긴다', leadsTo: 4 },
+          { text: '로그인 상태만 확인하면 된다', leadsTo: 1 },
+          { text: '중복 파라미터를 그대로 둔다', leadsTo: 4 },
+        ],
+        rationale:
+          '인코딩과 중복 파라미터를 정규화한 뒤 검증한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '설치 크기를 줄이면 실행 시 무엇을 치르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'App Bundle은 무엇인가?',
+        choices: [
+          { text: '게시 형식이며 스토어가 기기에 맞는 분할 APK를 만들어 전달한다', correct: true },
+          { text: '기기에 그대로 설치되는 파일이다', leadsTo: 0 },
+          { text: '기능 모듈을 내려받는 방식이다', leadsTo: 3 },
+          { text: '자원을 압축하는 방식이다', leadsTo: 2 },
+        ],
+        rationale:
+          '사용자가 모든 언어와 밀도 자원을 받을 필요가 없어진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '기능을 주문형으로 많이 빼면 체감이 좋아지는가?',
+        choices: [
+          { text: '아니다. 첫 여정에 필요한 기능을 빼면 오히려 시작이 느려진다', correct: true },
+          { text: '그렇다. 설치가 작을수록 항상 빠르다', leadsTo: 3 },
+          { text: '그렇다. 다운로드는 배경에서 끝난다', leadsTo: 1 },
+          { text: '아니다. 주문형은 쓸 일이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '초기 설치는 작아지지만 실행 중 다운로드 지연과 실패를 감수한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '기능 모듈을 쓰면 늘어나는 것은?',
+        choices: [
+          { text: '기능 부재 상태와 네트워크 오류를 처리하는 코드', correct: true },
+          { text: '기본 모듈의 크기', leadsTo: 3 },
+          { text: '자원 중복', leadsTo: 2 },
+          { text: '아무것도 늘지 않는다', leadsTo: 1 },
+        ],
+        rationale:
+          '다운로드 진행과 취소와 재시도 화면도 준비해야 한다.',
+      },
+    ],
+  },
 ]
