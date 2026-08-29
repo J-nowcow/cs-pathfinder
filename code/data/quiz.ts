@@ -10975,4 +10975,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '해시 테이블의 평균 O(1)이 무너지는 경우는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '평균 O(1)은 무엇을 전제로 하는가?',
+        choices: [
+          { text: '해시가 고르게 흩어진다는 것', correct: true },
+          { text: '키의 개수가 적다는 것', leadsTo: 1 },
+          { text: '버킷이 무한하다는 것', leadsTo: 1 },
+          { text: '삭제가 없다는 것', leadsTo: 0 },
+        ],
+        rationale:
+          '전제가 깨지면 최악 O(n)으로 간다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '분할 상환하면 평균이 O(1)이니 지연도 안정적인가?',
+        choices: [
+          { text: '아니다. 리사이즈 한 번이 튀는 지점으로 나타난다', correct: true },
+          { text: '그렇다. 평균이 곧 지연 보장이다', leadsTo: 2 },
+          { text: '그렇다. 리사이즈는 비용이 없다', leadsTo: 2 },
+          { text: '아니다. 대신 평균도 O(n)이다', leadsTo: 1 },
+        ],
+        rationale:
+          '리사이즈는 모든 키를 다시 배치하므로 그 한 번이 무겁다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '키가 몰리는 이유 중 방어가 필요한 쪽은?',
+        choices: [
+          { text: '누군가 일부러 겹치게 만드는 해시 충돌 공격', correct: true },
+          { text: '버킷 수가 2의 거듭제곱인 것', leadsTo: 1 },
+          { text: '삭제가 잦은 것', leadsTo: 2 },
+          { text: '키가 문자열인 것', leadsTo: 3 },
+        ],
+        rationale:
+          '사용자 입력이 그대로 키가 되는 자리에서는 실제 공격 벡터가 된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '정렬의 안정성이 실무에서 문제가 되는 때는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '안정 정렬이 보장하는 것은?',
+        choices: [
+          { text: '키가 같은 원소들의 원래 순서', correct: true },
+          { text: '최악 시간 복잡도', leadsTo: 0 },
+          { text: '추가 메모리를 안 쓰는 것', leadsTo: 1 },
+          { text: '정렬 결과가 유일한 것', leadsTo: 2 },
+        ],
+        rationale:
+          '이름순 목록을 부서순으로 다시 정렬해도 부서 안이 이름순으로 남는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 언어 안에서는 정렬 안정성이 늘 같은가?',
+        choices: [
+          { text: '아니다. 자바는 객체 배열만 안정적이고 원시 타입은 아니다', correct: true },
+          { text: '그렇다. 언어마다 하나로 정해져 있다', leadsTo: 3 },
+          { text: '그렇다. 모든 정렬이 안정적이다', leadsTo: 1 },
+          { text: '아니다. 대신 원시 타입만 안정적이다', leadsTo: 3 },
+        ],
+        rationale:
+          '값이 같은 int 둘은 구별할 방법이 없어 순서가 바뀌어도 관측되지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '안정성이 필요한지 어떻게 판단하는가?',
+        choices: [
+          { text: '같은 키를 가진 두 원소를 사용자가 구별할 수 있는지 본다', correct: true },
+          { text: '데이터 개수가 많은지 본다', leadsTo: 4 },
+          { text: '정렬 기준이 몇 개인지만 본다', leadsTo: 2 },
+          { text: '항상 필요하다', leadsTo: 3 },
+        ],
+        rationale:
+          '비교자를 합치면 안정 정렬에 기대지 않아도 된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '이진 탐색 트리가 한쪽으로 치우치면 무엇이 문제인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '치우친 트리는 무엇이 되는가?',
+        choices: [
+          { text: '연결 리스트', correct: true },
+          { text: '완전 이진 트리', leadsTo: 0 },
+          { text: '해시 테이블', leadsTo: 2 },
+          { text: 'B-트리', leadsTo: 3 },
+        ],
+        rationale:
+          '탐색이 절반씩 줄어든다는 전제가 깨져 O(log n)이 O(n)으로 내려앉는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '단건 조회가 빠른 해시로 다 바꾸면 되는가?',
+        choices: [
+          { text: '아니다. 범위 질의와 정렬 순회를 못 한다', correct: true },
+          { text: '그렇다. 해시가 모든 면에서 낫다', leadsTo: 2 },
+          { text: '그렇다. 정렬도 해시로 된다', leadsTo: 2 },
+          { text: '아니다. 대신 해시가 더 느리다', leadsTo: 2 },
+        ],
+        rationale:
+          '"20에서 30 사이"를 물어야 하면 트리 쪽이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '데이터베이스 인덱스가 B-트리를 쓰는 이유는?',
+        choices: [
+          { text: '디스크가 블록 단위로 읽어 한 노드에 키를 많이 담아 높이를 낮추는 편이 유리하다', correct: true },
+          { text: '이진 트리보다 회전이 쉬워서', leadsTo: 0 },
+          { text: '균형을 안 맞춰도 돼서', leadsTo: 4 },
+          { text: '범위 질의를 못 해서', leadsTo: 2 },
+        ],
+        rationale:
+          '스스로 균형을 잡는 트리는 회전 비용을 치르고 최악을 O(log n)으로 묶는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '연결 리스트가 배열보다 항상 삽입이 빠른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '연결 리스트 삽입이 O(1)인 조건은?',
+        choices: [
+          { text: '넣을 자리의 노드를 이미 쥐고 있을 때', correct: true },
+          { text: '가운데에 넣을 때', leadsTo: 0 },
+          { text: '원소가 적을 때', leadsTo: 1 },
+          { text: '언제나', leadsTo: 2 },
+        ],
+        rationale:
+          '자리를 찾아가는 것부터 세면 O(N)이라 배열과 다를 것이 없다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '배열은 탐색이 O(1)이니 삽입도 빠른가?',
+        choices: [
+          { text: '아니다. 뒤의 원소를 한 칸씩 미는 쉬프트 비용으로 O(N)이다', correct: true },
+          { text: '그렇다. 인덱스로 바로 넣는다', leadsTo: 2 },
+          { text: '그렇다. 삽입도 O(1)이다', leadsTo: 2 },
+          { text: '아니다. 대신 탐색도 O(N)이다', leadsTo: 2 },
+        ],
+        rationale:
+          '데이터가 무작위로 위치할 때는 두 자료구조 모두 한계가 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '큐를 연결 리스트로 구현하는 이유는?',
+        choices: [
+          { text: '양 끝의 삽입과 삭제에서 요소를 옮기지 않는다', correct: true },
+          { text: '탐색이 빨라서', leadsTo: 2 },
+          { text: '메모리를 덜 써서', leadsTo: 1 },
+          { text: '캐시 지역성이 좋아서', leadsTo: 2 },
+        ],
+        rationale:
+          '노드를 이미 쥐고 있는 자리라 쉬프트가 없다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '스택과 큐는 각각 어떤 상황에서 선택해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '너비 우선 탐색에 쓰는 자료구조는?',
+        choices: [
+          { text: '큐', correct: true },
+          { text: '스택', leadsTo: 3 },
+          { text: '우선순위 큐', leadsTo: 2 },
+          { text: '연결 리스트만', leadsTo: 0 },
+        ],
+        rationale:
+          '스택은 LIFO라 깊이 우선 탐색에, 큐는 FIFO라 너비 우선 탐색에 맞는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '어느 쪽을 쓸지는 입출력 순서만 보면 되는가?',
+        choices: [
+          { text: '아니다. 구현에 쓰는 자료구조의 비용도 따져야 한다', correct: true },
+          { text: '그렇다. 순서만 맞으면 성능은 같다', leadsTo: 0 },
+          { text: '그렇다. 구현은 언어가 최적화한다', leadsTo: 1 },
+          { text: '아니다. 대신 둘은 서로 대체 가능하다', leadsTo: 3 },
+        ],
+        rationale:
+          '큐는 꺼낼 때 생기는 배열 내 요소 이동 비용을 줄일 방법을 고민해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '직전 상태를 기억해야 하는 곳은?',
+        choices: [
+          { text: '함수 호출이나 실행 취소', correct: true },
+          { text: '이메일 발송 대기열', leadsTo: 0 },
+          { text: '프린터 인쇄 작업', leadsTo: 0 },
+          { text: '비동기 요청 완충', leadsTo: 0 },
+        ],
+        rationale:
+          '큐는 유입된 요청을 순서대로 소화하는 완충 지대에 알맞다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '해시 충돌 발생 시 해결 방법은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '체이닝과 개방 주소법의 저장 방식 차이는?',
+        choices: [
+          { text: '체이닝은 외부 리스트를 엮고 개방 주소법은 내부 빈 슬롯을 찾는다', correct: true },
+          { text: '둘 다 외부 리스트를 쓴다', leadsTo: 4 },
+          { text: '둘 다 내부 슬롯만 쓴다', leadsTo: 4 },
+          { text: '체이닝이 내부 슬롯을 쓴다', leadsTo: 2 },
+        ],
+        rationale:
+          '체이닝은 추가 메모리가 들고 개방 주소법은 미리 할당된 공간을 쓴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '자바 8은 버킷이 길어지면 바로 트리로 바꾸는가?',
+        choices: [
+          { text: '아니다. 표 용량이 64 이상일 때만 바꾸고 아니면 표를 먼저 키운다', correct: true },
+          { text: '그렇다. 임계치만 넘으면 바꾼다', leadsTo: 1 },
+          { text: '그렇다. 용량과 무관하다', leadsTo: 1 },
+          { text: '아니다. 트리로는 절대 바꾸지 않는다', leadsTo: 3 },
+        ],
+        rationale:
+          '용량이 작으면 트리 대신 표를 키우는 편이 낫다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '개방 주소법에서 선형 탐색의 약점은?',
+        choices: [
+          { text: '인접한 빈칸을 찾아 뭉침이 심해진다', correct: true },
+          { text: '추가 메모리를 많이 쓴다', leadsTo: 0 },
+          { text: '삭제가 불가능하다', leadsTo: 2 },
+          { text: '테이블이 꽉 차지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '데이터가 뭉치는 클러스터링 현상이 효율을 떨어뜨린다.',
+      },
+    ],
+  },
 ]
