@@ -9715,4 +9715,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'spring',
+    question: '@Transactional이 걸리지 않는 경우는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '트랜잭션을 여는 주체는?',
+        choices: [
+          { text: '프록시', correct: true },
+          { text: '애너테이션이 붙은 코드 자체', leadsTo: 1 },
+          { text: '실제 객체의 메서드 진입', leadsTo: 1 },
+          { text: '데이터베이스 드라이버', leadsTo: 3 },
+        ],
+        rationale:
+          '프록시를 통과하지 않으면 애초에 열릴 기회가 없다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '트랜잭션이 걸렸으면 예외가 나면 되돌아가는가?',
+        choices: [
+          { text: '아니다. 체크 예외를 던지면 그대로 커밋된다', correct: true },
+          { text: '그렇다. 모든 예외가 롤백을 부른다', leadsTo: 2 },
+          { text: '그렇다. 예외 종류는 상관없다', leadsTo: 2 },
+          { text: '아니다. 롤백은 수동으로만 가능하다', leadsTo: 2 },
+        ],
+        rationale:
+          '기본 롤백 대상은 unchecked 예외라 되돌리려면 rollbackFor를 명시한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'private 메서드에 안 걸리는 이유는?',
+        choices: [
+          { text: 'CGLIB 프록시는 상속으로 만들어지는데 private은 재정의할 수 없다', correct: true },
+          { text: 'private은 애너테이션을 붙일 수 없어서', leadsTo: 1 },
+          { text: '컨테이너가 private 메서드를 못 찾아서', leadsTo: 1 },
+          { text: '보안 정책 때문에', leadsTo: 1 },
+        ],
+        rationale:
+          'final 메서드와 final 클래스도 같은 이유로 가로채지 못한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'spring',
+    question: 'JPA에서 N+1 쿼리는 왜 생기고 무엇으로 막는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'N+1에서 1과 N은 각각 무엇인가?',
+        choices: [
+          { text: '목록을 가져오는 질의 하나와 원소마다 연관을 채우는 질의', correct: true },
+          { text: '연관을 읽는 질의 하나와 목록 질의 여러 개', leadsTo: 0 },
+          { text: '조인 질의 하나와 정렬 질의 여러 개', leadsTo: 0 },
+          { text: '읽기 질의 하나와 쓰기 질의 여러 개', leadsTo: 0 },
+        ],
+        rationale:
+          '연관을 지연 로딩으로 두고 목록을 순회할 때 생긴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '즉시 로딩으로 바꾸면 해결되는가?',
+        choices: [
+          { text: '아니다. 연관이 필요 없는 조회에도 매번 조인이 붙는다', correct: true },
+          { text: '그렇다. 질의가 하나로 줄어든다', leadsTo: 0 },
+          { text: '그렇다. 매핑에서 정하는 것이 맞다', leadsTo: 0 },
+          { text: '아니다. 오히려 질의 수가 더 늘어난다', leadsTo: 2 },
+        ],
+        rationale:
+          '문제를 옮긴 것이지 푼 것이 아니다. 어디를 함께 읽을지는 화면이 결정한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '페이징이 함께 필요한 화면에서는 무엇을 쓰는가?',
+        choices: [
+          { text: 'batch size로 IN 절에 묶어 몇 번에 나눠 읽는다', correct: true },
+          { text: '컬렉션 fetch join', leadsTo: 1 },
+          { text: '즉시 로딩', leadsTo: 2 },
+          { text: '@EntityGraph', leadsTo: 0 },
+        ],
+        rationale:
+          '컬렉션을 조인하면 행이 곱해져 페이징을 데이터베이스에 맡길 수 없다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'spring',
+    question: '스프링 빈이 싱글톤인 것이 언제 문제가 되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '빈의 필드에 값을 두면 공유 범위는?',
+        choices: [
+          { text: '애플리케이션 전체', correct: true },
+          { text: '호출 하나', leadsTo: 3 },
+          { text: '스레드 하나', leadsTo: 0 },
+          { text: '요청 하나', leadsTo: 4 },
+        ],
+        rationale:
+          '인스턴스가 하나뿐이라 한 요청이 써 넣은 값을 다른 요청이 읽는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '테스트가 통과했으면 안전한가?',
+        choices: [
+          { text: '아니다. 요청이 하나씩 들어오면 안 드러난다', correct: true },
+          { text: '그렇다. 통과했으면 동시성도 검증된 것이다', leadsTo: 3 },
+          { text: '그렇다. 스프링이 필드를 격리해 준다', leadsTo: 4 },
+          { text: '아니다. 대신 필드를 final로 두면 된다', leadsTo: 3 },
+        ],
+        rationale:
+          '동시 접속이 생기는 순간 남의 데이터가 보인다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '왜 싱글톤이 기본인가?',
+        choices: [
+          { text: '대부분의 빈이 상태 없는 서비스라 하나면 충분하다', correct: true },
+          { text: '스프링이 다른 스코프를 지원하지 않아서', leadsTo: 1 },
+          { text: '동시성을 자동으로 처리해 주기 때문에', leadsTo: 3 },
+          { text: '요청 스코프가 더 느려서', leadsTo: 4 },
+        ],
+        rationale:
+          '요청마다 만들면 생성 비용과 GC 부담이 그대로 늘어난다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'spring',
+    question: '생성자 주입이 기본 선택인 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '생성자 주입이 필드 주입과 다른 점은?',
+        choices: [
+          { text: '필드를 final로 둘 수 있어 불변으로 만든다', correct: true },
+          { text: '주입 오류를 늦게 잡는다', leadsTo: 1 },
+          { text: '컨테이너 없이는 쓸 수 없다', leadsTo: 2 },
+          { text: '선택 의존성만 표현할 수 있다', leadsTo: 0 },
+        ],
+        rationale:
+          '필수 의존성을 생성자 서명이 강제하고 테스트에서 직접 전달할 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '순환 참조가 나면 주입 방식을 바꿔 피하면 되는가?',
+        choices: [
+          { text: '아니다. 시작 단계에서 드러난 설계 신호로 본다', correct: true },
+          { text: '그렇다. 필드 주입으로 바꾸면 해결된다', leadsTo: 1 },
+          { text: '그렇다. 스프링 설정으로 끌 수 있다', leadsTo: 1 },
+          { text: '아니다. 순환 참조는 원래 정상이다', leadsTo: 1 },
+        ],
+        rationale:
+          '생성자 주입은 순환 참조를 시작 단계에서 드러낸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '생성자 매개변수가 지나치게 많으면?',
+        choices: [
+          { text: '클래스가 너무 많은 책임을 가진 것은 아닌지 먼저 본다', correct: true },
+          { text: '필드 주입으로 바꾼다', leadsTo: 0 },
+          { text: '@Autowired를 붙여 해결한다', leadsTo: 4 },
+          { text: 'ObjectProvider로 감싼다', leadsTo: 3 },
+        ],
+        rationale:
+          '주입 문법보다 설계를 먼저 의심한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'spring',
+    question: '빈 초기화 로직은 어느 시점에 실행해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '생성자에서 초기화하면 무엇이 보장되지 않는가?',
+        choices: [
+          { text: '모든 주입과 컨테이너 후처리가 끝났다는 것', correct: true },
+          { text: '인스턴스가 만들어졌다는 것', leadsTo: 3 },
+          { text: '클래스가 로드됐다는 것', leadsTo: 0 },
+          { text: '설정 파일이 읽혔다는 것', leadsTo: 3 },
+        ],
+        rationale:
+          '의존성 주입이 끝난 뒤 초기화 콜백에서 실행해야 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '초기화 콜백은 세 방식 중 아무거나 골라도 같은가?',
+        choices: [
+          { text: '순서가 정해져 있고 스프링 인터페이스는 결합도가 높다', correct: true },
+          { text: '그렇다. 완전히 동일하다', leadsTo: 0 },
+          { text: '그렇다. 호출 순서도 무작위다', leadsTo: 0 },
+          { text: '아니다. 하나만 쓸 수 있다', leadsTo: 3 },
+        ],
+        rationale:
+          '@PostConstruct, InitializingBean, initMethod 순서로 호출되며 애너테이션 쪽이 덜 결합된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'prototype 빈의 소멸 콜백은 누가 부르는가?',
+        choices: [
+          { text: '호출자가 직접 정리해야 한다', correct: true },
+          { text: '컨테이너가 종료 시 부른다', leadsTo: 2 },
+          { text: '가비지 컬렉터가 부른다', leadsTo: 2 },
+          { text: '@PreDestroy가 자동으로 처리한다', leadsTo: 2 },
+        ],
+        rationale:
+          '컨테이너가 생성 뒤 prototype 빈을 추적하지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'spring',
+    question: '내부 메서드 호출에 부가기능이 빠지는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '어드바이스가 실행되려면 무엇이 있어야 하는가?',
+        choices: [
+          { text: '프록시가 호출을 가로채야 한다', correct: true },
+          { text: '애너테이션이 붙어 있으면 된다', leadsTo: 2 },
+          { text: '메서드가 공개돼 있으면 된다', leadsTo: 2 },
+          { text: '대상 객체가 빈이면 된다', leadsTo: 2 },
+        ],
+        rationale:
+          '내부 호출은 프록시를 우회하므로 어드바이스가 실행되지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '클래스 기반 프록시면 무엇이든 가로챌 수 있는가?',
+        choices: [
+          { text: '아니다. 상속을 쓰므로 final 클래스와 final 메서드는 못 가로챈다', correct: true },
+          { text: '그렇다. 인터페이스가 없어도 전부 가능하다', leadsTo: 1 },
+          { text: '그렇다. 상속과 무관하게 동작한다', leadsTo: 1 },
+          { text: '아니다. 공개 메서드도 못 가로챈다', leadsTo: 0 },
+        ],
+        rationale:
+          'JDK 동적 프록시는 인터페이스를 바탕으로 만들어진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가장 명확한 해법은?',
+        choices: [
+          { text: '적용 경계를 별도 빈으로 분리해 외부 호출로 만든다', correct: true },
+          { text: '프록시를 노출해 자기 자신을 통해 부른다', leadsTo: 0 },
+          { text: '자기 자신을 주입받는다', leadsTo: 0 },
+          { text: '메서드를 private으로 바꾼다', leadsTo: 1 },
+        ],
+        rationale:
+          '프록시 노출이나 자기 자신 주입은 결합도를 높여 우선 선택이 아니다.',
+      },
+    ],
+  },
 ]
