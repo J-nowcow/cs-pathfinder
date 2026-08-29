@@ -2299,12 +2299,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '다른 로더가 만든 같은 이름의 객체는?',
         choices: [
           { text: '이름이 같아도 캐스팅할 수 없다', correct: true },
-          { text: '이름이 같으니 캐스팅된다', leadsTo: 0 },
-          { text: '리플렉션으로는 캐스팅된다', leadsTo: 1 },
-          { text: '부모 로더를 거치면 캐스팅된다', leadsTo: 0 },
+          { text: '이름이 같으니 그대로 캐스팅된다', leadsTo: 0 },
+          { text: '리플렉션을 거치면 캐스팅된다', leadsTo: 0 },
+          { text: '부모 로더를 거쳐 부르면 캐스팅된다', leadsTo: 3 },
         ],
         rationale:
-          '부모 우선 위임은 이미 로드된 핵심 클래스의 중복 정의를 막는다. 플러그인과 서버는 격리를 위해 이 순서를 일부러 뒤집기도 한다.',
+          '런타임 타입이 이름과 정의 로더의 조합이라 로더가 다르면 다른 타입이다.',
       },
       {
         kind: 'boundary',
@@ -4092,13 +4092,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '두 모드를 가르는 것은?',
         choices: [
-          { text: '실행 파일 형식', leadsTo: 0 },
-          { text: '프로세스 우선순위', leadsTo: 3 },
-          { text: '메모리 영역 크기', leadsTo: 1 },
+          { text: '프로세스마다 정해진 우선순위', leadsTo: 0 },
+          { text: '실행 파일의 형식', leadsTo: 0 },
           { text: 'CPU의 모드 비트', correct: true },
+          { text: '할당받은 메모리 영역의 크기', leadsTo: 2 },
         ],
         rationale:
-          '사용자 모드는 제한된 권한, 커널 모드는 하드웨어 제어와 메모리 보호까지 맡는다.',
+          '이 비트로 접근 권한을 갈라 하드웨어 제어를 커널 쪽에만 남긴다.',
       },
       {
         kind: 'misconception',
