@@ -89,7 +89,12 @@ const THEME_BOOT = `(function(){try{var s=localStorage.getItem('csqt.theme');var
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    /*
+     * 아래 부트 스크립트가 하이드레이션 전에 data-theme을 박는다. 리액트가
+     * 서버에서 그린 <html>에는 그 속성이 없어 불일치로 잡히므로, 이 요소에
+     * 한해 경고를 끈다. 끄지 않으면 매 방문마다 복구 불가 오류가 남는다.
+     */
+    <html lang="ko" suppressHydrationWarning>
       <body className="font-sans antialiased">
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
         {children}
