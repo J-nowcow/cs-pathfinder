@@ -12,7 +12,7 @@ import { Board } from '@/components/Board'
 import { ResumeLine } from '@/components/ResumeLine'
 import { DailyLearningCard } from '@/components/DailyLearningCard'
 import { BACKEND_INTERVIEW_30 } from '../../../data/learning-tracks'
-import { resolveTrackQuestions } from '@/lib/learning/tracks'
+import { resolveTrackQuestions, type ResolvedTrackQuestion } from '@/lib/learning/tracks'
 
 // PGlite가 인메모리라 매 요청 실제 DB를 읽는다. 정적 생성 대상이 아니다.
 export const dynamic = 'force-dynamic'
@@ -84,7 +84,27 @@ export default async function HomePage() {
     countRoots(),
     listRootsByQuestions(BACKEND_INTERVIEW_30.questionKeys),
   ])
-  const trackQuestions = resolveTrackQuestions(BACKEND_INTERVIEW_30, trackRoots)
+  /*
+   * **트랙이 깨져도 홈은 산다.**
+   *
+   * `resolveTrackQuestions`는 깨진 참조를 일부러 던진다. 함수 계약으로는
+   * 옳고 시험이 그것을 고정한다 — 조용히 누락하면 30개짜리 트랙이 29개로
+   * 줄어든 것을 아무도 모른다.
+   *
+   * 다만 홈이 그대로 터지면 카드 하나 때문에 첫 화면이 통째로 500이 된다.
+   * 실제로 그랬다. 등가 접기가 트랙 질문 둘을 목록에서 가리자 홈 전체가
+   * 죽었다. 트랙 문장은 정적이고 말뭉치는 계속 움직이므로(중복 정리·이름
+   * 변경) 다시 어긋날 수 있다.
+   *
+   * 관련 질문 목록이 실패하면 조용히 안 그리는 것과 같은 판단이다. 트랙은
+   * 덤이고 질문이 본체다. 대신 서버 로그에는 남긴다.
+   */
+  let trackQuestions: ResolvedTrackQuestion[] = []
+  try {
+    trackQuestions = resolveTrackQuestions(BACKEND_INTERVIEW_30, trackRoots)
+  } catch (error) {
+    console.error('학습 트랙을 해석하지 못해 카드를 접는다.', error)
+  }
 
   // 주인공 카드가 이미 맡은 질문은 목록에서 뺀다. 같은 화면에 두 번 나오면
   // 목록이 아니라 중복으로 읽힌다
@@ -136,7 +156,10 @@ export default async function HomePage() {
       */}
       <ResumeLine />
 
-      <DailyLearningCard track={BACKEND_INTERVIEW_30} questions={trackQuestions} />
+      {/* 해석에 실패했으면 빈 카드 대신 아예 안 그린다 */}
+      {trackQuestions.length > 0 && (
+        <DailyLearningCard track={BACKEND_INTERVIEW_30} questions={trackQuestions} />
+      )}
 
       {feature ? (
         <div className="mt-12">

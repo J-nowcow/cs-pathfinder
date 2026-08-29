@@ -26,4 +26,18 @@ describe('취준생의 첫 화면', () => {
     expect(home).toContain('<DailyLearningCard')
     expect(home.indexOf('<DailyLearningCard')).toBeLessThan(home.indexOf('<TodayCard'))
   })
+
+  /**
+   * **카드 하나가 첫 화면을 죽이지 못하게 한다.**
+   *
+   * `resolveTrackQuestions`는 깨진 참조를 일부러 던지고 그 계약은 그대로
+   * 둔다. 다만 홈이 받아내야 한다 — 등가 접기가 트랙 질문 두 개를 목록에서
+   * 가리자 홈 전체가 500이 났다. 트랙 문장은 정적인데 말뭉치는 계속 움직여서
+   * 다시 어긋날 수 있다.
+   */
+  it('트랙 해석이 깨져도 홈 전체를 죽이지 않는다', () => {
+    expect(home).toMatch(/try\s*\{[\s\S]{0,200}resolveTrackQuestions[\s\S]{0,200}\}\s*catch/)
+    // 실패했으면 빈 카드 대신 아예 안 그린다
+    expect(home).toContain('trackQuestions.length > 0 &&')
+  })
 })
