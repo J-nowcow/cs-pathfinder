@@ -1615,12 +1615,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '주소를 알아도 다시 물어보는 이유는?',
         choices: [
           { text: '실제로 보낼 때 쓰는 주소가 따로 있어서', correct: true },
-          { text: '상대가 살아 있는지 확인하려고', leadsTo: 4 },
-          { text: '경로를 계산하려고', leadsTo: 1 },
-          { text: '속도를 재려고', leadsTo: 0 },
+          { text: '상대가 살아 있는지 확인하려고', leadsTo: 0 },
+          { text: '어느 경로로 갈지 계산하려고', leadsTo: 1 },
+          { text: '왕복에 걸리는 시간을 재려고', leadsTo: 0 },
         ],
         rationale:
-          '알아낸 것은 잠시 들고 있는다. 매번 물어보면 망이 소리로 가득 찬다.',
+          'IP는 알아도 보낼 때 쓰는 주소는 따로 있어서 소리쳐 물어본다.',
       },
       {
         kind: 'misconception',
@@ -10530,13 +10530,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '추상 클래스도 여러 개를 상속할 수 있는가?',
         choices: [
-          { text: '그렇다. 개수 제한이 없다', leadsTo: 1 },
+          { text: '그렇다. 상속받을 개수에 제한이 없다', leadsTo: 1 },
+          { text: '그렇다. 추상 메서드만 있으면 여러 개도 된다', leadsTo: 1 },
           { text: '아니다. 다중 상속은 인터페이스만 가능하다', correct: true },
-          { text: '그렇다. 추상 메서드만 있으면 가능하다', leadsTo: 0 },
           { text: '아니다. 인터페이스도 하나만 구현할 수 있다', leadsTo: 1 },
         ],
         rationale:
-          '서로 다른 계층의 클래스들이 공통 인터페이스로 소통하게 하는 것이 목적이다.',
+          '정체성을 물려받는 자리라 하나뿐이고, 행위 규격인 인터페이스는 여럿을 붙인다.',
       },
       {
         kind: 'boundary',
