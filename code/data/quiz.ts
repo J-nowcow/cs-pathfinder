@@ -14629,4 +14629,331 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '파티션 키는 무엇으로 고르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '파티션 키를 고를 때 서로 당기는 두 가지는?',
+        choices: [
+          { text: '저장 비용과 조회 속도의 균형', leadsTo: 2 },
+          { text: '고르게 흩어짐과 함께 읽기', correct: true },
+          { text: '순서 보장과 중복 제거', leadsTo: 4 },
+          { text: '파티션 수와 소비자 수', leadsTo: 2 },
+        ],
+        rationale:
+          '고르게 흩어지면서 함께 읽을 것이 같은 칸으로 가는 값을 고른다. 이 둘이 서로 당기므로 어느 쪽을 얼마나 내줄지가 판단이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '국가 코드를 파티션 키로 쓰면?',
+        choices: [
+          { text: '순서 보장이 사라진다', leadsTo: 4 },
+          { text: '파티션 수를 늘리면 그대로 해결된다', leadsTo: 2 },
+          { text: '키를 바꾸기 쉬워진다', leadsTo: 3 },
+          { text: '큰 나라 하나가 대부분을 받는다', correct: true },
+        ],
+        rationale:
+          '값의 종류가 적으면 파티션 수를 늘려도 몇 개만 일한다. 국가 코드로 나누면 큰 나라 하나가 대부분을 받는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '파티션 키를 나중에 바꾸면?',
+        choices: [
+          { text: '뒤의 순서 보장이 옛것과 끊긴다', correct: true },
+          { text: '흩어진 자리는 그대로 유지된다', leadsTo: 2 },
+          { text: '소비자 수만 다시 맞추면 그만이다', leadsTo: 1 },
+          { text: '값의 종류가 늘어난다', leadsTo: 0 },
+        ],
+        rationale:
+          '바꾸면 같은 값이 다른 칸으로 가므로 그 뒤의 순서 보장이 옛 데이터와 끊긴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '핫 파티션은 어떻게 알아채는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '합계만 보면 무엇을 놓치는가?',
+        choices: [
+          { text: '전체 처리량이 준 것', leadsTo: 0 },
+          { text: '소비자가 죽은 것', leadsTo: 1 },
+          { text: '한 칸만 막혀 있는 것', correct: true },
+          { text: '보관 기간이 넘은 것', leadsTo: 4 },
+        ],
+        rationale: '파티션별로 따로 봐야 드러난다. 합계만 보면 한 칸이 막혀 있어도 평균에 묻힌다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 칸만 밀린 양이 벌어질 때 함께 봐야 하는 것은?',
+        choices: [
+          { text: '그 칸에 들어온 양', correct: true },
+          { text: '전체 소비자 수', leadsTo: 4 },
+          { text: '파티션 개수', leadsTo: 4 },
+          { text: '보관 중인 메시지 크기', leadsTo: 0 },
+        ],
+        rationale:
+          '밀린 양만 보면 소비자 한 대가 느려진 것과 구별되지 않는다. 들어온 양까지 한쪽에 몰려 있어야 키 문제다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '몰리는 키를 쪼개면 무엇을 내놓는가?',
+        choices: [
+          { text: '전체 처리량', leadsTo: 4 },
+          { text: '파티션 수의 상한', leadsTo: 4 },
+          { text: '밀린 양을 재는 방법', leadsTo: 0 },
+          { text: '그 키 안의 순서 보장', correct: true },
+        ],
+        rationale: '뒤에 번호를 붙여 여러 칸으로 흩고, 대신 그 키 안의 순서 보장을 내놓는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '기능 플래그는 배포와 어떻게 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '기능 플래그가 떼어 놓는 두 가지는?',
+        choices: [
+          { text: '나가는 일과 켜지는 일', correct: true },
+          { text: '빌드와 시험', leadsTo: 1 },
+          { text: '개발과 운영', leadsTo: 0 },
+          { text: '읽기와 쓰기', leadsTo: 3 },
+        ],
+        rationale: '코드는 이미 서버에 있고 언제 누구에게 보일지는 나중에 정한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '켠 기능에 문제가 났을 때 되돌리는 방법은?',
+        choices: [
+          { text: '지난 이미지를 다시 내보낸다', leadsTo: 4 },
+          { text: '플래그를 지우고 다시 배포한다', leadsTo: 2 },
+          { text: '값 하나를 끈다', correct: true },
+          { text: '비율을 100%로 올린다', leadsTo: 3 },
+        ],
+        rationale: '배포를 되돌리려면 다시 내보내야 하지만 플래그는 값 하나를 끄면 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '플래그를 두면 무엇이 늘어나는가?',
+        choices: [
+          { text: '배포 횟수', leadsTo: 4 },
+          { text: '시험할 갈래', correct: true },
+          { text: '저장 공간', leadsTo: 0 },
+          { text: '되돌리는 시간', leadsTo: 4 },
+        ],
+        rationale: '켠 경우와 끈 경우가 둘 다 살아 있으므로 시험할 것과 읽을 코드가 배로 는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '추적이 성능에 주는 부담은?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '추적 비용이 대개 가장 크게 드는 자리는?',
+        choices: [
+          { text: 'span을 만들고 시각을 찍는 순간', leadsTo: 3 },
+          { text: '헤더를 이어 넘기는 순간', leadsTo: 4 },
+          { text: '수집기로 내보내는 순간', leadsTo: 1 },
+          { text: '보관 기간만큼 쌓이는 저장소', correct: true },
+        ],
+        rationale:
+          '앱 안에서 드는 비용은 대개 작다. 보관 기간만큼 쌓이는 저장소가 대개 제일 비싸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '앱 안에서 span 하나를 만드는 비용은?',
+        choices: [
+          { text: '요청당 밀리초 단위', leadsTo: 0 },
+          { text: '요청당 마이크로초 단위', correct: true },
+          { text: '측정이 안 될 만큼 없다', leadsTo: 3 },
+          { text: '서비스 수에 비례해 늘어난다', leadsTo: 1 },
+        ],
+        rationale:
+          'span 하나를 만들고 시각을 찍는 일이라 요청당 마이크로초 단위로 이야기한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '수집기가 밀리면 앱에서 벌어지는 일은?',
+        choices: [
+          { text: '추적이 저절로 꺼진다', leadsTo: 0 },
+          { text: '저장 비용만 늘어난다', leadsTo: 2 },
+          { text: '큐가 차고 설정대로 갈린다', correct: true },
+          { text: '표본 비율이 저절로 내려간다', leadsTo: 0 },
+        ],
+        rationale:
+          '수집기가 밀리면 큐가 차고, 그때 요청을 붙들지 span을 버릴지는 설정이 정한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '상속보다 합성을 권장하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '합성이 상속과 다른 점은?',
+        choices: [
+          { text: '겉모습까지 물려받는다', leadsTo: 4 },
+          { text: '무엇을 쓸지 밖에서 넣는다', correct: true },
+          { text: '컴파일할 때 굳는다', leadsTo: 0 },
+          { text: '부모의 구현을 재정의한다', leadsTo: 1 },
+        ],
+        rationale:
+          '상속은 부모의 구현까지 물려받아 굳는다. 합성은 무엇을 쓸지 바깥에서 넣으므로 나중에 바꿀 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '부모가 메서드를 부르는 방식만 바꾸면?',
+        choices: [
+          { text: '재정의한 자식의 동작이 달라진다', correct: true },
+          { text: '자식은 그대로라 영향을 안 받는다', leadsTo: 1 },
+          { text: '컴파일이 실패한다', leadsTo: 0 },
+          { text: '겉모습만 바뀐다', leadsTo: 4 },
+        ],
+        rationale:
+          '부모의 메서드가 다른 메서드를 부르는 방식만 바꿔도 그것을 재정의한 자식의 동작이 달라진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '상속이 맞는 자리는?',
+        choices: [
+          { text: '코드를 재사용하고 싶을 때', leadsTo: 0 },
+          { text: '시험할 때 가짜로 바꾸고 싶을 때', leadsTo: 3 },
+          { text: '돌면서 바꾸고 싶을 때', leadsTo: 3 },
+          { text: '대신 들어가도 되는 관계일 때', correct: true },
+        ],
+        rationale:
+          '하위 유형이 상위 유형 자리에 그대로 들어가도 되는 관계이고 그 관계가 안 변할 때다. 재사용이 목적이면 합성이 낫다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: 'CAS 연산의 ABA 문제는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'CAS가 보지 못하는 것은?',
+        choices: [
+          { text: '값이 바뀌었는지', leadsTo: 0 },
+          { text: '누가 바꿨는지', leadsTo: 1 },
+          { text: '그사이 오갔는지', correct: true },
+          { text: '몇 번 시도했는지', leadsTo: 3 },
+        ],
+        rationale:
+          '비교는 값만 보므로 A에서 B로 갔다가 다시 A로 돌아온 사이가 아무 일도 없던 것과 구별되지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ABA가 실제로 아프게 되는 때는?',
+        choices: [
+          { text: '카운터를 올릴 때', leadsTo: 2 },
+          { text: '값을 읽기만 할 때', leadsTo: 0 },
+          { text: '스레드가 둘뿐일 때', leadsTo: 3 },
+          { text: '값이 무언가를 가리킬 때', correct: true },
+        ],
+        rationale:
+          '숫자만 다루면 대개 문제가 안 된다. 같은 주소에 다른 것이 다시 놓이면 지워진 것을 붙들게 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '값과 세대 번호를 함께 비교하면?',
+        choices: [
+          { text: 'A로 돌아와도 번호가 달라진다', correct: true },
+          { text: '값 비교가 필요 없어진다', leadsTo: 0 },
+          { text: '락을 쓰는 것과 사실상 같아진다', leadsTo: 3 },
+          { text: '회수 시점을 미룰 수 있다', leadsTo: 4 },
+        ],
+        rationale: '값과 세대 번호를 함께 비교하면 A로 돌아와도 번호가 달라 실패한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '트랩과 인터럽트의 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 기준은?',
+        choices: [
+          { text: '무엇이 일으켰는가', correct: true },
+          { text: '얼마나 자주 오는가', leadsTo: 3 },
+          { text: '커널로 들어가는가', leadsTo: 0 },
+          { text: '처리 시간이 얼마인가', leadsTo: 4 },
+        ],
+        rationale:
+          '트랩은 지금 도는 명령이 스스로 일으키고, 인터럽트는 바깥 장치가 명령과 상관없이 끼어든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 입력으로 다시 돌리면 트랩은?',
+        choices: [
+          { text: '다른 명령에서 난다', leadsTo: 2 },
+          { text: '같은 명령에서 또 난다', correct: true },
+          { text: '두 번째부터는 안 난다', leadsTo: 3 },
+          { text: '인터럽트로 바뀐다', leadsTo: 0 },
+        ],
+        rationale: '트랩은 되풀이하면 같은 자리에서 또 난다. 같은 입력이면 같은 명령에서 늘 일어난다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '페이지 부재를 처리한 뒤 돌아가는 자리는?',
+        choices: [
+          { text: '프로그램의 처음', leadsTo: 1 },
+          { text: '다음 명령', leadsTo: 0 },
+          { text: '그 명령을 다시', correct: true },
+          { text: '커널의 시작 지점', leadsTo: 2 },
+        ],
+        rationale:
+          '의도해서 부른 것은 다음 명령으로 돌아가고, 페이지 부재처럼 고쳐서 다시 해야 하는 것은 그 명령을 다시 실행한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '트라이의 공간 복잡도 한계는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '트라이가 공간을 많이 쓰는 까닭은?',
+        choices: [
+          { text: '단어를 통째로 여러 번 저장해서', leadsTo: 2 },
+          { text: '균형을 맞추느라 노드가 늘어서', leadsTo: 1 },
+          { text: '해시 충돌을 대비해서', leadsTo: 2 },
+          { text: '노드마다 다음 글자 자리를 들어서', correct: true },
+        ],
+        rationale:
+          '문자 하나에 노드 하나를 쓰고, 노드마다 다음 글자로 가는 자리를 통째로 들고 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '자식을 배열로 들면 노드 하나의 크기는?',
+        choices: [
+          { text: '자식 수만큼', leadsTo: 1 },
+          { text: '단어 길이만큼', leadsTo: 0 },
+          { text: '글자 종류만큼', correct: true },
+          { text: '트리 깊이만큼', leadsTo: 1 },
+        ],
+        rationale: '자식을 배열로 들면 노드 하나가 글자 종류만큼의 칸을 갖는다. 대부분의 칸이 빈다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '자식을 해시나 정렬된 목록으로 바꾸면?',
+        choices: [
+          { text: '노드 수가 줄어든다', leadsTo: 1 },
+          { text: '한 글자 옮기는 비용이 오른다', correct: true },
+          { text: '앞부분으로 찾는 일을 못 하게 된다', leadsTo: 3 },
+          { text: '글자 종류에 상관없어진다', leadsTo: 4 },
+        ],
+        rationale: '쓰는 갈래만큼만 차지한다. 대신 한 글자 옮겨 가는 비용이 올라간다.',
+      },
+    ],
+  },
 ]

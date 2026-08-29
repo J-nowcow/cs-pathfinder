@@ -371,4 +371,12 @@ export const NODE_LEVELS: NodeLevel[] = [
   { question: '루트 권한 컨테이너는 왜 위험한가?', level: '심화' },
   { question: '컨테이너의 1번 프로세스는 무엇을 해야 하는가?', level: '깊이' },
   { question: '배포를 되돌리려면 무엇이 필요한가?', level: '심화' },
+  { question: '파티션 키는 무엇으로 고르는가?', level: '심화' },
+  { question: '핫 파티션은 어떻게 알아채는가?', level: '깊이' },
+  { question: '기능 플래그는 배포와 어떻게 다른가?', level: '심화' },
+  { question: '추적이 성능에 주는 부담은?', level: '심화' },
+  { question: '상속보다 합성을 권장하는 이유는 무엇인가?', level: '기초' },
+  { question: 'CAS 연산의 ABA 문제는 무엇인가?', level: '깊이' },
+  { question: '트랩과 인터럽트의 차이는 무엇인가?', level: '기초' },
+  { question: '트라이의 공간 복잡도 한계는 무엇인가?', level: '심화' },
 ]
