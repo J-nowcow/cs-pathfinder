@@ -11479,4 +11479,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '그리디 알고리즘과 동적 계획법은 무엇으로 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '그리디가 답을 놓치는 문제의 성격은?',
+        choices: [
+          { text: '지금 이득인 선택이 나중을 막는 문제', correct: true },
+          { text: '부분 문제가 겹치는 문제', leadsTo: 1 },
+          { text: '입력이 큰 문제', leadsTo: 3 },
+          { text: '경우의 수를 세는 문제', leadsTo: 4 },
+        ],
+        rationale:
+          '그리디는 매 순간 가장 이득인 것을 고르고 뒤를 돌아보지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '동적 계획법은 메모이제이션을 뜻하는가?',
+        choices: [
+          { text: '아니다. 아래에서 위로 표를 채우는 방식도 있다', correct: true },
+          { text: '그렇다. 저장 방식은 하나뿐이다', leadsTo: 2 },
+          { text: '그렇다. 재귀 없이는 쓸 수 없다', leadsTo: 2 },
+          { text: '아니다. 대신 저장을 하지 않는다', leadsTo: 1 },
+        ],
+        rationale:
+          '작은 문제의 답을 저장해 중복 계산을 없애는 것이 핵심이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '동적 계획법은 최적화 문제에만 쓰는가?',
+        choices: [
+          { text: '아니다. 경우의 수 세기에도 쓴다', correct: true },
+          { text: '그렇다. 최솟값과 최댓값 전용이다', leadsTo: 2 },
+          { text: '그렇다. 그리디로 못 푸는 최적화 전용이다', leadsTo: 4 },
+          { text: '아니다. 대신 정렬에만 쓴다', leadsTo: 2 },
+        ],
+        rationale:
+          '최적 부분 구조와 겹치는 부분 문제가 있는지를 먼저 확인하게 만든다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '배열보다 연결 리스트를 사용하는 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '연결 리스트가 삽입·삭제에서 아끼는 것은?',
+        choices: [
+          { text: '나머지 요소를 밀고 당기는 이동', correct: true },
+          { text: '메모리 할당', leadsTo: 2 },
+          { text: '탐색 시간', leadsTo: 3 },
+          { text: '캐시 적재', leadsTo: 2 },
+        ],
+        rationale:
+          '앞뒤 노드의 주소값만 바꿔주면 된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '탐색이 잦아도 리스트가 유리한가?',
+        choices: [
+          { text: '아니다. 캐시 지역성 때문에 단순 탐색은 배열이 대개 빠르다', correct: true },
+          { text: '그렇다. 노드를 따라가면 되니 비슷하다', leadsTo: 2 },
+          { text: '그렇다. 메모리를 덜 써서 더 빠르다', leadsTo: 2 },
+          { text: '아니다. 대신 배열은 탐색도 느리다', leadsTo: 3 },
+        ],
+        rationale:
+          '배열은 연속된 메모리 공간을 쓴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '무엇을 먼저 따져야 하는가?',
+        choices: [
+          { text: '데이터 변경 빈도', correct: true },
+          { text: '데이터의 총 개수', leadsTo: 3 },
+          { text: '자료형의 크기', leadsTo: 2 },
+          { text: '정렬 여부', leadsTo: 3 },
+        ],
+        rationale:
+          '추가와 삭제가 빈번하고 순차 탐색으로 무방할 때 리스트가 유리하다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '스택과 큐의 가장 큰 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '입출력 지점은 어떻게 다른가?',
+        choices: [
+          { text: '스택은 한쪽 끝에서만, 큐는 입구와 출구가 다르다', correct: true },
+          { text: '둘 다 한쪽 끝에서만 한다', leadsTo: 3 },
+          { text: '둘 다 입구와 출구가 다르다', leadsTo: 3 },
+          { text: '스택만 입구와 출구가 다르다', leadsTo: 3 },
+        ],
+        rationale:
+          '스택은 LIFO, 큐는 FIFO로 나가는 순서가 갈린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '둘 다 삽입·삭제가 O(1)이니 구현은 신경 안 써도 되는가?',
+        choices: [
+          { text: '아니다. 큐를 배열로 구현하면 앞을 지울 때 당기는 비용이 생긴다', correct: true },
+          { text: '그렇다. 어떤 구현이든 O(1)이다', leadsTo: 1 },
+          { text: '그렇다. 배열이 항상 유리하다', leadsTo: 1 },
+          { text: '아니다. 대신 스택 쪽에 문제가 생긴다', leadsTo: 0 },
+        ],
+        rationale:
+          '그래서 원형 큐를 주로 쓴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '프로세스 스케줄링에 맞는 쪽은?',
+        choices: [
+          { text: '큐', correct: true },
+          { text: '스택', leadsTo: 4 },
+          { text: '둘 다 같다', leadsTo: 2 },
+          { text: '어느 쪽도 아니다', leadsTo: 2 },
+        ],
+        rationale:
+          '스택은 되돌리기나 함수 호출 스택처럼 최근 상태를 기억할 때 쓴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '그래프 구현 시 인접 행렬과 인접 리스트 중 무엇을 선택하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '간선 삭제 비용은 어떻게 다른가?',
+        choices: [
+          { text: '행렬은 O(1)이고 리스트는 O(degree(V))다', correct: true },
+          { text: '둘 다 O(1)이다', leadsTo: 0 },
+          { text: '둘 다 O(V+E)다', leadsTo: 0 },
+          { text: '행렬이 더 느리다', leadsTo: 0 },
+        ],
+        rationale:
+          '간선 추가는 둘 다 O(1)이지만 삭제에서 갈린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '희소 그래프가 많으니 행렬은 쓸 일이 없는가?',
+        choices: [
+          { text: '아니다. 모든 정점이 서로 연결된 완전 그래프라면 행렬이 유리하다', correct: true },
+          { text: '그렇다. 리스트가 언제나 낫다', leadsTo: 0 },
+          { text: '그렇다. 행렬은 메모리만 쓴다', leadsTo: 0 },
+          { text: '아니다. 대신 행렬이 항상 낫다', leadsTo: 0 },
+        ],
+        rationale:
+          '희소 그래프에서는 O(V²) 대신 O(V+E)만큼의 공간을 쓴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '정점이 늘 때 행렬이 겪는 문제는?',
+        choices: [
+          { text: '메모리 낭비가 심해진다', correct: true },
+          { text: '연결 확인이 느려진다', leadsTo: 0 },
+          { text: '간선 추가가 불가능해진다', leadsTo: 1 },
+          { text: '가중치를 담을 수 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '공간 복잡도가 O(V^2)이기 때문이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '공유 자료구조를 Thread-Safe하게 만드는 방법은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'CAS는 어떤 조건에서 값을 바꾸는가?',
+        choices: [
+          { text: '현재 값과 예상 값이 일치할 때만', correct: true },
+          { text: '락을 획득했을 때만', leadsTo: 0 },
+          { text: '다른 스레드가 없을 때만', leadsTo: 2 },
+          { text: '언제나 바꾼다', leadsTo: 1 },
+        ],
+        rationale:
+          '락을 쓰지 않는 논블로킹 알고리즘으로 구현된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '논블로킹이면 비용이 없는가?',
+        choices: [
+          { text: '아니다. 스핀락으로 CPU 점유율이 올라간다', correct: true },
+          { text: '그렇다. 대기가 없으니 공짜다', leadsTo: 1 },
+          { text: '그렇다. 컨텍스트 스위칭이 없어 부담이 없다', leadsTo: 1 },
+          { text: '아니다. 대신 구현이 더 쉽다', leadsTo: 0 },
+        ],
+        rationale:
+          '동기화 블록은 대기 전환 비용을, CAS는 점유 비용을 치른다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '읽기가 많은 자리에서는 무엇을 쓰는가?',
+        choices: [
+          { text: '읽기-쓰기 락으로 나눠 읽기끼리는 막지 않게 한다', correct: true },
+          { text: '모든 접근을 synchronized로 감싼다', leadsTo: 0 },
+          { text: 'CAS로 읽기도 처리한다', leadsTo: 1 },
+          { text: '스레드마다 사본을 둔다', leadsTo: 4 },
+        ],
+        rationale:
+          '아예 안 바뀌게 하거나 스레드마다 따로 두는 길도 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '해시 충돌을 해결하는 두 방식의 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '저장 위치는 어떻게 갈리는가?',
+        choices: [
+          { text: '체이닝은 버킷 외부, 개방 주소법은 버킷 내부', correct: true },
+          { text: '둘 다 버킷 내부', leadsTo: 4 },
+          { text: '둘 다 버킷 외부', leadsTo: 4 },
+          { text: '체이닝이 버킷 내부', leadsTo: 4 },
+        ],
+        rationale:
+          '체이닝은 추가 할당이 필요하고 개방 주소법은 정해진 크기 안에서 쓴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '개방 주소법은 메모리 효율이 좋으니 항상 나은가?',
+        choices: [
+          { text: '아니다. 데이터가 찰수록 빈 칸을 찾는 비용이 커진다', correct: true },
+          { text: '그렇다. 추가 할당이 없어 유리하다', leadsTo: 1 },
+          { text: '그렇다. 클러스터링은 성능과 무관하다', leadsTo: 3 },
+          { text: '아니다. 대신 체이닝이 항상 낫다', leadsTo: 0 },
+        ],
+        rationale:
+          '특정 영역에 데이터가 뭉치면 성능이 급격히 떨어진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '데이터 양을 예측할 수 없다면?',
+        choices: [
+          { text: '체이닝', correct: true },
+          { text: '개방 주소법', leadsTo: 1 },
+          { text: '둘 다 불가능하다', leadsTo: 1 },
+          { text: '해시 테이블을 쓰지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '체이닝은 데이터가 계속 늘어나도 저장할 수 있다.',
+      },
+    ],
+  },
 ]
