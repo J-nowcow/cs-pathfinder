@@ -8959,4 +8959,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'android',
+    question: '전송 성공은 단말 수신까지 뜻하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '서버가 받은 메시지 ID는 무엇을 뜻하는가?',
+        choices: [
+          { text: 'FCM이 전달 요청을 접수했다는 것', correct: true },
+          { text: '단말이 메시지를 받았다는 것', leadsTo: 4 },
+          { text: '앱이 메시지를 처리했다는 것', leadsTo: 4 },
+          { text: '사용자가 알림을 봤다는 것', leadsTo: 4 },
+        ],
+        rationale:
+          '단말 도착이나 앱 처리를 보장하지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '접수된 메시지는 언젠가는 반드시 도착하는가?',
+        choices: [
+          { text: '아니다. TTL이 지나거나 같은 collapse key의 새 메시지가 오면 버려질 수 있다', correct: true },
+          { text: '그렇다. 연결이 열리면 밀린 것이 모두 온다', leadsTo: 0 },
+          { text: '그렇다. 재시도가 무한히 이어진다', leadsTo: 0 },
+          { text: '아니다. 오프라인이면 즉시 실패로 끝난다', leadsTo: 0 },
+        ],
+        rationale:
+          '오프라인과 Doze와 토큰 만료 때문에 지연되거나 유실될 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '업무상 전달 확인이 필요하면 어떻게 하는가?',
+        choices: [
+          { text: '앱이 처리 ACK를 보내고 서버는 이벤트 ID로 중복을 제거한다', correct: true },
+          { text: '메시지를 여러 번 보낸다', leadsTo: 4 },
+          { text: '높은 우선순위로 올린다', leadsTo: 2 },
+          { text: '접수 응답을 도착으로 기록한다', leadsTo: 4 },
+        ],
+        rationale:
+          '누락되면 원본 데이터를 다시 동기화한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '재사용 셀에 이전 데이터가 비치는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'onBindViewHolder에서 무엇을 해야 하는가?',
+        choices: [
+          { text: '새 항목의 모든 가변 속성을 덮어쓴다', correct: true },
+          { text: '달라진 속성만 골라 바꾼다', leadsTo: 3 },
+          { text: '이전 값을 지우고 비워 둔다', leadsTo: 0 },
+          { text: 'ViewHolder를 새로 만든다', leadsTo: 4 },
+        ],
+        rationale:
+          '덮어쓰지 않으면 이전 항목의 가시성이나 체크 상태와 이미지가 남는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'DiffUtil과 stable ID를 붙이면 재사용 문제가 해결되는가?',
+        choices: [
+          { text: '아니다. 올바른 바인딩을 대신하지 않는다', correct: true },
+          { text: '그렇다. 변경 계산이 상태까지 맞춰 준다', leadsTo: 0 },
+          { text: '그렇다. 재사용 자체를 막아 준다', leadsTo: 4 },
+          { text: '아니다. 오히려 바인딩을 건너뛰게 한다', leadsTo: 3 },
+        ],
+        rationale:
+          '잘못된 ID는 화면 상태를 엉뚱한 항목에 붙인다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '클릭 처리에서 위치를 어떻게 다루는가?',
+        choices: [
+          { text: '실행 시점의 bindingAdapterPosition을 확인하거나 항목을 콜백에 넘긴다', correct: true },
+          { text: '바인딩 때 받은 position을 저장해 쓴다', leadsTo: 2 },
+          { text: '리스너를 한 번만 붙이고 위치는 고정한다', leadsTo: 2 },
+          { text: '위치 대신 화면 좌표를 쓴다', leadsTo: 2 },
+        ],
+        rationale:
+          '바인딩 시점과 클릭 시점 사이에 목록이 바뀔 수 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '상태 변경은 어디까지 다시 실행되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '다시 실행되는 범위는 무엇으로 정해지는가?',
+        choices: [
+          { text: '변경된 State를 읽은 재시작 범위', correct: true },
+          { text: '화면 전체', leadsTo: 0 },
+          { text: '상태를 선언한 곳부터 아래 전부', leadsTo: 0 },
+          { text: '가장 바깥 컴포저블만', leadsTo: 0 },
+        ],
+        rationale:
+          '그 아래에서도 입력이 바뀌지 않은 스킵 가능 컴포저블은 건너뛴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '일반 mutable 객체의 필드를 바꾸면 화면이 갱신되는가?',
+        choices: [
+          { text: '아니다. Compose가 변화를 알지 못한다', correct: true },
+          { text: '그렇다. 값이 바뀌면 다시 그린다', leadsTo: 0 },
+          { text: '그렇다. 다음 프레임에 반영된다', leadsTo: 0 },
+          { text: '아니다. 대신 remember를 붙이면 된다', leadsTo: 1 },
+        ],
+        rationale:
+          'MutableState로 바꾸거나 Flow를 collectAsState 계열로 수집해야 갱신이 예약된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '부수 효과를 컴포저블 본문에 직접 두면 왜 안 되는가?',
+        choices: [
+          { text: '재실행이나 취소 순서가 깨진다', correct: true },
+          { text: '컴파일되지 않는다', leadsTo: 4 },
+          { text: '한 번도 실행되지 않는다', leadsTo: 4 },
+          { text: '성능만 조금 나빠진다', leadsTo: 4 },
+        ],
+        rationale:
+          'LaunchedEffect와 DisposableEffect에 둬야 한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'kotlin',
+    question: '부모 작업이 취소되면 자식은 어떻게 되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '부모는 언제 완료되는가?',
+        choices: [
+          { text: '모든 자식이 끝나야 완료된다', correct: true },
+          { text: '본문이 끝나면 즉시 완료된다', leadsTo: 3 },
+          { text: '첫 자식이 끝나면 완료된다', leadsTo: 0 },
+          { text: '자식과 무관하게 완료된다', leadsTo: 3 },
+        ],
+        rationale:
+          '이 규칙 덕분에 호출 범위를 벗어난 작업이 남지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'SupervisorJob을 쓰면 부모 취소도 자식에게 안 가는가?',
+        choices: [
+          { text: '아니다. 부모 취소는 여전히 모든 자식에게 전파된다', correct: true },
+          { text: '그렇다. 자식이 부모와 분리된다', leadsTo: 0 },
+          { text: '그렇다. 자식이 부모보다 오래 남는다', leadsTo: 3 },
+          { text: '아니다. 실패 격리도 되지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          'SupervisorJob이 격리하는 것은 자식 하나의 실패다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '취소와 실패는 어느 방향으로 흐르는가?',
+        choices: [
+          { text: '취소는 아래로, 실패는 위로 전파된다', correct: true },
+          { text: '둘 다 아래로만 간다', leadsTo: 0 },
+          { text: '둘 다 위로만 간다', leadsTo: 1 },
+          { text: '방향 없이 형제끼리만 퍼진다', leadsTo: 0 },
+        ],
+        rationale:
+          '일반 Job이면 자식의 실패가 형제 자식까지 함께 취소시킨다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '권한을 한 번 받으면 계속 쓸 수 있는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '매니페스트 선언만으로 붙는 권한은?',
+        choices: [
+          { text: '일반 권한', correct: true },
+          { text: '위험 권한', leadsTo: 2 },
+          { text: '다른 앱 위에 그리기 같은 특수 권한', leadsTo: 2 },
+          { text: '모든 권한', leadsTo: 0 },
+        ],
+        rationale:
+          '위험 권한은 실행 중에 묻고, 특수 권한은 설정 화면에서 따로 받는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 번 허용받았으면 다음부터는 확인 없이 써도 되는가?',
+        choices: [
+          { text: '아니다. 철회와 일회성 권한과 자동 초기화가 있다', correct: true },
+          { text: '그렇다. 앱을 지우기 전까지 유지된다', leadsTo: 1 },
+          { text: '그렇다. 시스템이 바뀌면 알려 준다', leadsTo: 0 },
+          { text: '아니다. 매번 다시 물어야 한다', leadsTo: 2 },
+        ],
+        rationale:
+          '보호 기능을 쓰기 직전에 상태를 다시 확인해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '권한 요청을 줄이는 가장 좋은 방법은?',
+        choices: [
+          { text: '사진 선택기처럼 권한 없이 목적을 달성하는 시스템 기능을 쓴다', correct: true },
+          { text: '앱 시작 때 필요한 권한을 한꺼번에 묻는다', leadsTo: 2 },
+          { text: '거부되면 기능을 막고 다시 묻는다', leadsTo: 2 },
+          { text: '설정 화면으로 바로 보낸다', leadsTo: 2 },
+        ],
+        rationale:
+          '권한 범위가 줄수록 개인정보 위험과 심사 부담도 줄어든다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '첫 화면을 빠르게 띄우려면 무엇을 미뤄야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '콜드 시작은 무엇부터 무엇까지 재는가?',
+        choices: [
+          { text: '시작 요청부터 첫 프레임까지이며 프로세스 초기화도 포함한다', correct: true },
+          { text: '화면이 만들어진 뒤부터 첫 프레임까지', leadsTo: 0 },
+          { text: '사용자가 조작할 수 있을 때까지', leadsTo: 2 },
+          { text: '모든 데이터가 로드될 때까지', leadsTo: 2 },
+        ],
+        rationale:
+          '웜 시작과 핫 시작은 재사용 자원이 달라 같은 수치로 섞으면 병목을 잘못 판단한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '초기화를 전부 지연시키면 시작이 빨라지는가?',
+        choices: [
+          { text: '아니다. 사용 직전에 몰리면 끊김이 생긴다', correct: true },
+          { text: '그렇다. 미룰수록 항상 이득이다', leadsTo: 0 },
+          { text: '그렇다. 백그라운드로 보내면 비용이 사라진다', leadsTo: 1 },
+          { text: '아니다. 지연 초기화는 효과가 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '기능 우선순위와 의존성을 정하고 실제 기기에서 첫 표시와 완전 표시를 함께 측정한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '시작 추적에서 무엇을 찾는가?',
+        choices: [
+          { text: '메인 스레드의 디스크 접근과 클래스 로딩', correct: true },
+          { text: '전체 메모리 사용량', leadsTo: 1 },
+          { text: '네트워크 응답 시간만', leadsTo: 0 },
+          { text: '화면 애니메이션 프레임', leadsTo: 2 },
+        ],
+        rationale:
+          'Baseline Profile은 자주 쓰는 코드의 해석과 컴파일 비용을 줄인다.',
+      },
+    ],
+  },
 ]
