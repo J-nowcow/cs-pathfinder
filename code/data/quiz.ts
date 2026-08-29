@@ -5383,4 +5383,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'os',
+    question: '프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '죽은 뒤에도 남는 것은?',
+        choices: [
+          { text: '부모에게 전할 종료 상태', correct: true },
+          { text: '쓰던 메모리', leadsTo: 0 },
+          { text: '열어 둔 파일 디스크립터', leadsTo: 3 },
+          { text: '실행 중이던 스레드', leadsTo: 0 },
+        ],
+        rationale:
+          '메모리 같은 자원은 커널이 거둬 가고, 종료 상태는 부모가 거둘 때까지 남는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '강제 종료로 죽이면 커널 자원도 안 회수되는가?',
+        choices: [
+          { text: '자원 회수는 그대로 일어난다. 못 도는 것은 정리 코드다', correct: true },
+          { text: '자원도 회수되지 않는다', leadsTo: 2 },
+          { text: '메모리만 남는다', leadsTo: 0 },
+          { text: '재부팅해야 회수된다', leadsTo: 2 },
+        ],
+        rationale:
+          '잡을 수 없는 신호로 죽이면 종료 훅과 임시 파일 정리는 못 돌지만, 커널 자원 회수는 그와 무관하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '혼자 쥐고 있던 포트와 잠금은?',
+        choices: [
+          { text: '죽음과 함께 풀린다. 해제 코드를 못 돌렸어도 그렇다', correct: true },
+          { text: '재부팅까지 잠긴 채 남는다', leadsTo: 3 },
+          { text: '부모가 거둬야 풀린다', leadsTo: 0 },
+          { text: '수동으로 풀어야 한다', leadsTo: 3 },
+        ],
+        rationale:
+          '파일 디스크립터가 닫히기 때문이다. 다른 프로세스와 공유하던 것이면 마지막 참조가 닫힐 때까지 대상은 남는다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '데몬 프로세스는 왜 세션 리더로 지정되지 않는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '세션 리더만 할 수 있는 일은?',
+        choices: [
+          { text: '제어 터미널을 획득하는 것', correct: true },
+          { text: '자식을 만드는 것', leadsTo: 1 },
+          { text: '신호를 보내는 것', leadsTo: 2 },
+          { text: '파일을 여는 것', leadsTo: 4 },
+        ],
+        rationale:
+          '그래서 리더가 아닌 채로 남으면 터미널 쪽 신호와 엮이지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 번 fork해서 setsid()만 부르면 충분한가?',
+        choices: [
+          { text: '그 자식이 리더가 되므로 한 번 더 fork한다', correct: true },
+          { text: '충분하다. 터미널이 떨어진다', leadsTo: 1 },
+          { text: 'setsid()만으로 리더가 아니게 된다', leadsTo: 0 },
+          { text: 'fork를 세 번 해야 한다', leadsTo: 1 },
+        ],
+        rationale:
+          'setsid()를 부르면 새 세션의 리더가 되면서 제어 터미널이 떨어진다. 여기서 한 번 더 fork해야 최종 데몬이 리더가 아니게 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'systemd가 띄우는 요즘 데몬은?',
+        choices: [
+          { text: '이 절차를 밟지 않는다', correct: true },
+          { text: '같은 절차를 반드시 밟는다', leadsTo: 1 },
+          { text: 'fork를 세 번 한다', leadsTo: 1 },
+          { text: '세션 리더로 남는다', leadsTo: 0 },
+        ],
+        rationale:
+          '더블 포크는 전통적인 방식이고, 요즘은 관리자가 그 역할을 대신한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'postgres',
+    question: '격리 수준을 올리면 무엇을 잃는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '수준을 올리면 잃는 것은?',
+        choices: [
+          { text: '동시성', correct: true },
+          { text: '데이터 정확성', leadsTo: 0 },
+          { text: '저장 공간', leadsTo: 1 },
+          { text: '잃는 것이 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '위로 올라갈수록 막아주는 현상이 늘지만 그만큼 잠금을 오래 넓게 쥔다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '수준을 고르는 기준은?',
+        choices: [
+          { text: '무엇을 견딜 수 있는지', correct: true },
+          { text: '무엇을 막고 싶은지', leadsTo: 0 },
+          { text: '데이터베이스 기본값', leadsTo: 2 },
+          { text: '테이블 크기', leadsTo: 4 },
+        ],
+        rationale:
+          '대부분의 화면은 조금 어긋난 값을 견딘다. 읽은 값을 근거로 판단하는 자리만 위로 올린다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가장 높은 수준을 써도 애플리케이션에 남는 일은?',
+        choices: [
+          { text: '취소된 트랜잭션을 다시 시도하는 코드', correct: true },
+          { text: '아무것도 없다', leadsTo: 3 },
+          { text: '잠금을 직접 거는 코드', leadsTo: 4 },
+          { text: '버전을 직접 비교하는 코드', leadsTo: 2 },
+        ],
+        rationale:
+          '전부 줄 세우는 것이 아니라 충돌을 감지해 한쪽을 취소하는 방식이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '데이터베이스 정규화를 수행하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '정규화가 하려는 일에 가까운 것은?',
+        choices: [
+          { text: '한 사실을 그것을 결정하는 키와 함께 한곳에 두는 것', correct: true },
+          { text: '중복을 무조건 없애는 것', leadsTo: 3 },
+          { text: '표 개수를 늘리는 것', leadsTo: 1 },
+          { text: '조회 속도를 높이는 것', leadsTo: 4 },
+        ],
+        rationale:
+          '변경 규칙과 데이터의 의존 관계를 스키마에 드러내는 일이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '표를 나누면 무결성이 생기는가?',
+        choices: [
+          { text: '아니다. 키·고유·외래 키 같은 제약을 함께 둬야 한다', correct: true },
+          { text: '나누기만 하면 생긴다', leadsTo: 1 },
+          { text: '애플리케이션 코드의 약속으로 충분하다', leadsTo: 1 },
+          { text: '정규형 단계가 높으면 저절로 생긴다', leadsTo: 2 },
+        ],
+        rationale:
+          '데이터베이스가 검사할 제약을 두어야 참조 관계가 지켜진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '조인이 있으면 느린가?',
+        choices: [
+          { text: '단정하지 않는다. 질의 계획과 데이터 크기에서 측정한다', correct: true },
+          { text: '조인 수에 비례해 항상 느리다', leadsTo: 3 },
+          { text: '조인은 언제나 빠르다', leadsTo: 3 },
+          { text: '정규형이 높으면 빨라진다', leadsTo: 1 },
+        ],
+        rationale:
+          '읽기 병목 때문에 중복을 두면 원본의 주인, 갱신 방식, 허용 지연과 다시 만드는 절차까지 함께 설계한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '트랜잭션 격리 수준을 결정하는 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '무엇부터 보는가?',
+        choices: [
+          { text: '깨지면 안 되는 업무 규칙과 재시도 가능 여부', correct: true },
+          { text: '격리 수준의 이름', leadsTo: 4 },
+          { text: '데이터베이스 종류', leadsTo: 3 },
+          { text: '테이블 개수', leadsTo: 0 },
+        ],
+        rationale:
+          '격리 수준 이름부터 고르지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 이름이면 데이터베이스마다 같은 동작인가?',
+        choices: [
+          { text: '다르게 구현한다. 기본값도 제품마다 다르다', correct: true },
+          { text: '표준이라 모두 같다', leadsTo: 2 },
+          { text: '이름만 다르고 동작은 같다', leadsTo: 2 },
+          { text: '기본값은 모두 Read Committed다', leadsTo: 3 },
+        ],
+        rationale:
+          'PostgreSQL의 기본값은 Read Committed지만 InnoDB의 기본값은 Repeatable Read다. 기본값이 업무에 맞는다는 뜻도 아니다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '수준을 올리면 잠금이 반드시 늘어나는가?',
+        choices: [
+          { text: '단정할 수 없다. 구현이 다르므로 재고 고른다', correct: true },
+          { text: '반드시 비례해서 늘어난다', leadsTo: 3 },
+          { text: '오히려 줄어든다', leadsTo: 3 },
+          { text: '잠금과 무관하다', leadsTo: 0 },
+        ],
+        rationale:
+          'MVCC, 간격 잠금, 서로 다른 직렬화 구현이 있다. 실제 충돌률·대기 시간·재시도 횟수를 재고 선택한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'sql',
+    question: '데이터베이스 뷰는 언제 사용하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '뷰가 저장하는 것은?',
+        choices: [
+          { text: '쿼리문 정의', correct: true },
+          { text: '조회 결과 데이터', leadsTo: 0 },
+          { text: '인덱스', leadsTo: 4 },
+          { text: '원본 테이블의 사본', leadsTo: 0 },
+        ],
+        rationale:
+          '가상 테이블로서 실제 데이터를 저장하지 않는다. 그래서 물리적 공간은 정의만큼만 든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '뷰를 쓰면 조회가 빨라지는가?',
+        choices: [
+          { text: '조회 시마다 정의된 쿼리가 실행된다', correct: true },
+          { text: '결과가 저장돼 빨라진다', leadsTo: 0 },
+          { text: '인덱스가 자동으로 생긴다', leadsTo: 4 },
+          { text: '항상 원본보다 빠르다', leadsTo: 2 },
+        ],
+        rationale:
+          '원본 테이블의 인덱스를 타지 못하는 복잡한 뷰는 오히려 성능 저하를 일으킬 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '보안 측면에서 뷰가 하는 일은?',
+        choices: [
+          { text: '민감한 정보를 뺀 컬럼만 노출한다', correct: true },
+          { text: '데이터를 암호화한다', leadsTo: 3 },
+          { text: '접근 로그를 남긴다', leadsTo: 3 },
+          { text: '원본을 읽기 전용으로 만든다', leadsTo: 1 },
+        ],
+        rationale:
+          '뷰를 거치면 원본 테이블을 열지 않고 필요한 데이터만 내보낼 수 있다.',
+      },
+    ],
+  },
 ]
