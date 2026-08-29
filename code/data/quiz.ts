@@ -8707,4 +8707,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'android',
+    question: '화면 상태를 둘 때 두 수단을 어떻게 나누는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '프로세스가 종료되면 두 수단은 어떻게 갈리는가?',
+        choices: [
+          { text: 'ViewModel은 인스턴스가 사라지고 SavedStateHandle은 저장된 값을 복원한다', correct: true },
+          { text: '둘 다 값을 복원한다', leadsTo: 3 },
+          { text: '둘 다 사라진다', leadsTo: 0 },
+          { text: 'SavedStateHandle만 사라진다', leadsTo: 0 },
+        ],
+        rationale:
+          '구성 변경까지는 둘 다 살아남지만 프로세스 종료에서 갈린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'SavedStateHandle이면 무엇이든 넣어도 되는가?',
+        choices: [
+          { text: '아니다. Bundle 기반이라 큰 객체 대신 단서만 저장한다', correct: true },
+          { text: '그렇다. 크기 제한이 없다', leadsTo: 2 },
+          { text: '그렇다. 시스템이 알아서 압축한다', leadsTo: 2 },
+          { text: '아니다. 원시값만 넣을 수 있다', leadsTo: 0 },
+        ],
+        rationale:
+          '항목 ID와 필터처럼 다시 데이터를 만들 단서만 넣는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '복원이 보장되지 않는 상황은?',
+        choices: [
+          { text: '강제 종료나 최근 앱에서 태스크를 지웠을 때', correct: true },
+          { text: '화면을 회전했을 때', leadsTo: 3 },
+          { text: '다크 모드로 바꿨을 때', leadsTo: 3 },
+          { text: '앱을 백그라운드로 내렸을 때', leadsTo: 3 },
+        ],
+        rationale:
+          '반드시 남아야 하는 데이터는 데이터베이스 같은 영구 저장소에 둔다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '메모리 부족 시 어떤 프로세스부터 종료되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '프로세스 등급은 무엇에 맞춰지는가?',
+        choices: [
+          { text: '가장 중요한 활성 컴포넌트', correct: true },
+          { text: '가장 오래 살아 있던 컴포넌트', leadsTo: 3 },
+          { text: '메모리를 가장 많이 쓰는 컴포넌트', leadsTo: 2 },
+          { text: '가장 최근에 만들어진 컴포넌트', leadsTo: 3 },
+        ],
+        rationale:
+          '중요한 클라이언트가 바인드한 서비스의 프로세스도 우선순위가 올라간다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '백그라운드에 있는 동안 메모리의 싱글턴 값은 안전한가?',
+        choices: [
+          { text: '아니다. 사라질 수 있으므로 복원 가능하게 만든다', correct: true },
+          { text: '그렇다. 프로세스가 살아 있는 한 유지된다', leadsTo: 4 },
+          { text: '그렇다. 정적 필드는 시스템이 보존한다', leadsTo: 4 },
+          { text: '아니다. 대신 등급을 올리면 된다', leadsTo: 1 },
+        ],
+        rationale:
+          '백그라운드 프로세스의 수명을 전제로 설계하면 안 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가장 먼저 종료되는 등급은?',
+        choices: [
+          { text: '활성 컴포넌트가 없는 캐시', correct: true },
+          { text: '시작된 서비스를 수행 중인 프로세스', leadsTo: 1 },
+          { text: '화면에 보이는 가시 프로세스', leadsTo: 3 },
+          { text: '포그라운드', leadsTo: 0 },
+        ],
+        rationale:
+          '가시성과 사용자 영향이 클수록 우선순위가 높고 포그라운드가 마지막까지 보호된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '실행 시점과 사용자 인지 여부로 어떤 수단을 고르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '지연 가능하지만 반드시 끝내야 하는 일에는?',
+        choices: [
+          { text: 'WorkManager', correct: true },
+          { text: '포그라운드 서비스', leadsTo: 1 },
+          { text: '정확한 알람', leadsTo: 3 },
+          { text: '일반 서비스', leadsTo: 0 },
+        ],
+        rationale:
+          '즉시 진행하며 사용자가 알아야 하는 일이라야 포그라운드 서비스다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '스레드나 일반 서비스를 띄우면 백그라운드에서 계속 도는가?',
+        choices: [
+          { text: '아니다. Doze와 앱 대기가 실행을 제한한다', correct: true },
+          { text: '그렇다. 프로세스가 살아 있으면 계속 돈다', leadsTo: 0 },
+          { text: '그렇다. 스레드는 제한 밖이다', leadsTo: 0 },
+          { text: '아니다. 대신 배터리 최적화 예외를 받으면 된다', leadsTo: 4 },
+        ],
+        rationale:
+          'Doze와 앱 대기는 네트워크와 알람을 미루고 백그라운드 서비스 실행도 제한한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '정확한 알람은 어디에 쓰는가?',
+        choices: [
+          { text: '정확한 시각이 핵심인 사용자 기능', correct: true },
+          { text: '일반 동기화', leadsTo: 3 },
+          { text: '실패한 업로드 재시도', leadsTo: 2 },
+          { text: '주기적인 캐시 정리', leadsTo: 0 },
+        ],
+        rationale:
+          '정확한 알람은 권한과 용도 제한이 있어 일반 동기화에 쓰지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '예약한 작업은 정말 한 번만 실행되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'WorkManager가 보장하는 것과 보장하지 않는 것은?',
+        choices: [
+          { text: '재부팅 뒤에도 다시 예약하지만 정확한 시작 시각은 보장하지 않는다', correct: true },
+          { text: '정확한 시작 시각까지 보장한다', leadsTo: 3 },
+          { text: '프로세스가 죽으면 예약도 사라진다', leadsTo: 2 },
+          { text: '한 번 실행되면 재시도하지 않는다', leadsTo: 1 },
+        ],
+        rationale:
+          '조건이 맞은 뒤 실행되도록 영속적으로 예약한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '예약했으니 Worker는 정확히 한 번만 도는가?',
+        choices: [
+          { text: '아니다. 재시도와 중단 때문에 여러 번 시작될 수 있다', correct: true },
+          { text: '그렇다. 고유 작업으로 예약하면 한 번이다', leadsTo: 0 },
+          { text: '그렇다. 성공하면 다시 돌지 않는다', leadsTo: 2 },
+          { text: '아니다. 항상 두 번 돈다', leadsTo: 1 },
+        ],
+        rationale:
+          '외부 부수 효과는 멱등하게 만들어야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '실행이 중단돼도 결과를 일관되게 만들려면?',
+        choices: [
+          { text: '서버 요청에 멱등성 키를 넣고 로컬 갱신은 트랜잭션으로 묶는다', correct: true },
+          { text: '재시도 횟수를 1로 제한한다', leadsTo: 1 },
+          { text: '실패하면 즉시 다시 예약한다', leadsTo: 2 },
+          { text: '작업을 포그라운드로 올린다', leadsTo: 3 },
+        ],
+        rationale:
+          '고유 작업은 중복 예약을 줄이지만 중단 자체를 없애지는 못한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '비동기로 옮겼는데도 왜 응답 없음이 생기는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '메인 스레드가 직렬로 처리하는 것은?',
+        choices: [
+          { text: '입력과 생명주기 콜백과 화면 갱신', correct: true },
+          { text: '네트워크 응답만', leadsTo: 1 },
+          { text: '디스크 접근만', leadsTo: 1 },
+          { text: '화면 갱신만', leadsTo: 4 },
+        ],
+        rationale:
+          '입력 이벤트에 약 5초간 응답하지 못하면 입력 디스패치 ANR이 날 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '작업을 다른 스레드로 보냈으면 안전한가?',
+        choices: [
+          { text: '아니다. 메인 스레드가 결과나 잠금을 기다리면 막힌다', correct: true },
+          { text: '그렇다. 옮긴 순간 메인은 자유롭다', leadsTo: 1 },
+          { text: '그렇다. 잠금은 메인과 무관하다', leadsTo: 2 },
+          { text: '아니다. 스레드를 옮기면 오히려 느려진다', leadsTo: 3 },
+        ],
+        rationale:
+          '느린 Binder 호출과 과도한 그리기도 입력 처리를 지연시킨다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '원인을 찾을 때 어디를 보는가?',
+        choices: [
+          { text: '스택 덤프의 main 대기 지점과 잠금 보유 스레드', correct: true },
+          { text: '메모리 사용량 그래프', leadsTo: 4 },
+          { text: '네트워크 응답 시간만', leadsTo: 3 },
+          { text: '화면 프레임 수만', leadsTo: 4 },
+        ],
+        rationale:
+          'StrictMode와 Perfetto로 I/O와 느린 Binder 호출도 확인한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'android',
+    question: '화면이 닫혔는데 객체가 남는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '객체가 수집되지 않는 조건은?',
+        choices: [
+          { text: 'GC Root에서 도달 가능할 때', correct: true },
+          { text: '메모리가 충분할 때', leadsTo: 4 },
+          { text: '참조 횟수가 0이 아닐 때', leadsTo: 4 },
+          { text: '화면이 아직 그려져 있을 때', leadsTo: 0 },
+        ],
+        rationale:
+          '정적 필드나 실행 중 스레드가 GC Root가 되어 화면 객체를 붙잡는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ViewModel에 Activity 참조를 두면 편한가?',
+        choices: [
+          { text: '아니다. 화면보다 오래 살아 누수가 된다', correct: true },
+          { text: '그렇다. 수명이 같아 문제없다', leadsTo: 2 },
+          { text: '그렇다. 구성 변경 때 함께 정리된다', leadsTo: 2 },
+          { text: '아니다. 대신 View 참조는 괜찮다', leadsTo: 0 },
+        ],
+        rationale:
+          'UI가 필요 없는 객체에는 Application Context를 사용한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '고쳤는지 어떻게 확인하는가?',
+        choices: [
+          { text: '같은 화면을 반복 열고 보유 개수가 줄어드는지 본다', correct: true },
+          { text: '앱을 재시작해 메모리가 줄었는지 본다', leadsTo: 4 },
+          { text: '수집을 강제로 호출해 본다', leadsTo: 4 },
+          { text: '화면이 정상 동작하면 된 것이다', leadsTo: 4 },
+        ],
+        rationale:
+          '힙 덤프에서 누수 객체의 GC Root 경로를 따라가 지배 참조를 끊은 뒤 확인한다.',
+      },
+    ],
+  },
 ]
