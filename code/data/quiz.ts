@@ -9646,12 +9646,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '테스트가 통과했으면 안전한가?',
+        stem: '요청이 하나씩 들어오는 테스트에서는 이 문제가 가려지는가?',
         choices: [
-          { text: '아니다. 대신 필드를 final로 두면 된다', leadsTo: 3 },
-          { text: '그렇다. 통과했으면 동시성도 검증된 것이다', leadsTo: 3 },
-          { text: '그렇다. 스프링이 필드를 격리해 준다', leadsTo: 4 },
-          { text: '아니다. 요청이 하나씩 들어오면 안 드러난다', correct: true },
+          { text: '아니다. 필드를 final로 두면 드러난다', leadsTo: 3 },
+          { text: '그렇다. 동시 접속이 생겨야 남의 데이터가 보인다', correct: true },
+          { text: '아니다. 통과했으면 동시성도 검증된 것이다', leadsTo: 3 },
+          { text: '아니다. 스프링이 필드를 격리해 준다', leadsTo: 4 },
         ],
         rationale:
           '동시 접속이 생기는 순간 남의 데이터가 보인다.',
@@ -9688,11 +9688,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '순환 참조가 나면 주입 방식을 바꿔 피하면 되는가?',
+        stem: '순환 참조는 고칠 설계를 가리키는 신호로 봐야 하는가?',
         choices: [
-          { text: '그렇다. 필드 주입으로 바꾸면 해결된다', leadsTo: 1 },
-          { text: '아니다. 시작 단계에서 드러난 설계 신호로 본다', correct: true },
-          { text: '그렇다. 스프링 설정으로 끌 수 있다', leadsTo: 1 },
+          { text: '아니다. 필드 주입으로 바꾸면 해결된다', leadsTo: 1 },
+          { text: '아니다. 스프링 설정으로 끄면 된다', leadsTo: 1 },
+          { text: '그렇다. 시작 단계에서 드러난 설계 신호다', correct: true },
           { text: '아니다. 순환 참조는 원래 정상이다', leadsTo: 1 },
         ],
         rationale:
@@ -9772,12 +9772,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '클래스 기반 프록시면 무엇이든 가로챌 수 있는가?',
+        stem: '클래스 기반 프록시에는 상속이 못 미치는 자리가 있는가?',
         choices: [
-          { text: '그렇다. 상속과 무관하게 바이트코드를 고친다', leadsTo: 1 },
-          { text: '그렇다. 인터페이스가 없어도 전부 가능하다', leadsTo: 1 },
-          { text: '아니다. 상속을 쓰므로 final은 못 가로챈다', correct: true },
-          { text: '아니다. 공개 메서드도 못 가로챈다', leadsTo: 0 },
+          { text: '그렇다. final 클래스와 final 메서드는 못 가로챈다', correct: true },
+          { text: '아니다. 상속과 무관하게 바이트코드를 고친다', leadsTo: 1 },
+          { text: '아니다. 인터페이스가 없어도 전부 가능하다', leadsTo: 1 },
+          { text: '그렇다. 공개 메서드조차 못 가로챈다', leadsTo: 0 },
         ],
         rationale:
           'JDK 동적 프록시는 인터페이스를 바탕으로 만들어진다.',
@@ -9814,12 +9814,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '넓은 타입의 빈을 하나 선언하는 것은 안전한가?',
+        stem: '넓은 타입의 빈 하나가 여러 기본 구성을 끌 수 있는가?',
         choices: [
-          { text: '그렇다. 선언한 것만 정확히 대체한다', leadsTo: 1 },
-          { text: '아니다. 예상치 못한 기본 구성까지 꺼질 수 있다', correct: true },
-          { text: '그렇다. 타입 범위는 영향이 없다', leadsTo: 1 },
-          { text: '아니다. 대신 시작이 느려질 뿐이다', leadsTo: 2 },
+          { text: '아니다. 선언한 것만 정확히 대체한다', leadsTo: 1 },
+          { text: '아니다. 타입 범위는 영향이 없다', leadsTo: 1 },
+          { text: '아니다. 시작이 조금 느려질 뿐이다', leadsTo: 2 },
+          { text: '그렇다. 예상치 못한 구성까지 함께 꺼진다', correct: true },
         ],
         rationale:
           '조건 평가는 사용자 빈 유무를 타입으로 확인한다.',
@@ -9856,15 +9856,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'preHandle이 거짓을 내도 뒷정리 콜백은 도는가?',
+        stem: 'preHandle이 거짓을 내면 거기서 끊기는가?',
         choices: [
-          { text: '그렇다. afterCompletion은 항상 실행된다', leadsTo: 3 },
-          { text: '아니다. 뒤의 두 콜백 모두 돌지 않는다', correct: true },
-          { text: '그렇다. 뒤의 두 콜백 모두 실행된다', leadsTo: 3 },
-          { text: '아니다. 대신 필터가 대신 처리한다', leadsTo: 0 },
+          { text: '그렇다. 뒤의 두 콜백 모두 돌지 않는다', correct: true },
+          { text: '아니다. afterCompletion은 항상 실행된다', leadsTo: 3 },
+          { text: '아니다. 뒤의 두 콜백 모두 실행된다', leadsTo: 3 },
+          { text: '아니다. 필터가 대신 처리해 이어진다', leadsTo: 0 },
         ],
         rationale:
-          '거짓을 내면 거기서 끊긴다.',
+          '거짓을 내면 뒤가 이어지지 않는다.',
       },
       {
         kind: 'boundary',
@@ -9898,12 +9898,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '저장소 예외를 그대로 올려도 되는가?',
+        stem: '저장소 예외를 그대로 올리면 API가 내부 기술에 묶이는가?',
         choices: [
-          { text: '아니다. 대신 메시지만 바꾸면 된다', leadsTo: 2 },
-          { text: '그렇다. 원인이 정확히 전달된다', leadsTo: 4 },
-          { text: '그렇다. 매핑 코드를 줄일 수 있다', leadsTo: 2 },
-          { text: '아니다. API가 내부 기술에 묶인다', correct: true },
+          { text: '아니다. 메시지만 바꾸면 된다', leadsTo: 2 },
+          { text: '그렇다. 그래서 의미가 드러나는 예외로 바꾼다', correct: true },
+          { text: '아니다. 원인이 정확히 전달돼 낫다', leadsTo: 4 },
+          { text: '아니다. 매핑 코드를 줄일 수 있어 낫다', leadsTo: 2 },
         ],
         rationale:
           '예상 가능한 실패는 의미가 드러나는 예외로 표현한다.',
@@ -9940,11 +9940,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '인증만 되면 접근이 허용되는가?',
+        stem: '인증을 통과한 뒤에도 권한을 다시 판정하는가?',
         choices: [
-          { text: '그렇다. 인증이 곧 인가다', leadsTo: 1 },
-          { text: '아니다. 인가 필터가 권한으로 다시 판정한다', correct: true },
-          { text: '그렇다. 권한은 컨트롤러가 본다', leadsTo: 1 },
+          { text: '아니다. 인증이 곧 인가다', leadsTo: 1 },
+          { text: '아니다. 권한은 컨트롤러가 본다', leadsTo: 1 },
+          { text: '그렇다. 인가 필터가 권한으로 다시 본다', correct: true },
           { text: '아니다. 인증만으로 401이 난다', leadsTo: 1 },
         ],
         rationale:
@@ -9982,12 +9982,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '1차 캐시가 있으니 트랜잭션 격리는 신경 안 써도 되는가?',
+        stem: '1차 캐시와 트랜잭션 격리는 따로 챙겨야 하는가?',
         choices: [
-          { text: '아니다. 격리를 대신하지 않는다', correct: true },
-          { text: '그렇다. 캐시가 일관성을 보장한다', leadsTo: 3 },
-          { text: '그렇다. 여러 요청이 같은 캐시를 본다', leadsTo: 3 },
-          { text: '아니다. 대신 2차 캐시가 대신한다', leadsTo: 3 },
+          { text: '그렇다. 캐시는 격리를 대신하지 않는다', correct: true },
+          { text: '아니다. 캐시가 일관성을 보장한다', leadsTo: 3 },
+          { text: '아니다. 여러 요청이 같은 캐시를 본다', leadsTo: 3 },
+          { text: '아니다. 2차 캐시가 격리를 대신한다', leadsTo: 3 },
         ],
         rationale:
           '이 캐시는 EntityManager 범위 안에서만 유효하다.',
