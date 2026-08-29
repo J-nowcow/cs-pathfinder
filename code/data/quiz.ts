@@ -6931,4 +6931,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'generic',
+    question: '고차원 데이터에서 거리 계산 시 발생하는 문제는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '차원이 늘면 거리에 무슨 일이 생기는가?',
+        choices: [
+          { text: '가장 가까운 것과 먼 것의 차이가 상대적으로 준다', correct: true },
+          { text: '모든 거리가 0에 가까워진다', leadsTo: 1 },
+          { text: '거리 계산이 불가능해진다', leadsTo: 1 },
+          { text: '거리가 정확해진다', leadsTo: 3 },
+        ],
+        rationale:
+          '그러면 이웃을 정의하거나 밀도를 측정하는 기존 방식이 무력화된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '고차원이면 언제나 이 현상이 나타나는가?',
+        choices: [
+          { text: '늘 그런 것은 아니고 조건이 붙는다', correct: true },
+          { text: '차원만 높으면 반드시 나타난다', leadsTo: 3 },
+          { text: '표본이 많으면 절대 안 나타난다', leadsTo: 0 },
+          { text: '거리 함수와 무관하다', leadsTo: 1 },
+        ],
+        rationale:
+          '차원이 높고 값들이 비슷하게 흩어졌을 때 두드러진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '거리 집중이 나타나면 무엇이 흔들리는가?',
+        choices: [
+          { text: '거리 기반 군집 알고리즘의 구분력', correct: true },
+          { text: '데이터 저장 용량', leadsTo: 0 },
+          { text: '읽기 속도', leadsTo: 0 },
+          { text: '흔들리는 것이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '차원을 줄이거나 코사인 유사도 같은 다른 척도를 쓰는 이유다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'react',
+    question: 'useEffect 의존성 배열을 잘못 넣으면 어떤 문제가 생기는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '의존성을 빠뜨리면 이펙트가 보는 값은?',
+        choices: [
+          { text: '마지막으로 실행된 렌더의 값', correct: true },
+          { text: '언제나 최신 값', leadsTo: 0 },
+          { text: '첫 렌더의 값으로 고정', leadsTo: 0 },
+          { text: '정의되지 않은 값', leadsTo: 0 },
+        ],
+        rationale:
+          '최신 상태를 읽는 줄 알았는데 옛 값이 나오는 상황이 여기서 생긴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '두 실수 중 발견이 늦는 쪽은?',
+        choices: [
+          { text: '너무 적게 넣은 쪽. 오류가 안 난다', correct: true },
+          { text: '너무 많이 넣은 쪽', leadsTo: 1 },
+          { text: '둘 다 즉시 드러난다', leadsTo: 1 },
+          { text: '둘 다 드러나지 않는다', leadsTo: 3 },
+        ],
+        rationale:
+          '너무 많이 넣으면 매 렌더마다 실행되고 무한 루프로 가서 바로 티가 난다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '너무 자주 실행될 때 올바른 처방은?',
+        choices: [
+          { text: '값 자체를 안정화한다', correct: true },
+          { text: '의존성에서 빼 버린다', leadsTo: 3 },
+          { text: '배열을 비운다', leadsTo: 0 },
+          { text: '이펙트를 두 개로 쪼갠다', leadsTo: 4 },
+        ],
+        rationale:
+          '의존성을 빼서 해결하는 것은 증상만 가리는 것이다. 이펙트 안에서 쓰는 모든 외부 값은 넣는 것이 기준이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'react',
+    question: '브라우저가 화면을 그리기까지 무슨 일이 일어나는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '너비나 위치를 바꾸면 어디부터 다시 하는가?',
+        choices: [
+          { text: '레이아웃부터', correct: true },
+          { text: '페인트부터', leadsTo: 0 },
+          { text: '파싱부터', leadsTo: 4 },
+          { text: '합성 단계만', leadsTo: 1 },
+        ],
+        rationale:
+          '색만 바꾸면 페인트만 다시 한다. 어느 단계를 건드리느냐에 따라 비용이 크게 갈린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'transform과 opacity가 싼 까닭은?',
+        choices: [
+          { text: '합성 단계에서만 처리돼 앞 단계를 건너뛴다', correct: true },
+          { text: '계산이 단순해서', leadsTo: 1 },
+          { text: '브라우저가 무시해서', leadsTo: 0 },
+          { text: '싸지 않다', leadsTo: 1 },
+        ],
+        rationale:
+          '레이아웃과 페인트를 다시 하지 않는다는 것이 핵심이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '스타일을 바꾼 직후 크기 값을 읽으면?',
+        choices: [
+          { text: '그 자리에서 레이아웃을 다시 계산한다', correct: true },
+          { text: '캐시된 값을 준다', leadsTo: 2 },
+          { text: '이전 값을 준다', leadsTo: 2 },
+          { text: '오류가 난다', leadsTo: 0 },
+        ],
+        rationale:
+          '반복문 안에서 쓰기와 읽기를 번갈아 하면 매 회전마다 그 비용이 든다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'react',
+    question: '리렌더링이 필요 이상으로 도는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '인라인 객체나 함수를 넘기면?',
+        choices: [
+          { text: '내용이 같아도 참조가 달라 매번 바뀐 것으로 본다', correct: true },
+          { text: '내용이 같으면 같은 것으로 본다', leadsTo: 0 },
+          { text: '문자열처럼 값으로 비교된다', leadsTo: 0 },
+          { text: '비교되지 않는다', leadsTo: 4 },
+        ],
+        rationale:
+          '문자열이나 숫자는 같은 값이면 다시 안 그린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '자식을 memo로 감싸기만 하면 되는가?',
+        choices: [
+          { text: '인라인 객체를 계속 넘기면 비교만 늘고 효과가 없다', correct: true },
+          { text: '감싸기만 하면 충분하다', leadsTo: 0 },
+          { text: '감싸면 부모도 안 그려진다', leadsTo: 2 },
+          { text: 'memo는 함수에만 쓴다', leadsTo: 1 },
+        ],
+        rationale:
+          '자식을 감싸는 것과 넘기는 값을 고정하는 것이 한 벌이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '메모를 먼저 뿌리는 것이 손해인 까닭은?',
+        choices: [
+          { text: '비교에도 값이 들고 코드가 읽기 어려워진다', correct: true },
+          { text: '메모리를 두 배로 쓴다', leadsTo: 4 },
+          { text: '렌더가 아예 멈춘다', leadsTo: 0 },
+          { text: '손해가 아니다', leadsTo: 4 },
+        ],
+        rationale:
+          '프로파일러로 실제 느린 곳을 찾은 뒤에 붙인다. 대부분의 리렌더는 싸서 문제가 안 된다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'react',
+    question: '변경점을 비교하면 언제 비용이 줄어드는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '이득이 나는 조건은?',
+        choices: [
+          { text: '비교 비용보다 직접 조작 비용이 클 때', correct: true },
+          { text: '언제나 이득이다', leadsTo: 3 },
+          { text: '변경이 아주 작을 때', leadsTo: 3 },
+          { text: '노드 수가 적을 때', leadsTo: 3 },
+        ],
+        rationale:
+          '메모리의 트리에서 변경점을 모아 실제 노드 갱신 횟수를 줄이는 방식이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '렌더링마다 화면 전체를 다시 그리는가?',
+        choices: [
+          { text: '아니다. 필요한 변경만 커밋한다', correct: true },
+          { text: '전체를 다시 그린다', leadsTo: 0 },
+          { text: '절반만 그린다', leadsTo: 0 },
+          { text: '아무것도 안 그린다', leadsTo: 1 },
+        ],
+        rationale:
+          '이전 트리와 새 트리를 비교해 필요한 변경만 반영한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가상 트리를 무조건 빠른 기술로 볼 수 있는가?',
+        choices: [
+          { text: '없다. 상태 기반 UI를 예측 가능하게 만드는 절충이다', correct: true },
+          { text: '언제나 더 빠르다', leadsTo: 3 },
+          { text: '언제나 더 느리다', leadsTo: 3 },
+          { text: '속도와 무관한 개념이다', leadsTo: 0 },
+        ],
+        rationale:
+          '업데이트가 작고 구조가 단순하면 직접 조작이 더 싸다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'react',
+    question: '계산 단계와 반영 단계를 왜 나누는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '나누는 목적은?',
+        choices: [
+          { text: '계산을 중단해도 화면이 중간 상태에 안 놓이게', correct: true },
+          { text: '메모리를 아끼려고', leadsTo: 1 },
+          { text: '코드를 나누려고', leadsTo: 3 },
+          { text: '테스트를 쉽게 하려고', leadsTo: 3 },
+        ],
+        rationale:
+          'DOM과 ref는 커밋에서 일관되게 반영한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '렌더 단계에 부작용을 두면?',
+        choices: [
+          { text: '중단되거나 폐기될 수 있어 위험하다', correct: true },
+          { text: '문제없다. 한 번만 돈다', leadsTo: 0 },
+          { text: '커밋에서 되돌려 준다', leadsTo: 1 },
+          { text: '오류로 막힌다', leadsTo: 3 },
+        ],
+        rationale:
+          '렌더 단계는 우선순위에 따라 중단되거나 폐기될 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '커밋 단계는 쪼개질 수 있는가?',
+        choices: [
+          { text: '중간에 쪼개지 않는다', correct: true },
+          { text: '렌더처럼 쪼개진다', leadsTo: 1 },
+          { text: '우선순위에 따라 다르다', leadsTo: 1 },
+          { text: '항상 두 번에 나눠 한다', leadsTo: 4 },
+        ],
+        rationale:
+          'useLayoutEffect는 페인트 전, useEffect는 대체로 페인트 뒤에 실행된다.',
+      },
+    ],
+  },
 ]
