@@ -9199,12 +9199,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '재전송에 멱등 키와 서버 버전을 함께 쓰는 이유는?',
         choices: [
           { text: '연결이 끊긴 동안에도 로컬에서 읽을 수 있게 하려고', leadsTo: 0 },
+          { text: '성공 응답을 잃어도 중복 반영을 막는다', correct: true },
           { text: '같은 요청을 병렬로 보내 전송 속도를 높이려고', leadsTo: 1 },
           { text: '여러 요청이 보낸 순서대로 반영되게 하려고', leadsTo: 1 },
-          { text: '성공 응답을 잃어도 중복 반영을 막는다', correct: true },
         ],
         rationale:
-          '변경은 outbox에 기록해 연결이 돌아왔을 때 순서대로 보낸다.',
+          '버전까지 함께 보면 오래된 값이 새 값을 덮어쓰는 것도 거절할 수 있다.',
       },
     ],
   },
@@ -10920,13 +10920,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '데이터베이스 인덱스가 B-트리를 쓰는 이유는?',
         choices: [
-          { text: '노드가 커서 균형을 맞출 필요가 없어 회전 비용이 들지 않는다', leadsTo: 4 },
           { text: '이진 트리보다 회전이 단순해 삽입과 삭제가 빠르다', leadsTo: 0 },
-          { text: '한 노드에 키를 많이 담아 높이를 낮출 수 있어서', correct: true },
+          { text: '노드가 커서 균형을 맞출 필요가 없어 회전 비용이 들지 않는다', leadsTo: 4 },
           { text: '범위 질의를 못 하는 대신 단건 조회가 빠르다', leadsTo: 2 },
+          { text: '한 노드에 키를 많이 담아 높이를 낮출 수 있어서', correct: true },
         ],
         rationale:
-          '스스로 균형을 잡는 트리는 회전 비용을 치르고 최악을 O(log n)으로 묶는다.',
+          '디스크는 블록 단위로 읽으므로 높이를 낮추면 읽는 횟수가 준다.',
       },
     ],
   },
