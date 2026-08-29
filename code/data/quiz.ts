@@ -4867,4 +4867,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'os',
+    question: '쓰레싱이 발생하는 원인과 해결책은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '쓰레싱 상태에서 CPU는?',
+        choices: [
+          { text: '논다. 디스크 입출력만 계속된다', correct: true },
+          { text: '가장 바쁘게 돈다', leadsTo: 2 },
+          { text: '평소와 같다', leadsTo: 4 },
+          { text: '전환만 반복한다', leadsTo: 2 },
+        ],
+        rationale:
+          '페이지 부재가 잦아져 쓸모 있는 일보다 페이지를 갈아 끼우는 데 더 많은 시간을 쓴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'CPU 이용률이 낮을 때 프로세스를 더 올리면?',
+        choices: [
+          { text: '메모리 경쟁이 심해져 악순환이 깊어진다', correct: true },
+          { text: '이용률이 올라가 해결된다', leadsTo: 0 },
+          { text: '아무 변화가 없다', leadsTo: 3 },
+          { text: '페이지 부재가 줄어든다', leadsTo: 2 },
+        ],
+        rationale:
+          '각 프로세스에 할당된 메모리 공간이 줄어들어 페이지 부재가 더 심해진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '해결의 방향은?',
+        choices: [
+          { text: '프로세스가 필요한 최소 프레임을 보장한다', correct: true },
+          { text: '프로세스를 더 많이 올린다', leadsTo: 0 },
+          { text: '디스크를 빠른 것으로 바꾼다', leadsTo: 4 },
+          { text: '가상 메모리 크기만 늘린다', leadsTo: 4 },
+        ],
+        rationale:
+          '워킹셋 모델이나 페이지 부재 빈도로 할당량을 조절한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '동기화 문제를 하드웨어적으로 어떻게 해결하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '원자적 명령어가 보장하는 것은?',
+        choices: [
+          { text: '실행 중 다른 프로세스가 끼어들지 못한다', correct: true },
+          { text: '실행이 더 빨라진다', leadsTo: 1 },
+          { text: '메모리를 덜 쓴다', leadsTo: 3 },
+          { text: '락이 필요 없어진다', leadsTo: 2 },
+        ],
+        rationale:
+          '읽고 쓰는 작업을 한 번에 처리해 중간에 컨텍스트 스위칭이 끼지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'CAS는 값이 달라졌을 때 어떻게 하는가?',
+        choices: [
+          { text: '바꾸지 않고 실패를 알린다', correct: true },
+          { text: '기다렸다가 바꾼다', leadsTo: 1 },
+          { text: '덮어쓴다', leadsTo: 0 },
+          { text: '오류를 던져 프로그램을 멈춘다', leadsTo: 0 },
+        ],
+        rationale:
+          '지금 값이 기대한 값과 같을 때만 바꾼다. 다르면 누가 먼저 손댔다는 뜻이다. 락-프리 알고리즘의 핵심 기반이 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '인터럽트 비활성화가 실무에서 안 쓰이는 이유는?',
+        choices: [
+          { text: '멀티코어에서 모든 CPU를 끄는 비용이 너무 크다', correct: true },
+          { text: '단일 코어에서도 동작하지 않아서', leadsTo: 4 },
+          { text: '원자성을 보장하지 못해서', leadsTo: 3 },
+          { text: '커널이 허용하지 않아서', leadsTo: 4 },
+        ],
+        rationale:
+          '단일 코어에서만 유효한 방식이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: 'CPU와 메모리 중 무엇이 데이터 처리 속도를 결정하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘 사이에서 병목이 되는 쪽은?',
+        choices: [
+          { text: '메모리에서 데이터를 가져오는 지연', correct: true },
+          { text: 'CPU의 연산 속도', leadsTo: 1 },
+          { text: '코어 개수', leadsTo: 1 },
+          { text: '둘 다 아니다', leadsTo: 2 },
+        ],
+        rationale:
+          'CPU 연산보다 메모리 접근 지연이 훨씬 크다. 이를 메모리 벽이라 부른다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'CPU가 빠르면 처리 속도도 그만큼 오르는가?',
+        choices: [
+          { text: '데이터가 없으면 아무리 빨라도 논다', correct: true },
+          { text: '비례해서 오른다', leadsTo: 2 },
+          { text: '코어만 늘리면 된다', leadsTo: 1 },
+          { text: '메모리와 무관하다', leadsTo: 2 },
+        ],
+        rationale:
+          '연산 속도와 데이터 공급 속도의 균형이 실제 처리 속도를 정한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '캐시가 하는 일은?',
+        choices: [
+          { text: '자주 쓰는 데이터를 가까이 두어 대기를 줄인다', correct: true },
+          { text: '연산 자체를 빠르게 한다', leadsTo: 1 },
+          { text: '메모리 용량을 늘린다', leadsTo: 2 },
+          { text: '코어를 늘린다', leadsTo: 0 },
+        ],
+        rationale:
+          '메모리 벽을 우회하는 것이 아니라 그 앞에 가까운 층을 하나 두는 것이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '프로세스와 스레드의 핵심 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 핵심은?',
+        choices: [
+          { text: '무엇을 공유하고 어디까지 실패를 격리하는가', correct: true },
+          { text: '생성 속도', leadsTo: 2 },
+          { text: '메모리 사용량', leadsTo: 2 },
+          { text: '이름이 다를 뿐 같은 것', leadsTo: 0 },
+        ],
+        rationale:
+          '프로세스는 자원과 보호의 경계이고, 스레드는 그 안에서 스케줄되는 실행 흐름이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '스레드는 스택만 따로 가진다고 해도 되는가?',
+        choices: [
+          { text: '스레드 ID·레지스터·signal mask·errno 등도 각자 가진다', correct: true },
+          { text: '스택만 따로 가진다', leadsTo: 1 },
+          { text: '아무것도 따로 갖지 않는다', leadsTo: 1 },
+          { text: '힙도 따로 가진다', leadsTo: 0 },
+        ],
+        rationale:
+          '공유 범위는 언어 런타임과 운영체제에 따라 세부가 달라진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '프로세스 전환은 항상 무겁고 스레드 전환은 항상 싼가?',
+        choices: [
+          { text: '고정하지 않는다. 스레드 전환에도 비용이 남는다', correct: true },
+          { text: '그렇게 고정해도 된다', leadsTo: 1 },
+          { text: '반대로 고정해야 한다', leadsTo: 1 },
+          { text: '전환 비용은 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '같은 주소 공간을 유지해 더 쌀 수 있지만 레지스터 저장, 스케줄러와 캐시 비용은 남는다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '가상 메모리 관리에서 페이징과 세그먼테이션은 무엇으로 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '페이징에서 가상 쪽과 물리 쪽을 부르는 이름은?',
+        choices: [
+          { text: '페이지와 프레임', correct: true },
+          { text: '세그먼트와 페이지', leadsTo: 0 },
+          { text: '블록과 섹터', leadsTo: 1 },
+          { text: '둘 다 페이지', leadsTo: 2 },
+        ],
+        rationale:
+          '고정 크기로 나눠 할당과 회수를 단순하게 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '요즘 범용 운영체제가 중심으로 쓰는 쪽은?',
+        choices: [
+          { text: '페이징', correct: true },
+          { text: '세그먼테이션', leadsTo: 0 },
+          { text: '둘을 반씩', leadsTo: 4 },
+          { text: '둘 다 쓰지 않는다', leadsTo: 4 },
+        ],
+        rationale:
+          '세그먼테이션을 어디까지 쓰는지는 아키텍처마다 다르다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '세그먼트를 다시 페이징으로 관리하면 무엇이 해결되는가?',
+        choices: [
+          { text: '외부 파편화', correct: true },
+          { text: '내부 파편화', leadsTo: 0 },
+          { text: '페이지 부재', leadsTo: 1 },
+          { text: '주소 변환 비용', leadsTo: 2 },
+        ],
+        rationale:
+          '논리적 영역은 세그먼트로 나누고 그 안을 고정 크기로 다시 나누는 방식이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'process',
+    question: '좀비 프로세스는 왜 남는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '좀비가 남겨 두는 것은?',
+        choices: [
+          { text: '프로세스 표의 한 줄과 종료 상태, 번호', correct: true },
+          { text: '쓰던 메모리 전부', leadsTo: 2 },
+          { text: '열린 파일과 소켓', leadsTo: 2 },
+          { text: '실행 중이던 스레드', leadsTo: 4 },
+        ],
+        rationale:
+          '쓰던 메모리는 이미 내놓았다. 부모가 종료 상태를 가져갈 때까지 커널이 그 자리를 남겨 둔다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '고아 프로세스는 좀비인가?',
+        choices: [
+          { text: '아니다. 부모가 먼저 죽은 것뿐이고 init이 거둔다', correct: true },
+          { text: '같은 말이다', leadsTo: 4 },
+          { text: '고아가 더 위험하다', leadsTo: 4 },
+          { text: '고아는 영원히 남는다', leadsTo: 4 },
+        ],
+        rationale:
+          '좀비는 오히려 부모가 살아서 방치할 때 남는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '좀비가 실제로 문제가 되는 지점은?',
+        choices: [
+          { text: '표 한도를 채워 새 프로세스를 못 만들 때', correct: true },
+          { text: '하나만 생겨도 메모리가 샌다', leadsTo: 0 },
+          { text: 'CPU를 계속 쓴다', leadsTo: 0 },
+          { text: '문제가 되지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '하나둘로는 표가 안 난다. 자식을 많이 띄우는 서버에서 개수가 쌓일 때 드러난다.',
+      },
+    ],
+  },
 ]
