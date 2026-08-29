@@ -2466,13 +2466,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '체크 예외를 넓게 쓰면 더 안전해지는가?',
         choices: [
-          { text: '처리를 강제하니 넓게 쓸수록 안전하다', leadsTo: 3 },
-          { text: '계층마다 의미 없는 catch가 퍼진다', correct: true },
-          { text: '스택 추적 비용으로 성능만 조금 나빠진다', leadsTo: 2 },
-          { text: '컴파일러가 알아서 걸러 준다', leadsTo: 0 },
+          { text: '그렇다. 처리를 강제하니 넓게 쓸수록 안전하다', leadsTo: 1 },
+          { text: '아니다. 계층마다 의미 없는 catch가 퍼진다', correct: true },
+          { text: '그렇다. 컴파일러가 알아서 걸러 준다', leadsTo: 1 },
+          { text: '아니다. 스택 추적 비용으로 성능만 조금 나빠진다', leadsTo: 0 },
         ],
         rationale:
-          '복구할 수 없으면 도메인 런타임 예외로 번역하되 원인을 보존한다.',
+          '호출자가 복구할 수 없는 예외까지 계약에 실으면 넘기기만 하는 코드가 는다.',
       },
       {
         kind: 'boundary',
@@ -4524,13 +4524,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '딱 맞는 조각을 고르면 낭비가 줄어드는가?',
         choices: [
-          { text: '빈자리에 딱 맞으니 낭비가 확실히 준다', leadsTo: 1 },
-          { text: '쓸 수 없을 만큼 작은 조각이 남는다', correct: true },
-          { text: '고를 후보가 줄어 탐색도 함께 빨라진다', leadsTo: 0 },
-          { text: '남는 공간이 없어 단편화가 사라진다', leadsTo: 2 },
+          { text: '그렇다. 빈자리에 딱 맞으니 낭비가 확실히 준다', leadsTo: 1 },
+          { text: '그렇다. 고를 후보가 줄어 탐색도 함께 빨라진다', leadsTo: 0 },
+          { text: '아니다. 쓸 수 없을 만큼 작은 조각이 남는다', correct: true },
+          { text: '그렇다. 남는 공간이 없어 단편화가 사라진다', leadsTo: 1 },
         ],
         rationale:
-          '모든 조각을 확인해야 해서 느리기까지 하다.',
+          '그 작은 조각들이 쌓여 외부 단편화가 오히려 심해진다.',
       },
       {
         kind: 'boundary',
@@ -4902,13 +4902,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '스레드는 스택만 따로 가진다고 해도 되는가?',
         choices: [
-          { text: '스택만 따로 가지고 레지스터는 프로세스가 공유한다', leadsTo: 1 },
-          { text: '레지스터와 errno 등도 각자 가진다', correct: true },
-          { text: '레지스터까지 모두 공유하고 따로 갖는 것이 없다', leadsTo: 1 },
-          { text: '스택과 함께 힙도 스레드마다 따로 가진다', leadsTo: 0 },
+          { text: '그렇다. 스택만 따로 가지고 레지스터는 프로세스가 공유한다', leadsTo: 1 },
+          { text: '그렇다. 레지스터까지 모두 공유하고 따로 갖는 것이 없다', leadsTo: 1 },
+          { text: '그렇다. 스택과 함께 힙도 스레드마다 따로 가진다', leadsTo: 0 },
+          { text: '아니다. 레지스터와 errno 등도 각자 가진다', correct: true },
         ],
         rationale:
-          '공유 범위는 언어 런타임과 운영체제에 따라 세부가 달라진다.',
+          '스택만 따로 가진다고 축약하면 스레드 ID와 스케줄링 상태가 빠진다.',
       },
       {
         kind: 'boundary',
