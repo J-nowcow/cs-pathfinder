@@ -2287,4 +2287,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'jvm',
+    question: '왜 모든 바이트코드를 바로 최적화하지 않는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '전부 최적화하지 않는 까닭은?',
+        choices: [
+          { text: '시작이 느려지고 실행되지 않을 코드에도 비용을 쓴다', correct: true },
+          { text: '최적화가 코드를 망가뜨릴 수 있어서', leadsTo: 2 },
+          { text: '메모리가 부족해서', leadsTo: 0 },
+          { text: '바이트코드는 최적화할 수 없어서', leadsTo: 1 },
+        ],
+        rationale:
+          '실행 정보를 모아 자주 쓰이는 코드만 기계어로 최적화한다. 계층형 컴파일은 빠른 컴파일과 최고 성능을 절충한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 번 최적화된 코드는 그대로 유지되는가?',
+        choices: [
+          { text: '관찰에 기댄 가정이 깨지면 폐기하고 되돌린다', correct: true },
+          { text: '한 번 만들면 끝까지 쓴다', leadsTo: 2 },
+          { text: '주기적으로 다시 컴파일한다', leadsTo: 0 },
+          { text: '메서드가 끝나면 버린다', leadsTo: 3 },
+        ],
+        rationale:
+          'JIT는 관찰된 타입을 바탕으로 가상 호출을 인라이닝할 수 있다. 가정이 깨지면 최적화 코드를 폐기하고 디옵티마이즈한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '짧은 벤치마크가 잘못 읽히는 이유는?',
+        choices: [
+          { text: '워밍업과 컴파일 시간이 측정에 섞인다', correct: true },
+          { text: '측정 단위가 너무 커서', leadsTo: 0 },
+          { text: 'GC가 항상 끼어들어서', leadsTo: 3 },
+          { text: '인라이닝이 일어나지 않아서', leadsTo: 1 },
+        ],
+        rationale:
+          'JMH처럼 워밍업과 측정을 분리해야 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'jvm',
+    question: '이름이 같은 클래스가 다른 타입이 되는 조건은?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '런타임 타입을 정하는 것은?',
+        choices: [
+          { text: '바이너리 이름과 정의한 클래스 로더의 조합', correct: true },
+          { text: '바이너리 이름만', leadsTo: 0 },
+          { text: '패키지 경로만', leadsTo: 4 },
+          { text: '클래스 파일의 위치', leadsTo: 3 },
+        ],
+        rationale:
+          '이름이 같아도 정의한 클래스 로더가 다르면 다른 타입으로 본다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '다른 로더가 만든 같은 이름의 객체는?',
+        choices: [
+          { text: '이름이 같아도 캐스팅할 수 없다', correct: true },
+          { text: '이름이 같으니 캐스팅된다', leadsTo: 0 },
+          { text: '리플렉션으로는 캐스팅된다', leadsTo: 1 },
+          { text: '부모 로더를 거치면 캐스팅된다', leadsTo: 0 },
+        ],
+        rationale:
+          '부모 우선 위임은 이미 로드된 핵심 클래스의 중복 정의를 막는다. 플러그인과 서버는 격리를 위해 이 순서를 일부러 뒤집기도 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '클래스가 언로드되지 않는 때는?',
+        choices: [
+          { text: '로더가 실행 중인 스레드나 외부 정적 참조에 붙잡혀 있을 때', correct: true },
+          { text: '인스턴스가 하나라도 있을 때', leadsTo: 3 },
+          { text: '정적 초기화가 끝나지 않았을 때', leadsTo: 2 },
+          { text: '언로드는 원래 일어나지 않는다', leadsTo: 3 },
+        ],
+        rationale:
+          '로더가 살아 있으면 그 로더가 정의한 클래스도 함께 남는다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: '서로 다른 List 타입 인자는 런타임에 남는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '타입 인자가 다른 두 List는 런타임에?',
+        choices: [
+          { text: '같은 클래스다', correct: true },
+          { text: '서로 다른 클래스다', leadsTo: 4 },
+          { text: '인자 개수에 따라 다르다', leadsTo: 1 },
+          { text: '실행할 때마다 달라진다', leadsTo: 3 },
+        ],
+        rationale:
+          '컴파일러가 타입 안전성을 검사한 뒤 타입 인자를 소거한다. 형변환은 필요한 곳에 삽입된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '리플렉션으로 객체의 타입 인자를 알 수 있는가?',
+        choices: [
+          { text: '선언 정보는 읽지만 객체의 실제 인자는 복원하지 못한다', correct: true },
+          { text: '언제나 읽을 수 있다', leadsTo: 3 },
+          { text: '아무 제네릭 정보도 남지 않는다', leadsTo: 3 },
+          { text: '배열로 만들면 읽을 수 있다', leadsTo: 1 },
+        ],
+        rationale:
+          '필드와 메서드 선언의 제네릭 시그니처는 클래스 파일에 남을 수 있다. 그러나 그것은 선언이지 객체의 상태가 아니다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '소거 때문에 막히는 것은?',
+        choices: [
+          { text: '구체 타입 인자를 붙인 타입의 instanceof 검사', correct: true },
+          { text: '제네릭 메서드 선언', leadsTo: 0 },
+          { text: '와일드카드 사용', leadsTo: 2 },
+          { text: '상속받은 제네릭 타입', leadsTo: 0 },
+        ],
+        rationale:
+          '타입 변수의 직접 인스턴스화와 배열 생성도 제한되고, 소거형이 같은 메서드를 오버로드할 수도 없다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: '상태 변경을 막으면 동시성에서 무엇을 얻는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '불변으로 두면 얻는 것은?',
+        choices: [
+          { text: '잠금 없이 여러 스레드가 공유하기 쉬워진다', correct: true },
+          { text: '메모리를 덜 쓴다', leadsTo: 3 },
+          { text: '실행 속도가 항상 빨라진다', leadsTo: 3 },
+          { text: '가비지 컬렉션이 필요 없어진다', leadsTo: 3 },
+        ],
+        rationale:
+          '해시 키도 안정된다. 대신 변경마다 새 객체가 필요하다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '필드를 private final로 두면 불변인가?',
+        choices: [
+          { text: '부족하다. 가변 인자와 내부 컬렉션을 복사해야 한다', correct: true },
+          { text: '그것으로 충분하다', leadsTo: 0 },
+          { text: '필드가 기본형일 때만 충분하다', leadsTo: 2 },
+          { text: '생성자만 private이면 된다', leadsTo: 0 },
+        ],
+        rationale:
+          '생성자에서 가변 인자를 복사하고 내부 배열과 컬렉션도 방어적 복사로 반환해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'final 필드의 초기화 안전성이 깨지는 때는?',
+        choices: [
+          { text: '생성 중 this가 외부로 노출될 때', correct: true },
+          { text: '필드가 여러 개일 때', leadsTo: 1 },
+          { text: '상속받았을 때', leadsTo: 2 },
+          { text: '깨지는 경우가 없다', leadsTo: 1 },
+        ],
+        rationale:
+          'final 필드는 생성자 종료 뒤 초기화 안전성을 제공한다. 그 전에 참조가 새 나가면 보장이 성립하지 않는다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: '동등한 객체의 해시값도 같아야 하는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'equals가 지켜야 하는 성질은?',
+        choices: [
+          { text: '반사성·대칭성·추이성·일관성, 그리고 null에는 거짓', correct: true },
+          { text: '대칭성 하나면 된다', leadsTo: 2 },
+          { text: '순서를 매길 수 있어야 한다', leadsTo: 4 },
+          { text: '항상 모든 필드를 비교해야 한다', leadsTo: 3 },
+        ],
+        rationale:
+          'hashCode는 동등하면 같아야 하지만 충돌은 허용된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'hashCode는 equals가 쓰는 필드를 모두 써야 하는가?',
+        choices: [
+          { text: '더 적게 써도 동등하면 같기만 하면 된다', correct: true },
+          { text: '반드시 같은 필드를 모두 써야 한다', leadsTo: 3 },
+          { text: '항상 한 필드만 써야 한다', leadsTo: 0 },
+          { text: '필드와 무관하게 상수를 써도 좋다', leadsTo: 0 },
+        ],
+        rationale:
+          '규약이 요구하는 것은 동등한 객체의 해시값이 같다는 조건 하나다. 다만 상수를 쓰면 모든 키가 한 버킷에 몰린다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '상속 계층에서 값 동등성을 더하면 흔히 깨지는 것은?',
+        choices: [
+          { text: '대칭성', correct: true },
+          { text: '반사성', leadsTo: 0 },
+          { text: '일관성', leadsTo: 1 },
+          { text: '깨지는 것이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '값 객체는 불변으로 만들고 두 메서드를 같은 필드에서 함께 생성하는 편이 안전하다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: '체크 예외는 언제 API 계약에 넣는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '체크 예외를 계약에 넣는 기준은?',
+        choices: [
+          { text: '호출자가 복구 전략을 세울 수 있을 때', correct: true },
+          { text: '오류가 심각할 때', leadsTo: 4 },
+          { text: '내부 구현이 바뀔 수 있을 때', leadsTo: 0 },
+          { text: '예외가 자주 날 때', leadsTo: 3 },
+        ],
+        rationale:
+          '프로그래밍 오류에는 런타임 예외가 맞다. 컴파일러가 처리·선언을 강제하는 쪽은 예측 가능한 복구에 어울린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '체크 예외를 넓게 쓰면 더 안전해지는가?',
+        choices: [
+          { text: '호출 계층마다 의미 없는 catch와 throws가 퍼진다', correct: true },
+          { text: '넓게 쓸수록 안전하다', leadsTo: 3 },
+          { text: '성능만 조금 나빠진다', leadsTo: 2 },
+          { text: '컴파일러가 알아서 걸러 준다', leadsTo: 0 },
+        ],
+        rationale:
+          '복구할 수 없으면 도메인 런타임 예외로 번역하되 원인을 보존한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '경계에서 예외를 번역할 때 반드시 할 일은?',
+        choices: [
+          { text: '원인을 보존한다', correct: true },
+          { text: '메시지를 지운다', leadsTo: 1 },
+          { text: 'Error로 바꾼다', leadsTo: 4 },
+          { text: '스택 트레이스를 새로 만든다', leadsTo: 1 },
+        ],
+        rationale:
+          '예외를 경계에서 번역하면 저장소나 네트워크 구현을 API 밖으로 숨길 수 있다. 메시지와 원인, 복구 가능 여부를 계약에 명확히 둔다.',
+      },
+    ],
+  },
 ]
