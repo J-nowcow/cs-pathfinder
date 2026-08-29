@@ -13495,4 +13495,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'security',
+    question: '대칭키와 공개키 중 무엇을 선택하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '공개키가 느린 이유는?',
+        choices: [
+          { text: '복잡한 수학 연산을 수행하기 때문이다', correct: true },
+          { text: '키 길이가 짧기 때문이다', leadsTo: 1 },
+          { text: '네트워크를 거치기 때문이다', leadsTo: 2 },
+          { text: '서명을 매번 만들기 때문이다', leadsTo: 3 },
+        ],
+        rationale:
+          '전체 데이터를 공개키로 암호화하면 성능 저하가 심하다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '요즘 TLS는 공개키로 대칭키를 암호화해 보내는가?',
+        choices: [
+          { text: '아니다. 양쪽이 값을 주고받아 공유 비밀을 만들고 거기서 뽑는다', correct: true },
+          { text: '그렇다. 서버 공개키로 세션 키를 암호화한다', leadsTo: 2 },
+          { text: '그렇다. 대칭키를 인증서에 담아 보낸다', leadsTo: 4 },
+          { text: '아니다. 대신 대칭키만 쓴다', leadsTo: 0 },
+        ],
+        rationale:
+          '공개키는 서버가 진짜인지 서명으로 확인하는 데 쓴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '각각 어디에 쓰는가?',
+        choices: [
+          { text: '대칭키는 본문 암호화, 공개키는 키 교환과 서명', correct: true },
+          { text: '반대다', leadsTo: 3 },
+          { text: '둘 다 본문 암호화에 쓴다', leadsTo: 0 },
+          { text: '둘 다 서명에만 쓴다', leadsTo: 3 },
+        ],
+        rationale:
+          '대량 데이터 전송에는 대칭키가, 초기 키 교환과 인증에는 공개키가 맞는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: 'TLS 핸드셰이크의 핵심 목적은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '핸드셰이크로 이루려는 두 가지는?',
+        choices: [
+          { text: '서버가 진짜인지 확인하고 양쪽이 같은 대칭키를 갖는 것', correct: true },
+          { text: '클라이언트 신원 확인과 키 교환', leadsTo: 0 },
+          { text: '데이터 압축과 무결성 검사', leadsTo: 2 },
+          { text: '세션 재사용과 속도 향상', leadsTo: 4 },
+        ],
+        rationale:
+          '클라이언트 쪽 신원 확인은 기본이 아니다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '인증서의 공개키는 데이터를 잠그는 데 쓰이는가?',
+        choices: [
+          { text: '아니다. 서버가 그 인증서의 주인이 맞다는 것을 서명으로 보이는 데 쓴다', correct: true },
+          { text: '그렇다. 전송 데이터를 그 키로 암호화한다', leadsTo: 1 },
+          { text: '그렇다. 세션 키를 그 키로 잠가 보낸다', leadsTo: 1 },
+          { text: '아니다. 대신 아무 역할도 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '믿을 만한 기관이 서명한 인증서를 확인해 중간자를 막는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'TLS 1.3이 1-RTT로 줄인 방법은?',
+        choices: [
+          { text: '쓸 방식을 미리 좁혀 두고 첫 왕복에 키 재료까지 함께 보낸다', correct: true },
+          { text: '인증서 검증을 생략한다', leadsTo: 3 },
+          { text: '대칭키를 미리 공유해 둔다', leadsTo: 4 },
+          { text: '핸드셰이크를 건너뛴다', leadsTo: 2 },
+        ],
+        rationale:
+          '한 번 붙었던 서버에는 0-RTT로 더 줄일 수도 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '세션 하이재킹은 왜 성립하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '서버가 요청을 그 사용자의 것으로 처리하는 근거는?',
+        choices: [
+          { text: '유효한 토큰을 제시했다는 것', correct: true },
+          { text: '접속한 IP가 같다는 것', leadsTo: 0 },
+          { text: '기기 정보가 같다는 것', leadsTo: 0 },
+          { text: '비밀번호를 다시 확인했다는 것', leadsTo: 3 },
+        ],
+        rationale:
+          '대개의 세션이 토큰만 제시하면 통하는 방식이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'IP가 바뀌면 바로 끊는 것이 안전한가?',
+        choices: [
+          { text: '아니다. 이동 통신에서는 정상 사용자의 IP도 자주 바뀐다', correct: true },
+          { text: '그렇다. 탈취를 확실히 막는다', leadsTo: 0 },
+          { text: '그렇다. 오탐이 없다', leadsTo: 0 },
+          { text: '아니다. 대신 IP는 볼 필요가 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '보조 신호로 쓸 수는 있지만 어긋났다고 바로 끊으면 멀쩡한 사용자를 쫓아낸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '로그인 성공 시 토큰을 새로 만드는 이유는?',
+        choices: [
+          { text: '미리 심어 둔 토큰이 로그인 뒤에도 통하는 세션 고정 공격을 끊는다', correct: true },
+          { text: '토큰 길이를 늘리려고', leadsTo: 2 },
+          { text: '만료를 연장하려고', leadsTo: 3 },
+          { text: '스크립트 접근을 막으려고', leadsTo: 0 },
+        ],
+        rationale:
+          '이전 것을 함께 폐기해야 효과가 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '권한은 왜 최소로 주는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '권한이 정하는 것은?',
+        choices: [
+          { text: '계정이 뚫렸을 때 출발점의 넓이', correct: true },
+          { text: '최종 피해의 크기 전부', leadsTo: 1 },
+          { text: '공격이 성공할 확률', leadsTo: 4 },
+          { text: '탐지까지 걸리는 시간', leadsTo: 0 },
+        ],
+        rationale:
+          '공격자는 권한 상승이나 그 계정이 쥔 비밀로 피해를 더 키울 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '최소 권한은 처음에 좁게 주면 끝인가?',
+        choices: [
+          { text: '아니다. 정기적으로 살펴 불필요해진 권한을 회수하는 일까지다', correct: true },
+          { text: '그렇다. 초기 설정이 전부다', leadsTo: 3 },
+          { text: '그렇다. 한 번 정하면 바뀌지 않는다', leadsTo: 3 },
+          { text: '아니다. 대신 넓게 주고 감시한다', leadsTo: 0 },
+        ],
+        rationale:
+          '임시로 넓힌 권한이 안 돌아오고 쌓이기 쉽다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '서비스 계정과 CI 토큰이 더 위험한 이유는?',
+        choices: [
+          { text: '장기 유효하거나 권한이 넓고 감시가 부족하기 쉽다', correct: true },
+          { text: '사람보다 실수를 많이 해서', leadsTo: 1 },
+          { text: '권한 상승이 불가능해서', leadsTo: 1 },
+          { text: '비밀을 쥐지 않아서', leadsTo: 0 },
+        ],
+        rationale:
+          '자동화된 자리라 넓은 권한을 받기 쉽다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '비밀키를 코드에 넣으면 왜 안 되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '키를 지운 커밋을 올리면 해결되는가?',
+        choices: [
+          { text: '아니다. 히스토리와 이미 만들어진 복제본에는 남는다', correct: true },
+          { text: '그렇다. 최신 코드에 없으면 안전하다', leadsTo: 3 },
+          { text: '그렇다. 깃이 이전 기록을 지운다', leadsTo: 3 },
+          { text: '아니다. 대신 클론만 다시 받으면 된다', leadsTo: 3 },
+        ],
+        rationale:
+          '저장소가 복사되는 곳마다 키도 따라간다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '유출된 키의 대응은 삭제인가?',
+        choices: [
+          { text: '아니다. 폐기다. 무효로 만들고 필요하면 새 키로 바꾼다', correct: true },
+          { text: '그렇다. 지우면 회수된다', leadsTo: 3 },
+          { text: '그렇다. 저장소만 비공개로 돌리면 된다', leadsTo: 0 },
+          { text: '아니다. 대신 그대로 쓴다', leadsTo: 0 },
+        ],
+        rationale:
+          '어디까지 쓰였는지 접근 기록을 살피는 것도 대응의 일부다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '키는 어떻게 전달하는가?',
+        choices: [
+          { text: '배포 환경이 환경 변수로 주입하거나 시크릿 매니저를 쓴다', correct: true },
+          { text: '설정 파일에 적어 함께 커밋한다', leadsTo: 3 },
+          { text: '주석으로 남긴다', leadsTo: 3 },
+          { text: '별도 브랜치에 둔다', leadsTo: 3 },
+        ],
+        rationale:
+          '코드에는 어떤 키가 필요한지만 남는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'http',
+    question: 'HSTS는 무엇을 막는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '정책을 기억한 브라우저는 무엇을 하는가?',
+        choices: [
+          { text: 'HTTP 요청을 네트워크에 보내기 전에 HTTPS로 바꾼다', correct: true },
+          { text: 'HTTP로 보낸 뒤 리다이렉트를 따른다', leadsTo: 3 },
+          { text: '인증서를 더 엄격히 검사한다', leadsTo: 4 },
+          { text: '접속을 차단한다', leadsTo: 1 },
+        ],
+        rationale:
+          '공격이 낄 창문이 닫힌다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '서버가 HTTPS로 리다이렉트하면 충분한가?',
+        choices: [
+          { text: '아니다. 리다이렉트는 HTTP 응답이라 공격자가 바꿀 수 있다', correct: true },
+          { text: '그렇다. 결국 HTTPS로 넘어간다', leadsTo: 2 },
+          { text: '그렇다. 리다이렉트도 암호화된다', leadsTo: 3 },
+          { text: '아니다. 대신 리다이렉트를 없애야 한다', leadsTo: 3 },
+        ],
+        rationale:
+          'HTTP로 붙는 그 순간을 노리는 다운그레이드 공격이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '남는 빈틈은?',
+        choices: [
+          { text: '헤더를 아직 못 받은 첫 방문', correct: true },
+          { text: 'max-age가 끝난 뒤', leadsTo: 0 },
+          { text: '인증서를 갱신할 때', leadsTo: 4 },
+          { text: '빈틈이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          'preload 목록에 올리면 그 브라우저에서는 첫 방문부터 강제된다.',
+      },
+    ],
+  },
 ]
