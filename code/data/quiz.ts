@@ -4351,4 +4351,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'os',
+    question: '동기/비동기 및 블로킹/논블로킹의 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '동기·비동기가 가르는 것은?',
+        choices: [
+          { text: '작업 완료를 누가 확인하느냐', correct: true },
+          { text: '제어권을 언제 돌려주느냐', leadsTo: 2 },
+          { text: '스레드를 몇 개 쓰느냐', leadsTo: 2 },
+          { text: '커널을 거치느냐', leadsTo: 4 },
+        ],
+        rationale:
+          '블로킹·논블로킹은 호출된 쪽이 제어권을 언제 돌려주는지의 구분이라 축이 다르다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '논블로킹이면 완료를 저절로 알게 되는가?',
+        choices: [
+          { text: '직접 물어보거나 알림을 받아야 한다', correct: true },
+          { text: '완료되면 자동으로 값이 채워진다', leadsTo: 0 },
+          { text: '블로킹과 같은 방식으로 기다린다', leadsTo: 2 },
+          { text: '완료 여부를 알 수 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '계속 물어보는 것을 폴링이라 하고, 콜백이나 이벤트 루프로 알림을 받을 수도 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '블로킹 방식이 주는 이점은?',
+        choices: [
+          { text: '코드가 직관적이다', correct: true },
+          { text: '자원 효율이 높다', leadsTo: 2 },
+          { text: '처리량이 항상 크다', leadsTo: 2 },
+          { text: '이점이 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '작업이 끝날 때까지 아무것도 못 하고 대기하므로 시스템 자원 효율은 떨어진다. 맞바꾸는 값이 있다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '데이터 오류로 인한 손실을 어떻게 방지하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '패리티 비트로 할 수 있는 일은?',
+        choices: [
+          { text: '오류가 있다는 것을 아는 것까지', correct: true },
+          { text: '오류 위치를 찾아 되돌리는 것', leadsTo: 1 },
+          { text: '여러 비트를 한꺼번에 고치는 것', leadsTo: 1 },
+          { text: '오류를 아예 막는 것', leadsTo: 0 },
+        ],
+        rationale:
+          '데이터 끝에 1비트를 추가해 합을 맞춘다. 어디가 틀렸는지는 모르고 데이터는 버려야 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '해밍 코드는 몇 비트까지 되돌리는가?',
+        choices: [
+          { text: '한 비트가 뒤집힌 경우까지', correct: true },
+          { text: '몇 비트든 되돌린다', leadsTo: 1 },
+          { text: '되돌리지 못하고 검출만 한다', leadsTo: 0 },
+          { text: '체크 비트 수만큼 되돌린다', leadsTo: 3 },
+        ],
+        rationale:
+          '두 비트가 뒤집히면 있다는 것만 알고 자리는 못 찾는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '검출만으로 충분하지 않은 자리는?',
+        choices: [
+          { text: '지연이 길거나 재전송이 불가능한 곳', correct: true },
+          { text: '데이터가 작은 곳', leadsTo: 0 },
+          { text: '네트워크로 보내는 곳', leadsTo: 4 },
+          { text: '어디서나 검출로 충분하다', leadsTo: 2 },
+        ],
+        rationale:
+          '검출만 해도 재전송을 요청해 데이터를 살릴 수 있다. 그 길이 막힌 곳에서 직접 복구가 필요해진다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '블로킹과 논블로킹 I/O의 결정적 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '가르는 기준은?',
+        choices: [
+          { text: '제어권의 반환 시점', correct: true },
+          { text: '데이터 크기', leadsTo: 2 },
+          { text: '스레드 개수', leadsTo: 4 },
+          { text: '커널 모드 진입 여부', leadsTo: 4 },
+        ],
+        rationale:
+          '블로킹은 작업 완료까지 기다리고, 논블로킹은 호출 즉시 돌려준다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '논블로킹 호출이 바로 돌아오면 데이터가 온 것인가?',
+        choices: [
+          { text: '아직 없으면 EAGAIN 같은 표시로 바로 돌아온다', correct: true },
+          { text: '돌아왔으면 데이터가 있다', leadsTo: 0 },
+          { text: '돌아왔으면 오류다', leadsTo: 0 },
+          { text: '데이터가 올 때까지 안 돌아온다', leadsTo: 1 },
+        ],
+        rationale:
+          '그래서 대기 시간 동안 다른 일을 할 수 있다. 대신 완료를 확인하는 로직이 따로 필요하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '논블로킹이 치르는 대가는?',
+        choices: [
+          { text: '완료 확인이 필요해 로직이 복잡해진다', correct: true },
+          { text: '처리량이 반드시 떨어진다', leadsTo: 2 },
+          { text: '스레드를 더 써야 한다', leadsTo: 4 },
+          { text: '대가가 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '블로킹 쪽 코드가 직관적인 것과 맞바꾼 값이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '경쟁 상태를 막으려면 무엇을 고려해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '경쟁 상태란?',
+        choices: [
+          { text: '접근 순서가 결과를 바꾸는 상황', correct: true },
+          { text: '스레드가 많은 상황', leadsTo: 0 },
+          { text: '락이 걸린 상황', leadsTo: 0 },
+          { text: '메모리가 부족한 상황', leadsTo: 2 },
+        ],
+        rationale:
+          '둘 다 같은 값을 읽은 뒤 각자 계산하면 나중에 쓴 쪽이 앞의 결과를 덮는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '락 범위를 넓게 잡으면 안전한가?',
+        choices: [
+          { text: '안전해지지만 성능이 떨어진다', correct: true },
+          { text: '넓을수록 언제나 낫다', leadsTo: 0 },
+          { text: '범위와 성능은 무관하다', leadsTo: 2 },
+          { text: '넓으면 오히려 경쟁이 는다', leadsTo: 1 },
+        ],
+        rationale:
+          '꼭 필요한 구간만 묶거나 하드웨어 수준의 원자적 명령을 써서 오버헤드를 줄여야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '락 없이 오버헤드를 줄이는 길은?',
+        choices: [
+          { text: '원자적 변수처럼 하드웨어 수준 명령을 쓴다', correct: true },
+          { text: '스레드를 줄인다', leadsTo: 2 },
+          { text: '임계 구역을 없앤다', leadsTo: 0 },
+          { text: '방법이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '원자적 연산으로 처리하거나 상호 배제 기법을 쓰는 두 갈래가 있다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '인터럽트와 폴링의 결정적인 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 것은?',
+        choices: [
+          { text: 'CPU가 직접 확인하는가, 장치가 깨우는가', correct: true },
+          { text: '속도가 빠른가 느린가', leadsTo: 2 },
+          { text: '하드웨어인가 소프트웨어인가', leadsTo: 1 },
+          { text: '커널인가 사용자인가', leadsTo: 0 },
+        ],
+        rationale:
+          '폴링은 루프를 돌며 상태를 계속 확인하므로 그동안 자원을 쓴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '인터럽트는 하드웨어에서만 오는가?',
+        choices: [
+          { text: '소프트웨어 명령이나 예외로도 온다', correct: true },
+          { text: '하드웨어에서만 온다', leadsTo: 1 },
+          { text: '타이머에서만 온다', leadsTo: 1 },
+          { text: '커널이 스스로 만든다', leadsTo: 0 },
+        ],
+        rationale:
+          '운영체제는 하드웨어 인터럽트와 소프트웨어 인터럽트를 구분해 알맞은 처리 루틴으로 보낸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '인터럽트가 가능하게 한 것은?',
+        choices: [
+          { text: '현대 운영체제의 멀티태스킹', correct: true },
+          { text: '가상 메모리', leadsTo: 3 },
+          { text: '파일 시스템', leadsTo: 0 },
+          { text: '네트워크 통신', leadsTo: 2 },
+        ],
+        rationale:
+          'CPU는 다른 작업을 수행하다가 신호가 오면 처리 루틴으로 점프한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '컨텍스트 스위칭 시 CPU는 무엇을 저장하고 복원하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '무엇에 저장하는가?',
+        choices: [
+          { text: '현재 프로세스의 PCB', correct: true },
+          { text: '디스크의 스왑 영역', leadsTo: 4 },
+          { text: '다음 프로세스의 스택', leadsTo: 0 },
+          { text: '커널 힙', leadsTo: 0 },
+        ],
+        rationale:
+          '프로그램 카운터와 레지스터 값을 옮겨 적어야 나중에 중단된 지점부터 이어 갈 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '전환할 때 CPU 캐시는 지워지는가?',
+        choices: [
+          { text: '지워지는 것이 아니라 새 작업의 데이터에 밀린다', correct: true },
+          { text: '통째로 지워진다', leadsTo: 1 },
+          { text: '그대로 보존된다', leadsTo: 1 },
+          { text: '프로세스마다 따로 있어 영향이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          'TLB도 꼬리표를 달 수 있으면 통째로 비우지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '비용이 더 큰 쪽은?',
+        choices: [
+          { text: '전환 뒤 캐시 미스가 늘어나는 쪽', correct: true },
+          { text: '레지스터를 복원하는 쪽', leadsTo: 4 },
+          { text: '스케줄러가 고르는 쪽', leadsTo: 4 },
+          { text: '둘이 같다', leadsTo: 1 },
+        ],
+        rationale:
+          '단순한 레지스터 복원보다 이 초기화 비용이 더 크다. 그 사이 CPU는 실제 연산을 하지 않는다.',
+      },
+    ],
+  },
 ]
