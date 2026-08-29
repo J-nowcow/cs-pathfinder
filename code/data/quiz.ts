@@ -3319,4 +3319,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'python',
+    question: '파이썬의 가비지 컬렉션은 무엇으로 동작하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '기본이 되는 메커니즘은?',
+        choices: [
+          { text: '참조 횟수 세기', correct: true },
+          { text: '세대별 수집', leadsTo: 1 },
+          { text: '표시하고 쓸기', leadsTo: 0 },
+          { text: '수동 해제', leadsTo: 2 },
+        ],
+        rationale:
+          '참조 횟수가 0이 되면 즉시 메모리에서 제거한다. 세대별 수집기는 순환을 걷어 내는 보조 수단이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '참조 횟수만으로 충분한가?',
+        choices: [
+          { text: '순환 참조는 횟수가 0이 되지 않아 남는다', correct: true },
+          { text: '충분하다. 모든 객체를 해제한다', leadsTo: 0 },
+          { text: '큰 객체만 놓친다', leadsTo: 0 },
+          { text: '스레드가 많을 때만 놓친다', leadsTo: 3 },
+        ],
+        rationale:
+          '두 객체가 서로를 가리키면 외부에서 닿지 않아도 횟수가 남는다. 그래서 세대별 수집기가 주기적으로 찾아낸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '세대를 몇 개로 두는지는?',
+        choices: [
+          { text: '판마다 바뀌어 왔다', correct: true },
+          { text: '언제나 셋으로 고정이다', leadsTo: 1 },
+          { text: '객체 수에 따라 자동으로 늘어난다', leadsTo: 1 },
+          { text: '사용자가 반드시 정해야 한다', leadsTo: 1 },
+        ],
+        rationale:
+          '객체를 세대로 나눠 오래 살아남은 것은 덜 자주 훑는다는 원칙이 핵심이고, 그 개수는 구현 세부다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'javascript',
+    question: '호이스팅으로 인한 부작용을 어떻게 막는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'var로 선언한 변수를 할당 전에 읽으면?',
+        choices: [
+          { text: 'undefined가 나와 조용히 지나간다', correct: true },
+          { text: '오류가 나서 바로 잡힌다', leadsTo: 0 },
+          { text: '할당될 값이 미리 들어 있다', leadsTo: 2 },
+          { text: '이름을 찾지 못한다', leadsTo: 0 },
+        ],
+        rationale:
+          '선언문이 스코프 최상단으로 끌어올려져 이름만 예약된다. 값은 할당문 단계에서 결정되므로 그 틈이 논리적 오류를 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'let과 const를 쓰면 무엇이 달라지는가?',
+        choices: [
+          { text: '선언 전 접근이 런타임 오류로 드러난다', correct: true },
+          { text: '호이스팅 자체가 사라진다', leadsTo: 4 },
+          { text: 'undefined 대신 null이 나온다', leadsTo: 0 },
+          { text: '함수 스코프로 바뀐다', leadsTo: 2 },
+        ],
+        rationale:
+          '잘못된 접근을 조용히 넘기지 않고 즉시 알게 한다. 스코프도 블록 단위로 좁아진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '함수 선언문이 만드는 위험은?',
+        choices: [
+          { text: '의도치 않은 덮어쓰기', correct: true },
+          { text: '선언 전 호출이 막힌다', leadsTo: 1 },
+          { text: '스코프를 벗어난다', leadsTo: 2 },
+          { text: '위험이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '함수 선언문은 본문까지 일찍 바인딩되어 선언 앞에서 호출할 수 있다. 그래서 같은 이름이 조용히 덮일 수 있다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '값 타입과 참조 타입은 무엇으로 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '참조 타입 변수가 담는 것은?',
+        choices: [
+          { text: '값이 저장된 메모리 주소', correct: true },
+          { text: '값 자체', leadsTo: 3 },
+          { text: '값의 복사본', leadsTo: 3 },
+          { text: '타입 이름', leadsTo: 4 },
+        ],
+        rationale:
+          '값 타입은 실제 값을 직접 저장한다. 이 차이가 복사와 변경 전파의 차이를 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '값 타입은 언제나 스택에 놓이는가?',
+        choices: [
+          { text: '객체의 필드나 배열 원소면 힙에 놓인다', correct: true },
+          { text: '언제나 스택이다', leadsTo: 0 },
+          { text: '언제나 힙이다', leadsTo: 0 },
+          { text: '컴파일러가 무작위로 정한다', leadsTo: 4 },
+        ],
+        rationale:
+          '값이 그 자리에 직접 들어간다는 것이 핵심이고, 그 자리가 어디인지는 담긴 위치에 달렸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '참조 타입이 주는 이점과 대가는?',
+        choices: [
+          { text: '메모리 효율은 높지만 상태 변경 추적이 어렵다', correct: true },
+          { text: '효율도 추적도 모두 낫다', leadsTo: 1 },
+          { text: '효율이 나쁘고 추적은 쉽다', leadsTo: 1 },
+          { text: '값 타입과 차이가 없다', leadsTo: 3 },
+        ],
+        rationale:
+          '여러 변수가 동일한 객체를 가리키므로 한 곳에서 수정하면 다른 변수에도 반영된다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '함수형 프로그래밍을 적용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '얻으려는 것은?',
+        choices: [
+          { text: '상태 변경을 줄여 예측 가능성을 높이는 것', correct: true },
+          { text: '실행 속도를 높이는 것', leadsTo: 1 },
+          { text: '코드 줄 수를 줄이는 것', leadsTo: 3 },
+          { text: '메모리를 아끼는 것', leadsTo: 1 },
+        ],
+        rationale:
+          '순수 함수는 외부 상태를 바꾸지 않고 오직 입력값으로만 결과를 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '순수 함수가 시험하기 쉬운 까닭은?',
+        choices: [
+          { text: '입력과 출력만 비교하면 되기 때문', correct: true },
+          { text: '코드가 짧기 때문', leadsTo: 0 },
+          { text: '오류를 던지지 않기 때문', leadsTo: 4 },
+          { text: '자동으로 검증되기 때문', leadsTo: 0 },
+        ],
+        rationale:
+          '바깥 상태를 준비하고 되돌릴 일이 없다. 같은 입력이면 같은 결과라는 성질이 그것을 가능하게 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '불변성이 동시성에서 주는 것은?',
+        choices: [
+          { text: '락 비용 없이 경쟁 상태를 피한다', correct: true },
+          { text: '락을 더 촘촘히 걸게 한다', leadsTo: 1 },
+          { text: '스레드 수를 늘려 준다', leadsTo: 2 },
+          { text: '동시성과 무관하다', leadsTo: 1 },
+        ],
+        rationale:
+          '바뀌지 않는 값은 여러 스레드가 함께 읽어도 어긋날 자리가 없다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'jvm',
+    question: 'GC 알고리즘 선택 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '선택을 가르는 핵심 축은?',
+        choices: [
+          { text: '처리량 중심인가 응답 속도 중심인가', correct: true },
+          { text: '힙 크기가 큰가 작은가', leadsTo: 4 },
+          { text: 'JDK 버전이 높은가', leadsTo: 2 },
+          { text: '스레드가 많은가', leadsTo: 3 },
+        ],
+        rationale:
+          '애플리케이션의 서비스 특성과 지연 시간 허용 범위에 따라 결정한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '초저지연 수집기의 몇 밀리초는 무엇인가?',
+        choices: [
+          { text: '목표이지 어떤 환경에서든 지켜지는 약속은 아니다', correct: true },
+          { text: '모든 환경에서 보장되는 상한이다', leadsTo: 2 },
+          { text: '평균값이라 절반은 넘는다', leadsTo: 2 },
+          { text: '힙 크기와 무관한 상수다', leadsTo: 3 },
+        ],
+        rationale:
+          '힙이 커져도 멈추는 시간이 잘 늘지 않도록 만들어졌지만, 그것이 어떤 부하에서도 성립한다는 뜻은 아니다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '리전으로 나눠 수집하는 방식이 노리는 것은?',
+        choices: [
+          { text: '회수 가치가 큰 곳부터 처리해 목표 지연을 맞추는 것', correct: true },
+          { text: '힙을 물리적으로 줄이는 것', leadsTo: 3 },
+          { text: '수집을 아예 없애는 것', leadsTo: 0 },
+          { text: '스레드를 늘리는 것', leadsTo: 3 },
+        ],
+        rationale:
+          '설정한 목표 지연 시간을 맞추기 위해 수집 효율이 높은 영역부터 먼저 처리한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: '같은 문자열 리터럴이 같은 객체인 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '같은 리터럴이 같은 자리를 가리키는 까닭은?',
+        choices: [
+          { text: '풀에 한 벌만 두고 함께 쓰기 때문', correct: true },
+          { text: '내용이 같으면 자동으로 합쳐지기 때문', leadsTo: 0 },
+          { text: '문자열이 값 타입이기 때문', leadsTo: 0 },
+          { text: '컴파일러가 매번 새로 만들기 때문', leadsTo: 4 },
+        ],
+        rationale:
+          '리터럴은 문자열 풀에 한 벌만 있고 변수는 그 자리를 가리킨다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'new로 만든 문자열은 풀에 있으면 재사용되는가?',
+        choices: [
+          { text: '풀에 있든 없든 힙에 새로 하나를 만든다', correct: true },
+          { text: '풀에 있으면 그것을 쓴다', leadsTo: 1 },
+          { text: '내용이 같으면 합쳐진다', leadsTo: 0 },
+          { text: '오류가 난다', leadsTo: 2 },
+        ],
+        rationale:
+          '그래서 참조로 견주면 거짓이고 내용으로 견줘야 참이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '참조 비교가 문자열에서 헷갈리는 근본 이유는?',
+        choices: [
+          { text: '내용이 아니라 참조를 견주기 때문', correct: true },
+          { text: '문자열만 특별한 규칙을 쓰기 때문', leadsTo: 2 },
+          { text: '길이에 따라 다르게 동작하기 때문', leadsTo: 0 },
+          { text: '인코딩이 다르기 때문', leadsTo: 4 },
+        ],
+        rationale:
+          '문자열이 특별해서가 아니라 참조 비교라서 그렇다. 리터럴이 풀을 공유하는 것이 우연히 참을 만들 뿐이다.',
+      },
+    ],
+  },
 ]
