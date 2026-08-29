@@ -7546,11 +7546,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '글꼴을 전부 preload하면 표시가 빨라지는가?',
+        stem: '핵심 글꼴만 골라 preload해야 하는가?',
         choices: [
-          { text: '그렇다. 우선순위가 올라가니 항상 이득이다', leadsTo: 0 },
-          { text: '아니다. 핵심 이미지와 스크립트의 다운로드가 늦어진다', correct: true },
-          { text: '그렇다. 브라우저가 남는 대역만 쓴다', leadsTo: 0 },
+          { text: '아니다. 전부 걸수록 항상 이득이다', leadsTo: 0 },
+          { text: '그렇다. 다 걸면 핵심 이미지와 스크립트가 늦어진다', correct: true },
+          { text: '아니다. 브라우저가 남는 대역만 쓴다', leadsTo: 0 },
           { text: '아니다. preload는 글꼴에 쓸 수 없다', leadsTo: 0 },
         ],
         rationale:
@@ -7630,11 +7630,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'ARIA를 붙이면 시맨틱 요소와 같아지는가?',
+        stem: 'ARIA를 붙여도 키보드 동작은 직접 만들어야 하는가?',
         choices: [
-          { text: '아니다. 역할만 알릴 뿐 키보드 동작은 따라오지 않는다', correct: true },
-          { text: '그렇다. 역할을 지정하면 동작도 생긴다', leadsTo: 2 },
-          { text: '그렇다. 보조 기술이 알아서 처리한다', leadsTo: 2 },
+          { text: '아니다. 역할을 지정하면 동작도 생긴다', leadsTo: 2 },
+          { text: '아니다. 보조 기술이 알아서 처리한다', leadsTo: 2 },
+          { text: '그렇다. 역할만 알릴 뿐이다', correct: true },
           { text: '아니다. ARIA는 아무 효과가 없다', leadsTo: 2 },
         ],
         rationale:
@@ -7672,11 +7672,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '평균값이 좋으면 사용자 경험도 좋다고 볼 수 있는가?',
+        stem: '지표는 방문의 75번째 백분위에서 보는가?',
         choices: [
-          { text: '그렇다. 평균이 전체를 대표한다', leadsTo: 4 },
-          { text: '아니다. 방문의 75번째 백분위에서 본다', correct: true },
-          { text: '그렇다. 최빈값이면 더 정확하다', leadsTo: 4 },
+          { text: '그렇다. 평균은 느린 쪽을 가린다', correct: true },
+          { text: '아니다. 평균이 전체를 대표한다', leadsTo: 4 },
+          { text: '아니다. 최빈값이 더 정확하다', leadsTo: 4 },
           { text: '아니다. 최악값만 봐야 한다', leadsTo: 4 },
         ],
         rationale:
@@ -7756,12 +7756,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '오프라인을 위해 모든 응답을 캐시하면 되는가?',
+        stem: '실패 응답은 캐시에서 빼야 하는가?',
         choices: [
-          { text: '아니다. 실패 응답을 저장하지 않는다', correct: true },
-          { text: '그렇다. 많이 담을수록 오프라인에 강하다', leadsTo: 1 },
-          { text: '그렇다. 만료만 걸어 두면 된다', leadsTo: 0 },
+          { text: '아니다. 많이 담을수록 오프라인에 강하다', leadsTo: 1 },
+          { text: '아니다. 만료만 걸어 두면 된다', leadsTo: 0 },
           { text: '아니다. 캐시는 정적 자산에만 쓸 수 있다', leadsTo: 2 },
+          { text: '그렇다. 저장하면 오류가 오래 남는다', correct: true },
         ],
         rationale:
           '요청 종류별로 만료와 최대 개수도 제한해야 한다.',
@@ -7798,15 +7798,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'SSG는 빠르니 어디에나 쓰면 되는가?',
+        stem: 'SSG는 빠른 대신 갱신이 늦을 수 있는가?',
         choices: [
-          { text: '그렇다. 응답이 빠르고 서버 부하도 작다', leadsTo: 1 },
-          { text: '아니다. 갱신이 늦을 수 있다', correct: true },
-          { text: '그렇다. 재생성이 항상 즉시 반영된다', leadsTo: 1 },
-          { text: '아니다. 검색 노출이 나빠진다', leadsTo: 2 },
+          { text: '아니다. 재생성이 항상 즉시 반영된다', leadsTo: 1 },
+          { text: '그렇다. 미리 만들어 두는 대가다', correct: true },
+          { text: '아니다. 응답도 빠르고 갱신도 즉시다', leadsTo: 1 },
+          { text: '아니다. 대신 검색 노출이 나빠진다', leadsTo: 2 },
         ],
         rationale:
-          '미리 만들어 두는 대가로 최신 데이터가 늦는다. SSR은 반대로 요청마다 비용과 장애 지점이 생긴다.',
+          'SSR은 반대로 요청마다 렌더링 비용과 장애 지점이 생긴다.',
       },
       {
         kind: 'boundary',
@@ -7840,11 +7840,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '불일치는 화면이 잠깐 깜빡이는 정도의 문제인가?',
+        stem: '불일치가 상태 손실로도 이어지는가?',
         choices: [
-          { text: '아니다. 상태 손실과 이벤트 연결 오류로도 이어진다', correct: true },
-          { text: '그렇다. 결국 올바른 화면으로 수렴한다', leadsTo: 3 },
-          { text: '그렇다. 경고만 나올 뿐 동작은 같다', leadsTo: 3 },
+          { text: '그렇다. 이벤트 연결 오류까지 난다', correct: true },
+          { text: '아니다. 결국 올바른 화면으로 수렴한다', leadsTo: 3 },
+          { text: '아니다. 경고만 나올 뿐 동작은 같다', leadsTo: 3 },
           { text: '아니다. 렌더가 아예 중단된다', leadsTo: 2 },
         ],
         rationale:
@@ -7882,11 +7882,11 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '안전하게 가려면 ERROR만 남기면 되는가?',
+        stem: 'ERROR만 남기면 복구가 오히려 느려지는가?',
         choices: [
-          { text: '그렇다. 운영에서는 ERROR 외에 볼 것이 없다', leadsTo: 4 },
-          { text: '그렇다. 디스크를 아끼고 장애도 놓치지 않는다', leadsTo: 4 },
-          { text: '아니다. 장애 원인을 찾을 맥락 정보가 부족해진다', correct: true },
+          { text: '아니다. 운영에서는 ERROR 외에 볼 것이 없다', leadsTo: 4 },
+          { text: '아니다. 디스크를 아끼고 장애도 놓치지 않는다', leadsTo: 4 },
+          { text: '그렇다. 원인을 찾을 맥락이 없다', correct: true },
           { text: '아니다. ERROR는 운영에서 끄는 것이 맞다', leadsTo: 0 },
         ],
         rationale:
@@ -7924,12 +7924,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: 'HttpOnly 쿠키를 쓰면 XSS 피해가 사라지는가?',
+        stem: 'HttpOnly를 걸어도 공격자가 요청을 대신 보낼 수 있는가?',
         choices: [
-          { text: '아니다. 쿠키는 못 읽어도 그 자리에서 요청을 대신 보낼 수 있다', correct: true },
-          { text: '그렇다. 세션을 못 훔치면 할 수 있는 게 없다', leadsTo: 4 },
-          { text: '그렇다. 스크립트 삽입 자체가 막힌다', leadsTo: 3 },
+          { text: '아니다. 세션을 못 훔치면 할 수 있는 게 없다', leadsTo: 4 },
+          { text: '아니다. 스크립트 삽입 자체가 막힌다', leadsTo: 3 },
           { text: '아니다. HttpOnly는 스크립트도 읽을 수 있다', leadsTo: 2 },
+          { text: '그렇다. 쿠키를 못 읽어도 그 자리에서 보낸다', correct: true },
         ],
         rationale:
           'XSS는 그 출처의 권한으로 남의 스크립트를 돌린다는 점이 본질이다.',
