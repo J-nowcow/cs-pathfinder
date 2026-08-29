@@ -13999,4 +13999,214 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '이미지와 컨테이너는 무엇이 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '컨테이너가 이미지 위에 얹는 것은?',
+        choices: [
+          { text: '쓰기 층 하나', correct: true },
+          { text: '베이스 층 사본', leadsTo: 1 },
+          { text: '런타임 층 사본', leadsTo: 1 },
+          { text: '아무것도 얹지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '이미지는 읽기만 되는 층들이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 이미지로 열 개를 띄우면 디스크도 열 배인가?',
+        choices: [
+          { text: '아니다. 읽기 전용 층을 함께 쓰고 얇은 쓰기 층만 는다', correct: true },
+          { text: '그렇다. 각자 이미지를 복사한다', leadsTo: 1 },
+          { text: '그렇다. 층마다 사본이 생긴다', leadsTo: 1 },
+          { text: '아니다. 대신 전혀 늘지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '그 뒤로는 각자 쓴 파일과 로그만큼 는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '컨테이너를 고쳐 저장하는 방식을 안 쓰는 이유는?',
+        choices: [
+          { text: '무엇이 들었는지 아무도 모르는 이미지가 된다', correct: true },
+          { text: '용량이 커져서', leadsTo: 4 },
+          { text: '기술적으로 불가능해서', leadsTo: 3 },
+          { text: '쓰기 층이 사라져서', leadsTo: 2 },
+        ],
+        rationale:
+          '고칠 것은 만드는 파일 쪽이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: '비밀번호를 그냥 해시하면 왜 안 되는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '소금이 막는 것은?',
+        choices: [
+          { text: '미리 만든 표로 한꺼번에 대조하는 것', correct: true },
+          { text: '한 사람을 노린 공격', leadsTo: 0 },
+          { text: '해시 함수가 빠른 것', leadsTo: 3 },
+          { text: '유출 자체', leadsTo: 0 },
+        ],
+        rationale:
+          '사용자마다 다른 값을 붙여 같은 비밀번호여도 결과가 달라진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '소금을 붙였으면 안전한가?',
+        choices: [
+          { text: '아니다. 한 사람을 노려 그 소금으로 다시 만들면 된다', correct: true },
+          { text: '그렇다. 소금이면 충분하다', leadsTo: 0 },
+          { text: '그렇다. 소금을 숨기면 완전하다', leadsTo: 1 },
+          { text: '아니다. 대신 소금은 필요 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '빠른 함수라면 그게 오래 안 걸린다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '느리게 만드는 정도는 무엇으로 정하는가?',
+        choices: [
+          { text: '서버가 견디는 선', correct: true },
+          { text: '가능한 한 최대로', leadsTo: 3 },
+          { text: '해시 길이에 맞춰', leadsTo: 2 },
+          { text: '사용자 수에 비례해', leadsTo: 3 },
+        ],
+        rationale:
+          '로그인 한 번에 수백 밀리초쯤이 흔한 기준이다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'git',
+    question: '되돌리기와 지우기는 무엇이 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '되돌리기는 이력을 어떻게 바꾸는가?',
+        choices: [
+          { text: '무르는 기록을 하나 더 얹는다', correct: true },
+          { text: '해당 기록을 이력에서 뺀다', leadsTo: 1 },
+          { text: '가지가 가리키는 자리를 뒤로 옮긴다', leadsTo: 2 },
+          { text: '이력을 바꾸지 않는다', leadsTo: 4 },
+        ],
+        rationale:
+          '지우기는 가리키는 자리를 옮겨 그 뒤 기록을 이력에서 뺀다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '남이 받아 간 가지도 지워서 정리하면 되는가?',
+        choices: [
+          { text: '아니다. 남의 기록과 갈라져 다음 합칠 때 충돌한다', correct: true },
+          { text: '그렇다. 이력이 깔끔해진다', leadsTo: 3 },
+          { text: '그렇다. 남도 자동으로 맞춰진다', leadsTo: 1 },
+          { text: '아니다. 대신 혼자 쓰는 가지도 지우면 안 된다', leadsTo: 3 },
+        ],
+        rationale:
+          '혼자 쓰는 가지라면 지워도 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '실수로 올린 비밀번호는 되돌리기로 해결되는가?',
+        choices: [
+          { text: '아니다. 되돌린 기록도 이력에 남아 그 비밀번호를 바꾸는 것이 먼저다', correct: true },
+          { text: '그렇다. 무르면 사라진다', leadsTo: 1 },
+          { text: '그렇다. 다음 커밋이 덮는다', leadsTo: 0 },
+          { text: '아니다. 대신 지우기로 해결된다', leadsTo: 0 },
+        ],
+        rationale:
+          '기록 자체를 다시 써야 하고 이미 나갔다면 폐기가 먼저다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'infra',
+    question: '요청이 한꺼번에 몰릴 때 어떻게 막는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '토큰 버킷이 짧은 급증을 허용하는 원리는?',
+        choices: [
+          { text: '평소 남겨 둔 토큰을 쓴다', correct: true },
+          { text: '대기열을 늘린다', leadsTo: 3 },
+          { text: '한도를 일시적으로 올린다', leadsTo: 4 },
+          { text: '거절을 미룬다', leadsTo: 3 },
+        ],
+        rationale:
+          '계속 몰리면 토큰이 채워지는 속도까지만 통과한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'rate limit을 걸면 서버 과부하도 막히는가?',
+        choices: [
+          { text: '아니다. 느린 요청 100개가 오래 붙잡으면 자원이 바닥난다', correct: true },
+          { text: '그렇다. 초당 요청 수를 막으면 충분하다', leadsTo: 4 },
+          { text: '그렇다. 두 가지는 같은 문제다', leadsTo: 3 },
+          { text: '아니다. 대신 대기열을 늘리면 된다', leadsTo: 3 },
+        ],
+        rationale:
+          '실제 동시 요청 수와 대기열, CPU와 지연을 보고 진입을 줄여야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '할당량 초과와 서비스 과부하는 어떻게 구분하는가?',
+        choices: [
+          { text: '429와 503으로 나눈다', correct: true },
+          { text: '둘 다 429로 답한다', leadsTo: 1 },
+          { text: '둘 다 503으로 답한다', leadsTo: 1 },
+          { text: '구분하지 않는다', leadsTo: 1 },
+        ],
+        rationale:
+          '재시도를 허용할 때는 Retry-After와 지수 백오프, jitter를 함께 안내한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'security',
+    question: '누가 무엇을 할 수 있는지 어떻게 정하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '사람에게 붙는 것은?',
+        choices: [
+          { text: '역할', correct: true },
+          { text: '권한 하나하나', leadsTo: 1 },
+          { text: '조건식', leadsTo: 2 },
+          { text: '인증 결과', leadsTo: 0 },
+        ],
+        rationale:
+          '권한이 바뀌면 역할 하나만 고쳐 그 역할을 가진 모두에게 반영된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '역할을 잘게 쪼갤수록 정밀해지는가?',
+        choices: [
+          { text: '아니다. 사람마다 역할이 하나씩 생기면 권한을 직접 붙인 것과 같다', correct: true },
+          { text: '그렇다. 세분화가 항상 낫다', leadsTo: 1 },
+          { text: '그렇다. 역할 수는 상관없다', leadsTo: 1 },
+          { text: '아니다. 대신 역할을 하나만 둔다', leadsTo: 3 },
+        ],
+        rationale:
+          '역할을 사이에 두는 이점이 사라진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '"자기가 쓴 글만 고칠 수 있다"는 왜 역할로 안 되는가?',
+        choices: [
+          { text: '누구냐와 그 글이 누구 것이냐의 관계에 달렸기 때문이다', correct: true },
+          { text: '역할 수가 부족해서', leadsTo: 1 },
+          { text: '인증이 안 되어서', leadsTo: 0 },
+          { text: '권한 이름이 길어서', leadsTo: 1 },
+        ],
+        rationale:
+          '역할 이름만으로는 못 적어 조건을 함께 보는 방식을 쓴다.',
+      },
+    ],
+  },
 ]
