@@ -7447,4 +7447,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'css',
+    question: '선택자 최적화는 실제로 언제 필요한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '브라우저는 선택자를 어느 쪽부터 맞춰 보는가?',
+        choices: [
+          { text: '오른쪽 항에서 후보를 찾고 조상을 거슬러 확인한다', correct: true },
+          { text: '왼쪽 조상부터 자식으로 내려온다', leadsTo: 0 },
+          { text: '규칙을 쓴 순서대로 전부 검사한다', leadsTo: 0 },
+          { text: '자주 쓰는 규칙을 먼저 검사한다', leadsTo: 3 },
+        ],
+        rationale:
+          '오른쪽 항이 넓고 조합이 깊으면 후보 탐색과 조상 확인이 늘어난다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '스타일이 느릴 때 선택자부터 단순화하면 되는가?',
+        choices: [
+          { text: '아니다. 보통 DOM 규모와 잦은 클래스 변경을 줄이는 편이 효과가 크다', correct: true },
+          { text: '그렇다. 선택자 길이가 스타일 비용을 결정한다', leadsTo: 1 },
+          { text: '그렇다. 깊은 후손 선택자는 항상 병목이다', leadsTo: 0 },
+          { text: '아니다. 스타일 비용은 손댈 수 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '현대 엔진은 선택자 매칭을 강하게 최적화해서 단순화만으로 얻는 몫이 작다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '선택자를 손대야 할 때인지 무엇으로 판단하는가?',
+        choices: [
+          { text: '성능 기록에서 스타일 재계산 비중과 영향받는 요소 수를 본다', correct: true },
+          { text: '규칙 개수가 일정 수를 넘는지 본다', leadsTo: 4 },
+          { text: '선택자 문자열 길이를 잰다', leadsTo: 0 },
+          { text: '느리다고 느껴지면 바로 고친다', leadsTo: 4 },
+        ],
+        rationale:
+          '스타일 재계산이 병목으로 측정되고 DOM이 클 때라야 선택자 손질이 값을 한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'css',
+    question: '선언한 너비와 실제 크기가 왜 달라지는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '기본값인 content-box에서 width는 어디까지를 가리키는가?',
+        choices: [
+          { text: '콘텐츠 영역만 가리킨다', correct: true },
+          { text: '콘텐츠와 패딩까지', leadsTo: 0 },
+          { text: '콘텐츠·패딩·테두리 전부', leadsTo: 0 },
+          { text: '마진까지 포함한 바깥 크기', leadsTo: 0 },
+        ],
+        rationale:
+          'content-box에서는 선언한 너비 밖에 패딩과 테두리가 더해져 바깥 크기가 값보다 커진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'border-box를 걸면 안쪽 콘텐츠 폭도 그대로 유지되는가?',
+        choices: [
+          { text: '아니다. 패딩과 테두리가 늘수록 콘텐츠 영역이 줄어든다', correct: true },
+          { text: '그렇다. 콘텐츠 폭은 선언값으로 고정된다', leadsTo: 2 },
+          { text: '그렇다. 패딩이 바깥으로 밀려난다', leadsTo: 0 },
+          { text: '아니다. 테두리가 무시된다', leadsTo: 3 },
+        ],
+        rationale:
+          'border-box는 선언한 너비 안에 패딩과 테두리를 넣어 바깥 크기를 고정한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '마진은 박스 크기 계산에서 어떻게 다뤄지는가?',
+        choices: [
+          { text: '박스 크기에 포함되지 않고 주변 간격을 만든다', correct: true },
+          { text: 'content-box에서만 너비에 더해진다', leadsTo: 0 },
+          { text: 'border-box에서 너비 안으로 들어간다', leadsTo: 0 },
+          { text: '패딩과 같은 방식으로 계산된다', leadsTo: 1 },
+        ],
+        rationale:
+          '마진은 두 상자 어느 쪽에서도 너비에 들어가지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'css',
+    question: '한 축 배치와 두 축 배치는 어떻게 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '행과 열 트랙을 먼저 정의하고 항목을 앉히는 쪽은?',
+        choices: [
+          { text: 'Grid', correct: true },
+          { text: 'Flexbox', leadsTo: 0 },
+          { text: '둘 다 트랙을 먼저 정의한다', leadsTo: 2 },
+          { text: '둘 다 콘텐츠 흐름만 따른다', leadsTo: 1 },
+        ],
+        rationale:
+          'Grid는 트랙 구조가 먼저이고 Flexbox는 콘텐츠 흐름이 먼저다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'Flexbox를 줄바꿈시키면 격자처럼 열이 맞는가?',
+        choices: [
+          { text: '아니다. 각 줄이 독립적으로 정렬돼 열 맞춤에는 약하다', correct: true },
+          { text: '그렇다. 줄바꿈이 트랙을 만든다', leadsTo: 0 },
+          { text: '그렇다. 항목 크기가 같으면 항상 맞는다', leadsTo: 2 },
+          { text: '아니다. Flexbox는 줄바꿈을 못 한다', leadsTo: 0 },
+        ],
+        rationale:
+          '줄바꿈해도 줄끼리는 서로를 모르므로 두 축을 함께 맞추려면 Grid가 맞다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '한 화면에서 둘을 같이 써도 되는가?',
+        choices: [
+          { text: '된다. 페이지는 Grid, 내부 도구 모음은 Flexbox가 자연스럽다', correct: true },
+          { text: '안 된다. 한 문서에 하나만 골라야 한다', leadsTo: 4 },
+          { text: '안 된다. 중첩하면 트랙이 깨진다', leadsTo: 4 },
+          { text: '된다. 다만 Grid 안에는 Grid만 넣을 수 있다', leadsTo: 4 },
+        ],
+        rationale:
+          '영역 전체는 두 축으로 설계하고 그 안의 한 줄짜리 흐름은 한 축으로 두면 된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'browser',
+    question: '화면 밖 이미지는 언제 불러와야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'loading=lazy는 정확히 무엇을 하는가?',
+        choices: [
+          { text: '브라우저가 거리와 네트워크 상황을 보고 로드를 미룬다', correct: true },
+          { text: '정확히 화면에 들어온 순간 요청한다', leadsTo: 1 },
+          { text: '이미지 용량을 줄여 내려받는다', leadsTo: 3 },
+          { text: '요청 순서를 뒤로 미룰 뿐 시점은 같다', leadsTo: 1 },
+        ],
+        rationale:
+          '시점을 더 세밀하게 잡아야 하면 IntersectionObserver로 접근을 감지한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '모든 이미지에 지연 로딩을 걸면 더 빨라지는가?',
+        choices: [
+          { text: '아니다. 첫 화면 이미지는 지연 로딩하지 않는다', correct: true },
+          { text: '그렇다. 요청이 줄어드니 항상 이득이다', leadsTo: 0 },
+          { text: '그렇다. 브라우저가 알아서 첫 화면을 예외로 둔다', leadsTo: 0 },
+          { text: '아니다. 지연 로딩은 어디에도 쓰지 않는다', leadsTo: 1 },
+        ],
+        rationale:
+          '첫 화면 중 LCP 후보에는 오히려 높은 우선순위를 줘야 표시가 늦지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '지연 로딩을 걸 때 함께 해야 하는 일은?',
+        choices: [
+          { text: 'width와 height 또는 aspect-ratio로 자리를 예약한다', correct: true },
+          { text: '자리 표시자를 지우고 여백을 없앤다', leadsTo: 2 },
+          { text: '이미지를 모두 같은 크기로 자른다', leadsTo: 3 },
+          { text: '아무것도 없다. 로드되면 자연히 자리가 잡힌다', leadsTo: 2 },
+        ],
+        rationale:
+          '공간을 미리 잡지 않으면 로드 순간 레이아웃이 움직여 누적 레이아웃 이동이 생긴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'javascript',
+    question: '번들은 어떤 경계로 나눠 불러오는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '무엇이 별도 청크를 만드는 경계가 되는가?',
+        choices: [
+          { text: '동적 import', correct: true },
+          { text: '파일을 새로 만드는 것', leadsTo: 0 },
+          { text: '함수를 분리하는 것', leadsTo: 0 },
+          { text: '폴더를 나누는 것', leadsTo: 0 },
+        ],
+        rationale:
+          'React에서는 lazy와 Suspense를 함께 써서 로딩 상태를 보여주며 늦게 읽는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '청크를 잘게 나눌수록 초기 로딩이 계속 빨라지는가?',
+        choices: [
+          { text: '아니다. 요청 수와 로딩 화면이 늘고 공통 모듈이 중복될 수 있다', correct: true },
+          { text: '그렇다. 조각이 작을수록 항상 이득이다', leadsTo: 2 },
+          { text: '그렇다. 브라우저가 병렬로 받아 상쇄한다', leadsTo: 2 },
+          { text: '아니다. 분할 자체가 손해다', leadsTo: 0 },
+        ],
+        rationale:
+          '사용 빈도와 청크 크기, 캐시 적중률을 재서 경계를 조정해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '초기 진입에 먼저 보내야 하는 것은?',
+        choices: [
+          { text: '초기 경로에 필요한 코드만', correct: true },
+          { text: '모든 경로의 코드', leadsTo: 0 },
+          { text: '무거운 라이브러리부터', leadsTo: 3 },
+          { text: '자주 쓰는 기능 전부', leadsTo: 1 },
+        ],
+        rationale:
+          '나머지는 경로와 기능, 무거운 라이브러리 경계로 나눠 필요할 때 불러온다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'javascript',
+    question: '번들 최적화는 어디서 시작하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '가장 먼저 할 일은?',
+        choices: [
+          { text: '분석 도구로 큰 모듈과 중복 의존성을 찾는다', correct: true },
+          { text: '청크를 경로별로 나눈다', leadsTo: 3 },
+          { text: '압축 설정을 올린다', leadsTo: 4 },
+          { text: '소스 맵을 끈다', leadsTo: 4 },
+        ],
+        rationale:
+          '제거 뒤에 분할하고, 전송량과 실행 시간을 비교해 검증하는 순서다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '압축을 강하게 걸면 실행도 같이 빨라지는가?',
+        choices: [
+          { text: '아니다. 압축은 전송량만 줄인다', correct: true },
+          { text: '그렇다. 파일이 작아지면 파싱도 준다', leadsTo: 4 },
+          { text: '그렇다. 압축이 코드를 지워 준다', leadsTo: 0 },
+          { text: '아니다. 압축은 아무 효과가 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '파싱과 실행 비용을 낮추려면 실제 코드 자체를 덜 보내야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '분할 경계를 잡을 때 기준으로 삼는 것은?',
+        choices: [
+          { text: '화면 진입 빈도와 공통 의존성', correct: true },
+          { text: '파일 개수를 고르게 맞추는 것', leadsTo: 1 },
+          { text: '폴더 구조를 그대로 따르는 것', leadsTo: 1 },
+          { text: '가능한 한 잘게 쪼개는 것', leadsTo: 1 },
+        ],
+        rationale:
+          '지나치게 잘게 나누면 요청과 로딩 조율 비용이 늘어난다.',
+      },
+    ],
+  },
 ]
