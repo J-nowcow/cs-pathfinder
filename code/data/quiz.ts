@@ -5125,4 +5125,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'cpu',
+    question: '코어마다 캐시가 따로인데 값이 어긋나지 않는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '값이 어긋나지 않게 지키는 주체는?',
+        choices: [
+          { text: '하드웨어', correct: true },
+          { text: '컴파일러', leadsTo: 2 },
+          { text: '운영체제 커널', leadsTo: 1 },
+          { text: '프로그래머가 코드로', leadsTo: 2 },
+        ],
+        rationale:
+          '캐시 줄마다 상태를 달아 두고 남이 같은 자리를 건드리면 상태를 바꾼다. 프로그래머가 다루는 것은 순서와 가시성 쪽이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '서로 다른 변수인데 성능이 나빠지는 경우가 있는가?',
+        choices: [
+          { text: '한 캐시 줄에 붙어 있으면 값이 계속 오간다', correct: true },
+          { text: '다른 변수면 영향이 없다', leadsTo: 0 },
+          { text: '같은 타입일 때만 영향이 있다', leadsTo: 3 },
+          { text: '코어가 하나면 생긴다', leadsTo: 0 },
+        ],
+        rationale:
+          '이것을 거짓 공유라 부른다. 변수 사이를 벌려 다른 줄에 놓으면 사라진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: 'Shared 상태에서 쓰려면 무엇이 먼저인가?',
+        choices: [
+          { text: '다른 코어의 사본을 무효로 만든다', correct: true },
+          { text: '바로 쓴다', leadsTo: 4 },
+          { text: '커널에 알린다', leadsTo: 0 },
+          { text: '메모리에 먼저 내린다', leadsTo: 1 },
+        ],
+        rationale:
+          'Modified나 Exclusive 상태에서는 그 줄을 혼자 쓰므로 그 절차가 필요 없다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'process',
+    question: '급한 일이 안 급한 일에 밀리는 경우가 있는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '역전이 일어나는 구조는?',
+        choices: [
+          { text: '급한 쪽이 기다리는 잠금을 느린 쪽이 쥐었는데 그마저 밀릴 때', correct: true },
+          { text: '급한 일의 우선순위를 잘못 매겼을 때', leadsTo: 1 },
+          { text: '스케줄러가 고장 났을 때', leadsTo: 0 },
+          { text: '잠금을 안 썼을 때', leadsTo: 4 },
+        ],
+        rationale:
+          '느린 일이 중간 일에 밀려 돌지 못하면 결국 급한 일이 중간 일에 밀린 셈이 된다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이것은 기아 상태와 같은 것인가?',
+        choices: [
+          { text: '다르다. 우선순위대로면 일어날 수 없는 순서가 만들어진 것이다', correct: true },
+          { text: '같은 현상의 다른 이름이다', leadsTo: 2 },
+          { text: '기아가 더 심한 경우다', leadsTo: 2 },
+          { text: '둘 다 잠금과 무관하다', leadsTo: 4 },
+        ],
+        rationale:
+          '이름이 역전인 이유가 거기 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '푸는 방법은?',
+        choices: [
+          { text: '잠금을 쥔 쪽의 우선순위를 잠깐 올린다', correct: true },
+          { text: '급한 일의 우선순위를 더 올린다', leadsTo: 0 },
+          { text: '중간 일을 없앤다', leadsTo: 1 },
+          { text: '잠금 시간을 늘린다', leadsTo: 4 },
+        ],
+        rationale:
+          '급한 쪽만큼 올려 주면 중간 일이 끼어들지 못한다. 화성 탐사선 패스파인더가 이 설정으로 문제를 고쳤다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'process',
+    question: '파일 디스크립터 3은 무엇을 가리키는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '숫자에서 파일까지 몇 겹을 지나는가?',
+        choices: [
+          { text: '프로세스별 표, 열린 파일 표, 아이노드', correct: true },
+          { text: '곧바로 파일을 가리킨다', leadsTo: 1 },
+          { text: '프로세스별 표 하나만 거친다', leadsTo: 1 },
+          { text: '커널이 매번 이름으로 찾는다', leadsTo: 4 },
+        ],
+        rationale:
+          '소켓이나 파이프면 마지막 겹이 다르다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 파일을 두 번 열면 읽는 위치는?',
+        choices: [
+          { text: '각자 따로 기억한다', correct: true },
+          { text: '함께 움직인다', leadsTo: 1 },
+          { text: '두 번째 열기가 실패한다', leadsTo: 3 },
+          { text: '운영체제가 하나로 합친다', leadsTo: 1 },
+        ],
+        rationale:
+          '가운데 표가 있는 이유가 그것이다. dup으로 복제하면 반대로 같은 칸을 가리켜 위치가 함께 움직인다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '0, 1, 2번은 특별한 번호인가?',
+        choices: [
+          { text: '먼저 열려 있을 뿐이고 닫으면 다음 열기가 그 번호를 받는다', correct: true },
+          { text: '커널이 예약해 둔 특별한 번호다', leadsTo: 0 },
+          { text: '닫을 수 없다', leadsTo: 2 },
+          { text: '파일이 아니라 장치 전용이다', leadsTo: 4 },
+        ],
+        rationale:
+          '표준 입출력이 그 자리를 쓰기로 약속돼 있을 뿐 번호 자체는 평범하다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'cpu',
+    question: '조건문 하나가 성능을 좌우하는 경우가 있는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'CPU가 조건의 답이 나오기 전에 하는 일은?',
+        choices: [
+          { text: '한쪽을 골라 미리 진행한다', correct: true },
+          { text: '멈춰서 기다린다', leadsTo: 2 },
+          { text: '양쪽을 모두 끝까지 실행한다', leadsTo: 1 },
+          { text: '순서를 뒤로 미룬다', leadsTo: 3 },
+        ],
+        rationale:
+          '틀리면 그동안 한 것을 버리고 다시 채워야 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 데이터를 정렬만 해도 빨라지는 이유는?',
+        choices: [
+          { text: '한동안 같은 쪽만 나와 예측이 잘 맞는다', correct: true },
+          { text: '비교 횟수가 줄어서', leadsTo: 0 },
+          { text: '캐시에 더 잘 들어가서', leadsTo: 0 },
+          { text: '정렬해도 빨라지지 않는다', leadsTo: 0 },
+        ],
+        rationale:
+          '하는 일은 똑같은데 예측이 맞는 비율이 달라진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '분기를 아예 없애는 방법의 대가는?',
+        choices: [
+          { text: '읽기 어려워져 재 보고 정해야 한다', correct: true },
+          { text: '항상 느려진다', leadsTo: 2 },
+          { text: '예측이 더 자주 틀린다', leadsTo: 2 },
+          { text: '대가가 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '조건 대신 산술로 고르면 예측할 것이 없어진다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '읽은 파일이 두 번째부터 빨라지는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '두 번째 읽기가 빠른 까닭은?',
+        choices: [
+          { text: '운영체제가 내용을 메모리에 들고 있어 디스크까지 안 간다', correct: true },
+          { text: '디스크가 예열돼서', leadsTo: 4 },
+          { text: '파일이 압축돼서', leadsTo: 3 },
+          { text: '두 번째부터는 건너뛰어서', leadsTo: 0 },
+        ],
+        rationale:
+          '페이지 캐시가 남는 메모리를 써서 파일 내용을 들고 있는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '메모리가 거의 다 찬 것처럼 보이면 문제인가?',
+        choices: [
+          { text: '정상이다. 다른 곳에서 필요하면 그때 내준다', correct: true },
+          { text: '메모리 누수다', leadsTo: 1 },
+          { text: '즉시 비워야 한다', leadsTo: 1 },
+          { text: '캐시를 꺼야 한다', leadsTo: 3 },
+        ],
+        rationale:
+          '이 자리는 남는 메모리를 쓴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '성능을 잴 때 이 자리를 잊으면?',
+        choices: [
+          { text: '두 번째 측정이 빠른 것을 코드 덕으로 착각한다', correct: true },
+          { text: '측정값이 항상 느려진다', leadsTo: 2 },
+          { text: '측정이 실패한다', leadsTo: 2 },
+          { text: '아무 영향이 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '쓰기도 일단 이 자리에 적어 두고 나중에 모아 내리므로 빨라 보인다. 갑자기 꺼지면 아직 안 내려간 것이 사라진다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '큰 파일을 통째로 읽으면 무엇이 문제인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '메모리를 얼마나 잡는가?',
+        choices: [
+          { text: '파일 크기에 비례하고 대개 그보다 더 든다', correct: true },
+          { text: '파일 크기와 정확히 같다', leadsTo: 0 },
+          { text: '파일 크기와 무관하다', leadsTo: 4 },
+          { text: '항상 일정하다', leadsTo: 0 },
+        ],
+        rationale:
+          '읽어 온 바이트를 문자열이나 객체로 바꾸면 그만큼이 또 든다. 파일 크기만 보고 여유를 재면 모자란다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '메모리가 넉넉하면 통째로 읽어도 되는가?',
+        choices: [
+          { text: '같은 일을 동시에 열 명이 하면 열 배를 잡는다', correct: true },
+          { text: '넉넉하면 문제없다', leadsTo: 1 },
+          { text: '파일이 작으면 언제나 안전하다', leadsTo: 1 },
+          { text: '운영체제가 알아서 나눠 준다', leadsTo: 0 },
+        ],
+        rationale:
+          '혼자 시험하면 이 한계가 안 보인다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '무엇을 보고 위험을 판단하는가?',
+        choices: [
+          { text: '메모리 사용량이 입력 크기에 비례하는지', correct: true },
+          { text: '파일 확장자', leadsTo: 0 },
+          { text: '코드 줄 수', leadsTo: 3 },
+          { text: '디스크 여유 공간', leadsTo: 4 },
+        ],
+        rationale:
+          '비례하면 입력이 커질 때 그대로 무너진다. 정렬처럼 전체를 봐야 하는 일은 나눠 처리하고 합치는 방식으로 바꾼다.',
+      },
+    ],
+  },
 ]
