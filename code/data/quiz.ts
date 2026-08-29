@@ -3588,10 +3588,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '0.1이 정확히 저장되지 않는 까닭은?',
         choices: [
-          { text: '메모리가 손상돼서', leadsTo: 0 },
-          { text: '자릿수가 모자라서', leadsTo: 3 },
-          { text: '언어가 소수를 잘 못 다뤄서', leadsTo: 3 },
-          { text: '이진에서 끝나지 않는 소수라 가장 가까운 값으로 반올림된다', correct: true },
+          { text: '저장하는 사이에 메모리가 손상되기 때문에', leadsTo: 0 },
+          { text: '표현할 자릿수가 모자라 뒤가 잘리기 때문에', leadsTo: 3 },
+          { text: '언어마다 소수를 다루는 방식이 달라서', leadsTo: 3 },
+          { text: '이진에서 끝나지 않아 가까운 값으로 반올림된다', correct: true },
         ],
         rationale:
           '십진에서 1을 3으로 나눈 값을 끝없이 적는 것과 같은 일이다. 밑이 2인 자리로는 10분의 1을 유한하게 적을 수 없다.',
@@ -3726,10 +3726,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '래퍼 객체의 크기는 값 크기와 같은가?',
         choices: [
-          { text: '객체 머리와 정렬, 참조 압축 설정에 따라 더 크다', correct: true },
-          { text: '값과 똑같다', leadsTo: 2 },
+          { text: '객체 머리와 정렬 때문에 더 크다', correct: true },
+          { text: '감싸기만 하므로 값과 똑같다', leadsTo: 2 },
           { text: '언제나 정확히 두 배다', leadsTo: 2 },
-          { text: '값보다 작다', leadsTo: 0 },
+          { text: '압축돼 들어가 값보다 작다', leadsTo: 0 },
         ],
         rationale:
           '값 자체는 4바이트지만 객체로 감싸면 구현과 옵션에 따라 그보다 훨씬 커진다.',
@@ -3840,10 +3840,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '모드를 나눈 목적은?',
         choices: [
-          { text: '사용자 프로그램이 하드웨어를 직접 건드리지 못하게 하려고', correct: true },
-          { text: '실행 속도를 높이려고', leadsTo: 3 },
-          { text: '메모리를 아끼려고', leadsTo: 3 },
-          { text: '스레드를 나누려고', leadsTo: 1 },
+          { text: '하드웨어를 직접 건드리지 못하게 하려고', correct: true },
+          { text: '권한 검사를 줄여 실행 속도를 높이려고', leadsTo: 3 },
+          { text: '영역을 나눠 메모리를 아끼려고', leadsTo: 3 },
+          { text: '커널 스레드와 사용자 스레드를 나누려고', leadsTo: 1 },
         ],
         rationale:
           '권한을 분리해 하드웨어 제어권을 독점한다. 커널 모드만 모든 하드웨어 권한을 가진다.',
@@ -4021,9 +4021,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '회피와 예방은 같은 것인가?',
         choices: [
           { text: '둘 다 탐지 뒤에 하는 일이다', leadsTo: 2 },
-          { text: '같은 말이다', leadsTo: 1 },
-          { text: '회피가 조건을 없앤다', leadsTo: 1 },
-          { text: '예방은 조건을 막고, 회피는 조건을 둔 채 그때그때 판단한다', correct: true },
+          { text: '부르는 이름만 다른 같은 말이다', leadsTo: 1 },
+          { text: '회피가 조건을 없애고 예방은 판단한다', leadsTo: 1 },
+          { text: '예방은 조건을 막고 회피는 그때그때 판단한다', correct: true },
         ],
         rationale:
           '회피는 네 조건을 그대로 둔 채 요청마다 따진다.',
@@ -4524,10 +4524,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '딱 맞는 조각을 고르면 낭비가 줄어드는가?',
         choices: [
-          { text: '낭비가 확실히 준다', leadsTo: 1 },
-          { text: '쓸 수 없을 만큼 작은 조각이 남아 외부 단편화가 심해진다', correct: true },
-          { text: '탐색도 빨라진다', leadsTo: 0 },
-          { text: '단편화가 사라진다', leadsTo: 2 },
+          { text: '빈자리에 딱 맞으니 낭비가 확실히 준다', leadsTo: 1 },
+          { text: '쓸 수 없을 만큼 작은 조각이 남는다', correct: true },
+          { text: '고를 후보가 줄어 탐색도 함께 빨라진다', leadsTo: 0 },
+          { text: '남는 공간이 없어 단편화가 사라진다', leadsTo: 2 },
         ],
         rationale:
           '모든 조각을 확인해야 해서 느리기까지 하다.',
@@ -4650,10 +4650,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '카운트가 1인 세마포어는 뮤텍스와 같은가?',
         choices: [
-          { text: '더 느릴 뿐 같다', leadsTo: 0 },
-          { text: '같은 도구다', leadsTo: 0 },
-          { text: '더 안전하다', leadsTo: 0 },
-          { text: '소유권이 없고 다른 스레드도 신호할 수 있어 다르다', correct: true },
+          { text: '신호 비용 탓에 더 느릴 뿐 같다', leadsTo: 0 },
+          { text: '한 번에 하나만 들이므로 같은 도구다', leadsTo: 0 },
+          { text: '카운트가 있어 뮤텍스보다 더 안전하다', leadsTo: 0 },
+          { text: '소유권이 없어 다르다', correct: true },
         ],
         rationale:
           '한 번에 하나만 통과시키는 것은 같지만 해제할 수 있는 주체가 다르다.',
@@ -5070,10 +5070,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '이것은 기아 상태와 같은 것인가?',
         choices: [
-          { text: '기아가 더 심한 경우다', leadsTo: 2 },
+          { text: '오래 굶는 기아의 더 심한 경우다', leadsTo: 2 },
           { text: '같은 현상의 다른 이름이다', leadsTo: 2 },
-          { text: '다르다. 우선순위대로면 일어날 수 없는 순서가 만들어진 것이다', correct: true },
-          { text: '둘 다 잠금과 무관하다', leadsTo: 4 },
+          { text: '다르다. 우선순위가 뒤집힌 것이다', correct: true },
+          { text: '둘 다 잠금과 무관한 스케줄링 문제다', leadsTo: 4 },
         ],
         rationale:
           '이름이 역전인 이유가 거기 있다.',
@@ -5184,10 +5184,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '두 번째 읽기가 빠른 까닭은?',
         choices: [
-          { text: '운영체제가 내용을 메모리에 들고 있어 디스크까지 안 간다', correct: true },
-          { text: '디스크가 예열돼서', leadsTo: 4 },
-          { text: '파일이 압축돼서', leadsTo: 3 },
-          { text: '두 번째부터는 건너뛰어서', leadsTo: 0 },
+          { text: '운영체제가 내용을 메모리에 들고 있어서', correct: true },
+          { text: '디스크가 예열돼 회전이 빨라져서', leadsTo: 4 },
+          { text: '파일이 압축돼 읽을 양이 줄어서', leadsTo: 3 },
+          { text: '두 번째부터는 검사를 건너뛰어서', leadsTo: 0 },
         ],
         rationale:
           '페이지 캐시가 남는 메모리를 써서 파일 내용을 들고 있는다.',
@@ -6498,10 +6498,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '있는지만 보는 서브쿼리를 단순 조인으로 바꾸면?',
         choices: [
-          { text: '안쪽 중복 탓에 바깥 행이 늘어 중복 제거가 필요해진다', correct: true },
-          { text: '결과가 똑같다', leadsTo: 1 },
-          { text: '항상 빨라진다', leadsTo: 3 },
-          { text: '문법 오류가 난다', leadsTo: 1 },
+          { text: '안쪽 중복 탓에 바깥 행이 늘어난다', correct: true },
+          { text: '행 수가 그대로라 결과가 똑같다', leadsTo: 1 },
+          { text: '조인이 서브쿼리보다 항상 빨라진다', leadsTo: 3 },
+          { text: '안쪽 열을 못 써서 문법 오류가 난다', leadsTo: 1 },
         ],
         rationale:
           'IN이나 EXISTS는 안쪽에 중복이 있어도 바깥 행 수를 안 늘린다. DISTINCT나 GROUP BY를 붙이면 오히려 느려질 수 있다.',
@@ -6570,10 +6570,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '두 기법이 다루는 자리는?',
         choices: [
-          { text: '언네스팅이 FROM절', leadsTo: 2 },
-          { text: '둘 다 FROM절', leadsTo: 2 },
-          { text: '둘 다 WHERE절', leadsTo: 0 },
-          { text: '언네스팅은 WHERE·HAVING절, 뷰 병합은 FROM절', correct: true },
+          { text: '언네스팅이 FROM절, 뷰 병합이 WHERE절', leadsTo: 2 },
+          { text: '둘 다 FROM절만 다시 쓴다', leadsTo: 2 },
+          { text: '둘 다 WHERE절만 다시 쓴다', leadsTo: 0 },
+          { text: '언네스팅은 WHERE절, 뷰 병합은 FROM절', correct: true },
         ],
         rationale:
           '변환 대상절이 다르다는 것이 두 기법을 가르는 첫 기준이다.',
@@ -7212,9 +7212,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: 'defer와 async의 차이는?',
         choices: [
-          { text: 'defer는 문서 순서대로, async는 순서를 보장하지 않는다', correct: true },
-          { text: '둘 다 순서를 지킨다', leadsTo: 0 },
-          { text: '둘 다 순서를 안 지킨다', leadsTo: 0 },
+          { text: 'defer는 순서대로, async는 순서가 없다', correct: true },
+          { text: '둘 다 문서에 적힌 순서를 지킨다', leadsTo: 0 },
+          { text: '둘 다 내려받은 순서대로 실행된다', leadsTo: 0 },
           { text: '실행 시점만 다르고 순서는 같다', leadsTo: 0 },
         ],
         rationale:
@@ -9198,10 +9198,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '재전송에 멱등 키와 서버 버전을 함께 쓰는 이유는?',
         choices: [
-          { text: '오프라인 읽기를 위해', leadsTo: 0 },
-          { text: '전송 속도를 높이려고', leadsTo: 1 },
-          { text: '순서를 보장하려고', leadsTo: 1 },
-          { text: '성공 응답을 잃어도 중복 반영을 막고 오래된 덮어쓰기를 거절한다', correct: true },
+          { text: '연결이 끊긴 동안에도 로컬에서 읽을 수 있게 하려고', leadsTo: 0 },
+          { text: '같은 요청을 병렬로 보내 전송 속도를 높이려고', leadsTo: 1 },
+          { text: '여러 요청이 보낸 순서대로 반영되게 하려고', leadsTo: 1 },
+          { text: '성공 응답을 잃어도 중복 반영을 막는다', correct: true },
         ],
         rationale:
           '변경은 outbox에 기록해 연결이 돌아왔을 때 순서대로 보낸다.',
@@ -9216,10 +9216,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '링크를 받은 뒤 화면에 넘기기 전 순서는?',
         choices: [
-          { text: '스킴과 호스트를 확인하고 세션과 권한을 본 뒤 검증된 인자만 넘긴다', correct: true },
+          { text: '스킴과 호스트, 세션과 권한을 본 뒤 넘긴다', correct: true },
           { text: '화면을 먼저 열고 그 안에서 권한을 본다', leadsTo: 4 },
-          { text: '세션만 확인하면 충분하다', leadsTo: 4 },
-          { text: '스킴만 맞으면 바로 넘긴다', leadsTo: 4 },
+          { text: '로그인 세션만 확인하면 나머지는 충분하다', leadsTo: 4 },
+          { text: '등록한 스킴만 맞으면 그대로 화면에 넘긴다', leadsTo: 4 },
         ],
         rationale:
           '허용 목록으로 스킴과 호스트와 경로를 검증한다.',
@@ -9912,10 +9912,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '응답과 로그는 어떻게 나누는가?',
         choices: [
-          { text: '로그를 남기지 않는다', leadsTo: 4 },
+          { text: '응답만 남기고 로그는 따로 남기지 않는다', leadsTo: 4 },
           { text: '응답에도 스택 트레이스를 실어 디버깅을 돕는다', leadsTo: 4 },
-          { text: '로그를 각 계층마다 남긴다', leadsTo: 4 },
-          { text: '응답에는 추적 ID와 코드만, 스택 트레이스와 민감한 메시지는 숨긴다', correct: true },
+          { text: '계층마다 로그를 남겨 어디서 났는지 다 본다', leadsTo: 4 },
+          { text: '응답에는 추적 ID와 코드만 싣는다', correct: true },
         ],
         rationale:
           '로그는 한 경계에서 한 번 남긴다.',
@@ -10416,10 +10416,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: 'JIT 컴파일러가 하는 일은?',
         choices: [
-          { text: '실행 전에 전체를 기계어로 바꾼다', leadsTo: 1 },
-          { text: '자주 실행되는 코드를 기계어로 바꿔 저장해 해석 단계를 건너뛴다', correct: true },
-          { text: '바이트코드를 압축한다', leadsTo: 1 },
-          { text: '메모리를 회수한다', leadsTo: 3 },
+          { text: '실행 전에 전체를 기계어로 바꿔 두고 시작한다', leadsTo: 1 },
+          { text: '자주 실행되는 코드를 기계어로 바꿔 저장한다', correct: true },
+          { text: '바이트코드를 압축해 읽는 시간을 줄인다', leadsTo: 1 },
+          { text: '쓰지 않는 객체를 찾아 메모리를 회수한다', leadsTo: 3 },
         ],
         rationale:
           '이후 같은 코드는 해석 없이 바로 돈다.',
@@ -10476,10 +10476,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '톰캣이 요청을 받아 하는 일은?',
         choices: [
-          { text: '정적 파일만 골라 응답한다', leadsTo: 4 },
-          { text: '서블릿으로 전달하고 결과를 응답하며 생명주기와 멀티스레딩을 관리한다', correct: true },
-          { text: '요청을 웹 서버로 되돌린다', leadsTo: 0 },
-          { text: '데이터베이스 연결만 관리한다', leadsTo: 0 },
+          { text: '정적 파일만 골라 응답하고 나머지는 넘긴다', leadsTo: 4 },
+          { text: '서블릿에 넘기고 생명주기와 스레드를 관리한다', correct: true },
+          { text: '받은 요청을 앞단 웹 서버로 되돌려 보낸다', leadsTo: 0 },
+          { text: '데이터베이스 연결만 관리하고 요청은 안 본다', leadsTo: 0 },
         ],
         rationale:
           '비즈니스 로직이 필요한 요청을 처리해 동적인 응답을 만든다.',
@@ -11214,10 +11214,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '반복문으로 바꿔야 하는 조건은?',
         choices: [
-          { text: '입력이 정렬돼 있을 때', leadsTo: 4 },
-          { text: '재귀 함수의 줄 수가 많을 때', leadsTo: 1 },
-          { text: '기저 조건이 여러 개일 때', leadsTo: 1 },
-          { text: '꼬리 재귀 최적화가 없고 호출 깊이가 스택 한도를 넘길 수 있을 때', correct: true },
+          { text: '입력이 정렬돼 있어 순서대로 돌 수 있을 때', leadsTo: 4 },
+          { text: '재귀 함수의 줄 수가 많아 읽기 어려울 때', leadsTo: 1 },
+          { text: '기저 조건이 여러 개라 분기가 늘어날 때', leadsTo: 1 },
+          { text: '꼬리 재귀가 없고 깊이가 한도를 넘길 때', correct: true },
         ],
         rationale:
           '호출 횟수가 입력 크기에 비례해 커지면 스택 영역 한도를 넘길 수 있다.',
@@ -12745,9 +12745,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '공통 인터페이스를 부르면 각각 무엇을 하는가?',
         choices: [
           { text: '컴포지트만 동작하고 리프는 무시된다', leadsTo: 0 },
-          { text: '둘 다 자식을 순회한다', leadsTo: 0 },
-          { text: '둘 다 자기 일만 한다', leadsTo: 0 },
-          { text: '리프는 자기 일을 하고 컴포지트는 자식들을 돌며 같은 일을 시킨다', correct: true },
+          { text: '둘 다 자식을 순회하므로 리프도 재귀한다', leadsTo: 0 },
+          { text: '둘 다 자기 일만 하고 자식에게 넘기지 않는다', leadsTo: 0 },
+          { text: '리프는 자기 일을, 컴포지트는 자식에게 시킨다', correct: true },
         ],
         rationale:
           '클라이언트는 형변환도 타입 구분도 하지 않는다.',
@@ -13190,8 +13190,8 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         choices: [
           { text: '아니다. 대신 서명은 볼 필요가 없다', leadsTo: 3 },
           { text: '그렇다. 서명이 맞으면 신뢰할 수 있다', leadsTo: 3 },
-          { text: '그렇다. 서명이 내용을 숨겨 준다', leadsTo: 3 },
-          { text: '아니다. 허용 알고리즘과 issuer, audience, 만료 시간도 확인한다', correct: true },
+          { text: '그렇다. 서명이 내용까지 숨겨 주기 때문이다', leadsTo: 3 },
+          { text: '아니다. 알고리즘과 issuer, 만료 시간도 본다', correct: true },
         ],
         rationale:
           'JWT 서명은 claim을 숨기지 않아 암호화하지 않은 내용은 가진 사람이 읽는다.',
@@ -13944,9 +13944,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '실수로 올린 비밀번호는 되돌리기로 해결되는가?',
         choices: [
-          { text: '그렇다. 다음 커밋이 덮는다', leadsTo: 0 },
-          { text: '그렇다. 무르면 사라진다', leadsTo: 1 },
-          { text: '아니다. 되돌린 기록도 이력에 남아 그 비밀번호를 바꾸는 것이 먼저다', correct: true },
+          { text: '그렇다. 다음 커밋이 덮어 흔적이 없어진다', leadsTo: 0 },
+          { text: '그렇다. 무르는 커밋을 얹으면 함께 사라진다', leadsTo: 1 },
+          { text: '아니다. 되돌린 기록도 이력에 남는다', correct: true },
           { text: '아니다. 대신 지우기로 해결된다', leadsTo: 0 },
         ],
         rationale:
