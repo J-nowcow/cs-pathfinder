@@ -7014,13 +7014,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '커밋 단계는 쪼개질 수 있는가?',
         choices: [
-          { text: '렌더처럼 쪼개진다', leadsTo: 1 },
+          { text: '렌더처럼 우선순위에 따라 쪼개진다', leadsTo: 0 },
           { text: '중간에 쪼개지 않는다', correct: true },
-          { text: '우선순위에 따라 다르다', leadsTo: 1 },
-          { text: '항상 두 번에 나눠 한다', leadsTo: 4 },
+          { text: '우선순위가 높을 때만 한 번에 한다', leadsTo: 0 },
+          { text: '항상 두 번에 나눠서 한다', leadsTo: 0 },
         ],
         rationale:
-          'useLayoutEffect는 페인트 전, useEffect는 대체로 페인트 뒤에 실행된다.',
+          '쪼개면 화면이 중간 상태로 보이므로 DOM과 ref를 한 번에 반영한다.',
       },
     ],
   },
