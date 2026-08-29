@@ -11088,13 +11088,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '편향을 막는 방법은?',
         choices: [
-          { text: '일반 이진트리로 바꿔 정렬 규칙을 없앤다', leadsTo: 4 },
           { text: '삽입 전에 데이터를 무작위로 섞어 순서를 흩는다', leadsTo: 1 },
           { text: '스스로 균형을 맞추는 트리를 쓴다', correct: true },
+          { text: '일반 이진트리로 바꿔 정렬 규칙을 없앤다', leadsTo: 4 },
           { text: '노드 수에 상한을 둬 높이가 자라지 않게 한다', leadsTo: 1 },
         ],
         rationale:
-          '단순 이진트리는 모든 노드를 확인해야 해 O(N)이 걸린다.',
+          'Red-Black 트리나 AVL 트리가 높이를 눌러 최악을 막는다.',
       },
     ],
   },
