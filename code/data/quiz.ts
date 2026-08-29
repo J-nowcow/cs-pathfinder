@@ -13399,12 +13399,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: 'TLS 1.3이 1-RTT로 줄인 방법은?',
         choices: [
           { text: '인증서 검증을 생략해 왕복을 줄인다', leadsTo: 3 },
-          { text: '첫 왕복에 키 재료까지 함께 보낸다', correct: true },
           { text: '양쪽이 대칭키를 미리 나눠 갖고 시작한다', leadsTo: 4 },
+          { text: '첫 왕복에 키 재료까지 함께 보낸다', correct: true },
           { text: '핸드셰이크 자체를 건너뛰고 바로 보낸다', leadsTo: 2 },
         ],
         rationale:
-          '한 번 붙었던 서버에는 0-RTT로 더 줄일 수도 있다.',
+          '쓸 방식을 미리 좁혀 두었기 때문에 첫 메시지에 키 재료를 실을 수 있다.',
       },
     ],
   },
@@ -13650,13 +13650,13 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '열 이름처럼 값으로 바인딩할 수 없는 자리는?',
         choices: [
-          { text: '읽기 전용 계정으로 실행한다', leadsTo: 4 },
-          { text: '이스케이프해서 이어 붙인다', leadsTo: 0 },
-          { text: '입력 검증만 통과시키면 된다', leadsTo: 0 },
+          { text: '이스케이프해서 문자열로 이어 붙인다', leadsTo: 0 },
           { text: '코드의 허용 목록에서 매핑한다', correct: true },
+          { text: '입력 검증만 통과시키면 그대로 쓴다', leadsTo: 0 },
+          { text: '읽기 전용 계정으로 실행해 막는다', leadsTo: 4 },
         ],
         rationale:
-          '최소 권한은 피해를 줄이는 두 번째 방어선이지 인젝션 자체를 막지 않는다.',
+          '보통 값으로 바인딩할 수 없는 자리라 미리 정해 둔 것 중에서만 고른다.',
       },
     ],
   },
