@@ -11731,4 +11731,256 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+  {
+    identityScope: 'generic',
+    question: '해시 충돌이 생기면 어떤 방법으로 푸는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '오픈 어드레싱에서 삭제가 까다로운 이유는?',
+        choices: [
+          { text: '삭제 마커가 필요하기 때문이다', correct: true },
+          { text: '리스트에서 노드를 떼야 하기 때문이다', leadsTo: 1 },
+          { text: '해시 함수를 다시 계산해야 하기 때문이다', leadsTo: 2 },
+          { text: '삭제 자체가 불가능하기 때문이다', leadsTo: 1 },
+        ],
+        rationale:
+          '그냥 비우면 그 뒤에 밀려 저장된 값을 찾지 못한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '체이닝이면 탐색이 항상 빠른가?',
+        choices: [
+          { text: '아니다. 리스트가 길어지면 O(1)에서 O(n)으로 늘어난다', correct: true },
+          { text: '그렇다. 리스트라 항상 상수 시간이다', leadsTo: 4 },
+          { text: '그렇다. 버킷 수와 무관하다', leadsTo: 0 },
+          { text: '아니다. 대신 삽입이 느려진다', leadsTo: 2 },
+        ],
+        rationale:
+          '대신 데이터가 계속 늘어나도 수용할 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '오픈 어드레싱의 성능 저하를 막는 관리 항목은?',
+        choices: [
+          { text: '로드 팩터를 관리하고 리사이징을 수행한다', correct: true },
+          { text: '리스트 길이를 제한한다', leadsTo: 1 },
+          { text: '삭제를 하지 않는다', leadsTo: 3 },
+          { text: '버킷 수를 고정한다', leadsTo: 0 },
+        ],
+        rationale:
+          '데이터가 꽉 찰수록 충돌이 잦아져 성능이 급격히 떨어진다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '해시 충돌이 발생했을 때의 해결책은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '선형 탐색이 만드는 문제는?',
+        choices: [
+          { text: '데이터가 뭉치는 클러스터링', correct: true },
+          { text: '메모리 오버헤드', leadsTo: 0 },
+          { text: '삭제 불가', leadsTo: 4 },
+          { text: '해시 함수 재계산', leadsTo: 1 },
+        ],
+        rationale:
+          '2차 해시 함수를 쓰거나 무작위로 탐색해 뭉침을 흩는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '버킷을 트리로 바꾸는 것은 해시 테이블의 일반 동작인가?',
+        choices: [
+          { text: '아니다. 자바 8 이후 HashMap 같은 일부 구현의 이야기다', correct: true },
+          { text: '그렇다. 모든 해시 테이블이 그렇게 한다', leadsTo: 2 },
+          { text: '그렇다. 표준으로 정해져 있다', leadsTo: 2 },
+          { text: '아니다. 어떤 구현도 그렇게 하지 않는다', leadsTo: 2 },
+        ],
+        rationale:
+          '한 버킷이 임계치를 넘으면 리스트를 레드-블랙 트리로 바꾸는 구현이 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '두 방식이 치르는 대가는 각각 무엇인가?',
+        choices: [
+          { text: '체이닝은 메모리 오버헤드, 오픈 어드레싱은 클러스터링', correct: true },
+          { text: '둘 다 메모리 오버헤드', leadsTo: 3 },
+          { text: '둘 다 클러스터링', leadsTo: 3 },
+          { text: '체이닝이 클러스터링을 겪는다', leadsTo: 3 },
+        ],
+        rationale:
+          '체이닝은 버킷 밖에, 오픈 어드레싱은 배열 안에 담는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '최단 경로 알고리즘의 선택 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '가중치가 없을 때 가장 빠른 것은?',
+        choices: [
+          { text: 'BFS', correct: true },
+          { text: '다익스트라', leadsTo: 4 },
+          { text: '벨만-포드', leadsTo: 1 },
+          { text: '어느 쪽도 못 쓴다', leadsTo: 3 },
+        ],
+        rationale:
+          '모든 노드를 동일한 거리로 계산하기 때문이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '간선에 0이 있으면 다익스트라를 못 쓰는가?',
+        choices: [
+          { text: '아니다. 0인 간선은 있어도 된다', correct: true },
+          { text: '그렇다. 양수만 허용된다', leadsTo: 0 },
+          { text: '그렇다. 벨만-포드로 바꿔야 한다', leadsTo: 1 },
+          { text: '아니다. 대신 BFS를 써야 한다', leadsTo: 3 },
+        ],
+        rationale:
+          '문제가 되는 것은 음수 가중치다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '시작점에서 닿는 음수 사이클이 있으면?',
+        choices: [
+          { text: '최단 거리 자체가 없고 벨만-포드는 그것을 알려 줄 뿐이다', correct: true },
+          { text: '벨만-포드가 대신 최단 거리를 구해 준다', leadsTo: 1 },
+          { text: '다익스트라로 우회하면 된다', leadsTo: 0 },
+          { text: '사이클을 무시하고 계산한다', leadsTo: 1 },
+        ],
+        rationale:
+          '돌수록 거리가 줄어드니 최솟값이 정해지지 않는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '문자열 검색 최적화 시 어떤 기준으로 알고리즘을 고르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'KMP가 비교를 줄이는 원리는?',
+        choices: [
+          { text: '패턴 내부의 반복 구조를 미리 계산해 건너뛴다', correct: true },
+          { text: '해시 값으로 먼저 걸러낸다', leadsTo: 2 },
+          { text: '텍스트를 정렬해 둔다', leadsTo: 1 },
+          { text: '접두사를 트리로 공유한다', leadsTo: 0 },
+        ],
+        rationale:
+          '텍스트를 되돌아가지 않아 각 글자를 거듭 비교하지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '라빈-카프는 해시를 쓰니 항상 빠른가?',
+        choices: [
+          { text: '아니다. 최악에는 O(nm)까지 간다', correct: true },
+          { text: '그렇다. 항상 평균 시간으로 끝난다', leadsTo: 2 },
+          { text: '그렇다. 해시가 충돌하지 않는다', leadsTo: 2 },
+          { text: '아니다. 대신 KMP보다 항상 느리다', leadsTo: 1 },
+        ],
+        rationale:
+          '해시가 일치할 때만 실제 문자열을 대조하기 때문이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '트라이를 쓸 때 감수하는 것은?',
+        choices: [
+          { text: '각 노드의 포인터 배열이 메모리를 많이 쓴다', correct: true },
+          { text: '검색이 문자열 길이보다 오래 걸린다', leadsTo: 0 },
+          { text: '접두사를 공유하지 못한다', leadsTo: 0 },
+          { text: '한 번에 하나의 패턴만 찾는다', leadsTo: 3 },
+        ],
+        rationale:
+          '한 번 구축하면 검색 시간이 문자열 길이에 비례한다는 대가다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '스택과 큐는 어떤 상황에서 구분해 쓰는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '큐의 두 연산 이름은?',
+        choices: [
+          { text: 'enqueue와 dequeue', correct: true },
+          { text: 'push와 pop', leadsTo: 0 },
+          { text: 'insert와 delete', leadsTo: 2 },
+          { text: 'add와 remove만', leadsTo: 2 },
+        ],
+        rationale:
+          '스택은 push와 pop으로 한쪽 끝에서만 넣고 뺀다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '큐를 배열로 구현하면 삭제도 O(1)인가?',
+        choices: [
+          { text: '아니다. 데이터 시프팅이 발생한다', correct: true },
+          { text: '그렇다. 인덱스만 옮기면 된다', leadsTo: 1 },
+          { text: '그렇다. 배열이 가장 빠르다', leadsTo: 1 },
+          { text: '아니다. 대신 삽입이 느려진다', leadsTo: 1 },
+        ],
+        rationale:
+          '원형 큐나 연결 리스트로 구현하면 요소를 옮기는 비용이 사라진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '스택과 큐가 각각 맡는 역할을 한마디로 하면?',
+        choices: [
+          { text: '스택은 맥락 유지, 큐는 흐름 제어', correct: true },
+          { text: '스택은 흐름 제어, 큐는 맥락 유지', leadsTo: 0 },
+          { text: '둘 다 맥락 유지', leadsTo: 3 },
+          { text: '둘 다 흐름 제어', leadsTo: 0 },
+        ],
+        rationale:
+          '큐는 요청이 몰릴 때 부하를 조절하는 버퍼 역할을 한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '트라이를 사용하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '트라이는 키를 어떻게 찾는가?',
+        choices: [
+          { text: '문자 경로를 따라간다', correct: true },
+          { text: '키 전체를 해싱한다', leadsTo: 2 },
+          { text: '키 전체를 비교한다', leadsTo: 2 },
+          { text: '정렬된 배열을 이진 탐색한다', leadsTo: 4 },
+        ],
+        rationale:
+          '검색 속도가 문자열 길이만큼으로 줄어든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '평균 O(1)인 해시 맵이 항상 나은가?',
+        choices: [
+          { text: '아니다. 최악에는 충돌로 떨어지지만 트라이는 O(L)을 보장한다', correct: true },
+          { text: '그렇다. 평균이 더 빠르면 항상 낫다', leadsTo: 2 },
+          { text: '그렇다. 트라이는 최악이 더 나쁘다', leadsTo: 2 },
+          { text: '아니다. 대신 트라이가 메모리도 적게 쓴다', leadsTo: 0 },
+        ],
+        rationale:
+          '보장하는 최악값이 다르다는 것이 갈리는 지점이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '트라이가 특히 맞는 기능은?',
+        choices: [
+          { text: '자동 완성이나 사전 검색', correct: true },
+          { text: '단건 키 조회', leadsTo: 2 },
+          { text: '범위 합계 계산', leadsTo: 4 },
+          { text: '정렬', leadsTo: 4 },
+        ],
+        rationale:
+          '공통 접두사를 공유하는 구조 덕분이다.',
+      },
+    ],
+  },
 ]
