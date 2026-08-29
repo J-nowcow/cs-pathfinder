@@ -113,21 +113,56 @@ async function main() {
  * "구분하여 쓰는가", "어떤 기준으로 선택하는가"가 다 빠져 있었다. 넓혀
  * 다시 재니 72편이다.
  *
- * 고칠 것은 **아래쪽 숫자**다. 견주는 질문이 아닌데 표만 있는 편.
+ * **그래도 부족했다.** 제목만 보는 판정이라 `volatile은 무엇을 보장하고
+ * 놓치는가?` 같은 편이 "고쳐야 하는 표"로 세어졌다. 열어 보면 표 머리가
+ * `기준 | volatile | synchronized`다 — 표가 스스로 견주는 표라고 말하고
+ * 있는데 제목에 그 말이 없었을 뿐이다. 이렇게 오탐한 것이 **70편**이었고,
+ * 지표는 그동안 "105편을 고쳐라"라고 가리키고 있었다.
+ *
+ * 그래서 제목과 표 머리를 함께 본다. 축 이름을 단 첫 칸에 대상 둘 이상이
+ * 붙어 있으면 견주는 표다.
+ *
+ * 남은 숫자를 실제로 열어 보면 대부분 정당한 열거표(`상태 코드 | 분류`)다.
+ * 표 안이 사실은 흐름인 자리는 **첫 칸에 화살표가 들어 있다** — 표 173개
+ * 중 그런 것은 하나였다(`발행자 → 브로커`).
  */
 const PICKY = /(차이|다른가|다른 점|비교|구분|어느 쪽|vs|선택|고르는|기준은|언제 쓰|언제 사용|무엇을 쓰)/
+/** 표 스스로가 견주는 표라고 밝히는 자리 — 축 이름을 단 첫 칸 */
+const AXIS = /^(기준|구분|항목|비교|연산|상황|방식|대상|모드|범위|갈래|수단|속성)$/
+/** 첫 칸이 구간이면 그 표는 흐름이다 */
+const HOP = /(->|→|=>)/
+
+function comparesInTable(body: string): boolean {
+  for (const b of parseBlocks(body)) {
+    if (b.type !== 'table') continue
+    if (b.head.length >= 3 && AXIS.test(b.head[0].trim())) return true
+  }
+  return false
+}
+
+function tableIsAFlow(body: string): boolean {
+  for (const b of parseBlocks(body)) {
+    if (b.type !== 'table') continue
+    if (b.rows.some((r) => HOP.test(r[0] ?? ''))) return true
+  }
+  return false
+}
+
 let pickyTable = 0
 let plainTable = 0
+let flowInTable = 0
 for (const r of rows) {
   if (!r.body.trim()) continue
   const m = countBlocks(r.body)
   const onlyT = m.size > 0 && [...m.keys()].every((k) => k === '(마크다운 표)' || k === 'table')
+  if (tableIsAFlow(r.body)) flowInTable += 1
   if (!onlyT) continue
-  if (PICKY.test(r.question)) pickyTable += 1
+  if (PICKY.test(r.question) || comparesInTable(r.body)) pickyTable += 1
   else plainTable += 1
 }
-console.log(`  견주는 질문이라 표가 맞는 것  ${pickyTable}`)
-console.log(`  견주는 질문이 아닌데 표만     ${plainTable}   <- 줄여야 하는 숫자`)
+console.log(`  견주는 표인 것                ${pickyTable}`)
+console.log(`  견주는 표가 아닌 것           ${plainTable}   (대부분 정당한 열거표다)`)
+console.log(`표 안이 사실 흐름인 편  ${flowInTable}   <- 줄여야 하는 숫자`)
   console.log(`통짜 글인 편      ${nothing}`)
 
   /*
