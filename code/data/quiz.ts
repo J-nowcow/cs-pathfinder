@@ -3577,4 +3577,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'js',
+    question: '한 줄짜리 코드가 화면을 멈추게 하는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '화면이 굳는 까닭은?',
+        choices: [
+          { text: '클릭 처리와 화면 갱신이 같은 자리를 쓰기 때문', correct: true },
+          { text: '메모리가 모자라서', leadsTo: 4 },
+          { text: '네트워크가 느려서', leadsTo: 2 },
+          { text: '화면 갱신 주기가 길어서', leadsTo: 4 },
+        ],
+        rationale:
+          '자바스크립트를 도는 자리가 하나뿐이라 거기서 오래 걸리면 그동안 아무것도 못 한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '느린 API 호출도 화면을 멈추는가?',
+        choices: [
+          { text: '기다리는 동안에는 자리를 내놓아 멈추지 않는다', correct: true },
+          { text: '멈춘다. 오래 걸리는 것은 모두 같다', leadsTo: 2 },
+          { text: '응답 크기가 클 때만 멈춘다', leadsTo: 2 },
+          { text: '워커로 옮겨야만 안 멈춘다', leadsTo: 0 },
+        ],
+        rationale:
+          '느린 것과 오래 도는 것을 구분해야 한다. 느린 API 호출은 화면을 안 멈추지만 100만 번 도는 반복문은 멈춘다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '멈춘 동안에도 움직일 수 있는 것은?',
+        choices: [
+          { text: '합성만으로 도는 애니메이션', correct: true },
+          { text: '클릭 처리', leadsTo: 3 },
+          { text: '모든 화면 갱신', leadsTo: 4 },
+          { text: '움직이는 것이 없다', leadsTo: 4 },
+        ],
+        rationale:
+          '그것은 다른 자리에서 돌기 때문이다. 나머지는 같은 자리를 기다린다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '한글이 깨져 보이는 이유는?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '깨짐의 원인은?',
+        choices: [
+          { text: '저장할 때 쓴 규칙과 읽을 때 쓴 규칙이 다르다', correct: true },
+          { text: '바이트가 손상됐다', leadsTo: 1 },
+          { text: '글꼴이 없다', leadsTo: 4 },
+          { text: '한글이 유니코드에 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '바이트는 그대로인데 그것을 글자로 자르는 방법이 어긋난다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '유니코드와 UTF-8의 관계는?',
+        choices: [
+          { text: '유니코드는 번호표, UTF-8은 그 번호를 바이트로 적는 방법', correct: true },
+          { text: '같은 말이다', leadsTo: 0 },
+          { text: 'UTF-8이 유니코드를 대체했다', leadsTo: 0 },
+          { text: '유니코드가 바이트 표현까지 정한다', leadsTo: 4 },
+        ],
+        rationale:
+          '둘은 다른 층이다. 같은 번호를 적는 방법이 여럿이라 규칙이 어긋날 여지가 생긴다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '어긋남을 먼저 의심할 자리는?',
+        choices: [
+          { text: 'DB 연결·응답 헤더·파일 읽기 같은 경계', correct: true },
+          { text: '화면에 그리는 코드', leadsTo: 3 },
+          { text: '문자열을 만드는 코드', leadsTo: 1 },
+          { text: '어디든 무작위다', leadsTo: 2 },
+        ],
+        rationale:
+          '깨지는 자리는 대개 경계다. 이 중 하나만 어긋나도 그 지점부터 어긋난다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '0.1을 더했는데 왜 딱 안 떨어지는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '0.1이 정확히 저장되지 않는 까닭은?',
+        choices: [
+          { text: '이진에서 끝나지 않는 소수라 가장 가까운 값으로 반올림된다', correct: true },
+          { text: '자릿수가 모자라서', leadsTo: 3 },
+          { text: '언어가 소수를 잘 못 다뤄서', leadsTo: 3 },
+          { text: '메모리가 손상돼서', leadsTo: 0 },
+        ],
+        rationale:
+          '십진에서 1을 3으로 나눈 값을 끝없이 적는 것과 같은 일이다. 밑이 2인 자리로는 10분의 1을 유한하게 적을 수 없다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '정밀도를 올리면 해결되는가?',
+        choices: [
+          { text: '오차가 작아질 뿐 성질은 그대로다', correct: true },
+          { text: '완전히 해결된다', leadsTo: 3 },
+          { text: '오히려 나빠진다', leadsTo: 3 },
+          { text: '언어를 바꾸면 해결된다', leadsTo: 1 },
+        ],
+        rationale:
+          '표현의 한계와 계산 실수는 구분해야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '돈을 다룰 때 고르는 방식은?',
+        choices: [
+          { text: '십진 소수 타입을 쓰거나 최소 단위 정수로 계산한다', correct: true },
+          { text: '배정밀도로 충분하다', leadsTo: 3 },
+          { text: '반올림을 마지막에만 하면 된다', leadsTo: 4 },
+          { text: '문자열로 저장한다', leadsTo: 1 },
+        ],
+        rationale:
+          '이자나 환율처럼 나눗셈이 끼면 중간 계산을 몇 자리까지 들고 갈지와 어디서 반올림할지도 함께 정해야 한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '정규식 하나가 서버를 멈추게 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '멈추게 되는 원리는?',
+        choices: [
+          { text: '안 맞으면 되돌아가 다시 맞춰 보느라 경우의 수가 폭발한다', correct: true },
+          { text: '식이 길어서 파싱이 오래 걸린다', leadsTo: 0 },
+          { text: '메모리를 많이 써서', leadsTo: 1 },
+          { text: '엔진이 매번 다시 컴파일해서', leadsTo: 1 },
+        ],
+        rationale:
+          '글자가 하나 늘 때마다 시도 수가 배로 늘어 금세 멈춘 것처럼 보인다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '위험한 식만 있으면 바로 터지는가?',
+        choices: [
+          { text: '뒤쪽에서 실패가 겹쳐야 되돌아가기가 폭발한다', correct: true },
+          { text: '식만 있으면 언제나 터진다', leadsTo: 0 },
+          { text: '입력이 짧아도 터진다', leadsTo: 2 },
+          { text: '엔진 종류와 무관하다', leadsTo: 1 },
+        ],
+        rationale:
+          '반복 안에 반복이 있거나 같은 것을 받는 갈래가 나란히 놓여 한 입력을 여러 방법으로 나눌 수 있을 때, 거기에 실패가 겹쳐야 터진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가장 위험한 자리는?',
+        choices: [
+          { text: '우리가 쓴 식에 남의 문자열이 들어가는 자리', correct: true },
+          { text: '식을 상수로 박아 둔 자리', leadsTo: 0 },
+          { text: '식이 짧은 자리', leadsTo: 0 },
+          { text: '검증을 두 번 하는 자리', leadsTo: 2 },
+        ],
+        rationale:
+          '한 요청이 CPU를 붙잡으면 그 자리가 통째로 막힌다. 막는 길은 위험한 모양을 피하고, 입력 길이를 제한하고, 시간 제한이 있는 실행을 쓰는 것이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '메모리 관점에서 값 타입과 참조 타입의 선택 기준은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '고르는 기준 셋은?',
+        choices: [
+          { text: '수명, 크기, 바꿀 일이 있는지', correct: true },
+          { text: '언어, 버전, 플랫폼', leadsTo: 2 },
+          { text: '스레드 수, 코어 수, 힙 크기', leadsTo: 3 },
+          { text: '이름, 접근 제어, 상속 여부', leadsTo: 0 },
+        ],
+        rationale:
+          '작고 수명이 짧고 바꿀 일이 없으면 값 타입이 유리한 편이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '값 타입은 언제나 스택에 놓이는가?',
+        choices: [
+          { text: '객체의 필드나 배열 원소면 힙에 놓인다', correct: true },
+          { text: '언제나 스택이다', leadsTo: 4 },
+          { text: '언제나 힙이다', leadsTo: 4 },
+          { text: '박싱해야 힙에 간다', leadsTo: 1 },
+        ],
+        rationale:
+          '흔히 그리는 스택·힙 구조는 관념 모델이고 실제 배치는 언어와 런타임 최적화에 달렸다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '참조 타입이 치르는 대가는?',
+        choices: [
+          { text: '힙에 쌓이고 GC가 그만큼 일한다', correct: true },
+          { text: '전달할 때마다 전체가 복사된다', leadsTo: 0 },
+          { text: '여러 곳에서 공유할 수 없다', leadsTo: 3 },
+          { text: '대가가 없다', leadsTo: 1 },
+        ],
+        rationale:
+          '넘길 때 주소만 복사하니 전달은 싸다. 비용은 할당과 회수 쪽에 있다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'java',
+    question: '자바의 원시 타입과 래퍼 클래스는 메모리 구조상 어떤 차이가 있는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '래퍼 클래스 변수가 담는 것은?',
+        choices: [
+          { text: '힙에 있는 객체를 가리키는 참조', correct: true },
+          { text: '실제 데이터 값', leadsTo: 2 },
+          { text: '값의 복사본', leadsTo: 2 },
+          { text: '캐시된 정수', leadsTo: 0 },
+        ],
+        rationale:
+          '원시 타입은 변수 공간에 실제 값을 직접 저장한다. 래퍼는 객체 헤더까지 함께 힙에 놓인다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '래퍼 객체의 크기는 값 크기와 같은가?',
+        choices: [
+          { text: '객체 머리와 정렬, 참조 압축 설정에 따라 더 크다', correct: true },
+          { text: '값과 똑같다', leadsTo: 2 },
+          { text: '언제나 정확히 두 배다', leadsTo: 2 },
+          { text: '값보다 작다', leadsTo: 0 },
+        ],
+        rationale:
+          '값 자체는 4바이트지만 객체로 감싸면 구현과 옵션에 따라 그보다 훨씬 커진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '반복문에서 오토박싱이 위험해지는 이유는?',
+        choices: [
+          { text: '짧은 시간에 많은 객체가 생겨 GC 부담이 는다', correct: true },
+          { text: '값이 잘못 변환된다', leadsTo: 0 },
+          { text: '컴파일이 실패한다', leadsTo: 1 },
+          { text: '스레드가 늘어난다', leadsTo: 3 },
+        ],
+        rationale:
+          '참조를 거치는 간접 접근이라 CPU 캐시 효율도 떨어진다. 캐시 범위 밖 값이면 매번 새 객체가 된다.',
+      },
+    ],
+  },
 ]
