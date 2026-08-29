@@ -4609,4 +4609,262 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  {
+    identityScope: 'os',
+    question: '메모리 연속할당 방식 중 무엇을 선택하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '할당이 가장 빠른 방식은?',
+        choices: [
+          { text: 'First-fit', correct: true },
+          { text: 'Best-fit', leadsTo: 0 },
+          { text: 'Worst-fit', leadsTo: 0 },
+          { text: '셋이 같다', leadsTo: 2 },
+        ],
+        rationale:
+          '리스트의 처음부터 찾다가 멈추므로 오버헤드가 적다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '딱 맞는 조각을 고르면 낭비가 줄어드는가?',
+        choices: [
+          { text: '쓸 수 없을 만큼 작은 조각이 남아 외부 단편화가 심해진다', correct: true },
+          { text: '낭비가 확실히 준다', leadsTo: 1 },
+          { text: '탐색도 빨라진다', leadsTo: 0 },
+          { text: '단편화가 사라진다', leadsTo: 2 },
+        ],
+        rationale:
+          '모든 조각을 확인해야 해서 느리기까지 하다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가장 큰 조각을 내주는 방식의 치명적 단점은?',
+        choices: [
+          { text: '큰 프로세스가 들어올 자리를 미리 없앤다', correct: true },
+          { text: '탐색이 가장 느리다', leadsTo: 0 },
+          { text: '내부 단편화가 생긴다', leadsTo: 1 },
+          { text: '단점이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '남은 공간을 유의미하게 쓰려는 의도지만 결과가 반대로 나온다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: 'TLB 미스가 발생했을 때 처리 과정은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'TLB를 두는 까닭은?',
+        choices: [
+          { text: '페이지 테이블을 매번 보러 가는 것이 느려서', correct: true },
+          { text: '물리 메모리를 아끼려고', leadsTo: 2 },
+          { text: '페이지 폴트를 막으려고', leadsTo: 4 },
+          { text: '프로세스를 격리하려고', leadsTo: 1 },
+        ],
+        rationale:
+          '페이지 테이블은 메인 메모리에 있다. TLB는 주소 변환을 빨리 하려고 두는 캐시다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '컨텍스트 스위칭 때 TLB는 항상 비워지는가?',
+        choices: [
+          { text: '주소 공간에 꼬리표를 달 수 있으면 앞 항목을 남긴다', correct: true },
+          { text: '언제나 통째로 비운다', leadsTo: 1 },
+          { text: '절대 비우지 않는다', leadsTo: 0 },
+          { text: '페이지 폴트가 날 때만 비운다', leadsTo: 4 },
+        ],
+        rationale:
+          'PCID나 ASID가 있으면 프로세스별로 갈라 둔다. 없는 시스템이면 전환할 때 비운다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '페이지 테이블을 타고 내려갔는데 페이지가 없으면?',
+        choices: [
+          { text: '페이지 폴트로 이어진다', correct: true },
+          { text: 'TLB에 다시 물어본다', leadsTo: 0 },
+          { text: '변환을 포기하고 오류를 낸다', leadsTo: 3 },
+          { text: '아무 일도 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '단계가 여러 겹이면 그만큼 더 걸리고, 그 끝에 매핑이 없으면 커널이 개입한다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '컨텍스트 스위칭은 왜 비용이 발생하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '전환 동안 CPU는 무엇을 하는가?',
+        choices: [
+          { text: '스케줄러와 상태 저장 코드를 실행한다', correct: true },
+          { text: '아무것도 하지 않고 멈춰 있다', leadsTo: 3 },
+          { text: '사용자 작업을 그대로 이어 간다', leadsTo: 0 },
+          { text: '캐시를 정리한다', leadsTo: 2 },
+        ],
+        rationale:
+          '사용자 작업은 진행하지 못하지만 CPU가 노는 것은 아니다. 잠금과 실행 대기열을 다루는 시간도 직접 비용에 들어간다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '전환 횟수가 많으면 그 자체로 나쁜가?',
+        choices: [
+          { text: '아니다. 어떤 전환인지와 대기 상황을 함께 봐야 한다', correct: true },
+          { text: '많을수록 항상 나쁘다', leadsTo: 3 },
+          { text: '적을수록 항상 좋다', leadsTo: 3 },
+          { text: '횟수만 보면 충분하다', leadsTo: 3 },
+        ],
+        rationale:
+          '기다리며 CPU를 놓는 voluntary switch와 밀려나는 involuntary switch는 뜻이 다르다. run queue 대기와 CPU 사용률을 함께 본다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '간접 비용의 크기를 좌우하는 것은?',
+        choices: [
+          { text: '두 작업의 working set과 코어 이동', correct: true },
+          { text: '전환 명령의 개수', leadsTo: 0 },
+          { text: '스레드 이름 길이', leadsTo: 3 },
+          { text: '항상 일정하다', leadsTo: 2 },
+        ],
+        rationale:
+          '캐시와 branch predictor가 전환 명령 하나로 지워지지는 않는다. 새 작업이 이전 작업의 것을 밀어낸 만큼 나중에 miss가 는다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '뮤텍스와 세마포어는 무엇으로 구분하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 것은?',
+        choices: [
+          { text: '소유권과 카운트가 표현하는 뜻', correct: true },
+          { text: '속도', leadsTo: 3 },
+          { text: '커널 지원 여부', leadsTo: 4 },
+          { text: '스레드 개수 제한', leadsTo: 4 },
+        ],
+        rationale:
+          '뮤텍스는 임계 구역을 보호한 스레드가 소유자가 된다. 세마포어는 남은 허가 수나 이벤트 신호를 카운트로 나타낸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '카운트가 1인 세마포어는 뮤텍스와 같은가?',
+        choices: [
+          { text: '소유권이 없고 다른 스레드도 신호할 수 있어 다르다', correct: true },
+          { text: '같은 도구다', leadsTo: 0 },
+          { text: '더 안전하다', leadsTo: 0 },
+          { text: '더 느릴 뿐 같다', leadsTo: 0 },
+        ],
+        rationale:
+          '한 번에 하나만 통과시키는 것은 같지만 해제할 수 있는 주체가 다르다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '동시에 내줄 수 있는 커넥션 수를 나타내려면?',
+        choices: [
+          { text: '세마포어', correct: true },
+          { text: '뮤텍스', leadsTo: 0 },
+          { text: '스핀락', leadsTo: 3 },
+          { text: '둘 다 안 된다', leadsTo: 4 },
+        ],
+        rationale:
+          '상호 배제, 용량 제한, 순서 알림 중 무엇을 표현하려는지로 고른다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'os',
+    question: '프로세스 스케줄링 방식은 무엇으로 결정하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '선점형이 비선점형과 다른 점은?',
+        choices: [
+          { text: '운영체제가 CPU를 강제로 회수할 수 있다', correct: true },
+          { text: '프로세스를 더 많이 만든다', leadsTo: 4 },
+          { text: '우선순위를 쓰지 않는다', leadsTo: 2 },
+          { text: '문맥 교환이 없다', leadsTo: 0 },
+        ],
+        rationale:
+          '비선점형은 프로세스가 반납할 때까지 기다린다. 그래서 응답성이 갈린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '시간 조각을 짧게 할수록 좋은가?',
+        choices: [
+          { text: '너무 짧으면 문맥 교환 비용이 커진다', correct: true },
+          { text: '짧을수록 언제나 낫다', leadsTo: 0 },
+          { text: '길이는 성능과 무관하다', leadsTo: 3 },
+          { text: '짧으면 기아가 사라진다', leadsTo: 2 },
+        ],
+        rationale:
+          '라운드 로빈은 공평한 기회로 응답성을 높이지만 그 대가가 전환 비용이다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '우선순위 스케줄링의 기아를 막는 방법은?',
+        choices: [
+          { text: '오래 기다린 작업의 순위를 올리는 에이징', correct: true },
+          { text: '우선순위를 없앤다', leadsTo: 4 },
+          { text: '시간 조각을 늘린다', leadsTo: 3 },
+          { text: '막을 방법이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '낮은 우선순위의 작업이 영원히 실행되지 않는 것이 기아 현상이다.',
+      },
+    ],
+  },
+
+  {
+    identityScope: 'generic',
+    question: '멀티스레드 환경에서 스레드 세이프한 코드를 작성하는 방법은 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '세 갈래 방법이 공통으로 하는 일은?',
+        choices: [
+          { text: '공유 자원에 동시에 쓰는 경로를 줄이거나 없앤다', correct: true },
+          { text: '스레드 수를 줄인다', leadsTo: 0 },
+          { text: '실행 순서를 고정한다', leadsTo: 0 },
+          { text: '메모리를 더 준다', leadsTo: 4 },
+        ],
+        rationale:
+          '동기화는 한 번에 하나만 들어가게 하고, 불변성은 바뀔 일 자체를 없애고, 원자성은 읽고 고치는 것을 한 연산으로 만든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '락을 많이 걸수록 안전하고 좋은가?',
+        choices: [
+          { text: '기다리는 스레드가 늘고 전환 비용이 붙어 느려진다', correct: true },
+          { text: '많이 걸수록 좋다', leadsTo: 1 },
+          { text: '성능과 무관하다', leadsTo: 1 },
+          { text: '락을 걸면 전환이 사라진다', leadsTo: 0 },
+        ],
+        rationale:
+          '안전과 속도를 맞바꾸는 자리라 필요한 만큼만 걸어야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '락 없이 일관성을 지키는 길은?',
+        choices: [
+          { text: 'CAS 같은 원자적 연산으로 구현한다', correct: true },
+          { text: '동기화를 두 번 건다', leadsTo: 1 },
+          { text: '스레드를 하나로 줄인다', leadsTo: 0 },
+          { text: '길이 없다', leadsTo: 2 },
+        ],
+        rationale:
+          '일관성은 지키면서 기다리는 비용을 피하는 길이다.',
+      },
+    ],
+  },
 ]
