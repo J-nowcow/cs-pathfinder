@@ -1164,10 +1164,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '쿠키는 모든 요청에 자동으로 실리는가?',
         choices: [
-          { text: '모든 요청에 실린다', leadsTo: 1 },
-          { text: '스크립트가 붙여야만 실린다', leadsTo: 1 },
-          { text: '도메인·경로와 Secure·SameSite 조건에 맞는 요청에만 실린다', correct: true },
-          { text: '같은 탭에서만 실린다', leadsTo: 3 },
+          { text: '도메인과 상관없이 모든 요청에 자동으로 실린다', leadsTo: 1 },
+          { text: '스크립트가 헤더에 직접 붙일 때만 실린다', leadsTo: 1 },
+          { text: '도메인과 SameSite 조건에 맞는 요청에만 실린다', correct: true },
+          { text: '같은 탭에서 연 요청에만 실린다', leadsTo: 3 },
         ],
         rationale:
           '쿠키는 도메인·경로와 Secure·SameSite 조건에 맞는 요청에만 자동으로 실린다.',
@@ -4902,10 +4902,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '스레드는 스택만 따로 가진다고 해도 되는가?',
         choices: [
-          { text: '스택만 따로 가진다', leadsTo: 1 },
-          { text: '스레드 ID·레지스터·signal mask·errno 등도 각자 가진다', correct: true },
-          { text: '아무것도 따로 갖지 않는다', leadsTo: 1 },
-          { text: '힙도 따로 가진다', leadsTo: 0 },
+          { text: '스택만 따로 가지고 레지스터는 프로세스가 공유한다', leadsTo: 1 },
+          { text: '레지스터와 errno 등도 각자 가진다', correct: true },
+          { text: '레지스터까지 모두 공유하고 따로 갖는 것이 없다', leadsTo: 1 },
+          { text: '스택과 함께 힙도 스레드마다 따로 가진다', leadsTo: 0 },
         ],
         rationale:
           '공유 범위는 언어 런타임과 운영체제에 따라 세부가 달라진다.',
@@ -8262,10 +8262,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '빈 배열인데 두 번 실행되면 버그인가?',
         choices: [
-          { text: '그렇다. 의존성 배열이 잘못됐다', leadsTo: 0 },
-          { text: '아니다. 개발 모드의 Strict Mode가 정리를 확인하려고 일부러 두 번 실행한다', correct: true },
+          { text: '그렇다. 의존성 배열에 값이 남아 있어 다시 실행된 것이다', leadsTo: 0 },
+          { text: '아니다. 개발 모드의 Strict Mode가 일부러 두 번 실행한다', correct: true },
           { text: '그렇다. 컴포넌트가 두 번 마운트된 것이다', leadsTo: 3 },
-          { text: '아니다. 원래 항상 두 번 실행된다', leadsTo: 4 },
+          { text: '아니다. 빈 배열은 개발이든 운영이든 항상 두 번 실행된다', leadsTo: 4 },
         ],
         rationale:
           '정리가 제대로 되는지 보려는 개발 모드의 동작이다.',
@@ -8544,10 +8544,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '프로세스가 종료되면 두 수단은 어떻게 갈리는가?',
         choices: [
-          { text: '둘 다 사라진다', leadsTo: 0 },
-          { text: '둘 다 값을 복원한다', leadsTo: 3 },
-          { text: 'ViewModel은 인스턴스가 사라지고 SavedStateHandle은 저장된 값을 복원한다', correct: true },
-          { text: 'SavedStateHandle만 사라진다', leadsTo: 0 },
+          { text: 'ViewModel도 SavedStateHandle도 저장된 값을 복원한다', leadsTo: 0 },
+          { text: '둘 다 인스턴스가 사라져 값을 복원하지 못한다', leadsTo: 3 },
+          { text: 'ViewModel은 사라지고 SavedStateHandle은 복원한다', correct: true },
+          { text: 'SavedStateHandle은 인스턴스가 사라지고 ViewModel은 값을 복원한다', leadsTo: 0 },
         ],
         rationale:
           '구성 변경까지는 둘 다 살아남지만 프로세스 종료에서 갈린다.',
@@ -8808,10 +8808,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '접수된 메시지는 언젠가는 반드시 도착하는가?',
         choices: [
-          { text: '그렇다. 재시도가 무한히 이어진다', leadsTo: 0 },
+          { text: '그렇다. 도착할 때까지 재시도가 무한히 이어진다', leadsTo: 0 },
           { text: '그렇다. 연결이 열리면 밀린 것이 모두 온다', leadsTo: 0 },
-          { text: '아니다. TTL이 지나거나 같은 collapse key의 새 메시지가 오면 버려질 수 있다', correct: true },
-          { text: '아니다. 오프라인이면 즉시 실패로 끝난다', leadsTo: 0 },
+          { text: '아니다. TTL이 지나거나 collapse key가 겹치면 버려진다', correct: true },
+          { text: '아니다. 오프라인이면 재시도 없이 즉시 실패로 끝난다', leadsTo: 0 },
         ],
         rationale:
           '오프라인과 Doze와 토큰 만료 때문에 지연되거나 유실될 수 있다.',
@@ -10392,10 +10392,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'concept',
         stem: '컴파일러와 JVM은 각각 무엇을 하는가?',
         choices: [
-          { text: 'JVM이 소스를 직접 읽는다', leadsTo: 0 },
+          { text: '컴파일러 없이 JVM이 소스를 직접 읽어 기계어로 바꾼다', leadsTo: 0 },
           { text: '컴파일러가 기계어까지 만들고 JVM은 실행만 한다', leadsTo: 2 },
-          { text: '컴파일러는 소스를 바이트코드로, JVM은 바이트코드를 각 OS의 기계어로 바꾼다', correct: true },
-          { text: '둘 다 바이트코드를 만든다', leadsTo: 2 },
+          { text: '컴파일러는 바이트코드까지, JVM은 기계어로 바꾼다', correct: true },
+          { text: '컴파일러가 바이트코드를 만들고 JVM도 바이트코드를 만든다', leadsTo: 2 },
         ],
         rationale:
           '이 구조가 Write Once, Run Anywhere를 실현한다.',
@@ -10920,10 +10920,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '데이터베이스 인덱스가 B-트리를 쓰는 이유는?',
         choices: [
-          { text: '균형을 안 맞춰도 돼서', leadsTo: 4 },
-          { text: '이진 트리보다 회전이 쉬워서', leadsTo: 0 },
-          { text: '디스크가 블록 단위로 읽어 한 노드에 키를 많이 담아 높이를 낮추는 편이 유리하다', correct: true },
-          { text: '범위 질의를 못 해서', leadsTo: 2 },
+          { text: '노드가 커서 균형을 맞출 필요가 없어 회전 비용이 들지 않는다', leadsTo: 4 },
+          { text: '이진 트리보다 회전이 단순해 삽입과 삭제가 빠르다', leadsTo: 0 },
+          { text: '한 노드에 키를 많이 담아 높이를 낮출 수 있어서', correct: true },
+          { text: '범위 질의를 못 하는 대신 단건 조회가 빠르다', leadsTo: 2 },
         ],
         rationale:
           '스스로 균형을 잡는 트리는 회전 비용을 치르고 최악을 O(log n)으로 묶는다.',
@@ -11088,10 +11088,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '편향을 막는 방법은?',
         choices: [
-          { text: '일반 이진트리로 바꾼다', leadsTo: 4 },
-          { text: '삽입 전에 데이터를 섞는다', leadsTo: 1 },
-          { text: 'Red-Black 트리나 AVL 트리처럼 스스로 균형을 맞추는 트리를 쓴다', correct: true },
-          { text: '노드 수를 제한한다', leadsTo: 1 },
+          { text: '일반 이진트리로 바꿔 정렬 규칙을 없앤다', leadsTo: 4 },
+          { text: '삽입 전에 데이터를 무작위로 섞어 순서를 흩는다', leadsTo: 1 },
+          { text: '스스로 균형을 맞추는 트리를 쓴다', correct: true },
+          { text: '노드 수에 상한을 둬 높이가 자라지 않게 한다', leadsTo: 1 },
         ],
         rationale:
           '단순 이진트리는 모든 노드를 확인해야 해 O(N)이 걸린다.',

@@ -174,9 +174,32 @@ function main() {
     }
   }
 
+  /*
+   * 길이도 답을 흘린다. 정답이 늘 가장 길면 읽지 않고 긴 것만 골라도 맞는다.
+   * 아직 높아서 막지는 않고 숫자만 띄운다 — 오답을 정답과 같은 밀도로 다시
+   * 쓰는 일이라 한 번에 끝나지 않는다.
+   */
+  let longestIsCorrect = 0
+  for (const quiz of NODE_QUIZZES) {
+    for (const item of quiz.items) {
+      const lens = item.choices.map((c) => c.text.length)
+      const at = item.choices.findIndex((c) => c.correct)
+      const max = Math.max(...lens)
+      if (lens[at] === max && lens.filter((l) => l === max).length === 1) longestIsCorrect++
+    }
+  }
+
   const itemCount = NODE_QUIZZES.reduce((n, q) => n + q.items.length, 0)
   console.log(`노드 ${NODE_QUIZZES.length}개 · 문제 ${itemCount}개 검사`)
   console.log(`전체 노드 ${nodes.size}개 중 ${NODE_QUIZZES.length}개에 문제가 붙어 있다`)
+  const spread = [...positions]
+    .sort((a, b) => a[0] - b[0])
+    .map(([at, n]) => `${at + 1}번 ${((n / answered) * 100).toFixed(0)}%`)
+    .join(' · ')
+  console.log(`정답 위치 ${spread}`)
+  console.log(
+    `정답이 가장 긴 보기인 문항 ${((longestIsCorrect / itemCount) * 100).toFixed(1)}% (낮을수록 좋다)`,
+  )
 
   if (!problems.length) {
     console.log('\n문제 없음')
