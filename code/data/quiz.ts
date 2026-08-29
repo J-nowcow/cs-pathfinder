@@ -10780,12 +10780,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '@Cacheable은 애너테이션이라 내부 호출에도 붙는가?',
+        stem: '@Cacheable도 내부 호출에서는 건너뛰어지는가?',
         choices: [
-          { text: '아니다. 대신 예외가 발생한다', leadsTo: 0 },
-          { text: '그렇다. 애너테이션은 위치와 무관하다', leadsTo: 0 },
-          { text: '그렇다. 캐시는 트랜잭션과 달리 항상 동작한다', leadsTo: 0 },
-          { text: '아니다. 프록시의 가로채기를 건너뛰어 적용되지 않는다', correct: true },
+          { text: '아니다. 애너테이션은 위치와 무관하다', leadsTo: 0 },
+          { text: '아니다. 캐시는 트랜잭션과 달리 항상 동작한다', leadsTo: 0 },
+          { text: '그렇다. 프록시의 가로채기를 지나지 않는다', correct: true },
+          { text: '아니다. 대신 그 자리에서 예외가 난다', leadsTo: 0 },
         ],
         rationale:
           '@Transactional도 같은 이유로 내부 호출에서는 전파가 적용되지 않는다.',
@@ -10822,12 +10822,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '분할 상환하면 평균이 O(1)이니 지연도 안정적인가?',
+        stem: '평균이 O(1)이어도 튀는 지점이 생기는가?',
         choices: [
-          { text: '그렇다. 평균이 곧 지연 보장이다', leadsTo: 2 },
-          { text: '아니다. 리사이즈 한 번이 튀는 지점으로 나타난다', correct: true },
-          { text: '그렇다. 리사이즈는 비용이 없다', leadsTo: 2 },
-          { text: '아니다. 대신 평균도 O(n)이다', leadsTo: 1 },
+          { text: '그렇다. 리사이즈 한 번이 그 자리다', correct: true },
+          { text: '아니다. 평균이 곧 지연 보장이다', leadsTo: 2 },
+          { text: '아니다. 리사이즈는 비용이 없다', leadsTo: 2 },
+          { text: '아니다. 평균도 O(n)이라 고르게 느리다', leadsTo: 1 },
         ],
         rationale:
           '리사이즈는 모든 키를 다시 배치하므로 그 한 번이 무겁다.',
@@ -10864,12 +10864,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '한 언어 안에서는 정렬 안정성이 늘 같은가?',
+        stem: '같은 언어 안에서도 정렬 안정성이 갈리는가?',
         choices: [
-          { text: '그렇다. 모든 정렬이 안정적이다', leadsTo: 1 },
-          { text: '그렇다. 언어마다 하나로 정해져 있다', leadsTo: 3 },
-          { text: '아니다. 자바는 객체 배열만 안정적이고 원시 타입은 아니다', correct: true },
-          { text: '아니다. 대신 원시 타입만 안정적이다', leadsTo: 3 },
+          { text: '아니다. 모든 정렬이 안정적이다', leadsTo: 1 },
+          { text: '그렇다. 자바는 객체 배열만 안정적이다', correct: true },
+          { text: '아니다. 언어마다 하나로 정해져 있다', leadsTo: 3 },
+          { text: '아니다. 원시 타입만 안정적이다', leadsTo: 3 },
         ],
         rationale:
           '값이 같은 int 둘은 구별할 방법이 없어 순서가 바뀌어도 관측되지 않는다.',
@@ -10906,12 +10906,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '단건 조회가 빠른 해시로 다 바꾸면 되는가?',
+        stem: '해시로 바꾸면 잃는 것이 있는가?',
         choices: [
-          { text: '아니다. 범위 질의와 정렬 순회를 못 한다', correct: true },
-          { text: '그렇다. 해시가 모든 면에서 낫다', leadsTo: 2 },
-          { text: '그렇다. 정렬도 해시로 된다', leadsTo: 2 },
-          { text: '아니다. 대신 해시가 더 느리다', leadsTo: 2 },
+          { text: '아니다. 해시가 모든 면에서 낫다', leadsTo: 2 },
+          { text: '아니다. 정렬도 해시로 된다', leadsTo: 2 },
+          { text: '그렇다. 범위 질의와 정렬 순회를 못 한다', correct: true },
+          { text: '아니다. 단건 조회조차 더 느려진다', leadsTo: 2 },
         ],
         rationale:
           '"20에서 30 사이"를 물어야 하면 트리 쪽이다.',
@@ -10948,12 +10948,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '배열은 탐색이 O(1)이니 삽입도 빠른가?',
+        stem: '배열은 탐색이 빨라도 삽입에서 값을 치르는가?',
         choices: [
-          { text: '그렇다. 삽입도 O(1)이다', leadsTo: 2 },
-          { text: '그렇다. 인덱스로 바로 넣는다', leadsTo: 2 },
-          { text: '아니다. 뒤의 원소를 한 칸씩 미는 쉬프트 비용으로 O(N)이다', correct: true },
-          { text: '아니다. 대신 탐색도 O(N)이다', leadsTo: 2 },
+          { text: '그렇다. 뒤의 원소를 미는 쉬프트로 O(N)이다', correct: true },
+          { text: '아니다. 인덱스로 바로 넣어 O(1)이다', leadsTo: 2 },
+          { text: '아니다. 삽입도 탐색만큼 빠르다', leadsTo: 2 },
+          { text: '그렇다. 대신 탐색도 O(N)으로 느리다', leadsTo: 2 },
         ],
         rationale:
           '데이터가 무작위로 위치할 때는 두 자료구조 모두 한계가 있다.',
@@ -10990,12 +10990,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '어느 쪽을 쓸지는 입출력 순서만 보면 되는가?',
+        stem: '구현에 쓰는 자료구조의 비용도 함께 따져야 하는가?',
         choices: [
-          { text: '아니다. 대신 둘은 서로 대체 가능하다', leadsTo: 3 },
-          { text: '그렇다. 순서만 맞으면 성능은 같다', leadsTo: 0 },
-          { text: '그렇다. 구현은 언어가 최적화한다', leadsTo: 1 },
-          { text: '아니다. 구현에 쓰는 자료구조의 비용도 따져야 한다', correct: true },
+          { text: '아니다. 순서만 맞으면 성능은 같다', leadsTo: 0 },
+          { text: '아니다. 구현은 언어가 최적화한다', leadsTo: 1 },
+          { text: '그렇다. 꺼낼 때 생기는 이동 비용이 다르다', correct: true },
+          { text: '아니다. 둘은 서로 대체 가능하다', leadsTo: 3 },
         ],
         rationale:
           '큐는 꺼낼 때 생기는 배열 내 요소 이동 비용을 줄일 방법을 고민해야 한다.',
@@ -11032,12 +11032,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '자바 8은 버킷이 길어지면 바로 트리로 바꾸는가?',
+        stem: '버킷을 트리로 바꾸는 데 표 용량 조건도 붙는가?',
         choices: [
-          { text: '그렇다. 임계치만 넘으면 바꾼다', leadsTo: 1 },
-          { text: '아니다. 표 용량이 64 이상일 때만 바꾼다', correct: true },
-          { text: '그렇다. 표 용량과 무관하게 바꾼다', leadsTo: 1 },
+          { text: '아니다. 임계치만 넘으면 바꾼다', leadsTo: 1 },
+          { text: '아니다. 표 용량과 무관하게 바꾼다', leadsTo: 1 },
           { text: '아니다. 트리로는 절대 바꾸지 않는다', leadsTo: 3 },
+          { text: '그렇다. 표 용량이 64 이상일 때만 바꾼다', correct: true },
         ],
         rationale:
           '용량이 작으면 트리 대신 표를 키우는 편이 낫다.',
@@ -11074,12 +11074,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '이진탐색트리면 탐색이 O(log N)인가?',
+        stem: '이진탐색트리의 탐색 시간은 높이에 매이는가?',
         choices: [
-          { text: '그렇다. 노드 수만 적으면 된다', leadsTo: 1 },
-          { text: '그렇다. 구조 자체가 보장한다', leadsTo: 1 },
-          { text: '아니다. 높이에 비례하므로 기울면 O(N)이 된다', correct: true },
-          { text: '아니다. 항상 O(N)이다', leadsTo: 0 },
+          { text: '그렇다. 기울면 O(N)까지 내려간다', correct: true },
+          { text: '아니다. 노드 수만 적으면 된다', leadsTo: 1 },
+          { text: '아니다. 구조 자체가 O(log N)을 보장한다', leadsTo: 1 },
+          { text: '아니다. 언제나 O(N)이다', leadsTo: 0 },
         ],
         rationale:
           '정렬된 데이터가 순서대로 들어오면 편향 트리가 된다.',
