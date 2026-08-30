@@ -14251,7 +14251,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '부수 효과 자체가 결과일 때', correct: true },
         ],
         rationale:
-          '목은 무엇이 몇 번 불렸는지까지 검사한다. 많이 쓸수록 구현 순서를 외운 시험이 되므로 부수 효과 자체가 결과인 자리에만 쓴다.',
+          '목은 기대를 미리 걸어 두고 어긋나는 순간 실패시킨다. 많이 쓸수록 구현 순서를 외운 시험이 되므로 부수 효과 자체가 결과인 자리에만 쓴다.',
       },
     ],
   },
@@ -14371,10 +14371,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '시험을 먼저 쓰기가 방해가 되는 때는?',
         choices: [
-          { text: '고칠 곳이 여러 파일에 걸칠 때', leadsTo: 3 },
+          { text: '부르는 모양이 이미 정해져 있을 때', leadsTo: 2 },
           { text: '만들 것이 아직 흐릴 때', correct: true },
-          { text: '시험이 느려졌을 때', leadsTo: 4 },
-          { text: '구조를 다듬을 때', leadsTo: 4 },
+          { text: '되돌아갈 지점을 만들고 싶을 때', leadsTo: 0 },
+          { text: '구현을 작게 나눠 짤 때', leadsTo: 3 },
         ],
         rationale:
           '만들 것이 아직 흐릴 때는 시험이 먼저 굳어 방해가 된다. 대충 만들어 보고 버린 뒤 다시 시작하는 편이 빠르다.',
@@ -14491,7 +14491,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '이미지 층', leadsTo: 3 },
         ],
         rationale:
-          '같은 파드에 든 컨테이너는 주소 하나를 나눠 쓴다. 서로를 localhost로 부르고 포트는 겹칠 수 없다.',
+          '같은 파드의 컨테이너들은 네트워크와 볼륨을 함께 쓴다. 주소 하나를 나눠 써서 서로를 localhost로 부른다.',
       },
       {
         kind: 'boundary',
@@ -14520,19 +14520,18 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '읽기만 되는 사용자', leadsTo: 2 },
         ],
         rationale:
-          '이름공간은 무엇을 볼 수 있는지를 가를 뿐 사용자 번호를 바꾸지 않는다. 따로 매핑을 켜지 않으면 안의 0번이 밖의 0번이다.',
+          '컨테이너 안의 루트가 호스트의 루트와 같은 사용자다. 따로 매핑을 켜지 않으면 안의 0번이 밖의 0번이다.',
       },
       {
         kind: 'misconception',
-        stem: '이름공간이 하는 일은?',
+        stem: '네임스페이스가 하는 일은?',
         choices: [
           { text: '사용자 번호를 바꾼다', leadsTo: 1 },
           { text: '권한을 낮춰 준다', leadsTo: 1 },
           { text: '무엇을 볼 수 있는지 가른다', correct: true },
           { text: '파일을 읽기 전용으로 만든다', leadsTo: 2 },
         ],
-        rationale:
-          '가르는 일은 이름공간이 하고 그것이 뚫리는 순간 남는 것은 권한뿐이다. 번호까지 바꾸지는 않는다.',
+        rationale: '네임스페이스는 무엇을 볼 수 있는지를 가를 뿐 사용자 번호를 바꾸지 않는다.',
       },
       {
         kind: 'boundary',
@@ -14581,12 +14580,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '기다려 준 시간이 지나 강제로 끊기면?',
         choices: [
           { text: '하던 요청이 중간에 잘린다', correct: true },
-          { text: '볼륨의 데이터가 사라진다', leadsTo: 2 },
-          { text: '이미지가 손상된다', leadsTo: 1 },
-          { text: '재시작이 막힌다', leadsTo: 3 },
+          { text: '자식들만 먼저 정리된다', leadsTo: 2 },
+          { text: '남은 자식이 그대로 살아 돈다', leadsTo: 1 },
+          { text: '정리할 시간이 더 주어진다', leadsTo: 3 },
         ],
         rationale:
-          '기다려 준 시간이 지나면 강제로 끊는다. 배포할 때마다 오류가 조금씩 나는 원인이 여기인 경우가 있다.',
+          '강제로 끊기면 하던 요청이 중간에 잘린다. 배포할 때마다 오류가 조금씩 나는 원인이 여기인 경우가 있다.',
       },
     ],
   },
@@ -14704,9 +14703,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '몰리는 키를 쪼개면 무엇을 내놓는가?',
         choices: [
-          { text: '전체 처리량', leadsTo: 4 },
-          { text: '파티션 수의 상한', leadsTo: 4 },
-          { text: '밀린 양을 재는 방법', leadsTo: 0 },
+          { text: '파티션별로 나눠 보는 눈', leadsTo: 0 },
+          { text: '들어온 양과 밀린 양을 견주는 일', leadsTo: 1 },
+          { text: '몰린 키를 찾아내는 방법', leadsTo: 2 },
           { text: '그 키 안의 순서 보장', correct: true },
         ],
         rationale: '뒤에 번호를 붙여 여러 칸으로 흩고, 대신 그 키 안의 순서 보장을 내놓는다.',
@@ -14762,7 +14761,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '추적 비용이 대개 가장 크게 드는 자리는?',
         choices: [
           { text: 'span을 만들고 시각을 찍는 순간', leadsTo: 3 },
-          { text: '헤더를 이어 넘기는 순간', leadsTo: 4 },
+          { text: '큐에 모아 두는 동안', leadsTo: 1 },
           { text: '수집기로 내보내는 순간', leadsTo: 1 },
           { text: '보관 기간만큼 쌓이는 저장소', correct: true },
         ],
@@ -14771,15 +14770,14 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '앱 안에서 span 하나를 만드는 비용은?',
+        stem: 'span 하나를 만드는 데 드는 시간은?',
         choices: [
-          { text: '요청당 밀리초 단위', leadsTo: 0 },
-          { text: '요청당 마이크로초 단위', correct: true },
+          { text: '밀리초 단위', leadsTo: 0 },
+          { text: '마이크로초 단위', correct: true },
           { text: '측정이 안 될 만큼 없다', leadsTo: 3 },
-          { text: '서비스 수에 비례해 늘어난다', leadsTo: 1 },
+          { text: '붙인 속성 수에 비례해 늘어난다', leadsTo: 3 },
         ],
-        rationale:
-          'span 하나를 만들고 시각을 찍는 일이라 요청당 마이크로초 단위로 이야기한다.',
+        rationale: 'span 하나를 만들고 시각을 찍는 일이라 마이크로초 단위로 이야기한다.',
       },
       {
         kind: 'boundary',
@@ -14801,15 +14799,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
     items: [
       {
         kind: 'concept',
-        stem: '합성이 상속과 다른 점은?',
+        stem: '합성이 상속보다 바꾸기 쉬워지는 조건은?',
         choices: [
-          { text: '겉모습까지 물려받는다', leadsTo: 4 },
-          { text: '무엇을 쓸지 밖에서 넣는다', correct: true },
-          { text: '컴파일할 때 굳는다', leadsTo: 0 },
+          { text: '겉모습과 구현을 통째로 물려받는다', leadsTo: 4 },
+          { text: '인터페이스로 좁혀 밖에서 넣는다', correct: true },
+          { text: '품을 객체를 안에서 만들어 쥔다', leadsTo: 0 },
           { text: '부모의 구현을 재정의한다', leadsTo: 1 },
         ],
         rationale:
-          '상속은 부모의 구현까지 물려받아 굳는다. 합성은 무엇을 쓸지 바깥에서 넣으므로 나중에 바꿀 수 있다.',
+          '합성은 다른 객체를 품는 것이다. 그 자리를 인터페이스로 좁히고 밖에서 넣어 줄 때만 바꿔 끼울 수 있고, 안에서 만들어 쥐면 굳는다.',
       },
       {
         kind: 'misconception',
