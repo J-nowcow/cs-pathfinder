@@ -162,7 +162,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '누가 먼저 연결을 닫는지 확인한다', correct: true },
         ],
         rationale:
-          '설정을 만지기 전에 원인을 본다. 짧은 연결을 반복해 맺는 것이 원인이면 keep-alive와 연결 풀이 먼저다.',
+          '먼저 상태별 연결 수, 로컬 포트 범위, 누가 먼저 닫는지 확인한다. 짧은 연결이 원인이면 keep-alive와 연결 풀로 재사용률을 높인다.',
       },
       {
         kind: 'boundary',
@@ -174,7 +174,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '커널 파라미터가 잘못돼 있다', leadsTo: 3 },
         ],
         rationale:
-          '그 자체로 장애는 아니다. 실제 문제는 로컬 임시 포트나 연결 추적 자원이 모자랄 때 생긴다.',
+          '그 호스트가 능동 종료를 많이 했다는 뜻이다. 실제 문제는 같은 목적지로 나갈 로컬 임시 포트나 연결 추적 자원이 모자랄 때 생긴다.',
       },
     ],
   },
@@ -486,7 +486,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '응답 본문이 바뀌지 않았을 때', leadsTo: 3 },
         ],
         rationale:
-          '신선한 동안은 즉시 쓴다. 기간이 지나면 보통 검증자를 붙여 바뀌었는지 묻는다.',
+          '저장된 응답이 max-age 안에 있고 재검증을 강제하는 지시자가 없으면 그냥 쓴다. no-cache가 함께 붙어 있으면 신선해도 서버에 물어야 한다.',
       },
       {
         kind: 'misconception',
@@ -552,7 +552,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '문제가 없다. 본문으로 알리면 된다', leadsTo: 3 },
         ],
         rationale:
-          '원인과 재시도 가능성을 코드에 담아야 한다. 503은 일시적 과부하나 점검을 알리고 Retry-After로 재시도 시점을 안내할 수 있다.',
+          '내부 오류를 모두 200으로 감싸면 중간 장비가 실패를 오해한다. 원인과 재시도 가능성을 코드에 담아야 한다.',
       },
     ],
   },
@@ -612,7 +612,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '인증서 폐기 목록 내려받기', leadsTo: 2 },
         ],
         rationale:
-          '이 준비가 끝나야 애플리케이션 데이터를 안전하게 보낼 수 있다. 이후 트래픽은 파생된 대칭 키로 암호화한다.',
+          '암호 규칙을 합의하고 서버를 인증하며 공유 비밀에서 통신 키를 만들어야 한다. 이 준비가 끝나야 애플리케이션 데이터를 안전하게 보낼 수 있다.',
       },
       {
         kind: 'misconception',
@@ -708,7 +708,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '연결당 비용이 다르면 틀릴 수 있다', correct: true },
         ],
         rationale:
-          'CPU와 지연을 반영하는 방식은 정확도가 높지만 측정 지연과 진동을 제어해야 한다. 정적 가중치는 실제 부하 변화를 늦게 반영한다.',
+          '최소 연결도 연결당 비용이 다르면 틀릴 수 있다. CPU와 지연을 반영하는 방식은 정확도가 높지만 측정 지연과 진동을 제어해야 한다.',
       },
       {
         kind: 'boundary',
@@ -738,7 +738,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '응답 크기가 클 때', leadsTo: 3 },
         ],
         rationale:
-          '드문 갱신과 단순한 운영이 중요하면 폴링이 적합하다. 짧은 폴링 주기는 빈 응답과 헤더 비용을 늘린다.',
+          '갱신이 잦고 낮은 지연이나 양방향 전송이 필요하면 연결을 유지하는 편이 낫다. 짧은 폴링 주기는 빈 응답과 헤더 비용을 늘린다.',
       },
       {
         kind: 'misconception',
@@ -762,7 +762,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: 'Server-Sent Events', correct: true },
         ],
         rationale:
-          '통신 방향과 허용 지연, 기존 인프라 지원을 함께 비교한다. 단방향이면 더 단순한 선택지가 있다.',
+          '서버에서 클라이언트로만 흐르면 Server-Sent Events도 대안이다. 통신 방향과 허용 지연, 기존 인프라 지원을 함께 비교한다.',
       },
     ],
   },
@@ -780,7 +780,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '사람이 응답을 직접 읽어야 할 때', leadsTo: 2 },
         ],
         rationale:
-          '클라이언트와 서버를 함께 통제할 수 있을수록 도입 비용이 낮다. 단순 CRUD나 외부 연동은 REST가 운영과 디버깅에 더 쉬울 수 있다.',
+          '호출 양이 많고 엄격한 계약과 낮은 지연, 스트리밍이 필요할 때 유리하다. 클라이언트와 서버를 함께 통제할 수 있을수록 도입 비용이 낮다.',
       },
       {
         kind: 'misconception',
@@ -864,7 +864,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '응답 코드의 종류', leadsTo: 2 },
         ],
         rationale:
-          '대상 URI를 누가 정하는지, 표현을 통째로 바꿀지 일부 변경 명령을 적용할지도 함께 본다.',
+          '메서드는 CRUD 이름보다 클라이언트가 서버에 요구하는 의미로 고른다. 대상 URI를 누가 정하는지도 함께 본다.',
       },
       {
         kind: 'misconception',
@@ -1116,7 +1116,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '브라우저에 저장된 비밀번호', leadsTo: 2 },
         ],
         rationale:
-          'XSS는 주로 세션 정보와 브라우저 저장소를 노린다. 쿠키에는 세션 ID와 인증 정보가, 로컬 스토리지에는 토큰과 설정값이 담긴다.',
+          '같은 출처의 로컬 스토리지와 HttpOnly가 안 붙은 쿠키다. 브라우저가 실행하는 스크립트로 저장된 정보를 가로채 외부 서버로 전송한다.',
       },
       {
         kind: 'misconception',
@@ -1158,7 +1158,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '쿠키는 서버, 세션은 브라우저', leadsTo: 2 },
         ],
         rationale:
-          '세션은 서버에 데이터를 저장하고 클라이언트에는 세션 ID만 전달한다. 실제 데이터는 서버가 관리하므로 조작이 어렵다.',
+          '쿠키는 클라이언트의 브라우저에 저장하고, 세션은 서버 측 저장소에 저장한다. 클라이언트에는 세션 ID만 전달한다.',
       },
       {
         kind: 'misconception',
@@ -1422,7 +1422,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '원본을 다시 확인한다', leadsTo: 0 },
         ],
         rationale:
-          '어려운 것은 지우는 일이다. 그래서 파일 이름에 내용 해시를 넣어 다른 파일로 만든다.',
+          '파일을 바꿔도 사본은 보관 기간이 끝날 때까지 옛것을 준다.',
       },
       {
         kind: 'boundary',
@@ -1476,7 +1476,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '인증서를 쓸 수 없다', leadsTo: 1 },
         ],
         rationale:
-          '그래서 이 자리도 여러 대를 두거나 앞단을 따로 둔다.',
+          '대신 여기가 죽으면 전부 죽는다. 그래서 이 자리도 여러 대를 두거나 앞단을 따로 둔다.',
       },
     ],
   },
@@ -1518,7 +1518,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '먼저 닫은 쪽', correct: true },
         ],
         rationale:
-          '서버에 쌓였다면 서버가 먼저 끊고 있다는 신호다. 양쪽이 동시에 닫으면 둘 다 생긴다.',
+          'TIME_WAIT는 먼저 닫은 쪽에 생긴다. 서버에 쌓였다면 서버가 먼저 끊고 있다는 신호다.',
       },
     ],
   },
@@ -1590,7 +1590,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '전체를 다시 보내야 한다', correct: true },
         ],
         rationale:
-          '중간에서 자르는 방식은 손해가 크다. 받는 쪽은 다 모일 때까지 메모리를 붙들고 있어야 한다.',
+          '중간에서 자르는 방식은 손해가 크다. 조각 하나만 잃어도 전체를 다시 보내야 한다.',
       },
       {
         kind: 'boundary',
@@ -1662,7 +1662,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '출발지를 공인 주소로 바꿔 적고 표에 남긴다', correct: true },
         ],
         rationale:
-          '표가 있어야 돌아온 답을 누구에게 줄지 안다. 포트는 겹칠 때만 바꾼다.',
+          '나갈 때 출발지 주소를 공인 주소로 바꿔 적고 그 내역을 표에 남긴다.',
       },
       {
         kind: 'misconception',
@@ -1674,7 +1674,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '먼저 나간 적이 없어 표에 줄이 없어서', correct: true },
         ],
         rationale:
-          '받으려면 어느 포트를 어디로 보낼지 미리 적어 둬야 한다.',
+          '표가 있어야 돌아온 답을 누구에게 줄지 안다. 먼저 나간 적이 없으면 표에 줄이 없다.',
       },
       {
         kind: 'boundary',
@@ -1704,7 +1704,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '응답에 붙은 지시', correct: true },
         ],
         rationale:
-          '아직 신선하면 요청 없이 그대로 쓰고, 수명이 지났으면 서버에 물어본다.',
+          '응답에 붙은 지시를 보고 정한다. 아직 신선하면 그냥 쓰고, 지났으면 서버에 물어본다.',
       },
       {
         kind: 'misconception',
@@ -1746,7 +1746,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '아무것도 치르지 않는다', leadsTo: 2 },
         ],
         rationale:
-          '그래서 늘 이득이 아니다. 같은 파일을 요청마다 다시 압축하는 것이 가장 아까운 자리다.',
+          '전송량이 주는 대신 보내는 쪽과 받는 쪽 모두 CPU와 시간을 쓴다.',
       },
       {
         kind: 'misconception',
@@ -1830,7 +1830,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '최종 답이나 오류만', correct: true },
         ],
         rationale:
-          '중간 과정은 서버가 밟는다. 클라이언트의 부담은 줄지만 질의 처리 부담이 로컬 서버에 모인다.',
+          '중간 과정은 서버가 밟고 클라이언트는 최종 답이나 오류만 받는다.',
       },
       {
         kind: 'misconception',
@@ -1896,7 +1896,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '포트 범위 확대', leadsTo: 1 },
         ],
         rationale:
-          '커널 설정은 그다음이다. 어떤 프로세스가 능동적 닫기를 주도하는지도 함께 확인해야 한다.',
+          '원인이 잦은 재연결이면 커넥션 풀과 HTTP Keep-Alive부터 검토한다. 커널 설정은 그다음이다.',
       },
     ],
   },
@@ -1956,7 +1956,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '재전송을 기다린다', leadsTo: 2 },
         ],
         rationale:
-          '비정상적인 연결 요청을 받거나 연결을 즉시 끊어야 할 때 나간다. 닫힌 포트로 SYN이 들어오는 경우가 대표적이다.',
+          '정상적인 FIN 교환 과정과 달리 대기 시간 없이 연결을 즉시 파기한다.',
       },
       {
         kind: 'misconception',
@@ -1968,7 +1968,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '커널이 정상 종료 절차를 밟으면 FIN이 나간다', correct: true },
         ],
         rationale:
-          'SO_LINGER를 0으로 두고 닫는 것처럼 끊어 내는 방식으로 닫을 때 RST가 나간다.',
+          '프로세스가 강제로 죽어도 커널이 정상 종료 절차를 밟으면 FIN이 나간다.',
       },
       {
         kind: 'boundary',
@@ -2010,7 +2010,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: 'equals가 true면 hashCode도 같아야 한다', correct: true },
         ],
         rationale:
-          '규약은 단방향이다. hashCode가 같아도 equals는 false일 수 있고 이게 해시 충돌이다.',
+          '규약은 단방향이다. equals가 true면 hashCode는 반드시 같아야 한다.',
       },
       {
         kind: 'boundary',
@@ -2190,7 +2190,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '크기가 가장 큰 객체', leadsTo: 4 },
         ],
         rationale:
-          '루트가 살아 있으면 그 경로의 객체도 살아 있다.',
+          'GC 루트에는 실행 중인 스레드의 스택 참조와 정적 참조 등이 포함된다.',
       },
     ],
   },
@@ -2208,7 +2208,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '힙 크기만 보고 정한다', leadsTo: 3 },
         ],
         rationale:
-          '힙 크기, CPU 여유, 할당률과 실제 지원 범위도 함께 본다.',
+          '배치 작업은 처리량을, 응답형 서비스는 최악 지연 시간을 우선한다.',
       },
       {
         kind: 'misconception',
@@ -2220,7 +2220,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '장벽 비용과 충분한 힙 여유가 필요하다', correct: true },
         ],
         rationale:
-          'ZGC는 표시와 재배치 대부분을 동시에 수행하지만 그만큼 자원을 쓴다. Parallel GC는 처리량이 높은 대신 살아 있는 집합이 크면 정지가 길어진다.',
+          'ZGC는 표시와 재배치 대부분을 동시에 수행한다. 짧은 정지를 목표로 하지만 장벽 비용과 충분한 힙 여유가 필요하다.',
       },
       {
         kind: 'boundary',
@@ -2250,7 +2250,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '바이트코드는 최적화할 수 없어서', leadsTo: 1 },
         ],
         rationale:
-          '실행 정보를 모아 자주 쓰이는 코드만 기계어로 최적화한다. 계층형 컴파일은 빠른 컴파일과 최고 성능을 절충한다.',
+          '모두 최적화하면 시작이 느려지고 실행되지 않을 코드에도 비용을 쓴다.',
       },
       {
         kind: 'misconception',
@@ -2274,7 +2274,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '인라이닝이 일어나지 않아서', leadsTo: 1 },
         ],
         rationale:
-          'JMH처럼 워밍업과 측정을 분리해야 한다.',
+          '짧은 벤치마크는 워밍업과 컴파일 시간을 섞어 잘못 읽기 쉽다. JMH처럼 워밍업과 측정을 분리해야 한다.',
       },
     ],
   },
@@ -2358,7 +2358,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '부모에게서 상속받은 제네릭 타입', leadsTo: 0 },
         ],
         rationale:
-          '타입 변수의 직접 인스턴스화와 배열 생성도 제한되고, 소거형이 같은 메서드를 오버로드할 수도 없다.',
+          '구체 타입 인자를 붙인 타입을 instanceof로 검사할 수 없다. 타입 변수의 직접 인스턴스화와 배열 생성도 제한된다.',
       },
     ],
   },
@@ -2376,7 +2376,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '가비지 컬렉션이 필요 없어진다', leadsTo: 3 },
         ],
         rationale:
-          '해시 키도 안정된다. 대신 변경마다 새 객체가 필요하다.',
+          '생성 뒤 상태가 변하지 않으면 여러 스레드가 잠금 없이 공유하기 쉽다.',
       },
       {
         kind: 'misconception',
@@ -2418,7 +2418,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '항상 모든 필드를 비교해야 한다', leadsTo: 3 },
         ],
         rationale:
-          'hashCode는 동등하면 같아야 하지만 충돌은 허용된다.',
+          'equals는 반사성, 대칭성, 추이성, 일관성을 지켜야 하며 null에는 거짓이어야 한다.',
       },
       {
         kind: 'misconception',
@@ -2442,7 +2442,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '깨지는 것이 없다', leadsTo: 2 },
         ],
         rationale:
-          '값 객체는 불변으로 만들고 두 메서드를 같은 필드에서 함께 생성하는 편이 안전하다.',
+          '상속 계층에서 값 동등성을 추가하면 대칭성이 쉽게 깨진다.',
       },
     ],
   },
@@ -2484,7 +2484,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '스택 트레이스를 새로 만든다', leadsTo: 1 },
         ],
         rationale:
-          '예외를 경계에서 번역하면 저장소나 네트워크 구현을 API 밖으로 숨길 수 있다. 메시지와 원인, 복구 가능 여부를 계약에 명확히 둔다.',
+          '복구할 수 없으면 도메인 런타임 예외로 번역하되 원인을 보존한다.',
       },
     ],
   },
@@ -2556,7 +2556,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '같은 스레드면 안전하다', leadsTo: 0 },
         ],
         rationale:
-          'ConcurrentHashMap의 computeIfAbsent처럼 의도를 한 원자 연산으로 표현해야 한다.',
+          '공유 맵의 get 뒤 put은 두 번의 연산이라 경쟁할 수 있다. ConcurrentHashMap의 computeIfAbsent처럼 한 원자 연산으로 표현해야 한다.',
       },
       {
         kind: 'boundary',
@@ -2598,7 +2598,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '스레드가 둘 이하면 안전하다', leadsTo: 0 },
         ],
         rationale:
-          '경쟁 갱신에는 AtomicInteger나 잠금이 필요하다.',
+          'volatile은 해당 접근을 경계로 가시성과 재정렬 제약을 제공하지만 복합 연산은 원자화하지 않는다. 경쟁 갱신에는 AtomicInteger나 잠금이 필요하다.',
       },
       {
         kind: 'boundary',
@@ -2682,7 +2682,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '수집기가 다시 켜진다', leadsTo: 2 },
         ],
         rationale:
-          '수집 빈도를 낮추면 정지는 줄지만 순환 객체의 메모리 회수는 늦어진다.',
+          'gc.disable()은 자동 순환 수집만 끈다. 참조 횟수가 0이 되면 대부분 즉시 해제된다.',
       },
       {
         kind: 'boundary',
@@ -2694,7 +2694,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '크기가 큰가', leadsTo: 1 },
         ],
         rationale:
-          '추적 대상 컨테이너를 세대별 정책으로 검사한다. 오래 살아남은 객체는 덜 자주 본다.',
+          '참조 수가 0인지는 참조 카운팅 쪽 조건이다. 외부에서 닿지 않는 순환은 별도 순환 수집기가 찾아 수거한다.',
       },
     ],
   },
@@ -2808,7 +2808,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '읽을 때와 똑같은 경로를 그대로 탄다', leadsTo: 0 },
         ],
         rationale:
-          '하위 객체에 같은 키가 있으면 상속 속성을 가린다. 다만 대입 경로는 읽기와 규칙이 다르다.',
+          '대입은 보통 자체 속성을 만들지만 상속된 setter나 쓰기 금지 속성이 있으면 결과가 달라진다.',
       },
       {
         kind: 'boundary',
@@ -2820,7 +2820,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '클래스 생성자 자체', correct: true },
         ],
         rationale:
-          '인스턴스 메서드는 prototype에 둔다. 각 위치에서 같은 속성 탐색 규칙을 따른다.',
+          '인스턴스 메서드는 prototype에 두고, static 메서드는 클래스 생성자 자체에 둔다. 각 위치에서 같은 속성 탐색 규칙을 따른다.',
       },
     ],
   },
@@ -2892,7 +2892,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '오류가 나서 넘길 수 없다', leadsTo: 2 },
         ],
         rationale:
-          'bind로 고정하거나 수신자를 보존하는 래퍼를 써야 한다.',
+          '호출 형태가 this를 정하므로 떼어 낸 함수는 수신자 정보가 사라진다. bind로 고정하거나 수신자를 보존하는 래퍼를 써야 한다.',
       },
       {
         kind: 'boundary',
@@ -2904,7 +2904,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: 'call로 this를 바꾸거나 new로 만드는 것', correct: true },
         ],
         rationale:
-          '화살표 함수에는 자체 this와 arguments가 없다. 동적 수신자가 필요한 메서드에는 일반 함수가 맞다.',
+          '화살표 함수에는 자체 this가 없어 call이나 apply로 this를 바꿀 수도 없고 new로 생성할 수도 없다.',
       },
     ],
   },
@@ -2946,7 +2946,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '브랜드 필드를 더해 명목적 구분을 흉내 낸다', correct: true },
         ],
         rationale:
-          '타입 검사는 컴파일 시 사라진다. 외부 입력의 실제 구조는 런타임 검증이 따로 필요하다.',
+          '브랜드 필드를 더하면 명목적 구분을 흉내 내어 UserId와 OrderId 같은 혼용을 막을 수 있다.',
       },
     ],
   },
@@ -3006,7 +3006,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '아무것도 복사되지 않는다', leadsTo: 0 },
         ],
         rationale:
-          '값 타입 대입은 값 자체를 복사한다. 값 안의 참조 필드는 여전히 같은 객체를 가리킬 수 있다.',
+          '참조 타입 대입은 같은 객체를 가리키는 참조를 복사한다. 그래서 변경이 별칭으로 공유된다.',
       },
       {
         kind: 'misconception',
@@ -3072,7 +3072,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '어느 쪽이든 상관없다', leadsTo: 0 },
         ],
         rationale:
-          '오차를 허용하기 어려운 곳에서는 표현 범위보다 정확성이 먼저다.',
+          '금융 계산처럼 오차를 허용하기 어려운 곳에서는 고정 소수점이나 임의 정밀도 타입을 쓴다. 2진수로 딱 떨어지지 않는 10진 소수에서 반올림 오차가 생기기 때문이다.',
       },
     ],
   },
@@ -3144,7 +3144,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '클로저는 변수를 붙잡지 않는다', leadsTo: 0 },
         ],
         rationale:
-          '클로저가 오래 살아 있으면 그것이 잡은 값도 같이 남는다. 문제는 붙잡은 채로 오래 사는 구조다.',
+          '클로저에 닿을 길이 끊기면 함께 걷힌다. 새는 것이 아니라 붙잡고 있는 것이다.',
       },
       {
         kind: 'boundary',
@@ -3156,7 +3156,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '비동기 처리 비용', leadsTo: 4 },
         ],
         rationale:
-          '불필요한 전역 변수 사용을 줄여 상태 변화를 예측 가능하게 만든다.',
+          '불필요한 전역 변수 사용을 줄여 이름 충돌을 방지하고 상태 변화를 예측 가능하게 만든다.',
       },
     ],
   },
@@ -3186,7 +3186,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '요구 속성만 갖추면 상속 없이도 통과한다', correct: true },
         ],
         rationale:
-          '덕분에 외부 라이브러리와의 타입 호환성을 확보하기 쉽다.',
+          '객체의 실제 구조와 필요한 속성이 일치하는지로 판별하므로, 인터페이스를 명시적으로 상속받지 않아도 요구하는 속성만 갖추면 타입 체크를 통과한다.',
       },
       {
         kind: 'boundary',
@@ -3198,7 +3198,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '상속을 쓸 수 없다', leadsTo: 1 },
         ],
         rationale:
-          '뜻이 다른 타입에는 브랜드 태그나 고유 식별자를 붙여 구분한다.',
+          '예상치 못한 타입 일치로 인해 런타임 오류가 발생할 위험이 있다. 그래서 뜻이 다른 타입에는 브랜드 태그나 고유 식별자를 붙여 구분한다.',
       },
     ],
   },
@@ -3342,7 +3342,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '타입 이름', leadsTo: 4 },
         ],
         rationale:
-          '값 타입은 실제 값을 직접 저장한다. 이 차이가 복사와 변경 전파의 차이를 만든다.',
+          '값 타입은 실제 값을 직접 저장하고, 참조 타입은 값이 저장된 메모리 주소를 저장한다.',
       },
       {
         kind: 'misconception',
@@ -3480,7 +3480,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '풀에 있든 없든 힙에 새로 하나를 만든다', correct: true },
         ],
         rationale:
-          '그래서 참조로 견주면 거짓이고 내용으로 견줘야 참이다.',
+          'new로 만들면 풀에 있든 없든 힙에 새로 하나를 만든다. 풀의 자리를 얻으려면 intern()을 따로 불러야 한다.',
       },
       {
         kind: 'boundary',
@@ -3534,7 +3534,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '움직이는 것이 없다', leadsTo: 4 },
         ],
         rationale:
-          '그것은 다른 자리에서 돌기 때문이다. 나머지는 같은 자리를 기다린다.',
+          '합성만으로 도는 애니메이션은 다른 자리라 그동안에도 움직인다. 나머지는 같은 자리를 기다린다.',
       },
     ],
   },
@@ -3606,7 +3606,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '언어를 바꾸면 해결된다', leadsTo: 1 },
         ],
         rationale:
-          '표현의 한계와 계산 실수는 구분해야 한다.',
+          '정밀도를 올리면 오차가 작아질 뿐 성질은 그대로다. 표현의 한계와 계산 실수는 구분해야 한다.',
       },
       {
         kind: 'boundary',
@@ -3618,7 +3618,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '문자열로 저장한다', leadsTo: 1 },
         ],
         rationale:
-          '이자나 환율처럼 나눗셈이 끼면 중간 계산을 몇 자리까지 들고 갈지와 어디서 반올림할지도 함께 정해야 한다.',
+          '십진 소수를 그대로 다루는 타입을 쓰거나, 가장 작은 단위의 정수로 바꿔 계산하고 보여줄 때만 나눈다.',
       },
     ],
   },
@@ -3660,7 +3660,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '우리가 쓴 식에 남의 문자열이 들어가는 자리', correct: true },
         ],
         rationale:
-          '한 요청이 CPU를 붙잡으면 그 자리가 통째로 막힌다. 막는 길은 위험한 모양을 피하고, 입력 길이를 제한하고, 시간 제한이 있는 실행을 쓰는 것이다.',
+          '사용자 입력이 정규식 문법에 닿는 자리가 위험하다. 남이 보낸 입력이 방아쇠다.',
       },
     ],
   },
@@ -3720,7 +3720,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '힙에 있는 객체를 가리키는 참조', correct: true },
         ],
         rationale:
-          '원시 타입은 변수 공간에 실제 값을 직접 저장한다. 래퍼는 객체 헤더까지 함께 힙에 놓인다.',
+          '원시 타입은 변수 공간에 실제 값을 직접 저장하고, 래퍼 클래스 변수는 힙에 있는 객체를 가리키는 참조를 저장한다.',
       },
       {
         kind: 'misconception',
@@ -3786,7 +3786,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '자원이 자동 회수된다', leadsTo: 4 },
         ],
         rationale:
-          '한쪽만 계속 실패하면 starvation이다. 둘 다 데드락과는 다른 상태다.',
+          '재시도에 무작위 지연이 없으면 두 작업이 계속 양보하는 livelock이 생길 수 있다. 한쪽만 계속 실패하면 starvation이다.',
       },
     ],
   },
@@ -3900,7 +3900,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '운영체제와 규약에 따라 다르다', correct: true },
         ],
         rationale:
-          '흔한 배치에서 둘이 마주 보고 자라 가용 공간을 유동적으로 나눠 쓴다는 것이 요점이다.',
+          '흔한 배치에서는 스택과 힙이 서로 마주 보고 자라지만, 어느 쪽이 어디서 시작하는지는 운영체제와 규약에 따라 다르다.',
       },
       {
         kind: 'boundary',
@@ -3954,7 +3954,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '아무 차이가 없다', leadsTo: 2 },
         ],
         rationale:
-          '큰 쪽과 작은 쪽이 각각 다른 값을 깎는다. 그래서 적절한 크기를 찾는 일이 남는다.',
+          '너무 작으면 요청이 큐에 쌓여 응답 시간이 느려진다. 반대로 너무 크면 컨텍스트 스위칭 비용이 커진다.',
       },
     ],
   },
@@ -3972,7 +3972,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '스택과 구분하기 위해', leadsTo: 0 },
         ],
         rationale:
-          '데이터 영역은 프로그램 시작부터 종료까지 유지되는 상태를 담고, 힙은 런타임에 크기가 결정된다.',
+          '코드 영역은 읽기 전용으로 설정하여 프로그램 실행 파일의 내용을 그대로 올린다.',
       },
       {
         kind: 'misconception',
@@ -4038,7 +4038,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '프로세스마다 최대 사용량을 미리 알아야 해서', correct: true },
         ],
         rationale:
-          '그 값을 내놓을 수 없는 환경이 많다.',
+          '프로세스마다 최대 얼마까지 쓸지를 미리 알아야 하는데, 그 값을 내놓을 수 없어 쓰이는 곳이 좁다.',
       },
     ],
   },
@@ -4122,7 +4122,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '버퍼를 없애는 것', leadsTo: 4 },
         ],
         rationale:
-          '전환마다 비용이 붙으므로 호출 횟수 자체를 줄이는 쪽이 답이다.',
+          '잦은 시스템 콜 호출은 성능 저하의 원인이며, 이를 줄이기 위해 vmsplice나 io_uring 같은 기술이 사용된다.',
       },
     ],
   },
@@ -4204,7 +4204,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '없는 것이 없다', leadsTo: 0 },
         ],
         rationale:
-          '그래서 링커가 필요하다.',
+          '어셈블러는 이진 기계어까지는 만들지만 이 단계의 파일은 다른 모듈과의 연결 정보가 없다.',
       },
     ],
   },
@@ -4264,7 +4264,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '커널을 거치느냐', leadsTo: 4 },
         ],
         rationale:
-          '블로킹·논블로킹은 호출된 쪽이 제어권을 언제 돌려주는지의 구분이라 축이 다르다.',
+          '동기와 비동기는 호출한 함수의 완료 여부를 누가 확인하느냐의 차이다. 제어권을 언제 돌려주느냐는 블로킹·논블로킹 쪽 축이다.',
       },
       {
         kind: 'misconception',
@@ -4288,7 +4288,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '코드가 직관적이다', correct: true },
         ],
         rationale:
-          '작업이 끝날 때까지 아무것도 못 하고 대기하므로 시스템 자원 효율은 떨어진다. 맞바꾸는 값이 있다.',
+          '블로킹은 코드가 직관적이지만 시스템 자원 효율이 떨어진다.',
       },
     ],
   },
@@ -4360,7 +4360,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '데이터가 올 때까지 안 돌아온다', leadsTo: 1 },
         ],
         rationale:
-          '그래서 대기 시간 동안 다른 일을 할 수 있다. 대신 완료를 확인하는 로직이 따로 필요하다.',
+          '논블로킹은 호출 즉시 제어권을 돌려준다. 데이터가 아직 없으면 EAGAIN으로 바로 돌아온다.',
       },
       {
         kind: 'boundary',
@@ -4402,7 +4402,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '넓으면 오히려 경쟁이 는다', leadsTo: 1 },
         ],
         rationale:
-          '꼭 필요한 구간만 묶거나 하드웨어 수준의 원자적 명령을 써서 오버헤드를 줄여야 한다.',
+          '다만 락의 범위가 넓으면 성능이 떨어지므로 꼭 필요한 구간만 묶어야 한다.',
       },
       {
         kind: 'boundary',
@@ -4474,7 +4474,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '커널 힙', leadsTo: 0 },
         ],
         rationale:
-          '프로그램 카운터와 레지스터 값을 옮겨 적어야 나중에 중단된 지점부터 이어 갈 수 있다.',
+          'CPU의 프로그램 카운터와 레지스터 값들이 PCB에 옮겨진다. 그래야 중단된 지점부터 이어 갈 수 있다.',
       },
       {
         kind: 'misconception',
@@ -4486,7 +4486,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '프로세스마다 따로 있어 영향이 없다', leadsTo: 2 },
         ],
         rationale:
-          'TLB도 꼬리표를 달 수 있으면 통째로 비우지 않는다.',
+          'CPU 캐시가 지워지는 것이 아니라 새 작업의 데이터에 밀리는 것이다. TLB도 꼬리표를 달 수 있으면 통째로 비우지 않는다.',
       },
       {
         kind: 'boundary',
@@ -4540,7 +4540,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '단점이 없다', leadsTo: 0 },
         ],
         rationale:
-          '남은 공간을 유의미하게 쓰려는 의도지만 결과가 반대로 나온다.',
+          '남은 공간을 유의미하게 쓰려는 의도지만 큰 프로세스가 들어올 자리를 미리 없애는 치명적인 단점이 있다.',
       },
     ],
   },
@@ -4666,7 +4666,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '둘 다 안 된다', leadsTo: 4 },
         ],
         rationale:
-          '상호 배제, 용량 제한, 순서 알림 중 무엇을 표현하려는지로 고른다.',
+          '세마포어는 남은 허가 수를 카운트로 나타내므로 커넥션 풀이 동시에 내줄 수 있는 커넥션 수를 표현할 수 있다.',
       },
     ],
   },
@@ -4708,7 +4708,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '막을 방법이 없다', leadsTo: 2 },
         ],
         rationale:
-          '낮은 우선순위의 작업이 영원히 실행되지 않는 것이 기아 현상이다.',
+          '에이징은 오래 기다린 작업의 순위를 올려 기아를 막는다. 낮은 우선순위의 작업이 영원히 실행되지 않는 것이 기아 현상이다.',
       },
     ],
   },
@@ -4738,7 +4738,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '기다리는 스레드가 늘고 전환 비용이 붙어 느려진다', correct: true },
         ],
         rationale:
-          '안전과 속도를 맞바꾸는 자리라 필요한 만큼만 걸어야 한다.',
+          '락을 과하게 걸면 기다리는 스레드가 늘고 그만큼 전환 비용이 붙어 느려진다.',
       },
       {
         kind: 'boundary',
@@ -4750,7 +4750,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '길이 없다', leadsTo: 2 },
         ],
         rationale:
-          '일관성은 지키면서 기다리는 비용을 피하는 길이다.',
+          'CAS 같은 원자적 연산으로 락 없이 구현하면 일관성은 지키면서 기다리는 비용을 피할 수 있다.',
       },
     ],
   },
@@ -4834,7 +4834,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '커널이 허용하지 않아서', leadsTo: 4 },
         ],
         rationale:
-          '단일 코어에서만 유효한 방식이다.',
+          '멀티코어 환경에서는 모든 CPU의 인터럽트를 동시에 끄는 비용이 너무 커서 실무적으로 쓰이지 않는다.',
       },
     ],
   },
@@ -4936,7 +4936,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '둘 다 페이지', leadsTo: 2 },
         ],
         rationale:
-          '고정 크기로 나눠 할당과 회수를 단순하게 만든다.',
+          '페이징에서 가상 주소는 페이지, 물리 메모리는 프레임 단위로 나뉜다.',
       },
       {
         kind: 'misconception',
@@ -4948,7 +4948,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '둘 다 쓰지 않는다', leadsTo: 4 },
         ],
         rationale:
-          '세그먼테이션을 어디까지 쓰는지는 아키텍처마다 다르다.',
+          '요즘 범용 OS는 페이징을 중심으로 쓴다. 고정 크기로 나눠 할당과 회수를 단순하게 만들기 때문이다.',
       },
       {
         kind: 'boundary',
@@ -4960,7 +4960,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '주소 변환 비용', leadsTo: 2 },
         ],
         rationale:
-          '논리적 영역은 세그먼트로 나누고 그 안을 고정 크기로 다시 나누는 방식이다.',
+          '세그먼테이션의 가변 크기가 외부 파편화를 낳는데, 그 영역을 다시 페이징으로 관리하여 외부 파편화 문제를 해결한다.',
       },
     ],
   },
@@ -5020,7 +5020,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '하드웨어', correct: true },
         ],
         rationale:
-          '캐시 줄마다 상태를 달아 두고 남이 같은 자리를 건드리면 상태를 바꾼다. 프로그래머가 다루는 것은 순서와 가시성 쪽이다.',
+          '캐시 일관성은 하드웨어가 유지한다. 프로그래머가 다루는 것은 순서와 가시성 쪽이다.',
       },
       {
         kind: 'misconception',
@@ -5044,7 +5044,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '다른 코어의 사본을 무효로 만든다', correct: true },
         ],
         rationale:
-          'Modified나 Exclusive 상태에서는 그 줄을 혼자 쓰므로 그 절차가 필요 없다.',
+          'Shared였다면 다른 코어의 사본을 먼저 무효로 만들고 써야 한다. Modified나 Exclusive 상태에서는 그 줄을 혼자 쓰므로 그 절차가 필요 없다.',
       },
     ],
   },
@@ -5062,7 +5062,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '잠금 없이 공유 자원을 함께 만질 때', leadsTo: 4 },
         ],
         rationale:
-          '느린 일이 중간 일에 밀려 돌지 못하면 결국 급한 일이 중간 일에 밀린 셈이 된다.',
+          '급한 일은 느린 일이 잠금을 놓기만 기다리는데, 그 느린 일마저 중간 일에 밀려 돌지 못한다.',
       },
       {
         kind: 'misconception',
@@ -5074,7 +5074,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '둘 다 잠금과 무관한 스케줄링 문제다', leadsTo: 4 },
         ],
         rationale:
-          '이름이 역전인 이유가 거기 있다.',
+          '우선순위대로면 일어날 수 없는 순서가 만들어진다. 이름이 역전인 이유가 거기 있다.',
       },
       {
         kind: 'boundary',
@@ -5086,7 +5086,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '잠금 시간을 늘린다', leadsTo: 4 },
         ],
         rationale:
-          '급한 쪽만큼 올려 주면 중간 일이 끼어들지 못한다. 화성 탐사선 패스파인더가 이 설정으로 문제를 고쳤다.',
+          '잠금을 쥔 쪽의 우선순위를 급한 쪽만큼 잠깐 올려 주면 중간 일이 끼어들지 못한다.',
       },
     ],
   },
