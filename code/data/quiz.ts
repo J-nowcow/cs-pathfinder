@@ -4139,8 +4139,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '중기 스케줄러', leadsTo: 1 },
           { text: '셋이 번갈아 한다', leadsTo: 2 },
         ],
-        rationale:
-          '장기는 메모리로 올릴 프로세스를, 중기는 내보낼 프로세스를 정한다. 셋은 결정 범위와 호출 주기가 다르다.',
+        rationale: '단기 스케줄러가 준비 큐에서 CPU를 할당할 프로세스를 밀리초 단위로 고른다.',
       },
       {
         kind: 'misconception',
@@ -4151,8 +4150,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '너무 자주면 문맥 교환 비용이 처리량을 깎는다', correct: true },
           { text: '장기 스케줄러가 조절해 준다', leadsTo: 0 },
         ],
-        rationale:
-          '단기 스케줄러는 밀리초 단위로 동작하며 응답 시간과 처리량에 가장 큰 영향을 미친다.',
+        rationale: '실행 결정을 너무 자주 내리면 문맥 교환 비용이 처리량을 깎는다.',
       },
       {
         kind: 'boundary',
@@ -4164,7 +4162,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '우선순위를 낮춘다', leadsTo: 4 },
         ],
         rationale:
-          '스와핑으로 물리 메모리 자리를 확보한다.',
+          '메모리가 부족하면 프로세스를 잠시 디스크로 내려 물리 메모리 자리를 확보한다.',
       },
     ],
   },
