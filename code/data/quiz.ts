@@ -14206,4 +14206,754 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
     ],
   },
+
+  /*
+   * 꼬리질문이 가리키는데 노드가 없던 자리를 채운 10편의 문제(2026-08-30).
+   *
+   * 정답 위치는 미리 8·7·8·7로 나눠 배분했다. 전체가 1번에 쏠렸던 것을
+   * 되돌린 뒤라 새로 쓰는 것부터 고르게 두지 않으면 같은 자리로 돌아간다.
+   */
+  {
+    identityScope: 'generic',
+    question: '가짜 객체는 어디까지 써야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '가짜로 바꿀 자리를 무엇으로 고르는가?',
+        choices: [
+          { text: '느린 것부터 차례로 바꾼다', leadsTo: 3 },
+          { text: '협력 객체는 전부 바꾼다', leadsTo: 4 },
+          { text: '내가 못 정하는 바깥 자리를 바꾼다', correct: true },
+          { text: '시험 시간이 길어지는 자리를 전부 바꾼다', leadsTo: 0 },
+        ],
+        rationale:
+          '네트워크와 시계와 무작위처럼 내가 못 정하는 것을 가짜로 바꾸고, 내가 짠 것은 진짜를 쓴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '가짜를 늘리면 무엇을 잃는가?',
+        choices: [
+          { text: '맞물리는지 보는 눈', correct: true },
+          { text: '시험이 도는 속도', leadsTo: 3 },
+          { text: '따로 돌릴 때의 시험 안정성', leadsTo: 0 },
+          { text: '검사 문장을 쓸 자리', leadsTo: 1 },
+        ],
+        rationale:
+          '가짜를 늘리면 빨라지지만 조각들이 실제로 맞물리는지를 덜 본다. 따로 돌리면 통과하는데 붙여 놓으면 깨지는 상태가 여기서 온다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '목을 쓰는 것이 맞는 자리는?',
+        choices: [
+          { text: '값을 받아 계산 결과를 확인할 때', leadsTo: 0 },
+          { text: '가짜가 진짜와 같은지 확인할 때', leadsTo: 1 },
+          { text: '시험을 빠르게 만들고 싶을 때', leadsTo: 3 },
+          { text: '부수 효과 자체가 결과일 때', correct: true },
+        ],
+        rationale:
+          '목은 무엇이 몇 번 불렸는지까지 검사한다. 많이 쓸수록 구현 순서를 외운 시험이 되므로 부수 효과 자체가 결과인 자리에만 쓴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '깨지기 쉬운 시험은 왜 생기는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '같은 코드인데 결과가 갈리는 까닭은?',
+        choices: [
+          { text: '시험 대상 코드에 버그가 있어서', leadsTo: 3 },
+          { text: '코드 바깥의 것에 매여 있어서', correct: true },
+          { text: '검사 문장이 너무 엄격해서', leadsTo: 2 },
+          { text: '시험이 너무 많아서', leadsTo: 0 },
+        ],
+        rationale:
+          '실행할 때마다 달라지는 것을 시험이 붙들고 있으면 같은 코드에서도 결과가 갈린다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '기다릴 시간을 초로 못 박아 두면?',
+        choices: [
+          { text: '어느 기계에서나 똑같이 동작한다', leadsTo: 0 },
+          { text: '느린 기계에서 더 안전해진다', leadsTo: 3 },
+          { text: '기계가 달라지면 결과가 갈린다', correct: true },
+          { text: '조건을 기다리는 것보다 정확하다', leadsTo: 2 },
+        ],
+        rationale:
+          '내 노트북에서 2초면 끝나는 일이 빌드 서버에서는 안 끝난다. 시간이 아니라 조건이 찼는지를 기다려야 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '가끔 깨지는 시험에 재시도를 붙이면?',
+        choices: [
+          { text: '신호가 사라져 진짜 버그를 놓친다', correct: true },
+          { text: '실행 순서에 매인 문제가 해결된다', leadsTo: 2 },
+          { text: '원인이 드러나 고치기 쉬워진다', leadsTo: 3 },
+          { text: '시험이 더 빨라진다', leadsTo: 0 },
+        ],
+        rationale:
+          '재시도가 가장 빠른 처방이지만 그러면 신호가 사라진다. 가끔 깨지는 시험이 진짜 버그를 가리키고 있을 때가 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '커버리지 숫자는 무엇을 못 말하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '커버리지가 실제로 세는 것은?',
+        choices: [
+          { text: '결과를 확인한 줄', leadsTo: 1 },
+          { text: '검사 문장이 붙은 줄', leadsTo: 3 },
+          { text: '분기를 둘 다 밟은 줄', leadsTo: 0 },
+          { text: '실행된 줄', correct: true },
+        ],
+        rationale: '실행했다는 것만 말한다. 그 줄이 지나갔다는 뜻이지 결과를 확인했다는 뜻이 아니다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '검사 문장이 하나도 없는 시험의 커버리지는?',
+        choices: [
+          { text: '0%가 된다', leadsTo: 1 },
+          { text: '부른 줄만큼 올라간다', correct: true },
+          { text: '분기 커버리지만 올라간다', leadsTo: 0 },
+          { text: '측정에서 제외된다', leadsTo: 3 },
+        ],
+        rationale:
+          '검사 없이 부르기만 해도 그 줄은 실행된 것으로 세어진다. 무엇이 틀렸는지 묻지 않으니 어떤 회귀도 못 잡는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '커버리지 숫자가 쓸모 있는 자리는?',
+        choices: [
+          { text: '0%인 자리를 찾을 때', correct: true },
+          { text: '90%를 95%로 올릴 때', leadsTo: 2 },
+          { text: '팀 목표를 정할 때', leadsTo: 2 },
+          { text: '시험 품질을 견줄 때', leadsTo: 3 },
+        ],
+        rationale:
+          '0%인 자리는 확실히 안 본 자리다. 90%를 95%로 올리는 일은 대개 안 깨질 코드에 시험을 붙이는 일이 된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '시험을 먼저 쓰면 무엇이 달라지는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '순서를 바꾸면 무엇이 먼저 정해지는가?',
+        choices: [
+          { text: '내부 구현의 자료구조', leadsTo: 3 },
+          { text: '시험 도구와 설정', leadsTo: 2 },
+          { text: '바깥에서 부르는 모양', correct: true },
+          { text: '통과 기준이 되는 숫자', leadsTo: 0 },
+        ],
+        rationale:
+          '시험을 먼저 쓰려면 그 코드를 바깥에서 부를 수 있어야 한다. 인터페이스가 쓰는 사람 편에서 정해진다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '빨간불을 먼저 보는 이유는?',
+        choices: [
+          { text: '실제로 검사한다는 증거라서', correct: true },
+          { text: '구현에 얼마나 걸릴지 재기 위해서', leadsTo: 3 },
+          { text: '절차에 그렇게 적혀 있어서', leadsTo: 2 },
+          { text: '도구가 켜졌는지 보려고', leadsTo: 0 },
+        ],
+        rationale:
+          '실패하는 것을 봐야 그 시험이 실제로 무언가를 검사한다는 것을 알 수 있다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '시험을 먼저 쓰기가 방해가 되는 때는?',
+        choices: [
+          { text: '고칠 곳이 여러 파일에 걸칠 때', leadsTo: 3 },
+          { text: '만들 것이 아직 흐릴 때', correct: true },
+          { text: '시험이 느려졌을 때', leadsTo: 4 },
+          { text: '구조를 다듬을 때', leadsTo: 4 },
+        ],
+        rationale:
+          '만들 것이 아직 흐릴 때는 시험이 먼저 굳어 방해가 된다. 대충 만들어 보고 버린 뒤 다시 시작하는 편이 빠르다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '시험이 느려지면 무엇부터 보는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '가장 먼저 할 일은?',
+        choices: [
+          { text: '병렬 실행을 켠다', leadsTo: 2 },
+          { text: '느린 묶음을 따로 뺀다', leadsTo: 3 },
+          { text: '데이터베이스를 가짜로 바꾼다', leadsTo: 4 },
+          { text: '무엇이 느린지 잰다', correct: true },
+        ],
+        rationale:
+          '대개 전체가 느린 것이 아니라 몇 개가 전체 시간을 먹고 있다. 느린 순으로 줄을 세우는 일이 먼저다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '가장 자주 나오는 원인은?',
+        choices: [
+          { text: '검사 문장이 많아서', leadsTo: 1 },
+          { text: '시험마다 준비를 다시 해서', correct: true },
+          { text: '시험 개수가 많아서', leadsTo: 3 },
+          { text: '병렬로 안 돌려서', leadsTo: 2 },
+        ],
+        rationale:
+          '시험마다 컨테이너를 새로 띄우거나 문맥을 다시 만들면 그 시간이 개수만큼 곱해진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '문맥을 여러 시험이 함께 쓰면 따라오는 문제는?',
+        choices: [
+          { text: '문맥을 만드는 시간이 늘어난다', leadsTo: 0 },
+          { text: '병렬 실행이 불가능해진다', leadsTo: 2 },
+          { text: '앞 시험이 남긴 상태가 샌다', correct: true },
+          { text: '느린 묶음이 더 느려진다', leadsTo: 3 },
+        ],
+        rationale:
+          '함께 쓰면 크게 줄어들지만 한 시험이 남긴 상태가 다음 시험으로 새는 문제가 따라온다. 되돌리는 규칙을 같이 정한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '컨테이너 안 데이터는 어디에 두는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '컨테이너 안 경로에 쓴 파일은 언제까지 남는가?',
+        choices: [
+          { text: '그 컨테이너를 지울 때까지', correct: true },
+          { text: '이미지를 지울 때까지', leadsTo: 0 },
+          { text: '노드를 다시 켤 때까지', leadsTo: 1 },
+          { text: '볼륨을 떼어낼 때까지', leadsTo: 0 },
+        ],
+        rationale:
+          '쓰기 층은 컨테이너와 함께 사라진다. 남겨야 하는 것은 볼륨이나 바깥 저장소에 둔다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '볼륨을 붙이면 무엇이 달라지는가?',
+        choices: [
+          { text: '컨테이너가 더 빨리 뜬다', leadsTo: 2 },
+          { text: '어느 노드에서든 같은 디스크를 본다', leadsTo: 1 },
+          { text: '이미지 크기가 줄어든다', leadsTo: 0 },
+          { text: '바꿔 띄워도 데이터가 이어진다', correct: true },
+        ],
+        rationale:
+          '볼륨은 컨테이너 수명과 따로 관리된다. 새 버전으로 바꿔 띄워도 같은 볼륨을 다시 붙이면 데이터가 이어진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '파드가 다른 노드로 옮겨 갈 때 필요한 것은?',
+        choices: [
+          { text: '노드에 붙은 디스크', leadsTo: 1 },
+          { text: '네트워크 저장소', correct: true },
+          { text: '더 큰 쓰기 층', leadsTo: 2 },
+          { text: '이미지를 다시 만들기', leadsTo: 0 },
+        ],
+        rationale:
+          '노드에 붙은 디스크는 그 노드를 떠나면 못 따라간다. 옮겨 다니는 파드에는 네트워크 저장소를 쓴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '파드와 컨테이너는 무엇이 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '쿠버네티스가 다루는 가장 작은 단위는?',
+        choices: [
+          { text: '컨테이너', leadsTo: 0 },
+          { text: '이미지', leadsTo: 3 },
+          { text: '파드', correct: true },
+          { text: '노드', leadsTo: 4 },
+        ],
+        rationale:
+          '파드는 컨테이너를 담는 그릇이고 배치와 재시작과 주소의 단위다. 쿠버네티스는 여기까지만 본다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 파드의 컨테이너들이 함께 쓰는 것은?',
+        choices: [
+          { text: '주소와 볼륨', correct: true },
+          { text: '메모리 공간', leadsTo: 1 },
+          { text: '프로세스 표', leadsTo: 2 },
+          { text: '이미지 층', leadsTo: 3 },
+        ],
+        rationale:
+          '같은 파드에 든 컨테이너는 주소 하나를 나눠 쓴다. 서로를 localhost로 부르고 포트는 겹칠 수 없다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '따로 늘리고 싶은 둘을 한 파드에 넣으면?',
+        choices: [
+          { text: '자동으로 나뉘어 배치된다', leadsTo: 4 },
+          { text: '주소가 하나씩 더 생긴다', leadsTo: 1 },
+          { text: '재시작이 각각 일어난다', leadsTo: 2 },
+          { text: '한쪽만 늘릴 수 없다', correct: true },
+        ],
+        rationale: '개수를 늘리는 단위가 파드다. 같이 넣으면 한쪽만 두 배로 늘릴 방법이 없어진다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '루트 권한 컨테이너는 왜 위험한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '컨테이너 안의 루트는 호스트에서 누구인가?',
+        choices: [
+          { text: '권한 없는 별도 사용자', leadsTo: 1 },
+          { text: '같은 루트', correct: true },
+          { text: '컨테이너 전용 계정', leadsTo: 0 },
+          { text: '읽기만 되는 사용자', leadsTo: 2 },
+        ],
+        rationale:
+          '이름공간은 무엇을 볼 수 있는지를 가를 뿐 사용자 번호를 바꾸지 않는다. 따로 매핑을 켜지 않으면 안의 0번이 밖의 0번이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '이름공간이 하는 일은?',
+        choices: [
+          { text: '사용자 번호를 바꾼다', leadsTo: 1 },
+          { text: '권한을 낮춰 준다', leadsTo: 1 },
+          { text: '무엇을 볼 수 있는지 가른다', correct: true },
+          { text: '파일을 읽기 전용으로 만든다', leadsTo: 2 },
+        ],
+        rationale:
+          '가르는 일은 이름공간이 하고 그것이 뚫리는 순간 남는 것은 권한뿐이다. 번호까지 바꾸지는 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '낮은 포트를 열어야 해서 루트가 필요할 때는?',
+        choices: [
+          { text: '높은 포트로 옮겨 앞단에서 바꾼다', correct: true },
+          { text: '루트로 돌리되 붙인 볼륨을 떼어 둔다', leadsTo: 3 },
+          { text: '읽기 전용으로 두면 괜찮다', leadsTo: 2 },
+          { text: '사용자 번호 매핑으로 해결된다', leadsTo: 1 },
+        ],
+        rationale:
+          '1024 아래 포트를 여는 경우가 흔한데 대개 높은 포트로 옮기고 앞단에서 바꿔 주면 된다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '컨테이너의 1번 프로세스는 무엇을 해야 하는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '1번 프로세스가 종료 신호를 안 다루면?',
+        choices: [
+          { text: '기본 동작이 적용돼 곧바로 끝난다', leadsTo: 0 },
+          { text: '자식들이 대신 받는다', leadsTo: 1 },
+          { text: '무시하고 버티다 강제로 끊긴다', correct: true },
+          { text: '오케스트레이터가 다시 보낸다', leadsTo: 3 },
+        ],
+        rationale:
+          '1번에는 신호의 기본 동작이 붙지 않는다. 직접 받아 처리하지 않으면 버티다 강제로 끊긴다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '셸을 거쳐 앱을 띄우면?',
+        choices: [
+          { text: '신호가 더 빨리 전달된다', leadsTo: 0 },
+          { text: '앱이 1번이 된다', leadsTo: 1 },
+          { text: '자식 거두기가 저절로 된다', leadsTo: 2 },
+          { text: '신호가 앱까지 안 간다', correct: true },
+        ],
+        rationale: '셸이 1번이 되고 앱은 자식이 되는데 셸이 그 신호를 넘겨주지 않는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '기다려 준 시간이 지나 강제로 끊기면?',
+        choices: [
+          { text: '하던 요청이 중간에 잘린다', correct: true },
+          { text: '볼륨의 데이터가 사라진다', leadsTo: 2 },
+          { text: '이미지가 손상된다', leadsTo: 1 },
+          { text: '재시작이 막힌다', leadsTo: 3 },
+        ],
+        rationale:
+          '기다려 준 시간이 지나면 강제로 끊는다. 배포할 때마다 오류가 조금씩 나는 원인이 여기인 경우가 있다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '배포를 되돌리려면 무엇이 필요한가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '되돌리기에서 더 어려운 쪽은?',
+        choices: [
+          { text: '옛 이미지를 찾는 일', leadsTo: 0 },
+          { text: '바뀐 데이터를 옛 코드가 읽기', correct: true },
+          { text: '트래픽을 옛 버전으로 옮기는 일', leadsTo: 3 },
+          { text: '배포 도구를 되돌리는 일', leadsTo: 0 },
+        ],
+        rationale:
+          '코드만 보면 되돌리기는 쉽다. 그사이 바뀐 데이터가 옛 코드에서도 읽혀야 하는 쪽이 대개 더 어렵다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '스키마 변경을 어떤 순서로 나누는가?',
+        choices: [
+          { text: '지우기를 먼저, 더하기를 나중에', leadsTo: 1 },
+          { text: '한 번에 같이 내보낸다', leadsTo: 1 },
+          { text: '더하기를 먼저, 지우기를 나중에', correct: true },
+          { text: '코드 배포가 끝난 뒤 한꺼번에', leadsTo: 2 },
+        ],
+        rationale: '더하는 변경을 먼저 내보내고 지우는 변경은 되돌릴 일이 없어진 뒤에 한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '되돌려도 되돌아오지 않는 것은?',
+        choices: [
+          { text: '쓰기 층에 남은 파일', leadsTo: 1 },
+          { text: '옛 이미지의 이름표', leadsTo: 0 },
+          { text: '바뀐 스키마', leadsTo: 1 },
+          { text: '이미 나간 알림이나 결제', correct: true },
+        ],
+        rationale:
+          '바깥으로 떠난 것은 되돌아오지 않는다. 되돌리기 계획은 그것을 어떻게 수습할지까지 포함해야 한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '파티션 키는 무엇으로 고르는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '파티션 키를 고를 때 서로 당기는 두 가지는?',
+        choices: [
+          { text: '저장 비용과 조회 속도의 균형', leadsTo: 2 },
+          { text: '고르게 흩어짐과 함께 읽기', correct: true },
+          { text: '순서 보장과 중복 제거', leadsTo: 4 },
+          { text: '파티션 수와 소비자 수', leadsTo: 2 },
+        ],
+        rationale:
+          '고르게 흩어지면서 함께 읽을 것이 같은 칸으로 가는 값을 고른다. 이 둘이 서로 당기므로 어느 쪽을 얼마나 내줄지가 판단이다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '국가 코드를 파티션 키로 쓰면?',
+        choices: [
+          { text: '순서 보장이 사라진다', leadsTo: 4 },
+          { text: '파티션 수를 늘리면 그대로 해결된다', leadsTo: 2 },
+          { text: '키를 바꾸기 쉬워진다', leadsTo: 3 },
+          { text: '큰 나라 하나가 대부분을 받는다', correct: true },
+        ],
+        rationale:
+          '값의 종류가 적으면 파티션 수를 늘려도 몇 개만 일한다. 국가 코드로 나누면 큰 나라 하나가 대부분을 받는다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '파티션 키를 나중에 바꾸면?',
+        choices: [
+          { text: '뒤의 순서 보장이 옛것과 끊긴다', correct: true },
+          { text: '흩어진 자리는 그대로 유지된다', leadsTo: 2 },
+          { text: '소비자 수만 다시 맞추면 그만이다', leadsTo: 1 },
+          { text: '값의 종류가 늘어난다', leadsTo: 0 },
+        ],
+        rationale:
+          '바꾸면 같은 값이 다른 칸으로 가므로 그 뒤의 순서 보장이 옛 데이터와 끊긴다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '핫 파티션은 어떻게 알아채는가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '합계만 보면 무엇을 놓치는가?',
+        choices: [
+          { text: '전체 처리량이 준 것', leadsTo: 0 },
+          { text: '소비자가 죽은 것', leadsTo: 1 },
+          { text: '한 칸만 막혀 있는 것', correct: true },
+          { text: '보관 기간이 넘은 것', leadsTo: 4 },
+        ],
+        rationale: '파티션별로 따로 봐야 드러난다. 합계만 보면 한 칸이 막혀 있어도 평균에 묻힌다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '한 칸만 밀린 양이 벌어질 때 함께 봐야 하는 것은?',
+        choices: [
+          { text: '그 칸에 들어온 양', correct: true },
+          { text: '전체 소비자 수', leadsTo: 4 },
+          { text: '파티션 개수', leadsTo: 4 },
+          { text: '보관 중인 메시지 크기', leadsTo: 0 },
+        ],
+        rationale:
+          '밀린 양만 보면 소비자 한 대가 느려진 것과 구별되지 않는다. 들어온 양까지 한쪽에 몰려 있어야 키 문제다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '몰리는 키를 쪼개면 무엇을 내놓는가?',
+        choices: [
+          { text: '전체 처리량', leadsTo: 4 },
+          { text: '파티션 수의 상한', leadsTo: 4 },
+          { text: '밀린 양을 재는 방법', leadsTo: 0 },
+          { text: '그 키 안의 순서 보장', correct: true },
+        ],
+        rationale: '뒤에 번호를 붙여 여러 칸으로 흩고, 대신 그 키 안의 순서 보장을 내놓는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '기능 플래그는 배포와 어떻게 다른가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '기능 플래그가 떼어 놓는 두 가지는?',
+        choices: [
+          { text: '나가는 일과 켜지는 일', correct: true },
+          { text: '빌드와 시험', leadsTo: 1 },
+          { text: '개발과 운영', leadsTo: 0 },
+          { text: '읽기와 쓰기', leadsTo: 3 },
+        ],
+        rationale: '코드는 이미 서버에 있고 언제 누구에게 보일지는 나중에 정한다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '켠 기능에 문제가 났을 때 되돌리는 방법은?',
+        choices: [
+          { text: '지난 이미지를 다시 내보낸다', leadsTo: 4 },
+          { text: '플래그를 지우고 다시 배포한다', leadsTo: 2 },
+          { text: '값 하나를 끈다', correct: true },
+          { text: '비율을 100%로 올린다', leadsTo: 3 },
+        ],
+        rationale: '배포를 되돌리려면 다시 내보내야 하지만 플래그는 값 하나를 끄면 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '플래그를 두면 무엇이 늘어나는가?',
+        choices: [
+          { text: '배포 횟수', leadsTo: 4 },
+          { text: '시험할 갈래', correct: true },
+          { text: '저장 공간', leadsTo: 0 },
+          { text: '되돌리는 시간', leadsTo: 4 },
+        ],
+        rationale: '켠 경우와 끈 경우가 둘 다 살아 있으므로 시험할 것과 읽을 코드가 배로 는다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '추적이 성능에 주는 부담은?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '추적 비용이 대개 가장 크게 드는 자리는?',
+        choices: [
+          { text: 'span을 만들고 시각을 찍는 순간', leadsTo: 3 },
+          { text: '헤더를 이어 넘기는 순간', leadsTo: 4 },
+          { text: '수집기로 내보내는 순간', leadsTo: 1 },
+          { text: '보관 기간만큼 쌓이는 저장소', correct: true },
+        ],
+        rationale:
+          '앱 안에서 드는 비용은 대개 작다. 보관 기간만큼 쌓이는 저장소가 대개 제일 비싸다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '앱 안에서 span 하나를 만드는 비용은?',
+        choices: [
+          { text: '요청당 밀리초 단위', leadsTo: 0 },
+          { text: '요청당 마이크로초 단위', correct: true },
+          { text: '측정이 안 될 만큼 없다', leadsTo: 3 },
+          { text: '서비스 수에 비례해 늘어난다', leadsTo: 1 },
+        ],
+        rationale:
+          'span 하나를 만들고 시각을 찍는 일이라 요청당 마이크로초 단위로 이야기한다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '수집기가 밀리면 앱에서 벌어지는 일은?',
+        choices: [
+          { text: '추적이 저절로 꺼진다', leadsTo: 0 },
+          { text: '저장 비용만 늘어난다', leadsTo: 2 },
+          { text: '큐가 차고 설정대로 갈린다', correct: true },
+          { text: '표본 비율이 저절로 내려간다', leadsTo: 0 },
+        ],
+        rationale:
+          '수집기가 밀리면 큐가 차고, 그때 요청을 붙들지 span을 버릴지는 설정이 정한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '상속보다 합성을 권장하는 이유는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '합성이 상속과 다른 점은?',
+        choices: [
+          { text: '겉모습까지 물려받는다', leadsTo: 4 },
+          { text: '무엇을 쓸지 밖에서 넣는다', correct: true },
+          { text: '컴파일할 때 굳는다', leadsTo: 0 },
+          { text: '부모의 구현을 재정의한다', leadsTo: 1 },
+        ],
+        rationale:
+          '상속은 부모의 구현까지 물려받아 굳는다. 합성은 무엇을 쓸지 바깥에서 넣으므로 나중에 바꿀 수 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '부모가 메서드를 부르는 방식만 바꾸면?',
+        choices: [
+          { text: '재정의한 자식의 동작이 달라진다', correct: true },
+          { text: '자식은 그대로라 영향을 안 받는다', leadsTo: 1 },
+          { text: '컴파일이 실패한다', leadsTo: 0 },
+          { text: '겉모습만 바뀐다', leadsTo: 4 },
+        ],
+        rationale:
+          '부모의 메서드가 다른 메서드를 부르는 방식만 바꿔도 그것을 재정의한 자식의 동작이 달라진다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '상속이 맞는 자리는?',
+        choices: [
+          { text: '코드를 재사용하고 싶을 때', leadsTo: 0 },
+          { text: '시험할 때 가짜로 바꾸고 싶을 때', leadsTo: 3 },
+          { text: '돌면서 바꾸고 싶을 때', leadsTo: 3 },
+          { text: '대신 들어가도 되는 관계일 때', correct: true },
+        ],
+        rationale:
+          '하위 유형이 상위 유형 자리에 그대로 들어가도 되는 관계이고 그 관계가 안 변할 때다. 재사용이 목적이면 합성이 낫다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: 'CAS 연산의 ABA 문제는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: 'CAS가 보지 못하는 것은?',
+        choices: [
+          { text: '값이 바뀌었는지', leadsTo: 0 },
+          { text: '누가 바꿨는지', leadsTo: 1 },
+          { text: '그사이 오갔는지', correct: true },
+          { text: '몇 번 시도했는지', leadsTo: 3 },
+        ],
+        rationale:
+          '비교는 값만 보므로 A에서 B로 갔다가 다시 A로 돌아온 사이가 아무 일도 없던 것과 구별되지 않는다.',
+      },
+      {
+        kind: 'misconception',
+        stem: 'ABA가 실제로 아프게 되는 때는?',
+        choices: [
+          { text: '카운터를 올릴 때', leadsTo: 2 },
+          { text: '값을 읽기만 할 때', leadsTo: 0 },
+          { text: '스레드가 둘뿐일 때', leadsTo: 3 },
+          { text: '값이 무언가를 가리킬 때', correct: true },
+        ],
+        rationale:
+          '숫자만 다루면 대개 문제가 안 된다. 같은 주소에 다른 것이 다시 놓이면 지워진 것을 붙들게 된다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '값과 세대 번호를 함께 비교하면?',
+        choices: [
+          { text: 'A로 돌아와도 번호가 달라진다', correct: true },
+          { text: '값 비교가 필요 없어진다', leadsTo: 0 },
+          { text: '락을 쓰는 것과 사실상 같아진다', leadsTo: 3 },
+          { text: '회수 시점을 미룰 수 있다', leadsTo: 4 },
+        ],
+        rationale: '값과 세대 번호를 함께 비교하면 A로 돌아와도 번호가 달라 실패한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '트랩과 인터럽트의 차이는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '둘을 가르는 기준은?',
+        choices: [
+          { text: '무엇이 일으켰는가', correct: true },
+          { text: '얼마나 자주 오는가', leadsTo: 3 },
+          { text: '커널로 들어가는가', leadsTo: 0 },
+          { text: '처리 시간이 얼마인가', leadsTo: 4 },
+        ],
+        rationale:
+          '트랩은 지금 도는 명령이 스스로 일으키고, 인터럽트는 바깥 장치가 명령과 상관없이 끼어든다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '같은 입력으로 다시 돌리면 트랩은?',
+        choices: [
+          { text: '다른 명령에서 난다', leadsTo: 2 },
+          { text: '같은 명령에서 또 난다', correct: true },
+          { text: '두 번째부터는 안 난다', leadsTo: 3 },
+          { text: '인터럽트로 바뀐다', leadsTo: 0 },
+        ],
+        rationale: '트랩은 되풀이하면 같은 자리에서 또 난다. 같은 입력이면 같은 명령에서 늘 일어난다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '페이지 부재를 처리한 뒤 돌아가는 자리는?',
+        choices: [
+          { text: '프로그램의 처음', leadsTo: 1 },
+          { text: '다음 명령', leadsTo: 0 },
+          { text: '그 명령을 다시', correct: true },
+          { text: '커널의 시작 지점', leadsTo: 2 },
+        ],
+        rationale:
+          '의도해서 부른 것은 다음 명령으로 돌아가고, 페이지 부재처럼 고쳐서 다시 해야 하는 것은 그 명령을 다시 실행한다.',
+      },
+    ],
+  },
+  {
+    identityScope: 'generic',
+    question: '트라이의 공간 복잡도 한계는 무엇인가?',
+    items: [
+      {
+        kind: 'concept',
+        stem: '트라이가 공간을 많이 쓰는 까닭은?',
+        choices: [
+          { text: '단어를 통째로 여러 번 저장해서', leadsTo: 2 },
+          { text: '균형을 맞추느라 노드가 늘어서', leadsTo: 1 },
+          { text: '해시 충돌을 대비해서', leadsTo: 2 },
+          { text: '노드마다 다음 글자 자리를 들어서', correct: true },
+        ],
+        rationale:
+          '문자 하나에 노드 하나를 쓰고, 노드마다 다음 글자로 가는 자리를 통째로 들고 있다.',
+      },
+      {
+        kind: 'misconception',
+        stem: '자식을 배열로 들면 노드 하나의 크기는?',
+        choices: [
+          { text: '자식 수만큼', leadsTo: 1 },
+          { text: '단어 길이만큼', leadsTo: 0 },
+          { text: '글자 종류만큼', correct: true },
+          { text: '트리 깊이만큼', leadsTo: 1 },
+        ],
+        rationale: '자식을 배열로 들면 노드 하나가 글자 종류만큼의 칸을 갖는다. 대부분의 칸이 빈다.',
+      },
+      {
+        kind: 'boundary',
+        stem: '자식을 해시나 정렬된 목록으로 바꾸면?',
+        choices: [
+          { text: '노드 수가 줄어든다', leadsTo: 1 },
+          { text: '한 글자 옮기는 비용이 오른다', correct: true },
+          { text: '앞부분으로 찾는 일을 못 하게 된다', leadsTo: 3 },
+          { text: '글자 종류에 상관없어진다', leadsTo: 4 },
+        ],
+        rationale: '쓰는 갈래만큼만 차지한다. 대신 한 글자 옮겨 가는 비용이 올라간다.',
+      },
+    ],
+  },
 ]
