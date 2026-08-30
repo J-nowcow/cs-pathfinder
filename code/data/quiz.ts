@@ -14261,7 +14261,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
     items: [
       {
         kind: 'concept',
-        stem: '같은 코드인데 결과가 갈리는 까닭은?',
+        stem: '깨지기 쉬운 시험의 흔한 뿌리는?',
         choices: [
           { text: '시험 대상 코드에 버그가 있어서', leadsTo: 3 },
           { text: '코드 바깥의 것에 매여 있어서', correct: true },
@@ -14269,7 +14269,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '시험이 너무 많아서', leadsTo: 0 },
         ],
         rationale:
-          '실행할 때마다 달라지는 것을 시험이 붙들고 있으면 같은 코드에서도 결과가 갈린다.',
+          '흔한 뿌리가 넷이다. 실행 순서, 시각과 시간대, 무작위 값, 그리고 기다릴 시간을 초로 못 박아 둔 것이다.',
       },
       {
         kind: 'misconception',
@@ -14303,14 +14303,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
     items: [
       {
         kind: 'concept',
-        stem: '커버리지가 실제로 세는 것은?',
+        stem: '줄 커버리지가 실제로 세는 것은?',
         choices: [
           { text: '결과를 확인한 줄', leadsTo: 1 },
           { text: '검사 문장이 붙은 줄', leadsTo: 3 },
           { text: '분기를 둘 다 밟은 줄', leadsTo: 0 },
           { text: '실행된 줄', correct: true },
         ],
-        rationale: '실행했다는 것만 말한다. 그 줄이 지나갔다는 뜻이지 결과를 확인했다는 뜻이 아니다.',
+        rationale:
+          '줄 커버리지는 실행했다는 것만 센다. 그 줄이 지나갔다는 뜻이지 결과를 확인했다는 뜻이 아니다.',
       },
       {
         kind: 'misconception',
@@ -14498,7 +14499,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         choices: [
           { text: '자동으로 나뉘어 배치된다', leadsTo: 4 },
           { text: '주소가 하나씩 더 생긴다', leadsTo: 1 },
-          { text: '재시작이 각각 일어난다', leadsTo: 2 },
+          { text: '늘리는 단위가 컨테이너로 바뀐다', leadsTo: 2 },
           { text: '한쪽만 늘릴 수 없다', correct: true },
         ],
         rationale: '개수를 늘리는 단위가 파드다. 같이 넣으면 한쪽만 두 배로 늘릴 방법이 없어진다.',
@@ -14565,14 +14566,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '셸을 거쳐 앱을 띄우면?',
+        stem: '셸 형식으로 띄웠는데 셸이 1번으로 남는 때는?',
         choices: [
-          { text: '신호가 더 빨리 전달된다', leadsTo: 0 },
-          { text: '앱이 1번이 된다', leadsTo: 1 },
-          { text: '자식 거두기가 저절로 된다', leadsTo: 2 },
-          { text: '신호가 앱까지 안 간다', correct: true },
+          { text: '명령이 하나뿐일 때', leadsTo: 0 },
+          { text: '앱이 종료 신호를 다루지 않도록 짜였을 때', leadsTo: 0 },
+          { text: '자식을 거두지 않을 때', leadsTo: 2 },
+          { text: '여러 명령을 잇거나 리다이렉션을 쓸 때', correct: true },
         ],
-        rationale: '셸이 1번이 되고 앱은 자식이 되는데 셸이 그 신호를 넘겨주지 않는다.',
+        rationale:
+          '명령이 하나면 셸이 자기를 앱으로 바꿔 앱이 1번이 된다. 여러 명령을 잇거나 리다이렉션을 쓰면 셸이 1번으로 남아 신호를 안 넘긴다.',
       },
       {
         kind: 'boundary',
@@ -14619,9 +14621,9 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '되돌려도 되돌아오지 않는 것은?',
         choices: [
-          { text: '쓰기 층에 남은 파일', leadsTo: 1 },
-          { text: '옛 이미지의 이름표', leadsTo: 0 },
-          { text: '바뀐 스키마', leadsTo: 1 },
+          { text: '옛 이미지로 되돌린 컨테이너', leadsTo: 0 },
+          { text: '옛 버전으로 옮긴 트래픽', leadsTo: 3 },
+          { text: '더하기만 한 스키마 변경', leadsTo: 1 },
           { text: '이미 나간 알림이나 결제', correct: true },
         ],
         rationale:
@@ -14728,14 +14730,15 @@ export const NODE_QUIZZES: NodeQuiz[] = [
       },
       {
         kind: 'misconception',
-        stem: '켠 기능에 문제가 났을 때 되돌리는 방법은?',
+        stem: '켠 기능 하나만 골라 되돌리려면?',
         choices: [
           { text: '지난 이미지를 다시 내보낸다', leadsTo: 4 },
           { text: '플래그를 지우고 다시 배포한다', leadsTo: 2 },
           { text: '값 하나를 끈다', correct: true },
           { text: '비율을 100%로 올린다', leadsTo: 3 },
         ],
-        rationale: '배포를 되돌리려면 다시 내보내야 하지만 플래그는 값 하나를 끄면 된다.',
+        rationale:
+          '배포를 되돌리면 그 배포에 든 것이 통째로 함께 돌아간다. 플래그는 기능 하나만 값으로 끈다.',
       },
       {
         kind: 'boundary',
@@ -14840,12 +14843,12 @@ export const NODE_QUIZZES: NodeQuiz[] = [
     items: [
       {
         kind: 'concept',
-        stem: 'CAS가 보지 못하는 것은?',
+        stem: '값이 A로 돌아와 있으면 CAS는 어떻게 판정하는가?',
         choices: [
-          { text: '값이 바뀌었는지', leadsTo: 0 },
-          { text: '누가 바꿨는지', leadsTo: 1 },
-          { text: '그사이 오갔는지', correct: true },
-          { text: '몇 번 시도했는지', leadsTo: 3 },
+          { text: '값이 바뀐 적이 있다고 보고 실패시킨다', leadsTo: 0 },
+          { text: '오간 횟수를 함께 본다', leadsTo: 1 },
+          { text: '아무 일도 없던 것과 같게 본다', correct: true },
+          { text: '바뀐 쪽 스레드를 기다린다', leadsTo: 3 },
         ],
         rationale:
           '비교는 값만 보므로 A에서 B로 갔다가 다시 A로 돌아온 사이가 아무 일도 없던 것과 구별되지 않는다.',
@@ -14950,7 +14953,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '노드 수가 줄어든다', leadsTo: 1 },
           { text: '한 글자 옮기는 비용이 오른다', correct: true },
           { text: '앞부분으로 찾는 일을 못 하게 된다', leadsTo: 3 },
-          { text: '글자 종류에 상관없어진다', leadsTo: 4 },
+          { text: '노드 하나가 여전히 글자 종류만큼을 차지한다', leadsTo: 4 },
         ],
         rationale: '쓰는 갈래만큼만 차지한다. 대신 한 글자 옮겨 가는 비용이 올라간다.',
       },
