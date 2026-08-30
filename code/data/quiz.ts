@@ -14224,7 +14224,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '느린 것부터 차례로 바꾼다', leadsTo: 3 },
           { text: '협력 객체는 전부 바꾼다', leadsTo: 4 },
           { text: '내가 못 정하는 바깥 자리를 바꾼다', correct: true },
-          { text: '시험 시간이 길어지는 자리를 전부 바꾼다', leadsTo: 0 },
+          { text: '시험 시간이 길어지는 자리를 전부 바꾼다', leadsTo: 2 },
         ],
         rationale:
           '네트워크와 시계와 무작위처럼 내가 못 정하는 것을 가짜로 바꾸고, 내가 짠 것은 진짜를 쓴다.',
@@ -14235,7 +14235,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         choices: [
           { text: '맞물리는지 보는 눈', correct: true },
           { text: '시험이 도는 속도', leadsTo: 3 },
-          { text: '따로 돌릴 때의 시험 안정성', leadsTo: 0 },
+          { text: '따로 돌릴 때의 시험 안정성', leadsTo: 3 },
           { text: '검사 문장을 쓸 자리', leadsTo: 1 },
         ],
         rationale:
@@ -14278,7 +14278,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '어느 기계에서나 똑같이 동작한다', leadsTo: 0 },
           { text: '느린 기계에서 더 안전해진다', leadsTo: 3 },
           { text: '기계가 달라지면 결과가 갈린다', correct: true },
-          { text: '조건을 기다리는 것보다 정확하다', leadsTo: 2 },
+          { text: '조건을 기다리는 것보다 정확하다', leadsTo: 0 },
         ],
         rationale:
           '내 노트북에서 2초면 끝나는 일이 빌드 서버에서는 안 끝난다. 시간이 아니라 조건이 찼는지를 기다려야 한다.',
@@ -14362,7 +14362,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '실제로 검사한다는 증거라서', correct: true },
           { text: '구현에 얼마나 걸릴지 재기 위해서', leadsTo: 3 },
           { text: '절차에 그렇게 적혀 있어서', leadsTo: 2 },
-          { text: '도구가 켜졌는지 보려고', leadsTo: 0 },
+          { text: '도구가 켜졌는지 보려고', leadsTo: 2 },
         ],
         rationale:
           '실패하는 것을 봐야 그 시험이 실제로 무언가를 검사한다는 것을 알 수 있다.',
@@ -14401,7 +14401,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '가장 자주 나오는 원인은?',
         choices: [
-          { text: '검사 문장이 많아서', leadsTo: 1 },
+          { text: '검사 문장이 많아서', leadsTo: 0 },
           { text: '시험마다 준비를 다시 해서', correct: true },
           { text: '시험 개수가 많아서', leadsTo: 3 },
           { text: '병렬로 안 돌려서', leadsTo: 2 },
@@ -14567,7 +14567,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '셸 형식으로 띄웠는데 셸이 1번으로 남는 때는?',
         choices: [
-          { text: '명령이 하나뿐일 때', leadsTo: 0 },
+          { text: '명령이 하나뿐일 때', leadsTo: 1 },
           { text: '앱이 종료 신호를 다루지 않도록 짜였을 때', leadsTo: 0 },
           { text: '자식을 거두지 않을 때', leadsTo: 2 },
           { text: '여러 명령을 잇거나 리다이렉션을 쓸 때', correct: true },
@@ -14664,7 +14664,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         choices: [
           { text: '뒤의 순서 보장이 옛것과 끊긴다', correct: true },
           { text: '흩어진 자리는 그대로 유지된다', leadsTo: 2 },
-          { text: '소비자 수만 다시 맞추면 그만이다', leadsTo: 1 },
+          { text: '소비자 수만 다시 맞추면 그만이다', leadsTo: 3 },
           { text: '값의 종류가 늘어난다', leadsTo: 0 },
         ],
         rationale:
@@ -14761,7 +14761,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         stem: '추적 비용이 대개 가장 크게 드는 자리는?',
         choices: [
           { text: 'span을 만들고 시각을 찍는 순간', leadsTo: 3 },
-          { text: '큐에 모아 두는 동안', leadsTo: 1 },
+          { text: '표본을 고르는 동안', leadsTo: 0 },
           { text: '수집기로 내보내는 순간', leadsTo: 1 },
           { text: '보관 기간만큼 쌓이는 저장소', correct: true },
         ],
@@ -14772,10 +14772,10 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: 'span 하나를 만드는 데 드는 시간은?',
         choices: [
-          { text: '밀리초 단위', leadsTo: 0 },
+          { text: '밀리초 단위', leadsTo: 3 },
           { text: '마이크로초 단위', correct: true },
-          { text: '측정이 안 될 만큼 없다', leadsTo: 3 },
-          { text: '붙인 속성 수에 비례해 늘어난다', leadsTo: 3 },
+          { text: '측정이 안 될 만큼 없다', leadsTo: 0 },
+          { text: '요청 처리 시간에 비례해 늘어난다', leadsTo: 4 },
         ],
         rationale: 'span 하나를 만들고 시각을 찍는 일이라 마이크로초 단위로 이야기한다.',
       },
@@ -14825,7 +14825,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'boundary',
         stem: '상속이 맞는 자리는?',
         choices: [
-          { text: '코드를 재사용하고 싶을 때', leadsTo: 0 },
+          { text: '코드를 재사용하고 싶을 때', leadsTo: 2 },
           { text: '시험할 때 가짜로 바꾸고 싶을 때', leadsTo: 3 },
           { text: '돌면서 바꾸고 싶을 때', leadsTo: 3 },
           { text: '대신 들어가도 되는 관계일 때', correct: true },
@@ -14896,7 +14896,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '같은 입력으로 다시 돌리면 트랩은?',
         choices: [
-          { text: '다른 명령에서 난다', leadsTo: 2 },
+          { text: '다른 명령에서 난다', leadsTo: 1 },
           { text: '같은 명령에서 또 난다', correct: true },
           { text: '두 번째부터는 안 난다', leadsTo: 3 },
           { text: '인터럽트로 바뀐다', leadsTo: 0 },
@@ -14937,7 +14937,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
         kind: 'misconception',
         stem: '자식을 배열로 들면 노드 하나의 크기는?',
         choices: [
-          { text: '자식 수만큼', leadsTo: 1 },
+          { text: '자식 수만큼', leadsTo: 4 },
           { text: '단어 길이만큼', leadsTo: 0 },
           { text: '글자 종류만큼', correct: true },
           { text: '트리 깊이만큼', leadsTo: 1 },

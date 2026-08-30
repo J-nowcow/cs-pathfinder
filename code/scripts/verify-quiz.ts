@@ -212,6 +212,26 @@ function main() {
     })
   }
 
+  /*
+   * **오답 셋이 전부 한 꼬리질문으로 가는 문항.**
+   *
+   * 이 기능의 값은 "어느 오답을 골랐느냐"로 다음 질문을 고르는 데 있다.
+   * 셋이 같은 곳을 가리키면 남는 정보는 "틀렸다"뿐이라 그 값이 사라진다.
+   *
+   * **막지 않는다.** 겹치는 것 자체는 흔하다 — 오답 셋 중 둘이 같은 곳을
+   * 가리키는 문항이 62%이고 손으로 쓴 기준선도 그렇다. 꼬리질문이 다섯뿐이라
+   * 딱 맞는 짝이 늘 셋씩 있지는 않다. 그래서 겹침은 안 세고 **전부 몰린 것만**
+   * 센다. 이것도 게이트가 아니라 눈금이다 — 지금 152문항이고, 늘어나면
+   * 라우팅이 이름만 남는다.
+   */
+  let allSameLeads = 0
+  for (const quiz of NODE_QUIZZES) {
+    for (const item of quiz.items) {
+      const tos = item.choices.filter((c) => !c.correct).map((c) => c.leadsTo)
+      if (tos.length > 1 && new Set(tos).size === 1) allSameLeads += 1
+    }
+  }
+
   const itemCount = NODE_QUIZZES.reduce((n, q) => n + q.items.length, 0)
   console.log(`노드 ${NODE_QUIZZES.length}개 · 문제 ${itemCount}개 검사`)
   console.log(`전체 노드 ${nodes.size}개 중 ${NODE_QUIZZES.length}개에 문제가 붙어 있다`)
@@ -222,6 +242,9 @@ function main() {
   console.log(`정답 위치 ${spread}`)
   console.log(
     `정답이 가장 긴 보기인 문항 ${((longestIsCorrect / itemCount) * 100).toFixed(1)}% (낮을수록 좋다)`,
+  )
+  console.log(
+    `오답 셋이 한 꼬리질문으로 몰린 문항 ${allSameLeads} (${((allSameLeads / itemCount) * 100).toFixed(1)}%)`,
   )
   if (yesNo > 0) {
     console.log(
