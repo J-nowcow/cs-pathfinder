@@ -2,6 +2,7 @@ import { getDb } from '@/lib/db/client'
 import { isMissingTable } from '@/lib/db/missing-table'
 import { MIN_RELATION_VOTES } from '@/lib/db/relations'
 import { normalizeRelationReason } from '@/lib/relations/reason'
+import { NOT_FOLDED_SQL } from '@/lib/db/equivalence'
 import {
   EMBED_DIM,
   EMBED_TOP_K,
@@ -430,6 +431,7 @@ async function relatedByRelation(nodeId: string, limit: number): Promise<Related
             and n.status = 'ready'
             and n.id <> $1
             and n.number is not null
+            and ${NOT_FOLDED_SQL('n')}
           order by n.id, r.votes desc
        )
        select id, number, normalized_question, primary_category, reason
@@ -494,6 +496,7 @@ async function relatedByVector(nodeId: string, limit: number): Promise<RelatedNo
           and n.id <> $1
           and n.number is not null
           and n.embedding is not null
+          and ${NOT_FOLDED_SQL('n')}
           and 1 - (n.embedding::vector(${EMBED_DIM}) <=> me.v) >= $3
         order by n.embedding::vector(${EMBED_DIM}) <=> me.v asc, n.created_at asc
         limit $2`,
