@@ -1476,7 +1476,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '인증서를 쓸 수 없다', leadsTo: 1 },
         ],
         rationale:
-          '대신 여기가 죽으면 전부 죽는다. 그래서 이 자리도 여러 대를 두거나 앞단을 따로 둔다.',
+          '여기가 죽으면 전부 죽는다. 그래서 이 자리도 여러 대를 두거나 앞단을 따로 둔다.',
       },
     ],
   },
@@ -3996,7 +3996,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '코어', leadsTo: 1 },
         ],
         rationale:
-          '그래서 스레드를 늘리면 그만큼 스택 공간도 함께 늘어난다.',
+          '스택은 스레드마다 하나씩 있다. 함수를 부를 때마다 그 위에 프레임이 쌓이고 돌아올 때 걷힌다.',
       },
     ],
   },
@@ -7834,7 +7834,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '두 트리를 합쳐 새 트리를 만든다', leadsTo: 3 },
         ],
         rationale:
-          '다르면 일부 트리를 다시 그리는 복구 비용이 생긴다.',
+          '서버 HTML과 첫 트리가 같으면 기존 DOM을 그대로 두고 이벤트만 연결한다.',
       },
       {
         kind: 'misconception',
@@ -10690,7 +10690,7 @@ export const NODE_QUIZZES: NodeQuiz[] = [
           { text: '전혀 읽지 않는다', leadsTo: 2 },
         ],
         rationale:
-          '그래서 목록을 화면에 뿌리는 순간 항목 수만큼 더 나간다.',
+          '연결된 것은 실제로 쓸 때 그때 읽어 오도록 미뤄 둔 것이다.',
       },
       {
         kind: 'misconception',
