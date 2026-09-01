@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 374개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 375개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -374,6 +374,7 @@
 - [루트 권한 컨테이너는 왜 위험한가?](https://cs-pathfinder.vercel.app/q/6a0a42ac-b4fc-4fac-ab5a-b9c88acdd9e3)
 - [컨테이너의 1번 프로세스는 무엇을 해야 하는가?](https://cs-pathfinder.vercel.app/q/ccfbe5f5-e11c-44a7-a2db-4fba4f583e96)
 - [배포를 되돌리려면 무엇이 필요한가?](https://cs-pathfinder.vercel.app/q/36610323-5ea5-4ea3-9072-07a48c94fb34)
+- [도커 빌드 시 레이어 순서를 어떻게 배치해야 하는가?](https://cs-pathfinder.vercel.app/q/19ec0bc2-4e0e-4935-bc63-d5dcf8118485) — 2026-09-01
 
 ## 모바일
 
