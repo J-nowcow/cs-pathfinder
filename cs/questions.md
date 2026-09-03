@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 377개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 378개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -300,6 +300,7 @@
 - [기능 플래그는 배포와 어떻게 다른가?](https://cs-pathfinder.vercel.app/q/873b5688-3c89-4069-a456-f4c8e92c0c49)
 - [추적이 성능에 주는 부담은?](https://cs-pathfinder.vercel.app/q/549e6644-95be-4d91-af09-c9811b5205b1)
 - [상속보다 합성을 권장하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/314f00b8-ef27-403c-a9be-538a33e4cccc)
+- [싱글톤 패턴은 테스트와 유연성 측면에서 무엇을 잃는가?](https://cs-pathfinder.vercel.app/q/6ff42760-7377-44e5-a271-03be46849463) — 2026-09-04
 
 ## 프론트엔드
 
