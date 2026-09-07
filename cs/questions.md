@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 381개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 382개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -196,6 +196,7 @@
 - [멀티프로세스와 멀티스레드는 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/69bd9c69-44c8-4185-90b7-d56832cfabec) — 2026-08-19
 - [스래싱을 막기 위해 워킹셋을 어떻게 활용하는가?](https://cs-pathfinder.vercel.app/q/3ab0da9f-bbc2-4cb1-969d-7ccd8048cd16) — 2026-08-29
 - [트랩과 인터럽트의 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/57831aa0-aa67-49ab-a83d-7d5d68b54344)
+- [좀비와 고아 프로세스는 어떻게 처리하는가?](https://cs-pathfinder.vercel.app/q/9584d304-8973-4d9d-85b9-a71e62b73046) — 2026-09-08
 
 ## 자료구조 · 알고리즘
 
