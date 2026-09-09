@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 383개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 384개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -268,6 +268,7 @@
 - [시험을 먼저 쓰면 무엇이 달라지는가?](https://cs-pathfinder.vercel.app/q/7ec29979-2755-400b-8008-606fa3b7668c)
 - [시험이 느려지면 무엇부터 보는가?](https://cs-pathfinder.vercel.app/q/83f07431-9a8c-4c30-88f3-8add0a2199f3)
 - [테스트 컨텍스트가 재사용되지 않고 매번 새로 뜨는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/2d21db32-6b03-443e-a4c1-63f17b7c5008) — 2026-08-31
+- [통합 테스트보다 슬라이스 테스트를 선택하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/a5a41c46-0525-4ae8-9d60-88697560b76e) — 2026-09-10
 
 ## 아키텍처 · 분산시스템
 
