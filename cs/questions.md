@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 386개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 387개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -421,3 +421,4 @@
 - [오프라인 우선 앱에서 로컬과 서버의 데이터 일관성은 어떻게 유지하는가?](https://cs-pathfinder.vercel.app/q/3e75120a-b161-4e11-9986-e939f291afa9) — 2026-08-14
 - [WorkManager는 어떤 방식으로 작업 실행을 보장하는가?](https://cs-pathfinder.vercel.app/q/3916f81a-229d-4a73-85f1-5b1d03f77679) — 2026-08-24
 - [모바일 앱에서 이미지 캐시는 왜 메모리와 디스크로 나누는가?](https://cs-pathfinder.vercel.app/q/0f4c7b31-5f93-4c3f-95db-4044fe2ad94e) — 2026-09-03
+- [모바일 네트워크 요청 실패 시 재시도 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/f7859da0-2222-43df-a443-b9c1e516b8dc) — 2026-09-13
