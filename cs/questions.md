@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 388개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 389개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -151,6 +151,7 @@
 - [클래스 내 정적 변수와 정적 블록의 초기화 순서는 무엇으로 결정되는가?](https://cs-pathfinder.vercel.app/q/66979236-02fe-455d-b7be-8b47af9b9821) — 2026-08-16
 - [싱글 스레드인 JS에서 비동기 작업이 멈추지 않고 도는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/7560ea60-aacf-483f-aa47-3167e88019dc) — 2026-08-26
 - [인터페이스에 기본 메서드는 왜 추가했는가?](https://cs-pathfinder.vercel.app/q/9b5d5e86-903f-44f7-8ee5-9ba5863b0393) — 2026-09-05
+- [ThreadLocal 사용 시 메모리 누수가 일어나는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/79e9c795-b7b0-4148-971c-a05eed58537b) — 2026-09-15
 
 ## 운영체제
 
