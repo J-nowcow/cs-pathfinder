@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 389개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 390개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -48,6 +48,7 @@
 - [낙관적 락과 비관적 락은 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/af935dba-bdcf-4095-9045-c89345f49594) — 2026-08-17
 - [RDBMS 대신 NoSQL을 도입하는 판단 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/18737efb-f4a9-45d6-a5eb-99d3138d06e7) — 2026-08-27
 - [옵티마이저의 카디널리티 예측은 왜 빗나가는가?](https://cs-pathfinder.vercel.app/q/8f513579-1701-438f-a758-8a49a719750d) — 2026-09-06
+- [운영 중인 DB 스키마를 변경할 때 락으로 인한 장애를 어떻게 막는가?](https://cs-pathfinder.vercel.app/q/0f9f3dbd-7aee-402b-a7a4-a524747dfcd1) — 2026-09-16
 
 ## 네트워크
 
