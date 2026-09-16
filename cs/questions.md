@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 390개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 391개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -97,6 +97,7 @@
 - [TLS 핸드셰이크 비용은 어떻게 줄이는가?](https://cs-pathfinder.vercel.app/q/f2b936bd-8525-41f4-ac16-d78f1c91b6a1) — 2026-08-18
 - [브라우저는 왜 실제 요청 전에 Preflight 요청을 보내는가?](https://cs-pathfinder.vercel.app/q/f986556f-2519-4ba4-8e5c-ba0d532373d8) — 2026-08-28
 - [Keep-Alive 타임아웃이 너무 길면 어떤 문제가 발생하는가?](https://cs-pathfinder.vercel.app/q/48c820be-80ad-4d13-a3e5-47f551d01aa6) — 2026-09-07
+- [롱폴링은 일반 폴링 대비 서버 자원을 어떻게 소모하는가?](https://cs-pathfinder.vercel.app/q/64480273-8183-41a1-aef5-37123a279c5a) — 2026-09-17
 
 ## 언어 · 런타임
 
