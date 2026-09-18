@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 392개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 393개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -238,6 +238,7 @@
 - [CAS 연산의 ABA 문제는 무엇인가?](https://cs-pathfinder.vercel.app/q/4ec0907b-e7b4-41b6-9b8f-c55d641a9564)
 - [트라이의 공간 복잡도 한계는 무엇인가?](https://cs-pathfinder.vercel.app/q/813b7a26-f8aa-4b94-93be-b22fbdaf0452)
 - [좋은 해시 함수를 판단하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/23984797-81d8-4ac4-81e1-938bd965948f) — 2026-09-09
+- [백트래킹에서 가지치기는 어떤 기준으로 설계하는가?](https://cs-pathfinder.vercel.app/q/3c9104e2-c96e-4874-b00a-d47957ba82ac) — 2026-09-19
 
 ## 프레임워크
 
