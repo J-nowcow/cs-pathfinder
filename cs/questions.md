@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 394개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 395개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -392,6 +392,7 @@
 - [배포를 되돌리려면 무엇이 필요한가?](https://cs-pathfinder.vercel.app/q/36610323-5ea5-4ea3-9072-07a48c94fb34)
 - [도커 빌드 시 레이어 순서를 어떻게 배치해야 하는가?](https://cs-pathfinder.vercel.app/q/19ec0bc2-4e0e-4935-bc63-d5dcf8118485) — 2026-09-01
 - [스테이트풀셋은 재시작된 포드와 볼륨을 어떻게 매칭하는가?](https://cs-pathfinder.vercel.app/q/f54075a2-dd00-4e0f-8411-b086527ecd5e) — 2026-09-11
+- [JWT는 만료 전 세션 무효화를 어떻게 처리하는가?](https://cs-pathfinder.vercel.app/q/c0795a12-75e9-4027-a705-837a6e445ea0) — 2026-09-21
 
 ## 모바일
 
