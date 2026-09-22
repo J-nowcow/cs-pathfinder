@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 395개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 396개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -353,6 +353,7 @@
 - [SSR에서 하이드레이션이 필요한 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/43109666-79c3-4847-a7d6-6d52d2c5351b) — 2026-08-23
 - [검색어 추천과 무한 스크롤에는 각각 무엇을 쓰는가?](https://cs-pathfinder.vercel.app/q/03254c9d-94a4-4483-8eca-c3ca8c31b055) — 2026-09-02
 - [CSR, SSR, SSG는 무엇으로 고르는가?](https://cs-pathfinder.vercel.app/q/c4e3ec04-92fb-4e5c-a2e5-18eaec8ed70b) — 2026-09-12
+- [HTML과 CSS는 어떤 과정을 거쳐 화면에 그려지는가?](https://cs-pathfinder.vercel.app/q/11500412-1dd2-4205-852c-c92d55bcd79a) — 2026-09-22
 
 ## 인프라 · 보안
 
