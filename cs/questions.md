@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 356개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 357개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -143,6 +143,7 @@
 - [정규식 하나가 서버를 멈추게 하는가?](https://cs-pathfinder.vercel.app/q/5487a800-f726-4b85-ab6d-9369eaf24d83)
 - [메모리 관점에서 값 타입과 참조 타입의 선택 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/cd6900b0-8f32-4bcb-8138-96d6da301718)
 - [자바의 원시 타입과 래퍼 클래스는 메모리 구조상 어떤 차이가 있는가?](https://cs-pathfinder.vercel.app/q/2c65743f-9ed0-4761-bf11-5f73223f4a50)
+- [람다식 내부에서 외부 지역변수를 바꿀 수 없는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/68ac8ec0-c809-489c-a04e-00c5c55165f7) — 2026-09-25
 
 ## 운영체제
 
