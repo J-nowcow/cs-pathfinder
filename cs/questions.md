@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 359개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 360개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -188,6 +188,7 @@
 - [프로세스가 죽으면 무엇이 정리되고 무엇이 남는가?](https://cs-pathfinder.vercel.app/q/6ecf2ded-2ca1-47bd-8dc3-e29c3fc198ec)
 - [트랩과 인터럽트의 차이는 무엇인가?](https://cs-pathfinder.vercel.app/q/57831aa0-aa67-49ab-a83d-7d5d68b54344)
 - [데몬 프로세스는 왜 세션 리더로 지정되지 않는가?](https://cs-pathfinder.vercel.app/q/8e1a4351-630e-4664-9788-1dcdc88ef03f)
+- [컨텍스트 스위칭 비용은 구체적으로 어디서 발생하는가?](https://cs-pathfinder.vercel.app/q/bc27db97-e9f9-44bf-83f9-ea5325815565) — 2026-09-28
 
 ## 자료구조 · 알고리즘
 
