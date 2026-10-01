@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 361개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 362개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -363,6 +363,7 @@
 - [컨테이너의 1번 프로세스는 무엇을 해야 하는가?](https://cs-pathfinder.vercel.app/q/ccfbe5f5-e11c-44a7-a2db-4fba4f583e96)
 - [배포를 되돌리려면 무엇이 필요한가?](https://cs-pathfinder.vercel.app/q/36610323-5ea5-4ea3-9072-07a48c94fb34)
 - [컨테이너 이미지를 최소화해야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/eecaafa1-f355-4987-866d-ce5a3ea832aa)
+- [오토스케일링 지표는 서비스 병목에 따라 어떻게 선택하는가?](https://cs-pathfinder.vercel.app/q/d638c07e-e751-4321-9039-f33232a436ff) — 2026-10-01
 
 ## 모바일
 
