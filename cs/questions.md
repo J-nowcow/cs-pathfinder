@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 365개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 366개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -46,6 +46,7 @@
 - [뷰 쿼리의 성능 저하는 무엇을 확인해야 하는가?](https://cs-pathfinder.vercel.app/q/da8cf994-cce1-476c-b9a2-8e2ebd233baf)
 - [고차원 데이터에서 거리 계산 시 발생하는 문제는 무엇인가?](https://cs-pathfinder.vercel.app/q/a6976146-8c02-4d06-97c5-d83ad17a52d9)
 - [옵티마이저는 왜 서브쿼리를 조인으로 풀어서 실행하는가?](https://cs-pathfinder.vercel.app/q/db4b5826-47d3-45cb-b5bb-1282d34bfb36) — 2026-09-24
+- [느린 쿼리를 튜닝할 때 실행 계획에서 무엇을 먼저 보는가?](https://cs-pathfinder.vercel.app/q/1e916f3d-7071-456a-ae76-e5d625db83e1) — 2026-10-05
 
 ## 네트워크
 
