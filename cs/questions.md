@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 368개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 369개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -296,6 +296,7 @@
 - [상속보다 합성을 권장하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/314f00b8-ef27-403c-a9be-538a33e4cccc)
 - [이벤트 소싱을 도입할 때의 트레이드오프는 무엇인가?](https://cs-pathfinder.vercel.app/q/7d0c0314-d5a5-40ee-ba73-f2f57704cbba)
 - [데드레터 큐에 쌓인 메시지는 어떻게 처리하는가?](https://cs-pathfinder.vercel.app/q/da0756f8-ae9a-4776-8088-0aa79802dc17) — 2026-09-27
+- [로그, 메트릭, 트레이스는 각각 언제 쓰는가?](https://cs-pathfinder.vercel.app/q/2337bd83-9b4d-418a-8d11-9b67beb70504) — 2026-10-08
 
 ## 프론트엔드
 
