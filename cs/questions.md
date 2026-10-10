@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 370개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 371개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -228,6 +228,7 @@
 - [트라이의 공간 복잡도 한계는 무엇인가?](https://cs-pathfinder.vercel.app/q/813b7a26-f8aa-4b94-93be-b22fbdaf0452)
 - [메모리보다 큰 데이터를 정렬할 때 무엇을 쓰는가?](https://cs-pathfinder.vercel.app/q/9f25de17-33c6-4afa-ba52-2b343cba100e)
 - [크루스칼과 프림 알고리즘은 언제 구분하여 사용하는가?](https://cs-pathfinder.vercel.app/q/eac127ad-1537-4fea-b929-b21f74eee844) — 2026-09-29
+- [LRU 캐시를 O(1)로 구현하려면 어떤 자료구조들을 조합하는가?](https://cs-pathfinder.vercel.app/q/80b8b67b-e91d-415c-8f4f-b1c1ef80fd2c) — 2026-10-10
 
 ## 프레임워크
 
