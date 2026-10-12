@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 372개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 373개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -262,6 +262,7 @@
 - [시험이 느려지면 무엇부터 보는가?](https://cs-pathfinder.vercel.app/q/83f07431-9a8c-4c30-88f3-8add0a2199f3)
 - [스프링 AOP의 프록시 자기 호출 시 무엇이 문제인가?](https://cs-pathfinder.vercel.app/q/004d87a2-722a-4713-ba35-19e66695be26)
 - [Bean Validation은 직접 구현한 검증 로직과 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/c3eeea9a-dec5-4bfe-9d2f-9a72077e0e10) — 2026-10-02
+- [@ControllerAdvice로 예외를 전역 처리하는 이유는?](https://cs-pathfinder.vercel.app/q/68729ecc-4f82-47c5-9aeb-3b56b741ef5a) — 2026-10-12
 
 ## 아키텍처 · 분산시스템
 
