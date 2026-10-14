@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 374개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 375개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -409,3 +409,4 @@
 - [안드로이드에서 메모리 누수가 발생하는 주원인은 무엇인가?](https://cs-pathfinder.vercel.app/q/031700b2-742f-49a5-a571-e64f7034fda4)
 - [코루틴의 구조적 동시성은 무엇을 해결하는가?](https://cs-pathfinder.vercel.app/q/faa53301-ae3e-434d-9f2a-c08d4ec69c78)
 - [네비게이션 컴포넌트는 왜 단일 액티비티 구조를 권장하는가?](https://cs-pathfinder.vercel.app/q/0b36b330-f006-4bec-bfb6-bba430487329) — 2026-10-04
+- [R8이 ProGuard보다 유리한 점은 무엇인가?](https://cs-pathfinder.vercel.app/q/a2f4422d-a725-4f2f-b668-5148824bebcf) — 2026-10-15
