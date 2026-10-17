@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 377개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 378개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -95,6 +95,7 @@
 - [TCP 연결에서 RST 패킷은 어떤 상황에 전송되는가?](https://cs-pathfinder.vercel.app/q/68ceebf1-7e7f-4175-8fb4-6ac135c0e4f0)
 - [DNS 레코드 종류와 TTL은 어떤 기준으로 설정하는가?](https://cs-pathfinder.vercel.app/q/74b97641-613e-49ca-94c2-e36f90c38f57) — 2026-09-26
 - [HTTP/2는 단일 연결에서 여러 요청을 어떻게 동시에 처리하는가?](https://cs-pathfinder.vercel.app/q/893990fe-e32a-4452-bbbd-4a052bda5991) — 2026-10-07
+- [클라이언트 요청 결과에 따른 HTTP 상태 코드는 어떻게 고르는가?](https://cs-pathfinder.vercel.app/q/e3834ced-48aa-48e5-a386-a95b11155b26) — 2026-10-18
 
 ## 언어 · 런타임
 
