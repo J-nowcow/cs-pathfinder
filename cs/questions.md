@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 379개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 380개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -196,6 +196,7 @@
 - [데몬 프로세스는 왜 세션 리더로 지정되지 않는가?](https://cs-pathfinder.vercel.app/q/8e1a4351-630e-4664-9788-1dcdc88ef03f)
 - [컨텍스트 스위칭 비용은 구체적으로 어디서 발생하는가?](https://cs-pathfinder.vercel.app/q/bc27db97-e9f9-44bf-83f9-ea5325815565) — 2026-09-28
 - [OOM 킬러는 어떤 기준으로 프로세스를 종료하는가?](https://cs-pathfinder.vercel.app/q/75e66d05-8ac2-4aa1-b50d-1bf5c8dbd772) — 2026-10-09
+- [페이지 교체 시 LRU와 LFU는 무엇으로 선택하는가?](https://cs-pathfinder.vercel.app/q/861a01e8-7287-45d5-aed8-daff98e2293d) — 2026-10-20
 
 ## 자료구조 · 알고리즘
 
