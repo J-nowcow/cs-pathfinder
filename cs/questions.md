@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 383개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 384개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -344,6 +344,7 @@
 - [useEffect 의존성 배열을 비워두면 언제 실행되는가?](https://cs-pathfinder.vercel.app/q/6ed147a1-b131-4dd2-aef1-2563cbef66ca)
 - [CSR, SSR, SSG는 어떤 기준으로 고르는가?](https://cs-pathfinder.vercel.app/q/a0412141-d7da-46b4-8ea5-395864a4edca) — 2026-10-03
 - [Flexbox와 Grid는 어떤 기준으로 구분해서 쓰는가?](https://cs-pathfinder.vercel.app/q/8ba39b6c-f735-4261-9cc6-8381125d09e1) — 2026-10-13
+- [React에서 값과 함수의 메모이제이션은 어떻게 구분해서 적용하는가?](https://cs-pathfinder.vercel.app/q/6c2292a2-bf60-4918-9df4-caf33dde2db6) — 2026-10-24
 
 ## 인프라 · 보안
 
