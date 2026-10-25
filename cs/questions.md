@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 385개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 386개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -48,6 +48,7 @@
 - [옵티마이저는 왜 서브쿼리를 조인으로 풀어서 실행하는가?](https://cs-pathfinder.vercel.app/q/db4b5826-47d3-45cb-b5bb-1282d34bfb36) — 2026-09-24
 - [느린 쿼리를 튜닝할 때 실행 계획에서 무엇을 먼저 보는가?](https://cs-pathfinder.vercel.app/q/1e916f3d-7071-456a-ae76-e5d625db83e1) — 2026-10-05
 - [ORM이 생성하는 SQL을 직접 확인해야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/3d0f7bca-42b6-4d15-9dae-779bfd0814ad) — 2026-10-16
+- [느린 쿼리를 발견하면 실행 계획에서 무엇을 먼저 보는가?](https://cs-pathfinder.vercel.app/q/24226c19-c5e2-436b-b661-35c9d046637d) — 2026-10-26
 
 ## 네트워크
 
