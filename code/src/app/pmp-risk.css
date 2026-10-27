@@ -1,0 +1,130 @@
+/* Native expected-loss experiment in the shared reading view. */
+.pmp-risk-lab {
+  margin: 48px 0;
+  padding: 32px 0;
+  border-block: 1px solid var(--line);
+}
+.study-content .pmp-risk-lab {
+  font-size: var(--study-size);
+  line-height: 1.9;
+}
+.study-content .pmp-risk-lab :where(label, input, button, summary) {
+  font-size: var(--study-size);
+}
+.pmp-risk-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin: 24px 0;
+}
+.pmp-risk-inputs label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+.pmp-risk-inputs input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  font: inherit;
+  color: inherit;
+}
+.pmp-risk-inputs input[aria-invalid='true'] {
+  border-color: var(--warn);
+}
+.pmp-risk-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pmp-risk-presets button {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.pmp-risk-lab :disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.pmp-risk-status {
+  margin: 24px 0;
+  padding: 20px 24px;
+  border-left: 3px solid var(--d0);
+  background: var(--raised);
+}
+.pmp-risk-status p {
+  margin: 0 !important;
+}
+.pmp-risk-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 24px;
+  margin: 30px 0;
+}
+.pmp-risk-results > section {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.pmp-risk-value {
+  font-family: var(--font-heading);
+  font-size: 1.4em;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.pmp-risk-outcomes {
+  margin: 30px 0;
+}
+.pmp-risk-outcomes > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 18px;
+  margin-top: 18px;
+}
+.pmp-risk-outcomes strong {
+  font-variant-numeric: tabular-nums;
+}
+.pmp-risk-track {
+  grid-column: 1/-1;
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--line);
+}
+.pmp-risk-track i {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--d0);
+}
+.pmp-risk-limit {
+  margin: 30px 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.pmp-risk-lab table {
+  min-width: 600px;
+  table-layout: fixed;
+}
+.study-content .pmp-lesson .pmp-risk-lab :is(th, td) {
+  min-width: 0;
+  padding: 14px 10px;
+  font-size: var(--study-size);
+  white-space: normal;
+  word-break: keep-all;
+}
+.pmp-risk-lab caption {
+  text-align: left;
+  margin-bottom: 12px;
+}
+.pmp-risk-lab summary {
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

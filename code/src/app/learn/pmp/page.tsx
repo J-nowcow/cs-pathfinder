@@ -24,6 +24,7 @@ export default function PmpHome() {
         <Link href="/learn/pmp/terms">용어 찾아보기 →</Link>
         <Link href="/learn/pmp/n44#float-lab">여유시간 실습 →</Link>
         <Link href="/learn/pmp/n35#evm-lab">성과가치 실습 →</Link>
+        <Link href="/learn/pmp/n27#risk-lab">기대손실 실습 →</Link>
       </div>
       <div className="pmp-chapter-list">
         {c.tracks.map((t, i) => (
@@ -61,8 +62,9 @@ export default function PmpHome() {
           {c.asof} 확인본 · {c.nodes.length}수업. PMI 공식 교재나 합격·공인
           교육시간을 보장하는 과정은 아닙니다. 본문·비교표·심화 사례·상황
           문제·메모·복습·전체 기록 백업은 서재 안에서 이용합니다. 여유시간
-          실습은 44번, 성과가치 실습은 35번 수업에서 이용할 수 있습니다. 나머지
-          일정·위험 계산 실습은 이전 통합 HTML에서 제공합니다.
+          실습은 44번, 성과가치 실습은 35번, 기대손실 실습은 27번 수업에서
+          이용할 수 있습니다. 4작업 임계 경로 실습은 이전 통합 HTML에서
+          제공합니다.
         </p>
         <a href={release.links.study}>이전 통합 HTML 열기 →</a>
         <a href={release.links.offline} download>

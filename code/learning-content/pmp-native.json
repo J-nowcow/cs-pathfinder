@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-28.library8",
+  "release": "2026-10-28.library9",
   "source": "pm-content/pmp/source/course.json",
   "sourceSha256": "29e95155b8761334cea1f756986d0313d96b0f6c2e46540919fc576e7504aae3",
   "routes": {
@@ -72,7 +72,7 @@
     "Existing browser keys and backup schema"
   ],
   "remaining": [
-    "Other schedule and risk calculator labs remain in the original HTML; native float and EVM are available in their lessons",
+    "Four-activity basic CPM experiment remains in original HTML; native float, EVM and expected-loss experiments are available in their lessons",
     "Native full-course search and richer source metadata presentation",
     "PMP account synchronization and real OAuth/Postgres verification"
   ],
@@ -103,6 +103,14 @@
       "bestEffortCrossTabComparison": true,
       "legacyHtmlCompatible": true,
       "notAccountSync": true
+    },
+    "risk": {
+      "route": "/learn/pmp/n27#risk-lab",
+      "model": "Two exclusive incident/no-incident events; positive costs and losses",
+      "threshold": "Strictly greater; equality is within",
+      "noJsWorkedDefault": true,
+      "inputsPersisted": false,
+      "automaticRecommendation": false
     }
   },
   "initialNativeValidation": {
@@ -118,15 +126,16 @@
   },
   "validation": {
     "fullSuite": {
-      "files": 219,
-      "tests": 1914
+      "files": 221,
+      "tests": 1922
     },
     "build": "passed",
     "typecheck": "passed",
-    "nativeExperimentBrowser": "1440px desktop,22px reading/controls, no-JS defaults, reset/error recovery, zero/budget/completion and3EAC assumptions, native float path ties/switch/shared allowance; synthetic data",
+    "nativeExperimentBrowser": "1440px desktop,22px reading/controls, no-JS defaults, reset/error recovery, zero/budget/completion and3EAC assumptions, native float path ties/switch/shared allowance; synthetic data; risk equal expectations/different tails, exact ties, probability endpoints and strictly-greater thresholds",
     "mathChecks": {
       "floatClosedFormNetworks": 1024,
-      "evmLegacyAndIndependentCases": 480
+      "evmLegacyAndIndependentCases": 480,
+      "riskBigIntDistributions": 1120
     },
     "originalSnapshotsUnchanged": true,
     "accountRolloutEnabled": false

@@ -4,6 +4,7 @@ import { LibraryShell } from '@/components/library/LibraryShell'
 import { PmpPractice } from '@/components/pmp/PmpPractice'
 import { PmpFloatLab } from '@/components/pmp/PmpFloatLab'
 import { PmpEvmLab } from '@/components/pmp/PmpEvmLab'
+import { PmpRiskLab } from '@/components/pmp/PmpRiskLab'
 import {
   pmpCourse as c,
   lessonById,
@@ -120,6 +121,7 @@ export default async function PmpLesson({
           />
         ) : null}
         {n.id === 'n35' ? <PmpEvmLab /> : null}
+        {n.id === 'n27' ? <PmpRiskLab /> : null}
         <PmpPractice key={n.id} id={n.id} visit />
         <section>
           <h2>이 수업의 용어</h2>
