@@ -40,6 +40,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/learn" className={FOOTER_LINK}>
+                  CS·PM 학습 분야
+                </Link>
+              </li>
+              <li>
                 <Link href="/questions" className={FOOTER_LINK}>
                   질문 목록
                 </Link>

@@ -1,0 +1,43 @@
+{
+  "version": "2.4",
+  "capacity": {
+    "gross": 12,
+    "mandatory": 4,
+    "net": 8,
+    "aPlusB": 10,
+    "mandatoryPlusAPlusB": 14,
+    "allocation": [
+      4,
+      4,
+      2,
+      2
+    ]
+  },
+  "allocationWidths": [
+    243.671875,
+    243.671875,
+    121.828125,
+    121.828125
+  ],
+  "layouts": [
+    320,
+    390,
+    1280
+  ],
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "originalQuizPassed": true,
+  "clarifiedQuizScene": true,
+  "noteReload": true,
+  "search": true,
+  "crossLink": true,
+  "noJS": {
+    "lessons": 74,
+    "mcq": 83,
+    "reflection": 4
+  },
+  "errors": [],
+  "externalRequests": []
+}

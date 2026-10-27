@@ -1,0 +1,5 @@
+
+# Reviewed generated assets and third-party licenses retain their exact bytes.
+code/public/pmp/** -whitespace
+code/pm-content/pmp/source/uncertainty-plot.svg -whitespace
+code/pm-content/pmp/template/assets/*LICENSE.txt -whitespace

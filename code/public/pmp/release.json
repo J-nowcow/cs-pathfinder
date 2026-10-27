@@ -1,0 +1,17 @@
+{
+  "version": "2.5",
+  "asof": "2026-10-27",
+  "stats": {
+    "lessons": 74,
+    "deep": 38,
+    "questions": 83,
+    "terms": 321,
+    "chapters": 14,
+    "comparisonRows": 187
+  },
+  "links": {
+    "study": "/pmp/index.html",
+    "reader": "/pmp/PMP_%EA%B0%9C%EB%85%90%EC%84%9C_%ED%99%95%EC%9E%A5%ED%8C%90_%ED%8F%B0%EC%9A%A9.html",
+    "offline": "/pmp/PMP_%EA%B0%9C%EB%85%90%EC%84%9C_%ED%99%95%EC%9E%A5%ED%8C%90_%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8.zip"
+  }
+}

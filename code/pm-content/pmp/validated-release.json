@@ -1,0 +1,31 @@
+{
+  "version": "2.5",
+  "asof": "2026-10-27",
+  "stats": {
+    "lessons": 74,
+    "deep": 38,
+    "questions": 83,
+    "terms": 321,
+    "chapters": 14,
+    "comparisonRows": 187
+  },
+  "original_outputs": {
+    "PMP_개념서_확장판_시작하기.txt": {
+      "bytes": 3617,
+      "sha256": "432caca56da15c166246fb9fb7abb4657ea63b93f52375dab4a1d3928792ae8a"
+    },
+    "PMP_개념서_확장판_오프라인.zip": {
+      "bytes": 3689220,
+      "sha256": "7a8a1c97135539282f223a631b6cc0169181c48ee781988bed93da87d8dc6bf6"
+    },
+    "PMP_개념서_확장판_폰용.html": {
+      "bytes": 2820977,
+      "sha256": "80b660b2657a8c6cb61c828efa39a52bd169fd99fbcf2b134810525ba4601297"
+    },
+    "PMP_개념서_확장판_학습지도.html": {
+      "bytes": 2754193,
+      "sha256": "d459d14ad1a540272ffbf105612d28eccdd3ec5125886f2af564f11830414519"
+    }
+  },
+  "scope": "PMP standalone learning resources; shared CS record integration remains future work"
+}

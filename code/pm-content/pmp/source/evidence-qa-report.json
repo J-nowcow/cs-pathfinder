@@ -1,0 +1,42 @@
+{
+  "version": "2.2",
+  "numbers": {
+    "completionRates": [
+      60,
+      65
+    ],
+    "absolutePercentagePoints": 5,
+    "relativePercent": 8.333333333333334,
+    "errorRates": [
+      1,
+      3.5
+    ],
+    "guardrail": 2,
+    "chartWidths": [
+      "60%",
+      "65%",
+      "20%",
+      "70%"
+    ],
+    "thresholdPosition": "40%"
+  },
+  "layouts": [
+    320,
+    390,
+    1280
+  ],
+  "originalQuizPassed": true,
+  "noteReload": true,
+  "search": "full supplement found in scope and path",
+  "relatedLink": true,
+  "priorFloatLab": true,
+  "noJS": {
+    "lessons": 74,
+    "questions": 83,
+    "ungradedReflections": 4,
+    "nativeDisclosure": true,
+    "lessonLinks": true
+  },
+  "errors": [],
+  "external": []
+}

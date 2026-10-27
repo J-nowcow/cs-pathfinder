@@ -1,0 +1,38 @@
+{
+  "version": "2.3",
+  "knownIntervals": [
+    [
+      -8.401050331297,
+      18.401050331297
+    ],
+    [
+      0.762219718207,
+      9.237780281793
+    ],
+    [
+      3.6598949668703,
+      6.3401050331297
+    ]
+  ],
+  "layouts": [
+    320,
+    390,
+    1280
+  ],
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "originalQuizPassed": true,
+  "noteReload": true,
+  "scopeAndPathSearch": true,
+  "crossLinks": true,
+  "noJS": {
+    "lessons": 74,
+    "mcq": 83,
+    "ciCards": 3,
+    "nativeReflections": 3
+  },
+  "errors": [],
+  "externalRequests": []
+}
