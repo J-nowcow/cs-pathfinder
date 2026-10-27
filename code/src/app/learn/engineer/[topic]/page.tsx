@@ -144,7 +144,11 @@ export default async function TopicPage({
         </Link>
       </div>
       <ExamBrowser
-        questions={index.questions.filter((q) => q.topics.includes(g.id))}
+        questions={index.questions.filter(
+          (q) =>
+            q.topics.includes(g.id) ||
+            q.backgroundTopics.some((id) => id === g.id),
+        )}
         topicTitles={Object.fromEntries(guides.map((x) => [x.id, x.title]))}
       />
     </LibraryShell>

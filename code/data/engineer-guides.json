@@ -64,7 +64,10 @@
       "indexes"
     ],
     "questionCount": 13,
-    "roundCount": 12
+    "roundCount": 12,
+    "reviewedCount": 0,
+    "candidateCount": 13,
+    "backgroundCount": 0
   },
   {
     "id": "transactions",
@@ -131,7 +134,10 @@
       "cap"
     ],
     "questionCount": 14,
-    "roundCount": 13
+    "roundCount": 13,
+    "reviewedCount": 0,
+    "candidateCount": 14,
+    "backgroundCount": 0
   },
   {
     "id": "concurrency",
@@ -199,7 +205,10 @@
       "transactions"
     ],
     "questionCount": 6,
-    "roundCount": 6
+    "roundCount": 6,
+    "reviewedCount": 0,
+    "candidateCount": 6,
+    "backgroundCount": 0
   },
   {
     "id": "indexes",
@@ -267,7 +276,10 @@
       "normalization"
     ],
     "questionCount": 31,
-    "roundCount": 24
+    "roundCount": 24,
+    "reviewedCount": 0,
+    "candidateCount": 31,
+    "backgroundCount": 0
   },
   {
     "id": "cap",
@@ -334,8 +346,11 @@
       "transactions",
       "continuity"
     ],
-    "questionCount": 24,
-    "roundCount": 20
+    "questionCount": 23,
+    "roundCount": 19,
+    "reviewedCount": 0,
+    "candidateCount": 23,
+    "backgroundCount": 0
   },
   {
     "id": "requirements",
@@ -402,7 +417,10 @@
       "configuration"
     ],
     "questionCount": 37,
-    "roundCount": 30
+    "roundCount": 30,
+    "reviewedCount": 0,
+    "candidateCount": 37,
+    "backgroundCount": 0
   },
   {
     "id": "testing",
@@ -470,7 +488,10 @@
       "requirements"
     ],
     "questionCount": 49,
-    "roundCount": 36
+    "roundCount": 36,
+    "reviewedCount": 1,
+    "candidateCount": 48,
+    "backgroundCount": 0
   },
   {
     "id": "architecture",
@@ -540,8 +561,11 @@
       "cap",
       "containers"
     ],
-    "questionCount": 32,
-    "roundCount": 25
+    "questionCount": 33,
+    "roundCount": 26,
+    "reviewedCount": 1,
+    "candidateCount": 32,
+    "backgroundCount": 0
   },
   {
     "id": "configuration",
@@ -608,7 +632,10 @@
       "requirements"
     ],
     "questionCount": 7,
-    "roundCount": 7
+    "roundCount": 7,
+    "reviewedCount": 1,
+    "candidateCount": 6,
+    "backgroundCount": 0
   },
   {
     "id": "agile",
@@ -677,7 +704,10 @@
       "benefits"
     ],
     "questionCount": 11,
-    "roundCount": 11
+    "roundCount": 11,
+    "reviewedCount": 0,
+    "candidateCount": 11,
+    "backgroundCount": 0
   },
   {
     "id": "risk",
@@ -743,8 +773,11 @@
       "evm",
       "continuity"
     ],
-    "questionCount": 17,
-    "roundCount": 14
+    "questionCount": 16,
+    "roundCount": 13,
+    "reviewedCount": 0,
+    "candidateCount": 16,
+    "backgroundCount": 1
   },
   {
     "id": "evm",
@@ -814,7 +847,10 @@
       "benefits"
     ],
     "questionCount": 11,
-    "roundCount": 9
+    "roundCount": 9,
+    "reviewedCount": 0,
+    "candidateCount": 11,
+    "backgroundCount": 0
   },
   {
     "id": "benefits",
@@ -881,8 +917,11 @@
       "sla",
       "evm"
     ],
-    "questionCount": 51,
-    "roundCount": 31
+    "questionCount": 49,
+    "roundCount": 30,
+    "reviewedCount": 0,
+    "candidateCount": 49,
+    "backgroundCount": 1
   },
   {
     "id": "sla",
@@ -950,7 +989,10 @@
       "continuity"
     ],
     "questionCount": 9,
-    "roundCount": 9
+    "roundCount": 9,
+    "reviewedCount": 0,
+    "candidateCount": 9,
+    "backgroundCount": 0
   },
   {
     "id": "observability",
@@ -1019,7 +1061,10 @@
       "sla"
     ],
     "questionCount": 0,
-    "roundCount": 0
+    "roundCount": 0,
+    "reviewedCount": 0,
+    "candidateCount": 0,
+    "backgroundCount": 0
   },
   {
     "id": "continuity",
@@ -1090,7 +1135,10 @@
       "cloud"
     ],
     "questionCount": 7,
-    "roundCount": 7
+    "roundCount": 7,
+    "reviewedCount": 1,
+    "candidateCount": 6,
+    "backgroundCount": 0
   },
   {
     "id": "cloud",
@@ -1157,8 +1205,11 @@
       "containers",
       "continuity"
     ],
-    "questionCount": 44,
-    "roundCount": 30
+    "questionCount": 40,
+    "roundCount": 30,
+    "reviewedCount": 1,
+    "candidateCount": 39,
+    "backgroundCount": 3
   },
   {
     "id": "containers",
@@ -1226,7 +1277,10 @@
       "architecture"
     ],
     "questionCount": 12,
-    "roundCount": 10
+    "roundCount": 10,
+    "reviewedCount": 0,
+    "candidateCount": 12,
+    "backgroundCount": 0
   },
   {
     "id": "identity",
@@ -1296,8 +1350,11 @@
       "privacy",
       "rag"
     ],
-    "questionCount": 33,
-    "roundCount": 26
+    "questionCount": 34,
+    "roundCount": 27,
+    "reviewedCount": 1,
+    "candidateCount": 33,
+    "backgroundCount": 0
   },
   {
     "id": "crypto",
@@ -1366,7 +1423,10 @@
       "identity"
     ],
     "questionCount": 26,
-    "roundCount": 22
+    "roundCount": 22,
+    "reviewedCount": 0,
+    "candidateCount": 26,
+    "backgroundCount": 0
   },
   {
     "id": "privacy",
@@ -1432,8 +1492,11 @@
       "identity",
       "dataquality"
     ],
-    "questionCount": 35,
-    "roundCount": 29
+    "questionCount": 34,
+    "roundCount": 28,
+    "reviewedCount": 0,
+    "candidateCount": 34,
+    "backgroundCount": 1
   },
   {
     "id": "ml-evaluation",
@@ -1505,8 +1568,11 @@
       "rag",
       "dataquality"
     ],
-    "questionCount": 83,
-    "roundCount": 33
+    "questionCount": 71,
+    "roundCount": 32,
+    "reviewedCount": 0,
+    "candidateCount": 71,
+    "backgroundCount": 0
   },
   {
     "id": "rag",
@@ -1581,8 +1647,11 @@
       "ml-evaluation",
       "identity"
     ],
-    "questionCount": 18,
-    "roundCount": 9
+    "questionCount": 14,
+    "roundCount": 8,
+    "reviewedCount": 0,
+    "candidateCount": 14,
+    "backgroundCount": 3
   },
   {
     "id": "dataquality",
@@ -1653,6 +1722,9 @@
       "privacy"
     ],
     "questionCount": 53,
-    "roundCount": 36
+    "roundCount": 36,
+    "reviewedCount": 1,
+    "candidateCount": 52,
+    "backgroundCount": 1
   }
 ]

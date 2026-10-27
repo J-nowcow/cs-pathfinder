@@ -30,12 +30,15 @@
   --color-strata-line: var(--strata-line);
   --color-strata-ink: var(--strata-ink);
 
-  --font-sans:
-    Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui,
-    'Segoe UI', 'Malgun Gothic', sans-serif;
-
   /* 깊이 번호·카테고리·좌표 같은 측량값에만 쓴다 */
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+}
+
+/* next/font bundles these OFL fonts with the app; no external font CDN is needed.
+ * Inline tokens resolve the font variables on body, where next/font defines them. */
+@theme inline {
+  --font-sans:
+    var(--font-reading), 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 /*
@@ -156,6 +159,16 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), var(--font-reading), sans-serif;
+  letter-spacing: -0.025em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
 /* 경로 칩과 미니맵은 가로 스크롤이 전제다. 스크롤바가 콘텐츠를 밀지 않게 한다 */
 .scroll-x {
   overflow-x: auto;
@@ -218,7 +231,11 @@ summary::-webkit-details-marker {
   .rtable td:first-child {
     margin: -0.875rem -1rem 0.625rem;
     padding: 0.5rem 1rem;
-    background-image: linear-gradient(to right, var(--accent-soft), transparent 90%);
+    background-image: linear-gradient(
+      to right,
+      var(--accent-soft),
+      transparent 90%
+    );
     border-bottom: 1px solid var(--line);
   }
 

@@ -10,6 +10,13 @@ export const metadata: Metadata = {
 }
 export default function EngineerPage() {
   const linked = index.questions.filter((q) => q.topics.length).length
+  const reviewed = index.questions.filter((q) => q.classification).length
+  const candidates = index.questions.filter(
+    (q) => !q.classification && q.topics.length,
+  ).length
+  const backgroundOnly = index.questions.filter(
+    (q) => !q.topics.length && q.backgroundTopics.length,
+  ).length
   return (
     <LibraryShell
       eyebrow="ENGINEERING · READ / CONNECT / WRITE"
@@ -44,10 +51,14 @@ export default function EngineerPage() {
             모범답안은 수록하지 않았습니다.
           </p>
           <p>
-            정규화한 기술명 별칭의 정확 매칭으로 {linked}개 기록이 선정한24개
-            학습 주제에 자동 연결됐고 {1860 - linked}개는 연결 대기입니다. 요구
-            유형은 원문의 동사 규칙으로 추정했습니다. 배경 언급·OCR 누락이 있어
-            연결 수는 동일 문제 재출제 횟수나 출제 확률이 아닙니다.
+            {reviewed}문항은 원문의 요구 항목과 문맥을 대조해 편집 분류했습니다.
+            {candidates}문항의 수업 연결은 기술명 별칭 매칭에 따른 자동
+            후보입니다. 핵심 이해 또는 자동 후보 연결은 {linked}문항, 보충
+            수업만 연결된 기록은 {backgroundOnly}문항이며 나머지{' '}
+            {index.questions.length - linked - backgroundOnly}문항은 수업 연결
+            대기입니다. 미검토 문항의 요구 유형은 동사 규칙으로 추정했습니다.
+            배경 언급·OCR 누락이 있어 연결 수는 동일 문제 재출제 횟수나 출제
+            확률이 아닙니다.
           </p>
           <p>
             주제의 연습·참고 답안·표·개념도는 자체 제작입니다. 채점 기준을 알 수
@@ -63,6 +74,44 @@ export default function EngineerPage() {
           </a>
         </div>
       </details>
+      <section
+        className="rounded-xl border border-line bg-raised p-6"
+        aria-labelledby="classification-guide"
+      >
+        <p className="text-xs tracking-wider text-accent">
+          READ THE QUESTION FIRST
+        </p>
+        <h2 id="classification-guide" className="mt-3 text-2xl font-semibold">
+          단어가 같아도, 묻는 것은 다릅니다.
+        </h2>
+        <div className="mt-5 grid gap-5 sm:grid-cols-3">
+          {[
+            [
+              '01 · 핵심 주제',
+              '답안에서 직접 설명해야 할 대상을 찾습니다. 통계의 ‘분산’은 분산 시스템과 구분합니다.',
+            ],
+            [
+              '02 · 배경·맥락',
+              'AI·클라우드가 등장해도 스토리지 비교가 중심일 수 있습니다. 보충 수업은 핵심 출제 주제와 따로 표시합니다.',
+            ],
+            [
+              '03 · 답안 요구',
+              '정의·비교·절차·적용을 함께 요구하면 각각 답안 항목으로 만듭니다. 기술명만 있는 단문형의 해석도 표시합니다.',
+            ],
+          ].map(([title, body]) => (
+            <div key={title}>
+              <h3 className="font-semibold">{title}</h3>
+              <p className="mt-2 text-sm leading-7 text-muted">{body}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-5 border-t border-line pt-4 text-sm leading-7 text-muted">
+          검토 범위: 140회 {reviewed}문항 원문 대조 · 나머지{' '}
+          {index.questions.length - reviewed}문항 자동 후보. 편집 분류는 공식
+          출제 분류·채점 기준·전문가 감수가 아닙니다. 아래 ‘분류 상태’에서
+          구분해 볼 수 있습니다.
+        </p>
+      </section>
       <section>
         <h2 className="text-2xl font-semibold">핵심 주제의 답안 뼈대 만들기</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -78,8 +127,8 @@ export default function EngineerPage() {
                 {g.definition}
               </p>
               <p className="mt-4 text-xs text-faint">
-                자동 연결 {g.questionCount}문항 · {g.roundCount}회차 · 원문 대조
-                필요
+                핵심 이해 {g.reviewedCount} · 자동 후보 {g.candidateCount} ·
+                보충 {g.backgroundCount}문항
               </p>
             </Link>
           ))}
