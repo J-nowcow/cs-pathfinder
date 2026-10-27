@@ -67,7 +67,7 @@ export function PmpPractice({
       }
       setMessage(
         (e instanceof Error ? e.message : '저장소에 접근하지 못했어요.') +
-          ' 저장되지 않았어요. 입력한 글과 판단 결과는 현재 화면에만 남습니다.',
+          ' 저장되지 않았어요. 입력한 글과 판단 결과는 현재 화면에만 남아요.',
       )
       return false
     }
