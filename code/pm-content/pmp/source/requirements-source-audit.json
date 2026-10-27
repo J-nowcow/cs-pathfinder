@@ -1,0 +1,82 @@
+{
+  "checked_at": "2026-10-27T02:29:50.359803+00:00",
+  "sources": [
+    {
+      "id": "nasa-requirements",
+      "title": "NASA SE Handbook · 6.2 Requirements Management",
+      "url": "https://www.nasa.gov/reference/6-2-requirements-management/",
+      "edition": "NASA/SP-2016-6105 Rev 2",
+      "publication_metadata_url": "https://ntrs.nasa.gov/citations/20170001761",
+      "published": "2017-02-17 (NTRS 기록)",
+      "page_updated": "2023-07-26",
+      "checked": "2026-10-27",
+      "kind": "NASA 시스템 공학의 요구 관리 지침",
+      "note": "요구 출처·양방향 추적·변경 영향·승인된 기준선과 검증 결과 연결을 참고. Rev2의 NTRS 발행 기록은2017-02-17, 웹 절 갱신은2023-07-26로 구분.2026-10-27 원문 확인. NASA의 단계·승인 조직을 모든 소프트웨어 프로젝트의 의무 절차로 적용하지 않음."
+    },
+    {
+      "id": "nasa-verification-validation",
+      "title": "NASA SE Handbook · 2.4 Verification and Validation",
+      "url": "https://www.nasa.gov/reference/2-0-fundamentals-of-systems-engineering/",
+      "edition": "NASA SE Handbook §2.4",
+      "page_updated": "2025-01-09",
+      "checked": "2026-10-27",
+      "kind": "시스템 공학의 목적 구분",
+      "note": "제품이 명세를 충족하는지와 의도한 환경에서 목적에 맞는지를 구분하는 설명 참고. 웹 페이지 갱신2025-01-09,2026-10-27 §2.4 원문 확인. NASA의 product validation을 PMP의 공식 범위 수용이나 계약 승인과 같은 뜻으로 사용하지 않음."
+    },
+    {
+      "id": "govuk-stories",
+      "title": "GOV.UK Service Manual · Writing user stories",
+      "url": "https://www.gov.uk/service-manual/agile-delivery/writing-user-stories",
+      "published": "2016-02-16 (페이지 표시)",
+      "history_first_guidance": "2016-01-05 (업데이트 이력)",
+      "updated": "2016-05-23",
+      "checked": "2026-10-27",
+      "kind": "영국 정부 디지털 서비스의 실무 지침",
+      "note": "사용자·필요·목적과 항목별 수용 기준·증거 연결을 참고. 페이지 발행2016-02-16·갱신2016-05-23, 이력의 최초 지침2016-01-05는 별도로 기록.2026-10-27 원문 확인. 양식이나 예제를 복제하지 않은 창작 사례이며 특정 국가의 서비스 지침을 PMP 공식 규칙으로 제시하지 않음."
+    }
+  ],
+  "claim_checks": [
+    {
+      "source_id": "nasa-requirements",
+      "read_scope": "§6.2 definitions, traceability, change-impact and baseline controls; NTRS publication metadata",
+      "supported": "Relationships from source/expectation to requirements, design and verification; bidirectional traceability and approved change control",
+      "limits": "NASA-specific stages and approval structure are not imposed as a universal PMP/software procedure."
+    },
+    {
+      "source_id": "nasa-verification-validation",
+      "read_scope": "§2.4 definitions, intended environment, configuration baseline and early iterative validation",
+      "supported": "Specification compliance and intended-purpose suitability have different objectives",
+      "limits": "Product validation is not treated as a synonym for formal project scope acceptance."
+    },
+    {
+      "source_id": "govuk-stories",
+      "read_scope": "User/need/goal, acceptance criteria/evidence links and displayed page history",
+      "supported": "Acceptance criteria and evidence should connect to the user need",
+      "limits": "British government service guidance is not an official universal PMP rule; no copied original examples."
+    },
+    {
+      "source_id": "scrum",
+      "url": "https://scrumguides.org/scrum-guide.html",
+      "edition": "November2020",
+      "checked": "2026-10-27",
+      "read_scope": "Increment, Definition of Done, Sprint Review",
+      "supported": "DoD required for Increment; Review is not a release gate",
+      "limits": "Does not define every organization-specific acceptance/contract/operational release process."
+    }
+  ],
+  "independent_calculation": {
+    "requirements": 4,
+    "checks": 10,
+    "passedChecks": 7,
+    "notRunChecks": 3,
+    "executedAutomated": 6,
+    "passedAutomated": 6,
+    "requirementsWithAllSpecifiedChecksPassed": 1,
+    "ratios": [
+      100,
+      100,
+      25
+    ]
+  },
+  "authored_material": "4 fictional requirements,10 checks, B-07/v1.2 version labels, three denominator-specific ratios, CR-01 and4 ungraded reflections independently authored; not actual company/Jira data."
+}

@@ -1,0 +1,29 @@
+{
+  "version": "2.18",
+  "singleDOM": true,
+  "fontsAndLicensesOnce": true,
+  "interactiveAndReaderSameLesson": true,
+  "nativeReaderWithoutJS": true,
+  "startupFailureFallback": true,
+  "backForwardReload": true,
+  "readerDoesNotMarkAllLessonsSeen": true,
+  "quizNotePersistence": true,
+  "backupSchema1RoundTripAndOldImport": true,
+  "search": true,
+  "floatLab": true,
+  "settingsFontsTheme24": true,
+  "widths": [
+    1280
+  ],
+  "uniqueDOMIds": true,
+  "readerAnchorsValid": true,
+  "noJS": {
+    "lessons": 74,
+    "mcq": 83,
+    "optionalCases": 13,
+    "printContent": true
+  },
+  "errors": [],
+  "externalRequests": [],
+  "physicalAndroidTested": false
+}

@@ -23,3 +23,9 @@ code/docs/brand.md
 
 # 대조용으로 잘라 둔 코퍼스 묶음. scripts/slice-corpus.ts가 다시 만든다
 code/docs/audit/slices/
+
+# PMP source is reviewed; author-only build intermediates stay local.
+code/pm-content/pmp/dist/
+code/pm-content/pmp/downloads/
+code/pm-content/pmp/source/__pycache__/
+code/pm-content/pmp/source/plot-env/

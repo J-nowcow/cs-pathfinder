@@ -1,0 +1,66 @@
+{
+  "checked_at": "2026-10-27T02:52:13.999946+00:00",
+  "sources": [
+    {
+      "id": "gao-schedule-risk",
+      "title": "U.S. GAO · Schedule Assessment Guide",
+      "url": "https://www.gao.gov/products/gao-16-89g",
+      "paper_url": "https://www.gao.gov/assets/d1689G.pdf",
+      "edition": "GAO-16-89G / December 2015",
+      "published": "2015-12-22",
+      "checked": "2026-10-27",
+      "kind": "일정 평가 지침 · Best Practice8",
+      "note": "인쇄 쪽 115–117의 상관관계·위험 동인·일정 여유 설명을 확인. 공통 원인이 여러 활동에 미치는 영향을 모델링하는 관점 참고.2015-12-22 발행,2026-10-27 원문 확인. 원문 건설 사례·그림을 복제하지 않은 별도 이산 확률 예제이며 특정 P80을 모든 프로젝트의 의무 기준으로 삼지 않음."
+    },
+    {
+      "id": "nasa-risk-triggers",
+      "title": "NASA SE Handbook · 6.4 Technical Risk Management",
+      "url": "https://www.nasa.gov/reference/6-4-technical-risk-management/",
+      "edition": "SE Handbook §6.4.1.2.4–7",
+      "page_updated": "2023-07-26",
+      "checked": "2026-10-27",
+      "kind": "NASA 기술 위험관리의 대응·감시 지침",
+      "note": "대응 실행 한도·관련자·감시 주기·효과 및 잔여 위험·기록을 참고. 웹 절 갱신 2023-07-26,2026-10-27 원문 확인. 기존 SE Handbook 절이며 최신 NASA 전체 위험관리 지침이라고 소개하지 않음. 아래 실행 시점·기간·예산 한도는 창작 가정."
+    }
+  ],
+  "claim_checks": [
+    {
+      "source_id": "gao-schedule-risk",
+      "read_scope": "Official product page publication date; official accessible PDF d1689G.pdf printedpp115–117, PDFpages128–130, correlation and risk-driver sections",
+      "supported": "Shared causes can affect multiple activities; dependence changes schedule distribution and percentile interpretation",
+      "limits": "No reproduction of GAO house-construction data or figures; no claim that increased dependence worsens every deadline probability or mandates P80."
+    },
+    {
+      "source_id": "nasa-risk-triggers",
+      "read_scope": "SEHandbook §6.4.1.2.4–7, page updated2023-07-26",
+      "supported": "Select response triggers and informed/executing stakeholders; monitor near thresholds; implement and track residual impact and effectiveness",
+      "limits": "Existing SEHandbook excerpt, not advertised as the newest comprehensive NASA RM manual; authored timing/budget scenario is not NASA policy."
+    }
+  ],
+  "math_report": "risk-math-report.json",
+  "independent_exact_fraction_check": [
+    {
+      "id": "independent",
+      "probabilities": {
+        "10": "49/100",
+        "13": "21/50",
+        "16": "9/100"
+      },
+      "mean": "59/5",
+      "P13": "91/100",
+      "P80": 13
+    },
+    {
+      "id": "common",
+      "probabilities": {
+        "10": "7/10",
+        "13": "0",
+        "16": "3/10"
+      },
+      "mean": "59/5",
+      "P13": "7/10",
+      "P80": 16
+    }
+  ],
+  "authored_material": "Two joint distributions and serial10+3XA+3XB schedule, exact enumeration not MonteCarlo; response timing/budget example is distinct, all fictional. No delay double counting."
+}

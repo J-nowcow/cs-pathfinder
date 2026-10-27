@@ -146,6 +146,12 @@ export default async function HomePage() {
           >
             레쥬메에서 질문 만들기 →
           </Link>
+          <Link
+            href="/learn"
+            className="-my-2 inline-flex min-h-11 items-center rounded-sm font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            CS·PM 학습 분야 →
+          </Link>
         </nav>
       </header>
 

@@ -1,0 +1,29 @@
+{
+  "math": {
+    "cases": 1000,
+    "invalid": 8,
+    "backup": "preserved"
+  },
+  "layouts": [
+    {
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "width": 1280,
+      "scroll": 1280
+    }
+  ],
+  "noJS": {
+    "lessons": 74,
+    "questions": 83,
+    "cards": 5,
+    "experiments": 4
+  },
+  "externalRequests": [],
+  "errors": []
+}

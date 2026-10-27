@@ -1,0 +1,22 @@
+{
+  "method": "Independent scipy.stats.norm.interval + NumPy SE; compared against statistics.NormalDist generator",
+  "tolerance": 1e-10,
+  "passed": true,
+  "values": [
+    {
+      "n": 100,
+      "lowPercentagePoints": -8.40105219255004,
+      "highPercentagePoints": 18.40105219255005
+    },
+    {
+      "n": 1000,
+      "lowPercentagePoints": 0.7622152028748559,
+      "highPercentagePoints": 9.237784797125153
+    },
+    {
+      "n": 10000,
+      "lowPercentagePoints": 3.659894780745,
+      "highPercentagePoints": 6.340105219255008
+    }
+  ]
+}

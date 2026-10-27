@@ -50,7 +50,8 @@
     "fix:tables": "tsx scripts/fix-table-batch.ts",
     "measure:candidates": "tsx scripts/measure-candidates.ts",
     "embed": "tsx scripts/embed.ts",
-    "mark:duplicates": "tsx scripts/mark-duplicates.ts"
+    "mark:duplicates": "tsx scripts/mark-duplicates.ts",
+    "build:pmp": "python3 scripts/build-pmp-content.py"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",

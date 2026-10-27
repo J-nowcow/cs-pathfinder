@@ -1,0 +1,21 @@
+{
+  "version": "2.18",
+  "fixed300HourAxisAndFourSegments": true,
+  "axisLabelsInsideTrack": true,
+  "axisAndBarSameWidthAndOrigin": true,
+  "tableCellPadding15": true,
+  "separateBaseAndRework7Rows": true,
+  "threeTargetsAndFiveProfileRows": true,
+  "cashCapacityAndCausalLimitsVisible": true,
+  "fourUngradedReflections": true,
+  "originalQuizRetryNoteReload": true,
+  "supplementSearchCaseEntry": true,
+  "linkedN70KeyboardBack": true,
+  "readerExactCaseAndNativeNoJSReveal": true,
+  "printExpandedBody": true,
+  "desktopWidth": 1280,
+  "lightSuite24": true,
+  "mobileSpecificChecks": false,
+  "errors": [],
+  "externalRequests": []
+}

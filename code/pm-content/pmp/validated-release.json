@@ -1,0 +1,67 @@
+{
+  "version": "2.18",
+  "asof": "2026-10-27",
+  "stats": {
+    "lessons": 74,
+    "deep": 38,
+    "questions": 83,
+    "terms": 321,
+    "chapters": 14,
+    "comparisonRows": 187
+  },
+  "primary_output": "PMP_통합_자습서.html",
+  "active_output_names": [
+    "PMP_통합_자습서.html",
+    "PMP_개념서_확장판_시작하기.txt",
+    "PMP_개념서_확장판_오프라인.zip",
+    "PMP_개념서_확장판_학습지도.html"
+  ],
+  "original_outputs": {
+    "PMP_통합_자습서.html": {
+      "bytes": 3718629,
+      "sha256": "5aaf710bb18a4f49100d11a34e8983c4948ec24b2fa9981685bc5cc380f1c498"
+    },
+    "PMP_개념서_확장판_시작하기.txt": {
+      "bytes": 7802,
+      "sha256": "1ae72f61e88d36c5e9b15d5d275ddbb8396cfacb328ae2c8d7ae9541672c26cc"
+    },
+    "PMP_개념서_확장판_오프라인.zip": {
+      "bytes": 3985141,
+      "sha256": "279f66981abbc2a8258769561ee19e287502bc71763d9c1470b3f2c8284e47bf"
+    },
+    "PMP_개념서_확장판_학습지도.html": {
+      "bytes": 3024095,
+      "sha256": "0882198e44ce74c277f09608d93127006f30aa5141cd72c72e8792a38197d8dc"
+    }
+  },
+  "source_validation": {
+    "reports": [
+      "benefit-qa-report.json",
+      "unified218-qa-report.json",
+      "library218-qa-report.json"
+    ],
+    "independent_math": "benefit-math-report.json",
+    "other73LessonsAndAllPriorDatasetsSourcesTermsOrderPreserved": true,
+    "allOriginalOptionsCorrectIndicesIDsAndSchema1Preserved": true,
+    "independentRationalBaseReworkTotalsRatesCashAndAlternative": true,
+    "fixed300HourAxisFourBarSegmentsAndAxisOriginWidth": true,
+    "7MeasurementRows3TargetRows5ProfileRows": true,
+    "userVsRequestDenominatorsAndTimeVsCashSeparated": true,
+    "causalAndPersistenceLimitsVisible": true,
+    "4UngradedReflections": true,
+    "13CasesDerivedInReadingOrderAndAllDirectRoutes": true,
+    "caseModeSwitchHistoryAndNoJSNativeReveal": true,
+    "originalQuizRetryNotesAndBackupOldImport": true,
+    "desktopWidth": 1280,
+    "lightSuite24": true,
+    "uniqueDOMIdsAndValidReaderAnchors": true,
+    "noJS74Lessons83MCQ13OptionalCases": true,
+    "printContent": true,
+    "noExternalRequests": true,
+    "startupFailureFallback": true,
+    "zipIntegrity": true,
+    "retiredPhoneSHA256UnchangedNotBundled": true,
+    "mobileSpecificChecks": false
+  },
+  "source_note": "Reviewed offline v2.18 snapshot; repository generators change paths only. No standalone mobile generation. Existing archived/legacy mobile assets are not active outputs."
+}

@@ -1,0 +1,60 @@
+{
+  "version": "2.5",
+  "independentMath": [
+    {
+      "id": "A",
+      "accuracy": 99,
+      "recall": 0,
+      "precision": null,
+      "reviewMinutes": 0,
+      "missGate": false,
+      "capacityGate": true
+    },
+    {
+      "id": "B",
+      "accuracy": 95.6,
+      "recall": 80,
+      "precision": 16,
+      "reviewMinutes": 200,
+      "missGate": true,
+      "capacityGate": false
+    },
+    {
+      "id": "C",
+      "accuracy": 98.4,
+      "recall": 70,
+      "precision": 35,
+      "reviewMinutes": 80,
+      "missGate": false,
+      "capacityGate": true
+    }
+  ],
+  "layouts": [
+    320,
+    390,
+    1280
+  ],
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "matrixCells": [
+    "TP8",
+    "FN2",
+    "FP42",
+    "TN948"
+  ],
+  "originalQuizPassed": true,
+  "noteReload": true,
+  "keyboardDisclosure": true,
+  "search": true,
+  "crossLink": true,
+  "noJS": {
+    "lessons": 74,
+    "mcq": 83,
+    "models": 3,
+    "reflection": 4
+  },
+  "errors": [],
+  "externalRequests": []
+}
