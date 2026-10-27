@@ -8,21 +8,28 @@ import {
   type LibraryEdit,
 } from '@/lib/library/local-edit'
 import { libraryButton } from './LibraryShell'
-export function StudyPractice({
-  id,
-  title,
-  href,
-  track,
-  checklist = [],
-  visit = false,
-}: {
+import { useLibraryScope } from './LibraryAccount'
+type PracticeProps = {
   id: string
   title: string
   href: string
   track: 'engineer' | 'jira'
   checklist?: string[]
   visit?: boolean
-}) {
+}
+export function StudyPractice(props: PracticeProps) {
+  const scope = useLibraryScope()
+  return <PracticeEditor key={scope.id + ':' + scope.generation} {...props} />
+}
+function PracticeEditor({
+  id,
+  title,
+  href,
+  track,
+  checklist = [],
+  visit = false,
+}: PracticeProps) {
+  const scope = useLibraryScope()
   const [entry, setEntry] = useState<StudyEntry | null>(null),
     [draft, setDraft] = useState(''),
     [unsaved, setUnsaved] = useState(false),
@@ -30,7 +37,10 @@ export function StudyPractice({
     [ready, setReady] = useState(false),
     [message, setMessage] = useState('')
   const baseline = useRef('')
-  const pending = useRef(new Map<string, { text: string; expected: string }>())
+  const localPending = useRef(
+    new Map<string, { text: string; expected: string }>(),
+  )
+  const pending = { current: scope.pending ?? localPending.current }
   const failureMessage = (error: unknown) =>
     error instanceof LibraryEditError && error.code === 'conflict'
       ? '다른 화면에서 기록이 바뀌었어요. 현재 입력과 저장된 기록은 덮어쓰지 않았어요. 답안을 복사해 둔 뒤 저장된 답안과 비교해 주세요.'
@@ -39,6 +49,7 @@ export function StudyPractice({
         ? '저장된 기록을 온전히 읽지 못했어요. 기존 기록은 바꾸지 않았어요. 현재 답안은 복사해 보관해 주세요.'
         : '저장하지 못했어요. 현재 답안은 화면에 남아 있어요. 기록 한도와 브라우저 저장 설정을 확인하고 답안을 복사해 보관해 주세요.'
   useEffect(() => {
+    if (!scope.ready) { setReady(false); return }
     const held = pending.current.get(id)
     setReady(false)
     setEntry(null)
@@ -47,13 +58,13 @@ export function StudyPractice({
     try {
       const state = visit
         ? editLibrary(
-            localStorage,
+            scope.storage ?? localStorage,
             id,
             { title, href, track },
             { kind: 'visit' },
             new Date().toISOString(),
           )
-        : readLibraryStrict(localStorage)
+        : readLibraryStrict(scope.storage ?? localStorage)
       const found = state.entries[id]
       setEntry(found ?? null)
       setDraft(held?.text ?? found?.draft ?? '')
@@ -67,7 +78,7 @@ export function StudyPractice({
       setMessage(failureMessage(error))
     }
     setReady(true)
-  }, [id, title, href, track, visit])
+  }, [id, title, href, track, visit, scope.storage, scope.ready])
   useEffect(() => {
     const warn = (event: BeforeUnloadEvent) => {
       if (!pending.current.size) return
@@ -80,7 +91,7 @@ export function StudyPractice({
   const persist = (action: LibraryEdit, input = draft) => {
     try {
       const next = editLibrary(
-        localStorage,
+        scope.storage ?? localStorage,
         id,
         { title, href, track },
         action,
@@ -112,7 +123,8 @@ export function StudyPractice({
       setMessage(failureMessage(error))
       try {
         setConflictDraft(
-          readLibraryStrict(localStorage).entries[id]?.draft ?? null,
+          readLibraryStrict(scope.storage ?? localStorage).entries[id]?.draft ??
+            null,
         )
       } catch {}
     }
@@ -146,7 +158,10 @@ export function StudyPractice({
         }}
       />
       <p className="study-meta text-faint">
-        {draft.length}/6,000자 · 브라우저 저장 · 계정 동기화 없음
+        {draft.length}/6,000자 ·{' '}
+        {scope.id === 'guest'
+          ? '브라우저 저장 · 계정 동기화 없음'
+          : '계정용 브라우저 보관 · 계정 전송은 복습·기록에서'}
       </p>
       {unsaved && (
         <p className="study-meta" role="alert">
