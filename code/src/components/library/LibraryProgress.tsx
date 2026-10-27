@@ -98,7 +98,7 @@ export function LibraryProgress({
       restoreLibraryStrict(localStorage, clean)
       window.dispatchEvent(new Event(LIBRARY_EVENT))
       setMessage(
-        '기록을 가져왔어요. 비어 있지 않은 답안은 보존했고, 답안이 같은 항목의 체크·복습 날짜는 더 최근 기록을 사용했어요.',
+        '기록을 가져왔어요. 비어 있지 않은 답안은 보존했고 답안이 같은 항목의 체크·복습 날짜는 더 최근 기록을 사용했어요.',
       )
     } catch (error) {
       setMessage(
