@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-28.library7",
+  "release": "2026-10-28.library8",
   "source": "pm-content/pmp/source/course.json",
   "sourceSha256": "29e95155b8761334cea1f756986d0313d96b0f6c2e46540919fc576e7504aae3",
   "routes": {
@@ -72,12 +72,40 @@
     "Existing browser keys and backup schema"
   ],
   "remaining": [
-    "Native calculator labs; current links explicitly open original HTML",
-    "Native PMP backup import/export UI; original HTML retains full backup tools",
+    "Other schedule and risk calculator labs remain in the original HTML; native float and EVM are available in their lessons",
     "Native full-course search and richer source metadata presentation",
     "PMP account synchronization and real OAuth/Postgres verification"
   ],
-  "validation": {
+  "nativeTools": {
+    "float": {
+      "route": "/learn/pmp/n44#float-lab",
+      "source": "course.json.floatLab",
+      "noJsWorkedDefault": true,
+      "inputsPersisted": false
+    },
+    "evm": {
+      "route": "/learn/pmp/n35#evm-lab",
+      "forecasts": [
+        "Current CPI continues",
+        "Remaining work at planned cost efficiency",
+        "New bottom-up ETC"
+      ],
+      "noJsWorkedDefault": true,
+      "inputsPersisted": false
+    },
+    "fullBackup": {
+      "route": "/learn/pmp#pmp-backup",
+      "key": "pmp-pathfinder-v1",
+      "version": 1,
+      "rawExportPreservesBytes": true,
+      "wholeFileValidation": true,
+      "explicitFieldChoices": true,
+      "bestEffortCrossTabComparison": true,
+      "legacyHtmlCompatible": true,
+      "notAccountSync": true
+    }
+  },
+  "initialNativeValidation": {
     "fullSuite": {
       "files": 203,
       "tests": 1804
@@ -87,5 +115,20 @@
     "browser": "All74 routes at22px,3cases,321terms, original notes/answers/review reload, exact resume, same-field conflict, denied storage, no-JS reading; no iframe or viewport overflow",
     "visual": "Catalogue, lesson, scoped completion chart, uncertainty plot, contract plot and dark mode inspected",
     "originalSnapshotsUnchanged": true
+  },
+  "validation": {
+    "fullSuite": {
+      "files": 219,
+      "tests": 1914
+    },
+    "build": "passed",
+    "typecheck": "passed",
+    "nativeExperimentBrowser": "1440px desktop,22px reading/controls, no-JS defaults, reset/error recovery, zero/budget/completion and3EAC assumptions, native float path ties/switch/shared allowance; synthetic data",
+    "mathChecks": {
+      "floatClosedFormNetworks": 1024,
+      "evmLegacyAndIndependentCases": 480
+    },
+    "originalSnapshotsUnchanged": true,
+    "accountRolloutEnabled": false
   }
 }
