@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './pmp-content.css';
 @import './pmp-backup.css';
+@import './pmp-float.css';
 
 /*
  * 이 서비스의 동사는 "파고들기"다. 질문 하나에서 아래로 계속 판다.
