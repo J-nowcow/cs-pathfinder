@@ -1,12 +1,13 @@
 {
-  "release": "2026-10-28.library9",
+  "release": "2026-10-28.library10",
   "source": "pm-content/pmp/source/course.json",
   "sourceSha256": "29e95155b8761334cea1f756986d0313d96b0f6c2e46540919fc576e7504aae3",
   "routes": {
     "catalogue": "/learn/pmp",
     "lessons": "/learn/pmp/[lesson]",
     "cases": "/learn/pmp/case/[case]",
-    "glossary": "/learn/pmp/terms"
+    "glossary": "/learn/pmp/terms",
+    "search": "/learn/pmp/search"
   },
   "counts": {
     "chapters": 14,
@@ -73,7 +74,7 @@
   ],
   "remaining": [
     "Four-activity basic CPM experiment remains in original HTML; native float, EVM and expected-loss experiments are available in their lessons",
-    "Native full-course search and richer source metadata presentation",
+    "Richer source metadata presentation",
     "PMP account synchronization and real OAuth/Postgres verification"
   ],
   "nativeTools": {
@@ -111,6 +112,23 @@
       "noJsWorkedDefault": true,
       "inputsPersisted": false,
       "automaticRecommendation": false
+    },
+    "search": {
+      "route": "/learn/pmp/search?q=",
+      "scope": "Public lesson title/heading/lead/body/steps/table/worked/trap/supplement and rendered term aliases/definitions",
+      "excluded": [
+        "Quiz choices and option explanations",
+        "Private records",
+        "Separate cases",
+        "Interactive lab copy",
+        "Source-only supplementSearch metadata"
+      ],
+      "matching": "Literal AND tokens; case/NFC/whitespace normalized; title tiers then reading order",
+      "queryMaxCodeUnits": 120,
+      "ambiguousQueries": "Rejected",
+      "noJsGet": true,
+      "learningRecordsWritten": false,
+      "queryPrivacy": "URL/history and ordinary hosting request logs; not private memo search"
     }
   },
   "initialNativeValidation": {
@@ -126,8 +144,8 @@
   },
   "validation": {
     "fullSuite": {
-      "files": 221,
-      "tests": 1922
+      "files": 223,
+      "tests": 1930
     },
     "build": "passed",
     "typecheck": "passed",
@@ -138,6 +156,7 @@
       "riskBigIntDistributions": 1120
     },
     "originalSnapshotsUnchanged": true,
-    "accountRolloutEnabled": false
+    "accountRolloutEnabled": false,
+    "nativeSearch": "All74 titles, body-only/rich terms, literal AND, NFC/case, rank/order/unique IDs, query limits, plain text escaping; desktop GET/history/no-JS/22px/record preservation"
   }
 }

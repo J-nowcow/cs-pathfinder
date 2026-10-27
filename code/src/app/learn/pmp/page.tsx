@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { PmpBackup } from '@/components/pmp/PmpBackup'
+import { PmpSearchForm } from '@/components/pmp/PmpSearchForm'
 import { StudyDesk } from '@/components/library/StudyDesk'
 import { pmpCourse as c, lessonById, pmpLessonHref } from '@/lib/pmp/course'
 import release from '../../../../data/pmp-release.json'
@@ -26,6 +27,7 @@ export default function PmpHome() {
         <Link href="/learn/pmp/n35#evm-lab">성과가치 실습 →</Link>
         <Link href="/learn/pmp/n27#risk-lab">기대손실 실습 →</Link>
       </div>
+      <PmpSearchForm />
       <div className="pmp-chapter-list">
         {c.tracks.map((t, i) => (
           <section key={t.id} id={t.id}>
