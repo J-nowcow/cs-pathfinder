@@ -106,7 +106,7 @@
     },
     "risk": {
       "route": "/learn/pmp/n27#risk-lab",
-      "model": "Two exclusive incident/no-incident events; positive costs and losses",
+      "model": "Two exclusive incident/no-incident events; nonnegative costs and losses",
       "threshold": "Strictly greater; equality is within",
       "noJsWorkedDefault": true,
       "inputsPersisted": false,
