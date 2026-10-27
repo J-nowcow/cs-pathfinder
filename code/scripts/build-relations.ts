@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { loadEnvLocal } from '../src/lib/load-env'
 
 // import보다 먼저 돌아야 한다. 키를 읽는 모듈이 아래에 있다
@@ -91,7 +92,7 @@ async function attachEmbeddings(): Promise<void> {
   }
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
   try {
     const r = await pool.query<{ q: string; embedding: number[] | null }>(
       `select normalized_question as q, embedding

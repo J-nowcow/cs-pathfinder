@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { postgresPoolConfig } from './postgres-config'
 
 /** 트랜잭션 안에서 쓸 수 있는 최소 인터페이스. 중첩 트랜잭션은 열지 않는다 */
 export interface Tx {
@@ -122,13 +123,7 @@ async function createPglite(): Promise<Db> {
  */
 async function createPostgres(connectionString: string): Promise<Db> {
   const { Pool } = await import('pg')
-  const pool = new Pool({
-    connectionString,
-    max: 5,
-    idleTimeoutMillis: 30_000,
-    // Neon은 TLS를 요구하는데 사내망 프록시가 인증서를 가로채면 검증이 깨진다.
-    ssl: { rejectUnauthorized: false },
-  })
+  const pool = new Pool(postgresPoolConfig(connectionString))
   /* 인증 어댑터처럼 `pg.Pool` 자체를 요구하는 쪽이 같은 것을 받아 가게 둔다 */
   holder.__csqtPool = pool
 

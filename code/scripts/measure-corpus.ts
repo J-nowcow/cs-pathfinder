@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { loadEnvLocal } from '../src/lib/load-env'
 import { parseBlocks } from '../src/lib/markdown/blocks'
 import { flowShape } from '../src/lib/markdown/flow-shape'
@@ -57,7 +58,7 @@ async function main() {
   }
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
 
   const r = await pool.query<Row>(
     `select id, number, normalized_question as question,

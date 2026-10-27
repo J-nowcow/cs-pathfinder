@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { loadEnvLocal } from '../src/lib/load-env'
 import { parseBlocks } from '../src/lib/markdown/blocks'
 
@@ -61,7 +62,7 @@ async function main() {
     process.exit(1)
   }
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
   const r = await pool.query<Row>(
     `select number, normalized_question as question, coalesce(body,'') as body
        from qnode where body like '%:::stack%' order by number asc nulls last`,

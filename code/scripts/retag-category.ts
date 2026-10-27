@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { loadEnvLocal } from '../src/lib/load-env'
 
@@ -52,7 +53,7 @@ async function main() {
   const apply = process.argv.includes('--apply')
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
   const r = await pool.query<{ number: number; q: string }>(
     'select number, normalized_question as q from qnode where number = any($1)',
     [Object.keys(MOVES).map(Number)],

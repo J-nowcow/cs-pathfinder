@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { loadEnvLocal } from '../src/lib/load-env'
 import { readMigrations } from '../src/lib/db/client'
 
@@ -21,7 +22,7 @@ async function main() {
   }
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
 
   await pool.query(`
     create table if not exists schema_migrations (
