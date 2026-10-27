@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-27.library4",
+  "release": "2026-10-28.library5",
   "scope": [
     "Jira study+5missions",
     "24topic guides and1860question positions",
@@ -9,7 +9,9 @@
     "Readable library prose, size preferences, narrower lessons and grouped topics",
     "Editorial cleanup of UI headings/instructions and18of24concept introductions",
     "Personal shelf: latest saved title and local draft before catalogue, review queue before statistics",
-    "Shared reading frame and secondary utilities across library/engineering/Jira mission pages"
+    "Shared reading frame and secondary utilities across library/engineering/Jira mission pages",
+    "Bright personal shelf with four authored SVG covers, own light/dark preference independent of CS theme",
+    "Narrative concurrency lesson: concrete conflict, lock-order comparison, recovery, explanatory self-check"
   ],
   "counts": {
     "guides": 24,
@@ -44,7 +46,10 @@
     "public/jira/offline.html": "259262d26e4979eab9ed5f49dd693b91d19c0350893d3ff8c763cc4edaccd6e7",
     "learning-content/engineer/classification-reviews.json": "2bb2882f8430e9c64b87461b2cd695da0ec1989ae03ba9ea6d3a7b3b11d2969e",
     "src/app/fonts/WantedSansVariable.woff2": "4259e7e9a172e634c2cb419d793b84148990316341e910443e5d10965b2c8f16",
-    "src/app/fonts/SUITE-Variable.woff2": "fc5e0648d5413b55b79ebbab0f50de561a026574cba3a9c8eb03d5bddd432263"
+    "src/app/fonts/SUITE-Variable.woff2": "fc5e0648d5413b55b79ebbab0f50de561a026574cba3a9c8eb03d5bddd432263",
+    "src/components/library/ConcurrencyStory.tsx": "7de684e9a7dbf5740398890a355d86078c833287c459364e00c0d1c5b9d54a48",
+    "src/components/library/BookArt.tsx": "6826ae0acf45e92fc378977cdb5b03bc1975f256eeeb09e372ac0fe4e7f5a2a0",
+    "src/components/library/DeskAppearance.tsx": "32e36701c62a18bd1858450e6fad6e37d1c1401e54a4a944a59ce4e09bb43107"
   },
   "browser": {
     "base": "http://127.0.0.1:3042",
@@ -112,12 +117,13 @@
     "Mobile-specific testing not added per user preference"
   ],
   "validation": {
-    "tests": "198 files / 1791 passed",
+    "tests": "Focused current change:10 files /27 passed. Previous full-suite baseline:198 files /1791 passed.",
     "build": "passed",
     "typecheck": "passed",
     "browserReading": "size18/22, reload,7domain disclosure, advanced filters, draft persistence, exact resume, no-JS reference reading, denied-storage controls and backup download passed",
-    "contrast": "Changed muted/faint text ratios6.16–9.92 on library surface/card colors; not a whole-site accessibility certification",
-    "personalShelf": "Empty/saved states, local-only draft excerpt, subject title + exact exam resume, complete backup import/export preserving PMP, all24reading routes at22px, Jira anchor, blocked storage and no-JS source catalogue/reading passed"
+    "contrast": "22 sampled text/background pairs in new reading UI:5.36–15.14:1. Computed independently in light/dark while CS root theme is dark; not a whole-site accessibility certification.",
+    "personalShelf": "Empty/saved states, local-only draft excerpt, subject title + exact exam resume, complete backup import/export preserving PMP, all24reading routes at22px, Jira anchor, blocked storage and no-JS source catalogue/reading passed",
+    "narrativeLesson": "Both lock-order snapshots, keyboard choice feedback, draft/checklist reload,22px, no-JS narrative/definitions/reference passed. Existing shelf QA including all24routes and backup round trip passed."
   },
   "reading": {
     "defaultSize": 18,
@@ -138,5 +144,12 @@
     "definitionsRewritten": 18,
     "meaningfulSourceAndUsageLimitsRetained": true,
     "frozenPMPAndOriginalJiraUnchanged": true
+  },
+  "presentationDesign": {
+    "prototypeTopic": "concurrency",
+    "otherTopics": "Existing23topic explanation layouts retained",
+    "references": "learning-content/reading-design.json",
+    "storage": "Own appearance key pathfinder.library.appearance.v1; existing CS/PMP/Jira and library record keys preserved",
+    "diagramScope": "Two fictional transactions, two exclusive single-instance resources, release on completion; snapshots compare order, not a general DB simulator"
   }
 }

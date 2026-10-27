@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import release from '../../../data/pmp-release.json'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { DeskAppearance } from './DeskAppearance'
 import { ReadingPreferences } from './ReadingPreferences'
 
 export function StudyDesk({
@@ -23,16 +23,28 @@ export function StudyDesk({
   return (
     <div
       className={'study-library study-desk' + (reading ? ' desk-reading' : '')}
+      data-appearance="light"
     >
       <header className="desk-header">
         <Link href="/learn" className="desk-brand">
+          <span className="desk-brand-mark" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+            >
+              <path d="M3 5.5c3-1 6-1 9 1 3-2 6-2 9-1v14c-3-1-6-1-9 1-3-2-6-2-9-1Z" />
+              <path d="M12 6.5v14M6 9l3 .5m-3 3 3 .5m6-4 3-.5m-3 4 3-.5" />
+            </svg>
+          </span>
           CS 길라잡이
         </Link>
         <div className="flex items-center gap-6">
           <Link href="/learn" className="text-sm text-muted">
             학습 분야
           </Link>
-          <ThemeToggle />
+          <DeskAppearance />
         </div>
       </header>
       <div className="desk-layout">

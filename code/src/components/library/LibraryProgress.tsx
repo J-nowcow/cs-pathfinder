@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { LearningAreas } from '../LearningAreas'
+import { OpenBookArt } from './BookArt'
 import { readLibraryProgress, type ProgressItem } from '@/lib/library/progress'
 import {
   loadLibrary,
@@ -136,6 +137,7 @@ export function LibraryProgress({
   const previous = view.recent.slice(1)
   const focus = latest ? (
     <section className="desk-focus" aria-label="이어서 공부할 내용">
+      <OpenBookArt />
       <p className="desk-kicker">마지막으로 공부한 내용</p>
       <p className="desk-focus-meta">
         {latest.track}

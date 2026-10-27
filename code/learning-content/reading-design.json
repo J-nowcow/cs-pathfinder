@@ -1,0 +1,50 @@
+{
+  "checked": "2026-10-28",
+  "intent": "Read a lesson naturally, like an illustrated presentation, without forced slides or scroll capture.",
+  "references": [
+    {
+      "url": "https://ciechanow.ski/mechanical-watch/",
+      "author": "Bartosz Ciechanowski",
+      "published": "2022-05-04",
+      "observed": "Progressive explanation with adjacent mechanism diagrams and consistent colour identity.",
+      "applied": "T1 blue and T2 orange recur in prose and diagrams; compare the causal difference of lock order."
+    },
+    {
+      "url": "https://blog.ncase.me/how-i-make-an-explorable-explanation/",
+      "author": "Nicky Case",
+      "published": "2017-09-20",
+      "observed": "Start with a concrete experience and build abstraction through an explanatory story.",
+      "applied": "Begin with two blocked transactions; change one condition; distinguish prevention and recovery."
+    },
+    {
+      "url": "https://ncase.me/nutshell/",
+      "author": "Nicky Case",
+      "observed": "Expandable explanations retain the surrounding reading context.",
+      "applied": "Native details for terms and compact definition/comparison reference; no third-party script used."
+    }
+  ],
+  "implementation": "Original React, CSS and SVG. No reference assets, source code or article text copied.",
+  "technicalEvidence": [
+    {
+      "url": "https://www.postgresql.org/docs/18/explicit-locking.html#LOCKING-DEADLOCKS",
+      "edition": "PostgreSQL18,13.3.4",
+      "checked": "2026-10-28",
+      "supports": [
+        "Deadlock from conflicting lock acquisition order",
+        "Consistent acquisition order in the illustrated case",
+        "Detect and abort one transaction; do not assume which",
+        "Retry an aborted transaction appropriately"
+      ],
+      "limit": "Two-resource narrative is authored for this site; it does not claim all deadlocks or fairness guarantees."
+    }
+  ],
+  "authoringRules": [
+    "One scene makes one causal point; use short explanatory headings.",
+    "Introduce a concrete case before definitions.",
+    "Put labels beside what they describe; preserve actor colours.",
+    "Let the learner vary a meaningful condition, without autoplay or fake progress.",
+    "Keep assumptions and exceptions near the example.",
+    "Connect the explanation to the existing answer practice and primary source.",
+    "Never convert every paragraph into a decorative card."
+  ]
+}
