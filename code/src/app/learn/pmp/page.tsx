@@ -59,7 +59,7 @@ export default function PmpHome() {
           {c.asof} 확인본 · {c.nodes.length}수업. PMI 공식 교재나 합격·공인
           교육시간을 보장하는 과정은 아닙니다. 본문·비교표·심화 사례·상황
           문제·메모·복습·전체 기록 백업은 서재 안에서 이용합니다. 계산 실습은
-          현재 이전 통합 HTML에서 제공하며, 다음 통합 작업에 포함됩니다.
+          현재 이전 통합 HTML에서 제공하며 다음 통합 작업에 포함됩니다.
         </p>
         <a href={release.links.study}>이전 통합 HTML 열기 →</a>
         <a href={release.links.offline} download>
