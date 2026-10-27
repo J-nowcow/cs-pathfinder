@@ -90,7 +90,7 @@ export function PmpEvmLab() {
   return (
     <section id="evm-lab" className="pmp-evm-lab" aria-labelledby="evm-title">
       <p className="study-meta">직접 비교하는 비용과 진척</p>
-      <h2 id="evm-title">실적은 같은데, 예상 총원가는 왜 다를까요?</h2>
+      <h2 id="evm-title">실적은 같은데 예상 총원가는 왜 다를까요?</h2>
       <p>
         같은 기준일과 가상 예산 단위를 사용합니다. EV는 완료한 일의 예산
         가치이며 매출이나 지출액이 아닙니다.
