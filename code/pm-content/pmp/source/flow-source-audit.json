@@ -1,0 +1,44 @@
+{
+  "version": "2.13",
+  "checked_at": "2026-10-27T03:46:25.376007+00:00",
+  "sources": [
+    {
+      "id": "kanban",
+      "title": "Kanban Guides · The Kanban Guide, May2025",
+      "url": "https://kanbanguides.org/the-kanban-guide/2025.5/",
+      "note": "2025.5판의 Definition of Workflow·Active Management·Flow Metrics를2026-10-27 원문 확인. 시작·종료 경계, WIP·처리량·작업 나이·사이클 타임과 막힌 작업 관리의 참고. 지침의 고유 정의를 모든 조직의 용어·PMP 공식 목차와 동일시하지 않음. 아래 작업 기록·수치·그림·판단 연습은 독립 창작.",
+      "edition": "2025.5",
+      "page_updated": "2025-05-01",
+      "checked": "2026-10-27",
+      "kind": "특정 방법론의 최소 지침"
+    },
+    {
+      "id": "little-original",
+      "title": "Little · A Proof for the Queuing Formula: L = λW",
+      "url": "https://pubsonline.informs.org/doi/abs/10.1287/opre.9.3.383",
+      "published": "1961-06-01",
+      "checked": "2026-10-27",
+      "kind": "원 연구 · 출판사 초록과 서지 확인",
+      "note": "Little, Operations Research9(3),383–387,1961. 출판사 초록의 평균 관계와 유한 평균·정상성 등 제시 조건을 확인. 논문 본문 증명 전체를 읽었다는 뜻은 아님. 아래 유한 작업 기록의 면적 계산은 자체 산술 검증이며 장기 평균 정리의 증명·실제 예측 모형을 대신하지 않음."
+    }
+  ],
+  "passages": [
+    {
+      "id": "kanban",
+      "sections": [
+        "Definition of Workflow",
+        "Actively Managing Items in a Workflow",
+        "Flow Metrics"
+      ],
+      "read": "official2025.5 web text, updated2025-05-01"
+    },
+    {
+      "id": "little-original",
+      "read": "publisher abstract and bibliographic page only; no full-proof reading claimed",
+      "published": "1961-06-01"
+    }
+  ],
+  "authored": "four-item finite log, same-axis timeline, area calculations, finite-window comparisons and reflections independently constructed; full-window arithmetic identity is explicitly separated from long-run theory and real forecasts",
+  "math": "flow-math-report.json",
+  "visual_failure_and_fix": "Global mobile concept-table card rules compressed caption and inserted irrelevant labels; flow-ledger now uses separate native table semantics/styles and is visually checked at320/390/1280."
+}

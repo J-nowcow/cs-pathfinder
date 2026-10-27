@@ -1,5 +1,5 @@
 {
-  "version": "2.5",
+  "version": "2.18",
   "asof": "2026-10-27",
   "stats": {
     "lessons": 74,
@@ -10,8 +10,8 @@
     "comparisonRows": 187
   },
   "links": {
-    "study": "/pmp/index.html",
-    "reader": "/pmp/PMP_%EA%B0%9C%EB%85%90%EC%84%9C_%ED%99%95%EC%9E%A5%ED%8C%90_%ED%8F%B0%EC%9A%A9.html",
+    "study": "/pmp/PMP_%ED%86%B5%ED%95%A9_%EC%9E%90%EC%8A%B5%EC%84%9C.html",
+    "reader": "/pmp/PMP_%ED%86%B5%ED%95%A9_%EC%9E%90%EC%8A%B5%EC%84%9C.html#reader-top",
     "offline": "/pmp/PMP_%EA%B0%9C%EB%85%90%EC%84%9C_%ED%99%95%EC%9E%A5%ED%8C%90_%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8.zip"
   }
 }

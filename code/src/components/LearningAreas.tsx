@@ -24,8 +24,8 @@ export function LearningAreas() {
         <p className="mt-3 text-[15px] leading-7 text-muted">PMP의 기본 개념에서 제품 발견·실험·사업 가치·AI 검증까지, 사례와 계산으로 판단을 연습합니다.</p>
         <p className="mt-4 text-[13px] leading-6 text-faint">{release.stats.chapters}장 · {release.stats.lessons}수업 · {release.stats.questions}개 창작 판단 문제 · {release.stats.terms}개 용어</p>
         <div className="mt-5 flex flex-wrap gap-3">
-          <a className={button} href={release.links.study}>학습지도·실험 열기 →</a>
-          <a className={button} href={release.links.reader}>폰용 읽기 열기 →</a>
+          <a className={button} href={release.links.study}>PMP 통합 자습서 열기 →</a>
+          <a className={button} href={release.links.reader}>전체 읽기 열기 →</a>
           <a className={button} href={release.links.offline} download>오프라인 ZIP 받기 ↓</a>
         </div>
         <p className="mt-5 text-[12px] leading-6 text-faint">검토한 자료 v{release.version} · {release.asof}. 독립 자습서이며 공식 교재·기출·공인 교육시간 과정이 아닙니다.</p>

@@ -1,0 +1,25 @@
+{
+  "version": "2.16",
+  "checked_at": "2026-10-27T04:47:21.104222+00:00",
+  "sources": [
+    {
+      "id": "nz-tco",
+      "title": "NZ Government Procurement · Total Cost of Ownership",
+      "url": "https://www.procurement.govt.nz/assets/procurement-property/documents/guide-total-cost-ownership.pdf",
+      "published": "2013-10",
+      "checked": "2026-10-27",
+      "edition": "표지·판권의 First Published October2013",
+      "kind": "정부 조달의 역사적 실무 안내",
+      "note": "MBIE, October2013. 원문 인쇄1~4쪽의 생애 비용·기간·반복/일회 비용·전환/처분 관점을2026-10-27 확인. 검색 결과의 최근 수집·게시 추정일을 발행일로 쓰지 않음. 원문의 냉장고·계약관리시스템 수치와 도표를 복제하지 않은 별도 창작 예제. 뉴질랜드 지침의 규정·회계 처리나 평가 방식을 한국 계약·모든 조직의 의무로 적용하지 않음."
+    }
+  ],
+  "read_scope": "Official PDF cover/publication page and printedpp1–4 extracted text: total life cost, lifespan, recurring/one-off costs and exit/disposal. No whole19-page close-reading claim.",
+  "source_date": "First Published October2013 on cover/copyright; search-engine recent publication/crawl estimate ignored.",
+  "research_limits": [
+    "NZ evaluation-criteria page returned429 and was not retried or cited.",
+    "Subsequent deeper PDF text requests timed out; no unsupported detail from unread sections incorporated."
+  ],
+  "authored": "X/Y names,3-year figures, fixed-axis chart, sensitivity equation/range, three-state hypothetical mandatory-gate policy and reflection prompts independently constructed. No copied source fridge/software numbers or figures.",
+  "independent_math": "tco-math-report.json",
+  "scope_limits": "No market prices, probability distribution, discount/tax/residual-value model, actual exclusion rule or vendor choice established."
+}

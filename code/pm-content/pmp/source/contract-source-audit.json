@@ -1,0 +1,60 @@
+{
+  "version": "2.15",
+  "checked_at": "2026-10-27T04:27:18.230545+00:00",
+  "sources": [
+    {
+      "id": "contracts",
+      "title": "PMI · Zuberi — Contract/Procurement Management",
+      "url": "https://www.pmi.org/learning/library/2019/04/07/15/46/contract-procurement-management-9101",
+      "note": "Zuberi, August1987. 조달 환경·위험·계약 유형·선정·관리의 개요를2026-10-27 원문 확인. URL의2019년 경로를 발행일로 보지 않음. 현행 법규·오늘의 계약 전문이나 세부 한도 산식의 유일한 근거로 쓰지 않음.",
+      "published": "1987-08",
+      "checked": "2026-10-27",
+      "kind": "역사적 조달 개요 · PM Network1(3),41–44"
+    },
+    {
+      "id": "far-cpif",
+      "title": "Acquisition.gov · FAR16.405-1 Cost-plus-incentive-fee contracts",
+      "url": "https://www.acquisition.gov/far/16.405-1",
+      "edition": "표시 FAC2026-01",
+      "effective": "2026-03-13",
+      "checked": "2026-10-27",
+      "kind": "미국 연방조달 규정의 특정 계약 구조",
+      "note": "2026-10-27 공식 웹 조문(a)를 확인. 페이지 표시 FAC2026-01·효력일2026-03-13은 해당 페이지의 판본 표시이며 이 계약 유형의 최초 도입일이 아님. 목표 원가·목표 보수·최소/최대 보수와 정산 원가에 따른 조정 구조를 참고. 한국·민간 계약에 이 조문을 자동 적용하지 않음."
+    },
+    {
+      "id": "far-fpif",
+      "title": "Acquisition.gov · FAR16.403-1 Fixed-price incentive (firm target) contracts",
+      "url": "https://www.acquisition.gov/far/16.403-1",
+      "edition": "표시 FAC2026-01",
+      "effective": "2026-03-13",
+      "checked": "2026-10-27",
+      "kind": "미국 연방조달 규정의 특정 계약 구조",
+      "note": "2026-10-27 공식 웹 조문(a)를 확인. 목표 원가·목표 이익·가격 상한과 이익 조정 구조, 다른 조항에 따른 상한 조정 예외를 참고. 아래 가상식은 그 예외를 제외하며 실제 지급청구권·자금 한도·계약 해석을 판정하지 않음."
+    }
+  ],
+  "passages": [
+    {
+      "id": "contracts",
+      "sections": [
+        "Introduction",
+        "Contract Types",
+        "Procurement environment"
+      ],
+      "scope": "Historical overview; not used as current legal rule or complete modern incentive formula."
+    },
+    {
+      "id": "far-cpif",
+      "section": "16.405-1(a)",
+      "scope": "Negotiated fee adjustment and min/max fee structure."
+    },
+    {
+      "id": "far-fpif",
+      "section": "16.403-1(a)",
+      "scope": "Target cost/profit, price ceiling, other-clause adjustment exception and possible loss."
+    }
+  ],
+  "authored": "Numbers, formulas with fixed assumptions, six-row table, two curves, ceiling/zero-profit algebra and reflection prompts independently constructed. All C values assumed eligible for settlement and necessary funding/other performance conditions satisfied; no real payment entitlement adjudicated.",
+  "independent_math": "contract-math-report.json",
+  "legal_scope": "Specific US federal procurement structure used as a reference; no assumption it applies to Korean/private contracts or covers complete FAR rules/clauses.",
+  "delivery": "No mobile-specific generation or viewport tests; prior phone output preserved by SHA256."
+}

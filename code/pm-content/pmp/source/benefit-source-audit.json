@@ -1,0 +1,46 @@
+{
+  "version": "2.18",
+  "checked_at": "2026-10-27T05:25:40.489805+00:00",
+  "sources": [
+    {
+      "id": "uk-efficiency",
+      "title": "HM Treasury · The Government Efficiency Framework",
+      "url": "https://www.gov.uk/government/publications/the-government-efficiency-framework/the-government-efficiency-framework--2",
+      "published": null,
+      "updated": "2025-11-24",
+      "checked": "2026-10-27",
+      "kind": "영국 중앙정부의 효율 보고 지침",
+      "note": "페이지 표시 갱신2025-11-24,2026-10-27 원문 §4.1·4.4–4.8 확인. 현금 지출 감소와 비현금 편익·비용 경계·중복 계산 구분을 참고. 최초 발행일이나 모든 조항의 발효일로 해석하지 않음. 영국의 보고 의무를 한국·민간 조직이나 PMP의 공식 계산 규칙으로 적용하지 않음. 원문의 수치 예제·그림을 복제하지 않은 창작 사례."
+    },
+    {
+      "id": "ni-benefits",
+      "title": "Northern Ireland Department of Finance · Introduction to benefits management",
+      "url": "https://www.finance-ni.gov.uk/articles/introduction-benefits-management-programmes-and-projects",
+      "published": null,
+      "checked": "2026-10-27",
+      "kind": "북아일랜드 정부의 프로그램·프로젝트 실무 지침",
+      "note": "2026-10-27 원문의 책임·사업 검토 절 확인. 기준 상태·다른 프로젝트와의 경계·사업성 갱신·전환 뒤 책임을 보는 관점 참고. 페이지 최초 발행일은 확인하지 못했으며 최신 전면 개정으로 주장하지 않음. 아래 역할·측정 계획·판단 기록은 자체 제작이며 원문의 조직 체계를 모든 조직에 적용하지 않음."
+    }
+  ],
+  "read_scope": [
+    {
+      "id": "uk-efficiency",
+      "sections": "§4.1 categories,4.4/4.5 cash and non-cash criteria,4.7 baseline,4.8 delivery costs; page header updated24November2025",
+      "claims_used": "Distinguish actual spending reduction from monetised non-cash capacity; compare explicit boundaries and avoid counting the same effect twice. No full UK reporting-policy transplantation."
+    },
+    {
+      "id": "ni-benefits",
+      "sections": "Responsibilities; Benefits management and business cases, including baseline, other-programme boundary, continuing ownership and updating the business case",
+      "claims_used": "Connect measurement, business-case review and post-delivery responsibility. Local fictional owner/analyst/finance roles, target values and8-week review are authored, not prescribed by the source."
+    }
+  ],
+  "date_limits": "UK page updated2025-11-24, not a first-publication/effectivity claim. NI article first-publication not confirmed; no inferred date or current-version claim. Search-engine recency ignored.",
+  "authored": "1200 requests,100users,90trained/60active,12→8minute base,10→20percent single20minute rework,300hour fixed axis,30k reference hourly value/300k additional service cash,220hour/80percent/10percent targets,benefit record and4 reflections all independently authored. No source numerical example, original form or diagram reproduced.",
+  "independent_math": "benefit-math-report.json",
+  "limits": [
+    "Fictional closed comparable-month workload; no causal attribution, confidence interval, sustainability or real savings proven.",
+    "Total person-hours excludes waiting/support/admin/training and is not elapsed approval lead time.",
+    "Salary/payments unchanged; time reference value not a cash saving. No full ROI/NPV, annual forecast, accounting or investment advice.",
+    "User adoption denominators distinct from request-volume ratios. Original MCQ83/options/schema1 unchanged."
+  ]
+}

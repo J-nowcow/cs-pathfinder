@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 from pathlib import Path
 import json,random,re
+from benefit_case import SOURCES as BENEFIT_SOURCES, DATA as BENEFIT_DATA, render as render_benefit
+from tco_case import SOURCE as TCO_SOURCE, DATA as TCO_DATA, render as render_tco
+from contract_case import SOURCES as CONTRACT_SOURCES, DATA as CONTRACT_DATA, render as render_contract
+from engagement_case import SOURCES as ENGAGEMENT_SOURCES, DATA as ENGAGEMENT_DATA, render as render_engagement
+from flow_case import SOURCES as FLOW_SOURCES, DATA as FLOW_DATA, render as render_flow
+from forecast_case import SOURCES as FORECAST_SOURCES, DATA as FORECAST_DATA, render as render_forecast
+from risk_dependence import SOURCES as RISK_DEP_SOURCES, DATA as RISK_DEP_DATA, render as render_dependence
+from requirements_case import SOURCES as TRACE_SOURCES, DATA as TRACE_DATA, render as render_trace
+from team_conflict import SOURCES as TEAM_SOURCES, SCRUM as TEAM_SCRUM, DATA as TEAM_DATA, render as render_team
 from ai_review import SOURCES as AI_REVIEW_SOURCES, DATA as AI_REVIEW_DATA, render as render_ai_review
 from product_strategy import SOURCES as STRATEGY_SOURCES, DATA as STRATEGY_DATA, render as render_strategy
 from uncertainty import SOURCES as UNCERTAINTY_SOURCES, chart_input as uncertainty_input, render as render_uncertainty
@@ -636,7 +645,7 @@ MORE=[
 C['sources'] += [dict(id=i,title=t,url=u,note=note) for i,t,u,note in MORE]
 for id,source in [(38,'matrix'),(53,'raci'),(54,'teammodel'),(55,'motivation'),(56,'raci'),(60,'monte'),(65,'invest'),(65,'wsjf')]:
  next(n for n in N if n['id']==f'n{id:02}')['sources'].append(source)
-C.update(version='2.5',nodes=N,tracks=tracks,glossary=list(G.values()),asof='2026-10-27')
+C.update(version='2.18',nodes=N,tracks=tracks,glossary=list(G.values()),asof='2026-10-27')
 # A small authored network: stable lesson/quiz IDs and record schema remain unchanged.
 C['floatLab']={
  'order':['A','B','C','E','D'],
@@ -699,6 +708,100 @@ n73=next(n for n in N if n['id']=='n73')
 n73['body'].append('혼동행렬의 TP·FN·FP·TN으로 정확도·재현율·분류 정밀도의 분모를 구분하고, 미탐 영향과 경보 검토량을 함께 판단한다. 아래 가상 예제는 99% 정확도의 함정과 사람의 검토 여력, 자료·버전·운영 통제를 연결한다. 생성형 AI의 사실 충실성·출처 검증은 분류 지표와 따로 평가한다.')
 n73['supplement']=render_ai_review()
 n73['supplementSearch']=re.sub('<[^>]+>',' ',n73['supplement'])
+# Team theory and a concrete conflict facilitation case; assessment IDs stay stable.
+C['sources'] += TEAM_SOURCES
+next(a for a in C['sources'] if a['id']=='scrum').update(TEAM_SCRUM)
+n54=next(n for n in N if n['id']=='n54')
+n54['body'].append('아래 심화 사례에서는 사실·해석·이해관계·권한을 나누어 품질 갈등을 조정한다. 팀 발달 모형과 심리적 안전 연구의 근거 범위, Scrum의 완료 기준을 구분하며 대화·결정 기록·후속 확인으로 연결한다.')
+n54['supplement']=render_team()
+n54['supplementSearch']=re.sub('<[^>]+>',' ',n54['supplement'])
+n54['sources'] += [a['id'] for a in TEAM_SOURCES]+['scrum']
+n54['links'] += [id for id in ['n64','n18'] if id not in n54['links']]
+C['teamConflictCase']=TEAM_DATA
+# Traceability follows evidence and versioned decisions, not just requirement IDs.
+C['sources'] += TRACE_SOURCES
+n41=next(n for n in N if n['id']=='n41')
+n41['body'].append('아래 가상 추적 사례에서 요구·작업·지정 검증·결과물 버전을 연결한다. 실행한 시험의 통과율과 요구별 검증 완료는 분모가 다르며, 사용 목적 적합성·공식 수용·Scrum의 Done도 각각 확인한다.')
+n41['supplement']=render_trace()
+n41['supplementSearch']=re.sub('<[^>]+>',' ',n41['supplement'])
+n41['sources'] += [a['id'] for a in TRACE_SOURCES]+['scrum']
+n41['links'] += [id for id in ['n18','n34','n25'] if id not in n41['links']]
+C['requirementsCase']=TRACE_DATA
+# Exact joint-scenario comparison, distinct from the existing monetary EMV example.
+C['sources'] += RISK_DEP_SOURCES
+n60=next(n for n in N if n['id']=='n60')
+n60['body'].append('아래 심화 사례는 같은 주변 지연 확률과 평균에서도 공통 원인에 따라 납기 확률·P80이 달라지는 모습을 모든 경우를 합산해 비교한다. 별도의 대응 일정에서는 준비·검증 리드타임과 실행 신호·권한을 연결한다.')
+n60['scene']='별도의 가상 비용 예제에서 A는 확정 비용30, B는 항상 발생하는 준비비5에20% 확률 손실100·80% 확률 손실0이다. B의 기대 총비용은?'
+n60['supplement']=render_dependence()
+n60['supplementSearch']=re.sub('<[^>]+>',' ',n60['supplement'])
+n60['sources'] += [a['id'] for a in RISK_DEP_SOURCES]
+n60['links'] += [id for id in ['n59','n26','n46'] if id not in n60['links']]
+C['riskDependenceCase']=RISK_DEP_DATA
+# Forecast assumptions share the original n49 numbers; existing graded answers remain unchanged.
+n49=next(n for n in N if n['id']=='n49')
+n49['body'].append('아래 비교는 같은 실적에서 남은 작업의 예산 가치와 잔여 비용 한도를 나누고, 미래 효율 가정별 EAC·ETC·VAC를 같은 금액 축으로 읽는다. TCPI의 목표와 분모, 역산의 한계도 확인한다.')
+n49['scene']='BAC=100, PV=50, EV=40, AC=50인 가상 예제에서 원가·일정 효율을 남은 비용에 함께 반영하는 EAC는? (동일 금액 단위)'
+n49['supplement']=render_forecast()
+n49['supplementSearch']=re.sub('<[^>]+>',' ',n49['supplement'])
+C['forecastCase']=FORECAST_DATA
+for source in FORECAST_SOURCES:
+ next(s for s in C['sources'] if s['id']==source['id']).update(source)
+# Flow metrics use an authored finite log; no predictive claim from a short sample.
+n66=next(n for n in N if n['id']=='n66')
+n66['body'].append('아래 작업 기록에서 기간 평균 WIP와 순간 WIP, 완료 작업의 사이클 타임과 미완료 작업 나이를 구분한다. 전체 관찰 창과 미완료가 남는 짧은 창을 비교해 경계 효과를 계산하고 대기·막힘을 실제 개선 행동과 연결한다.')
+n66['scene']='같은 측정 경계·단위와 안정적 평균 조건을 가정할 때, 평균 WIP10건·완료 처리율2건/일에서 평균 사이클 타임은?'
+n66['supplement']=render_flow()
+n66['supplementSearch']=re.sub('<[^>]+>',' ',n66['supplement'])
+n66['sources'].append('little-original')
+C['flowCase']=FLOW_DATA
+for source in FLOW_SOURCES:
+ prior=next((s for s in C['sources'] if s['id']==source['id']),None)
+ if prior:prior.update(source)
+ else:C['sources'].append(source)
+# Engagement is expressed as observable participation and feedback, not fixed labels.
+n56=next(n for n in N if n['id']=='n56')
+n56['body'].append('아래 참여 계획은 관찰·해석·원하는 참여 행동·활동·증거·권한을 구분한다. 현장·운영·스폰서의 다른 필요를 소통과 결정 기록으로 연결하고, AI 요약의 태도·준비·승인 단정을 원문과 대조한다.')
+n56['supplement']=render_engagement()
+n56['supplementSearch']=re.sub('<[^>]+>',' ',n56['supplement'])
+n56['sources'].append('research-sharing')
+C['engagementCase']=ENGAGEMENT_DATA
+for source in ENGAGEMENT_SOURCES:
+ prior=next((s for s in C['sources'] if s['id']==source['id']),None)
+ if prior:prior.update(source)
+ else:C['sources'].append(source)
+# Fee bounds and total-price ceilings are different fictional contract assumptions.
+n61=next(n for n in N if n['id']=='n61')
+n61['body'].append('아래 가상 계약 비교는 같은 원가에서도 CPIF의 보수 상·하한과 FPIF의 총가격 상한이 서로 다른 지급액·판매자 손익을 만드는 과정을 보여 준다. 상한 도달 원가와 이익0 지점, 허용 원가·변경·인수 조건을 함께 확인한다.')
+n61['scene']='가상 CPIF에서 목표 원가100·목표 보수10·실제 허용 원가90이며 절감분의 판매자 몫은20%다. 계산 보수는 한도 안에 있다. 총 지급액은?'
+n61['supplement']=render_contract()
+n61['supplementSearch']=re.sub('<[^>]+>',' ',n61['supplement'])
+n61['sources']+=['far-cpif','far-fpif']
+C['contractCase']=CONTRACT_DATA
+for source in CONTRACT_SOURCES:
+ prior=next((s for s in C['sources'] if s['id']==source['id']),None)
+ if prior:prior.update(source)
+ else:C['sources'].append(source)
+# Cost boundary is distinct from the original weighted point-score example.
+n62=next(n for n in N if n['id']=='n62')
+n62['body'].append('아래 별도 X/Y 사례에서 같은3년의 도입·연계·운영·전환 비용을 모으고, 미확인 전환 비용의 민감도를 계산한다. 원래 A/B의 가격 점수는 금액이 아니며 필수 조건·평가 점수·비용·자금 요구도 구분한다.')
+n62['scene']='가상 점수 모형에서 가격 점수 가중치40%, 품질60%이고 B의 가격 점수70·품질 점수90이다. 필수 조건은 충족했다. B의 가중 점수는?'
+n62['supplement']=render_tco()
+n62['supplementSearch']=re.sub('<[^>]+>',' ',n62['supplement'])
+n62['sources'].append('nz-tco')
+C['sources'].append(TCO_SOURCE)
+C['tcoCase']=TCO_DATA
+# Shared reading labels; no lesson or assessment identity changes.
+n69=next(n for n in N if n['id']=='n69')
+n69['supplement']=render_benefit()
+n69['supplementSearch']=re.sub('<[^>]+>',' ',n69['supplement'])
+n69['sources'] += [s['id'] for s in BENEFIT_SOURCES]
+n69['links'] += [id for id in ['n70','n74'] if id not in n69['links']]
+C['sources'] += BENEFIT_SOURCES
+C['benefitCase']=BENEFIT_DATA
+READING_CASES={'n69':('빨라진 처리에서 실제 편익까지','재작업 포함 시간·실사용 분모·시간 가치와 현금·운영 책임을 나누는 사례'),'n62': ('견적에서 생애 비용과 민감도로', '3년 비용 경계·전환 비용·필수 조건·가중 점수의 구분'), 'n61': ('보수 한도와 총가격 상한 비교하기', 'CPIF·FPIF의 지급 곡선·판매자 손익·조건별 판단 연습'), 'n56': ('분석에서 대화와 결정으로 이어가기', '집단별 참여 계획·피드백·AI 요약 검토·결정 기록의 연결'), 'n66': ('작업 기록으로 흐름의 경계 읽기', '평균·순간 WIP와 완료·미완료 시간, 짧은 관찰 창의 차이'), 'n49': ('같은 실적, 달라지는 비용 예측', '잔여 작업 가치·비용 한도·EAC 가정·TCPI를 함께 읽는 사례'), 'n60': ('같은 평균에서 달라지는 납기 확률', '독립·공통 원인·P80·대응 리드타임을 비교하는 가상 사례'), 'n41': ('요구에서 증거와 수용 판단까지 추적하기', '4개 요구·검증 기록·분모가 다른 비율·변경 영향을 읽는 사례'), 'n54': ('갈등을 대화와 결정 기록으로 풀기', '팀 발달·심리적 안전·품질 기준을 연결하는 가상 팀 사례'), 'n52': ('같은 5%p 차이, 얼마나 믿을 수 있을까?', '표본 크기·신뢰구간·실무 기준을 비교하는 그래프와 해석 연습'), 'n65': ('전략을 실제 선택과 로드맵으로 옮기기', '고객 문제·대안·가용량·기회비용을 연결하는 신청 서비스 사례'), 'n68': ('발견과 실험, 무엇을 확인했을까?', '제품 위험·연구 방법·A/B 결과·가드레일을 연결하는 사례'), 'n73': ('99% 정확도만으로 도입해도 될까?', '혼동행렬·누락·검토 여력·운영 책임을 함께 판단하는 사례')}
+for n in N:
+ if n['id'] in READING_CASES:n['supplementTitle'],n['supplementSummary']=READING_CASES[n['id']]
+
 n73['sources'] += [a['id'] for a in AI_REVIEW_SOURCES]
 n73['links'] += [id for id in ['n52','n68','n74'] if id not in n73['links']]
 n74=next(n for n in N if n['id']=='n74')
@@ -712,6 +815,8 @@ for n in N:
  assert all(x in {a['id'] for a in N} for x in n['links'])
  assert all(t in G for t in n['terms'])
  if n['level']=='deep':assert len(n['table'])>=4 and len(n['worked'])>=3 and n['trap']
+from case_debrief import render as render_case_debrief
+for case in C['cases']:case['debrief']=render_case_debrief(case['id'])
 (D/'data.js').write_text('window.COURSE='+json.dumps(C,ensure_ascii=False)+';')
 (ROOT/'source/course.json').write_text(json.dumps(C,ensure_ascii=False,indent=2))
 print(C['stats'])

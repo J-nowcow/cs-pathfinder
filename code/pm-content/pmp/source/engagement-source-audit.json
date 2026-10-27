@@ -1,0 +1,53 @@
+{
+  "version": "2.14",
+  "checked_at": "2026-10-27T04:06:28.253087+00:00",
+  "sources": [
+    {
+      "id": "raci",
+      "title": "PMI · Stakeholder Management and RACI: Who Does What, and Who Answers for It",
+      "url": "https://www.pmi.org/blog/stakeholder-management-raci",
+      "note": "2026-07-29 게시,2026-10-27 본문 확인. 이해관계자 분석·참여 계획·역할 구분과 AI 초안의 사람 책임·검토를 참고. 블로그의 실무 제안을 시험 규정·모든 조직의 승인 체계·효과가 입증된 추세로 취급하지 않음. 기사 속 사고·통계·RACI 표를 전재하지 않은 창작 사례.",
+      "published": "2026-07-29",
+      "checked": "2026-10-27",
+      "kind": "PMI 공식 블로그의 실무 제안"
+    },
+    {
+      "id": "research-sharing",
+      "title": "GOV.UK Service Manual · Sharing user research findings",
+      "url": "https://www.gov.uk/service-manual/user-research/sharing-user-research-findings",
+      "published": "2016-05-24",
+      "checked": "2026-10-27",
+      "kind": "영국 정부 서비스 연구의 실무 지침",
+      "note": "2016-05-24 발행 표시,2026-10-27 원문 확인. 연구의 사실·중요성·근거를 공유해 설계·우선순위·다음 행동에 연결하는 관점 참고. 문서의 슬라이드 수·행사 주기를 모든 프로젝트의 의무로 적용하지 않음. 아래 계획·기록·대화·질문은 독립 제작."
+    }
+  ],
+  "passages": [
+    {
+      "id": "raci",
+      "sections": [
+        "What is stakeholder management?",
+        "Stakeholder management and RACI at a glance",
+        "Map your stakeholders",
+        "RACI",
+        "When agents join the team",
+        "The habits that keep hybrid teams aligned"
+      ],
+      "scope": "Current official blog offers practical recommendations; no source incident/statistics/RACI matrix copied and no broad adoption or proven-effect claim made."
+    },
+    {
+      "id": "research-sharing",
+      "sections": [
+        "Who you should share your research with",
+        "How to share research findings",
+        "Presenting your findings"
+      ],
+      "scope": "Used for sharing evidence/importance/next actions, not mandatory meeting cadence or slide count."
+    }
+  ],
+  "authored": "Scenario observations, fictional delegation, stakeholder plans, AI mistakes/corrections, loop, pending decision request and reflection answers independently constructed. No AI model actually tested and no real stakeholder engagement measured.",
+  "research_not_used": {
+    "url": "https://journals.aom.org/doi/abs/10.5465/amr.1997.9711022105",
+    "result": "Publisher search abstract visible but direct open403; no full-paper claim or new source citation added. Existing three-attribute overview is supported by the read PMI article."
+  },
+  "validation_note": "Initial paragraph-size QA targeted the intentionally14px loop-return caption; corrected selector targets prose24px and checks plan descriptions22px. Artifact font behavior was correct."
+}

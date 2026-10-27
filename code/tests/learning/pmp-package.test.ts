@@ -23,13 +23,16 @@ describe('PMP reviewed content package', () => {
   it('links the app to real same-origin learning and offline files', () => {
     for (const url of Object.values(release.links)) {
       expect(url.startsWith('/pmp/')).toBe(true)
-      expect(readFileSync(resolve('public', decodeURIComponent(url.slice(1)))).length).toBeGreaterThan(0)
+      expect(readFileSync(resolve('public', decodeURIComponent(url.split('#')[0].slice(1)))).length).toBeGreaterThan(0)
     }
     const live = JSON.parse(readFileSync(resolve('public/pmp/release.json'), 'utf8'))
     expect(live).toEqual(release)
-    const reader = readFileSync(resolve('public', decodeURIComponent(release.links.reader.slice(1))), 'utf8')
-    expect(reader).not.toMatch(/<script(?:\s|>)/i)
-    expect(reader.match(/class="reader-lesson" id="n\d+"/g)).toHaveLength(release.stats.lessons)
+    const reader = readFileSync(resolve('public', decodeURIComponent(release.links.reader.split('#')[0].slice(1))), 'utf8')
+    expect(release.links.reader).toBe(`${release.links.study}#reader-top`)
+    expect(reader).toContain('id="pmp-reader"')
+    expect(reader).toContain('id="pmp-interactive" hidden')
+    expect(reader).not.toMatch(/<iframe(?:\s|>)/i)
+    expect(reader.match(/class="reader-lesson" id="reader-n\d+"/g)).toHaveLength(release.stats.lessons)
     expect(reader).toContain('data:font/woff2;base64,')
   })
 })

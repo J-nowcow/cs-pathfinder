@@ -21,7 +21,8 @@ with zipfile.ZipFile(archive) as z:
 shutil.copytree(D,public,dirs_exist_ok=True)
 for name in review['original_outputs']:shutil.copyfile(O/name,public/name)
 index=public/'index.html';index.write_text(index.read_text().replace('<footer>', '<footer><p><a href="/learn">CS·PM 학습 분야로 돌아가기 →</a></p>',1))
-release={'version':course['version'],'asof':course['asof'],'stats':course['stats'],'links':{'study':'/pmp/index.html','reader':'/pmp/'+quote('PMP_개념서_확장판_폰용.html'),'offline':'/pmp/'+quote('PMP_개념서_확장판_오프라인.zip')}}
+primary='/pmp/'+quote(review['primary_output'])
+release={'version':course['version'],'asof':course['asof'],'stats':course['stats'],'links':{'study':primary,'reader':primary+'#reader-top','offline':'/pmp/'+quote('PMP_개념서_확장판_오프라인.zip')}}
 (C/'data/pmp-release.json').write_text(json.dumps(release,ensure_ascii=False,indent=2)+'\n')
 (public/'release.json').write_text(json.dumps(release,ensure_ascii=False,indent=2)+'\n')
 print('PMP public assets ready:',release['version'])

@@ -1,0 +1,57 @@
+{
+  "checked_at": "2026-10-27T02:07:24.534847+00:00",
+  "source_notes": [
+    {
+      "id": "psych-safety-1999",
+      "title": "Amy Edmondson · Psychological Safety and Learning Behavior in Work Teams",
+      "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf",
+      "doi": "10.2307/2666999",
+      "published": "1999-06",
+      "checked": "2026-10-27",
+      "kind": "원 연구 · 단일 제조기업 51개 팀 현장 연구",
+      "note": "Administrative Science Quarterly 44(2), 350–383. 정의·연구 개요와 한계 절을 확인. 심리적 안전과 학습 행동의 관련성을 보고한 역사적 연구이며 모든 팀에 대한 인과 효과·성공 보장을 뜻하지 않음.2026-10-27 원문 확인."
+    },
+    {
+      "id": "team-stages-1977",
+      "title": "Tuckman & Jensen · Stages of Small-Group Development Revisited",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/105960117700200404",
+      "doi": "10.1177/105960117700200404",
+      "published": "1977-12",
+      "checked": "2026-10-27",
+      "access": "출판사 초록만 확인; 유료 본문 미열람",
+      "kind": "원저자 후속 문헌 검토 · 공개 초록",
+      "note": "1965년 4단계 가설의 후속 검토. 초록은 22편 중 직접 검증 목적의 연구가1편이었다고 밝히며 해산 단계와 추가 검증 필요를 제시. 1977-12 발행,2026-10-27 출판사 초록 확인. 모든 팀의 직선 진행을 입증한 실험으로 소개하지 않음."
+    },
+    {
+      "id": "scrum",
+      "title": "Scrum Guides · 2020 Scrum Guide",
+      "url": "https://scrumguides.org/scrum-guide.html",
+      "edition": "November 2020",
+      "published": "2020-11",
+      "checked": "2026-10-27",
+      "kind": "특정 프레임워크의 공식 정의",
+      "note": "2020판의 자기 관리·책임·Sprint 중 품질·범위 조정·Definition of Done 참고. 2026-10-27 공식 영문 원문 확인. Scrum 규칙과 일반 프로젝트의 조직별 승인 절차를 구분하며 아래 사례는 독립 창작."
+    }
+  ],
+  "claim_checks": [
+    {
+      "claim": "51 teams in one manufacturing company; association with learning behavior; limited generalization",
+      "source_id": "psych-safety-1999",
+      "read_scope": "original PDF abstract, construct definition p354, limitations pp378–379",
+      "inference_limit": "No general causal performance effect or numerical improvement attributed to authored case."
+    },
+    {
+      "claim": "22 studies reviewed, one directly set out to test original hypothesis; adjourning added",
+      "source_id": "team-stages-1977",
+      "read_scope": "Publisher abstract only; paywalled full text not read",
+      "inference_limit": "Historical theory, not individual diagnosis or universal linear growth."
+    },
+    {
+      "claim": "Quality does not decrease during Sprint; scope may be renegotiated; DoD required for Increment; organizational DoD is minimum",
+      "source_id": "scrum",
+      "read_scope": "Official2020 English guide: Sprint, Scrum Team, Developers, Product Owner, Scrum Master, Increment, DoD",
+      "inference_limit": "Specific framework rules; authored facilitation flow is not an official additional Scrum procedure."
+    }
+  ],
+  "authored_material": "All example service details, dialogue, observation cards, decision branches, decision record and four ungraded exercises independently authored."
+}

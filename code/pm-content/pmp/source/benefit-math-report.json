@@ -1,0 +1,42 @@
+{
+  "version": "2.18",
+  "other73LessonsAndAllPriorDatasetsSourcesTermsOrderPreserved": true,
+  "allOriginalOptionsAndCorrectIndicesUnchanged": true,
+  "rows": [
+    {
+      "id": "before",
+      "requests": 1200,
+      "reworkCount": "120",
+      "baseHours": "240",
+      "reworkHours": "40",
+      "totalHours": "280",
+      "widthPercent": [
+        "80",
+        "40/3"
+      ]
+    },
+    {
+      "id": "after",
+      "requests": 1200,
+      "reworkCount": "240",
+      "baseHours": "160",
+      "reworkHours": "80",
+      "totalHours": "240",
+      "widthPercent": [
+        "160/3",
+        "80/3"
+      ]
+    }
+  ],
+  "baseReduction": 80,
+  "additionalReworkIncrease": 40,
+  "netTimeReduction": "40",
+  "relativeTimeReduction": "1/7",
+  "adoptionPeopleRate": "3/5",
+  "trainingPeopleRate": "9/10",
+  "referenceTimeValueWon": "1200000",
+  "cashChangeWon": -300000,
+  "alternativeRework10PercentTotalHours": "200",
+  "alternativeNetReduction": 80,
+  "measurementBoundary": "1200 closed comparable requests per month; base excludes rework; one extra20-min rework on each flagged request; no wait/support/admin time; cash wages unchanged and service300000 added; fictional, not causal evidence"
+}

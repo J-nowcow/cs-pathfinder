@@ -7,8 +7,8 @@ import release from '../../data/pmp-release.json'
 describe('learning areas', () => {
   it('opens standalone resources through full page navigation and explains record boundaries', () => {
     const { getByRole, getByText } = render(<LearningAreas />)
-    expect(getByRole('link', { name: '학습지도·실험 열기 →' }).getAttribute('href')).toBe(release.links.study)
-    expect(getByRole('link', { name: '폰용 읽기 열기 →' }).getAttribute('href')).toBe(release.links.reader)
+    expect(getByRole('link', { name: 'PMP 통합 자습서 열기 →' }).getAttribute('href')).toBe(release.links.study)
+    expect(getByRole('link', { name: '전체 읽기 열기 →' }).getAttribute('href')).toBe(release.links.reader)
     expect(getByRole('link', { name: '오프라인 ZIP 받기 ↓' }).hasAttribute('download')).toBe(true)
     expect(getByText(/CS 계정 기록과 별도로/)).toBeTruthy()
   })
