@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LibraryShell } from '@/components/library/LibraryShell'
 import { PmpPractice } from '@/components/pmp/PmpPractice'
+import { PmpFloatLab } from '@/components/pmp/PmpFloatLab'
 import {
   pmpCourse as c,
   lessonById,
@@ -9,7 +10,6 @@ import {
   pmpLessonHref,
   nativePmpHtml,
 } from '@/lib/pmp/course'
-import release from '../../../../../data/pmp-release.json'
 export function generateStaticParams() {
   return c.nodes.map((n) => ({ lesson: n.id }))
 }
@@ -112,14 +112,11 @@ export default async function PmpLesson({
             dangerouslySetInnerHTML={{ __html: nativePmpHtml(n.supplement) }}
           />
         ) : null}
-        {'lab' in n && n.lab ? (
-          <aside className="pmp-original">
-            <p>
-              여유시간 계산 실습은 이전 자료에서 이용할 수 있어요. 본문과 메모는
-              이 화면에서 이어집니다.
-            </p>
-            <a href={release.links.study + '#lab'}>이전 계산 실습 열기 →</a>
-          </aside>
+        {'lab' in n && n.lab === 'float' ? (
+          <PmpFloatLab
+            config={c.floatLab}
+            source={c.sources.find((s) => s.id === 'cpm')!}
+          />
         ) : null}
         <PmpPractice key={n.id} id={n.id} visit />
         <section>

@@ -1,0 +1,132 @@
+/* Native float experiment; authored lesson styles remain generated separately. */
+.pmp-float-lab {
+  --accent: var(--d0);
+  margin: 48px 0;
+  padding: 32px 0;
+  border-block: 1px solid var(--line);
+}
+.pmp-float-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.pmp-float-inputs label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+.pmp-float-inputs input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--surface);
+  font: inherit;
+  color: inherit;
+}
+.pmp-float-inputs input[aria-invalid='true'] {
+  border-color: #ac4537;
+}
+.pmp-float-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pmp-float-presets button {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  background: var(--surface);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.pmp-float-presets button[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.pmp-float-lab :disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.pmp-float-summary {
+  margin: 24px 0;
+  padding: 20px 24px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+}
+.pmp-float-summary p {
+  margin: 0 !important;
+}
+.pmp-float-summary strong {
+  font-family: var(--font-heading);
+  font-size: 1.3em;
+}
+.pmp-float-figure {
+  margin: 28px 0;
+}
+.pmp-float-figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  color: var(--ink);
+}
+.pmp-float-figure svg > path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+.pmp-float-figure .has-float {
+  stroke-dasharray: 6 5;
+  opacity: 0.65;
+}
+.pmp-float-figure svg > path.is-critical {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+.pmp-float-figure rect {
+  fill: var(--surface);
+  stroke: var(--line);
+  stroke-width: 2;
+}
+.pmp-float-figure g.is-critical rect {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+.pmp-float-figure text {
+  fill: currentColor;
+  font: 600 20px var(--font-reading);
+}
+.pmp-float-figure figcaption {
+  font-size: var(--study-size);
+  line-height: 1.8;
+}
+.pmp-float-explanation {
+  margin: 28px 0;
+}
+.pmp-float-lab caption {
+  text-align: left;
+  margin-bottom: 12px;
+}
+.pmp-float-lab table {
+  min-width: 640px;
+  font-variant-numeric: tabular-nums;
+}
+.pmp-float-lab th,
+.pmp-float-lab td {
+  white-space: nowrap;
+}
+.pmp-float-formulas {
+  margin: 24px 0;
+}
+.pmp-float-formulas summary {
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.pmp-float-lab li {
+  margin-bottom: 16px;
+}
