@@ -75,6 +75,16 @@
 
 현재 PMP는 검토한 독립 콘텐츠 패키지를 같은 앱에서 여는 방식이며, PMP의 브라우저 진도·메모와 CS 계정 기록은 별도로 관리됩니다. 자료를 바꾸는 방법과 라이선스는 [`code/pm-content/pmp/README.md`](code/pm-content/pmp/README.md)에 있습니다.
 
+## Jira 실무·정보관리기술사·학습 기록
+
+학습 분야에서 [Jira 실무 미션](https://cs-pathfinder.vercel.app/learn/jira), [정보관리기술사](https://cs-pathfinder.vercel.app/learn/engineer), [모든 학습 기록](https://cs-pathfinder.vercel.app/learn/progress)을 엽니다.
+
+- Jira: 기존10수업·20JQL·16가상 작업에5개 실무 미션을 연결했습니다. 실제 회사 데이터에 연결하지 않습니다.
+- 기술사:24핵심 주제의 개념도·비교·창작 연습과 참고 답안,60회차1,860개 실제 기출 위치를 제공합니다. 이전 회차는 기술명 색인이며140회31문항만 원문을 제공합니다. 주제·유형 연결은 미검토 자동 후보이고 전 역사 전체 수집·공식 모범답안은 아닙니다.
+- 기록: 같은 브라우저의 기존 CS·PMP·Jira 기록과 새 답안·미션을 모아 이어보기·복습을 제공합니다. 원래 저장 형식을 보존하며 새 계정 동기화는 추가하지 않습니다.
+
+자료 범위·출처·이용 조건·재생성·백업은 [`code/learning-content/README.md`](code/learning-content/README.md)에 있습니다.
+
 ## 🔍 얼마나 믿어도 되는가
 
 **해설 초안은 AI가 씁니다.** 그래서 정확도를 짐작으로 말하지 않고 잽니다.
