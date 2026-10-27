@@ -10,7 +10,7 @@ import {
   LibraryEditError,
 } from '@/lib/library/local-edit'
 import { libraryAccountStateSchema } from '@/lib/library/account-schema'
-import release from '../../../data/pmp-release.json'
+import { PmpBackup } from '@/components/pmp/PmpBackup'
 import { libraryButton } from './LibraryShell'
 import { JOURNEY_SYNCED_EVENT, STREAK_SYNCED_EVENT } from '@/lib/journey/sync'
 import { LibraryAccountPanel, useLibraryScope } from './LibraryAccount'
@@ -287,6 +287,7 @@ export function LibraryProgress({
       )}
       <div className="desk-tools">
         <LibraryAccountPanel />
+        <PmpBackup />
         <details className="desk-utility">
           <summary>분야별 학습 기록</summary>
           <dl className="desk-track-stats">
@@ -338,7 +339,7 @@ export function LibraryProgress({
             <a className={libraryButton} href="/me">
               CS 내 기록
             </a>
-            <a className={libraryButton} href={release.links.study + '#record'}>
+            <a className={libraryButton} href="#pmp-backup">
               PMP 내 기록·백업
             </a>
             <a className={libraryButton} href="/jira/index.html#home">
