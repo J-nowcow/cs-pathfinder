@@ -21,7 +21,8 @@
     "build": "passed",
     "typecheck": "passed",
     "sql": "Every displayed result table executed against isolated PGlite; FK/CHECK/NULL/empty subquery/join checks and FD closure independently verified",
-    "limits": "PGlite is not real Postgres concurrency or production-performance validation"
+    "limits": "PGlite is not real Postgres concurrency or production-performance validation",
+    "koreanHumanize": "Actual humanize-korean heavy run2026-10-28-003-8ce9: diagnosis,16chunks, reassembly, independent finalizer accept; gate rate0.0014, gradeB, self-check6/6. Committed-text receipt required before push."
   },
   "storage": {
     "key": "pathfinder.certificate.v1",
@@ -29,5 +30,5 @@
     "notes": "Expected-text comparison preserves same-note conflicts; checklist mutations read latest state; visiting preserves content timestamps",
     "backup": "Separate version1 format. Different nonempty current note blocks import; unchanged note uses newer checks/review. Does not alter existing backup formats."
   },
-  "publication": "Requires actual humanize-korean review and committed-text receipt before push"
+  "publication": "Validated source; publish only after final committed-text receipt."
 }

@@ -57,7 +57,7 @@
     "src/components/library/TypographyPreferences.tsx": "edf4a029b4251a80f1a15a76f53ced27aff84c6c98709aa5f27416b89c597b70",
     "learning-content/typography.json": "4f115a68d92d8ed4474917e8ec4f08b52d7d39e6bc78bf6d42f2fbab3e8dddd4",
     "learning-content/pmp-native.json": "7a1b7827f3f7293e388cf5fe2c4f89bc6578a426c852abbb9a526554824d21c5",
-    "learning-content/certificate/course.json": "0f77d2202d2ba630f22846ac405dd5f8e4e57a03c32c4a3fa96ab2e72ee023a2"
+    "learning-content/certificate/course.json": "b69cadadd219b261c3528c7b91058b50ad08e7bb618f05436380a051f096ae35"
   },
   "browser": {
     "base": "http://127.0.0.1:3042",
@@ -144,7 +144,8 @@
       "visual": "Catalogue, lesson, scoped completion chart, uncertainty plot, contract plot and dark mode inspected",
       "originalSnapshotsUnchanged": true
     },
-    "koreanHumanize": "Actual skill run2026-10-28-002-cac2: diagnosis,46chunk rewrite, reassembly and finalizer correction completed. Final gate exit0; rate0.0004 (display0.0%), edited-span self-check6/6, gradeB. Source mirrors regenerated;13focused files/36tests,build,typecheck passed. Global Git pre-push has8 isolated tests."
+    "koreanHumanize": "Prior run2026-10-28-002-cac2 retained. Certificate run2026-10-28-003-8ce9: actual diagnosis,16chunk rewrite, reassembly, independent finalizer accept; gate rate0.0014, gradeB, edited-span self-check6/6. Global hook10 isolated tests passed.",
+    "certificate": "12 native routes, independently executed SQL result tables and FD checks, memo/check/review/reload, exact resume, separate backup round trip/conflicts, preserved previous record keys,22px, no-JS and denied storage passed."
   },
   "reading": {
     "defaultSize": 18,

@@ -12,7 +12,7 @@ export default function CertificatePage() {
   return (
     <LibraryShell
       eyebrow="정보처리기사 · 이론"
-      title="표를 읽고, 데이터의 규칙을 이해하는 공부."
+      title="표를 읽고 데이터의 규칙을 이해하는 공부."
       description={c.intro}
     >
       <section className="pmp-catalog-intro">
