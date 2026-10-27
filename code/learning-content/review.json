@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-28.library6",
+  "release": "2026-10-28.library7",
   "scope": [
     "Jira study+5missions",
     "24topic guides and1860question positions",
@@ -12,7 +12,8 @@
     "Shared reading frame and secondary utilities across library/engineering/Jira mission pages",
     "Bright personal shelf with four authored SVG covers, own light/dark preference independent of CS theme",
     "Narrative concurrency lesson: concrete conflict, lock-order comparison, recovery, explanatory self-check",
-    "Four selectable reading pairs: Paperlogy+SUIT default, LINE Seed+SUIT, Gowun Batang+SUIT, original SUITE+Wanted Sans; scoped browser preference"
+    "Four selectable reading pairs: Paperlogy+SUIT default, LINE Seed+SUIT, Gowun Batang+SUIT, original SUITE+Wanted Sans; scoped browser preference",
+    "Native PMP:74lessons/14chapters,13rich supplements,83scenario prompts,3cases and321terms in the common StudyDesk frame; legacy local records retained"
   ],
   "counts": {
     "guides": 24,
@@ -52,7 +53,8 @@
     "src/components/library/BookArt.tsx": "6826ae0acf45e92fc378977cdb5b03bc1975f256eeeb09e372ac0fe4e7f5a2a0",
     "src/components/library/DeskAppearance.tsx": "32e36701c62a18bd1858450e6fad6e37d1c1401e54a4a944a59ce4e09bb43107",
     "src/components/library/TypographyPreferences.tsx": "edf4a029b4251a80f1a15a76f53ced27aff84c6c98709aa5f27416b89c597b70",
-    "learning-content/typography.json": "4f115a68d92d8ed4474917e8ec4f08b52d7d39e6bc78bf6d42f2fbab3e8dddd4"
+    "learning-content/typography.json": "4f115a68d92d8ed4474917e8ec4f08b52d7d39e6bc78bf6d42f2fbab3e8dddd4",
+    "learning-content/pmp-native.json": "7a1b7827f3f7293e388cf5fe2c4f89bc6578a426c852abbb9a526554824d21c5"
   },
   "browser": {
     "base": "http://127.0.0.1:3042",
@@ -112,7 +114,7 @@
       "referenceTimeWon": 500000
     }
   },
-  "recordCompatibility": "Read existing CS/PMP/Jira keys without rewriting. New library backups merge newer per item. Recurring automations remain paused.",
+  "recordCompatibility": "Existing CS/Jira keys preserved. Native PMP reads and edits schema1 pmp-pathfinder-v1, preserving unrelated/unknown fields; same-field note conflict is reported. Browser-local only. Legacy backup schema unchanged.",
   "limits": [
     "No all-history completeness claim; rounds before63 unverified",
     "No real Jira/company data connection",
@@ -120,14 +122,25 @@
     "Mobile-specific testing not added per user preference"
   ],
   "validation": {
-    "tests": "Focused current font change:11 files /30 tests passed. Previous full-suite baseline:198 files /1791 tests passed.",
+    "tests": "Full suite:203 files /1804 tests passed.",
     "build": "passed",
     "typecheck": "passed",
     "browserReading": "size18/22, reload,7domain disclosure, advanced filters, draft persistence, exact resume, no-JS reference reading, denied-storage controls and backup download passed",
     "contrast": "22 sampled text/background pairs in new reading UI:5.36–15.14:1. Computed independently in light/dark while CS root theme is dark; not a whole-site accessibility certification.",
     "personalShelf": "Empty/saved states, local-only draft excerpt, subject title + exact exam resume, complete backup import/export preserving PMP, all24reading routes at22px, Jira anchor, blocked storage and no-JS source catalogue/reading passed",
     "narrativeLesson": "Both lock-order snapshots, keyboard choice feedback, draft/checklist reload,22px, no-JS narrative/definitions/reference passed. Existing shelf QA including all24routes and backup round trip passed.",
-    "typographyPairs": "All4pairs on all24reading routes at22px: no horizontal overflow; actual local font faces loaded, original draft/checklist/reading-size/CS-theme/PMP record values preserved, reload, no-JS reading and denied-storage controls passed."
+    "typographyPairs": "All4pairs on all24reading routes at22px: no horizontal overflow; actual local font faces loaded, original draft/checklist/reading-size/CS-theme/PMP record values preserved, reload, no-JS reading and denied-storage controls passed.",
+    "nativePmp": {
+      "fullSuite": {
+        "files": 203,
+        "tests": 1804
+      },
+      "build": "passed",
+      "typecheck": "passed",
+      "browser": "All74 routes at22px,3cases,321terms, original notes/answers/review reload, exact resume, same-field conflict, denied storage, no-JS reading; no iframe or viewport overflow",
+      "visual": "Catalogue, lesson, scoped completion chart, uncertainty plot, contract plot and dark mode inspected",
+      "originalSnapshotsUnchanged": true
+    }
   },
   "reading": {
     "defaultSize": 18,
@@ -163,5 +176,6 @@
     "scope": "StudyDesk only; standalone frozen PMP/Jira packages unchanged",
     "cdnFontRequests": false,
     "license": "Bundled OFL notices and accessible font attribution"
-  }
+  },
+  "nativePmp": "learning-content/pmp-native.json"
 }

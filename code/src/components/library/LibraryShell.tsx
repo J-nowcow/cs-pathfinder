@@ -16,7 +16,13 @@ export function LibraryShell({
 }) {
   return (
     <StudyDesk
-      section={eyebrow.includes('정보관리기술사') ? 'engineer' : 'jira'}
+      section={
+        eyebrow.includes('정보관리기술사')
+          ? 'engineer'
+          : eyebrow.includes('PMP')
+            ? 'pmp'
+            : 'jira'
+      }
       document
       reading={reading}
     >

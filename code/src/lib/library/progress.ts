@@ -9,7 +9,7 @@ import { parseLibrary, LIBRARY_KEY } from './storage'
 import { kstToday } from '@/lib/daily/date'
 import pmp from '../../../data/pmp-library.json'
 import jira from '../../../data/jira-library.json'
-import release from '../../../data/pmp-release.json'
+import { pmpLessonHref } from '@/lib/pmp/routes'
 export type ProgressItem = {
   id: string
   track: string
@@ -110,7 +110,7 @@ export function readLibraryProgress(
         id: 'pmp:' + id,
         track: 'PMP',
         title: nodes.get(id)!,
-        href: release.links.study + '#lesson/' + id,
+        href: pmpLessonHref(id),
         at: null,
         due: kstToday(new Date(v.due)),
       })
@@ -133,7 +133,7 @@ export function readLibraryProgress(
       id: 'pmp:' + x.id,
       track: 'PMP',
       title: nodes.get(x.id)!,
-      href: release.links.study + '#lesson/' + x.id,
+      href: pmpLessonHref(x.id),
       at: x.at,
     })
   for (const [id, a] of Object.entries(answers.drafts).slice(0, 100))
@@ -189,9 +189,7 @@ export function readLibraryProgress(
         ['열어 본 수업', pSeen.length],
         ['복습 대기', due.filter((x) => x.track === 'PMP').length],
       ],
-      href: pSeen[0]
-        ? release.links.study + '#lesson/' + pSeen[0].id
-        : release.links.study,
+      href: pSeen[0] ? pmpLessonHref(pSeen[0].id) : '/learn/pmp',
       resume: pSeen[0] ? nodes.get(pSeen[0].id)! : 'PMP 통합 자습서',
     },
     {

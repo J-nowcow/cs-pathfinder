@@ -1,0 +1,91 @@
+{
+  "release": "2026-10-28.library7",
+  "source": "pm-content/pmp/source/course.json",
+  "sourceSha256": "29e95155b8761334cea1f756986d0313d96b0f6c2e46540919fc576e7504aae3",
+  "routes": {
+    "catalogue": "/learn/pmp",
+    "lessons": "/learn/pmp/[lesson]",
+    "cases": "/learn/pmp/case/[case]",
+    "glossary": "/learn/pmp/terms"
+  },
+  "counts": {
+    "chapters": 14,
+    "lessons": 74,
+    "scenarioPrompts": 83,
+    "connectedCases": 3,
+    "terms": 321,
+    "richSupplements": 13
+  },
+  "renderedFields": [
+    "title",
+    "q",
+    "answer",
+    "body",
+    "steps",
+    "table",
+    "worked",
+    "trap",
+    "supplement",
+    "scene",
+    "options",
+    "recall",
+    "terms",
+    "sources",
+    "links"
+  ],
+  "caseFields": [
+    "context",
+    "questions",
+    "debrief"
+  ],
+  "retainedSourceMetadata": [
+    "level",
+    "task",
+    "lab",
+    "supplementTitle",
+    "supplementSummary",
+    "supplementSearch"
+  ],
+  "nativeRecords": {
+    "key": "pmp-pathfinder-v1",
+    "version": 1,
+    "fields": [
+      "seen",
+      "journey",
+      "notes",
+      "thoughts",
+      "answers",
+      "recall",
+      "review"
+    ],
+    "accountSync": false,
+    "compatibility": "Existing lesson and question IDs preserved; records tested with original PMP_CHECK.sanitize. Unknown fields retained on native edits."
+  },
+  "conflicts": "Latest storage is read before every write. Same-field note changes detected against an expected value; input retained and user told to compare. Browser storage is not an atomic database transaction.",
+  "generation": [
+    "python3 scripts/build-pmp-native.py",
+    "node scripts/build-pmp-native-style.cjs"
+  ],
+  "preserved": [
+    "Original course snapshot and generators",
+    "Standalone HTML and ZIP downloads",
+    "Existing browser keys and backup schema"
+  ],
+  "remaining": [
+    "Native calculator labs; current links explicitly open original HTML",
+    "Native PMP backup import/export UI; original HTML retains full backup tools",
+    "Native full-course search and richer source metadata presentation",
+    "PMP account synchronization and real OAuth/Postgres verification"
+  ],
+  "validation": {
+    "fullSuite": {
+      "files": 203,
+      "tests": 1804
+    },
+    "build": "passed",
+    "typecheck": "passed",
+    "browser": "All74 routes at22px,3cases,321terms, original notes/answers/review reload, exact resume, same-field conflict, denied storage, no-JS reading; no iframe or viewport overflow",
+    "visual": "Catalogue, lesson, scoped completion chart, uncertainty plot, contract plot and dark mode inspected",
+    "originalSnapshotsUnchanged": true
+  }
+}

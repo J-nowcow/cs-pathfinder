@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import release from '../../../data/pmp-release.json'
 import { DeskAppearance } from './DeskAppearance'
 import { TypographyPreferences } from './TypographyPreferences'
 import { ReadingPreferences } from './ReadingPreferences'
@@ -11,7 +10,7 @@ export function StudyDesk({
   reading = false,
 }: {
   children: React.ReactNode
-  section?: 'library' | 'progress' | 'engineer' | 'jira'
+  section?: 'library' | 'progress' | 'engineer' | 'jira' | 'pmp'
   document?: boolean
   reading?: boolean
 }) {
@@ -20,6 +19,7 @@ export function StudyDesk({
     progress: '복습·기록',
     engineer: '정보관리기술사',
     jira: 'Jira 연습',
+    pmp: '프로젝트·제품 관리',
   }[section]
   return (
     <div
@@ -68,7 +68,12 @@ export function StudyDesk({
             </Link>
             <span className="desk-nav-label">공부 자료</span>
             <Link href="/questions">CS 면접 질문</Link>
-            <a href={release.links.study}>PMP 자습서</a>
+            <Link
+              href="/learn/pmp"
+              aria-current={section === 'pmp' ? 'page' : undefined}
+            >
+              PMP 자습서
+            </Link>
             <Link
               href="/learn/jira"
               aria-current={section === 'jira' ? 'page' : undefined}

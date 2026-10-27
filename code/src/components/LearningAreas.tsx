@@ -27,7 +27,7 @@ export function LearningAreas() {
           </div>
         </article>
         <article className="desk-book book-pmp">
-          <a className="desk-book-cover" href={release.links.study}>
+          <Link className="desk-book-cover" href="/learn/pmp">
             <span className="book-edition">02 · PMP</span>
             <h3 aria-label="프로젝트·제품 관리">
               프로젝트·
@@ -38,20 +38,20 @@ export function LearningAreas() {
             <span className="book-cover-foot">
               개념과 사례 <span aria-hidden="true">↗</span>
             </span>
-          </a>
+          </Link>
           <div className="desk-book-info">
             <p>일정·비용·위험 관리부터 제품 조사와 실험까지 공부합니다.</p>
             <p className="study-meta">
               {release.stats.chapters}장 · {release.stats.lessons}수업 · v
               {release.version}
             </p>
-            <a className="desk-book-link" href={release.links.study}>
+            <Link className="desk-book-link" href="/learn/pmp">
               PMP 통합 자습서 열기 →
-            </a>
+            </Link>
             <div className="desk-book-actions">
-              <a className="desk-book-link" href={release.links.reader}>
-                전체 읽기 열기 →
-              </a>
+              <Link className="desk-book-link" href="/learn/pmp">
+                장별 목차 보기 →
+              </Link>
               <a
                 className="desk-book-link"
                 href={release.links.offline}
@@ -62,6 +62,9 @@ export function LearningAreas() {
             </div>
             <details className="desk-book-note">
               <summary>자료 안내</summary>
+              <a className="desk-book-link" href={release.links.reader}>
+                이전 전체 읽기 HTML →
+              </a>
               <p className="study-meta">
                 {release.asof} 기준의 학습용 자습서입니다. PMI 공식 교재나 공인
                 교육시간 과정은 아닙니다. PMP 진도·메모는 CS 계정 기록과 별도로

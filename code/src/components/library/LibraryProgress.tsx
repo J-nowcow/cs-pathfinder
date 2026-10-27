@@ -36,6 +36,7 @@ export function LibraryProgress({
       'storage',
       'focus',
       'pageshow',
+      'pathfinder-pmp-updated',
       LIBRARY_EVENT,
       JOURNEY_SYNCED_EVENT,
       STREAK_SYNCED_EVENT,
