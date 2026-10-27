@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { loadEnvLocal } from '../src/lib/load-env'
 import { writeFileSync, mkdirSync } from 'node:fs'
 
@@ -51,7 +52,7 @@ async function main() {
   }
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
 
   const r = await pool.query<{ id: string; number: number | null; question: string; body: string }>(
     `select id, number, normalized_question as question, coalesce(body,'') as body

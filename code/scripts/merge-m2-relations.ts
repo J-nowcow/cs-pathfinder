@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { loadEnvLocal } from '../src/lib/load-env'
 
@@ -114,7 +115,7 @@ async function main() {
   const apply = process.argv.includes('--apply')
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
 
   const nums = [...new Set(JUDGED.flatMap(([a, b]) => [a, b]))]
   const r = await pool.query<{ number: number; identity_scope: string; q: string }>(

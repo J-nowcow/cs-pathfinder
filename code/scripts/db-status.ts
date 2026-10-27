@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { loadEnvLocal } from '../src/lib/load-env'
 import { queueHealth } from '../src/lib/daily/queue'
 
@@ -32,7 +33,7 @@ async function main() {
   }
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
 
   console.log('테이블별 행 수')
   for (const t of TABLES) {

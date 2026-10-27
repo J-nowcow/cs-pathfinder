@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { loadEnvLocal } from '../src/lib/load-env'
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { parseBlocks } from '../src/lib/markdown/blocks'
@@ -112,7 +113,7 @@ async function main() {
   }
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
   const gen = readFileSync(GEN, 'utf8')
 
   const ok: Array<{ fix: Fix; id: string; question: string; body: string; next: string }> = []

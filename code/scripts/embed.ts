@@ -1,3 +1,4 @@
+import { postgresPoolConfig } from '../src/lib/db/postgres-config'
 import { loadEnvLocal } from '../src/lib/load-env'
 import { EMBED_MODEL, EMBED_DIM } from '../src/lib/embed/model'
 import { embedQuestions } from '../src/lib/embed/gemini'
@@ -34,7 +35,7 @@ async function main() {
   const probe = process.argv.includes('--probe')
 
   const { Pool } = await import('pg')
-  const pool = new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } })
+  const pool = new Pool(postgresPoolConfig(url))
 
   const where = all || probe ? '' : 'and embedding is null'
   const r = await pool.query<Row>(
