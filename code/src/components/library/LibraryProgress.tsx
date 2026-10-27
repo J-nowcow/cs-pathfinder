@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react'
 import { LearningAreas } from '../LearningAreas'
 import { OpenBookArt } from './BookArt'
 import { readLibraryProgress, type ProgressItem } from '@/lib/library/progress'
+import { LIBRARY_EVENT } from '@/lib/library/storage'
 import {
-  loadLibrary,
-  parseLibrary,
-  mergeLibrary,
-  saveLibrary,
-  LIBRARY_EVENT,
-} from '@/lib/library/storage'
+  readLibraryStrict,
+  restoreLibraryStrict,
+  LibraryEditError,
+} from '@/lib/library/local-edit'
+import { libraryAccountStateSchema } from '@/lib/library/account-schema'
 import release from '../../../data/pmp-release.json'
 import { libraryButton } from './LibraryShell'
 import { JOURNEY_SYNCED_EVENT, STREAK_SYNCED_EVENT } from '@/lib/journey/sync'
@@ -46,10 +46,19 @@ export function LibraryProgress({
     return () => events.forEach((e) => window.removeEventListener(e, refresh))
   }, [])
   function backup() {
+    let state
+    try {
+      state = readLibraryStrict(localStorage)
+    } catch {
+      setMessage(
+        '저장된 기록을 온전히 읽지 못해 백업을 만들지 않았어요. 브라우저의 기존 기록은 그대로예요.',
+      )
+      return
+    }
     const blob = new Blob(
       [
         JSON.stringify(
-          { format: 'pathfinder.library.backup', ...loadLibrary() },
+          { format: 'pathfinder.library.backup', ...state },
           null,
           2,
         ),
@@ -76,21 +85,26 @@ export function LibraryProgress({
         Array.isArray(input.entries)
       )
         throw Error()
-      const clean = parseLibrary(raw)
       if (
-        input.version !== 1 ||
-        Object.keys(clean.entries).length !== Object.keys(input.entries).length
+        Object.keys(input).some(
+          (key) => !['format', 'version', 'entries'].includes(key),
+        )
       )
         throw Error()
-      const merged = mergeLibrary(loadLibrary(), clean)
-      if (!merged) throw Error()
-      if (!saveLibrary(merged)) throw Error()
+      const clean = libraryAccountStateSchema.parse({
+        version: input.version,
+        entries: input.entries,
+      })
+      restoreLibraryStrict(localStorage, clean)
+      window.dispatchEvent(new Event(LIBRARY_EVENT))
       setMessage(
-        '기록을 가져왔습니다. 중복 항목은 더 최근에 저장한 답안을 사용했습니다.',
+        '기록을 가져왔어요. 비어 있지 않은 답안은 보존했고 답안이 같은 항목의 체크·복습 날짜는 더 최근 기록을 사용했어요.',
       )
-    } catch {
+    } catch (error) {
       setMessage(
-        '파일을 가져오지 못했습니다. 이 화면에서 내보낸 JSON 파일인지, 3MB·200개 항목 한도를 넘지 않는지 확인하세요. 기존 기록은 바뀌지 않았습니다.',
+        error instanceof LibraryEditError && error.code === 'conflict'
+          ? '서로 다른 답안이 겹치거나 200개 한도를 넘어서 가져오지 않았어요. 기존 기록과 백업 파일은 그대로예요.'
+          : '파일을 가져오지 못했어요. 파일 형식과 3MB·200개 한도, 브라우저 기록과 저장 설정을 확인해 주세요. 기존 기록은 바뀌지 않았어요.',
       )
     }
   }
@@ -292,7 +306,8 @@ export function LibraryProgress({
           <summary className="cursor-pointer font-semibold">답안 백업</summary>
           <p className="mt-3 text-sm leading-7 text-muted">
             기술사 답안과 Jira 과제의 메모·체크 항목·복습 날짜를 파일로
-            저장합니다. 파일을 가져올 때는 항목별로 더 최근 기록을 사용합니다.
+            저장합니다. 서로 다른 답안이 겹치면 가져오기를 멈추고 기존 기록을
+            보존합니다.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <button className={libraryButton} onClick={backup}>

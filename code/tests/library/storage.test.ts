@@ -66,7 +66,7 @@ describe('새 학습 기록의 보존과 복습', () => {
     v.entries['topic:normalization'].draft = 'x'.repeat(6001)
     expect(parseLibrary(JSON.stringify(v))).toEqual(emptyLibrary())
   })
-  it('최신 충돌을 병합하고 기존 기록을 몰래 버리지 않는다', () => {
+  it('서로 다른 답안은 병합하지 않고 기존 기록을 보존한다', () => {
     const a = updateStudy(
       emptyLibrary(),
       'topic:normalization',
@@ -81,9 +81,7 @@ describe('새 학습 기록의 보존과 복습', () => {
       { draft: '새 답' },
       '2026-10-28T01:00:00Z',
     )!
-    expect(mergeLibrary(b, a)?.entries['topic:normalization'].draft).toBe(
-      '새 답',
-    )
+    expect(mergeLibrary(b, a)).toBeNull()
     let full = emptyLibrary()
     for (let i = 0; i < 200; i++)
       full = updateStudy(full, 'topic:t-' + i, meta, {}, at)!

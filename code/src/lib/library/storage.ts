@@ -133,8 +133,14 @@ export function mergeLibrary(
   incoming: LibraryState,
 ): LibraryState | null {
   const entries = { ...current.entries }
-  for (const [id, entry] of Object.entries(incoming.entries))
-    if (!entries[id] || entry.updatedAt > entries[id].updatedAt)
-      entries[id] = entry
+  for (const [id, entry] of Object.entries(incoming.entries)) {
+    const old = entries[id]
+    if (old?.draft && entry.draft && old.draft !== entry.draft) return null
+    if (!old) entries[id] = entry
+    else {
+      const newer = entry.updatedAt > old.updatedAt ? entry : old
+      entries[id] = { ...newer, draft: old.draft || entry.draft }
+    }
+  }
   return Object.keys(entries).length <= 200 ? { version: 1, entries } : null
 }
