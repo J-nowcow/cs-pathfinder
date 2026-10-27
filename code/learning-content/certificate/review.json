@@ -20,8 +20,8 @@
   "validation": {
     "fullSuiteFiles": 224,
     "fullSuiteTests": 1935,
-    "focusedFiles": 16,
-    "focusedTests": 67,
+    "focusedFiles": 17,
+    "focusedTests": 69,
     "build": "passed",
     "typecheck": "passed",
     "sql": "Existing12 SQL lesson fields/data unchanged except additive domain; displayed SQL results rerun in isolated PGlite",
