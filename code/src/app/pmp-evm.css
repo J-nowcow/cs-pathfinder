@@ -4,6 +4,13 @@
   padding: 32px 0;
   border-block: 1px solid var(--line);
 }
+.study-content .pmp-evm-lab {
+  font-size: var(--study-size);
+  line-height: 1.9;
+}
+.study-content .pmp-evm-lab :where(label, input, button, summary) {
+  font-size: var(--study-size);
+}
 .pmp-evm-inputs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
