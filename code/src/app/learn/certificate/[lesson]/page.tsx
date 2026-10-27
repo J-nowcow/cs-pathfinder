@@ -3,10 +3,12 @@ import { notFound } from 'next/navigation'
 import { LibraryShell, ConceptFlow } from '@/components/library/LibraryShell'
 import { CertificateTable } from '@/components/certificate/CertificateTable'
 import { CertificatePractice } from '@/components/certificate/CertificatePractice'
+import { CertificateCoverageGraph } from '@/components/certificate/CertificateCoverageGraph'
 import {
   certificate as c,
   certificateLessons,
   certificateHref,
+  certificateDomain,
 } from '@/lib/certificate/course'
 export function generateStaticParams() {
   return c.lessons.map((n) => ({ lesson: n.id }))
@@ -32,7 +34,9 @@ export default async function CertificateLesson({
     <LibraryShell
       reading
       eyebrow={
-        '정보처리기사 · DB·SQL · ' +
+        '정보처리기사 · ' +
+        certificateDomain(n) +
+        ' · ' +
         String(at + 1).padStart(2, '0') +
         '/' +
         c.lessons.length
@@ -48,6 +52,7 @@ export default async function CertificateLesson({
           ))}
         </div>
         <ConceptFlow items={n.flow} />
+        {n.id === 'test-coverage' ? <CertificateCoverageGraph /> : null}
         <section>
           <h2>같은 상황에서 비교하기</h2>
           <CertificateTable
@@ -65,17 +70,22 @@ export default async function CertificateLesson({
           )}
           {n.example.rows && n.example.headers && (
             <CertificateTable
-              caption="예상 결과 · 격리된 PGlite 실행으로 확인"
+              caption={
+                n.example.verification ??
+                '예상 결과 · 격리된 PGlite 실행으로 확인'
+              }
               headers={n.example.headers}
               rows={n.example.rows}
             />
           )}
           <p>{n.example.text}</p>
-          <details>
-            <summary>공통 예제 데이터 보기</summary>
-            <CertificateTable caption="books" {...c.books} />
-            <CertificateTable caption="loans" {...c.loans} />
-          </details>
+          {n.domain === 'db-sql' ? (
+            <details>
+              <summary>공통 예제 데이터 보기</summary>
+              <CertificateTable caption="books" {...c.books} />
+              <CertificateTable caption="loans" {...c.loans} />
+            </details>
+          ) : null}
         </section>
         <aside className="certificate-caution">
           <h2>함께 기억할 조건</h2>

@@ -20,7 +20,7 @@ afterEach(async () => {
 describe('독립 정처기 이론의 실제 SQL과 경계', () => {
   it('서재의 모든 예상 결과를 초기 상태에서 실행해 확인한다', async () => {
     for (const n of c.lessons) {
-      if (n.example.code && n.example.rows) {
+      if (n.domain === 'db-sql' && n.example.code && n.example.rows) {
         const result = await db.query(n.example.code)
         expect(
           result.rows.map((r) =>
@@ -154,9 +154,10 @@ describe('독립 정처기 이론의 실제 SQL과 경계', () => {
     ).toEqual(['하린'])
   })
   it('기출 파일 없이 정제한 범위와 원천 출처를 보존한다', () => {
-    expect(c.lessons).toHaveLength(12)
-    expect(new Set(c.lessons.map((x) => x.id)).size).toBe(12)
-    expect(c.origin.concepts).toHaveLength(14)
+    expect(c.lessons).toHaveLength(15)
+    expect(new Set(c.lessons.map((x) => x.id)).size).toBe(15)
+    expect(c.lessons.filter((x) => x.domain === 'db-sql')).toHaveLength(12)
+    expect(c.origin.concepts).toHaveLength(18)
     expect(c.origin.file).toBe('concepts-theory.json')
     const sourceIds = new Set(c.sources.map((x) => x.id)),
       originIds = new Set(c.origin.concepts.map((x) => x.id))

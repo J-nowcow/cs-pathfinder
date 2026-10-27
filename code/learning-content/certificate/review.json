@@ -1,13 +1,15 @@
 {
-  "release": "2026-10-28.certificate1",
+  "release": "2026-10-28.certificate2",
   "canonicalSource": "learning-content/certificate/course.json",
   "counts": {
-    "lessons": 12,
-    "originConcepts": 14,
+    "lessons": 15,
+    "dbSqlLessons": 12,
+    "testingLessons": 3,
+    "originConcepts": 18,
     "candidateConcepts": 106
   },
-  "scope": "Independent DB/SQL theory with a new fictional library dataset; partial exam theory coverage only",
-  "originalSource": "Read-only concepts-theory.json; origin IDs, original primary references and source hash retained in course.json",
+  "scope": "Independent DB/SQL and three connected testing-design/oracle lessons; other theory domains remain partial",
+  "originalSource": "Read-only concepts-theory.json; four additional concept IDs and their primary references retained. Exam-reconstruction theory.json and all banks/solutions/images excluded.",
   "excluded": [
     "Exam questions",
     "Recalled exam code",
@@ -16,13 +18,17 @@
     "Authentic question JSON files"
   ],
   "validation": {
-    "fullSuiteFiles": 205,
-    "fullSuiteTests": 1813,
+    "fullSuiteFiles": 224,
+    "fullSuiteTests": 1935,
+    "focusedFiles": 16,
+    "focusedTests": 67,
     "build": "passed",
     "typecheck": "passed",
-    "sql": "Every displayed result table executed against isolated PGlite; FK/CHECK/NULL/empty subquery/join checks and FD closure independently verified",
-    "limits": "PGlite is not real Postgres concurrency or production-performance validation",
-    "koreanHumanize": "Actual humanize-korean heavy run2026-10-28-003-8ce9: diagnosis,16chunks, reassembly, independent finalizer accept; gate rate0.0014, gradeB, self-check6/6. Committed-text receipt required before push."
+    "sql": "Existing12 SQL lesson fields/data unchanged except additive domain; displayed SQL results rerun in isolated PGlite",
+    "testing": "Published boundary outputs plus81 integers and10 type/special cases checked against enumerated allowed set; four Boolean suites instrumented against explicit six-edge graph; mutation demonstrates full coverage can return wrong result; before/after oracle table checked",
+    "storage": "Complete legacy12-lesson record preserved while adding testing record; mixed roundtrip/merge/conflict checked; existing backup version/key unchanged",
+    "limits": "Fixed authored examples only; no actual service coverage, SQL production performance or account sync proof",
+    "koreanHumanize": "Required actual skill review and committed-text receipt before publication; evidence retained by global pre-push gate"
   },
   "storage": {
     "key": "pathfinder.certificate.v1",
@@ -30,5 +36,22 @@
     "notes": "Expected-text comparison preserves same-note conflicts; checklist mutations read latest state; visiting preserves content timestamps",
     "backup": "Separate version1 format. Different nonempty current note blocks import; unchanged note uses newer checks/review. Does not alter existing backup formats."
   },
-  "publication": "Validated source; publish only after final committed-text receipt."
+  "publication": "Validated source; publish only after final committed-text receipt.",
+  "initialDbSqlBundle": {
+    "release": "2026-10-28.certificate1",
+    "counts": {
+      "lessons": 12,
+      "originConcepts": 14,
+      "candidateConcepts": 106
+    },
+    "validation": {
+      "fullSuiteFiles": 205,
+      "fullSuiteTests": 1813,
+      "build": "passed",
+      "typecheck": "passed",
+      "sql": "Every displayed result table executed against isolated PGlite; FK/CHECK/NULL/empty subquery/join checks and FD closure independently verified",
+      "limits": "PGlite is not real Postgres concurrency or production-performance validation",
+      "koreanHumanize": "Actual humanize-korean heavy run2026-10-28-003-8ce9: diagnosis,16chunks, reassembly, independent finalizer accept; gate rate0.0014, gradeB, self-check6/6. Committed-text receipt required before push."
+    }
+  }
 }

@@ -5,6 +5,8 @@
 @import './pmp-evm.css';
 @import './pmp-risk.css';
 @import './pmp-search.css';
+@import './certificate-testing.css';
+@import './library-purpose.css';
 
 /*
  * 이 서비스의 동사는 "파고들기"다. 질문 하나에서 아래로 계속 판다.

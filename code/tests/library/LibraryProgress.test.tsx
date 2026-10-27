@@ -55,7 +55,7 @@ describe('통계보다 공부할 내용을 앞세우는 서재', () => {
     expect(disclosure.open).toBe(true)
     expect(localStorage.getItem(LIBRARY_KEY)).toBe(before)
   })
-  it('서재 첫 화면에는 이어 읽을 자료와 네 분야의 실제 링크를 표시한다', () => {
+  it('서재 첫 화면에는 이어 읽을 자료와 세 목적별 실제 링크를 표시한다', () => {
     seed()
     render(
       <LibraryProgress
