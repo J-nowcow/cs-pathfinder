@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { LibraryShell } from '@/components/library/LibraryShell'
 import { PmpPractice } from '@/components/pmp/PmpPractice'
 import { PmpFloatLab } from '@/components/pmp/PmpFloatLab'
+import { PmpEvmLab } from '@/components/pmp/PmpEvmLab'
 import {
   pmpCourse as c,
   lessonById,
@@ -118,6 +119,7 @@ export default async function PmpLesson({
             source={c.sources.find((s) => s.id === 'cpm')!}
           />
         ) : null}
+        {n.id === 'n35' ? <PmpEvmLab /> : null}
         <PmpPractice key={n.id} id={n.id} visit />
         <section>
           <h2>이 수업의 용어</h2>
