@@ -30,6 +30,7 @@ import {
   targetIdentity,
   type MigrationPlan,
 } from './lib/library-migration'
+import { verifyRolloutSchema } from './lib/library-rollout'
 import { schemaBackup } from './lib/library-schema-backup'
 
 // Never read DATABASE_URL, PG* connection environment or private app env files.
@@ -519,6 +520,66 @@ try {
           )
         ).rows[0].n,
         0,
+      )
+      await check(
+        'read-only rollout gate rejects missing grants/RLS/index/log readiness without writing rows',
+        async () => {
+          const ready = await verifyRolloutSchema(candidate)
+          assert.equal(ready.readOnly, true)
+          assert.equal(ready.tlsAuthorized, true)
+          await candidate.query(
+            'grant select on library_study_snapshot to public',
+          )
+          await assert.rejects(verifyRolloutSchema(candidate))
+          await candidate.query(
+            'revoke all on library_study_snapshot from public',
+          )
+          await candidate.query(
+            'alter table library_study_snapshot disable row level security',
+          )
+          await assert.rejects(verifyRolloutSchema(candidate))
+          await candidate.query(
+            'alter table library_study_snapshot enable row level security',
+          )
+          await candidate.query('drop index library_study_write_revision_idx')
+          await assert.rejects(verifyRolloutSchema(candidate))
+          await candidate.query(
+            'create index library_study_write_revision_idx on library_study_write(user_id,revision)',
+          )
+          await candidate.query(
+            "delete from schema_migrations where name='0022_library_study.sql'",
+          )
+          await assert.rejects(verifyRolloutSchema(candidate))
+          await candidate.query(
+            "insert into schema_migrations(name) values('0022_library_study.sql')",
+          )
+          assert.equal(
+            (await verifyRolloutSchema(candidate)).migrationLogVerified,
+            true,
+          )
+          assert.equal(
+            (
+              await candidate.query(
+                'select count(*)::int n from library_study_snapshot',
+              )
+            ).rows[0].n,
+            0,
+          )
+          assert.equal(
+            (
+              await candidate.query(
+                'select count(*)::int n from library_study_write',
+              )
+            ).rows[0].n,
+            0,
+          )
+          result.rolloutReadiness = {
+            passed: true,
+            negativeCases: 4,
+            newRowsWrittenByGate: 0,
+            productionAccess: false,
+          }
+        },
       )
       stage = 'migration rollback'
       await candidate.query(rollback)

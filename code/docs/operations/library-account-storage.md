@@ -2,10 +2,9 @@
 
 Status: server and opt-in native client are implemented. The API and client
 remain disabled unless `LIBRARY_ACCOUNT_SYNC_ENABLED=1`; enabling the client also
-requires a fresh build. No production migration or activation has been executed.
+requires a fresh build. The user-approved0022 migration was applied on2026-10-27T21:52:19Z; activation remains off.
 The local client/notice and isolated API flow are verified. Keep the flag absent
-until actual OAuth/environment checks and the separately approved migration are
-complete. See `library-account-client.md` for current client behavior and limits.
+until actual OAuth/environment checks are complete. See `library-account-client.md` for current client behavior and limits.
 
 ## Scope and protocol
 
@@ -62,7 +61,7 @@ Neon/PgBouncer behavior, Google OAuth or authenticated cross-device restoration.
 5. Published after actual humanize-korean review: Korean scope, logout, browser
    retention and server-deletion notices. Server rollout is still disabled.
 
-## Concrete production migration plan (not executed)
+## Production migration record and procedure
 
 The guarded preparation/apply tool and tested private-backup procedure are in
 [library-migration-package.md](library-migration-package.md). Its prepare phase
@@ -74,8 +73,10 @@ The URL/credentials remain in the existing private environment and are never
 copied to this document. Reserve0021 for the user's staged seed migration;
 this change is **only** `0022_library_study.sql`.
 
-After the client/notice work is ready, request explicit approval for this exact
-target and two-table additive migration. Do not run the general migration runner
+Explicit approval for this target and two-table additive migration was recorded
+and executed once. The procedure below is retained for audit, not a repeat-run
+instruction. See [rollout readiness](library-rollout-readiness.md) for the remaining
+environment and OAuth boundary. Do not run the general migration runner
 against all pending files, enable the rollout flag or seed existing tables as
 part of this approval.
 
