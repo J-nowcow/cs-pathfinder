@@ -67,13 +67,12 @@ export function StudyDesk({
             >
               복습·기록
             </Link>
-            <span className="desk-nav-label">공부 자료</span>
-            <Link href="/questions">CS 면접 질문</Link>
+            <span className="desk-nav-label">PM 이론</span>
             <Link
               href="/learn/pmp"
               aria-current={section === 'pmp' ? 'page' : undefined}
             >
-              PMP 자습서
+              프로젝트·제품 관리
             </Link>
             <Link
               href="/learn/jira"
@@ -81,6 +80,9 @@ export function StudyDesk({
             >
               Jira 연습
             </Link>
+            <span className="desk-nav-label">CS 이론</span>
+            <Link href="/questions">CS 질문·해설</Link>
+            <span className="desk-nav-label">자격증 대비</span>
             <Link
               href="/learn/engineer"
               aria-current={section === 'engineer' ? 'page' : undefined}

@@ -1,0 +1,48 @@
+.certificate-coverage-figure {
+  margin: 36px 0;
+  padding: 22px 0;
+  border-block: 1px solid var(--line);
+}
+.certificate-coverage-figure figcaption {
+  font-weight: 650;
+  font-size: var(--study-size);
+}
+.certificate-coverage-scroll {
+  overflow: auto;
+  max-width: 100%;
+}
+.certificate-coverage-scroll svg {
+  display: block;
+  width: 100%;
+  min-width: 700px;
+  max-width: none;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: var(--study-size);
+}
+.certificate-coverage-edge {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.certificate-coverage-edge-label {
+  fill: var(--ink);
+  font-size: 15px;
+}
+.certificate-coverage-node :is(rect, polygon) {
+  fill: var(--raised);
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.certificate-coverage-node text {
+  fill: var(--ink);
+  text-anchor: middle;
+}
+.certificate-coverage-figure > p {
+  font-size: var(--study-size);
+  line-height: 1.9;
+}
+
+.study-desk .study-content .certificate-lesson :is(th, td) {
+  font-size: var(--study-size);
+}

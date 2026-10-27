@@ -2,11 +2,18 @@ import course from '../../../learning-content/certificate/course.json'
 export type Cell = string | number | null
 export type CertificateLesson = {
   id: string
+  domain: 'db-sql' | 'testing'
   title: string
   question: string
   lead: string
   body: string[]
-  example: { code?: string; text: string; headers?: string[]; rows?: Cell[][] }
+  example: {
+    code?: string
+    text: string
+    headers?: string[]
+    rows?: Cell[][]
+    verification?: string
+  }
   comparison: string[][]
   trap: string
   recall: string
@@ -24,3 +31,5 @@ export const certificateLessons = new Map(
 )
 export const certificateHref = (id: string) =>
   '/learn/certificate/' + encodeURIComponent(id)
+export const certificateDomain = (lesson: CertificateLesson) =>
+  certificate.domains.find((domain) => domain.id === lesson.domain)!.title
