@@ -17,7 +17,7 @@ NODE_TLS_REJECT_UNAUTHORIZED=1 npm run verify:library-postgres -- \
 ```
 
 All three paths are mandatory and absolute. The binary directory must contain
-`initdb` and `pg_ctl`; OpenSSL must be available. The runner creates a unique
+`initdb`, `pg_ctl`, `pg_dump` and `pg_restore`; OpenSSL must be available. The runner creates a unique
 private directory underneath the scratch parent. It never starts a system
 service or uses a pre-existing cluster. On completion it stops only the cluster
 at that unique data directory, then removes its synthetic data, generated
@@ -37,6 +37,11 @@ synthetic `user(id)` table and the exact0022 migration's two tables. This models
 the new migration's FK/owner boundary, not the complete better-auth schema. The
 actual `writeLibraryForUser`/`loadLibraryForUser` functions receive an explicit
 multi-connection `Db` adapter; their fallback application connection is unused.
+
+The runner also verifies the guarded migration package and a schema-only archive
+restore in separate owned disposable databases. See
+[library-migration-package.md](library-migration-package.md). The expanded run has
+14 checks; the original13-check result below remains a dated baseline.
 
 ## Checked behavior
 
