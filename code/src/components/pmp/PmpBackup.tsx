@@ -277,7 +277,7 @@ export function PmpBackup() {
                             ? '현재 브라우저 기록 유지'
                             : '백업 파일의 기록 사용'}
                         </span>
-                        <pre>{answer(c, c[side])}</pre>
+                        <pre tabIndex={0}>{answer(c, c[side])}</pre>
                       </label>
                     ))}
                   </div>
