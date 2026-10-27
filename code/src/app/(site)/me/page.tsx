@@ -66,6 +66,7 @@ export default async function MePage() {
       <p className="mt-2 text-muted">
         내 경험에서 질문을 만들고, 지금까지의 학습 기록을 이어 보세요.
       </p>
+      <Link href="/learn/progress" className="mt-5 inline-flex min-h-11 items-center text-sm font-medium text-accent">CS·PMP·Jira·기술사 기록 모아보기 →</Link>
 
       <div className="mt-8">
         <ResumeQuestionMaker />

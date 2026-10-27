@@ -3,3 +3,5 @@
 code/public/pmp/** -whitespace
 code/pm-content/pmp/source/uncertainty-plot.svg -whitespace
 code/pm-content/pmp/template/assets/*LICENSE.txt -whitespace
+code/public/jira/** -whitespace
+code/learning-content/jira/template/assets/*LICENSE.txt -whitespace

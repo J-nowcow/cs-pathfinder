@@ -1,0 +1,241 @@
+{
+  "lessons": [
+    {
+      "id": 1,
+      "title": "Jira의 지도를 그리기"
+    },
+    {
+      "id": 2,
+      "title": "좋은 작업 한 장 쓰기"
+    },
+    {
+      "id": 3,
+      "title": "과제·계층·의존관계"
+    },
+    {
+      "id": 4,
+      "title": "완료를 믿을 수 있게"
+    },
+    {
+      "id": 5,
+      "title": "보드에서 흐름 보기"
+    },
+    {
+      "id": 6,
+      "title": "검색에서 필터까지"
+    },
+    {
+      "id": 7,
+      "title": "보고 화면과 지표"
+    },
+    {
+      "id": 8,
+      "title": "자동화를 작게 검증하기"
+    },
+    {
+      "id": 9,
+      "title": "권한·필드 오류 풀기"
+    },
+    {
+      "id": 10,
+      "title": "BSS PI 운영으로 연결"
+    }
+  ],
+  "queries": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    },
+    {
+      "id": 4
+    },
+    {
+      "id": 5
+    },
+    {
+      "id": 6
+    },
+    {
+      "id": 7
+    },
+    {
+      "id": 8
+    },
+    {
+      "id": 9
+    },
+    {
+      "id": 10
+    },
+    {
+      "id": 11
+    },
+    {
+      "id": 12
+    },
+    {
+      "id": 13
+    },
+    {
+      "id": 14
+    },
+    {
+      "id": 15
+    },
+    {
+      "id": 16
+    },
+    {
+      "id": 17
+    },
+    {
+      "id": 18
+    },
+    {
+      "id": 19
+    },
+    {
+      "id": 20
+    }
+  ],
+  "sources": [
+    [
+      "용어 변경과 기존 JQL",
+      "https://support.atlassian.com/jira-software-cloud/docs/find-specific-work-items/"
+    ],
+    [
+      "Team-managed와 Company-managed",
+      "https://support.atlassian.com/jira-software-cloud/docs/what-are-team-managed-and-company-managed-spaces/"
+    ],
+    [
+      "작업 유형과 계층",
+      "https://support.atlassian.com/jira-cloud-administration/docs/what-are-issue-types/"
+    ],
+    [
+      "상태·우선순위·해결값",
+      "https://support.atlassian.com/jira-cloud-administration/docs/what-are-issue-statuses-priorities-and-resolutions/"
+    ],
+    [
+      "Parent 필드와 계층 연결",
+      "https://support.atlassian.com/jira-software-cloud/docs/upcoming-changes-epic-link-replaced-with-parent/"
+    ],
+    [
+      "작업 간 관계 연결",
+      "https://support.atlassian.com/jira-software-cloud/docs/link-issues/"
+    ],
+    [
+      "보드 열과 상태 연결",
+      "https://support.atlassian.com/jira-software-cloud/docs/configure-columns/"
+    ],
+    [
+      "JQL 필드",
+      "https://support.atlassian.com/jira-software-cloud/docs/jql-fields/"
+    ],
+    [
+      "JQL 연산자",
+      "https://support.atlassian.com/jira-software-cloud/docs/jql-operators/"
+    ],
+    [
+      "JQL 함수와 날짜",
+      "https://support.atlassian.com/jira-software-cloud/docs/jql-functions/"
+    ],
+    [
+      "대시보드 가젯",
+      "https://support.atlassian.com/jira-cloud-administration/docs/use-dashboard-gadgets/"
+    ],
+    [
+      "필터·대시보드 공유",
+      "https://support.atlassian.com/jira/kb/how-to-share-a-dashboard-or-filter-ie-make-it-public-change-its-viewers-and-editor-permissions/"
+    ],
+    [
+      "자동화 실행 계정",
+      "https://support.atlassian.com/cloud-automation/docs/run-jira-rules-as-another-user/"
+    ],
+    [
+      "자동화 한도와 사용량",
+      "https://support.atlassian.com/automation/kb/difference-between-automation-service-limits-and-automation-usage-limits/"
+    ],
+    [
+      "자동화 실행 모니터링",
+      "https://support.atlassian.com/cloud-automation/docs/monitor-automation-activity/"
+    ],
+    [
+      "필드 컨텍스트",
+      "https://support.atlassian.com/jira-cloud-administration/docs/configure-custom-field-context/"
+    ],
+    [
+      "권한 스킴",
+      "https://support.atlassian.com/jira-cloud-administration/docs/grant-or-revoke-permissions-in-a-scheme/"
+    ],
+    [
+      "Resolution 정합성",
+      "https://support.atlassian.com/jira/kb/best-practices-on-using-the-resolution-field-in-jira-cloud/"
+    ],
+    [
+      "Jira Essentials 자격증",
+      "https://community.atlassian.com/learning/certifications/jira-software-essentials-certification"
+    ],
+    [
+      "Essentials 무료 준비 과정",
+      "https://community.atlassian.com/learning/collection/cert-prep/jira-software-essentials-prep"
+    ],
+    [
+      "Certiverse 시험 예약·원격 감독",
+      "https://community.atlassian.com/forums/discussion/3204237/certiverse-is-live-for-all-atlassian-credential-exams"
+    ],
+    [
+      "Managing Jira Projects 종료 안내",
+      "https://community.atlassian.com/learning/certifications/managing-jira-projects-for-cloud-certification"
+    ],
+    [
+      "Jira Administration 개편 안내",
+      "https://community.atlassian.com/learning/certifications/jira-administration-for-cloud"
+    ],
+    [
+      "워크플로 공식 교육",
+      "https://community.atlassian.com/learning/course/configure-workflows-and-notifications-in-jira-projects"
+    ],
+    [
+      "자동화 공식 교육",
+      "https://learning.atlassian.com/learning/path/administer-confluence-to-improve-the-user-experience/course/jira-automation-course"
+    ],
+    [
+      "필드 만들기와 구성",
+      "https://www.atlassian.com/software/jira/guides/fields/tutorials"
+    ],
+    [
+      "저장 필터로 보드 만들기",
+      "https://support.atlassian.com/jira-software-cloud/docs/create-a-board-based-on-filters/"
+    ],
+    [
+      "워크플로 규칙 편집",
+      "https://support.atlassian.com/jira-cloud-administration/docs/edit-an-issue-workflow/"
+    ],
+    [
+      "종료 전 필수 필드 검증",
+      "https://support.atlassian.com/jira/kb/mandatory-field-validation-for-issue-closure-in-jira-cloud/"
+    ],
+    [
+      "고급 검색과 JQL 사용",
+      "https://support.atlassian.com/jira-software-cloud/docs/what-is-advanced-search-in-jira-cloud/"
+    ],
+    [
+      "사용자 대시보드와 가젯 추가",
+      "https://support.atlassian.com/jira-cloud-administration/docs/configure-custom-dashboards/"
+    ],
+    [
+      "자동화 트리거",
+      "https://support.atlassian.com/cloud-automation/docs/jira-automation-triggers/"
+    ],
+    [
+      "자동화 액션",
+      "https://support.atlassian.com/cloud-automation/docs/jira-automation-actions/"
+    ]
+  ],
+  "asof": "2026-10-27"
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f0">
+  <meta name="description" content="하루 한 개념, 차근차근 익히는 Jira Cloud. BSS PI 예제로 배우는 개념, 실습, JQL, 용어 사전.">
+  <title>차근차근 Jira · 나만의 작은 공부방</title>
+  <link rel="icon" href="assets/leaf.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/SUITE-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="data.js"></script><script defer src="trace-data.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 이동</a>
+  <aside id="sidebar" class="sidebar">
+    <a class="brand" href="#home"><span class="brand-icon">✳</span><span>차근차근<span class="brand-sub">JIRA STUDY GARDEN</span></span></a>
+    <div style="padding:0 24px 16px;display:flex;gap:14px;flex-wrap:wrap;font-size:13px"><a href="/learn/jira">실무 미션 ↗</a><a href="/learn/progress">통합 기록 ↗</a></div><div class="side-label">나만의 작은 공부방</div>
+    <nav aria-label="주 메뉴" id="navigation"></nav>
+    <div class="side-bottom"><div class="tiny-sprout">✳</div><strong>조금씩, 내 속도대로.</strong><p>한 번에 전부 알 필요는 없어요.<br>오늘은 딱 하나면 충분해요.</p><button data-action="settings" class="text-btn">글꼴 · 읽기 설정 <span>↗</span></button></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><button class="icon-btn menu-btn" data-action="menu" aria-label="메뉴 열기" aria-expanded="false" aria-controls="sidebar">☰</button><span class="breadcrumb" id="breadcrumb">나의 공부방</span><div class="top-actions"><button class="search-trigger" data-action="search" aria-label="전체 검색">⌕ <span>궁금한 개념 찾기</span><kbd>/</kbd></button><button class="icon-btn" data-action="settings" aria-label="글꼴과 읽기 설정">가<span class="font-dot">✦</span></button></div></header>
+    <main id="main" tabindex="-1"></main>
+    <footer>개념을 읽고, 직접 해보고, 결과를 확인하기. <span>Jira Cloud · 가상 BSS PI 예제</span></footer>
+  </div>
+  <dialog id="dialog" aria-labelledby="dialog-title"></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body></html>

@@ -1,7 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const expandMock = vi.fn()
+const afterMock = vi.fn()
 vi.mock('@/lib/expand', () => ({ expand: (...a: unknown[]) => expandMock(...a) }))
+// Route-contract tests use a mocked expansion result. Keep real bootstrap and
+// background embedding out of the shared test DB; both have dedicated suites.
+vi.mock('@/lib/db/bootstrap', () => ({ ensureSeeded: async () => {} }))
+vi.mock('@/lib/next/safe-after', () => ({ safeAfter: (...a: unknown[]) => afterMock(...a) }))
 
 const { POST } = await import('@/app/api/expand/route')
 
@@ -39,7 +44,10 @@ const okOutcome = {
 }
 
 describe('POST /api/expand', () => {
-  beforeEach(() => expandMock.mockReset())
+  beforeEach(() => {
+    expandMock.mockReset()
+    afterMock.mockReset()
+  })
 
   it('returns 200 with node payload on success', async () => {
     expandMock.mockResolvedValue(okOutcome)
@@ -51,6 +59,13 @@ describe('POST /api/expand', () => {
     expect(json.cache).toBe('miss')
     expect(json.node.suggestions[0].resolved).toBe(false)
     expect(json.node.suggestions[1].resolved).toBe(true)
+    expect(afterMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not schedule embedding for a cached response', async () => {
+    expandMock.mockResolvedValue({ ...okOutcome, cache: 'hit' })
+    expect((await POST(req(validBody))).status).toBe(200)
+    expect(afterMock).not.toHaveBeenCalled()
   })
 
   it('never caches the response', async () => {

@@ -1,0 +1,104 @@
+{
+  "release": "2026-10-27.library1",
+  "scope": [
+    "Jira study+5missions",
+    "24topic guides and1860question positions",
+    "same-browser cross-track records"
+  ],
+  "counts": {
+    "guides": 24,
+    "positions": 1860,
+    "licensedOriginals": 31,
+    "linkedPositions": 538,
+    "pendingGuideLinks": 1322,
+    "jiraMissions": 5
+  },
+  "sourceRules": {
+    "oldQuestionProseNotRedistributed": true,
+    "originalJiraDataPreserved": true,
+    "proprietaryFontsNotBundled": true,
+    "automaticLabelsUnreviewed": true,
+    "referenceAnswersAreAuthoredNotOfficial": true
+  },
+  "sha256": {
+    "learning-content/engineer/source-index.json": "605de49a543c7e3148e14f483853bbc0ccbbf3a5e9b8d1675f1e8f5bf40ca047",
+    "learning-content/engineer/guides.json": "e0393e281bc5516bd5b9e8434b53e69d66367e2c006cd0dc7163bf61b25aa006",
+    "learning-content/jira/missions.json": "1ff87014e9773e45d34f9d1ee0eaf6f368be880dfa45e585f15f01d8b1940168",
+    "data/engineer-index.json": "a6de17cd4bb0ffbc80e8962021421f25b2e5509659f1b5109e858868f76c51b4",
+    "data/engineer-guides.json": "7f42426fc854a61af61519e800a2433f69d0713c05e5fc2088dd454f13deb46f",
+    "public/jira/data.js": "834bc09b28292689eba8b5e7b1ab1710b602719c5d782f44ac380a1acf9ad6a6",
+    "public/jira/trace-data.js": "ecb5c78ec6a05199c99ab79682ffa7e3ebd03d2b7ad0f6fdf3b4a8a1fde6e463",
+    "public/jira/offline.html": "259262d26e4979eab9ed5f49dd693b91d19c0350893d3ff8c763cc4edaccd6e7"
+  },
+  "browser": {
+    "base": "http://127.0.0.1:3042",
+    "desktopWidth": 1280,
+    "all24TopicRoutes": [
+      "normalization",
+      "transactions",
+      "concurrency",
+      "indexes",
+      "cap",
+      "requirements",
+      "testing",
+      "architecture",
+      "configuration",
+      "agile",
+      "risk",
+      "evm",
+      "benefits",
+      "sla",
+      "observability",
+      "continuity",
+      "cloud",
+      "containers",
+      "identity",
+      "crypto",
+      "privacy",
+      "ml-evaluation",
+      "rag",
+      "dataquality"
+    ],
+    "jiraQuizNotes": true,
+    "missionDraftChecksReload": true,
+    "examFiltersPagination": true,
+    "exactExamResume": true,
+    "topicReferenceAndNoJS": true,
+    "unifiedReadsOldRecords": true,
+    "backupRestorePreservesPMP": true,
+    "blockedStorage": true,
+    "errors": []
+  },
+  "independentMath": {
+    "method": "independent Fraction arithmetic and original Jira dataset recount",
+    "checks": {
+      "jiraTaskClosed": "1/3",
+      "jiraAllClosed": "5/16",
+      "riskExpectedHours": "10",
+      "CPI": "8/9",
+      "SPI": "4/5",
+      "testBranch": "3/4",
+      "requestFailures": "1000",
+      "timeMinutes": "216/5",
+      "accuracy": "483/500",
+      "recall": "4/5",
+      "precision": "1/5",
+      "reviewMinutes": 120,
+      "referenceTimeWon": 500000
+    }
+  },
+  "recordCompatibility": "Read existing CS/PMP/Jira keys without rewriting. New library backups merge newer per item. Recurring automations remain paused.",
+  "limits": [
+    "No all-history completeness claim; rounds before63 unverified",
+    "No real Jira/company data connection",
+    "No new account sync; current site/browser records only",
+    "Mobile-specific testing not added per user preference"
+  ],
+  "validation": {
+    "tests": "195 files / 1781 passed",
+    "build": "passed",
+    "typecheck": "passed",
+    "apiTestIsolation": "Expand route contract suite mocks bootstrap/background callback execution; cache-miss scheduling and cache-hit non-scheduling asserted. Production DB code unchanged.",
+    "initialFailureLog": "Shared test DB qnode_number_key collisions reproduced in initial full suite; isolated13passed; proper dependency isolation added before final1781full pass."
+  }
+}
