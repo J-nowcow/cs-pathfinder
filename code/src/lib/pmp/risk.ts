@@ -25,7 +25,7 @@ const valid = (value: number, max: number) =>
   value >= 0 &&
   value <= max &&
   Math.round(value * 100) / 100 === value
-/** Two exclusive events: loss L with probability p, otherwise loss0. Costs are positive. */
+/** Two exclusive events: loss L with probability p, otherwise loss0. Costs are nonnegative. */
 export function calculateRisk(input: RiskInput) {
   const { fixed, probability, loss, limit } = input
   if (

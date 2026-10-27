@@ -54,8 +54,8 @@ export function PmpRiskLab() {
       <h2 id="risk-title">평균 손실이 작으면 감당할 수 있을까요?</h2>
       <p>
         A는 확정 비용을 지출합니다. B는 사건 발생 시 입력한 손실, 미발생 시 손실
-        0이라는 두 경우만 둡니다. 비용과 손실을 같은 가상 금액 단위의 양수로
-        표시합니다.
+        0이라는 두 경우만 둡니다. 비용과 손실은 같은 가상 금액 단위로 표시하며
+        모두 0 이상입니다.
       </p>
       <div className="pmp-risk-inputs">
         {inputs.map(([key, label]) => (

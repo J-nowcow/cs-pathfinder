@@ -1,7 +1,7 @@
 # Native expected-loss and threshold experiment
 
 Lesson n27 embeds the original A30 / p20% / loss100 / limit50 example in
-StudyDesk. Costs and losses are positive. B has exactly two exclusive events:
+StudyDesk. Costs and losses are nonnegative. B has exactly two exclusive events:
 the incident causes the supplied loss, otherwise monetary loss is0. Shared
 costs, insurance and other benefits are excluded. This is an authored teaching
 model, not an automatic alternative recommendation or organizational policy.
