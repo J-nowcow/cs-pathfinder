@@ -9,7 +9,7 @@ import { parseLibrary, LIBRARY_KEY } from './storage'
 import { kstToday } from '@/lib/daily/date'
 import pmp from '../../../data/pmp-library.json'
 import jira from '../../../data/jira-library.json'
-import release from '../../../data/pmp-release.json'
+import { pmpLessonHref } from '@/lib/pmp/routes'
 export type ProgressItem = {
   id: string
   track: string
@@ -17,6 +17,7 @@ export type ProgressItem = {
   href: string
   at: string | null
   due?: string
+  excerpt?: string
 }
 export type ProgressCard = {
   id: string
@@ -109,7 +110,7 @@ export function readLibraryProgress(
         id: 'pmp:' + id,
         track: 'PMP',
         title: nodes.get(id)!,
-        href: release.links.study + '#lesson/' + id,
+        href: pmpLessonHref(id),
         at: null,
         due: kstToday(new Date(v.due)),
       })
@@ -117,10 +118,11 @@ export function readLibraryProgress(
   for (const [id, e] of Object.entries(library.entries)) {
     const item = {
       id,
-      track: e.track === 'jira' ? 'Jira 미션' : '기술사',
+      track: e.track === 'jira' ? 'Jira 과제' : '기술사',
       title: e.title,
       href: e.href,
       at: e.updatedAt,
+      ...(e.draft.trim() ? { excerpt: e.draft.trim().slice(0, 180) } : {}),
       ...(e.due ? { due: e.due } : {}),
     }
     recent.push(item)
@@ -131,7 +133,7 @@ export function readLibraryProgress(
       id: 'pmp:' + x.id,
       track: 'PMP',
       title: nodes.get(x.id)!,
-      href: release.links.study + '#lesson/' + x.id,
+      href: pmpLessonHref(x.id),
       at: x.at,
     })
   for (const [id, a] of Object.entries(answers.drafts).slice(0, 100))
@@ -167,7 +169,7 @@ export function readLibraryProgress(
       ...Object.values(streak.days).flat().filter(nodeId),
     ]).size
   const jiraLatest = recent
-    .filter((x) => x.track === 'Jira' || x.track === 'Jira 미션')
+    .filter((x) => x.track === 'Jira' || x.track === 'Jira 과제')
     .sort((a, b) => (b.at ?? '').localeCompare(a.at ?? ''))[0]
   const cards: ProgressCard[] = [
     {
@@ -187,9 +189,7 @@ export function readLibraryProgress(
         ['열어 본 수업', pSeen.length],
         ['복습 대기', due.filter((x) => x.track === 'PMP').length],
       ],
-      href: pSeen[0]
-        ? release.links.study + '#lesson/' + pSeen[0].id
-        : release.links.study,
+      href: pSeen[0] ? pmpLessonHref(pSeen[0].id) : '/learn/pmp',
       resume: pSeen[0] ? nodes.get(pSeen[0].id)! : 'PMP 통합 자습서',
     },
     {
@@ -214,7 +214,7 @@ export function readLibraryProgress(
       title: '정보관리기술사',
       metrics: [
         [
-          '열어 본 학습 기록',
+          '저장된 학습 항목',
           libraryItems.filter((x) => x.track === 'engineer').length,
         ],
         [

@@ -1,0 +1,70 @@
+{
+  "checked": "2026-10-28",
+  "scope": "StudyDesk pages only. Existing standalone PMP and Jira packages preserved.",
+  "default": "presentation",
+  "storage": {
+    "key": "pathfinder.typography.v1",
+    "version": 1,
+    "scope": "local browser preference; no existing answer/reading/theme key modified"
+  },
+  "pairs": {
+    "presentation": {
+      "heading": "Paperlogy600/700, SUIT glyph fallback",
+      "body": "SUIT100–900"
+    },
+    "friendly": {
+      "heading": "LINE Seed KR Bold, SUIT glyph fallback",
+      "body": "SUIT100–900"
+    },
+    "book": {
+      "heading": "Gowun Batang Regular",
+      "body": "SUIT100–900"
+    },
+    "original": {
+      "heading": "SUITE",
+      "body": "Wanted Sans"
+    }
+  },
+  "sources": [
+    {
+      "family": "Paperlogy",
+      "site": "https://freesentation.blog/paperlogyfont",
+      "download": "https://github.com/Freesentation/paperlogy/tree/main/woff2",
+      "license": "public/library/fonts/Paperlogy-OFL.txt",
+      "note": "Official original binaries, not a third-party subset. Limited Hangul coverage falls back to SUIT."
+    },
+    {
+      "family": "LINE Seed KR",
+      "site": "https://seed.line.me/index_kr.html",
+      "download": "https://seed.line.me/src/images/fonts/LINE_Seed_Sans_KR.zip",
+      "edition": "2023.09.06",
+      "license": "public/library/fonts/LINESeed-LICENSE.txt",
+      "note": "Official WOFF2 file; copyright/license notice read from corresponding official TTF name table."
+    },
+    {
+      "family": "SUIT",
+      "site": "https://github.com/sun-typeface/SUIT",
+      "license": "public/library/fonts/SUIT-LICENSE.txt",
+      "note": "Copied byte-for-byte from existing licensed local asset; original kept."
+    },
+    {
+      "family": "Gowun Batang",
+      "site": "https://github.com/yangheeryu/Gowun-Batang",
+      "license": "public/library/fonts/GowunBatang-LICENSE.txt",
+      "note": "Copied byte-for-byte from existing licensed local asset; original kept."
+    }
+  ],
+  "loading": "All assets self-hosted. Unselected new title faces load when the choice menu previews them. Existing Next.js fonts retain their original preload behavior. No external CDN/font service requests.",
+  "sha256": {
+    "public/library/fonts/SUIT-Variable.woff2": "aa894a204d5a6fbae259dac6868d350cbd373a390caee0313f92946af741df23",
+    "public/library/fonts/GowunBatang-Regular.woff2": "6c5c443a4181181a2d64ac5d6a72c090a4e22694af3b0556c20857c8fc79cd80",
+    "public/library/fonts/SUIT-LICENSE.txt": "30d101ee3c35ef629d622d933d261a27b2f60223e0a3b0f36791e569c2b9daa9",
+    "public/library/fonts/Paperlogy-OFL.txt": "603b2e7ef9effb9037b0b67f0530cacdc05e71a4e569032d7e4d98c2e6763135",
+    "public/library/fonts/LINESeedKR-Bd.woff2": "57f95a6c2ce2ff6fa84e28f96bc5d29dcf5a7e308c9a25ed9541eacff3edfa56",
+    "public/library/fonts/NOTICE.txt": "27f3a8b6b853a6400d325e8dd538fa8664d30bcc8a2babdd0df9ce40c544aa94",
+    "public/library/fonts/Paperlogy-6SemiBold.woff2": "416702a9fe2215de762cf47ed5b83fbfef65a0cc99a50ab8f26f74e878a0aa16",
+    "public/library/fonts/Paperlogy-7Bold.woff2": "39daa190bc0ccaa7dfe8bb55716953fc56acdad812da6701a6e31a4a051173af",
+    "public/library/fonts/LINESeed-LICENSE.txt": "7ae71fb36162a6b010213b092cc52a6d65b8e25d98b47e8558ddaa1a38738365",
+    "public/library/fonts/GowunBatang-LICENSE.txt": "49a57cc769fa9affd6eefb9070a61e3d3f6b757c97cafb15848bc6d1c81acc78"
+  }
+}

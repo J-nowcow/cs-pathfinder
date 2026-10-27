@@ -21,16 +21,47 @@ describe('기출 원문 경계와 학습 연결', () => {
         .every((x) => x.question_records === 0),
     ).toBe(true)
   })
-  it('주제 연결을 정확한 별칭 규칙으로만 생성하고 연결 대기를 남긴다', () => {
+  it('자동 별칭 후보와 원문 대조한 핵심·보충 연결을 구분한다', () => {
     const ids = new Set(guides.map((x) => x.id))
     expect(guides).toHaveLength(24)
     for (const q of index.questions)
       expect(q.topics.every((t) => ids.has(t))).toBe(true)
-    expect(index.questions.filter((q) => q.topics.length)).toHaveLength(538)
-    expect(index.questions.filter((q) => !q.topics.length)).toHaveLength(1322)
+    expect(index.questions.filter((q) => q.autoTopics.length)).toHaveLength(538)
+    expect(index.questions.filter((q) => q.classification)).toHaveLength(31)
+    const normalize = (s: string) => s.toLowerCase().replace(/[\s_-]/g, '')
+    for (const q of index.questions) {
+      expect(q.autoTopics).toEqual(
+        guides
+          .filter((g) =>
+            g.aliases.some((a) =>
+              q.rawTopics.map(normalize).includes(normalize(a)),
+            ),
+          )
+          .map((g) => g.id),
+      )
+      if (!q.classification) {
+        expect(q.topics).toEqual(q.autoTopics)
+        expect(q.types).toEqual(q.autoTypes)
+      } else {
+        expect(q.round).toBe(140)
+        expect(createHash('sha256').update(q.text!).digest('hex')).toBe(
+          q.classification.sourceTextSha256,
+        )
+        expect(q.classification.core.length).toBeGreaterThan(0)
+        expect(
+          q.topics.some((t) => q.backgroundTopics.some((id) => id === t)),
+        ).toBe(false)
+      }
+    }
     for (const g of guides) {
       expect(g.questionCount).toBe(
         index.questions.filter((q) => q.topics.includes(g.id)).length,
+      )
+      expect(g.reviewedCount + g.candidateCount).toBe(g.questionCount)
+      expect(g.backgroundCount).toBe(
+        index.questions.filter((q) =>
+          q.backgroundTopics.some((id) => id === g.id),
+        ).length,
       )
       expect(g.reference.length).toBeGreaterThanOrEqual(3)
       expect(g.comparison.length).toBe(3)
@@ -41,6 +72,21 @@ describe('기출 원문 경계와 학습 연결', () => {
         ),
       ).toBe(true)
     }
+  })
+  it('같은 단어의 다른 의미와 배경 AI를 핵심 기출 연결로 세지 않는다', () => {
+    const q = (id: string) =>
+      index.questions.find((x) => x.id === 'impe-140-' + id)!
+    expect(q('1-06').autoTopics).toContain('cloud')
+    expect(q('1-06').topics).not.toContain('cloud')
+    expect(q('1-06').backgroundTopics).toContain('rag')
+    expect(q('1-07').autoTopics).toContain('cap')
+    expect(q('1-07').topics).not.toContain('cap')
+    expect(q('1-01').types).toEqual(['효과'])
+    expect(q('3-05').topics).not.toContain('ml-evaluation')
+    expect(q('3-05').types).toEqual(['비교', '적용'])
+    expect(q('3-01').topics).toEqual(['continuity'])
+    expect(q('3-01').backgroundTopics).toEqual(['cloud'])
+    expect(q('3-01').types).not.toContain('설계')
   })
   it('원본Jira 데이터·추적 데이터·폰트 허가 파일을 그대로 보존한다', () => {
     const bytes = readFileSync('public/jira/data.js')

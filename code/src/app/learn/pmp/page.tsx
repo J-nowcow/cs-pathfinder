@@ -1,0 +1,70 @@
+import Link from 'next/link'
+import { StudyDesk } from '@/components/library/StudyDesk'
+import { pmpCourse as c, lessonById, pmpLessonHref } from '@/lib/pmp/course'
+import release from '../../../../data/pmp-release.json'
+export const metadata = { title: '프로젝트·제품 관리' }
+export default function PmpHome() {
+  return (
+    <StudyDesk section="pmp">
+      <header className="desk-document-heading">
+        <p className="study-meta">PMP · 개념과 실무</p>
+        <h1>
+          프로젝트를 끝내고,
+          <br />
+          가치를 남기는 일.
+        </h1>
+        <p>
+          목적을 정하고 계획을 세우는 순간부터, 팀과 함께 실행하고 결과를
+          확인하는 과정까지 읽습니다.
+        </p>
+      </header>
+      <div className="pmp-home-links">
+        <Link href="/learn/pmp/n01">첫 수업 읽기 →</Link>
+        <Link href="/learn/pmp/terms">용어 찾아보기 →</Link>
+      </div>
+      <div className="pmp-chapter-list">
+        {c.tracks.map((t, i) => (
+          <section key={t.id} id={t.id}>
+            <p className="study-meta">
+              {String(i + 1).padStart(2, '0')} / {t.sub}
+            </p>
+            <h2>{t.title}</h2>
+            <ol>
+              {t.order.map((id) => (
+                <li key={id}>
+                  <Link href={pmpLessonHref(id)}>
+                    {lessonById.get(id)?.title}
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+      </div>
+      <section className="pmp-cases">
+        <h2>연결해서 생각하기</h2>
+        <p>여러 개념을 하나의 가상 프로젝트에 적용해 보세요.</p>
+        {c.cases.map((x) => (
+          <Link key={x.id} href={'/learn/pmp/case/' + x.id}>
+            {x.title} →
+          </Link>
+        ))}
+      </section>
+      <details className="pmp-original">
+        <summary>자료 범위와 오프라인 원본</summary>
+        <p>
+          {c.asof} 확인본 · {c.nodes.length}수업. PMI 공식 교재나 합격·공인
+          교육시간을 보장하는 과정은 아닙니다. 본문·비교표·심화 사례·상황
+          문제·메모·복습은 서재 안에서 이용합니다. 계산 실습과 전체 백업
+          가져오기 화면은 현재 이전 통합 HTML에서 제공하며, 다음 통합 작업에
+          포함됩니다.
+        </p>
+        <a href={release.links.study}>이전 통합 HTML 열기 →</a>
+        <a href={release.links.offline} download>
+          오프라인 ZIP 받기 ↓
+        </a>
+      </details>
+    </StudyDesk>
+  )
+}

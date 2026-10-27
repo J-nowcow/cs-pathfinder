@@ -1,0 +1,612 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-10-27",
+  "method": "공개 원문의 문맥·요구 항목을 대조한 학습용 편집 분류. 공식 출제 분류·채점 기준 또는 전문가 감수라는 뜻은 아님.",
+  "reviews": [
+    {
+      "id": "impe-140-1-01",
+      "core": [
+        "AI 기반 BPR",
+        "업무 프로세스 혁신 효과"
+      ],
+      "background": [
+        "AI 활용"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "효과"
+      ],
+      "implicitDemand": false,
+      "rationale": "프로세스 재설계의 도입 효과를 묻는다. 재설계라는 명사에 설계 동사가 포함돼도 시스템 설계 요구로 분류하지 않는다. AI가 등장한다는 이유로 분류 모델의 정밀도·재현율 수업에 연결하지 않는다.",
+      "sourceTextSha256": "7ed6db9995296a4a2a0d9e22d265716a0545e71f8eb479cc975e8626965cfac4"
+    },
+    {
+      "id": "impe-140-1-02",
+      "core": [
+        "다크 팩토리"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "개념"
+      ],
+      "implicitDemand": true,
+      "rationale": "별도 지시 동사가 없는 단문형 기술명이다. 개념 설명형은 학습 편의를 위한 편집 해석이며 공식 답안 요구 항목이 아니다.",
+      "sourceTextSha256": "fe671a0e45c77028981bb085e93138184480dd5b73a2fe67f22480e68110c684"
+    },
+    {
+      "id": "impe-140-1-03",
+      "core": [
+        "ATAM",
+        "아키텍처 트레이드오프 평가"
+      ],
+      "background": [],
+      "coreTopics": [
+        "architecture"
+      ],
+      "backgroundTopics": [],
+      "types": [
+        "개념"
+      ],
+      "implicitDemand": true,
+      "rationale": "직접 제시된 대상은 아키텍처 평가 방법이다. 아키텍처 수업은 기초 연결이며 ATAM 전용 해설을 제공한다는 뜻은 아니다.",
+      "sourceTextSha256": "75621af4dc43574688a74a5ebfeeab5888a537568c5ec666e17ba9e9d3b871a1"
+    },
+    {
+      "id": "impe-140-1-04",
+      "core": [
+        "PMC",
+        "PMO"
+      ],
+      "background": [
+        "프로젝트 관리 조직"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "비교"
+      ],
+      "implicitDemand": false,
+      "rationale": "두 조직의 비교가 명시돼 있다. 프로젝트라는 배경어만으로 특정 EVM·위험관리 수업의 기출로 세지 않는다.",
+      "sourceTextSha256": "c6c4c902018f208691b7aa70a2c7395fb16e4b445c3982c4a4d45c9da26d4e89"
+    },
+    {
+      "id": "impe-140-1-05",
+      "core": [
+        "ISO/IEC 25010",
+        "품질 특성"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "구조·원리"
+      ],
+      "implicitDemand": false,
+      "rationale": "주특성과 부특성이라는 구성 체계를 요구한다. ISO라는 문자열만으로 테스트나 보안 인증 문제라고 판단하지 않는다.",
+      "sourceTextSha256": "70aa479c1fb63299a4ec6d6f716dd7f24b31be794e3c65b78b9c4f5691c667b4"
+    },
+    {
+      "id": "impe-140-1-06",
+      "core": [
+        "하이브리드 검색",
+        "어휘 검색",
+        "의미 검색"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [
+        "rag"
+      ],
+      "types": [
+        "개념",
+        "구조·원리"
+      ],
+      "implicitDemand": true,
+      "rationale": "검색 방식의 결합이 대상이다. 하이브리드 클라우드 문제로 분류하지 않는다. RAG는 검색의 활용 맥락을 배우는 보충 수업이며 문제 자체가 RAG를 묻는 것은 아니다.",
+      "sourceTextSha256": "2cdafa4070aade588770be9c201523dc4c4fca8cf94364366fe47f70c48adf86"
+    },
+    {
+      "id": "impe-140-1-07",
+      "core": [
+        "잭나이프",
+        "편향 감소",
+        "분산 추정"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "구조·원리"
+      ],
+      "implicitDemand": true,
+      "rationale": "분산은 통계량의 변동을 뜻한다. 분산 시스템의 일관성이나 CAP 수업과 연결하지 않는다. 세부 요구가 없는 단문형은 방법 설명으로 해석했다.",
+      "sourceTextSha256": "298a48ef38f816c452f46b6f02386274cd871173ea304adaf291c52acfcba35a"
+    },
+    {
+      "id": "impe-140-1-08",
+      "core": [
+        "좀비 프로세스"
+      ],
+      "background": [
+        "운영체제 프로세스"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "개념"
+      ],
+      "implicitDemand": true,
+      "rationale": "운영체제의 프로세스 상태가 대상이다. 업무 프로세스 관리와 구분하며 구체 답안 항목은 원문에 제시되지 않았다.",
+      "sourceTextSha256": "d4cf28276f81c993ba24293b301fe0a83a186c0def013bf0ed24a540f41899d0"
+    },
+    {
+      "id": "impe-140-1-09",
+      "core": [
+        "Physical AI",
+        "생성형 AI"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [
+        "rag"
+      ],
+      "types": [
+        "비교"
+      ],
+      "implicitDemand": false,
+      "rationale": "두 AI 범주의 비교가 요구된다. 모델 평가 지표 문제로 분류하지 않고 RAG 수업은 생성형 AI를 이해하는 보충 연결로만 둔다.",
+      "sourceTextSha256": "16e757808d260a3a5db8fd91bd69d8b9b1cec66200dbaae2c163feb1ccc1b1a6"
+    },
+    {
+      "id": "impe-140-1-10",
+      "core": [
+        "차등적 맨체스터 부호화"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "구조·원리"
+      ],
+      "implicitDemand": false,
+      "rationale": "부호화 방법을 설명하는 문제다. 특정 계산값을 산출하라는 지시는 없으므로 계산형으로 넣지 않는다.",
+      "sourceTextSha256": "b9e0a99a765f1f8ea302650df426684515bfdc8026fc2b9aebdb1358f9a16a88"
+    },
+    {
+      "id": "impe-140-1-11",
+      "core": [
+        "비인간 신원",
+        "신원 보안 취약점"
+      ],
+      "background": [],
+      "coreTopics": [
+        "identity"
+      ],
+      "backgroundTopics": [],
+      "types": [
+        "평가"
+      ],
+      "implicitDemand": false,
+      "rationale": "취약점이 직접 평가 대상이다. 신원·권한 경계를 다루는 수업에 연결하되 해당 수업이 NHI 기출의 완성 답안은 아니다.",
+      "sourceTextSha256": "9e1e2f61cf5810da235328e123586c054f0a0346ec8d1111ad4752bf0f565dc3"
+    },
+    {
+      "id": "impe-140-1-12",
+      "core": [
+        "디지털 포렌식"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "개념"
+      ],
+      "implicitDemand": true,
+      "rationale": "기술명만 제시된 단문형이다. 개념형이라는 표시는 학습용 해석이며 절차나 법적 요건을 원문 요구로 추가하지 않는다.",
+      "sourceTextSha256": "ceaadf9748d64736915d51caebdfafbe648eaae6beb254ed99ae8915d20178f3"
+    },
+    {
+      "id": "impe-140-1-13",
+      "core": [
+        "프롬프트 엔지니어링",
+        "하네스 엔지니어링"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [
+        "rag"
+      ],
+      "types": [
+        "비교"
+      ],
+      "implicitDemand": false,
+      "rationale": "두 엔지니어링 접근의 비교가 대상이다. 생성형 AI 수업은 보충 연결이며 하네스 비교 전용 해설을 수록했다는 뜻은 아니다.",
+      "sourceTextSha256": "b780146d6bcacabc538427deea38c10f638a45780bb5b09fdb4c2bc423c097a4"
+    },
+    {
+      "id": "impe-140-2-01",
+      "core": [
+        "서버리스 컴퓨팅"
+      ],
+      "background": [],
+      "coreTopics": [
+        "cloud"
+      ],
+      "backgroundTopics": [],
+      "types": [
+        "개념",
+        "구조·원리",
+        "비교",
+        "평가"
+      ],
+      "implicitDemand": false,
+      "rationale": "정의·특징, 구성, 장단점, 도입 고려사항을 나누어 요구한다. 단순 개념 암기로 답안이 끝나지 않도록 여러 요구 유형을 함께 표시한다.",
+      "sourceTextSha256": "dcf62287177f352e3f52f88dcae1755acae549aed1148c718aa6c33570462e79"
+    },
+    {
+      "id": "impe-140-2-02",
+      "core": [
+        "오픈소스 라이선스",
+        "컴플라이언스",
+        "AI 거버넌스"
+      ],
+      "background": [
+        "AI 생성 코드",
+        "오픈웨이트 모델"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [
+        "risk"
+      ],
+      "types": [
+        "평가",
+        "절차"
+      ],
+      "implicitDemand": false,
+      "rationale": "라이선스 의무와 위험, 점검 항목, 통합 준수 절차·검증 도구가 중심이다. AI는 적용 맥락이며 모델 성능 평가 기출로 세지 않는다. 위험관리 수업은 보충 연결이다.",
+      "sourceTextSha256": "df7420cd7aa83672acad8f68a391a8f82ffeaa457ff0f46c4c34294367652b73"
+    },
+    {
+      "id": "impe-140-2-03",
+      "core": [
+        "AI 학습 데이터 품질관리",
+        "데이터 생애주기"
+      ],
+      "background": [
+        "인공지능 학습"
+      ],
+      "coreTopics": [
+        "dataquality"
+      ],
+      "backgroundTopics": [],
+      "types": [
+        "구조·원리",
+        "절차"
+      ],
+      "implicitDemand": false,
+      "rationale": "학습 데이터의 특성·생애주기와 품질 원칙·관리 활동이 요구된다. AI라는 단어보다 데이터 품질관리라는 출제 대상을 우선한다.",
+      "sourceTextSha256": "590025338e2bcc1b5f4a9a173d87f5ff5766c751b15355c624646b00a60f2028"
+    },
+    {
+      "id": "impe-140-2-04",
+      "core": [
+        "AI 슈퍼컴퓨팅 플랫폼",
+        "컴퓨팅 플랫폼 비교"
+      ],
+      "background": [
+        "LLM 서비스",
+        "멀티모달 데이터",
+        "대규모 학습·추론"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [
+        "cloud"
+      ],
+      "types": [
+        "개념",
+        "구조·원리",
+        "비교"
+      ],
+      "implicitDemand": false,
+      "rationale": "플랫폼 개념·구성 역할·플랫폼 간 비교가 대상이다. LLM과 멀티모달은 등장 배경이므로 RAG나 분류 모델 평가 기출로 세지 않는다. 클라우드는 비교 대상에 관한 보충 수업이다.",
+      "sourceTextSha256": "ad3075bb6b9c70406f42a2a4adfd987d26b6d026bb3beeb77ac57360bc9e3a95"
+    },
+    {
+      "id": "impe-140-2-05",
+      "core": [
+        "FIFO 큐잉",
+        "웨이티드 페어큐잉"
+      ],
+      "background": [],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "비교"
+      ],
+      "implicitDemand": false,
+      "rationale": "두 큐잉 방식을 비교하도록 명시했다. 운영체제 FIFO 페이지 교체 문제로 바꾸어 해석하지 않는다.",
+      "sourceTextSha256": "1593a23f14602bf31639484f1144c81077b38a28df06870b2f41f48bbcdd5073"
+    },
+    {
+      "id": "impe-140-2-06",
+      "core": [
+        "AI 보안",
+        "공격 지원 위협",
+        "자율성 통제"
+      ],
+      "background": [
+        "고성능 AI 모델"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "평가"
+      ],
+      "implicitDemand": false,
+      "rationale": "사이버 공격 지원 및 자율성 통제 상실의 위협·대응이 중심이다. 모델 성능이라는 배경 표현을 정확도·재현율 문제로 오인하지 않는다.",
+      "sourceTextSha256": "8d1b68e6e58a586df1ac3d7127ed7a4370859f558fab072d1d7ce6413baeaf77"
+    },
+    {
+      "id": "impe-140-3-01",
+      "core": [
+        "재해복구 전략",
+        "RTO",
+        "RPO",
+        "복구 구성 방식"
+      ],
+      "background": [
+        "클라우드 네이티브",
+        "무중단 아키텍처"
+      ],
+      "coreTopics": [
+        "continuity"
+      ],
+      "backgroundTopics": [
+        "cloud"
+      ],
+      "types": [
+        "개념",
+        "구조·원리"
+      ],
+      "implicitDemand": false,
+      "rationale": "복구 목표와 복구 구성 방식이 직접 요구된다. 도입부의 설계는 상황 설명이며 직접 시스템을 설계하라는 지시가 아니다. 클라우드는 배경 학습으로 구분한다.",
+      "sourceTextSha256": "c880dcd93c8cf5aac68ff604eab510eda4cbe75356d059ebd206902080cce4ef"
+    },
+    {
+      "id": "impe-140-3-02",
+      "core": [
+        "메타모픽 테스트",
+        "테스트 오라클",
+        "메타모픽 관계"
+      ],
+      "background": [
+        "AI 기반 시스템"
+      ],
+      "coreTopics": [
+        "testing"
+      ],
+      "backgroundTopics": [],
+      "types": [
+        "개념",
+        "구조·원리",
+        "절차",
+        "비교"
+      ],
+      "implicitDemand": false,
+      "rationale": "오라클 문제와 관계·절차·기법 차이를 설명해야 한다. AI는 테스트 대상의 맥락이며 분류 모델 평가 주제와 동일하지 않다.",
+      "sourceTextSha256": "ce126fc97f2ff95029631de9c3411e5242321103069a6429751ce80052ab1e59"
+    },
+    {
+      "id": "impe-140-3-03",
+      "core": [
+        "합성데이터",
+        "데이터 생성 기법",
+        "합성데이터 품질 평가"
+      ],
+      "background": [
+        "학습 데이터 부족",
+        "개인정보 보호"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [
+        "dataquality",
+        "privacy"
+      ],
+      "types": [
+        "개념",
+        "구조·원리",
+        "평가"
+      ],
+      "implicitDemand": false,
+      "rationale": "생성 개념·기법과 품질 지표가 직접 요구된다. 개인정보 보호는 문제를 여는 배경이며 법령 준수 답안 자체를 요구하지 않는다. 데이터 품질·개인정보 수업은 보충 연결로 둔다.",
+      "sourceTextSha256": "93ddfa8479effff0ff5b1b2738ed822ae4943a24e8cea6541418289ede9c87c0"
+    },
+    {
+      "id": "impe-140-3-04",
+      "core": [
+        "CSMA/CA",
+        "CDMA",
+        "TDMA"
+      ],
+      "background": [
+        "무선 통신"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "구조·원리"
+      ],
+      "implicitDemand": true,
+      "rationale": "무선 매체 접근·다중접속 기술의 설명이다. 비교하라는 명시 지시는 없어서 비교형을 자동 부여하지 않는다.",
+      "sourceTextSha256": "4561707e47e0b0cc10504df689f30102092ac1c1ab4315f28bff952c5d51efca"
+    },
+    {
+      "id": "impe-140-3-05",
+      "core": [
+        "블록 스토리지",
+        "파일 스토리지",
+        "오브젝트 스토리지"
+      ],
+      "background": [
+        "클라우드 환경",
+        "AI 학습 데이터 구축"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [
+        "cloud"
+      ],
+      "types": [
+        "비교",
+        "적용"
+      ],
+      "implicitDemand": false,
+      "rationale": "스토리지 세 방식의 비교와 활용 방안이 대상이다. 클라우드와 AI는 사용 환경이며 모델 평가 기출로 세지 않는다. 클라우드 수업은 배경 학습이다.",
+      "sourceTextSha256": "83224b1aea3c694b0762137c6eecc4a2816a66b2ae2a78b155b38a89e4bf421b"
+    },
+    {
+      "id": "impe-140-3-06",
+      "core": [
+        "고영향 인공지능",
+        "사업자의 안전·신뢰 활동"
+      ],
+      "background": [
+        "인공지능 기본법"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "개념",
+        "적용",
+        "평가"
+      ],
+      "implicitDemand": false,
+      "rationale": "법에 따른 정의·영역·사업자 활동을 요구한다. 성과라는 일반 단어 때문에 사업 편익 수업으로 연결하지 않는다. 여기서는 법의 내용이나 적용 판단을 새로 해설하지 않는다.",
+      "sourceTextSha256": "e0493c5042a8e2edfcee74e0f4501eac4e56c5622983313e896f7e302ce91bf2"
+    },
+    {
+      "id": "impe-140-4-01",
+      "core": [
+        "데이터 가치평가",
+        "가치평가 요인·방법론"
+      ],
+      "background": [
+        "디지털 경제의 데이터 자산"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [
+        "benefits"
+      ],
+      "types": [
+        "평가",
+        "구조·원리"
+      ],
+      "implicitDemand": false,
+      "rationale": "평가 요인·방법론·핵심변수라는 가치평가 구성이 대상이다. 편익 수업은 사업가치 판단의 기초 연결이며 데이터 가치평가 전용 해설은 아니다.",
+      "sourceTextSha256": "03fae819073fb03800f0730d700c095900c181b00c08f642f0899cd6e78a71ca"
+    },
+    {
+      "id": "impe-140-4-02",
+      "core": [
+        "표본추출",
+        "확률·비확률 표본추출"
+      ],
+      "background": [
+        "AI 학습 데이터 구축"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "개념",
+        "절차",
+        "비교",
+        "적용"
+      ],
+      "implicitDemand": false,
+      "rationale": "표본추출 개념·절차·기법 비교·학습 데이터 적용을 나누어 요구한다. AI 적용 맥락만으로 분류 모델 지표를 핵심 주제로 붙이지 않는다.",
+      "sourceTextSha256": "50f33beb850a3697252c333822bef275aff8f907d6e4c07b9cb2b304f90d0cfd"
+    },
+    {
+      "id": "impe-140-4-03",
+      "core": [
+        "소프트웨어 형상관리",
+        "기준선",
+        "형상관리 도구"
+      ],
+      "background": [],
+      "coreTopics": [
+        "configuration"
+      ],
+      "backgroundTopics": [],
+      "types": [
+        "개념",
+        "절차",
+        "구조·원리"
+      ],
+      "implicitDemand": false,
+      "rationale": "형상관리의 정의·절차·기준선·도구가 직접 요구되므로 기존 형상관리 수업에 핵심 연결한다.",
+      "sourceTextSha256": "7c5442bc89d52ca9676bf3bb847324fdc43cfc31519dad0f7ac176e8a426f99a"
+    },
+    {
+      "id": "impe-140-4-04",
+      "core": [
+        "시계열 이상치 탐지",
+        "이상치 유형",
+        "탐지 기법"
+      ],
+      "background": [
+        "실시간 처리",
+        "딥러닝"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "구조·원리"
+      ],
+      "implicitDemand": false,
+      "rationale": "이상치 유형과 탐지 방식·기법이 직접 요구된다. 딥러닝이 등장해도 분류 임계값 평가 수업이 같은 출제 대상을 설명한다고 보지 않는다.",
+      "sourceTextSha256": "372a0d656489c91c7347cdff6e46952ad865c33e2d76a9cc5c3f86b7c4a2c2e5"
+    },
+    {
+      "id": "impe-140-4-05",
+      "core": [
+        "정보보호 컴플라이언스"
+      ],
+      "background": [
+        "국내 규제"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "개념",
+        "효과",
+        "평가"
+      ],
+      "implicitDemand": false,
+      "rationale": "개념·필요성·대응 방안을 요구한다. 규제와 준수 체계 전반을 묻는 것을 인증·암호·개인정보 중 하나의 문제로 좁히지 않는다.",
+      "sourceTextSha256": "d4f1d386c0edd5ad610a18a817182e5a84636309fe3a778ce81ebdbd98140fc9"
+    },
+    {
+      "id": "impe-140-4-06",
+      "core": [
+        "AI 데이터센터",
+        "데이터센터 핵심 기술"
+      ],
+      "background": [
+        "AI 컴퓨팅 수요"
+      ],
+      "coreTopics": [],
+      "backgroundTopics": [],
+      "types": [
+        "개념",
+        "비교",
+        "구조·원리"
+      ],
+      "implicitDemand": false,
+      "rationale": "정의·배경·기존 센터와 비교·구현 기술이 대상이다. AI라는 키워드만으로 분류 모델 성능 평가에 연결하지 않는다.",
+      "sourceTextSha256": "d5f9ef791ca61affefd921a4a03e18d5959c2b78b089b354fb30e0f5c8670d45"
+    }
+  ]
+}

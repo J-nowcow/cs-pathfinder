@@ -1,6 +1,22 @@
 import type { Metadata, Viewport } from 'next'
+import localFont from 'next/font/local'
 import { siteUrl } from '@/lib/site'
 import './globals.css'
+
+const readingFont = localFont({
+  src: './fonts/WantedSansVariable.woff2',
+  variable: '--font-reading',
+  weight: '100 1000',
+  display: 'swap',
+  fallback: ['Apple SD Gothic Neo', 'Malgun Gothic', 'sans-serif'],
+})
+const headingFont = localFont({
+  src: './fonts/SUITE-Variable.woff2',
+  variable: '--font-heading',
+  weight: '300 900',
+  display: 'swap',
+  fallback: ['Apple SD Gothic Neo', 'Malgun Gothic', 'sans-serif'],
+})
 
 /*
  * 이름은 `CS 길라잡이`다.
@@ -87,7 +103,11 @@ export const viewport: Viewport = {
  */
 const THEME_BOOT = `(function(){try{var s=localStorage.getItem('csqt.theme');var d=s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})()`
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     /*
      * 아래 부트 스크립트가 하이드레이션 전에 data-theme을 박는다. 리액트가
@@ -95,7 +115,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
      * 한해 경고를 끈다. 끄지 않으면 매 방문마다 복구 불가 오류가 남는다.
      */
     <html lang="ko" suppressHydrationWarning>
-      <body className="font-sans antialiased">
+      <body
+        className={`${readingFont.variable} ${headingFont.variable} font-sans antialiased`}
+      >
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
         {children}
       </body>

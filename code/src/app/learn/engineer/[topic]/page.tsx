@@ -9,6 +9,7 @@ import {
 } from '@/components/library/LibraryShell'
 import { StudyPractice } from '@/components/library/StudyPractice'
 import { ExamBrowser } from '@/components/library/ExamBrowser'
+import { ConcurrencyStory } from '@/components/library/ConcurrencyStory'
 export function generateStaticParams() {
   return guides.map((g) => ({ topic: g.id }))
 }
@@ -30,50 +31,77 @@ export default async function TopicPage({
   if (!g) notFound()
   return (
     <LibraryShell
-      eyebrow={g.domain + ' · CONCEPT TO ANSWER'}
+      reading
+      eyebrow={g.domain + ' · 정보관리기술사'}
       title={g.title}
-      description={g.definition}
+      description={
+        g.id === 'concurrency'
+          ? '기다리는 것과 서로를 막는 것은 어떻게 다를까요? 두 작업이 잠금을 잡는 순서를 바꾸며 차이를 살펴봅니다.'
+          : g.definition
+      }
     >
-      <ConceptFlow items={g.flow} />
-      <section>
-        <h2 className="text-2xl font-semibold">비슷해도 다른 개념</h2>
-        <div className="mt-5 overflow-x-auto rounded-xl border border-line">
-          <table className="w-full text-left text-sm leading-7">
-            <thead className="bg-raised">
-              <tr>
-                {['개념', '의미·목적', '구분할 점'].map((t) => (
-                  <th scope="col" key={t} className="min-w-28 p-4">
-                    {t}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {g.comparison.map((row) => (
-                <tr key={row[0]} className="border-t border-line">
-                  {row.map((v, i) =>
-                    i === 0 ? (
-                      <th scope="row" key={i} className="p-4 font-medium">
-                        {v}
-                      </th>
-                    ) : (
-                      <td key={i} className="p-4 align-top">
-                        {v}
-                      </td>
-                    ),
-                  )}
-                </tr>
+      {g.id === 'concurrency' ? (
+        <>
+          <ConcurrencyStory />
+          <details className="story-concept-reference rounded-xl border border-line p-6">
+            <summary className="cursor-pointer text-lg font-semibold text-accent">
+              정의·비교 정리
+            </summary>
+            <p className="mt-5">{g.definition}</p>
+            <dl className="mt-6 space-y-5">
+              {g.comparison.map(([term, meaning, distinction]) => (
+                <div key={term}>
+                  <dt className="font-semibold">{term}</dt>
+                  <dd className="mt-1 text-muted">
+                    {meaning} · {distinction}
+                  </dd>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+            </dl>
+          </details>
+        </>
+      ) : (
+        <>
+          <ConceptFlow items={g.flow} />
+          <section>
+            <h2 className="text-2xl font-semibold">비슷해도 다른 개념</h2>
+            <div className="mt-5 overflow-x-auto rounded-xl border border-line">
+              <table className="w-full text-left text-sm leading-7">
+                <thead className="bg-raised">
+                  <tr>
+                    {['개념', '의미·목적', '구분할 점'].map((t) => (
+                      <th scope="col" key={t} className="min-w-28 p-4">
+                        {t}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {g.comparison.map((row) => (
+                    <tr key={row[0]} className="border-t border-line">
+                      {row.map((v, i) =>
+                        i === 0 ? (
+                          <th scope="row" key={i} className="p-4 font-medium">
+                            {v}
+                          </th>
+                        ) : (
+                          <td key={i} className="p-4 align-top">
+                            {v}
+                          </td>
+                        ),
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </>
+      )}
       <section className="rounded-xl border border-line bg-raised p-6">
-        <p className="text-xs text-faint">
-          창작 연습 · 실제 기출 문장이 아닙니다
-        </p>
+        <p className="text-xs text-faint">직접 만든 연습 문제</p>
         <h2 className="mt-3 text-xl font-semibold leading-8">{g.prompt}</h2>
-        <h3 className="mt-6 font-semibold">답안 골격</h3>
+        <h3 className="mt-6 font-semibold">답안 구성</h3>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-7">
           {g.outline.map((x) => (
             <li key={x}>{x}</li>
@@ -90,7 +118,7 @@ export default async function TopicPage({
       />
       <details className="rounded-xl border border-line bg-surface p-6">
         <summary className="cursor-pointer text-lg font-semibold text-accent">
-          창작 연습의 참고 답안 펼치기
+          참고 답안 보기
         </summary>
         <div className="mt-5 space-y-4 text-base leading-8">
           {g.reference.map((x) => (
@@ -98,13 +126,12 @@ export default async function TopicPage({
           ))}
         </div>
         <p className="mt-5 text-xs leading-6 text-faint">
-          독립적으로 작성한 학습용 답안입니다. 공식 기출의 모범답안·채점
-          기준·분량 기준이 아닙니다. 먼저 쓴 답안과 빠진 논점·전제·증거를
-          비교하세요.
+          이 연습 문제의 학습용 참고 답안입니다. 공식 기출 해설이나 채점 기준은
+          아닙니다.
         </p>
       </details>
       <aside className="rounded-xl border border-line p-6">
-        <h2 className="text-xl font-semibold">빠지기 쉬운 함정</h2>
+        <h2 className="text-xl font-semibold">자주 틀리는 부분</h2>
         <ul className="mt-4 list-disc space-y-3 pl-5 text-sm leading-7">
           {g.pitfalls.map((x) => (
             <li key={x}>{x}</li>
@@ -112,7 +139,7 @@ export default async function TopicPage({
         </ul>
       </aside>
       <section>
-        <h2 className="text-xl font-semibold">근거·확인 범위</h2>
+        <h2 className="text-xl font-semibold">참고 자료</h2>
         {g.sources.map((s) => (
           <div key={s.url} className="mt-4 text-sm leading-7">
             <a
@@ -144,7 +171,11 @@ export default async function TopicPage({
         </Link>
       </div>
       <ExamBrowser
-        questions={index.questions.filter((q) => q.topics.includes(g.id))}
+        questions={index.questions.filter(
+          (q) =>
+            q.topics.includes(g.id) ||
+            q.backgroundTopics.some((id) => id === g.id),
+        )}
         topicTitles={Object.fromEntries(guides.map((x) => [x.id, x.title]))}
       />
     </LibraryShell>

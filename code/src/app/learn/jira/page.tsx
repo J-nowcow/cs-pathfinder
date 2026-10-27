@@ -10,26 +10,26 @@ import {
 import { MissionAnchor } from '@/components/library/MissionAnchor'
 import { StudyPractice } from '@/components/library/StudyPractice'
 export const metadata: Metadata = {
-  title: 'Jira 실무 미션',
+  title: 'Jira 작업 관리 연습',
   description: '가상 작업 데이터로 요구·흐름·검색·변경·보고를 연습합니다.',
 }
 export default function JiraPage() {
   return (
     <LibraryShell
-      eyebrow="JIRA CLOUD · PRACTICE LAB"
-      title="배운 관리 개념을, 작업 한 장에."
-      description="고정된 가상 BSS PI 표본으로 작업 분해·완료 증거·JQL·변경·보고를 연습합니다. 실제 Jira나 회사 데이터에 연결하지 않으며 완료 표시는 자기 점검입니다."
+      eyebrow="Jira Cloud"
+      title="BSS PI 작업 관리 연습"
+      description="가상 작업 16개로 작업 분해, JQL 검색, 변경 기록과 보고를 연습합니다. 회사 Jira와 연결되지 않는 연습용 자료입니다."
     >
       <MissionAnchor />
       <div className="flex flex-wrap gap-3">
         <a className={libraryButton} href="/jira/index.html">
-          기존 Jira 공부방 · 10수업 →
+          Jira 기본 수업 10개 →
         </a>
         <a className={libraryButton} href="/jira/index.html#practice">
-          JQL20개 연습 →
+          JQL 연습 20개 →
         </a>
         <a className={libraryButton} href="/jira/index.html#dataset">
-          가상16개 작업 →
+          가상 작업 16개 보기 →
         </a>
         <a className={libraryButton} href="/jira/offline.html" download>
           Jira 오프라인 HTML ↓
@@ -44,13 +44,11 @@ export default function JiraPage() {
         ]}
       />
       <p className="rounded-xl border border-line bg-raised p-5 text-sm leading-7 text-muted">
-        먼저 관련 수업을 읽고 표본을 확인한 뒤 미션 기록을 남기세요. 아래
-        서식·예시는 창작 실습입니다. 실제 제품의 화면·요금제·권한·용어는 바뀔 수
-        있으니 공부방의 공식 자료 링크와 현재 환경을 확인하세요.
-        원본10수업·20JQL·16작업·60용어·33공식 링크를 보존했습니다.
+        과제마다 관련 수업과 기록 양식이 있습니다. 수업을 읽고 작업 목록을
+        확인한 뒤 답안을 작성하세요.
       </p>
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">다섯 번의 작은 실무</h2>
+        <h2 className="text-2xl font-semibold">연습 과제 5개</h2>
         {missions.map((m) => (
           <details
             key={m.id}
@@ -73,7 +71,7 @@ export default function JiraPage() {
                   className={libraryButton}
                   href={'/jira/index.html#lesson/' + n}
                 >
-                  Jira수업{n} →
+                  Jira 수업 {n} →
                 </a>
               ))}
               {'query' in m && (
@@ -81,20 +79,20 @@ export default function JiraPage() {
                   className={libraryButton}
                   href={'/jira/index.html#practice/' + m.query}
                 >
-                  정답 집합 직접 채점 →
+                  선택한 작업 키 채점 →
                 </a>
               )}
               <a
                 className={libraryButton}
                 href={release.links.study + '#lesson/' + m.pmp}
               >
-                연결된 PMP 개념 →
+                관련 PMP 수업 →
               </a>
               <Link
                 className={libraryButton}
                 href={'/learn/engineer/' + m.topic}
               >
-                기술사 개념·답안 →
+                관련 기술사 수업 →
               </Link>
             </div>
             <details className="my-5 rounded-lg border border-line p-4">
@@ -114,7 +112,7 @@ export default function JiraPage() {
             />
             <details className="mt-5 rounded-lg border border-line p-4">
               <summary className="cursor-pointer font-medium text-accent">
-                미션의 판단 예시·확인값
+                예시 답안과 확인할 수치
               </summary>
               <div className="mt-4 space-y-3 text-sm leading-7">
                 {m.reference.map((x) => (
