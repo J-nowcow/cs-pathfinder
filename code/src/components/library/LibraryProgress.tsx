@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { LearningAreas } from '../LearningAreas'
 import { OpenBookArt } from './BookArt'
 import { readLibraryProgress, type ProgressItem } from '@/lib/library/progress'
@@ -22,6 +22,13 @@ export function LibraryProgress({
   mode?: 'progress' | 'shelf'
 }) {
   const scope = useLibraryScope()
+  const restoreSerial = useRef(0),
+    latestScope = useRef(scope)
+  latestScope.current = scope
+  useEffect(
+    () => () => { restoreSerial.current++ },
+    [scope.id, scope.ready],
+  )
   const [view, setView] = useState<ReturnType<
       typeof readLibraryProgress
     > | null>(null),
@@ -76,11 +83,17 @@ export function LibraryProgress({
     setTimeout(() => URL.revokeObjectURL(u), 1000)
   }
   async function restore(file: File | undefined) {
-    if (!file) return
+    const token = ++restoreSerial.current,
+      selectedScope = scope.id
+    const isCurrent = () =>
+      token === restoreSerial.current && latestScope.current.ready &&
+      latestScope.current.id === selectedScope
+    if (!file || !scope.ready) return
     try {
       if (file.size > 3000000) throw Error()
-      const raw = await file.text(),
-        input = JSON.parse(raw)
+      const raw = await file.text()
+      if (!isCurrent()) return
+      const input = JSON.parse(raw)
       if (
         input.format !== 'pathfinder.library.backup' ||
         !input.entries ||
@@ -104,6 +117,7 @@ export function LibraryProgress({
         '기록을 가져왔어요. 비어 있지 않은 답안은 보존했고 답안이 같은 항목의 체크·복습 날짜는 더 최근 기록을 사용했어요.',
       )
     } catch (error) {
+      if (!isCurrent()) return
       setMessage(
         error instanceof LibraryEditError && error.code === 'conflict'
           ? '서로 다른 답안이 겹치거나 200개 한도를 넘어서 가져오지 않았어요. 기존 기록과 백업 파일은 그대로예요.'
