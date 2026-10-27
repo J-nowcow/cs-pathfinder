@@ -50,7 +50,7 @@ export function PmpFloatLab({
       aria-labelledby="float-title"
     >
       <p className="study-meta">직접 바꿔 보는 일정 · 5작업 예제</p>
-      <h2 id="float-title">다음 일은 밀렸는데, 끝나는 날은 같다고요?</h2>
+      <h2 id="float-title">다음 일은 밀렸는데 끝나는 날은 같다고요?</h2>
       <p>{config.assumptions}</p>
       <div className="pmp-float-inputs">
         {config.order.map((id) => (
