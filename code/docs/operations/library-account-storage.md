@@ -1,9 +1,11 @@
 # Library account storage: server foundation
 
-Status: server implementation and isolated tests only. The API is disabled unless
-`LIBRARY_ACCOUNT_SYNC_ENABLED=1`. No client synchronization or production
-migration is included in this release. Keep the flag absent until the remaining
-client, privacy, OAuth and migration checks are completed and execution approved.
+Status: server and opt-in native client are implemented. The API and client
+remain disabled unless `LIBRARY_ACCOUNT_SYNC_ENABLED=1`; enabling the client also
+requires a fresh build. No production migration or activation has been executed.
+The local client/notice and isolated API flow are verified. Keep the flag absent
+until actual OAuth/environment checks and the separately approved migration are
+complete. See `library-account-client.md` for current client behavior and limits.
 
 ## Scope and protocol
 
@@ -40,21 +42,25 @@ dropping records through the permissive legacy parser.
   Responses are private/no-store and missing tables fail with503, never DDL.
 
 PGlite tests cover SQL atomicity/rollback, stale writes, retries, ownership,
-RLS denial, validation and cascades. They do not prove actual PostgreSQL
-concurrent-lock behavior, Google OAuth or cross-device restoration.
+RLS denial, validation and cascades. The opt-in real-Postgres runner additionally
+verifies concurrent first/existing writes, receipt races, owner-row lock isolation
+and timeouts in a dedicated local PostgreSQL18.6 cluster with verified TLS.
+See `library-postgres-verification.md`. These tests do not prove production
+Neon/PgBouncer behavior, Google OAuth or authenticated cross-device restoration.
 
-## Required client work before enabling
+## Client rollout checks
 
-1. Opt-in upload with a clear list of included/excluded records and a backup path.
-2. Account-specific working state and pending operations. Account switches must
-   invalidate old requests and preserve each account's unsent drafts separately;
-   never silently upload guest/another account's local records.
-3. Expected-revision writes, stable retry IDs and an explicit three-way conflict
-   workflow. Failed/offline/pending uploads retain their original local data.
-4. Read → draft → save → restore in a separate session, account switch and network
-   failure tests. Show success only for the acknowledged owner/revision.
-5. Update the Korean privacy/deletion and storage-scope notices through the
-   mandatory actual humanize-korean review before publishing them.
+1. Implemented: explicit open/import/manual upload, included/excluded scope and
+   active-scope backup; login alone does not import guest records.
+2. Implemented: per-owner working/pending copies, stale-response checks, old-client
+   disposal and a distinct unchanged guest key.
+3. Implemented: expected revisions, frozen retry IDs/payloads and explicit
+   three-way conflict choices with local/remote/comparison-base views.
+4. Verified with real API + PGlite and synthetic-auth desktop QA: read → draft →
+   save → separate-client/session restore, owner switch and lost-response retry.
+   Actual Google OAuth and approved live-environment restoration remain pending.
+5. Published after actual humanize-korean review: Korean scope, logout, browser
+   retention and server-deletion notices. Server rollout is still disabled.
 
 ## Concrete production migration plan (not executed)
 

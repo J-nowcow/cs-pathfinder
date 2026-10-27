@@ -20,6 +20,7 @@
     "measure:diagrams": "tsx scripts/measure-diagrams.ts",
     "verify:scale": "tsx scripts/verify-match-scale.ts",
     "verify:concurrency": "tsx scripts/verify-concurrency.ts",
+    "verify:library-postgres": "tsx scripts/verify-library-postgres.ts",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:status": "tsx scripts/db-status.ts",
     "db:dedupe": "tsx scripts/dedupe-roots.ts",
