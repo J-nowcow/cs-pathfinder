@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 }
 
 /** 이 방침이 마지막으로 사실과 대조된 날 */
-const REVIEWED = '2026년 8월 13일'
+const REVIEWED = '2026년 10월 28일'
 const CONTACT = 'wkdgusdn0321@naver.com'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
         CS 길라잡이(이하 &lsquo;서비스&rsquo;)는 가입 없이 쓸 수 있습니다. 그래도 서비스를 돌리는 데
         필요한 최소한을 저장합니다. 무엇을 저장하고 무엇을 저장하지 않는지 아래에 적습니다.
       </p>
-      <p className="mt-2 text-[13px] text-faint">사실과 대조한 날: {REVIEWED}</p>
+      <p className="mt-2 text-[13px] text-faint">최근 고친 날: {REVIEWED}</p>
 
       <Section title="1. 무엇을 저장하는가">
         <p>사용자를 구분하는 데 쓰는 정보는 다음 세 가지입니다.</p>
@@ -101,6 +101,25 @@ export default function PrivacyPage() {
         <p>
           <strong className="text-ink">맞춤 질문에 적은 답변</strong>도 현재 브라우저에만
           남습니다. 맞춤 질문을 지우면 그 질문에 적은 답변도 함께 지워집니다.
+        </p>
+        <p>
+          <strong className="text-ink">
+            서재의 기술사 답안·Jira 과제 기록
+          </strong>
+          은 손님 기록과 계정용 브라우저 사본을 구분합니다. 계정 저장 기능이
+          제공되는 환경에서는 계정 기록을 직접 열고 저장 버튼을 눌러 답안·체크
+          항목·복습 날짜·읽은 시각과 수업 제목·주소를 서버에 보냅니다.
+          로그인만으로 손님 기록을 가져오지 않으며 가져오기는 별도로
+          선택합니다. 이 답안은 AI에 보내지 않습니다. PMP·정처기·Jira 기본
+          수업과 CS 답변 초안은 이 기능에 포함하지 않습니다.
+        </p>
+        <p>
+          계정용 브라우저 사본과 전송 대기 기록은 로그아웃 뒤에도 이 기기에
+          남습니다. 서버의 계정 기록은 탈퇴하면 함께 삭제됩니다. 브라우저 사본과
+          다운로드한 백업 파일은 탈퇴로 지워지지 않으므로 공유 기기에서는 별도로
+          삭제해야 합니다.
+          {process.env.LIBRARY_ACCOUNT_SYNC_ENABLED !== '1' &&
+            '현재 운영 환경의 계정 저장은 아직 비활성 상태입니다.'}
         </p>
       </Section>
 

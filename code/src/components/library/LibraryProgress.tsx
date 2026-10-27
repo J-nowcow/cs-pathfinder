@@ -13,6 +13,7 @@ import { libraryAccountStateSchema } from '@/lib/library/account-schema'
 import release from '../../../data/pmp-release.json'
 import { libraryButton } from './LibraryShell'
 import { JOURNEY_SYNCED_EVENT, STREAK_SYNCED_EVENT } from '@/lib/journey/sync'
+import { LibraryAccountPanel, useLibraryScope } from './LibraryAccount'
 export function LibraryProgress({
   questionTitles = {},
   mode = 'progress',
@@ -20,15 +21,17 @@ export function LibraryProgress({
   questionTitles?: Record<string, string>
   mode?: 'progress' | 'shelf'
 }) {
+  const scope = useLibraryScope()
   const [view, setView] = useState<ReturnType<
       typeof readLibraryProgress
     > | null>(null),
     [message, setMessage] = useState('')
   useEffect(() => {
+    if (!scope.ready) { setView(null); return }
     const refresh = () =>
       setView(
         readLibraryProgress({
-          getItem: (key) => window.localStorage.getItem(key),
+          getItem: (key) => (scope.storage ?? window.localStorage).getItem(key),
         }),
       )
     refresh()
@@ -44,11 +47,11 @@ export function LibraryProgress({
     ]
     events.forEach((e) => window.addEventListener(e, refresh))
     return () => events.forEach((e) => window.removeEventListener(e, refresh))
-  }, [])
+  }, [scope.storage, scope.ready])
   function backup() {
     let state
     try {
-      state = readLibraryStrict(localStorage)
+      state = readLibraryStrict(scope.storage ?? localStorage)
     } catch {
       setMessage(
         '저장된 기록을 온전히 읽지 못해 백업을 만들지 않았어요. 브라우저의 기존 기록은 그대로예요.',
@@ -95,7 +98,7 @@ export function LibraryProgress({
         version: input.version,
         entries: input.entries,
       })
-      restoreLibraryStrict(localStorage, clean)
+      restoreLibraryStrict(scope.storage ?? localStorage, clean)
       window.dispatchEvent(new Event(LIBRARY_EVENT))
       setMessage(
         '기록을 가져왔어요. 비어 있지 않은 답안은 보존했고 답안이 같은 항목의 체크·복습 날짜는 더 최근 기록을 사용했어요.',
@@ -283,6 +286,7 @@ export function LibraryProgress({
         </section>
       )}
       <div className="desk-tools">
+        <LibraryAccountPanel />
         <details className="desk-utility">
           <summary>분야별 학습 기록</summary>
           <dl className="desk-track-stats">
