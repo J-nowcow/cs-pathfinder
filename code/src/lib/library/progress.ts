@@ -9,6 +9,8 @@ import { parseLibrary, LIBRARY_KEY } from './storage'
 import { kstToday } from '@/lib/daily/date'
 import pmp from '../../../data/pmp-library.json'
 import jira from '../../../data/jira-library.json'
+import { CERTIFICATE_KEY, readCertificate } from '@/lib/certificate/storage'
+import { certificateLessons, certificateHref } from '@/lib/certificate/course'
 import { pmpLessonHref } from '@/lib/pmp/routes'
 export type ProgressItem = {
   id: string
@@ -93,6 +95,25 @@ export function readLibraryProgress(
   const today = kstToday(now)
   const due: ProgressItem[] = [],
     recent: ProgressItem[] = []
+  let certificateEntries: ReturnType<typeof readCertificate>['entries'] = {}
+  try {
+    certificateEntries = readCertificate(get(CERTIFICATE_KEY)).entries
+  } catch {
+    unavailable = true
+  }
+  const certificateRecent: ProgressItem[] = Object.entries(certificateEntries)
+    .map(([id, e]) => ({
+      id: 'certificate:' + id,
+      track: '정처기',
+      title: certificateLessons.get(id)!.title,
+      href: certificateHref(id),
+      at: e.visitedAt > e.updatedAt ? e.visitedAt : e.updatedAt,
+      ...(e.draft.trim() ? { excerpt: e.draft.trim().slice(0, 180) } : {}),
+      ...(e.due ? { due: e.due } : {}),
+    }))
+    .sort((a, b) => (b.at ?? '').localeCompare(a.at ?? ''))
+  recent.push(...certificateRecent)
+  due.push(...certificateRecent.filter((e) => e.due && e.due <= today))
   for (const [id, a] of Object.entries(answers.reviews))
     if (nodeId(id) && a.nextReviewOn <= today)
       due.push({
@@ -235,6 +256,19 @@ export function readLibraryProgress(
         '주제·기출 둘러보기',
     },
   ]
+  cards.push({
+    id: 'certificate',
+    title: '정보처리기사 이론',
+    metrics: [
+      ['열어 본 이론', certificateRecent.length],
+      [
+        '작성한 메모',
+        Object.values(certificateEntries).filter((e) => e.draft.trim()).length,
+      ],
+    ],
+    href: certificateRecent[0]?.href ?? '/learn/certificate',
+    resume: certificateRecent[0]?.title ?? 'DB·SQL 이론 읽기',
+  })
   return {
     cards,
     due: due.sort((a, b) => (a.due ?? '').localeCompare(b.due ?? '')),

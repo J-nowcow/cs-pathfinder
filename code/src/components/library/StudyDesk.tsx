@@ -10,7 +10,7 @@ export function StudyDesk({
   reading = false,
 }: {
   children: React.ReactNode
-  section?: 'library' | 'progress' | 'engineer' | 'jira' | 'pmp'
+  section?: 'library' | 'progress' | 'engineer' | 'jira' | 'pmp' | 'certificate'
   document?: boolean
   reading?: boolean
 }) {
@@ -20,6 +20,7 @@ export function StudyDesk({
     engineer: '정보관리기술사',
     jira: 'Jira 연습',
     pmp: '프로젝트·제품 관리',
+    certificate: '정보처리기사 이론',
   }[section]
   return (
     <div
@@ -85,6 +86,12 @@ export function StudyDesk({
               aria-current={section === 'engineer' ? 'page' : undefined}
             >
               정보관리기술사
+            </Link>
+            <Link
+              href="/learn/certificate"
+              aria-current={section === 'certificate' ? 'page' : undefined}
+            >
+              정보처리기사 이론
             </Link>
             <Link href="/learn/engineer#questions" className="desk-sub-link">
               기출 찾아보기

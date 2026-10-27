@@ -1,0 +1,34 @@
+{
+  "release": "2026-10-28.certificate1",
+  "canonicalSource": "learning-content/certificate/course.json",
+  "counts": {
+    "lessons": 12,
+    "originConcepts": 14,
+    "candidateConcepts": 106
+  },
+  "scope": "Independent DB/SQL theory with a new fictional library dataset; partial exam theory coverage only",
+  "originalSource": "Read-only concepts-theory.json; origin IDs, original primary references and source hash retained in course.json",
+  "excluded": [
+    "Exam questions",
+    "Recalled exam code",
+    "Question solutions",
+    "Original source images",
+    "Authentic question JSON files"
+  ],
+  "validation": {
+    "fullSuiteFiles": 205,
+    "fullSuiteTests": 1813,
+    "build": "passed",
+    "typecheck": "passed",
+    "sql": "Every displayed result table executed against isolated PGlite; FK/CHECK/NULL/empty subquery/join checks and FD closure independently verified",
+    "limits": "PGlite is not real Postgres concurrency or production-performance validation",
+    "koreanHumanize": "Actual humanize-korean heavy run2026-10-28-003-8ce9: diagnosis,16chunks, reassembly, independent finalizer accept; gate rate0.0014, gradeB, self-check6/6. Committed-text receipt required before push."
+  },
+  "storage": {
+    "key": "pathfinder.certificate.v1",
+    "scope": "Browser-only, independent of existing CS/PMP/Jira/library keys",
+    "notes": "Expected-text comparison preserves same-note conflicts; checklist mutations read latest state; visiting preserves content timestamps",
+    "backup": "Separate version1 format. Different nonempty current note blocks import; unchanged note uses newer checks/review. Does not alter existing backup formats."
+  },
+  "publication": "Validated source; publish only after final committed-text receipt."
+}

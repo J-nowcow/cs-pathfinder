@@ -1,0 +1,1023 @@
+{
+  "version": 1,
+  "release": "2026-10-28.certificate1",
+  "title": "정보처리기사 이론",
+  "scope": "DB·SQL 첫 묶음 · 전체 시험 범위가 아닙니다.",
+  "intro": "작은 도서관의 표를 따라 관계·제약·SQL을 이해합니다. 기출문제나 복원 코드를 수록하지 않았습니다.",
+  "lessons": [
+    {
+      "id": "relation",
+      "title": "표를 읽는 네 가지 기준",
+      "question": "책이 한 권 늘어나면 표의 무엇이 바뀔까?",
+      "lead": "행은 한 건의 기록이고 열은 기록할 속성이다. 구조와 현재 값을 나누어 보면 표를 훨씬 쉽게 읽을 수 있다.",
+      "body": [
+        "이 자료의 books에는 책번호·제목·서가코드·쪽수라는 열 4개와 책 4권의 행이 있다. 관계 모델에서 열 개수를 차수, 행 개수를 카디널리티라고 부른다. 책 한 권을 추가하면 행은 5개가 되지만 열은 4개다.",
+        "스키마는 열과 제약조건으로 정한 구조이고 인스턴스는 어느 시점에 들어 있는 데이터다. 도메인은 속성에 허용하는 값의 범위다. 도메인을 정할 때 자료형뿐 아니라 업무상 허용할 값도 살핀다."
+      ],
+      "example": {
+        "text": "books의 현재 차수는 4, 카디널리티는 4다. 아래 공통 예제 표의 쪽수 NULL은 숫자 0과 구분한다."
+      },
+      "comparison": [
+        [
+          "속성·attribute",
+          "열의 의미",
+          "책 제목"
+        ],
+        [
+          "튜플·tuple",
+          "한 행",
+          "책 한 권의 기록"
+        ],
+        [
+          "차수·degree",
+          "속성 수",
+          "현재 4"
+        ],
+        [
+          "카디널리티",
+          "튜플 수",
+          "현재 4"
+        ]
+      ],
+      "trap": "카디널리티는 문맥에 따라 서로 다른 뜻으로 쓰인다. 여기서는 관계의 행 수이며 인덱스 값의 종류 수를 뜻하지 않는다.",
+      "recall": "새 열 없이 책만 한 권 추가하면 차수와 카디널리티가 각각 어떻게 될까?",
+      "recallAnswer": "차수는 4로 유지되고 카디널리티는 5가 된다. 구조를 바꾼 것이 아니라 인스턴스에 행을 추가했다.",
+      "originConceptIds": [
+        "th-relation-terms"
+      ],
+      "sources": [
+        "model"
+      ],
+      "flow": [
+        "무엇을 기록하나",
+        "열을 정한다",
+        "행을 채운다",
+        "구조와 값을 구분한다"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "keys",
+      "title": "행을 구별하는 키",
+      "question": "책 제목이 같아도 서로 다른 책을 저장할 수 있을까?",
+      "lead": "키는 모든 허용 데이터에서 행을 유일하게 구별하는 속성 집합이다. 지금 우연히 값이 다르다는 사실만으로 키가 되지는 않는다.",
+      "body": [
+        "books에서는 book_id가 기본키다. 제목이 같은 복본을 허용하므로 title을 키라고 가정하지 않는다. book_id와 title을 함께 써도 행을 구별하지만 title을 빼도 충분하다.",
+        "행을 유일하게 구별하는 속성 집합이 슈퍼키다. 후보키는 최소 슈퍼키다. 속성을 하나라도 빼면 유일성이 깨진다. 후보키 중 대표로 고른 것이 기본키이며 다른 후보키는 대체키다. 최소성은 글자 수나 값의 길이가 짧다는 뜻이 아니다."
+      ],
+      "example": {
+        "text": "book_id만으로 유일한 현재 설계에서 {book_id, title}은 슈퍼키이지만 최소성이 없어 후보키는 아니다. 별도의 관리번호도 항상 유일하고 NULL이 없도록 정한다면 후보키를 더 둘 수 있다."
+      },
+      "comparison": [
+        [
+          "슈퍼키",
+          "유일성",
+          "불필요한 속성을 포함할 수 있다"
+        ],
+        [
+          "후보키",
+          "유일성·최소성",
+          "여러 개일 수 있다"
+        ],
+        [
+          "기본키",
+          "선택한 후보키",
+          "SQL PRIMARY KEY는 유일성과 NOT NULL을 강제한다"
+        ],
+        [
+          "대체키",
+          "선택하지 않은 후보키",
+          "예시의 title은 해당하지 않는다"
+        ]
+      ],
+      "trap": "샘플 4행에서 제목이 모두 다르다는 관찰과 앞으로도 제목 중복을 금지한다는 업무 제약을 혼동하지 않는다.",
+      "recall": "{book_id, title}이 후보키가 아닌 이유를 최소성으로 설명해 보자.",
+      "recallAnswer": "book_id만 남겨도 행을 구별하므로 title이 불필요하다. 유일성은 만족하지만 최소성을 만족하지 않는다.",
+      "originConceptIds": [
+        "th-keys"
+      ],
+      "sources": [
+        "model",
+        "constraints"
+      ],
+      "flow": [
+        "허용할 중복을 정한다",
+        "유일성을 확인한다",
+        "속성을 빼 본다",
+        "대표 키를 고른다"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "constraints",
+      "title": "연결과 값에 규칙 걸기",
+      "question": "없는 책의 대출을 DB가 막게 하려면?",
+      "lead": "참조 무결성은 연결의 유효성을 지킨다. CHECK와 NOT NULL은 저장할 값의 조건을 각각 맡는다.",
+      "body": [
+        "loans.book_id가 books.book_id를 참조하면 존재하지 않는 책번호로 대출을 추가할 수 없다. 책 한 권을 여러 번 빌릴 수 있으므로 외래키 값 자체는 중복될 수 있다.",
+        "pages에 CHECK(pages > 0)만 걸면 음수는 거절하지만 NULL은 허용된다. CHECK는 조건이 거짓일 때 거절하고 미정인 경우에는 통과한다. 값이 반드시 있어야 한다면 NOT NULL을 따로 선언한다.",
+        "부모 행 삭제 때 자식도 지울지, 삭제를 막을지, NULL로 바꿀지는 참조 동작을 정해 결정한다. 학습 기록을 보존해야 하는 업무에서 CASCADE를 습관적으로 붙이지 않는다."
+      ],
+      "example": {
+        "code": "CREATE TABLE books (\n  book_id INTEGER PRIMARY KEY,\n  title TEXT NOT NULL,\n  shelf_code TEXT REFERENCES shelves(code),\n  pages INTEGER CHECK (pages > 0)\n);",
+        "text": "쪽수 0은 거절된다. 쪽수 NULL은 허용된다. loans의 책번호는 별도 FOREIGN KEY로 books에 연결한다."
+      },
+      "comparison": [
+        [
+          "PRIMARY KEY",
+          "자기 행의 식별",
+          "중복·NULL을 금지한다"
+        ],
+        [
+          "FOREIGN KEY",
+          "참조 대상의 존재",
+          "참조 열의 NULL 허용 여부는 별도다"
+        ],
+        [
+          "CHECK",
+          "값이 조건에 맞는가",
+          "NULL 금지와 다르다"
+        ],
+        [
+          "NOT NULL",
+          "값이 있는가",
+          "범위 검사는 하지 않는다"
+        ]
+      ],
+      "trap": "외래키를 선언했다고 참조 열에 자동으로 유일성이나 NOT NULL이 생기지는 않는다. 복합 외래키의 NULL 규칙은 MATCH 설정도 확인한다.",
+      "recall": "CHECK(pages > 0)에서 NULL이 통과하는 이유와 막는 방법은?",
+      "recallAnswer": "NULL과의 비교는 미정이다. CHECK는 미정을 거절하지 않으므로 값이 필요하면 NOT NULL을 함께 쓴다.",
+      "originConceptIds": [
+        "th-foreign-key",
+        "th-domain-check"
+      ],
+      "sources": [
+        "constraints"
+      ],
+      "flow": [
+        "행의 식별",
+        "연결의 유효성",
+        "값의 범위",
+        "값의 존재"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "normalization",
+      "title": "중복된 사실을 나누는 정규화",
+      "question": "서가 이름을 고칠 때 책마다 고쳐야 한다면?",
+      "lead": "서로 다른 사실을 한 표에 반복 저장하면 일부만 고쳐지거나 함께 사라질 수 있다. 함수 종속을 확인하고 사실의 단위로 나눈다.",
+      "body": [
+        "book_id → shelf_code이고 shelf_code → shelf_name이라는 업무 규칙을 가정하자. 책마다 서가 이름까지 저장하면 같은 서가 이름이 반복된다. 서가 이름을 일부 행에서만 고치면 수정 이상이 생긴다. 마지막 책을 지울 때 서가 정보도 없어지면 삭제 이상이다.",
+        "books(book_id, title, shelf_code)와 shelves(code, name)로 나누면 서가 이름을 한 곳에서 관리한다. 분해 뒤 원래 관계를 잘못된 추가 행 없이 복원하는 무손실 조인인지도 확인한다.",
+        "3NF는 비자명한 X → A마다 X가 슈퍼키이거나 A가 어떤 후보키에 포함되는 주요 속성이면 허용한다. BCNF는 주요 속성 예외 없이 결정자 X가 슈퍼키여야 한다. 더 강한 정규형일수록 언제나 최선인 것은 아니며 종속성 보존과 실제 작업도 살핀다."
+      ],
+      "example": {
+        "text": "별도 학습 가정 R(독자, 분야, 담당자)에서 (독자, 분야) → 담당자, 담당자 → 분야만 있다고 하자. 후보키는 (독자, 분야)와 (독자, 담당자)다. 담당자는 슈퍼키가 아니지만 분야는 주요 속성이므로 3NF는 만족하고 BCNF는 위반한다."
+      },
+      "comparison": [
+        [
+          "1NF",
+          "도메인의 값을 원자적으로 다룬다",
+          "원자성은 선택한 데이터 모델의 문맥에서 판단한다"
+        ],
+        [
+          "2NF",
+          "후보키의 일부에 대한 비주요 속성의 종속을 제거한다",
+          "복합 후보키와 부분 종속을 확인한다"
+        ],
+        [
+          "3NF",
+          "결정자가 슈퍼키이거나 오른쪽 속성이 주요 속성",
+          "모든 결정자가 키라는 정의와 다르다"
+        ],
+        [
+          "BCNF",
+          "비자명한 종속의 결정자는 슈퍼키",
+          "3NF보다 엄격하다"
+        ]
+      ],
+      "trap": "반정규화는 성능 목적의 중복을 선택하는 설계다. 조회 이득과 갱신·검증 비용을 함께 측정한다. 대출 당시 제목처럼 과거 사실을 보존하려는 스냅샷은 현재값 중복과 목적이 다르다.",
+      "recall": "3NF가 허용하지만 BCNF가 허용하지 않는 조건을 말해 보자.",
+      "recallAnswer": "결정자가 슈퍼키가 아니어도 오른쪽 속성이 주요 속성이면 3NF에서 허용할 수 있다. BCNF에는 이 예외가 없다.",
+      "originConceptIds": [
+        "th-normal-forms",
+        "th-denormalization"
+      ],
+      "sources": [
+        "normal",
+        "design"
+      ],
+      "flow": [
+        "업무 규칙을 적는다",
+        "종속을 찾는다",
+        "사실을 나눈다",
+        "복원과 갱신을 확인한다"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "design",
+      "title": "업무에서 저장 구조까지",
+      "question": "대출 서비스를 만든다면 무엇부터 정할까?",
+      "lead": "개념 설계는 업무의 대상과 관계를 잡고 논리 설계는 이를 스키마로 옮긴다. 물리 설계에서 저장과 접근 경로를 구체화한다.",
+      "body": [
+        "요구 분석에서는 같은 책을 재대출할 수 있는지, 반납 이력을 언제까지 남길지부터 확인한다. 개념 설계에서는 책·회원·대출의 관계를 표현한다. DB 제품을 고르기 전에 업무 의미를 맞추는 단계다.",
+        "논리 설계에서는 books와 loans의 열·키·참조를 정하고 종속을 검토한다. 물리 설계에서는 자주 쓰는 조회와 데이터 규모에 맞춰 인덱스 등 접근 방법을 정한다. 실제 과정에서는 검증 결과를 보고 이전 설계로 돌아갈 수 있다."
+      ],
+      "example": {
+        "text": "“책 한 권은 여러 대출 이력을 가진다”는 업무 관계다. “loans.book_id가 books를 참조한다”는 논리 구조다. “loans(book_id)에 인덱스를 둔다”는 물리 접근 계획이다."
+      },
+      "comparison": [
+        [
+          "개념 설계",
+          "대상·관계·제약",
+          "ER 모델"
+        ],
+        [
+          "논리 설계",
+          "관계·키·종속",
+          "관계 스키마"
+        ],
+        [
+          "물리 설계",
+          "저장·접근 경로",
+          "인덱스·파티션 등"
+        ]
+      ],
+      "trap": "요구 분석에서 정하지 못한 보존 정책을 단순한 열 이름 문제로 미루지 않는다. 구현할 DB의 기능과 제약도 설계에 영향을 준다.",
+      "recall": "books와 loans의 외래키를 정하는 것과 인덱스를 정하는 것은 어떤 차이가 있을까?",
+      "recallAnswer": "외래키는 유효한 관계를 정하는 논리 제약이다. 인덱스는 조회·갱신 비용과 관련된 물리 접근 구조다.",
+      "originConceptIds": [
+        "th-db-design"
+      ],
+      "sources": [
+        "design",
+        "constraints",
+        "index"
+      ],
+      "flow": [
+        "요구 분석",
+        "개념 설계",
+        "논리 설계",
+        "물리 설계·구현"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "indexes",
+      "title": "인덱스가 이득인 조건",
+      "question": "인덱스를 많이 만들수록 빨라질까?",
+      "lead": "인덱스는 필요한 행을 찾는 접근 경로다. 읽기를 줄일 수 있지만 저장 공간과 갱신 비용이 든다.",
+      "body": [
+        "전체 대출에서 책번호 하나의 이력을 찾을 때 loans(book_id) 인덱스가 도움이 될 수 있다. 반대로 대부분의 행을 읽는 집계에서는 순차 스캔이 유리할 수도 있다. 작은 예제 표의 결과를 큰 운영 표의 성능으로 일반화하지 않는다.",
+        "INSERT·UPDATE·DELETE 때 관련 인덱스도 유지해야 한다. 실행 계획과 실제 읽기·쓰기 시간, 저장 공간을 함께 보고 선택한다. 검색 조건과 정렬 조건에 맞는 인덱스인지도 확인한다."
+      ],
+      "example": {
+        "code": "CREATE INDEX loans_book_idx ON loans(book_id);",
+        "text": "인덱스 생성이 성공했다는 사실은 측정한 성능 향상과 다르다. 이 자료에서는 구조를 만들 수 있는지만 실행해 확인한다."
+      },
+      "comparison": [
+        [
+          "선택적인 검색",
+          "적은 행을 찾는 상황",
+          "인덱스 후보를 검토한다"
+        ],
+        [
+          "넓은 집계",
+          "많은 행을 읽는 상황",
+          "전체 스캔도 비교한다"
+        ],
+        [
+          "잦은 갱신",
+          "쓰기 작업이 많은 상황",
+          "유지 비용을 측정한다"
+        ]
+      ],
+      "trap": "인덱스가 있어도 출력 순서는 보장되지 않는다. 결과에 순서가 필요하면 ORDER BY를 명시한다.",
+      "recall": "인덱스 추가 여부를 판단할 때 읽기 속도 외에 무엇을 확인해야 할까?",
+      "recallAnswer": "쓰기 때 유지 비용과 저장 공간, 실제 질의의 실행 계획을 확인한다.",
+      "originConceptIds": [
+        "th-index"
+      ],
+      "sources": [
+        "index"
+      ],
+      "flow": [
+        "질의를 고른다",
+        "접근 경로를 비교한다",
+        "읽기·쓰기를 측정한다",
+        "유지 비용을 확인한다"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "algebra",
+      "title": "행·열·모두를 구분하기",
+      "question": "선택과 투영은 무엇을 남길까?",
+      "lead": "선택은 조건에 맞는 행을 남기고 투영은 지정한 속성을 남긴다. 순수 관계대수는 집합을 다룬다.",
+      "body": [
+        "books에서 shelf_code가 DB인 행을 고르는 것은 선택 σ다. 그 결과에서 shelf_code 열만 남기는 것은 투영 π다. 집합 기반 투영 결과에는 같은 튜플이 여러 번 남지 않는다. SQL SELECT는 기본적으로 중복을 유지하므로 DISTINCT 여부를 확인한다.",
+        "디비전 ÷은 관련 조건을 모두 만족하는 대상을 표현한다. 관심분야(독자, 분야)를 필수분야(분야)로 나누면 모든 필수분야에 관심을 등록한 독자를 구하는 식으로 이해할 수 있다. 관계해석은 원하는 결과가 만족할 논리 조건을 적는 방식이다."
+      ],
+      "example": {
+        "text": "관심분야={(하린, DB), (하린, SW), (도윤, DB)}, 필수분야={DB, SW}라면 디비전 결과는 {하린}이다. 단순히 DB 또는 SW 중 하나가 있는 독자를 고르는 것과 구분한다."
+      },
+      "comparison": [
+        [
+          "σ 선택",
+          "조건에 맞는 행",
+          "WHERE와 대응해 생각한다"
+        ],
+        [
+          "π 투영",
+          "지정한 열·집합 중복 제거",
+          "SELECT DISTINCT와 비교한다"
+        ],
+        [
+          "÷ 디비전",
+          "모든 관련 조건",
+          "하나 이상이라는 조건과 구분한다"
+        ]
+      ],
+      "trap": "관계대수의 기호와 실제 DB의 NULL·중복·정렬 규칙을 동일하게 취급하지 않는다.",
+      "recall": "DB 관심만 등록한 도윤이 디비전 결과에서 빠지는 이유는?",
+      "recallAnswer": "필수분야 SW가 빠져 모든 조건을 만족하지 못한다. 하나 이상의 분야가 일치하는 조건만으로는 충분하지 않다.",
+      "originConceptIds": [
+        "th-relational-algebra"
+      ],
+      "sources": [
+        "model",
+        "tables"
+      ],
+      "flow": [
+        "행을 고른다",
+        "열을 고른다",
+        "중복 규칙을 확인한다",
+        "모든 조건을 만족하는지 확인한다"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "sql-basics",
+      "title": "SQL을 읽는 순서",
+      "question": "어느 표에서 어떤 행과 값을 고를까?",
+      "lead": "FROM으로 입력을 보고 WHERE로 남길 행을 정한 뒤 SELECT가 출력할 값을 읽으면 질의가 잘 보인다.",
+      "body": [
+        "아래 질의는 DB 서가의 책 1번과 3번을 남긴 뒤 책번호·제목을 출력한다. 논리적으로 결과를 이해하는 순서이며 DB가 내부적으로 꼭 같은 순서로 실행한다는 뜻은 아니다.",
+        "INSERT는 행을 넣고 UPDATE의 SET은 값을 바꾼다. DELETE는 조건에 맞는 행을 지운다. UPDATE·DELETE에서 WHERE를 생략하면 전체 행이 대상이 될 수 있다. AND가 OR보다 우선하므로 의도한 조건에 괄호를 쓰면 읽기 쉽다."
+      ],
+      "example": {
+        "code": "SELECT book_id, title\nFROM books\nWHERE shelf_code = 'DB'\nORDER BY book_id;",
+        "rows": [
+          [
+            1,
+            "SQL 입문"
+          ],
+          [
+            3,
+            "관계 모델"
+          ]
+        ],
+        "headers": [
+          "book_id",
+          "title"
+        ],
+        "text": "서가 조건으로 고른 두 행을 책번호 순서로 보여준다."
+      },
+      "comparison": [
+        [
+          "FROM",
+          "입력 관계",
+          "어느 표를 읽는가"
+        ],
+        [
+          "WHERE",
+          "행 조건",
+          "어떤 행을 남기는가"
+        ],
+        [
+          "SELECT",
+          "출력 값",
+          "어떤 열·식을 보여주는가"
+        ],
+        [
+          "SET",
+          "갱신 값",
+          "어떤 값으로 바꾸는가"
+        ]
+      ],
+      "trap": "SELECT 목록의 열 수와 반환된 행 수를 구분한다. 서브쿼리·그룹·윈도 함수가 있는 질의는 해당 단계의 입력 범위를 더 살핀다.",
+      "recall": "SELECT에 열 2개를 썼다는 이유로 결과도 2행이라고 할 수 있을까?",
+      "recallAnswer": "아니다. 출력 열 수와 행 조건에 남는 행 수는 별개다.",
+      "originConceptIds": [
+        "th-sql-basics"
+      ],
+      "sources": [
+        "tables"
+      ],
+      "flow": [
+        "입력 표",
+        "행 조건",
+        "출력 값",
+        "출력 순서"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "count-null",
+      "title": "NULL과 중복을 세는 방법",
+      "question": "COUNT(*)와 COUNT(pages)는 왜 다를까?",
+      "lead": "COUNT(*)는 행을 세고 COUNT(열)은 그 열이 NULL이 아닌 행을 센다. DISTINCT가 붙으면 중복값도 한 번만 센다.",
+      "body": [
+        "books는 4행이고 쪽수는 120·200·NULL·160이다. COUNT(*)는 4, COUNT(pages)는 3이다. shelf_code는 DB·SW·DB·NULL이므로 COUNT(DISTINCT shelf_code)는 2다.",
+        "GROUP BY가 없는 아래 집계는 값 세 개를 가진 결과 한 행을 반환한다. 빈 입력에서도 COUNT는 0을 반환하지만 SUM 같은 집계는 보통 NULL을 반환한다. NULL을 0으로 간주하지 않는다."
+      ],
+      "example": {
+        "code": "SELECT COUNT(*) AS all_rows,\n       COUNT(pages) AS known_pages,\n       COUNT(DISTINCT shelf_code) AS shelves\nFROM books;",
+        "rows": [
+          [
+            4,
+            3,
+            2
+          ]
+        ],
+        "headers": [
+          "all_rows",
+          "known_pages",
+          "shelves"
+        ],
+        "text": "집계값은 4·3·2이고 결과 행 수는 1이다."
+      },
+      "comparison": [
+        [
+          "COUNT(*)",
+          "입력 행 수",
+          "NULL 열이 있어도 행을 센다"
+        ],
+        [
+          "COUNT(pages)",
+          "값이 있는 행 수",
+          "pages가 NULL이면 세지 않는다"
+        ],
+        [
+          "COUNT(DISTINCT shelf_code)",
+          "고유한 비NULL 값 수",
+          "같은 DB는 한 번 센다"
+        ]
+      ],
+      "trap": "COUNT가 반환한 숫자와 SQL 결과의 행 수를 같은 것으로 보지 않는다. 그룹별 집계라면 그룹마다 결과 행이 생긴다.",
+      "recall": "쪽수가 NULL인 책을 80쪽으로 수정하면 COUNT(*)와 COUNT(pages)는 어떻게 될까?",
+      "recallAnswer": "행 수는 그대로 4다. 쪽수 값이 모두 있으므로 COUNT(pages)도 4가 된다. NULL을 숫자와 구분해서 세는 기준을 확인한다.",
+      "originConceptIds": [
+        "th-sql-count-distinct"
+      ],
+      "sources": [
+        "aggregate"
+      ],
+      "flow": [
+        "입력 행 수",
+        "NULL 여부",
+        "중복 여부",
+        "결과 행 수"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "joins",
+      "title": "연결하며 늘어나는 행",
+      "question": "책 4권을 조인하면 결과도 4행일까?",
+      "lead": "조인은 두 입력의 행을 조건에 따라 짝짓는다. 한 행에 여러 짝이 있으면 결과도 그만큼 늘어난다.",
+      "body": [
+        "이 예제에서 책 1번은 대출 이력이 2개, 2번은 1개이고 3·4번은 없다. INNER JOIN 결과는 대출이 있는 짝 3행이다. 책을 왼쪽에 둔 LEFT JOIN은 미일치 책도 남겨 총 5행이다.",
+        "미일치 행의 대출 열에는 NULL이 채워진다. 조인 뒤 WHERE l.loan_id IS NULL로 대출 이력이 없는 책 3·4번을 찾을 수 있다. 이 예제의 loan_id는 기본키여서 원래 NULL이 없다는 조건을 사용한다."
+      ],
+      "example": {
+        "code": "SELECT b.book_id, l.loan_id\nFROM books b\nLEFT JOIN loans l ON l.book_id = b.book_id\nORDER BY b.book_id, l.loan_id;",
+        "rows": [
+          [
+            1,
+            11
+          ],
+          [
+            1,
+            12
+          ],
+          [
+            2,
+            13
+          ],
+          [
+            3,
+            null
+          ],
+          [
+            4,
+            null
+          ]
+        ],
+        "headers": [
+          "book_id",
+          "loan_id"
+        ],
+        "text": "같은 책이 여러 대출과 짝지어지면 책번호가 결과에서 반복된다."
+      },
+      "comparison": [
+        [
+          "INNER",
+          "일치한 짝만",
+          "현재 3행"
+        ],
+        [
+          "LEFT OUTER",
+          "왼쪽 미일치 행도 보존",
+          "현재 5행"
+        ],
+        [
+          "CROSS",
+          "모든 조합",
+          "현재 두 표는 4×3=12행"
+        ]
+      ],
+      "trap": "LEFT JOIN 뒤 오른쪽 열에 WHERE 조건을 걸면 NULL 보충 행이 사라질 수 있다. ON에서 짝을 제한할지, WHERE에서 결과를 거를지 구분한다.",
+      "recall": "LEFT JOIN 결과가 책 수보다 많은 이유와 NULL 행의 의미를 설명해 보자.",
+      "recallAnswer": "책 1번이 두 대출에 연결되어 두 행이 된다. 책 3·4번은 짝이 없어서 대출 쪽 열이 NULL인 보충 행으로 남는다.",
+      "originConceptIds": [
+        "th-sql-joins"
+      ],
+      "sources": [
+        "tables"
+      ],
+      "flow": [
+        "왼쪽 행",
+        "일치하는 오른쪽 행",
+        "짝마다 결과 한 행",
+        "없으면 보충 행"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "subqueries",
+      "title": "존재·하나 이상·모두",
+      "question": "대출이 없는 책을 안전하게 찾으려면?",
+      "lead": "EXISTS는 행의 존재, ANY는 비교가 하나 이상 참인지, ALL은 모든 비교가 참인지 묻는다. NULL과 빈 집합도 따로 살핀다.",
+      "body": [
+        "상관 서브쿼리는 바깥 행의 값을 안쪽에서 참조한다. 아래 NOT EXISTS는 각 책번호와 연결된 대출 행이 없는 책 3·4번을 반환한다. 실제 실행 횟수나 물리 처리 방식은 옵티마이저에 따라 달라질 수 있다.",
+        "170 > ANY(120, 200)는 참이고 170 > ALL(120, 200)는 거짓이다. 비교 대상이 빈 집합이면 ANY는 거짓, ALL은 참이다. NULL 때문에 참·거짓이 확정되지 않을 수도 있다.",
+        "NOT IN의 비교 집합에 NULL이 들어 있고 일치하는 값도 없다면 결과가 참이 아니라 미정일 수 있다. 단순히 NOT EXISTS와 같은 문법이라고 바꾸지 말고 NULL 가능성과 상관 조건을 먼저 확인한다."
+      ],
+      "example": {
+        "code": "SELECT b.book_id\nFROM books b\nWHERE NOT EXISTS (\n  SELECT 1 FROM loans l\n  WHERE l.book_id = b.book_id\n)\nORDER BY b.book_id;",
+        "rows": [
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "headers": [
+          "book_id"
+        ],
+        "text": "안쪽의 SELECT 1은 값을 합산하는 것이 아니라 행의 존재를 확인하는 표현이다."
+      },
+      "comparison": [
+        [
+          "EXISTS",
+          "한 행이라도 존재",
+          "값보다 행 존재를 본다"
+        ],
+        [
+          "ANY",
+          "하나 이상 비교 참",
+          "빈 집합은 거짓"
+        ],
+        [
+          "ALL",
+          "모든 비교 참",
+          "빈 집합은 참"
+        ],
+        [
+          "NOT IN",
+          "모두와 다름",
+          "NULL이 끼면 미정 가능"
+        ]
+      ],
+      "trap": "SQL의 참·거짓·미정 3값 논리를 잊지 않는다. WHERE는 조건이 참인 행만 남긴다.",
+      "recall": "비교 대상이 하나도 없을 때 >ALL과 >ANY의 결과는?",
+      "recallAnswer": "ALL은 참이고 ANY는 거짓이다. NULL 원소가 있는 집합과 원소 자체가 없는 빈 집합은 구분한다.",
+      "originConceptIds": [
+        "th-sql-subquery"
+      ],
+      "sources": [
+        "subquery"
+      ],
+      "flow": [
+        "바깥 행의 값",
+        "안쪽 결과",
+        "존재·비교 조건",
+        "NULL·빈 집합"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    },
+    {
+      "id": "patterns",
+      "title": "패턴과 정렬을 명시하기",
+      "question": "문자열을 고르는 것과 순서를 정하는 것은 어떻게 다를까?",
+      "lead": "LIKE는 문자 패턴을 검사하고 ORDER BY는 결과 순서를 정한다. 검색 조건이 결과 순서를 대신하지 않는다.",
+      "body": [
+        "LIKE에서 %는 길이가 0 이상인 문자열, _는 한 문자에 대응한다. 제목 LIKE SQL%는 SQL로 시작하는 제목을 고른다. 중간에 SQL을 포함하는 제목까지 찾으려면 %SQL%처럼 양쪽을 연다.",
+        "ORDER BY pages DESC NULLS LAST는 쪽수가 큰 책부터 놓고 NULL은 뒤로 보낸다. 동점인 책 사이 순서도 필요하다면 book_id 같은 추가 정렬 기준을 둔다. 대소문자·문자 비교의 세부 동작은 DB와 collation을 확인한다."
+      ],
+      "example": {
+        "code": "SELECT book_id, title, pages\nFROM books\nORDER BY pages DESC NULLS LAST, book_id;",
+        "rows": [
+          [
+            2,
+            "설계 노트",
+            200
+          ],
+          [
+            4,
+            "분산 읽기",
+            160
+          ],
+          [
+            1,
+            "SQL 입문",
+            120
+          ],
+          [
+            3,
+            "관계 모델",
+            null
+          ]
+        ],
+        "headers": [
+          "book_id",
+          "title",
+          "pages"
+        ],
+        "text": "NULL 위치와 동점 정렬 기준까지 명시한 PostgreSQL 예제다."
+      },
+      "comparison": [
+        [
+          "SQL%",
+          "SQL로 시작",
+          "SQL 자체도 일치한다"
+        ],
+        [
+          "%SQL%",
+          "SQL 포함",
+          "앞뒤 문자열 길이는 0이어도 된다"
+        ],
+        [
+          "_QL",
+          "정확히 한 문자+QL",
+          "SQL은 일치한다"
+        ],
+        [
+          "ORDER BY",
+          "결과의 순서",
+          "LIKE와 역할이 다르다"
+        ]
+      ],
+      "trap": "ORDER BY가 없는 결과의 우연한 순서를 저장 순서나 키 순서라고 보장하지 않는다. 실제 %·_ 문자를 찾으려면 ESCAPE 규칙을 사용한다.",
+      "recall": "SQL%가 SQL 자체와도 일치하는 이유는?",
+      "recallAnswer": "%는 0개 문자에도 대응하므로 뒤에 문자가 없어도 조건을 만족한다.",
+      "originConceptIds": [
+        "th-sql-like"
+      ],
+      "sources": [
+        "pattern",
+        "tables"
+      ],
+      "flow": [
+        "문자 패턴",
+        "행 선택",
+        "정렬 기준",
+        "NULL·동점 규칙"
+      ],
+      "checklist": [
+        "개념의 기준을 설명했다",
+        "예시와 예외를 구분했다"
+      ]
+    }
+  ],
+  "books": {
+    "headers": [
+      "book_id",
+      "title",
+      "shelf_code",
+      "pages"
+    ],
+    "rows": [
+      [
+        1,
+        "SQL 입문",
+        "DB",
+        120
+      ],
+      [
+        2,
+        "설계 노트",
+        "SW",
+        200
+      ],
+      [
+        3,
+        "관계 모델",
+        "DB",
+        null
+      ],
+      [
+        4,
+        "분산 읽기",
+        null,
+        160
+      ]
+    ]
+  },
+  "loans": {
+    "headers": [
+      "loan_id",
+      "book_id"
+    ],
+    "rows": [
+      [
+        11,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        13,
+        2
+      ]
+    ]
+  },
+  "sources": [
+    {
+      "id": "model",
+      "title": "관계 모델·키·관계대수",
+      "url": "https://db-book.com/slides-dir/PDF-dir/ch2.pdf",
+      "edition": "Database System Concepts 7판 · 저자 제공 자료",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "normal",
+      "title": "함수 종속과 정규형",
+      "url": "https://www.cs.rpi.edu/~sibel/csci4380/fall2026/lecture_notes/lecture5.html",
+      "edition": "RPI Sibel Adalı · 2026 가을 강의",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "design",
+      "title": "정규화와 설계",
+      "url": "https://db-book.com/slides-dir/PDF-dir/ch7.pdf",
+      "edition": "Database System Concepts 7판 · 저자 제공 자료",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "constraints",
+      "title": "제약조건",
+      "url": "https://www.postgresql.org/docs/18/ddl-constraints.html",
+      "edition": "PostgreSQL 18",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "tables",
+      "title": "행 조건·그룹·조인",
+      "url": "https://www.postgresql.org/docs/18/queries-table-expressions.html",
+      "edition": "PostgreSQL 18",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "aggregate",
+      "title": "집계 함수",
+      "url": "https://www.postgresql.org/docs/18/functions-aggregate.html",
+      "edition": "PostgreSQL 18",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "index",
+      "title": "인덱스의 역할과 비용",
+      "url": "https://www.postgresql.org/docs/18/indexes-intro.html",
+      "edition": "PostgreSQL 18",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "subquery",
+      "title": "EXISTS·ANY·ALL·NULL",
+      "url": "https://www.postgresql.org/docs/18/functions-subquery.html",
+      "edition": "PostgreSQL 18",
+      "checked": "2026-10-28"
+    },
+    {
+      "id": "pattern",
+      "title": "LIKE 패턴",
+      "url": "https://www.postgresql.org/docs/18/functions-matching.html",
+      "edition": "PostgreSQL 18",
+      "checked": "2026-10-28"
+    }
+  ],
+  "origin": {
+    "file": "concepts-theory.json",
+    "sha256": "905e732699d8c9609f3a518460e2c652577e7b915209ee3505eb9d63ec6aa470",
+    "concepts": [
+      {
+        "id": "th-db-design",
+        "title": "데이터베이스 설계 단계",
+        "sources": [
+          {
+            "title": "Database System Concepts: ER 설계",
+            "url": "https://www.db-book.com/slides-dir/PDF-dir/ch6.pdf"
+          }
+        ]
+      },
+      {
+        "id": "th-denormalization",
+        "title": "이상 현상과 반정규화",
+        "sources": [
+          {
+            "title": "Database System Concepts: 정규화",
+            "url": "https://www.db-book.com/slides-dir/PDF-dir/ch7.pdf"
+          }
+        ]
+      },
+      {
+        "id": "th-domain-check",
+        "title": "도메인·CHECK·NULL 제약",
+        "sources": [
+          {
+            "title": "PostgreSQL: 제약조건",
+            "url": "https://www.postgresql.org/docs/current/ddl-constraints.html"
+          }
+        ]
+      },
+      {
+        "id": "th-foreign-key",
+        "title": "외래키와 참조 무결성",
+        "sources": [
+          {
+            "title": "PostgreSQL: 외래키",
+            "url": "https://www.postgresql.org/docs/current/tutorial-fk.html"
+          }
+        ]
+      },
+      {
+        "id": "th-index",
+        "title": "인덱스: 값을 이용한 빠른 위치 찾기",
+        "sources": [
+          {
+            "title": "PostgreSQL: 인덱스",
+            "url": "https://www.postgresql.org/docs/current/indexes-intro.html"
+          }
+        ]
+      },
+      {
+        "id": "th-keys",
+        "title": "슈퍼키·후보키·기본키·대체키",
+        "sources": [
+          {
+            "title": "Database System Concepts: 관계 모델",
+            "url": "https://www.db-book.com/slides-dir/PDF-dir/ch2.pdf"
+          },
+          {
+            "title": "PostgreSQL: 제약조건",
+            "url": "https://www.postgresql.org/docs/current/ddl-constraints.html"
+          }
+        ]
+      },
+      {
+        "id": "th-normal-forms",
+        "title": "3NF와 BCNF: 결정자가 키인가",
+        "sources": [
+          {
+            "title": "Database System Concepts: 정규화",
+            "url": "https://www.db-book.com/slides-dir/PDF-dir/ch7.pdf"
+          }
+        ]
+      },
+      {
+        "id": "th-relation-terms",
+        "title": "릴레이션의 행·열·차수·카디널리티",
+        "sources": [
+          {
+            "title": "Database System Concepts: 관계 모델",
+            "url": "https://www.db-book.com/slides-dir/PDF-dir/ch2.pdf"
+          }
+        ]
+      },
+      {
+        "id": "th-relational-algebra",
+        "title": "관계대수·관계해석·디비전",
+        "sources": [
+          {
+            "title": "Database System Concepts: 관계 모델",
+            "url": "https://www.db-book.com/slides-dir/PDF-dir/ch2.pdf"
+          }
+        ]
+      },
+      {
+        "id": "th-sql-basics",
+        "title": "SQL 읽기: SELECT·FROM·WHERE·INSERT·UPDATE",
+        "sources": [
+          {
+            "title": "PostgreSQL: 테이블 표현식",
+            "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html"
+          }
+        ]
+      },
+      {
+        "id": "th-sql-count-distinct",
+        "title": "COUNT·NULL·DISTINCT",
+        "sources": [
+          {
+            "title": "PostgreSQL: 집계",
+            "url": "https://www.postgresql.org/docs/current/tutorial-agg.html"
+          },
+          {
+            "title": "PostgreSQL: SELECT와 DISTINCT",
+            "url": "https://www.postgresql.org/docs/current/queries-select-lists.html"
+          }
+        ]
+      },
+      {
+        "id": "th-sql-joins",
+        "title": "조인: 행 짝짓기와 외부 조인",
+        "sources": [
+          {
+            "title": "PostgreSQL: 테이블 표현식",
+            "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html"
+          }
+        ]
+      },
+      {
+        "id": "th-sql-like",
+        "title": "LIKE 패턴과 ORDER BY",
+        "sources": [
+          {
+            "title": "PostgreSQL: 패턴 매칭",
+            "url": "https://www.postgresql.org/docs/current/functions-matching.html"
+          }
+        ]
+      },
+      {
+        "id": "th-sql-subquery",
+        "title": "서브쿼리·상관 조건·ALL",
+        "sources": [
+          {
+            "title": "PostgreSQL: 서브쿼리",
+            "url": "https://www.postgresql.org/docs/current/functions-subquery.html"
+          },
+          {
+            "title": "PostgreSQL: 집계",
+            "url": "https://www.postgresql.org/docs/current/tutorial-agg.html"
+          }
+        ]
+      }
+    ],
+    "policy": "기존 독립 개념 자료의 범위와 1차 출처를 이어받아 설명·예시·회상 안내를 새로 작성했습니다. 기출·복원 코드·해설·원자료 이미지는 가져오지 않았습니다. 원본 자료는 그대로 보존했습니다."
+  },
+  "limits": [
+    "이론의 일부를 정제한 학습 자료이며 공식 교재·시험 전체 범위가 아닙니다.",
+    "예시 SQL은 PostgreSQL 문법이며 다른 DB의 NULL·정렬·자료형 규칙은 확인이 필요합니다.",
+    "화면은 SQL 실행기가 아닙니다. 실행 검증은 격리된 PGlite에서 수행하며 실제 서버 성능을 증명하지 않습니다."
+  ]
+}

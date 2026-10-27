@@ -72,6 +72,6 @@ describe('기존 학습 기록을 덮어쓰지 않는 통합 보기', () => {
     ).toBe(true)
     expect(
       readLibraryProgress({ getItem: () => '{bad' }, now).cards,
-    ).toHaveLength(4)
+    ).toHaveLength(5)
   })
 })
