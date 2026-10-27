@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { PmpBackup } from '@/components/pmp/PmpBackup'
 import { StudyDesk } from '@/components/library/StudyDesk'
 import { pmpCourse as c, lessonById, pmpLessonHref } from '@/lib/pmp/course'
 import release from '../../../../data/pmp-release.json'
@@ -51,14 +52,14 @@ export default function PmpHome() {
           </Link>
         ))}
       </section>
+      <PmpBackup />
       <details className="pmp-original">
         <summary>자료 범위와 오프라인 원본</summary>
         <p>
           {c.asof} 확인본 · {c.nodes.length}수업. PMI 공식 교재나 합격·공인
           교육시간을 보장하는 과정은 아닙니다. 본문·비교표·심화 사례·상황
-          문제·메모·복습은 서재 안에서 이용합니다. 계산 실습과 전체 백업
-          가져오기 화면은 현재 이전 통합 HTML에서 제공하며, 다음 통합 작업에
-          포함됩니다.
+          문제·메모·복습·전체 기록 백업은 서재 안에서 이용합니다. 계산 실습은
+          현재 이전 통합 HTML에서 제공하며, 다음 통합 작업에 포함됩니다.
         </p>
         <a href={release.links.study}>이전 통합 HTML 열기 →</a>
         <a href={release.links.offline} download>
