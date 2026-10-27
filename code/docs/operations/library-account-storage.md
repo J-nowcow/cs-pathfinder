@@ -64,6 +64,10 @@ Neon/PgBouncer behavior, Google OAuth or authenticated cross-device restoration.
 
 ## Concrete production migration plan (not executed)
 
+The guarded preparation/apply tool and tested private-backup procedure are in
+[library-migration-package.md](library-migration-package.md). Its prepare phase
+does not authorize the separate production apply step.
+
 Target is the existing Neon database identified by the SHA256 hostname/database
 fingerprint `a52c3eed53cc667d` in the private-free read-only readiness report.
 The URL/credentials remain in the existing private environment and are never

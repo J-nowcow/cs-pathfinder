@@ -9,6 +9,7 @@ import {
   mkdtempSync,
   readFileSync,
   realpathSync,
+  statSync,
   rmSync,
   writeFileSync,
 } from 'node:fs'
@@ -22,6 +23,14 @@ import {
 } from '../src/lib/db/library-study'
 import type { Db, Tx } from '../src/lib/db/client'
 import type { LibraryState } from '../src/lib/library/storage'
+import {
+  applyOnlyLibrary,
+  hash,
+  preflight,
+  targetIdentity,
+  type MigrationPlan,
+} from './lib/library-migration'
+import { schemaBackup } from './lib/library-schema-backup'
 
 // Never read DATABASE_URL, PG* connection environment or private app env files.
 const args = process.argv.slice(2)
@@ -417,6 +426,156 @@ try {
     })
     await expectCode(wrong.query('select 1'), '28P01')
   })
+  await check(
+    'guarded migration rejects target/file/schema drift and rolls back failed log writes',
+    async () => {
+      await admin.query(
+        'create database library_migration_check owner library_check_app',
+      )
+      const candidate = pool('library_check_app', 'library_migration_check')
+      await candidate.query(
+        'create table "user"(id text primary key); create table schema_migrations(name text primary key, applied_at timestamptz not null default now())',
+      )
+      await candidate.query('insert into "user" values($1)', [
+        'PRIVATE_SYNTHETIC_ROW_MUST_NOT_BE_BACKED_UP',
+      ])
+      const connection = `postgres://library_check_app:${password}@127.0.0.1:${port}/library_migration_check`
+      stage = 'migration preflight'
+      const before = await preflight(candidate)
+      const directory = join(run, 'schema-backup')
+      mkdirSync(directory, { mode: 0o700 })
+      stage = 'migration schema-only backup'
+      const backupInfo = schemaBackup(
+        bin,
+        directory,
+        connection,
+        readFileSync(join(tlsDir, 'ca.pem'), 'utf8'),
+      )
+      const backup = readFileSync(join(directory, 'schema.dump'))
+      assert.equal(statSync(join(directory, 'schema.dump')).mode & 0o777, 0o600)
+      stage = 'migration plan validation'
+      const plan: MigrationPlan = {
+        version: 1,
+        createdAt: new Date().toISOString(),
+        target: targetIdentity(connection),
+        migration: '0022_library_study.sql',
+        sqlHash: hash(migration),
+        schemaHash: before.schemaHash,
+        backupHash: backupInfo.backupHash,
+      }
+      for (const [p, url, sql, bytes] of [
+        [plan, connection + '-wrong', migration, backup],
+        [plan, connection, migration + '--tampered', backup],
+        [plan, connection, migration, Buffer.from('tampered')],
+        [
+          { ...plan, createdAt: '2000-01-01T00:00:00Z' },
+          connection,
+          migration,
+          backup,
+        ],
+      ] as const)
+        await assert.rejects(
+          applyOnlyLibrary(candidate, p, url, sql, bytes),
+          /PLAN_REFUSED/,
+        )
+      stage = 'migration schema drift'
+      await candidate.query('alter table "user" add column drift text')
+      await assert.rejects(
+        applyOnlyLibrary(candidate, plan, connection, migration, backup),
+        /SCHEMA_CHANGED/,
+      )
+      await candidate.query('alter table "user" drop column drift')
+      // Dropped catalog columns are not visible; the relevant public schema is back to its original shape.
+      assert.equal((await preflight(candidate)).schemaHash, plan.schemaHash)
+      await candidate.query(
+        `create function fail_migration_log() returns trigger language plpgsql as $$begin raise exception 'synthetic failure'; end$$; create trigger fail_log before insert on schema_migrations for each row execute function fail_migration_log()`,
+      )
+      stage = 'migration log fault'
+      await expectCode(
+        applyOnlyLibrary(candidate, plan, connection, migration, backup),
+        'P0001',
+      )
+      assert.equal((await preflight(candidate)).schemaHash, plan.schemaHash)
+      await candidate.query(
+        'drop trigger fail_log on schema_migrations; drop function fail_migration_log()',
+      )
+      stage = 'migration concurrent apply'
+      const outcomes = await Promise.allSettled(
+        Array.from({ length: 2 }, () =>
+          applyOnlyLibrary(candidate, plan, connection, migration, backup),
+        ),
+      )
+      assert.equal(outcomes.filter((r) => r.status === 'fulfilled').length, 1)
+      assert.equal(outcomes.filter((r) => r.status === 'rejected').length, 1)
+      assert.equal(
+        (await candidate.query('select count(*)::int n from schema_migrations'))
+          .rows[0].n,
+        1,
+      )
+      assert.equal(
+        (
+          await candidate.query(
+            'select count(*)::int n from library_study_snapshot',
+          )
+        ).rows[0].n,
+        0,
+      )
+      stage = 'migration rollback'
+      await candidate.query(rollback)
+      await preflight(candidate)
+      // Restore this schema-only archive only into a second owned disposable database.
+      stage = 'migration archive restore'
+      await admin.query(
+        'create database library_restore_check owner library_check_app',
+      )
+      execFileSync(
+        join(bin, 'pg_restore'),
+        [
+          '--clean',
+          '--if-exists',
+          '--no-owner',
+          '--no-privileges',
+          '--exit-on-error',
+          '--dbname',
+          'library_restore_check',
+          join(directory, 'schema.dump'),
+        ],
+        {
+          env: {
+            NODE_ENV: process.env.NODE_ENV || 'test',
+            PATH: process.env.PATH,
+            PGHOST: '127.0.0.1',
+            PGPORT: String(port),
+            PGUSER: 'library_check_app',
+            PGPASSWORD: password,
+            PGSSLMODE: 'verify-full',
+            PGSSLROOTCERT: join(tlsDir, 'ca.pem'),
+            PGCONNECT_TIMEOUT: '5',
+          },
+          stdio: 'ignore',
+          timeout: 20000,
+        },
+      )
+      const restored = pool('library_check_app', 'library_restore_check')
+      assert.equal(
+        (await restored.query('select count(*)::int n from "user"')).rows[0].n,
+        0,
+      )
+      assert.equal(
+        (await restored.query('select count(*)::int n from schema_migrations'))
+          .rows[0].n,
+        0,
+      )
+      assert.equal((await preflight(restored)).schemaHash, plan.schemaHash)
+      result.migrationPackage = {
+        checksPassed: true,
+        backupMode: '0600',
+        backupRestoredToOwnedDisposableDatabase: true,
+        rowDataExcluded: true,
+        productionApplied: false,
+      }
+    },
+  )
   await application.query('create table "user" (id text primary key)')
   await application.query(migration)
   for (const owner of [
@@ -718,7 +877,9 @@ try {
     'code' in error &&
     /^[A-Z0-9_]{1,50}$/.test(String(error.code))
       ? String(error.code)
-      : 'VERIFICATION_FAILED'
+      : error instanceof Error && /^[A-Z_]{3,60}$/.test(error.message)
+        ? error.message
+        : 'VERIFICATION_FAILED'
   console.error(
     'FAIL ' +
       stage +
@@ -737,6 +898,7 @@ try {
     } catch {
       process.exitCode = 1
       result.cleanupError = 'owned_cluster_stop_failed'
+      result.passed = false
     }
   }
   result.clusterStopped = stopped
