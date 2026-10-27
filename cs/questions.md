@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 386개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 387개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -152,6 +152,7 @@
 - [람다식 내부에서 외부 지역변수를 바꿀 수 없는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/68ac8ec0-c809-489c-a04e-00c5c55165f7) — 2026-09-25
 - [이벤트 루프는 두 태스크 큐를 어떤 기준으로 처리하는가?](https://cs-pathfinder.vercel.app/q/96f61ea5-6b05-4671-b63a-757052d68a87) — 2026-10-06
 - [제네릭에 extends 키워드는 왜 사용하는가?](https://cs-pathfinder.vercel.app/q/a4659d2f-3399-44e5-b662-2860a3f54b36) — 2026-10-17
+- [final 키워드만으로 불변 객체가 완성되지 않는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/80036636-1385-4d0e-984d-84bd1e54c794) — 2026-10-27
 
 ## 운영체제
 
