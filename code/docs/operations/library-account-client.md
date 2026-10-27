@@ -3,8 +3,9 @@
 The native `/learn` layout uses `LIBRARY_ACCOUNT_SYNC_ENABLED=1` to expose the
 account panel. The same server flag gates the API. Next.js prerenders the layout,
 so changing the flag requires a fresh deployment as well as the runtime setting.
-Do not enable production until the reviewed migration, real-environment checks
-and explicit execution approval in `library-account-storage.md` are complete.
+The user-approved migration0022 is applied; production activation remains off
+until actual OAuth/environment checks are complete. See
+[library-rollout-readiness.md](library-rollout-readiness.md).
 
 ## Guest and account scopes
 
@@ -83,8 +84,8 @@ synthetic users and intercepted auth/account requests only. Neither proves real
 Google OAuth or production writes. Concurrent database locking is now separately
 verified by the opt-in real PostgreSQL runner documented in
 `library-postgres-verification.md`; this does not verify Neon/PgBouncer-specific
-behavior. Production keeps the flag off and migration unapplied until separately
-approved.
+behavior. Production keeps the flag off; the separately approved0022 migration
+was applied once at2026-10-27T21:52:19Z.
 
 Official references checked2026-10-28: [Better Auth useSession](https://better-auth.com/docs/basic-usage#session)
 and [WHATWG Web Storage](https://html.spec.whatwg.org/multipage/webstorage.html#introduction-16).

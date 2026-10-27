@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/verify-library-rollout.ts && next build",
     "start": "next start",
     "typecheck": "rm -rf .next/dev/types && tsc --noEmit",
     "build:relations": "tsx scripts/build-relations.ts",
@@ -54,7 +54,8 @@
     "mark:duplicates": "tsx scripts/mark-duplicates.ts",
     "build:pmp": "python3 scripts/build-pmp-content.py",
     "build:library": "python3 scripts/build-learning-library.py",
-    "db:library": "tsx scripts/library-migration.ts"
+    "db:library": "tsx scripts/library-migration.ts",
+    "verify:library-rollout": "tsx scripts/verify-library-rollout.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",

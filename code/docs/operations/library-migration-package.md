@@ -1,6 +1,10 @@
 # Restricted library migration package
 
-Status: tooling is prepared; production execution needs explicit human approval.
+Status: explicit approval was recorded and only0022 was applied once on
+2026-10-27T21:52:19Z to target `a52c3eed53cc667d`. The procedure below remains an
+audit reference, not a repeat-run instruction. Rollout and actual OAuth remain
+pending; see [library-rollout-readiness.md](library-rollout-readiness.md). Any
+future production execution needs its own explicit human approval.
 The command does not grant itself permission. Never infer approval from an earlier
 push/deploy request or from possession of `--approve-target`. Keep account rollout
 off throughout this migration-only step. No general migration runner, seed,
