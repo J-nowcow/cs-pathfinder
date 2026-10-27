@@ -19,7 +19,7 @@ export default async function PmpSearch({
       <header className="desk-document-heading">
         <p className="study-meta">PMP · 다시 찾아 읽기</p>
         <h1>어느 수업에서 읽었더라?</h1>
-        <p>기억나는 개념으로 수업을 찾고, 앞뒤 설명을 함께 읽어보세요.</p>
+        <p>기억나는 개념으로 수업을 찾고 앞뒤 설명을 함께 읽어보세요.</p>
       </header>
       <PmpSearchForm query={query} error={error} />
       {!error && query.trim() ? (

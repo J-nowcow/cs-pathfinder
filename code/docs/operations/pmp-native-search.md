@@ -42,6 +42,13 @@ Official page last updated2026-06-09; installed Next.js16.2.6 remains unchanged.
 The reference documents promised searchParams, repeated-key arrays and dynamic
 request rendering. No library or deployment policy change is inferred.
 
+Hosting-log reference checked2026-10-28:
+https://vercel.com/docs/drains/reference/logs
+Official reference last updated2025-11-24 describes proxy.path including query
+parameters. The privacy page distinguishes no dedicated account search history
+from URL/history/possible hosting request records. This does not assert that a
+Log Drain is configured for this project, or change any log settings.
+
 Validation: actual source title reachability for all74 lessons, non-title
 concepts and rich content, term aliases, case/NFC/AND matching, stable tier order,
 literal punctuation, empty/overlong/ambiguous input, text entity handling and
