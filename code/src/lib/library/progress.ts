@@ -273,7 +273,7 @@ export function readLibraryProgress(
       ],
     ],
     href: certificateRecent[0]?.href ?? '/learn/certificate',
-    resume: certificateRecent[0]?.title ?? 'DB·SQL·테스트 이론 읽기',
+    resume: certificateRecent[0]?.title ?? 'DB·SQL·테스트·주소 이론 읽기',
   })
   return {
     cards,

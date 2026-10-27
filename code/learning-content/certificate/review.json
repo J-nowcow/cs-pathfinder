@@ -1,15 +1,16 @@
 {
-  "release": "2026-10-28.certificate2",
+  "release": "2026-10-28.certificate3",
   "canonicalSource": "learning-content/certificate/course.json",
   "counts": {
-    "lessons": 15,
+    "lessons": 16,
     "dbSqlLessons": 12,
     "testingLessons": 3,
-    "originConcepts": 18,
-    "candidateConcepts": 106
+    "originConcepts": 19,
+    "candidateConcepts": 106,
+    "networkAddressLessons": 1
   },
-  "scope": "Independent DB/SQL and three connected testing-design/oracle lessons; other theory domains remain partial",
-  "originalSource": "Read-only concepts-theory.json; four additional concept IDs and their primary references retained. Exam-reconstruction theory.json and all banks/solutions/images excluded.",
+  "scope": "DB/SQL12, testing3, one independent IPv4 CIDR reading lesson; remaining theory domains partial",
+  "originalSource": "Read-only concepts-theory.json; th-cidr metadata/reference retained; previous15 lesson objects unchanged; exam banks, recalled code, solutions, original prose/images excluded",
   "excluded": [
     "Exam questions",
     "Recalled exam code",
@@ -18,17 +19,17 @@
     "Authentic question JSON files"
   ],
   "validation": {
-    "fullSuiteFiles": 224,
-    "fullSuiteTests": 1935,
-    "focusedFiles": 17,
-    "focusedTests": 69,
+    "relatedSuite": {
+      "files": 18,
+      "tests": 71,
+      "passed": true
+    },
+    "calculation": "Independent Node BigInt plus Python ipaddress: displayed example, four /26s,256memberships,33prefix lengths and /31-/32 context; no real-network claim",
+    "storage": "Prior15 complete records retained; new-domain note, mixed v1 backup and conflicts verified",
+    "browser": "Desktop1440px/22px figure and tables; catalogue16, notes/check/review/reload, previous-note preservation, resume, navigation, mixed backup restore and no-JS passed",
+    "koreanHumanize": "Actual skill and final committed-text gate required before push/deploy",
     "build": "passed",
-    "typecheck": "passed",
-    "sql": "Existing12 SQL lesson fields/data unchanged except additive domain; displayed SQL results rerun in isolated PGlite",
-    "testing": "Published boundary outputs plus81 integers and10 type/special cases checked against enumerated allowed set; four Boolean suites instrumented against explicit six-edge graph; mutation demonstrates full coverage can return wrong result; before/after oracle table checked",
-    "storage": "Complete legacy12-lesson record preserved while adding testing record; mixed roundtrip/merge/conflict checked; existing backup version/key unchanged",
-    "limits": "Fixed authored examples only; no actual service coverage, SQL production performance or account sync proof",
-    "koreanHumanize": "Required actual skill review and committed-text receipt before publication; evidence retained by global pre-push gate"
+    "typecheck": "passed"
   },
   "storage": {
     "key": "pathfinder.certificate.v1",
@@ -52,6 +53,30 @@
       "sql": "Every displayed result table executed against isolated PGlite; FK/CHECK/NULL/empty subquery/join checks and FD closure independently verified",
       "limits": "PGlite is not real Postgres concurrency or production-performance validation",
       "koreanHumanize": "Actual humanize-korean heavy run2026-10-28-003-8ce9: diagnosis,16chunks, reassembly, independent finalizer accept; gate rate0.0014, gradeB, self-check6/6. Committed-text receipt required before push."
+    }
+  },
+  "previousTestingBundle": {
+    "release": "2026-10-28.certificate2",
+    "counts": {
+      "lessons": 16,
+      "dbSqlLessons": 12,
+      "testingLessons": 3,
+      "originConcepts": 19,
+      "candidateConcepts": 106,
+      "networkAddressLessons": 1
+    },
+    "validation": {
+      "fullSuiteFiles": 224,
+      "fullSuiteTests": 1935,
+      "focusedFiles": 17,
+      "focusedTests": 69,
+      "build": "passed",
+      "typecheck": "passed",
+      "sql": "Existing12 SQL lesson fields/data unchanged except additive domain; displayed SQL results rerun in isolated PGlite",
+      "testing": "Published boundary outputs plus81 integers and10 type/special cases checked against enumerated allowed set; four Boolean suites instrumented against explicit six-edge graph; mutation demonstrates full coverage can return wrong result; before/after oracle table checked",
+      "storage": "Complete legacy12-lesson record preserved while adding testing record; mixed roundtrip/merge/conflict checked; existing backup version/key unchanged",
+      "limits": "Fixed authored examples only; no actual service coverage, SQL production performance or account sync proof",
+      "koreanHumanize": "Required actual skill review and committed-text receipt before publication; evidence retained by global pre-push gate"
     }
   }
 }

@@ -8,15 +8,15 @@ import {
   certificateDomain,
 } from '@/lib/certificate/course'
 export const metadata = {
-  title: '정보처리기사 이론 · DB·SQL·테스트',
+  title: '정보처리기사 이론 · DB·SQL·테스트·주소 범위',
   description:
-    '독립적인 도서관 예제로 배우는 관계 모델·SQL·테스트 설계와 검증. 기출과 복원 코드는 포함하지 않습니다.',
+    '독립적인 도서관 예제로 배우는 관계 모델·SQL·테스트 설계·IPv4 주소 범위. 기출과 복원 코드는 포함하지 않습니다.',
 }
 export default function CertificatePage() {
   return (
     <LibraryShell
       eyebrow="정보처리기사 · 이론"
-      title="데이터의 규칙부터 검증의 근거까지."
+      title="데이터·검증·주소 범위를 예제로."
       description={c.intro}
     >
       <section className="pmp-catalog-intro">
@@ -45,7 +45,8 @@ export default function CertificatePage() {
         <p>
           모든 값은 학습을 위해 만든 예시예요. 실제 회원이나 대출 데이터가
           아니에요. DB·SQL 수업은 아래 초기 상태에서 시작해요. 테스트 수업의
-          대출 기간·입력 계약은 각 수업에서 따로 정한 가상 규칙이에요.
+          대출 기간·입력 계약은 각 수업에서 따로 정한 가상 규칙이에요. 주소
+          수업은 문서 예제용 블록으로 만든 가상 열람실을 사용해요.
         </p>
         <CertificateTable caption="books · 책 4권" {...c.books} />
         <CertificateTable caption="loans · 대출 이력 3건" {...c.loans} />
