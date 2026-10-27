@@ -50,7 +50,7 @@ it('removes stale results on invalid input and restores them from a preset', () 
     screen.getByLabelText('C 기간 (일)').getAttribute('aria-invalid'),
   ).toBe('true')
   fireEvent.click(
-    screen.getByRole('button', { name: '기본 예제', exact: true }),
+    screen.getByRole('button', { name: /^기본 예제$/ }),
   )
   expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(6)
   expect(screen.getByRole('status').textContent).toContain('프로젝트 종료 12일')
