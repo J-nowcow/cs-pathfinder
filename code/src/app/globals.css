@@ -1702,3 +1702,171 @@ summary::-webkit-details-marker {
   --on-accent: var(--surface);
   --color-on-accent: var(--surface);
 }
+
+/* Locally hosted reading pairs. Opening settings also loads the face previews. */
+@font-face {
+  font-family: 'DeskPaperlogy';
+  src: url('/library/fonts/Paperlogy-6SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DeskPaperlogy';
+  src: url('/library/fonts/Paperlogy-7Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DeskSUIT';
+  src: url('/library/fonts/SUIT-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DeskLINESeed';
+  src: url('/library/fonts/LINESeedKR-Bd.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DeskGowunBatang';
+  src: url('/library/fonts/GowunBatang-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.study-desk[data-typography='presentation'] {
+  --font-heading: 'DeskPaperlogy', 'DeskSUIT', sans-serif;
+  --font-reading: 'DeskSUIT', sans-serif;
+}
+.study-desk[data-typography='friendly'] {
+  --font-heading: 'DeskLINESeed', 'DeskSUIT', sans-serif;
+  --font-reading: 'DeskSUIT', sans-serif;
+}
+.study-desk[data-typography='book'] {
+  --font-heading: 'DeskGowunBatang', 'DeskSUIT', serif;
+  --font-reading: 'DeskSUIT', sans-serif;
+}
+.study-desk {
+  font-family: var(--font-reading), sans-serif;
+}
+.study-desk[data-typography]:not([data-typography='original'])
+  :is(h1, h2, h3, .desk-brand) {
+  font-synthesis: none;
+  letter-spacing: -0.025em;
+}
+.study-desk[data-typography='presentation']
+  :is(.desk-document-heading h1, .concept-story h2) {
+  font-weight: 700;
+  line-height: 1.5;
+}
+.study-desk[data-typography='book'] :is(h1, h2, h3, .desk-brand) {
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1.6;
+}
+.desk-type-menu > div {
+  width: min(360px, calc(100vw - 48px));
+  padding: 20px;
+  border-radius: 14px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.desk-font-choices {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.desk-font-choices legend {
+  font-size: 14px;
+  font-weight: 650;
+  margin-bottom: 12px;
+}
+.desk-font-choice {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  margin-top: 7px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+}
+.desk-font-choice:has(input:checked) {
+  background: var(--accent-soft);
+  border-color: var(--d0);
+}
+.desk-font-choice input {
+  accent-color: var(--d0);
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+.desk-font-choice:has(input:focus-visible) {
+  outline: 2px solid var(--d0);
+  outline-offset: 3px;
+}
+.desk-font-choice > span {
+  display: grid;
+  gap: 4px;
+}
+.desk-font-sample {
+  font-size: 18px;
+  line-height: 1.5;
+  font-synthesis: none;
+}
+.font-sample-presentation {
+  font-family: 'DeskPaperlogy', 'DeskSUIT', sans-serif;
+  font-weight: 700;
+}
+.font-sample-friendly {
+  font-family: 'DeskLINESeed', 'DeskSUIT', sans-serif;
+  font-weight: 700;
+}
+.font-sample-book {
+  font-family: 'DeskGowunBatang', 'DeskSUIT', serif;
+  font-weight: 400;
+}
+/* Original faces remain inherited on body, so this sample needs its own stable alias. */
+body {
+  --desk-original-heading: var(--font-heading);
+}
+.font-sample-original {
+  font-family: var(--desk-original-heading), sans-serif;
+  font-weight: 700;
+}
+.desk-font-choice small {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.desk-font-choice em {
+  margin-left: auto;
+  font-size: 11px;
+  font-style: normal;
+  color: var(--d0);
+}
+.desk-font-hint {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 12px 0 0;
+  color: var(--muted);
+}
+.desk-type-menu .study-reading-controls {
+  padding: 20px 0 0;
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.desk-font-credits {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

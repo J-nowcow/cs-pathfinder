@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-28.library5",
+  "release": "2026-10-28.library6",
   "scope": [
     "Jira study+5missions",
     "24topic guides and1860question positions",
@@ -11,7 +11,8 @@
     "Personal shelf: latest saved title and local draft before catalogue, review queue before statistics",
     "Shared reading frame and secondary utilities across library/engineering/Jira mission pages",
     "Bright personal shelf with four authored SVG covers, own light/dark preference independent of CS theme",
-    "Narrative concurrency lesson: concrete conflict, lock-order comparison, recovery, explanatory self-check"
+    "Narrative concurrency lesson: concrete conflict, lock-order comparison, recovery, explanatory self-check",
+    "Four selectable reading pairs: Paperlogy+SUIT default, LINE Seed+SUIT, Gowun Batang+SUIT, original SUITE+Wanted Sans; scoped browser preference"
   ],
   "counts": {
     "guides": 24,
@@ -49,7 +50,9 @@
     "src/app/fonts/SUITE-Variable.woff2": "fc5e0648d5413b55b79ebbab0f50de561a026574cba3a9c8eb03d5bddd432263",
     "src/components/library/ConcurrencyStory.tsx": "7de684e9a7dbf5740398890a355d86078c833287c459364e00c0d1c5b9d54a48",
     "src/components/library/BookArt.tsx": "6826ae0acf45e92fc378977cdb5b03bc1975f256eeeb09e372ac0fe4e7f5a2a0",
-    "src/components/library/DeskAppearance.tsx": "32e36701c62a18bd1858450e6fad6e37d1c1401e54a4a944a59ce4e09bb43107"
+    "src/components/library/DeskAppearance.tsx": "32e36701c62a18bd1858450e6fad6e37d1c1401e54a4a944a59ce4e09bb43107",
+    "src/components/library/TypographyPreferences.tsx": "edf4a029b4251a80f1a15a76f53ced27aff84c6c98709aa5f27416b89c597b70",
+    "learning-content/typography.json": "4f115a68d92d8ed4474917e8ec4f08b52d7d39e6bc78bf6d42f2fbab3e8dddd4"
   },
   "browser": {
     "base": "http://127.0.0.1:3042",
@@ -117,13 +120,14 @@
     "Mobile-specific testing not added per user preference"
   ],
   "validation": {
-    "tests": "Focused current change:10 files /27 passed. Previous full-suite baseline:198 files /1791 passed.",
+    "tests": "Focused current font change:11 files /30 tests passed. Previous full-suite baseline:198 files /1791 tests passed.",
     "build": "passed",
     "typecheck": "passed",
     "browserReading": "size18/22, reload,7domain disclosure, advanced filters, draft persistence, exact resume, no-JS reference reading, denied-storage controls and backup download passed",
     "contrast": "22 sampled text/background pairs in new reading UI:5.36–15.14:1. Computed independently in light/dark while CS root theme is dark; not a whole-site accessibility certification.",
     "personalShelf": "Empty/saved states, local-only draft excerpt, subject title + exact exam resume, complete backup import/export preserving PMP, all24reading routes at22px, Jira anchor, blocked storage and no-JS source catalogue/reading passed",
-    "narrativeLesson": "Both lock-order snapshots, keyboard choice feedback, draft/checklist reload,22px, no-JS narrative/definitions/reference passed. Existing shelf QA including all24routes and backup round trip passed."
+    "narrativeLesson": "Both lock-order snapshots, keyboard choice feedback, draft/checklist reload,22px, no-JS narrative/definitions/reference passed. Existing shelf QA including all24routes and backup round trip passed.",
+    "typographyPairs": "All4pairs on all24reading routes at22px: no horizontal overflow; actual local font faces loaded, original draft/checklist/reading-size/CS-theme/PMP record values preserved, reload, no-JS reading and denied-storage controls passed."
   },
   "reading": {
     "defaultSize": 18,
@@ -151,5 +155,13 @@
     "references": "learning-content/reading-design.json",
     "storage": "Own appearance key pathfinder.library.appearance.v1; existing CS/PMP/Jira and library record keys preserved",
     "diagramScope": "Two fictional transactions, two exclusive single-instance resources, release on completion; snapshots compare order, not a general DB simulator"
+  },
+  "typography": {
+    "sourceManifest": "learning-content/typography.json",
+    "default": "Paperlogy heading / SUIT body",
+    "choices": 4,
+    "scope": "StudyDesk only; standalone frozen PMP/Jira packages unchanged",
+    "cdnFontRequests": false,
+    "license": "Bundled OFL notices and accessible font attribution"
   }
 }

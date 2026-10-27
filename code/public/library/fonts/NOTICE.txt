@@ -1,0 +1,40 @@
+CS Pathfinder 글꼴 출처
+확인: 2026-10-28
+
+제목 · 본문 조합
+- 또렷한 PT: Paperlogy / SUIT
+- 부드러운 앱: LINE Seed KR / SUIT
+- 차분한 책: Gowun Batang / SUIT
+- 기존 글꼴: SUITE / Wanted Sans
+
+Paperlogy
+Copyright 2024 The PAPERLOGY Authors
+https://freesentation.blog/paperlogyfont
+Official font files: https://github.com/Freesentation/paperlogy
+License: Paperlogy-OFL.txt (SIL Open Font License 1.1)
+
+LINE Seed KR
+Copyright LY Corporation
+https://seed.line.me/index_kr.html
+Official font files: LINE_SeedKR_2023.09.06/Web/woff2, from the official download ZIP
+License: LINESeed-LICENSE.txt (SIL Open Font License 1.1)
+
+SUIT
+https://github.com/sun-typeface/SUIT
+License: SUIT-LICENSE.txt (SIL Open Font License 1.1)
+
+Gowun Batang
+Copyright 2021 The Gowun Batang Project Authors
+https://github.com/yangheeryu/Gowun-Batang
+License: GowunBatang-LICENSE.txt (SIL Open Font License 1.1)
+
+SUITE
+https://github.com/sunn-us/SUITE
+License: bundled in the repository at src/app/fonts/SUITE-LICENSE.txt
+
+Wanted Sans
+https://github.com/wanteddev/wanted-sans
+License: bundled in the repository at src/app/fonts/Wanted-LICENSE.txt
+
+All font binaries are unchanged. CSS family aliases only identify the locally hosted faces.
+Paperlogy has a smaller Hangul set; missing title glyphs fall back to SUIT.

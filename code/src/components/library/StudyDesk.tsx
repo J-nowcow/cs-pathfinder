@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import release from '../../../data/pmp-release.json'
 import { DeskAppearance } from './DeskAppearance'
+import { TypographyPreferences } from './TypographyPreferences'
 import { ReadingPreferences } from './ReadingPreferences'
 
 export function StudyDesk({
@@ -24,6 +25,7 @@ export function StudyDesk({
     <div
       className={'study-library study-desk' + (reading ? ' desk-reading' : '')}
       data-appearance="light"
+      data-typography="presentation"
     >
       <header className="desk-header">
         <Link href="/learn" className="desk-brand">
@@ -92,8 +94,9 @@ export function StudyDesk({
               <h1>{name}</h1>
             )}
             <details className="desk-type-menu">
-              <summary>글자 크기</summary>
+              <summary>읽기 설정</summary>
               <div>
+                <TypographyPreferences />
                 <ReadingPreferences />
               </div>
             </details>
