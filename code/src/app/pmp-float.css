@@ -113,11 +113,15 @@
 }
 .pmp-float-lab table {
   min-width: 640px;
+  table-layout: fixed;
   font-variant-numeric: tabular-nums;
 }
-.pmp-float-lab th,
-.pmp-float-lab td {
-  white-space: nowrap;
+.study-content .pmp-lesson .pmp-float-lab :is(th, td) {
+  min-width: 0;
+  padding: 14px 10px;
+  font-size: var(--study-size);
+  white-space: normal;
+  word-break: keep-all;
 }
 .pmp-float-formulas {
   margin: 24px 0;
