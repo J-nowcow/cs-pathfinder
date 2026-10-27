@@ -80,8 +80,11 @@ pending snapshots, so quota can be reached before the server's record maximum.
 Tests exercise separate clients through the real API and isolated PGlite, and
 the UI uses a mocked authentication session/transport. Headless desktop QA uses
 synthetic users and intercepted auth/account requests only. Neither proves real
-Google OAuth, actual Postgres concurrent locking or production writes. Production
-keeps the flag off and migration unapplied until separately approved.
+Google OAuth or production writes. Concurrent database locking is now separately
+verified by the opt-in real PostgreSQL runner documented in
+`library-postgres-verification.md`; this does not verify Neon/PgBouncer-specific
+behavior. Production keeps the flag off and migration unapplied until separately
+approved.
 
 Official references checked2026-10-28: [Better Auth useSession](https://better-auth.com/docs/basic-usage#session)
 and [WHATWG Web Storage](https://html.spec.whatwg.org/multipage/webstorage.html#introduction-16).
