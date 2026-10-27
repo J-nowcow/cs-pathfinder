@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   CERTIFICATE_KEY,
   CERTIFICATE_EVENT,
@@ -10,7 +10,11 @@ import { libraryButton } from '@/components/library/LibraryShell'
 export function CertificateBackup() {
   const [message, setMessage] = useState(''),
     [ready, setReady] = useState(false)
-  useEffect(() => setReady(true), [])
+  const restoreSerial = useRef(0)
+  useEffect(() => {
+    setReady(true)
+    return () => { restoreSerial.current++ }
+  }, [])
   function backup() {
     try {
       const value = readCertificate(localStorage.getItem(CERTIFICATE_KEY))
@@ -39,12 +43,14 @@ export function CertificateBackup() {
     }
   }
   async function restore(file?: File) {
+    const token = ++restoreSerial.current
     if (!file) return
     try {
       if (file.size > 500000)
         throw Error('500KB 이하의 정처기 백업 파일을 골라 주세요.')
-      const raw = await file.text(),
-        v = JSON.parse(raw)
+      const raw = await file.text()
+      if (token !== restoreSerial.current) return
+      const v = JSON.parse(raw)
       if (v.format !== 'pathfinder.certificate.backup')
         throw Error('이 화면에서 내보낸 정처기 백업 파일을 골라 주세요.')
       const incoming = readCertificate(raw),
@@ -60,6 +66,7 @@ export function CertificateBackup() {
         '정처기 기록을 가져왔어요. 메모가 같은 항목의 점검·복습은 더 최근 기록을 사용했어요.',
       )
     } catch (e) {
+      if (token !== restoreSerial.current) return
       setMessage(
         (e instanceof Error ? e.message : '파일을 확인해 주세요.') +
           ' 기존 기록은 그대로예요.',
