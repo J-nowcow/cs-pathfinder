@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-27.library3",
+  "release": "2026-10-27.library4",
   "scope": [
     "Jira study+5missions",
     "24topic guides and1860question positions",
@@ -7,7 +7,9 @@
     "Round140 source-checked editorial core/background/demand classification",
     "Self-hosted Wanted Sans body and SUITE headings",
     "Readable library prose, size preferences, narrower lessons and grouped topics",
-    "Editorial cleanup of UI headings/instructions and18of24concept introductions"
+    "Editorial cleanup of UI headings/instructions and18of24concept introductions",
+    "Personal shelf: latest saved title and local draft before catalogue, review queue before statistics",
+    "Shared reading frame and secondary utilities across library/engineering/Jira mission pages"
   ],
   "counts": {
     "guides": 24,
@@ -46,25 +48,41 @@
   },
   "browser": {
     "base": "http://127.0.0.1:3042",
-    "normal": {
-      "font": 18,
-      "line": 34.2,
-      "width": 768,
-      "bodyFont": "readingFont, \"readingFont Fallback\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", sans-serif, \"Apple SD Gothic Neo\", \"Malgun Gothic\", sans-serif"
-    },
-    "large": {
-      "font": 22,
-      "line": 41.8,
-      "width": 768,
-      "bodyFont": "readingFont, \"readingFont Fallback\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", sans-serif, \"Apple SD Gothic Neo\", \"Malgun Gothic\", sans-serif"
-    },
-    "groups": 7,
-    "defaultCollapsed": true,
-    "filterAndDisclosure": true,
-    "draftPreserved": true,
-    "exactResume": true,
-    "noScriptReading": true,
-    "blockedStorageSizing": true,
+    "desktopWidth": 1440,
+    "emptyShelf": true,
+    "resumeQuestionTitle": true,
+    "exactDraftResume": true,
+    "originalRecordsPreserved": true,
+    "backupRoundTrip": true,
+    "all24TopicRoutesAt22px": [
+      "normalization",
+      "transactions",
+      "concurrency",
+      "indexes",
+      "cap",
+      "requirements",
+      "testing",
+      "architecture",
+      "configuration",
+      "agile",
+      "risk",
+      "evm",
+      "benefits",
+      "sla",
+      "observability",
+      "continuity",
+      "cloud",
+      "containers",
+      "identity",
+      "crypto",
+      "privacy",
+      "ml-evaluation",
+      "rag",
+      "dataquality"
+    ],
+    "jiraAnchor": true,
+    "noJSReading": true,
+    "blockedStorage": true,
     "overflow": false,
     "errors": []
   },
@@ -94,11 +112,12 @@
     "Mobile-specific testing not added per user preference"
   ],
   "validation": {
-    "tests": "197 files / 1788 passed",
+    "tests": "198 files / 1791 passed",
     "build": "passed",
     "typecheck": "passed",
     "browserReading": "size18/22, reload,7domain disclosure, advanced filters, draft persistence, exact resume, no-JS reference reading, denied-storage controls and backup download passed",
-    "contrast": "Changed muted/faint text ratios6.16–9.92 on library surface/card colors; not a whole-site accessibility certification"
+    "contrast": "Changed muted/faint text ratios6.16–9.92 on library surface/card colors; not a whole-site accessibility certification",
+    "personalShelf": "Empty/saved states, local-only draft excerpt, subject title + exact exam resume, complete backup import/export preserving PMP, all24reading routes at22px, Jira anchor, blocked storage and no-JS source catalogue/reading passed"
   },
   "reading": {
     "defaultSize": 18,

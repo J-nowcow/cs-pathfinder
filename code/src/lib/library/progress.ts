@@ -17,6 +17,7 @@ export type ProgressItem = {
   href: string
   at: string | null
   due?: string
+  excerpt?: string
 }
 export type ProgressCard = {
   id: string
@@ -121,6 +122,7 @@ export function readLibraryProgress(
       title: e.title,
       href: e.href,
       at: e.updatedAt,
+      ...(e.draft.trim() ? { excerpt: e.draft.trim().slice(0, 180) } : {}),
       ...(e.due ? { due: e.due } : {}),
     }
     recent.push(item)

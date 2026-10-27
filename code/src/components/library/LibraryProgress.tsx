@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { readLibraryProgress } from '@/lib/library/progress'
+import { LearningAreas } from '../LearningAreas'
+import { readLibraryProgress, type ProgressItem } from '@/lib/library/progress'
 import {
   loadLibrary,
   parseLibrary,
@@ -11,7 +12,13 @@ import {
 import release from '../../../data/pmp-release.json'
 import { libraryButton } from './LibraryShell'
 import { JOURNEY_SYNCED_EVENT, STREAK_SYNCED_EVENT } from '@/lib/journey/sync'
-export function LibraryProgress() {
+export function LibraryProgress({
+  questionTitles = {},
+  mode = 'progress',
+}: {
+  questionTitles?: Record<string, string>
+  mode?: 'progress' | 'shelf'
+}) {
   const [view, setView] = useState<ReturnType<
       typeof readLibraryProgress
     > | null>(null),
@@ -84,147 +91,240 @@ export function LibraryProgress() {
       )
     }
   }
-  if (!view) return <p role="status">이 브라우저의 학습 기록을 불러오는 중…</p>
-  return (
-    <div className="space-y-10">
-      {view.unavailable && (
-        <p role="alert" className="rounded-lg border border-line p-4">
-          일부 기록을 읽지 못했어요. 브라우저 저장 허용 여부와 원래 학습 화면의
-          백업을 확인해 주세요.
-        </p>
+  const displayTitle = (item: ProgressItem) =>
+    item.id.startsWith('exam:')
+      ? (questionTitles[item.id.slice(5)] ?? item.title)
+      : item.title
+  const when = (value: string | null) =>
+    value
+      ? new Date(value).toLocaleString('ko-KR', {
+          timeZone: 'Asia/Seoul',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      : '날짜 없음'
+  const rows = (items: ProgressItem[], review = false) => (
+    <ul className="desk-item-list">
+      {items.map((x) => (
+        <li key={x.id}>
+          <a href={x.href}>
+            <span className="desk-row-meta">
+              {x.track}
+              {x.id.startsWith('exam:') && displayTitle(x) !== x.title
+                ? ' · ' + x.title
+                : ''}
+            </span>
+            <span className="desk-row-title">{displayTitle(x)}</span>
+            <span className="desk-row-end">
+              {review ? x.due : when(x.at)} <span aria-hidden="true">↗</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+  if (!view)
+    return (
+      <>
+        <p role="status">학습 기록을 불러오는 중…</p>
+        {mode === 'shelf' && <LearningAreas />}
+      </>
+    )
+  const latest = view.recent[0]
+  const previous = view.recent.slice(1)
+  const focus = latest ? (
+    <section className="desk-focus" aria-label="이어서 공부할 내용">
+      <p className="desk-kicker">마지막으로 공부한 내용</p>
+      <p className="desk-focus-meta">
+        {latest.track}
+        {latest.id.startsWith('exam:') && displayTitle(latest) !== latest.title
+          ? ' · ' + latest.title
+          : ''}{' '}
+        · {when(latest.at)}
+      </p>
+      <h2
+        className={
+          'desk-resume-title' +
+          (displayTitle(latest).length > 70 ? ' is-long' : '')
+        }
+      >
+        {displayTitle(latest)}
+      </h2>
+      {latest.excerpt && (
+        <blockquote className="desk-draft-preview">
+          <span>작성 중인 내 답안</span>
+          <p>{latest.excerpt}</p>
+        </blockquote>
       )}
-      <div className="grid gap-4 sm:grid-cols-2">
-        {view.cards.map((c) => (
-          <section
-            key={c.id}
-            className="rounded-xl border border-line bg-surface p-6"
-          >
-            <h2 className="text-xl font-semibold">{c.title}</h2>
-            <dl className="mt-5 flex flex-wrap gap-8">
-              {c.metrics.map(([t, n]) => (
-                <div key={t}>
-                  <dt className="text-[15px] text-faint">{t}</dt>
-                  <dd className="mt-1 text-3xl font-semibold">
-                    {n}
-                    <span className="ml-1 text-base font-normal text-muted">
-                      개
-                    </span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-            <a className={libraryButton + ' mt-5'} href={c.href}>
-              {c.resume} →
-            </a>
-          </section>
-        ))}
-      </div>
-      <section>
-        <h2 className="text-2xl font-semibold">
-          오늘까지 복습할 것{' '}
-          <span className="text-faint">{view.due.length}</span>
-        </h2>
-        <p className="mt-3 text-sm leading-7 text-muted">
-          복습 날짜가 오늘이거나 지난 항목입니다.
-        </p>
-        {view.due.length ? (
-          <ul className="mt-5 space-y-3">
-            {view.due.slice(0, 30).map((x) => (
-              <li key={x.id}>
-                <a
-                  className="block rounded-lg border border-line p-4"
-                  href={x.href}
-                >
-                  <span className="text-[15px] text-faint">
-                    {x.track} · {x.due}
-                  </span>
-                  <b className="mt-1 block font-medium text-accent">
-                    {x.title} →
-                  </b>
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-5 rounded-xl border border-line p-5 text-sm text-muted">
-            복습할 항목이 없습니다. 수업이나 답안에서 ‘내일 다시 설명하기’를
-            누르면 여기에 표시됩니다.
+      <a href={latest.href} className="desk-primary">
+        이어서 읽기 <span aria-hidden="true">→</span>
+      </a>
+    </section>
+  ) : (
+    <section className="desk-focus desk-start" aria-label="공부 시작하기">
+      <p className="desk-kicker">처음 방문했나요?</p>
+      <h2 className="desk-resume-title">공부할 자료를 고르세요.</h2>
+      <p className="desk-start-note">
+        자료를 읽거나 답안을 쓰면 다음에 여기서 이어볼 수 있습니다.
+      </p>
+      <ul className="desk-start-list">
+        <li>
+          <a href="/questions">
+            <span>CS 면접</span>
+            <strong>면접 질문과 해설</strong>
+            <span aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a href={release.links.study + '#lesson/n01'}>
+            <span>PMP</span>
+            <strong>성공의 기준</strong>
+            <span aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a href="/jira/index.html#lesson/1">
+            <span>Jira</span>
+            <strong>기본 수업부터 읽기</strong>
+            <span aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a href="/learn/engineer/normalization">
+            <span>정보관리기술사</span>
+            <strong>정규화와 역정규화</strong>
+            <span aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  )
+  if (mode === 'shelf')
+    return (
+      <div>
+        {view.unavailable && (
+          <p role="alert" className="desk-storage-alert">
+            일부 기록을 읽지 못했어요. 브라우저 저장 설정을 확인하세요.
           </p>
         )}
-      </section>
-      <section>
-        <h2 className="text-2xl font-semibold">최근 공부한 내용</h2>
-        <p className="mt-3 text-sm leading-7 text-muted">
-          최근에 저장한 기록부터 보여줍니다. 날짜가 없는 기록은 목록 끝에
-          표시합니다.
+        {latest && focus}
+        {view.due.length > 0 && (
+          <a
+            className="desk-review-shortcut"
+            href="/learn/progress#desk-review-heading"
+          >
+            복습할 내용 {view.due.length}개 →
+          </a>
+        )}
+        <LearningAreas />
+      </div>
+    )
+
+  return (
+    <div>
+      {view.unavailable && (
+        <p role="alert" className="desk-storage-alert">
+          일부 기록을 읽지 못했어요. 브라우저 저장 설정과 학습 자료의 백업을
+          확인하세요.
         </p>
-        <div className="mt-5 space-y-3">
-          {view.recent.slice(0, 20).map((x) => (
-            <a
-              key={x.id}
-              className="block rounded-lg border border-line p-4"
-              href={x.href}
-            >
-              <span className="text-[15px] text-faint">
-                {x.track} ·{' '}
-                {x.at
-                  ? new Date(x.at).toLocaleString('ko-KR', {
-                      timeZone: 'Asia/Seoul',
-                    })
-                  : '날짜 없음'}
-              </span>
-              <p className="mt-1 font-medium text-accent">{x.title} →</p>
-            </a>
-          ))}
-          {!view.recent.length && (
-            <p className="rounded-xl border border-line p-5 text-sm text-muted">
-              아직 학습 기록이 없습니다.
-            </p>
+      )}
+      {focus}
+      <section className="desk-section" aria-labelledby="desk-review-heading">
+        <div className="desk-section-heading">
+          <h2 id="desk-review-heading">복습할 내용</h2>
+          <span>{view.due.length}개</span>
+        </div>
+        {view.due.length ? (
+          <>
+            {rows(view.due.slice(0, 5), true)}
+            {view.due.length > 5 && (
+              <details className="desk-more">
+                <summary>나머지 {view.due.length - 5}개 보기</summary>
+                {rows(view.due.slice(5), true)}
+              </details>
+            )}
+          </>
+        ) : (
+          <p className="desk-empty">예정된 복습이 없습니다.</p>
+        )}
+      </section>
+      {!!previous.length && (
+        <section className="desk-section" aria-labelledby="desk-recent-heading">
+          <div className="desk-section-heading">
+            <h2 id="desk-recent-heading">이전에 공부한 내용</h2>
+          </div>
+          {rows(previous.slice(0, 5))}
+          {previous.length > 5 && (
+            <details className="desk-more">
+              <summary>이전 기록 {previous.length - 5}개 더 보기</summary>
+              {rows(previous.slice(5))}
+            </details>
           )}
-        </div>
-      </section>
-      <details className="rounded-xl border border-line bg-raised p-6">
-        <summary className="cursor-pointer text-xl font-semibold">
-          답안 백업
-        </summary>
-        <p className="mt-3 text-sm leading-7 text-muted">
-          기술사 답안과 Jira 과제의 메모·체크 항목·복습 날짜를 파일로
-          저장합니다. 파일을 가져올 때는 항목별로 더 최근 기록을 사용합니다.
-        </p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <button className={libraryButton} onClick={backup}>
-            기술사·Jira 과제 답안 저장
-          </button>
-          <label className={libraryButton + ' cursor-pointer'}>
-            답안 파일 가져오기
-            <input
-              className="sr-only"
-              type="file"
-              accept="application/json,.json"
-              onChange={(e) => {
-                void restore(e.target.files?.[0])
-                e.target.value = ''
-              }}
-            />
-          </label>
-          <a className={libraryButton} href="/me">
-            CS 내 기록
-          </a>
-          <a className={libraryButton} href={release.links.study + '#record'}>
-            PMP 내 기록·백업
-          </a>
-          <a className={libraryButton} href="/jira/index.html#home">
-            Jira 기본 수업 백업
-          </a>
-        </div>
-        <p className="study-meta mt-5 text-muted">
-          CS·PMP·Jira 기본 수업 기록은 각 화면에서 따로 백업할 수 있습니다. 복습
-          날짜가 없는 Jira 기본 수업은 복습 목록에 표시되지 않습니다.
-        </p>
-        <p role="status" className="mt-4 text-sm text-muted">
-          {message}
-        </p>
-      </details>
+        </section>
+      )}
+      <div className="desk-tools">
+        <details className="desk-utility">
+          <summary>분야별 학습 기록</summary>
+          <dl className="desk-track-stats">
+            {view.cards.map((c) => (
+              <div key={c.id}>
+                <dt>
+                  <a href={c.href}>{c.title} →</a>
+                </dt>
+                <dd>
+                  {c.metrics.map(([t, n]) => (
+                    <span key={t}>
+                      {t} <b>{n}</b>개
+                    </span>
+                  ))}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </details>
+        <details className="desk-utility">
+          <summary className="cursor-pointer font-semibold">답안 백업</summary>
+          <p className="mt-3 text-sm leading-7 text-muted">
+            기술사 답안과 Jira 과제의 메모·체크 항목·복습 날짜를 파일로
+            저장합니다. 파일을 가져올 때는 항목별로 더 최근 기록을 사용합니다.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button className={libraryButton} onClick={backup}>
+              기술사·Jira 과제 답안 저장
+            </button>
+            <label className={libraryButton + ' cursor-pointer'}>
+              답안 파일 가져오기
+              <input
+                className="sr-only"
+                type="file"
+                accept="application/json,.json"
+                onChange={(e) => {
+                  void restore(e.target.files?.[0])
+                  e.target.value = ''
+                }}
+              />
+            </label>
+            <a className={libraryButton} href="/me">
+              CS 내 기록
+            </a>
+            <a className={libraryButton} href={release.links.study + '#record'}>
+              PMP 내 기록·백업
+            </a>
+            <a className={libraryButton} href="/jira/index.html#home">
+              Jira 기본 수업 백업
+            </a>
+          </div>
+          <p className="study-meta mt-5 text-muted">
+            CS·PMP·Jira 기본 수업 기록은 각 화면에서 따로 백업할 수 있습니다.
+            복습 날짜가 없는 Jira 기본 수업은 복습 목록에 표시되지 않습니다.
+          </p>
+          <p role="status" className="mt-4 text-sm text-muted">
+            {message}
+          </p>
+        </details>
+      </div>
     </div>
   )
 }
