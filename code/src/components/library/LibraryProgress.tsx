@@ -37,6 +37,7 @@ export function LibraryProgress({
       'focus',
       'pageshow',
       'pathfinder-pmp-updated',
+      'pathfinder-certificate-updated',
       LIBRARY_EVENT,
       JOURNEY_SYNCED_EVENT,
       STREAK_SYNCED_EVENT,
@@ -181,7 +182,7 @@ export function LibraryProgress({
           </a>
         </li>
         <li>
-          <a href={release.links.study + '#lesson/n01'}>
+          <a href="/learn/pmp/n01">
             <span>PMP</span>
             <strong>성공의 기준</strong>
             <span aria-hidden="true">→</span>
@@ -309,6 +310,12 @@ export function LibraryProgress({
                 }}
               />
             </label>
+            <a
+              className={libraryButton}
+              href="/learn/certificate#certificate-backup"
+            >
+              정처기 이론 기록·백업
+            </a>
             <a className={libraryButton} href="/me">
               CS 내 기록
             </a>

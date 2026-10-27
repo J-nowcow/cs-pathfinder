@@ -2259,3 +2259,42 @@ body {
   background: #fff;
   border-radius: 8px;
 }
+
+.book-certificate {
+  --book-colour: #dceee8;
+  --book-ink: #285950;
+  --book-paper: #edf8f4;
+}
+.certificate-code {
+  overflow-x: auto;
+  padding: 22px;
+  border-radius: 12px;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  font-size: 0.88em;
+  line-height: 1.75;
+  white-space: pre;
+}
+.certificate-null {
+  color: var(--muted);
+  font-size: 0.9em;
+}
+.certificate-caution {
+  border-left: 3px solid var(--accent);
+  padding: 8px 0 8px 24px;
+}
+.certificate-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+.certificate-source {
+  margin: 20px 0;
+}
+.certificate-lesson table caption {
+  text-align: left;
+  font-size: 14px;
+  padding: 10px 0;
+  color: var(--muted);
+}

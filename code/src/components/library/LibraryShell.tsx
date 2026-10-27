@@ -17,11 +17,13 @@ export function LibraryShell({
   return (
     <StudyDesk
       section={
-        eyebrow.includes('정보관리기술사')
-          ? 'engineer'
-          : eyebrow.includes('PMP')
-            ? 'pmp'
-            : 'jira'
+        eyebrow.includes('정보처리기사')
+          ? 'certificate'
+          : eyebrow.includes('정보관리기술사')
+            ? 'engineer'
+            : eyebrow.includes('PMP')
+              ? 'pmp'
+              : 'jira'
       }
       document
       reading={reading}

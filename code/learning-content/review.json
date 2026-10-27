@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-28.library8",
+  "release": "2026-10-28.library9",
   "scope": [
     "Jira study+5missions",
     "24topic guides and1860question positions",
@@ -14,7 +14,8 @@
     "Narrative concurrency lesson: concrete conflict, lock-order comparison, recovery, explanatory self-check",
     "Four selectable reading pairs: Paperlogy+SUIT default, LINE Seed+SUIT, Gowun Batang+SUIT, original SUITE+Wanted Sans; scoped browser preference",
     "Native PMP:74lessons/14chapters,13rich supplements,83scenario prompts,3cases and321terms in the common StudyDesk frame; legacy local records retained",
-    "Actual humanize-korean diagnosis/rewrite/finalizer pass on committed Korean changes before publication; technical statements, numbers, citations and original snapshots preserved"
+    "Actual humanize-korean diagnosis/rewrite/finalizer pass on committed Korean changes before publication; technical statements, numbers, citations and original snapshots preserved",
+    "Native certificate theory first bundle:12independent DB/SQL lessons,14origin concepts, fictional library examples, compatible common resume/review and separate conflict-preserving notes/backup"
   ],
   "counts": {
     "guides": 24,
@@ -55,7 +56,8 @@
     "src/components/library/DeskAppearance.tsx": "32e36701c62a18bd1858450e6fad6e37d1c1401e54a4a944a59ce4e09bb43107",
     "src/components/library/TypographyPreferences.tsx": "edf4a029b4251a80f1a15a76f53ced27aff84c6c98709aa5f27416b89c597b70",
     "learning-content/typography.json": "4f115a68d92d8ed4474917e8ec4f08b52d7d39e6bc78bf6d42f2fbab3e8dddd4",
-    "learning-content/pmp-native.json": "7a1b7827f3f7293e388cf5fe2c4f89bc6578a426c852abbb9a526554824d21c5"
+    "learning-content/pmp-native.json": "7a1b7827f3f7293e388cf5fe2c4f89bc6578a426c852abbb9a526554824d21c5",
+    "learning-content/certificate/course.json": "0f77d2202d2ba630f22846ac405dd5f8e4e57a03c32c4a3fa96ab2e72ee023a2"
   },
   "browser": {
     "base": "http://127.0.0.1:3042",
@@ -123,7 +125,7 @@
     "Mobile-specific testing not added per user preference"
   ],
   "validation": {
-    "tests": "Full suite:203 files /1804 tests passed.",
+    "tests": "Full suite:205 files /1813 tests passed.",
     "build": "passed",
     "typecheck": "passed",
     "browserReading": "size18/22, reload,7domain disclosure, advanced filters, draft persistence, exact resume, no-JS reference reading, denied-storage controls and backup download passed",
@@ -179,5 +181,6 @@
     "cdnFontRequests": false,
     "license": "Bundled OFL notices and accessible font attribution"
   },
-  "nativePmp": "learning-content/pmp-native.json"
+  "nativePmp": "learning-content/pmp-native.json",
+  "certificateTheory": "learning-content/certificate/review.json"
 }

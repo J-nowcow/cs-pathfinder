@@ -1,7 +1,7 @@
 export function BookArt({
   kind,
 }: {
-  kind: 'cs' | 'pmp' | 'jira' | 'engineer'
+  kind: 'cs' | 'pmp' | 'jira' | 'engineer' | 'certificate'
 }) {
   return (
     <svg
@@ -60,6 +60,14 @@ export function BookArt({
             </g>
           ))}
           <path d="m63 55 5 4-5 4m53-8 5 4-5 4" />
+        </g>
+      )}
+      {kind === 'certificate' && (
+        <g stroke="currentColor" strokeWidth="1.7">
+          <ellipse cx="75" cy="21" rx="43" ry="12" fill="var(--book-paper)" />
+          <path d="M32 21v47c0 16 86 16 86 0V21M32 44c0 16 86 16 86 0" />
+          <path d="m121 66 12 12 26-33" strokeWidth="3" />
+          <path d="M49 25h17m-17 23h17m-17 23h17" opacity=".6" />
         </g>
       )}
       {kind === 'engineer' && (

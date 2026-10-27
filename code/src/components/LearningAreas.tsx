@@ -7,7 +7,7 @@ export function LearningAreas() {
     <section className="desk-shelf" aria-labelledby="desk-shelf-title">
       <div className="desk-shelf-heading">
         <h2 id="desk-shelf-title">공부 자료</h2>
-        <span>4개 분야</span>
+        <span>5개 분야</span>
       </div>
       <div className="desk-books">
         <article className="desk-book book-cs">
@@ -109,6 +109,27 @@ export function LearningAreas() {
             <p className="study-meta">개념 24개 · 기출 색인 1,860개</p>
             <Link className="desk-book-link" href="/learn/engineer">
               개념·기출 공부하기 →
+            </Link>
+          </div>
+        </article>
+        <article className="desk-book book-certificate">
+          <Link className="desk-book-cover" href="/learn/certificate">
+            <span className="book-edition">05 · 정처기 이론</span>
+            <h3>
+              정보처리기사
+              <br />
+              DB·SQL
+            </h3>
+            <BookArt kind="certificate" />
+            <span className="book-cover-foot">
+              개념과 창작 예시 <span aria-hidden="true">↗</span>
+            </span>
+          </Link>
+          <div className="desk-book-info">
+            <p>표와 제약조건부터 정규화·조인·NULL까지 예제로 설명합니다.</p>
+            <p className="study-meta">첫 묶음 12수업 · 기출·복원 코드 제외</p>
+            <Link className="desk-book-link" href="/learn/certificate">
+              정처기 이론 읽기 →
             </Link>
           </div>
         </article>
