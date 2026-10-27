@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ReadingPreferences } from './ReadingPreferences'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { SiteFooter } from '@/components/SiteFooter'
 export const libraryButton =
@@ -8,14 +9,16 @@ export function LibraryShell({
   title,
   description,
   children,
+  reading = false,
 }: {
   eyebrow: string
   title: string
   description: string
   children: React.ReactNode
+  reading?: boolean
 }) {
   return (
-    <>
+    <div className="study-library">
       <header className="border-b border-line">
         <nav
           aria-label="학습 도서관"
@@ -33,18 +36,21 @@ export function LibraryShell({
           <ThemeToggle />
         </nav>
       </header>
-      <main className="mx-auto max-w-5xl px-5 py-12 sm:px-8">
+      <main
+        className={`mx-auto px-5 py-12 sm:px-8 ${reading ? 'max-w-3xl' : 'max-w-5xl'}`}
+      >
         <p className="text-xs tracking-widest text-faint">{eyebrow}</p>
         <h1 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
           {title}
         </h1>
-        <p className="mt-5 max-w-3xl text-base leading-8 text-muted">
+        <p className="mt-5 max-w-2xl text-[19px] leading-[1.9] text-muted">
           {description}
         </p>
-        <div className="mt-10 space-y-10">{children}</div>
+        <ReadingPreferences />
+        <div className="study-content mt-6 space-y-12">{children}</div>
       </main>
       <SiteFooter />
-    </>
+    </div>
   )
 }
 export function ConceptFlow({ items }: { items: string[] }) {

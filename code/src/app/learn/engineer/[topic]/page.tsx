@@ -30,7 +30,8 @@ export default async function TopicPage({
   if (!g) notFound()
   return (
     <LibraryShell
-      eyebrow={g.domain + ' · CONCEPT TO ANSWER'}
+      reading
+      eyebrow={g.domain + ' · 정보관리기술사'}
       title={g.title}
       description={g.definition}
     >
@@ -69,11 +70,9 @@ export default async function TopicPage({
         </div>
       </section>
       <section className="rounded-xl border border-line bg-raised p-6">
-        <p className="text-xs text-faint">
-          창작 연습 · 실제 기출 문장이 아닙니다
-        </p>
+        <p className="text-xs text-faint">직접 만든 연습 문제</p>
         <h2 className="mt-3 text-xl font-semibold leading-8">{g.prompt}</h2>
-        <h3 className="mt-6 font-semibold">답안 골격</h3>
+        <h3 className="mt-6 font-semibold">답안 구성</h3>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-7">
           {g.outline.map((x) => (
             <li key={x}>{x}</li>
@@ -90,7 +89,7 @@ export default async function TopicPage({
       />
       <details className="rounded-xl border border-line bg-surface p-6">
         <summary className="cursor-pointer text-lg font-semibold text-accent">
-          창작 연습의 참고 답안 펼치기
+          참고 답안 보기
         </summary>
         <div className="mt-5 space-y-4 text-base leading-8">
           {g.reference.map((x) => (
@@ -98,13 +97,12 @@ export default async function TopicPage({
           ))}
         </div>
         <p className="mt-5 text-xs leading-6 text-faint">
-          독립적으로 작성한 학습용 답안입니다. 공식 기출의 모범답안·채점
-          기준·분량 기준이 아닙니다. 먼저 쓴 답안과 빠진 논점·전제·증거를
-          비교하세요.
+          이 연습 문제의 학습용 참고 답안입니다. 공식 기출 해설이나 채점 기준은
+          아닙니다.
         </p>
       </details>
       <aside className="rounded-xl border border-line p-6">
-        <h2 className="text-xl font-semibold">빠지기 쉬운 함정</h2>
+        <h2 className="text-xl font-semibold">자주 틀리는 부분</h2>
         <ul className="mt-4 list-disc space-y-3 pl-5 text-sm leading-7">
           {g.pitfalls.map((x) => (
             <li key={x}>{x}</li>
@@ -112,7 +110,7 @@ export default async function TopicPage({
         </ul>
       </aside>
       <section>
-        <h2 className="text-xl font-semibold">근거·확인 범위</h2>
+        <h2 className="text-xl font-semibold">참고 자료</h2>
         {g.sources.map((s) => (
           <div key={s.url} className="mt-4 text-sm leading-7">
             <a

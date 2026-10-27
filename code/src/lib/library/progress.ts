@@ -117,7 +117,7 @@ export function readLibraryProgress(
   for (const [id, e] of Object.entries(library.entries)) {
     const item = {
       id,
-      track: e.track === 'jira' ? 'Jira 미션' : '기술사',
+      track: e.track === 'jira' ? 'Jira 과제' : '기술사',
       title: e.title,
       href: e.href,
       at: e.updatedAt,
@@ -167,7 +167,7 @@ export function readLibraryProgress(
       ...Object.values(streak.days).flat().filter(nodeId),
     ]).size
   const jiraLatest = recent
-    .filter((x) => x.track === 'Jira' || x.track === 'Jira 미션')
+    .filter((x) => x.track === 'Jira' || x.track === 'Jira 과제')
     .sort((a, b) => (b.at ?? '').localeCompare(a.at ?? ''))[0]
   const cards: ProgressCard[] = [
     {
@@ -214,7 +214,7 @@ export function readLibraryProgress(
       title: '정보관리기술사',
       metrics: [
         [
-          '열어 본 학습 기록',
+          '저장된 학습 항목',
           libraryItems.filter((x) => x.track === 'engineer').length,
         ],
         [

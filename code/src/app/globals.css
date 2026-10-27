@@ -488,3 +488,84 @@ summary::-webkit-details-marker {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Reading layouts: size controls change prose, not the navigation or page grid. */
+.study-library {
+  --study-size: 18px;
+  --muted: #554d42;
+  --faint: #675c4f;
+}
+:root[data-theme='dark'] .study-library {
+  --muted: #c9beb0;
+  --faint: #b5a796;
+}
+:root[data-study-size='20'] .study-library {
+  --study-size: 20px;
+}
+:root[data-study-size='22'] .study-library {
+  --study-size: 22px;
+}
+.study-content :where(p, li, td, th, textarea) {
+  font-size: var(--study-size);
+  line-height: 1.9;
+}
+.study-content :where(summary, label, input, select) {
+  font-size: 16px;
+  line-height: 1.65;
+}
+.study-content :where(p, li, td, th) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.study-content .study-meta {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.study-content .study-question-title {
+  font-size: calc(var(--study-size) + 4px);
+  font-weight: 650;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.study-content .study-measure {
+  max-width: 42rem;
+}
+.study-content h2 {
+  font-size: 28px;
+  line-height: 1.5;
+}
+.study-content h3 {
+  font-size: 21px;
+  line-height: 1.55;
+}
+.study-content a:not([class]) {
+  text-underline-offset: 5px;
+}
+.study-reading-controls {
+  padding: 1.25rem 0;
+}
+.study-question {
+  scroll-margin-top: 2rem;
+}
+.study-question > details {
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+.study-question summary {
+  min-height: 2.75rem;
+  padding: 0.4rem 0;
+}
+.study-question .study-source-text {
+  color: var(--ink);
+  max-width: 42rem;
+  white-space: pre-line;
+}
+.study-content textarea {
+  min-height: 16rem;
+}
+@media print {
+  .study-reading-controls,
+  .study-jump-nav {
+    display: none;
+  }
+}

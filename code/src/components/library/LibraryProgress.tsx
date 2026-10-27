@@ -76,11 +76,11 @@ export function LibraryProgress() {
       if (!merged) throw Error()
       if (!saveLibrary(merged)) throw Error()
       setMessage(
-        '더 최근 기록을 우선해 기술사·실무 미션 기록을 합쳤어요. 기존 CS·PMP·Jira 공부방 기록은 그대로입니다.',
+        '기록을 가져왔습니다. 중복 항목은 더 최근에 저장한 답안을 사용했습니다.',
       )
     } catch {
       setMessage(
-        '가져오지 못했어요. 이 화면에서 내보낸3MB 이하의 올바른 파일과200개 기록 한도를 확인해 주세요. 기존 기록은 보존했어요.',
+        '파일을 가져오지 못했습니다. 이 화면에서 내보낸 JSON 파일인지, 3MB·200개 항목 한도를 넘지 않는지 확인하세요. 기존 기록은 바뀌지 않았습니다.',
       )
     }
   }
@@ -103,8 +103,13 @@ export function LibraryProgress() {
             <dl className="mt-5 flex flex-wrap gap-8">
               {c.metrics.map(([t, n]) => (
                 <div key={t}>
-                  <dt className="text-xs text-faint">{t}</dt>
-                  <dd className="mt-1 text-3xl font-semibold">{n}</dd>
+                  <dt className="text-[15px] text-faint">{t}</dt>
+                  <dd className="mt-1 text-3xl font-semibold">
+                    {n}
+                    <span className="ml-1 text-base font-normal text-muted">
+                      개
+                    </span>
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -120,9 +125,7 @@ export function LibraryProgress() {
           <span className="text-faint">{view.due.length}</span>
         </h2>
         <p className="mt-3 text-sm leading-7 text-muted">
-          CS·PMP의 기존 복습 날짜와 기술사·미션의 자기 점검 날짜를 함께
-          읽습니다. Jira 공부방 수업은 완료 표시이며 별도 복습 날짜가 없어
-          여기서 임의 생성하지 않습니다.
+          복습 날짜가 오늘이거나 지난 항목입니다.
         </p>
         {view.due.length ? (
           <ul className="mt-5 space-y-3">
@@ -132,7 +135,7 @@ export function LibraryProgress() {
                   className="block rounded-lg border border-line p-4"
                   href={x.href}
                 >
-                  <span className="text-xs text-faint">
+                  <span className="text-[15px] text-faint">
                     {x.track} · {x.due}
                   </span>
                   <b className="mt-1 block font-medium text-accent">
@@ -144,17 +147,16 @@ export function LibraryProgress() {
           </ul>
         ) : (
           <p className="mt-5 rounded-xl border border-line p-5 text-sm text-muted">
-            기록된 복습 대기가 없어요. 주제를 읽고 ‘내일 다시 설명하기’로 복습을
-            예약해 보세요.
+            복습할 항목이 없습니다. 수업이나 답안에서 ‘내일 다시 설명하기’를
+            누르면 여기에 표시됩니다.
           </p>
         )}
       </section>
       <section>
-        <h2 className="text-2xl font-semibold">최근 기록·이어보기</h2>
+        <h2 className="text-2xl font-semibold">최근 공부한 내용</h2>
         <p className="mt-3 text-sm leading-7 text-muted">
-          시각이 있는 활동은 최신순입니다. 예전 CS 방문 경로처럼 시각을 남기지
-          않은 기록은 뒤에 따로 표시합니다. 읽기·완료·정답의 단위가 달라 전체
-          숙련도 비율로 합산하지 않습니다.
+          최근에 저장한 기록부터 보여줍니다. 날짜가 없는 기록은 목록 끝에
+          표시합니다.
         </p>
         <div className="mt-5 space-y-3">
           {view.recent.slice(0, 20).map((x) => (
@@ -163,38 +165,38 @@ export function LibraryProgress() {
               className="block rounded-lg border border-line p-4"
               href={x.href}
             >
-              <span className="text-xs text-faint">
+              <span className="text-[15px] text-faint">
                 {x.track} ·{' '}
                 {x.at
                   ? new Date(x.at).toLocaleString('ko-KR', {
                       timeZone: 'Asia/Seoul',
                     })
-                  : '시각 미기록 · 이어보기'}
+                  : '날짜 없음'}
               </span>
               <p className="mt-1 font-medium text-accent">{x.title} →</p>
             </a>
           ))}
           {!view.recent.length && (
             <p className="rounded-xl border border-line p-5 text-sm text-muted">
-              아직 이 브라우저의 기록이 없어요. 학습 분야에서 시작하면 이어볼
-              위치가 여기에 모여요.
+              아직 학습 기록이 없습니다.
             </p>
           )}
         </div>
       </section>
-      <section className="rounded-xl border border-line bg-raised p-6">
-        <h2 className="text-xl font-semibold">기술사·실무 미션 기록 백업</h2>
+      <details className="rounded-xl border border-line bg-raised p-6">
+        <summary className="cursor-pointer text-xl font-semibold">
+          답안 백업
+        </summary>
         <p className="mt-3 text-sm leading-7 text-muted">
-          이곳에서 새로 쓰는 기술사·미션의 답안·체크·복습 날짜를 내보내고
-          합칩니다. 같은 항목은 더 최근 기록을 사용합니다. CS 계정 기록이나
-          PMP·Jira 공부방의 원래 백업을 이 파일로 덮어쓰지 않습니다.
+          기술사 답안과 Jira 과제의 메모·체크 항목·복습 날짜를 파일로
+          저장합니다. 파일을 가져올 때는 항목별로 더 최근 기록을 사용합니다.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <button className={libraryButton} onClick={backup}>
-            기술사·미션 기록 내보내기
+            기술사·Jira 과제 답안 저장
           </button>
           <label className={libraryButton + ' cursor-pointer'}>
-            기록 파일 가져오기
+            답안 파일 가져오기
             <input
               className="sr-only"
               type="file"
@@ -212,13 +214,17 @@ export function LibraryProgress() {
             PMP 내 기록·백업
           </a>
           <a className={libraryButton} href="/jira/index.html#home">
-            Jira 공부방 백업
+            Jira 기본 수업 백업
           </a>
         </div>
+        <p className="study-meta mt-5 text-muted">
+          CS·PMP·Jira 기본 수업 기록은 각 화면에서 따로 백업할 수 있습니다. 복습
+          날짜가 없는 Jira 기본 수업은 복습 목록에 표시되지 않습니다.
+        </p>
         <p role="status" className="mt-4 text-sm text-muted">
           {message}
         </p>
-      </section>
+      </details>
     </div>
   )
 }

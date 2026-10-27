@@ -27,3 +27,9 @@ Meaningful tests cover source/licensing boundaries, exact alias matching and pen
 ## App typography
 
 The app now self-hosts Wanted Sans Variable for body text and SUITE Variable for headings through `next/font/local`, including the original OFL notices in `src/app/fonts/`. This replaces a Pretendard-only CSS name without a font source, which could resolve to device defaults. Font display uses swap and next/font-generated preload/hashed assets; no font CDN request or device-installed font is needed. Monospace code remains unchanged. Existing standalone PMP/Jira font pickers remain intact.
+
+## Reading layout and editorial review
+
+Library prose uses an18px default with1.9line spacing;20px and22px options persist only the selected size under `pathfinder.reading.v1`. Stored values are restricted to those sizes, and storage denial does not prevent reading. Lesson pages use a narrower measure; topic lists open by domain; source/classification details and advanced filters remain available without crowding the initial view. Contrast tokens apply to the library only. Existing CS/PMP/Jira and answer storage keys are not rewritten.
+
+App headings and action labels describe the actual task rather than metaphors or decorative English. Repeated implementation-history notices were removed while source attribution, licensed-text boundaries, local-storage scope and failure messages remain. All24 engineering definitions were reviewed and18 rewritten for concrete actors, actions and costs; IDs, aliases, prompts, checklist strings, reference answers, numeric cases and primary sources are retained. The scan of UI strings and learning JSON is an editorial aid, not an AI authorship detector. Frozen PMP v2.18 and original Jira lessons remain unchanged.

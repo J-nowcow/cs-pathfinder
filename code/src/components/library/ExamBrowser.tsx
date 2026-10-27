@@ -102,14 +102,14 @@ export function ExamBrowser({
   return (
     <section id="questions" className="scroll-mt-6">
       <h2 className="text-2xl font-semibold">기출 위치 찾아보기</h2>
-      <p className="mt-3 text-sm leading-7 text-muted">
+      <p className="study-measure mt-3 text-muted">
         각 기록은 실제 기출의 위치입니다. 140회 31문항은 확인된 이용 조건에 따라
         원문을 제공하며, 이전 회차는 기술명 색인과 공식 원문 링크를 제공합니다.
         ‘원문 대조’는 문항의 요구를 읽고 편집 분류했다는 뜻이며 공식 분류나 정답
         감수가 아닙니다. 나머지 ‘자동 후보’는 배경 용어를 잡거나 놓칠 수
         있습니다.
       </p>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <label className="text-sm">
           기술명·회차 검색
           <input
@@ -130,21 +130,6 @@ export function ExamBrowser({
             {rounds.map((n) => (
               <option key={n} value={n}>
                 {n}회
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="text-sm">
-          교시
-          <select
-            className="mt-2 w-full rounded-lg border border-line bg-surface p-3"
-            value={session}
-            onChange={(e) => change(() => setSession(e.target.value))}
-          >
-            <option value="">전체 교시</option>
-            {[1, 2, 3, 4].map((n) => (
-              <option key={n} value={n}>
-                {n}교시
               </option>
             ))}
           </select>
@@ -172,45 +157,67 @@ export function ExamBrowser({
             ))}
           </select>
         </label>
-        <label className="text-sm">
-          분류 상태
-          <select
-            className="mt-2 w-full rounded-lg border border-line bg-surface p-3"
-            value={review}
-            onChange={(e) => change(() => setReview(e.target.value))}
-          >
-            <option value="">모든 분류 상태</option>
-            <option value="reviewed">원문 대조 · 편집 분류</option>
-            <option value="candidate">자동 후보 · 미검토</option>
-          </select>
-        </label>
-        <label className="text-sm">
-          수업 연결 구분
-          <select
-            className="mt-2 w-full rounded-lg border border-line bg-surface p-3"
-            value={connection}
-            onChange={(e) => change(() => setConnection(e.target.value))}
-          >
-            <option value="">모든 수업 연결</option>
-            <option value="core">핵심 이해 수업 · 원문 대조</option>
-            <option value="background">보충 수업 · 원문 대조</option>
-            <option value="candidate">자동 수업 후보 · 미검토</option>
-            <option value="pending">수업 연결 대기</option>
-          </select>
-        </label>
-        <label className="text-sm">
-          자료 범위
-          <select
-            className="mt-2 w-full rounded-lg border border-line bg-surface p-3"
-            value={coverage}
-            onChange={(e) => change(() => setCoverage(e.target.value))}
-          >
-            <option value="">전체 기록</option>
-            <option value="fulltext">원문 제공</option>
-            <option value="unclassified">학습 주제 연결 대기</option>
-          </select>
-        </label>
       </div>
+      <details className="mt-4 rounded-xl border border-line p-4">
+        <summary className="cursor-pointer font-medium text-accent">
+          교시·분류·자료 범위 더 고르기
+        </summary>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <label className="text-sm">
+            교시
+            <select
+              className="mt-2 w-full rounded-lg border border-line bg-surface p-3"
+              value={session}
+              onChange={(e) => change(() => setSession(e.target.value))}
+            >
+              <option value="">전체 교시</option>
+              {[1, 2, 3, 4].map((n) => (
+                <option key={n} value={n}>
+                  {n}교시
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-sm">
+            분류 상태
+            <select
+              className="mt-2 w-full rounded-lg border border-line bg-surface p-3"
+              value={review}
+              onChange={(e) => change(() => setReview(e.target.value))}
+            >
+              <option value="">모든 분류 상태</option>
+              <option value="reviewed">원문 대조 · 편집 분류</option>
+              <option value="candidate">자동 후보 · 미검토</option>
+            </select>
+          </label>
+          <label className="text-sm">
+            수업 연결 구분
+            <select
+              className="mt-2 w-full rounded-lg border border-line bg-surface p-3"
+              value={connection}
+              onChange={(e) => change(() => setConnection(e.target.value))}
+            >
+              <option value="">모든 수업 연결</option>
+              <option value="core">핵심 이해 수업 · 원문 대조</option>
+              <option value="background">보충 수업 · 원문 대조</option>
+              <option value="candidate">자동 수업 후보 · 미검토</option>
+              <option value="pending">수업 연결 대기</option>
+            </select>
+          </label>
+          <label className="text-sm">
+            자료 범위
+            <select
+              className="mt-2 w-full rounded-lg border border-line bg-surface p-3"
+              value={coverage}
+              onChange={(e) => change(() => setCoverage(e.target.value))}
+            >
+              <option value="">전체 기록</option>
+              <option value="fulltext">원문 제공</option>
+              <option value="unclassified">학습 주제 연결 대기</option>
+            </select>
+          </label>
+        </div>
+      </details>
       <p
         role="status"
         aria-label="기출 검색 결과"
@@ -227,7 +234,7 @@ export function ExamBrowser({
           <article
             id={q.id}
             key={q.id}
-            className="rounded-xl border border-line bg-surface p-5"
+            className="study-question rounded-2xl border border-line bg-raised p-6 sm:p-8"
           >
             <div className="flex flex-wrap justify-between gap-3">
               <h3 className="font-semibold">{label(q)}</h3>
@@ -240,7 +247,7 @@ export function ExamBrowser({
                 Q-Net 공식 문제지 ↗
               </a>
             </div>
-            <p className="mt-3 text-sm leading-7 text-muted">
+            <p className="study-question-title mt-5">
               {q.classification ? '핵심 출제 주제: ' : '기술명 색인: '}
               {q.classification
                 ? q.classification.core.join(' · ')
@@ -249,8 +256,13 @@ export function ExamBrowser({
                   : '추출한 기술명 없음 · 원문 확인 필요'}
             </p>
             {q.classification && (
-              <div className="mt-3 rounded-lg bg-raised p-4 text-sm leading-7">
-                <p className="font-medium text-accent">원문 대조 · 편집 분류</p>
+              <details className="mt-5 rounded-lg bg-surface p-4">
+                <summary className="cursor-pointer font-medium text-accent">
+                  분류 근거·배경 보기
+                </summary>
+                <p className="study-meta mt-3 text-accent">
+                  원문 대조 · 편집 분류
+                </p>
                 {!!q.classification.background.length && (
                   <p className="mt-2 text-muted">
                     배경·적용 맥락: {q.classification.background.join(' · ')}
@@ -259,19 +271,19 @@ export function ExamBrowser({
                 <p className="mt-2 text-muted">
                   분류 근거: {q.classification.rationale}
                 </p>
-                <p className="mt-2 text-xs text-faint">
+                <p className="study-meta mt-2 text-faint">
                   대조 {q.classification.reviewedAt} ·{' '}
                   {q.classification.implicitDemand
                     ? '요구 유형에 학습용 해석 포함'
                     : '명시된 요구 항목 기준'}{' '}
                   · 공식 분류 아님
                 </p>
-              </div>
+              </details>
             )}
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap gap-3">
               {q.topics.map((t) => (
                 <Link
-                  className="rounded-full border border-line px-3 py-1 text-xs text-accent"
+                  className="rounded-full border border-line px-3 py-2 text-[15px] text-accent"
                   key={t}
                   href={'/learn/engineer/' + t}
                 >
@@ -281,7 +293,7 @@ export function ExamBrowser({
               ))}
               {q.backgroundTopics.map((t) => (
                 <Link
-                  className="rounded-full border border-dashed border-line px-3 py-1 text-xs text-muted"
+                  className="rounded-full border border-dashed border-line px-3 py-2 text-[15px] text-muted"
                   key={t}
                   href={'/learn/engineer/' + t}
                 >
@@ -294,7 +306,7 @@ export function ExamBrowser({
                 </span>
               )}
             </div>
-            <p className="mt-3 text-xs leading-6 text-faint">
+            <p className="study-meta mt-4 text-faint">
               {q.classification
                 ? '답안 요구 · 편집: '
                 : '요구 유형 · 자동 후보: '}
@@ -309,7 +321,7 @@ export function ExamBrowser({
                     : '번호 확인 · 주제 분류는 미검토'}
             </p>
             {q.classification && (
-              <details className="mt-3 text-xs leading-6 text-faint">
+              <details className="study-meta mt-4 text-faint">
                 <summary className="cursor-pointer">
                   원래 기술명 색인 확인
                 </summary>
@@ -323,17 +335,15 @@ export function ExamBrowser({
                 <summary className="cursor-pointer text-sm font-medium text-accent">
                   140회 기출 원문 보기
                 </summary>
-                <p className="mt-3 whitespace-pre-wrap text-sm leading-7">
-                  {q.text}
-                </p>
-                <p className="mt-3 text-xs text-faint">
+                <p className="study-source-text mt-5">{q.text}</p>
+                <p className="study-meta mt-3 text-faint">
                   출처: 한국산업인력공단 Q-Net · 제140회 정보관리기술사 ·
                   공공누리 제1유형 및 AI유형 적용 안내 참조. 원문 구조·표는 공식
                   PDF와 대조하세요.
                 </p>
               </details>
             ) : (
-              <p className="mt-3 text-xs text-faint">
+              <p className="study-meta mt-3 text-faint">
                 이 기록은 원문 미수록 색인입니다. 공식 문제지에서 실제
                 요구사항을 먼저 확인하세요.
               </p>

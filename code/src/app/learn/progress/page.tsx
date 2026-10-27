@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 export default function ProgressPage() {
   return (
     <LibraryShell
-      eyebrow="ONE PLACE · YOUR NEXT STEP"
-      title="흩어진 공부, 이어서 한 걸음."
-      description="현재 사이트·현재 브라우저에 있는 CS·PMP·Jira·기술사 기록을 모아 봅니다. 각 분야의 원래 진도를 보존하며, 로그인 계정 통합이나 기기 간 자동 동기화가 새로 생기는 것은 아닙니다."
+      eyebrow="학습 기록"
+      title="이어서 공부하기"
+      description="마지막으로 공부한 내용과 복습 날짜를 확인합니다. 이 화면은 현재 브라우저에 저장된 기록을 보여줍니다."
     >
       <LibraryProgress />
     </LibraryShell>

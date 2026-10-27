@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { ReadingPreferences } from '@/components/library/ReadingPreferences'
 import { LearningAreas } from '@/components/LearningAreas'
 import { SiteFooter } from '@/components/SiteFooter'
 import { ThemeToggle } from '@/components/ThemeToggle'
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 /** 분야 입구는 320px에서도 이동과 읽기 설정이 한 줄 안에 들어가도록 둔다. */
 export default function LearningPage() {
   return (
-    <>
+    <div className="study-library">
       <header className="border-b border-line bg-surface">
         <nav
           aria-label="학습 분야 이동"
@@ -30,18 +31,21 @@ export default function LearningPage() {
       </header>
       <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
         <p className="text-[11px] font-medium tracking-[0.12em] text-faint">
-          PATHFINDER · LEARNING AREAS
+          학습 분야
         </p>
         <h1 className="mt-4 text-[30px] font-extrabold leading-snug tracking-[-0.025em]">
-          어떤 질문에서 시작할까요?
+          무엇을 공부할까요?
         </h1>
         <p className="mt-4 text-[15px] leading-7 text-muted">
-          지금 공부할 수 있는 분야를 골라 보세요. 개념을 읽고, 사례에 적용하고,
-          다시 설명하며 배웁니다.
+          CS 면접, 프로젝트 관리, Jira 사용법, 정보관리기술사를 공부할 수
+          있습니다.
         </p>
-        <LearningAreas />
+        <ReadingPreferences />
+        <div className="study-content">
+          <LearningAreas />
+        </div>
       </main>
       <SiteFooter />
-    </>
+    </div>
   )
 }

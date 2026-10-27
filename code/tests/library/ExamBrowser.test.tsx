@@ -15,6 +15,7 @@ describe('기출의 핵심·배경 및 분류 상태', () => {
   it('원문 대조/자동 상태, 수업 역할과 요구 유형을 함께 필터하고 초기화한다', async () => {
     const user = userEvent.setup()
     render(<ExamBrowser {...props} />)
+    await user.click(screen.getByText('교시·분류·자료 범위 더 고르기'))
     await user.selectOptions(screen.getByLabelText('분류 상태'), 'reviewed')
     expect(
       screen.getByRole('status', { name: '기출 검색 결과' }).textContent,
@@ -59,6 +60,7 @@ describe('기출의 핵심·배경 및 분류 상태', () => {
     const user = userEvent.setup()
     const q = index.questions.find((q) => q.id === 'impe-140-1-06')!
     render(<ExamBrowser {...props} questions={[q]} />)
+    await user.click(screen.getByText('교시·분류·자료 범위 더 고르기'))
     await user.selectOptions(screen.getByLabelText('수업 연결 구분'), 'core')
     expect(
       screen.getByRole('status', { name: '기출 검색 결과' }).textContent,

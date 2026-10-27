@@ -80,11 +80,11 @@ export function StudyPractice({
     >
       <h3 className="text-xl font-semibold">내 말로 써보기</h3>
       <p className="mt-2 text-sm leading-6 text-muted">
-        먼저 답을 쓰고 참고 답안과 비교하세요. 완료·복습은 자기 점검이며 시험
-        점수나 자동 정답 판정이 아닙니다.
+        답안을 쓴 뒤 아래 항목으로 점검하세요. 입력한 답안은 자동 채점되지
+        않습니다.
       </p>
       <label className="mt-5 block text-sm" htmlFor={'draft-' + id}>
-        답안·판단 근거
+        내 답안
       </label>
       <textarea
         disabled={!ready}
@@ -95,7 +95,7 @@ export function StudyPractice({
         value={entry?.draft ?? ''}
         onChange={(e) => persist({ draft: e.target.value })}
       />
-      <p className="text-xs text-faint">
+      <p className="study-meta text-faint">
         {entry?.draft.length ?? 0}/6,000자 · 브라우저 저장 · 계정 동기화 없음
       </p>
       {checklist.length > 0 && (
