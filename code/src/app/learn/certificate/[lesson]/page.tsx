@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { LibraryShell, ConceptFlow } from '@/components/library/LibraryShell'
 import { CertificateTable } from '@/components/certificate/CertificateTable'
 import { CertificatePractice } from '@/components/certificate/CertificatePractice'
+import { CertificateCidrFigure } from '@/components/certificate/CertificateCidrFigure'
 import { CertificateCoverageGraph } from '@/components/certificate/CertificateCoverageGraph'
 import {
   certificate as c,
@@ -53,6 +54,7 @@ export default async function CertificateLesson({
         </div>
         <ConceptFlow items={n.flow} />
         {n.id === 'test-coverage' ? <CertificateCoverageGraph /> : null}
+        {n.id === 'ipv4-subnet' ? <CertificateCidrFigure /> : null}
         <section>
           <h2>같은 상황에서 비교하기</h2>
           <CertificateTable

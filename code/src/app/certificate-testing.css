@@ -46,3 +46,46 @@
 .study-desk .study-content .certificate-lesson :is(th, td) {
   font-size: var(--study-size);
 }
+
+.certificate-cidr-figure {
+  margin: 36px 0;
+  padding: 24px 0;
+  border-block: 1px solid var(--line);
+  font-size: var(--study-size);
+}
+.certificate-cidr-figure figcaption {
+  font-weight: 650;
+  line-height: 1.8;
+}
+.certificate-cidr-byte {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  margin-top: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.certificate-cidr-byte > div {
+  padding: 18px 14px;
+  background: var(--raised);
+}
+.certificate-cidr-byte > div + div {
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+}
+.certificate-cidr-byte span {
+  display: block;
+  font-size: 0.8em;
+  line-height: 1.8;
+}
+.certificate-cidr-byte strong {
+  display: block;
+  margin-top: 8px;
+  font-family: monospace;
+  font-size: 1.3em;
+  letter-spacing: 0.15em;
+}
+.certificate-cidr-figure > p {
+  margin-top: 20px;
+  line-height: 1.9;
+}
