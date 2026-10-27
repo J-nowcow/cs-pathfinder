@@ -61,6 +61,7 @@ export function canonicalLibraryJson(value: unknown): string {
     return (
       '{' +
       Object.keys(value)
+        .filter((key) => (value as Record<string, unknown>)[key] !== undefined)
         .sort()
         .map(
           (key) =>
@@ -72,5 +73,5 @@ export function canonicalLibraryJson(value: unknown): string {
       '}'
     )
   }
-  return JSON.stringify(value)
+  return value === undefined ? 'null' : JSON.stringify(value)
 }

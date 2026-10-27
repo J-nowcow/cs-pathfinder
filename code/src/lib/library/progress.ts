@@ -5,7 +5,8 @@ import {
   ANSWER_PRACTICE_STORAGE_KEY,
   LEGACY_ANSWER_PRACTICE_STORAGE_KEY,
 } from '@/lib/answer-practice/storage'
-import { parseLibrary, LIBRARY_KEY } from './storage'
+import { emptyLibrary } from './storage'
+import { readLibraryStrict } from './local-edit'
 import { kstToday } from '@/lib/daily/date'
 import pmp from '../../../data/pmp-library.json'
 import jira from '../../../data/jira-library.json'
@@ -64,8 +65,13 @@ export function readLibraryProgress(
     answers = deserializeAnswerPractice(
       get(ANSWER_PRACTICE_STORAGE_KEY) ??
         get(LEGACY_ANSWER_PRACTICE_STORAGE_KEY),
-    ),
-    library = parseLibrary(get(LIBRARY_KEY))
+    )
+  let library = emptyLibrary()
+  try {
+    library = readLibraryStrict({ getItem: get })
+  } catch {
+    unavailable = true
+  }
   const titles = new Map(
       (journey?.occurrences ?? [])
         .filter((o) => nodeId(o.nodeId))
@@ -142,7 +148,7 @@ export function readLibraryProgress(
       track: e.track === 'jira' ? 'Jira 과제' : '기술사',
       title: e.title,
       href: e.href,
-      at: e.updatedAt,
+      at: e.visitedAt > e.updatedAt ? e.visitedAt : e.updatedAt,
       ...(e.draft.trim() ? { excerpt: e.draft.trim().slice(0, 180) } : {}),
       ...(e.due ? { due: e.due } : {}),
     }
