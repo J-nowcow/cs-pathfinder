@@ -10,7 +10,7 @@ checks the server's data directory and TCP endpoint before creating fixtures.
 Example from `code/`, using separately installed PostgreSQL18 binaries:
 
 ```sh
-NODE_TLS_REJECT_UNAUTHORIZED=1 npx tsx scripts/verify-library-postgres.ts \
+NODE_TLS_REJECT_UNAUTHORIZED=1 npm run verify:library-postgres -- \
   --bin-dir /opt/homebrew/opt/postgresql@18/bin \
   --work-dir /absolute/task/work/postgres-private \
   --report /absolute/task/work/postgres-concurrency-report.json
