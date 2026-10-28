@@ -1,7 +1,9 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import missions from '../../../../learning-content/jira/missions.json'
-import release from '../../../../data/pmp-release.json'
+import { pmpLessonHref } from '@/lib/pmp/routes'
 import {
   LibraryShell,
   ConceptFlow,
@@ -9,10 +11,7 @@ import {
 } from '@/components/library/LibraryShell'
 import { MissionAnchor } from '@/components/library/MissionAnchor'
 import { StudyPractice } from '@/components/library/StudyPractice'
-export const metadata: Metadata = {
-  title: 'Jira 작업 관리 연습',
-  description: '가상 작업 데이터로 요구·흐름·검색·변경·보고를 연습합니다.',
-}
+export const metadata = learningMetadata('/learn/jira')
 export default function JiraPage() {
   return (
     <LibraryShell
@@ -20,6 +19,7 @@ export default function JiraPage() {
       title="BSS PI 작업 관리 연습"
       description="가상 작업 16개로 작업 분해, JQL 검색, 변경 기록과 보고를 연습합니다. 회사 Jira와 연결되지 않는 연습용 자료입니다."
     >
+      <LearningSeo path="/learn/jira" />
       <MissionAnchor />
       <div className="flex flex-wrap gap-3">
         <a className={libraryButton} href="/jira/index.html">
@@ -84,7 +84,7 @@ export default function JiraPage() {
               )}
               <a
                 className={libraryButton}
-                href={release.links.study + '#lesson/' + m.pmp}
+                href={pmpLessonHref(m.pmp)}
               >
                 관련 PMP 수업 →
               </a>

@@ -1,3 +1,5 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { LibraryShell } from '@/components/library/LibraryShell'
@@ -5,6 +7,9 @@ import { PmpPractice } from '@/components/pmp/PmpPractice'
 import { pmpCourse, nativePmpHtml } from '@/lib/pmp/course'
 export function generateStaticParams() {
   return pmpCourse.cases.map((c) => ({ case: c.id }))
+}
+export async function generateMetadata({ params }: { params: Promise<{ case: string }> }) {
+  return learningMetadata('/learn/pmp/case/' + (await params).case)
 }
 export default async function PmpCase({
   params,
@@ -21,6 +26,7 @@ export default async function PmpCase({
       title={c.title}
       description={c.context}
     >
+      <LearningSeo path={'/learn/pmp/case/' + c.id} />
       <div className="pmp-lesson">
         {c.questions.map((q) => (
           <PmpPractice key={q.id} id={q.id} />

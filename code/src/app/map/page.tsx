@@ -7,6 +7,7 @@ import { socialMeta } from '@/lib/site'
 export const revalidate = 0
 
 export const metadata: Metadata = socialMeta({
+  path: '/map',
   title: '질문 지도',
   description: '지금까지 올라온 CS 질문을 한눈에 봅니다.',
 })

@@ -41,6 +41,7 @@ export const metadata: Metadata = {
   metadataBase: siteUrl(),
   title: { default: TITLE, template: `%s · ${TITLE}` },
   description: DESCRIPTION,
+  robots: process.env.VERCEL_ENV === 'preview' ? { index: false, follow: false } : undefined,
   /*
    * 읽기 도구가 주소만 넣어도 피드를 찾게 한다. 이 줄이 없으면 사용자가
    * `/rss.xml`을 직접 알고 쳐야 한다 — 대부분 그러지 않는다.
@@ -51,9 +52,13 @@ export const metadata: Metadata = {
    * 저장소가 공개라 상관은 없지만, 프로젝트 밖 값이라 env로 받는다.
    * env가 없으면 태그 자체가 안 나간다.
    */
-  verification: process.env.GOOGLE_SITE_VERIFICATION
-    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
-    : undefined,
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+    other: {
+      ...(process.env.NAVER_SITE_VERIFICATION ? { 'naver-site-verification': process.env.NAVER_SITE_VERIFICATION } : {}),
+      ...(process.env.BING_SITE_VERIFICATION ? { 'msvalidate.01': process.env.BING_SITE_VERIFICATION } : {}),
+    },
+  },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,

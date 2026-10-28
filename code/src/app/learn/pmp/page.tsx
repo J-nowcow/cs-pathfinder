@@ -1,12 +1,15 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
 import { PmpBackup } from '@/components/pmp/PmpBackup'
 import { PmpSearchForm } from '@/components/pmp/PmpSearchForm'
 import { StudyDesk } from '@/components/library/StudyDesk'
 import { pmpCourse as c, lessonById, pmpLessonHref } from '@/lib/pmp/course'
-export const metadata = { title: '프로젝트·제품 관리' }
+export const metadata = learningMetadata('/learn/pmp')
 export default function PmpHome() {
   return (
-    <StudyDesk section="pmp">
+    <StudyDesk section="pmp" document>
+      <LearningSeo path="/learn/pmp" />
       <header className="desk-document-heading">
         <p className="study-meta">PMP · 개념과 실무</p>
         <h1>

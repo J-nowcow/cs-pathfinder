@@ -6,7 +6,7 @@ import { socialMeta } from '@/lib/site'
 import { headers } from 'next/headers'
 import { getQuota } from '@/lib/quota'
 import { quotaKeyFromHeaders, anonDailyLimit } from '@/lib/quota/key'
-import { qaPageJsonLd, serializeJsonLd } from '@/lib/seo/jsonld'
+import { questionArticleJsonLd, serializeJsonLd } from '@/lib/seo/jsonld'
 import { siteUrl } from '@/lib/site'
 import { ReadingView, type ReadingNode } from '@/components/ReadingView'
 
@@ -36,8 +36,8 @@ export async function generateMetadata({
   const lead = node.body.split('\n\n')[0]?.slice(0, 140) ?? ''
 
   return {
+    alternates: { canonical: new URL('/q/' + node.id, siteUrl()).href, types: { 'application/rss+xml': '/rss.xml' } },
     // title은 socialMeta가 준다. 여기서 또 적으면 두 곳이 갈릴 자리가 생긴다
-    description: lead,
     ...socialMeta({ title: node.question, description: lead, type: 'article' }),
   }
 }
@@ -76,14 +76,11 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
     related,
   }
 
-  /*
-   * 크롤러에게 이 페이지가 질문과 답임을 형식으로 알린다. 주소는 짧은
-   * 번호 주소를 정본으로 준다 — sitemap이 알리는 주소와 같아야 한다.
-   */
-  const jsonLd = qaPageJsonLd({
+  // The immutable node URL matches sitemap/llms; numeric reader URLs remain usable aliases.
+  const jsonLd = questionArticleJsonLd({
     question: node.question,
     body: node.body,
-    url: `${siteUrl().origin}/q/${node.number ?? node.id}`,
+    url: `${siteUrl().origin}/q/${node.id}`,
   })
 
   return (

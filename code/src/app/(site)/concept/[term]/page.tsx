@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { GLOSSARY } from '../../../../../data/glossary'
+import { socialMeta } from '@/lib/site'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { listSearchableRoots } from '@/lib/db/roots'
 import {
@@ -19,8 +20,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const entry = findGlossaryEntry(GLOSSARY, term)
   if (!entry) return { title: '개념을 찾지 못했습니다' }
   return {
-    title: `${entry.term} 면접 질문`,
-    description: `${entry.term}의 뜻과 이 개념으로 준비할 CS 면접 질문을 확인합니다.`,
+    ...socialMeta({
+      path: '/concept/' + encodeURIComponent(entry.term),
+      title: `${entry.term} 면접 질문`,
+      description: `${entry.term}의 뜻과 이 개념으로 준비할 CS 면접 질문을 확인합니다.`,
+    }),
   }
 }
 

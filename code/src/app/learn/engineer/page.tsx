@@ -1,13 +1,12 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import guides from '../../../../data/engineer-guides.json'
 import index from '../../../../data/engineer-index.json'
 import { LibraryShell, libraryButton } from '@/components/library/LibraryShell'
 import { ExamBrowser } from '@/components/library/ExamBrowser'
-export const metadata: Metadata = {
-  title: '정보관리기술사 · 주제로 연결하는 기출',
-  description: '24개 핵심 주제의 개념·비교·답안 연습과 60회차 기출 위치 색인.',
-}
+export const metadata = learningMetadata('/learn/engineer')
 export default function EngineerPage() {
   const linked = index.questions.filter((q) => q.topics.length).length
   const reviewed = index.questions.filter((q) => q.classification).length
@@ -23,6 +22,7 @@ export default function EngineerPage() {
       title="개념 공부와 기출 연습"
       description="24개 주제의 개념과 참고 답안을 읽고, 회차별 기출을 찾아 답안을 연습합니다."
     >
+      <LearningSeo path="/learn/engineer" />
       <nav
         aria-label="기술사 학습 시작"
         className="study-jump-nav flex flex-wrap gap-6 border-b border-line pb-5"

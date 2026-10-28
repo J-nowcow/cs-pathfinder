@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { GlossaryList } from '@/components/GlossaryList'
+import { siteUrl } from '@/lib/site'
 
 /**
  * 용어 사전.
@@ -17,6 +18,7 @@ import { GlossaryList } from '@/components/GlossaryList'
  * 넘길 이유가 없다.
  */
 export const metadata: Metadata = {
+  alternates: { canonical: new URL('/glossary', siteUrl()).href, types: { 'application/rss+xml': '/rss.xml' } },
   title: '용어 사전',
   description: '해설에 자주 나오는 CS 용어를 한 문장씩 풀었습니다.',
 }

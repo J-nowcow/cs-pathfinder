@@ -63,6 +63,16 @@ describe('sitemap', () => {
     expect(map.some((m) => m.url.includes('/t/'))).toBe(false)
   })
 
+  it('includes all public native learning routes while excluding personal record and search pages', async () => {
+    const map = await loadSitemap(async () => ({ date: '', entries: ENTRIES, byCategory: [] }))
+    const urls = map.map((m) => m.url)
+    expect(urls.filter((url) => new URL(url).pathname.startsWith('/learn'))).toHaveLength(123)
+    expect(urls).toContain('https://example.test/learn/pmp/n74')
+    expect(urls).toContain('https://example.test/learn/certificate/keys')
+    expect(urls).not.toContain('https://example.test/learn/library')
+    expect(urls).not.toContain('https://example.test/learn/progress')
+  })
+
   /*
    * **여기서 던지면 sitemap이 통째로 500이 되고 위의 세 주소도 못 알린다.**
    * 부팅 직후나 마이그레이션 전이면 표가 없을 수 있다.
@@ -88,7 +98,7 @@ describe('sitemap', () => {
 describe('robots', () => {
   it('sitemap 자리를 알려준다', async () => {
     const robots = (await import('@/app/robots')).default()
-    expect(robots.sitemap).toBe('https://example.test/sitemap.xml')
+    expect(robots.sitemap).toEqual(['https://example.test/sitemap.xml', 'https://example.test/learn/sitemap.xml'])
   })
 
   /* `/api/`는 사람이 읽을 화면이 아니고 같은 내용이 `/q/…`에 제대로 된 모양으로 있다 */
