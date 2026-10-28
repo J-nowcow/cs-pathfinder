@@ -2506,3 +2506,18 @@ body {
 .lesson-figure-comparison strong,
 .lesson-figure-comparison span { display: block; }
 .lesson-figure-comparison span { color: var(--muted); font-size: 14px; }
+
+/* Shared reading header: existing destinations, without automatic prefetch. */
+.desk-header { gap: 24px; flex-wrap: wrap; }
+.desk-topnav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; font-size: 14px; color: var(--muted); }
+.desk-topnav > a, .desk-nav-group > summary { min-height: 44px; display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; }
+.desk-topnav a:hover, .desk-nav-group > summary:hover, .desk-topnav a[aria-current='page'], .desk-nav-group[data-active='true'] > summary { color: var(--d0); }
+.desk-topnav :is(a, summary):focus-visible { outline: 2px solid var(--d0); outline-offset: 4px; }
+.desk-nav-group { position: relative; }
+.desk-nav-group > summary { cursor: pointer; list-style: none; }
+.desk-nav-group > summary::-webkit-details-marker { display: none; }
+.desk-nav-group[open] > summary svg { transform: rotate(180deg); }
+.desk-nav-panel { position: absolute; top: calc(100% + 6px); left: 0; z-index: 40; width: 260px; max-width: calc(100vw - 48px); padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: 0 12px 32px rgb(0 0 0 / .1); color: var(--ink); }
+.desk-nav-panel a { display: grid; gap: 3px; padding: 12px; border-radius: 7px; line-height: 1.6; }
+.desk-nav-panel a:hover, .desk-nav-panel a:focus-visible { background: var(--raised); }
+.desk-nav-panel small { font-size: 12px; color: var(--muted); }

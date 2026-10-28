@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { DeskAppearance } from './DeskAppearance'
+import { StudyNavigation } from './StudyNavigation'
 import { TypographyPreferences } from './TypographyPreferences'
 import { ReadingPreferences } from './ReadingPreferences'
 
@@ -44,15 +44,7 @@ export function StudyDesk({
           </span>
           CS 길라잡이
         </Link>
-        <nav aria-label="주요 메뉴" className="flex items-center gap-6">
-          <Link href="/learn" aria-current={section === 'home' ? 'page' : undefined} className="text-sm text-muted">
-            메인
-          </Link>
-          <Link href="/learn/library" prefetch={false} aria-current={section === 'library' ? 'page' : undefined} className="text-sm text-muted">
-            내 서재
-          </Link>
-          <DeskAppearance />
-        </nav>
+        <StudyNavigation section={section} />
       </header>
       <div className="desk-layout">
         {section !== 'home' && <aside className="desk-sidebar">
