@@ -85,7 +85,7 @@ export function CertificateBackup() {
         <button className={libraryButton} disabled={!ready} onClick={backup}>
           정처기 기록 저장
         </button>
-        <label className={libraryButton}>
+        <label className={libraryButton + ' cursor-pointer focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-accent'}>
           정처기 기록 가져오기
           <input
             className="sr-only"
