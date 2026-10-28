@@ -29,7 +29,6 @@ export const certificate = course as Omit<typeof course, 'lessons'> & {
 export const certificateLessons = new Map(
   certificate.lessons.map((n) => [n.id, n]),
 )
-export const certificateHref = (id: string) =>
-  '/learn/certificate/' + encodeURIComponent(id)
+export { certificateHref } from './routes'
 export const certificateDomain = (lesson: CertificateLesson) =>
   certificate.domains.find((domain) => domain.id === lesson.domain)!.title

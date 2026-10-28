@@ -6,7 +6,7 @@ import {
   type CertificateEntry,
   type CertificateChange,
 } from '@/lib/certificate/storage'
-import { certificateLessons } from '@/lib/certificate/course'
+import { certificateCatalog as certificateLessons } from '@/lib/certificate/catalog'
 import { libraryButton } from '@/components/library/LibraryShell'
 export function CertificatePractice({ id }: { id: string }) {
   const [entry, setEntry] = useState<CertificateEntry | null>(null),

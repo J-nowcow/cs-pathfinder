@@ -11,7 +11,8 @@ import { kstToday } from '@/lib/daily/date'
 import pmp from '../../../data/pmp-library.json'
 import jira from '../../../data/jira-library.json'
 import { CERTIFICATE_KEY, readCertificate } from '@/lib/certificate/storage'
-import { certificateLessons, certificateHref } from '@/lib/certificate/course'
+import { certificateCatalog as certificateLessons } from '@/lib/certificate/catalog'
+import { certificateHref } from '@/lib/certificate/routes'
 import { pmpLessonHref } from '@/lib/pmp/routes'
 export type ProgressItem = {
   id: string
