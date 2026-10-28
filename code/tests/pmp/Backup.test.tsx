@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest'
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -113,5 +114,62 @@ describe('native PMP backup decisions', () => {
       ),
     )
     expect(localStorage.getItem(PMP_KEY)).toBe(before)
+  })
+})
+
+function deferredText() {
+  let resolve!: (value: string) => void
+  let reject!: (error: Error) => void
+  const promise = new Promise<string>((yes, no) => { resolve = yes; reject = no })
+  return { promise, resolve, reject }
+}
+
+describe('backup preparation feedback', () => {
+  it('shows a named busy operation, lets keyboard users cancel, and ignores its late result', async () => {
+    const before = raw({ n01: 'Keep original' })
+    localStorage.setItem(PMP_KEY, before)
+    const { container } = render(<PmpBackup />)
+    fireEvent.click(container.querySelector('summary')!)
+    const read = deferredText()
+    upload({ ...file('', 'slow.json'), text: () => read.promise })
+    const loading = container.querySelector('.pmp-backup-loading')!
+    expect(loading.textContent).toContain('slow.json')
+    expect(container.querySelector('[aria-busy=true]')).not.toBeNull()
+    const waiting = screen.getByRole('status').textContent
+    expect(waiting?.length).toBeGreaterThan(0)
+    expect(localStorage.getItem(PMP_KEY)).toBe(before)
+    fireEvent.click(loading.querySelector('button')!)
+    expect(document.activeElement).toBe(container.querySelector('input[type=file]'))
+    const canceled = screen.getByRole('status').textContent
+    expect(canceled).not.toBe(waiting)
+    await act(async () => read.resolve(raw({ n02: 'Late incoming' })))
+    expect(container.querySelector('.pmp-backup-preview')).toBeNull()
+    expect(container.querySelector('[aria-busy=true]')).toBeNull()
+    expect(screen.getByRole('status').textContent).toBe(canceled)
+    expect(localStorage.getItem(PMP_KEY)).toBe(before)
+  })
+
+  it('keeps the newer file busy when an older read rejects, then previews only the newer file without auto-import', async () => {
+    const before = raw({ n01: 'Keep original' })
+    localStorage.setItem(PMP_KEY, before)
+    const { container } = render(<PmpBackup />)
+    fireEvent.click(container.querySelector('summary')!)
+    const first = deferredText(), second = deferredText()
+    upload({ ...file('', 'old.json'), text: () => first.promise })
+    upload({ ...file('', 'new.json'), text: () => second.promise })
+    const waiting = screen.getByRole('status').textContent
+    await act(async () => first.reject(new Error('Obsolete failure')))
+    expect(container.querySelector('.pmp-backup-loading')?.textContent).toContain('new.json')
+    expect(container.querySelector('[aria-busy=true]')).not.toBeNull()
+    expect(screen.getByRole('status').textContent).toBe(waiting)
+    await act(async () => second.resolve(raw({ n02: 'Newest incoming' })))
+    await waitFor(() => expect(container.querySelector('.pmp-backup-loading')).toBeNull())
+    const comparison = container.querySelector('.pmp-backup-preview')!
+    expect(comparison.textContent).toContain('new.json')
+    expect(comparison.textContent).not.toContain('old.json')
+    expect(container.querySelector('[aria-busy=true]')).toBeNull()
+    expect(localStorage.getItem(PMP_KEY)).toBe(before)
+    fireEvent.click(comparison.querySelector('button')!)
+    expect(JSON.parse(localStorage.getItem(PMP_KEY)!).notes).toEqual({ n01: 'Keep original', n02: 'Newest incoming' })
   })
 })
