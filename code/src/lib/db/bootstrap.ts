@@ -13,6 +13,7 @@ import { NODE_TAGS } from '../../../data/node-tags'
 import { NODE_LEVELS } from '../../../data/node-levels'
 import { SEED_RELATIONS, type SeedRelation } from '../../../data/relations'
 import { saveRelations, type NewRelation } from '@/lib/db/relations'
+import { insertSeedAliases, type SeedAlias } from '@/lib/db/seed-aliases'
 
 export function rootNodeId(node: Pick<ExampleNode, 'identityScope' | 'question'>): string {
   return derivedUuid(`node:${node.identityScope}:${node.question}`)
@@ -40,6 +41,7 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
   const db = await getDb()
   let inserted = 0
   let refreshed = 0
+  const aliases: SeedAlias[] = []
 
   /*
    * 손으로 쓴 것과 생성된 것을 함께 심는다.
@@ -211,15 +213,11 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
     if (!isIdentityScope(ex.identityScope)) hashes.add(questionHash('generic', ex.question))
 
     for (const hash of hashes) {
-      await db.query(
-        `insert into qnode_alias (normalizer_version, normalized_hash, qnode_id)
-         values ($1, $2, $3)
-         on conflict (normalizer_version, normalized_hash) do nothing`,
-        [NORMALIZER_VERSION, hash, id],
-      )
+      aliases.push({ hash, nodeId: id })
     }
   }
 
+  await insertSeedAliases(db, NORMALIZER_VERSION, aliases)
   return { inserted, refreshed }
 }
 
