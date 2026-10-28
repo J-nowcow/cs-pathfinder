@@ -348,7 +348,7 @@ export function LibraryProgress({
             <button className={libraryButton} onClick={backup}>
               기술사·Jira 과제 답안 저장
             </button>
-            <label className={libraryButton + ' cursor-pointer'}>
+            <label className={libraryButton + ' cursor-pointer focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-accent'}>
               답안 파일 가져오기
               <input
                 className="sr-only"
