@@ -1,91 +1,29 @@
 // @vitest-environment happy-dom
-import { afterEach, beforeEach, expect, it, vi } from 'vitest'
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { afterEach, expect, it } from 'vitest'
+import { cleanup, render, screen } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { ConceptSteps } from '@/components/library/ConceptSteps'
+import { pmpCourse } from '@/lib/pmp/course'
 
 const steps = ['Set the purpose', 'Agree on delivery', 'Check the outcome']
-let preference: EventTarget & { matches: boolean }
-beforeEach(() => {
-  vi.useFakeTimers()
-  preference = Object.assign(new EventTarget(), { matches: false })
-  vi.stubGlobal('matchMedia', () => preference)
+afterEach(cleanup)
+it('keeps each authored procedure readable in its original order without playback controls', () => {
+  const { container } = render(<ConceptSteps steps={steps} />)
+  expect(screen.getByRole('list')).toBeTruthy()
+  expect(screen.getAllByRole('listitem').map(li => li.querySelector('div')?.textContent)).toEqual(steps)
+  expect(screen.queryAllByRole('button')).toEqual([])
+  expect(container.querySelectorAll('[tabindex], [aria-current], [role=status]')).toHaveLength(0)
 })
-afterEach(() => {
-  cleanup()
-  vi.useRealTimers()
-  vi.unstubAllGlobals()
-})
-it('server renders every authored step without requiring playback or JavaScript', () => {
-  const html = renderToString(<ConceptSteps steps={steps} />)
-  for (const text of steps) expect(html).toContain(text)
-  expect(html).not.toContain('aria-current="step"')
-  expect(html).toContain('disabled=""')
-})
-it('plays once only on request, supports manual steps and cancels work on unmount', () => {
-  const view = render(<ConceptSteps steps={steps} />)
-  expect(view.container.querySelector('[aria-current]')).toBeNull()
-  fireEvent.click(screen.getByRole('button', { name: '순서대로 보기' }))
-  expect(
-    screen.getByRole('button', { name: steps[0] }).getAttribute('aria-current'),
-  ).toBe('step')
-  act(() => {
-    vi.advanceTimersByTime(1400)
-  })
-  expect(
-    screen.getByRole('button', { name: steps[1] }).getAttribute('aria-current'),
-  ).toBe('step')
-  fireEvent.click(screen.getByRole('button', { name: '일시정지' }))
-  act(() => {
-    vi.advanceTimersByTime(10000)
-  })
-  expect(
-    screen.getByRole('button', { name: steps[1] }).getAttribute('aria-current'),
-  ).toBe('step')
-  fireEvent.click(screen.getByRole('button', { name: '다음 단계' }))
-  expect(
-    screen.getByRole('button', { name: steps[2] }).getAttribute('aria-current'),
-  ).toBe('step')
-  fireEvent.click(screen.getByRole('button', { name: '전체 보기' }))
-  expect(view.container.querySelector('[aria-current]')).toBeNull()
-  fireEvent.click(screen.getByRole('button', { name: '순서대로 보기' }))
-  for (let i = 0; i < steps.length; i++)
-    act(() => {
-      vi.advanceTimersByTime(1400)
-    })
-  expect(view.container.querySelector('[data-playing="true"]')).toBeNull()
-  fireEvent.click(screen.getByRole('button', { name: '순서대로 보기' }))
-  view.unmount()
-  expect(vi.getTimerCount()).toBe(0)
-})
-it('reduced motion uses direct selection and changing preference or hiding the page stops playback', () => {
-  preference.matches = true
-  const view = render(<ConceptSteps steps={steps} />)
-  expect(screen.queryByRole('button', { name: '순서대로 보기' })).toBeNull()
-  fireEvent.click(screen.getByRole('button', { name: '다음 단계' }))
-  expect(
-    screen.getByRole('button', { name: steps[0] }).getAttribute('aria-current'),
-  ).toBe('step')
-  act(() => {
-    preference.matches = false
-    preference.dispatchEvent(new Event('change'))
-  })
-  fireEvent.click(screen.getByRole('button', { name: '순서대로 보기' }))
-  act(() => {
-    preference.matches = true
-    preference.dispatchEvent(new Event('change'))
-  })
-  expect(view.container.querySelector('[data-playing="true"]')).toBeNull()
-  act(() => {
-    preference.matches = false
-    preference.dispatchEvent(new Event('change'))
-  })
-  fireEvent.click(screen.getByRole('button', { name: '순서대로 보기' }))
-  Object.defineProperty(document, 'hidden', { configurable: true, value: true })
-  fireEvent(document, new Event('visibilitychange'))
-  expect(view.container.querySelector('[data-playing="true"]')).toBeNull()
-  Object.defineProperty(document, 'hidden', {
-    configurable: true,
-    value: false,
-  })
+it('server renders every PMP procedure unchanged, including empty lists and literal markup text', () => {
+  for (const n of pmpCourse.nodes) {
+    const html = renderToString(<ConceptSteps steps={n.steps} />)
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    expect([...doc.querySelectorAll('li > div')].map(el => el.textContent)).toEqual(n.steps)
+    expect(doc.querySelector('button')).toBeNull()
+  }
+  expect(renderToString(<ConceptSteps steps={[]} />)).not.toContain('<li')
+  const html = renderToString(<ConceptSteps steps={['<img src=x onerror=alert(1)>']} />)
+  expect(html).toContain('&lt;img')
+  expect(html).not.toContain('<img')
+  expect(html).not.toContain('<button')
 })
