@@ -45,6 +45,8 @@ export interface Db extends Tx {
 type Holder = {
   __csqtDb?: Db | null
   __csqtMigrated?: boolean
+  /** Initialization must share the same lifetime as the database and pool. */
+  __csqtOpening?: Promise<Db> | null
   /**
    * 실제 Postgres일 때의 연결 풀.
    *
@@ -188,19 +190,17 @@ export function readMigrations(): Array<{ name: string; sql: string }> {
  * 그쪽 주석이 이 함정을 정확히 적어 놓고 정작 자기가 부르는 `getDb`가 그
  * 함정이었다.
  */
-let opening: Promise<Db> | null = null
-
 export async function getDb(): Promise<Db> {
   if (holder.__csqtDb && holder.__csqtMigrated) return holder.__csqtDb
 
-  if (!opening) {
-    opening = open().catch((e) => {
+  if (!holder.__csqtOpening) {
+    holder.__csqtOpening = open().catch((e) => {
       // 실패를 캐싱하면 다음 요청이 영영 같은 실패를 돌려받는다
-      opening = null
+      holder.__csqtOpening = null
       throw e
     })
   }
-  return opening
+  return holder.__csqtOpening
 }
 
 async function open(): Promise<Db> {
@@ -242,7 +242,7 @@ export async function getPool(): Promise<import('pg').Pool | null> {
 /** 테스트 격리용. 스키마를 통째로 다시 만든다. */
 export async function resetDb(): Promise<Db> {
   // 준비 중인 약속도 같이 비운다. 안 그러면 getDb가 옛 인스턴스를 계속 돌려준다
-  opening = null
+  holder.__csqtOpening = null
   holder.__csqtDb = null
   holder.__csqtMigrated = false
   // 풀도 같이 놓는다. 안 그러면 죽은 DB의 풀을 다음 사람이 받아 간다
