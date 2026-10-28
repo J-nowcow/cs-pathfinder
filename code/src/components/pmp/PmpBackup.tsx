@@ -61,9 +61,11 @@ export function PmpBackup() {
   const [ready, setReady] = useState(false),
     [message, setMessage] = useState(''),
     [pending, setPending] = useState<Pending | null>(null),
+    [loading, setLoading] = useState<string | null>(null),
     [choices, setChoices] = useState<PmpBackupChoices>({}),
     [stale, setStale] = useState(false)
   const serial = useRef(0),
+    inputRef = useRef<HTMLInputElement>(null),
     formId = useId()
   useEffect(() => {
     setReady(true)
@@ -131,7 +133,9 @@ export function PmpBackup() {
     setChoices({})
     setStale(false)
     setMessage('')
+    setLoading(file?.name ?? null)
     if (!file) return
+    setMessage('파일을 읽고 기록을 비교하고 있어요. 아직 저장하지 않았어요.')
     try {
       if (file.size > PMP_BACKUP_BYTES)
         throw Error('8MB 이하의 PMP 백업 파일을 골라 주세요.')
@@ -144,13 +148,29 @@ export function PmpBackup() {
       const { pmpQuestions } = await import('@/lib/pmp/questions')
       if (token !== serial.current) return
       setPending({ raw, name: file.name, baseline, questions: pmpQuestions })
+      setMessage('비교할 준비가 됐어요. 내용을 확인한 뒤 가져와 주세요.')
     } catch (e) {
       if (token === serial.current)
         setMessage(
           (e instanceof Error ? e.message : '파일을 읽지 못했어요.') +
             ' 현재 기록은 바꾸지 않았어요.',
         )
+    } finally {
+      if (token === serial.current) setLoading(null)
     }
+  }
+  function cancel() {
+    serial.current++
+    setLoading(null)
+    setPending(null)
+    setChoices({})
+    setStale(false)
+    setMessage(
+      loading !== null
+        ? '파일 확인을 취소했어요. 현재 기록은 그대로예요.'
+        : '가져오기를 취소했어요. 현재 기록은 그대로예요.',
+    )
+    inputRef.current?.focus()
   }
   function recheck() {
     try {
@@ -198,13 +218,14 @@ export function PmpBackup() {
         바꾸지 않아요. 현재 기록을 먼저 저장해 두면 비교 전에 되돌아갈 사본이
         남아요.
       </p>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3" aria-busy={loading !== null}>
         <button className={libraryButton} disabled={!ready} onClick={download}>
           PMP 기록 원본 저장
         </button>
-        <label className={libraryButton + ' cursor-pointer'}>
+        <label className={libraryButton + ' cursor-pointer focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-accent'}>
           PMP 백업 파일 비교
           <input
+            ref={inputRef}
             aria-label="PMP 백업 파일 비교"
             className="sr-only"
             type="file"
@@ -217,6 +238,13 @@ export function PmpBackup() {
           />
         </label>
       </div>
+      {loading !== null && (
+        <section className="pmp-backup-preview pmp-backup-loading" aria-label="백업 파일 확인 중">
+          <h3>백업 파일 확인 중</h3>
+          <p className="break-all">{loading}</p>
+          <button className={libraryButton} onClick={cancel}>파일 확인 취소</button>
+        </section>
+      )}
       {pending && (
         <section className="pmp-backup-preview" aria-label="PMP 백업 비교">
           <h3>가져오기 전 확인</h3>
@@ -308,12 +336,7 @@ export function PmpBackup() {
                 )}
                 <button
                   className={libraryButton}
-                  onClick={() => {
-                    serial.current++
-                    setPending(null)
-                    setChoices({})
-                    setMessage('가져오기를 취소했어요. 현재 기록은 그대로예요.')
-                  }}
+                  onClick={cancel}
                 >
                   취소
                 </button>
@@ -325,11 +348,7 @@ export function PmpBackup() {
       {pending && !preview?.plan && (
         <button
           className={libraryButton}
-          onClick={() => {
-            serial.current++
-            setPending(null)
-            setChoices({})
-          }}
+          onClick={cancel}
         >
           취소
         </button>
