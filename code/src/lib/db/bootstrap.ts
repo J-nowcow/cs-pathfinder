@@ -232,6 +232,13 @@ export async function seedExampleNodes(): Promise<{ inserted: number; refreshed:
  * 넘어가면 선이 사라진 것을 아무도 모른다. 세어 두면 부를 쪽에서 알아챌 수 있다.
  */
 export async function seedRelations(rels: SeedRelation[]): Promise<{ inserted: number; missing: number }> {
+  return seedRelationsWithPolicy(rels, false)
+}
+
+async function seedRelationsWithPolicy(
+  rels: SeedRelation[],
+  tolerateMissingRelationTable: boolean,
+): Promise<{ inserted: number; missing: number }> {
   if (rels.length === 0) return { inserted: 0, missing: 0 }
 
   const db = await getDb()
@@ -259,7 +266,22 @@ export async function seedRelations(rels: SeedRelation[]): Promise<{ inserted: n
     ready.push({ fromId: from, toId: to, kind: r.kind, source: 'llm', reason: r.reason, votes: r.votes })
   }
 
-  await saveRelations(ready)
+  try {
+    // Only this write targets the optional table; DB setup and qnode lookup must fail normally.
+    await saveRelations(ready, db)
+  } catch (e: unknown) {
+    /*
+     * 관계 표가 없어도 부팅은 끝난다.
+     *
+     * 관계는 질문 위에 얹는 덤이다. 그런데 이 단계가 터지면서 `ensureSeeded`가
+     * 실패했고 그것을 await하는 화면 전부가 500이 됐다 — 마이그레이션 0009를
+     * 프로덕션에 적용하지 않은 채 배포한 날 실제로 그랬다.
+     *
+     * 덤이 본체를 죽이면 안 된다. 다른 실패는 그대로 던진다.
+     */
+    if (!tolerateMissingRelationTable || !isMissingTable(e)) throw e
+    console.warn('[seed] semantic_relation이 없다. 관계 없이 띄운다 — npm run db:migrate')
+  }
   return { inserted: ready.length, missing }
 }
 
@@ -275,23 +297,10 @@ export function ensureSeeded(): Promise<void> {
   if (!seeding) {
     // 질문을 먼저 심는다. 관계는 질문을 찾아 잇는 것이라 순서가 뒤집히면 전부 못 찾는다
     seeding = seedExampleNodes()
-      .then(() => seedRelations(SEED_RELATIONS))
+      .then(() => seedRelationsWithPolicy(SEED_RELATIONS, true))
       .then(({ missing }) => {
         // 질문 문장을 고치면 여기가 어긋난다. 화면은 멀쩡해 보이고 선만 사라진다
         if (missing > 0) console.warn(`[seed] 관계 ${missing}개가 가리키는 질문을 못 찾았다`)
-      })
-      /*
-       * 관계 표가 없어도 부팅은 끝난다.
-       *
-       * 관계는 질문 위에 얹는 덤이다. 그런데 이 단계가 터지면서 `ensureSeeded`가
-       * 실패했고, 그것을 await하는 화면 전부가 500이 됐다 — 마이그레이션 0009를
-       * 프로덕션에 적용하지 않은 채 배포한 날 실제로 그랬다.
-       *
-       * 덤이 본체를 죽이면 안 된다. 다른 실패는 그대로 던진다.
-       */
-      .catch((e: unknown) => {
-        if (!isMissingTable(e)) throw e
-        console.warn('[seed] semantic_relation이 없다. 관계 없이 띄운다 — npm run db:migrate')
       })
       .catch((e) => {
         // 실패를 캐싱하면 다음 요청이 영영 빈 화면을 본다.
