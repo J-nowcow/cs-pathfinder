@@ -6,9 +6,9 @@ import {
   type CertificateEntry,
   type CertificateChange,
 } from '@/lib/certificate/storage'
-import { certificateLessons } from '@/lib/certificate/course'
+import { certificateCatalog as certificateLessons } from '@/lib/certificate/catalog'
 import { libraryButton } from '@/components/library/LibraryShell'
-export function CertificatePractice({ id }: { id: string }) {
+export function CertificatePractice({ id, recallAnswer }: { id: string; recallAnswer: string }) {
   const [entry, setEntry] = useState<CertificateEntry | null>(null),
     [draft, setDraft] = useState(''),
     [ready, setReady] = useState(false),
@@ -111,7 +111,7 @@ export function CertificatePractice({ id }: { id: string }) {
       </p>
       <details>
         <summary>설명 예시 확인</summary>
-        <p>{lesson.recallAnswer}</p>
+        <p>{recallAnswer}</p>
         <p className="study-meta">
           암기한 문장과 같을 필요는 없어요. 개념의 기준과 예외가 맞는지
           비교하세요.

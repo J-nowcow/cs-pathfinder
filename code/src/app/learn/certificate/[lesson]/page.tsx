@@ -99,7 +99,7 @@ export default async function CertificateLesson({
           <h2>함께 기억할 조건</h2>
           <p>{n.trap}</p>
         </aside>
-        <CertificatePractice key={n.id} id={n.id} />
+        <CertificatePractice key={n.id} id={n.id} recallAnswer={n.recallAnswer} />
         <section>
           <h2>참고한 자료</h2>
           {c.sources

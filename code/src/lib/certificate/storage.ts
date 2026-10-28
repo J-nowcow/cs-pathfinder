@@ -1,4 +1,4 @@
-import { certificateLessons } from './course'
+import { certificateCatalog as certificateLessons } from './catalog'
 import { kstToday } from '@/lib/daily/date'
 import { shiftDay } from '@/lib/streak/storage'
 export const CERTIFICATE_KEY = 'pathfinder.certificate.v1'
