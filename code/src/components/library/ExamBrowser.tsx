@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { StudyPractice } from './StudyPractice'
 import { libraryButton } from './LibraryShell'
 export type ExamQuestion = {
@@ -38,6 +38,18 @@ export function ExamBrowser({
     [review, setReview] = useState(''),
     [connection, setConnection] = useState(''),
     [page, setPage] = useState(0)
+  const resultStart = useRef<HTMLParagraphElement>(null)
+  const pageMovePending = useRef(false)
+  useEffect(() => {
+    if (!pageMovePending.current) return
+    pageMovePending.current = false
+    resultStart.current?.focus({ preventScroll: true })
+    resultStart.current?.scrollIntoView({ block: 'start', behavior: 'instant' })
+  }, [page])
+  const turnPage = (next: number) => {
+    pageMovePending.current = true
+    setPage(next)
+  }
   useEffect(() => {
     const id = new URLSearchParams(location.search).get('exam')
     if (id && questions.some((q) => q.id === id)) {
@@ -219,9 +231,11 @@ export function ExamBrowser({
         </div>
       </details>
       <p
+        ref={resultStart}
+        tabIndex={-1}
         role="status"
         aria-label="기출 검색 결과"
-        className="my-5 text-sm text-muted"
+        className="my-5 scroll-mt-8 text-sm text-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
       >
         {filtered.length.toLocaleString()}개 기록 ·{' '}
         {filtered.length
@@ -373,14 +387,14 @@ export function ExamBrowser({
         <button
           className={libraryButton}
           disabled={page === 0}
-          onClick={() => setPage(page - 1)}
+          onClick={() => turnPage(page - 1)}
         >
           ← 이전20개
         </button>
         <button
           className={libraryButton}
           disabled={(page + 1) * 20 >= filtered.length}
-          onClick={() => setPage(page + 1)}
+          onClick={() => turnPage(page + 1)}
         >
           다음20개 →
         </button>

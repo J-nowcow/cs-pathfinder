@@ -1,11 +1,17 @@
 // @vitest-environment happy-dom
-import { afterEach, describe, it, expect } from 'vitest'
+import { afterEach, describe, it, expect, vi } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ExamBrowser } from '@/components/library/ExamBrowser'
+import { emptyLibrary, updateStudy, LIBRARY_KEY } from '@/lib/library/storage'
 import index from '../../data/engineer-index.json'
 import guides from '../../data/engineer-guides.json'
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  vi.restoreAllMocks()
+  localStorage.removeItem(LIBRARY_KEY)
+  window.history.replaceState(null, '', '/')
+})
 const props = {
   questions: index.questions,
   topicTitles: Object.fromEntries(guides.map((g) => [g.id, g.title])),
@@ -76,5 +82,65 @@ describe('기출의 핵심·배경 및 분류 상태', () => {
     expect(
       screen.getByRole('status', { name: '기출 검색 결과' }).textContent,
     ).toContain('검색 결과 없음')
+  })
+})
+
+describe('exam result pagination reading position', () => {
+  it('preserves direct exam resume and opens its note without taking result-status focus', () => {
+    const question = index.questions[20]
+    window.history.replaceState(null, '', '/learn/engineer?exam=' + question.id + '#' + question.id)
+    const scroll = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {})
+    render(<ExamBrowser {...props} questions={index.questions.slice(0, 25)} />)
+    const article = screen.getByRole('article')
+    expect(article.id).toBe(question.id)
+    expect(article.querySelector('details[data-exam-note]')?.hasAttribute('open')).toBe(true)
+    expect(scroll).toHaveBeenCalledWith({ block: 'start' })
+    expect(document.activeElement).not.toBe(screen.getByRole('status', { name: '기출 검색 결과' }))
+  })
+
+  it('starts the next and previous result sets at their status, then tabs to their first link', async () => {
+    const user = userEvent.setup()
+    const scroll = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {})
+    render(<ExamBrowser {...props} questions={index.questions.slice(0, 25)} />)
+    const result = screen.getByRole('status', { name: '기출 검색 결과' })
+    expect(scroll).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: '다음20개 →' }))
+    expect(result.textContent).toContain('21–25')
+    expect(document.activeElement).toBe(result)
+    expect(scroll).toHaveBeenLastCalledWith({ block: 'start', behavior: 'instant' })
+    expect(screen.getByRole('button', { name: '다음20개 →' }).hasAttribute('disabled')).toBe(true)
+    expect(screen.getAllByRole('article')[0].id).toBe(index.questions[20].id)
+    await user.tab()
+    expect(document.activeElement).toBe(within(screen.getAllByRole('article')[0]).getByRole('link', { name: 'Q-Net 공식 문제지 ↗' }))
+    await user.click(screen.getByRole('button', { name: '← 이전20개' }))
+    expect(result.textContent).toContain('1–20')
+    expect(document.activeElement).toBe(result)
+    expect(scroll).toHaveBeenCalledTimes(2)
+    expect(screen.getByRole('button', { name: '← 이전20개' }).hasAttribute('disabled')).toBe(true)
+  })
+
+  it('keeps filter/reset focus and saved records when returning to the first result set', async () => {
+    const user = userEvent.setup()
+    const scroll = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {})
+    const question = index.questions[0]
+    const stored = JSON.stringify(updateStudy(emptyLibrary(), 'exam:' + question.id, {
+      title: 'Synthetic existing exam answer',
+      href: '/learn/engineer?exam=' + question.id + '#' + question.id,
+      track: 'engineer',
+    }, { draft: 'Synthetic existing draft', checks: ['Synthetic checked condition'], status: 'review' }, '2026-10-27T10:00:00.000Z'))
+    expect(JSON.parse(stored).entries['exam:' + question.id].due).toBe('2026-10-28')
+    localStorage.setItem(LIBRARY_KEY, stored)
+    render(<ExamBrowser {...props} questions={index.questions.slice(0, 25)} />)
+    await user.click(screen.getByRole('button', { name: '다음20개 →' }))
+    const filter = screen.getByLabelText('회차')
+    await user.selectOptions(filter, String(index.questions[0].round))
+    expect(document.activeElement).toBe(filter)
+    expect(screen.getByRole('status', { name: '기출 검색 결과' }).textContent).toContain('1–20')
+    expect(scroll).toHaveBeenCalledTimes(1)
+    const reset = screen.getByRole('button', { name: '조건 초기화' })
+    await user.click(reset)
+    expect(document.activeElement).toBe(reset)
+    expect(scroll).toHaveBeenCalledTimes(1)
+    expect(localStorage.getItem(LIBRARY_KEY)).toBe(stored)
   })
 })
