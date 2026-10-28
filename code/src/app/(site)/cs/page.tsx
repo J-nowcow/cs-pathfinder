@@ -127,7 +127,7 @@ export default async function HomePage() {
           오늘 질문부터
         </h1>
         <p className="relative mt-4 max-w-lg text-[15px] leading-[1.72] text-muted">
-          먼저 답을 떠올려 보고, 막힌 개념은 용어와 꼬리질문으로 이어서 공부하세요.
+          먼저 답을 떠올려 보고 막힌 개념은 용어와 꼬리질문으로 이어서 공부하세요.
           읽은 길은 내 질문 지도에 남습니다.
         </p>
         <nav aria-label="학습 시작 방법" className="relative mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[13px]">
