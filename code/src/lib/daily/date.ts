@@ -5,15 +5,17 @@
  * 서버가 UTC로 돌아도 사용자가 보는 "오늘"은 하나여야 한다.
  */
 const KST = 'Asia/Seoul'
+// Reuse only the fixed locale/time-zone formatter, never a formatted date value.
+const kstDayFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: KST,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+})
 
 /** 'YYYY-MM-DD'. en-CA 로케일이 ISO 순서로 찍어준다 */
 export function kstToday(now: Date = new Date()): string {
-  return new Intl.DateTimeFormat('en-CA', {
-    timeZone: KST,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(now)
+  return kstDayFormatter.format(now)
 }
 
 const DATE_SHAPE = /^(\d{4})-(\d{2})-(\d{2})$/
