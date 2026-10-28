@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { LearningAreas } from '../LearningAreas'
 import { OpenBookArt } from './BookArt'
+import pmpTitles from '../../../data/pmp-library.json'
 import { readLibraryProgress, type ProgressItem } from '@/lib/library/progress'
 import { LIBRARY_EVENT } from '@/lib/library/storage'
 import {
@@ -163,7 +163,7 @@ export function LibraryProgress({
     return (
       <>
         <p role="status">학습 기록을 불러오는 중…</p>
-        {mode === 'shelf' && <LearningAreas />}
+        <noscript><p>내 서재의 기록을 보려면 JavaScript가 필요합니다. <a href="/learn">학습 자료 둘러보기 →</a></p></noscript>
       </>
     )
   const latest = view.recent[0]
@@ -215,12 +215,12 @@ export function LibraryProgress({
         <li>
           <a href="/learn/pmp/n01">
             <span>PMP</span>
-            <strong>성공의 기준</strong>
+            <strong>{pmpTitles.nodes.find((n) => n.id === 'n01')!.title}</strong>
             <span aria-hidden="true">→</span>
           </a>
         </li>
         <li>
-          <a href="/jira/index.html#lesson/1">
+          <a href="/learn/jira">
             <span>Jira</span>
             <strong>기본 수업부터 읽기</strong>
             <span aria-hidden="true">→</span>
@@ -244,7 +244,14 @@ export function LibraryProgress({
             일부 기록을 읽지 못했어요. 브라우저 저장 설정을 확인하세요.
           </p>
         )}
-        {latest && focus}
+        {latest ? focus : (
+          <section className="desk-shelf-empty" aria-labelledby="shelf-empty-heading">
+            <OpenBookArt />
+            <h2 id="shelf-empty-heading">아직 읽은 자료가 없어요.</h2>
+            <p>자료를 읽거나 답안을 쓰면 이곳에서 이어 볼 수 있습니다.</p>
+            <a href="/learn" className="desk-primary">공부 자료 둘러보기 →</a>
+          </section>
+        )}
         {view.due.length > 0 && (
           <a
             className="desk-review-shortcut"
@@ -253,7 +260,16 @@ export function LibraryProgress({
             복습할 내용 {view.due.length}개 →
           </a>
         )}
-        <LearningAreas />
+        {!!previous.length && (
+          <section className="desk-section" aria-labelledby="shelf-recent-heading">
+            <div className="desk-section-heading"><h2 id="shelf-recent-heading">이전에 읽은 자료</h2></div>
+            {rows(previous.slice(0, 5))}
+          </section>
+        )}
+        <div className="desk-shelf-actions">
+          <a href="/learn/progress">복습·백업 열기 →</a>
+          <a href="/learn">다른 공부 자료 찾기 →</a>
+        </div>
       </div>
     )
 

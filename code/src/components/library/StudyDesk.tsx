@@ -10,11 +10,12 @@ export function StudyDesk({
   reading = false,
 }: {
   children: React.ReactNode
-  section?: 'library' | 'progress' | 'engineer' | 'jira' | 'pmp' | 'certificate'
+  section?: 'home' | 'library' | 'progress' | 'engineer' | 'jira' | 'pmp' | 'certificate'
   document?: boolean
   reading?: boolean
 }) {
   const name = {
+    home: '메인',
     library: '내 서재',
     progress: '복습·기록',
     engineer: '정보관리기술사',
@@ -24,7 +25,7 @@ export function StudyDesk({
   }[section]
   return (
     <div
-      className={'study-library study-desk' + (reading ? ' desk-reading' : '')}
+      className={'study-library study-desk' + (reading ? ' desk-reading' : '') + (section === 'home' ? ' desk-home' : '')}
       data-appearance="light"
       data-typography="presentation"
     >
@@ -43,18 +44,22 @@ export function StudyDesk({
           </span>
           CS 길라잡이
         </Link>
-        <div className="flex items-center gap-6">
-          <Link href="/learn" className="text-sm text-muted">
-            학습 분야
+        <nav aria-label="주요 메뉴" className="flex items-center gap-6">
+          <Link href="/learn" aria-current={section === 'home' ? 'page' : undefined} className="text-sm text-muted">
+            메인
+          </Link>
+          <Link href="/learn/library" prefetch={false} aria-current={section === 'library' ? 'page' : undefined} className="text-sm text-muted">
+            내 서재
           </Link>
           <DeskAppearance />
-        </div>
+        </nav>
       </header>
       <div className="desk-layout">
-        <aside className="desk-sidebar">
+        {section !== 'home' && <aside className="desk-sidebar">
           <nav aria-label="내 공부 메뉴">
+            <Link href="/learn">메인</Link>
             <Link
-              href="/learn"
+              href="/learn/library"
               aria-current={section === 'library' ? 'page' : undefined}
               className={section === 'library' ? 'desk-current' : ''}
             >
@@ -99,7 +104,7 @@ export function StudyDesk({
               기출 찾아보기
             </Link>
           </nav>
-        </aside>
+        </aside>}
         <main className="desk-main">
           <div className="desk-pagebar">
             {document ? (
@@ -117,7 +122,7 @@ export function StudyDesk({
           </div>
           <div className="study-content desk-content">{children}</div>
           <footer className="desk-footer">
-            <p>현재 브라우저에 저장된 학습 기록입니다.</p>
+            <p>{section === 'home' ? '읽던 자료와 학습 기록은 내 서재에서 이어 볼 수 있습니다.' : '현재 브라우저에 저장된 학습 기록입니다.'}</p>
             <div className="flex gap-5">
               <Link href="/privacy">개인정보처리방침</Link>
               <Link href="/terms">이용약관</Link>

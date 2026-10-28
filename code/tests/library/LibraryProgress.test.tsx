@@ -55,7 +55,7 @@ describe('통계보다 공부할 내용을 앞세우는 서재', () => {
     expect(disclosure.open).toBe(true)
     expect(localStorage.getItem(LIBRARY_KEY)).toBe(before)
   })
-  it('서재 첫 화면에는 이어 읽을 자료와 세 목적별 실제 링크를 표시한다', () => {
+  it('keeps personal resume/review in the shelf and points catalogue discovery to the separate home', () => {
     seed()
     render(
       <LibraryProgress
@@ -64,12 +64,8 @@ describe('통계보다 공부할 내용을 앞세우는 서재', () => {
       />,
     )
     expect(screen.getByRole('link', { name: '이어서 읽기' })).toBeTruthy()
-    expect(screen.getByRole('region', { name: '공부 자료' })).toBeTruthy()
-    expect(
-      screen
-        .getByRole('link', { name: '오프라인 ZIP 받기 ↓' })
-        .hasAttribute('download'),
-    ).toBe(true)
+    expect(screen.queryByRole('region', { name: '공부 자료' })).toBeNull()
+    expect(screen.getByRole('link', { name: '다른 공부 자료 찾기 →' }).getAttribute('href')).toBe('/learn')
     expect(
       screen
         .getByRole('link', { name: /복습할 내용 1개/ })

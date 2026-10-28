@@ -1,0 +1,81 @@
+.desk-home .desk-layout { display: block; }
+.desk-home .desk-main, .desk-home .desk-content { max-width: none; }
+.desk-home .desk-pagebar { margin-bottom: 16px; }
+.desk-home-intro {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding: 28px 0 44px;
+  margin-bottom: 28px;
+}
+.desk-home-intro > div:first-child { flex: 1 1 560px; }
+.study-content .desk-home-intro .desk-kicker {
+  color: var(--d0);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 18px;
+}
+.study-content .desk-home-intro h1 {
+  margin: 0;
+  font-size: clamp(32px, 3.3vw, 46px);
+  font-weight: 750;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+.study-content .desk-home-lead {
+  max-width: 620px;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.9;
+}
+.desk-home-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 26px;
+}
+.desk-home-actions .desk-primary { margin: 0; font-size: 16px; gap: 28px; }
+.desk-home-actions > a:not(.desk-primary) { font-size: 16px; color: var(--d0); padding: 14px 0; }
+.desk-home-art { flex: 0 1 230px; margin: auto; }
+.desk-home-art .desk-open-book {
+  width: 230px;
+  grid-area: auto;
+  transform: rotate(-4deg);
+  filter: drop-shadow(0 12px 14px #4a321d12);
+}
+.desk-home .desk-purpose-grid { align-items: stretch; gap: 24px; }
+.desk-home .desk-purpose-card {
+  background: var(--raised);
+  box-shadow: 0 2px 3px #49372206, 0 12px 26px #49372208;
+}
+.desk-home .desk-purpose-card > header { border-bottom: 1px solid #49372210; }
+.desk-home-return {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 42px;
+  padding: 26px 30px;
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.study-content .desk-home-return h2 { margin: 0 0 10px; font-size: 22px; font-weight: 700; }
+.study-content .desk-home-return p { margin: 0; font-size: 16px; line-height: 1.8; color: var(--muted); }
+.desk-home-return > a { font-size: 16px; font-weight: 600; color: var(--d0); padding: 12px 0; }
+.study-content .desk-library-intro { margin: 0 0 28px; color: var(--muted); font-size: 17px; }
+.desk-shelf-empty { padding: 36px 24px; border: 1px solid var(--line); border-radius: 16px; text-align: center; }
+.desk-shelf-empty .desk-open-book { width: 150px; margin: 0 auto 14px; }
+.study-content .desk-shelf-empty h2 { margin: 0 0 14px; font-size: 25px; font-weight: 700; }
+.study-content .desk-shelf-empty p { margin: 0; font-size: 16px; color: var(--muted); line-height: 1.8; }
+.desk-shelf-empty .desk-primary { margin-top: 24px; font-size: 16px; }
+.desk-shelf-actions { display: flex; flex-wrap: wrap; gap: 24px; padding: 26px 0; color: var(--d0); font-size: 16px; }
+.desk-home-actions a:focus-visible, .desk-home-return > a:focus-visible, .desk-shelf-actions a:focus-visible {
+  outline: 2px solid var(--d0);
+  outline-offset: 5px;
+  border-radius: 4px;
+}
