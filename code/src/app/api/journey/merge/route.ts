@@ -32,8 +32,6 @@ export async function POST(request: Request): Promise<Response> {
   const userId = await readUserId(request.headers)
   if (!userId) return json({ error: 'unauthorized' }, 401)
 
-  await ensureSeeded()
-
   let raw: unknown
   try {
     raw = await request.json()
@@ -45,6 +43,8 @@ export async function POST(request: Request): Promise<Response> {
   if (!parsed.success) {
     return json({ error: 'invalid_input', detail: parsed.error.issues[0]?.message }, 400)
   }
+
+  await ensureSeeded()
 
   const outcome = await mergeJourneyForUser(
     userId,
