@@ -76,6 +76,10 @@ function isUuid(key: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(key)
 }
 
+export function isNodeKey(key: string): boolean {
+  return isNumber(key) || isUuid(key)
+}
+
 /**
  * @param opts.withRelated 관련 질문까지 담을지. **기본은 담지 않는다.**
  *
@@ -89,7 +93,7 @@ export async function loadNode(
   opts: { withRelated?: boolean } = {},
 ): Promise<CachedNode | null> {
   /* 번호도 UUID도 아니면 찾을 것이 없다. 질의에 넣으면 500이 난다 */
-  if (!isNumber(nodeId) && !isUuid(nodeId)) return null
+  if (!isNodeKey(nodeId)) return null
 
   const db = await getDb()
 
