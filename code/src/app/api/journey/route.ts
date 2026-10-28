@@ -15,10 +15,10 @@ import { journeyToWire, journeyResponse as json } from '@/lib/journey/wire'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request): Promise<Response> {
-  await ensureSeeded()
-
   const userId = await readUserId(request.headers)
   if (!userId) return json({ error: 'unauthorized' }, 401)
+
+  await ensureSeeded()
 
   const snap = await loadJourneyForUser(userId)
   return json(journeyToWire(snap), 200)
