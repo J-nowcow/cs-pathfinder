@@ -4,7 +4,7 @@ import { learningMetadata, learningJsonLd } from '@/lib/seo/learning'
 export const metadata = learningMetadata('/cs')
 import { listRoots, countRoots, listRootsByQuestions } from '@/lib/db/roots'
 import { listTrees, BOARD_PAGE_SIZE } from '@/lib/db/trees'
-import { getTodayTree } from '@/lib/daily/today'
+import { getTodayFeature } from '@/lib/daily/today'
 import { RootCard } from '@/components/RootCard'
 import { HeroBackdrop } from '@/components/HeroBackdrop'
 import { TodayCard, type TodayFeature } from '@/components/TodayCard'
@@ -31,24 +31,17 @@ export const dynamic = 'force-dynamic'
 /**
  * 매일 발행이 아직 없을 때의 대비.
  *
- * getTodayTree는 발행분이 하나도 없으면 null을 준다. 그때 홈의 주인공 자리가
+ * getTodayFeature는 발행분이 하나도 없으면 null을 준다. 그때 홈의 주인공 자리가
  * 비면 서비스가 통째로 비어 보이므로 예시 루트의 첫 질문이 그 자리를 맡는다.
  * `isToday: false`라 화면은 "가장 최근 질문"이라고 부른다. 없는 발행을 있는 척하지 않는다.
  */
 async function loadFeature(): Promise<{ feature: TodayFeature | null; roots: Awaited<ReturnType<typeof listRoots>> }> {
-  const [today, roots] = await Promise.all([getTodayTree(), listRoots({ limit: FIRST_PAINT + 1 })])
+  const [today, roots] = await Promise.all([getTodayFeature(), listRoots({ limit: FIRST_PAINT + 1 })])
 
   if (today) {
     return {
       roots,
-      feature: {
-        nodeId: today.root.id,
-        question: today.root.question,
-        category: today.category,
-        excerpt: today.root.body.split('\n\n')[0] ?? '',
-        isToday: today.isToday,
-        treeSlug: today.slug,
-      },
+      feature: today,
     }
   }
 

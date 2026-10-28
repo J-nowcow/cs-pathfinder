@@ -31,6 +31,15 @@ export type DailyTree = {
   root: PublicNode
 }
 
+export type DailyFeature = {
+  nodeId: string
+  question: string
+  category: string
+  excerpt: string
+  isToday: boolean
+  treeSlug: string
+}
+
 type TreeRow = {
   id: string
   slug: string
@@ -51,6 +60,10 @@ const SELECT = `
   from tree t
   where t.kind = 'daily'
 `
+
+const LATEST_SELECT = `${SELECT} and t.publish_date <= $1::date
+     order by t.publish_date desc
+     limit 1`
 
 function isoOf(v: string | Date): string {
   return typeof v === 'string' ? new Date(v).toISOString() : v.toISOString()
@@ -104,12 +117,35 @@ async function hydrate(row: TreeRow | undefined, today: string): Promise<DailyTr
 export async function getTodayTree(today: string = kstToday()): Promise<DailyTree | null> {
   const db = await getDb()
   const rows = await db.query<TreeRow>(
-    `${SELECT} and t.publish_date <= $1::date
-     order by t.publish_date desc
-     limit 1`,
+    LATEST_SELECT,
     [today],
   )
   return hydrate(rows[0], today)
+}
+
+/** The home card needs no suggestions; keep the full reading APIs unchanged. */
+export async function getTodayFeature(today: string = kstToday()): Promise<DailyFeature | null> {
+  const db = await getDb()
+  const rows = await db.query<TreeRow>(LATEST_SELECT, [today])
+  const row = rows[0]
+  if (!row) return null
+
+  // Select the latest tree before checking its root, preserving the fallback boundary.
+  const nodes = await db.query<{ id: string; normalized_question: string; body: string }>(
+    `select id, normalized_question, body
+       from qnode where id = $1 and status = 'ready'`,
+    [row.root_node_id],
+  )
+  const node = nodes[0]
+  if (!node) return null
+  return {
+    nodeId: node.id,
+    question: node.normalized_question,
+    category: row.category,
+    excerpt: node.body.split('\n\n')[0] ?? '',
+    isToday: row.publish_date === today,
+    treeSlug: row.slug,
+  }
 }
 
 /**
