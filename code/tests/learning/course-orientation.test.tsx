@@ -16,6 +16,7 @@ import search from '../../data/learning-search.json'
 import pmpCatalog from '../../data/pmp-library.json'
 import jiraTitles from '../../learning-content/jira/title-editorial.json'
 import jiraCatalog from '../../data/jira-library.json'
+import jiraCopy from '../../learning-content/jira/copy-editorial.json'
 
 describe('official syllabus and public course orientation', () => {
   it('uses the 2027–2029 four-subject source and distinguishes partial content from unwritten units', () => {
@@ -122,6 +123,8 @@ describe('official syllabus and public course orientation', () => {
     runInNewContext(original, context)
     const before = JSON.parse(JSON.stringify(context.window.STUDY_DATA))
     const script = readFileSync('public/jira/app.js', 'utf8')
+    expect(script.startsWith("'use strict';\n")).toBe(true)
+    for (const value of Object.values(jiraCopy)) expect(script).toContain(value)
     runInNewContext(script.split('\n').find(line => line.startsWith('const lessonTitles='))!, context)
     const after = context.window.STUDY_DATA as typeof before
     expect(after.lessons).toHaveLength(10)
