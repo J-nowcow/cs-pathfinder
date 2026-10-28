@@ -74,9 +74,9 @@ export function CertificateBackup() {
     }
   }
   return (
-    <details id="certificate-backup" className="desk-utility">
+    <details className="desk-utility">
       <summary>정처기 기록 백업</summary>
-      <p>
+      <p id="certificate-backup" tabIndex={-1}>
         이 이론 자료의 메모·점검·복습 날짜를 저장해요. 서로 다른 기존 메모가
         있으면 가져오기를 중단해요. 다른 분야의 기록은 각 백업 화면을
         이용하세요.

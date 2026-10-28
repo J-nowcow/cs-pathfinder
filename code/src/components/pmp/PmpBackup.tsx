@@ -206,9 +206,9 @@ export function PmpBackup() {
     }
   }
   return (
-    <details id="pmp-backup" className="desk-utility pmp-backup">
+    <details className="desk-utility pmp-backup">
       <summary>PMP 기록 백업</summary>
-      <p>
+      <p id="pmp-backup" tabIndex={-1}>
         읽음·이동 경로·선택한 답·메모·회상 답변·복습·나중에 읽기와 이전 HTML의
         읽기 설정을 파일로 보관해요. 이전 통합 HTML에서 내보낸 JSON도 가져올 수
         있어요.
