@@ -46,7 +46,10 @@ export default async function CertificateLesson({
       description={n.question}
     >
       <article className="pmp-lesson certificate-lesson">
-        <p className="pmp-answer-lead">{n.lead}</p>
+        <aside className="lesson-takeaway" aria-label="이번 수업의 핵심">
+          <span className="lesson-eyebrow">이번 수업의 핵심</span>
+          <p className="pmp-answer-lead">{n.lead}</p>
+        </aside>
         <div className="pmp-body">
           {n.body.map((p) => (
             <p key={p}>{p}</p>
