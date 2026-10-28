@@ -102,7 +102,7 @@ export default async function PmpLesson({
         ) : null}
         {'worked' in n && n.worked?.length ? (
           <section>
-            <h2>계산 예제</h2>
+            <h2>적용 예제</h2>
             {n.worked.map((s, i) => (
               <p key={i}>{s}</p>
             ))}
