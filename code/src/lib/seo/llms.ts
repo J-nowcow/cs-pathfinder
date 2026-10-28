@@ -19,7 +19,7 @@ export function renderLlms(catalog: Catalog, base: string): string {
   const lines: string[] = [
     '# CS 길라잡이',
     '',
-    '> 한국어 CS 기술면접 해설과 PM 이론·자격증 대비 학습 서재. CS 해설은 "첫 문장이 곧 답" 구조이고, 해설마다 꼬리질문 5개로 더 깊이 팔 수 있다. 질문은 그래프로 이어져 있다. PMP·기술사·정보처리기사·Jira 수업은 아래의 정식 HTML 주소에서 읽을 수 있다.',
+    '> 한국어 CS 기술면접 해설과 PM 이론·자격증 대비 학습 서재. CS 해설은 "첫 문장이 곧 답" 구조이고 해설마다 꼬리질문 5개로 더 깊이 팔 수 있다. 질문은 그래프로 이어져 있다. PMP·기술사·정보처리기사·Jira 수업은 아래의 정식 HTML 주소에서 읽을 수 있다.',
     '',
     `- CS 질문 수: ${catalog.entries.length} (매일 아침 6시 KST 1개 추가)`,
     `- 전체 해설 전문(마크다운 한 파일): ${base}/llms-full.txt`,
@@ -52,7 +52,7 @@ export function renderLlmsFull(catalog: Catalog, base: string): string {
   const lines: string[] = [
     '# CS 길라잡이 — 해설 전문',
     '',
-    `> 한국어 CS 기술면접 질문 ${catalog.entries.length}개의 해설 전문과 PM·자격증 수업 안내. PM·자격증 수업의 전문은 연결된 HTML 주소에서 읽는다. 본문의 ':::이름 … :::' 블록은 도식(flow=순서, state=상태, stack=계층, tree=트리, timeline=시간축, note/warn=콜아웃) 문법이고, ==글==은 강조다.`,
+    `> 한국어 CS 기술면접 질문 ${catalog.entries.length}개의 해설 전문과 PM·자격증 수업 안내. PM·자격증 수업의 전문은 연결된 HTML 주소에서 읽는다. 본문의 ':::이름 … :::' 블록은 도식(flow=순서, state=상태, stack=계층, tree=트리, timeline=시간축, note/warn=콜아웃) 문법이고 ==글==은 강조다.`,
     '',
   ]
 
