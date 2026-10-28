@@ -1,0 +1,11 @@
+# One journey response contract
+
+`GET /api/journey` and `POST /api/journey/merge` returned the same snapshot using separate field mappers and separate private-response factories. The browser sync module declared a third, local version of that wire shape. A field or cache-policy edit could therefore diverge between a new device's initial load and a device's merge/retry response without sharing a compile-time contract.
+
+`lib/journey/wire.ts` now owns the response type, explicit snapshot projection and existing private JSON response policy. Both routes use the same mapper/factory; browser sync imports only the type. The module has no database, authentication, session state, process cache or network access. The projection explicitly includes only the existing occurrence ID, node ID, parent ID, question, category and current cursor. It does not spread arbitrary server fields into the response.
+
+This refactor preserves the field spelling/order, null cursors, status codes, content type and `private, no-store` header. Session ownership, validation, unknown-node dropping, DB source of question/category, additive path merge, logs, retry identity, local storage keys and sync events are unchanged. Authentication and seeding still run in their original order. There is no rollout activation, production DB operation or performance claim.
+
+Before the refactor, new contract tests passed against the original routes: identical empty response bytes, equal GET/merge/retry snapshots, stable path identities, server-owned labels, separate owners and propagation of session lookup failures. After the refactor the same tests still pass, alongside database journey, browser-sync, persistence and reading-view tests. A separate projection test verifies that extra account/database fields stay excluded and the source object is not mutated. Sessions in route tests are synthetic; PGlite does not establish OAuth or real PostgreSQL concurrency.
+
+The next optimization may inspect actual guest/session/focus/prefetch calls and their DB/seed path. This common response boundary supplies a regression seam for that work; it does not itself reduce query counts, CPU, connections or billed usage. Keep any future authentication-order or cache change in a separately measured and validated bundle.

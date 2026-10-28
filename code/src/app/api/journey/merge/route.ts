@@ -3,6 +3,7 @@ import { ensureSeeded } from '@/lib/db/bootstrap'
 import { readUserId } from '@/lib/auth/session'
 import { mergeJourneyForUser } from '@/lib/db/journeys'
 import { MAX_OCCURRENCES } from '@/lib/journey/storage'
+import { journeyToWire, journeyResponse as json } from '@/lib/journey/wire'
 
 /**
  * 여정 병합 (C4). **더하기만 한다** — 치환 엔드포인트(PUT)는 만들지
@@ -26,13 +27,6 @@ const bodySchema = z.object({
     .max(MAX_OCCURRENCES),
   current_id: z.string().min(1).max(64).nullable(),
 })
-
-function json(payload: unknown, status: number): Response {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' },
-  })
-}
 
 export async function POST(request: Request): Promise<Response> {
   await ensureSeeded()
@@ -68,18 +62,6 @@ export async function POST(request: Request): Promise<Response> {
         // 재시드로 사라진 노드의 흔적 — 정상 처리지만 규모는 지켜본다
         console.warn(`[journey/merge] dropped ${outcome.droppedUnknown} unknown-node steps (user=${userId})`)
       }
-      return json(
-        {
-          occurrences: outcome.journey.occurrences.map((o) => ({
-            id: o.id,
-            node_id: o.nodeId,
-            parent_id: o.parentId,
-            question: o.question,
-            category: o.category,
-          })),
-          current_id: outcome.journey.currentId,
-        },
-        200,
-      )
+      return json(journeyToWire(outcome.journey), 200)
   }
 }

@@ -3,6 +3,7 @@ import { mergeJourney, sanitizeForest } from '@/lib/journey/merge'
 import { EMPTY_JOURNEY, type JourneyState, type Occurrence } from '@/lib/journey/types'
 import { loadStreak, saveStreak } from '@/lib/streak/client'
 import { mergeStreak } from '@/lib/streak/merge'
+import type { WireJourney } from '@/lib/journey/wire'
 
 /**
  * 로그인 직후 한 번, 이 기기의 기록과 계정의 기록을 합친다 (C4).
@@ -67,15 +68,6 @@ async function run(userId: string): Promise<boolean> {
   }
   return true
 }
-
-type WireOccurrence = {
-  id: string
-  node_id: string
-  parent_id: string | null
-  question: string
-  category: string
-}
-type WireJourney = { occurrences: WireOccurrence[]; current_id: string | null }
 
 async function syncJourney(): Promise<boolean> {
   /*
