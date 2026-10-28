@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { ensureSeeded } from '@/lib/db/bootstrap'
-import { loadNode, isNodeKey } from '@/lib/expand/cache'
+import { loadPublicNodeForRender } from '@/lib/server/public-render-reads'
+import { relatedForDisplay } from '@/lib/expand/nodes'
 import { socialMeta } from '@/lib/site'
 import { headers } from 'next/headers'
 import { getQuota } from '@/lib/quota'
@@ -27,8 +27,7 @@ export async function generateMetadata({
   params: Promise<{ nodeId: string }>
 }): Promise<Metadata> {
   const { nodeId } = await params
-  if (isNodeKey(nodeId)) await ensureSeeded()
-  const node = await loadNode(nodeId)
+  const node = await loadPublicNodeForRender(nodeId)
 
   // 접미는 layout의 title template이 붙인다. 여기서 또 붙이면 두 번 나온다.
   if (!node) return { title: '없는 질문입니다' }
@@ -45,14 +44,13 @@ export async function generateMetadata({
 
 export default async function ReadPage({ params }: { params: Promise<{ nodeId: string }> }) {
   const { nodeId } = await params
-  if (!isNodeKey(nodeId)) notFound()
-  await ensureSeeded()
   /*
    * 관련 질문까지 함께 받는다. 화면이 따로 물으면 첫 화면에 목록이 없다가
    * 뒤늦게 튀어나온다 — 남은 횟수를 서버에서 받아 오는 것과 같은 이유다.
    */
-  const node = await loadNode(nodeId, { withRelated: true })
+  const node = await loadPublicNodeForRender(nodeId)
   if (!node) notFound()
+  const related = await relatedForDisplay(node.id)
 
   // 남은 횟수를 첫 화면부터 보여준다. 클라이언트가 따로 물으면 한 번 더 왕복하고
   // 그 사이에 숫자가 없는 순간이 생긴다. 확장 API와 같은 키로 조회해야
@@ -75,7 +73,7 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
       text: s.text,
       resolved: s.targetNodeId !== null,
     })),
-    related: node.related ?? [],
+    related,
   }
 
   /*
