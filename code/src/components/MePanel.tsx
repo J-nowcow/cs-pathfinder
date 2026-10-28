@@ -173,7 +173,7 @@ export function MePanel({ all, track }: { all: Candidate[]; track?: TrackSummary
             />
             <p className="text-[15px] leading-[1.7] text-muted">
               아직 열어 본 질문이 없습니다. 질문을 열어 본 날이 여기 잔디에 남습니다.{' '}
-              <Link href="/" className="rounded-sm font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+              <Link href="/cs" className="rounded-sm font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                 오늘의 질문 보기
               </Link>
             </p>

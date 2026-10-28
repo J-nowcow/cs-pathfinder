@@ -11,7 +11,7 @@ describe('public learning discovery coverage', () => {
     for (const n of pmpCourse.cases) expect(paths.get('/learn/pmp/case/' + n.id)?.title).toBe(n.title)
     for (const n of certificate.lessons) expect(paths.get('/learn/certificate/' + n.id)?.title).toBe(n.title)
     for (const n of guides) expect(paths.get('/learn/engineer/' + n.id)?.title).toBe(n.title)
-    expect(paths.size).toBe(74 + 3 + 16 + 24 + 6)
+    expect(paths.size).toBe(74 + 3 + 16 + 24 + 7)
   })
   it('publishes only canonical content paths, never records, query parameters, fragments or retired editions', () => {
     for (const p of learningPages) {
@@ -39,7 +39,7 @@ describe('public learning discovery coverage', () => {
     expect(learningMetadata('/learn/certificate/keys').title).toContain('정보처리기사')
   })
   it('describes actual navigation with no invented breadcrumb levels or invalid-page markup', () => {
-    expect(learningBreadcrumbs('/learn/pmp/n01').map((p) => p.path)).toEqual(['/learn', '/learn/pmp', '/learn/pmp/n01'])
+    expect(learningBreadcrumbs('/learn/pmp/n01').map((p) => p.path)).toEqual(['/', '/learn/pmp', '/learn/pmp/n01'])
     for (const p of learningPages) {
       const chain = learningBreadcrumbs(p.path)
       expect(new Set(chain.map((n) => n.path)).size).toBe(chain.length)
@@ -49,11 +49,11 @@ describe('public learning discovery coverage', () => {
   })
   it('serves the static learning sitemap even if any database access would fail', async () => {
     vi.doMock('@/lib/db/client', () => ({ getDb: () => { throw new Error('DB must stay asleep') } }))
-    const { GET, dynamic } = await import('@/app/learn/sitemap.xml/route')
+    const { GET, dynamic } = await import('@/app/(study)/learn/sitemap.xml/route')
     expect(dynamic).toBe('force-static')
     const response = GET(), xml = await response.text()
     expect(response.headers.get('content-type')).toContain('application/xml')
-    expect(xml.match(/<loc>/g)).toHaveLength(123)
+    expect(xml.match(/<loc>/g)).toHaveLength(124)
     expect(xml).not.toContain('<lastmod>')
     vi.doUnmock('@/lib/db/client')
   })

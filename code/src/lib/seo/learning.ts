@@ -47,6 +47,7 @@ export function learningJsonLd(path: string) {
         ...(page.article ? { headline: page.title, mainEntityOfPage: url, isAccessibleForFree: true } : { name: page.title }),
         description: page.description, inLanguage: 'ko',
         isPartOf: { '@type': 'WebSite', '@id': new URL('/#website', base).href, name: SITE_NAME } },
+      ...(path === '/' ? [{ '@type': 'WebSite', '@id': new URL('/#website', base).href, name: SITE_NAME, url, description: page.description, inLanguage: 'ko' }] : []),
       ...(chain.length > 1 ? [{ '@type': 'BreadcrumbList',
         itemListElement: chain.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.title, item: new URL(p.path, base).href })) }] : []),
     ],

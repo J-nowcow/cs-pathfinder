@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 
-const home = readFileSync(new URL('../../src/app/(site)/page.tsx', import.meta.url), 'utf8')
+const home = readFileSync(new URL('../../src/app/(site)/cs/page.tsx', import.meta.url), 'utf8')
 const resume = readFileSync(
   new URL('../../src/components/ResumeQuestionMaker.tsx', import.meta.url),
   'utf8',

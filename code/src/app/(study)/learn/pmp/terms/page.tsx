@@ -9,7 +9,7 @@ export default function Terms() {
     <LibraryShell
       eyebrow="PMP · 용어집"
       title="PMP 용어집"
-      description="한 줄 뜻을 확인하고, 연결된 수업에서 맥락을 함께 읽습니다."
+      description="한 줄 뜻을 확인하고 연결된 수업에서 맥락을 함께 읽습니다."
     >
       <LearningSeo path="/learn/pmp/terms" />
       <dl className="pmp-glossary">

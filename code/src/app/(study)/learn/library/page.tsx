@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { StudyDesk } from '@/components/library/StudyDesk'
 import { LibraryProgress } from '@/components/library/LibraryProgress'
-import classifications from '../../../../learning-content/engineer/classification-reviews.json'
+import classifications from '../../../../../learning-content/engineer/classification-reviews.json'
 
 export const metadata: Metadata = {
   robots: { index: false, follow: true },

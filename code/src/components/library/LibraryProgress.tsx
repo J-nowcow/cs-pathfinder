@@ -163,7 +163,7 @@ export function LibraryProgress({
     return (
       <>
         <p role="status">학습 기록을 불러오는 중…</p>
-        <noscript><p>내 서재의 기록을 보려면 JavaScript가 필요합니다. <a href="/learn">학습 자료 둘러보기 →</a></p></noscript>
+        <noscript><p>내 서재의 기록을 보려면 JavaScript가 필요합니다. <a href="/">학습 자료 둘러보기 →</a></p></noscript>
       </>
     )
   const latest = view.recent[0]
@@ -249,7 +249,7 @@ export function LibraryProgress({
             <OpenBookArt />
             <h2 id="shelf-empty-heading">아직 읽은 자료가 없어요.</h2>
             <p>자료를 읽거나 답안을 쓰면 이곳에서 이어 볼 수 있습니다.</p>
-            <a href="/learn" className="desk-primary">공부 자료 둘러보기 →</a>
+            <a href="/" className="desk-primary">공부 자료 둘러보기 →</a>
           </section>
         )}
         {view.due.length > 0 && (
@@ -268,7 +268,7 @@ export function LibraryProgress({
         )}
         <div className="desk-shelf-actions">
           <a href="/learn/progress">복습·백업 열기 →</a>
-          <a href="/learn">다른 공부 자료 찾기 →</a>
+          <a href="/">다른 공부 자료 찾기 →</a>
         </div>
       </div>
     )

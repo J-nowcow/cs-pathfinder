@@ -1,16 +1,23 @@
 [
   {
-    "path": "/learn",
+    "path": "/",
     "title": "PM·CS 학습 길라잡이",
     "description": "PM 이론·CS 이론·자격증 대비 자료를 둘러보고 개념과 사례, 연습으로 공부합니다.",
     "parent": null,
     "article": false
   },
   {
+    "path": "/cs",
+    "title": "CS 면접 공부",
+    "description": "하루에 질문 하나. 꼬리에 꼬리를 무는 CS 면접 공부.",
+    "parent": "/",
+    "article": false
+  },
+  {
     "path": "/learn/pmp",
     "title": "프로젝트 관리·PMP 학습 목차",
     "description": "PMP 개념·사례·계산 실습을 14장·74수업으로 읽습니다. 독립 자습 자료이며 PMI 공식 교재나 공인 교육시간 과정은 아닙니다.",
-    "parent": "/learn",
+    "parent": "/",
     "article": false
   },
   {
@@ -24,21 +31,21 @@
     "path": "/learn/engineer",
     "title": "정보관리기술사 개념·기출 목차",
     "description": "24개 핵심 주제의 개념·비교·답안 연습과 60회차 기출 위치 색인.",
-    "parent": "/learn",
+    "parent": "/",
     "article": false
   },
   {
     "path": "/learn/certificate",
     "title": "정보처리기사 이론·출제기준 목차",
     "description": "2027–2029 큐넷 출제기준의 필기 4과목·실기 목차와 현재 제공하는 16개 기초 이론 수업. DB·SQL·테스트·IPv4의 일부 개념을 다루며 전체 시험 대비 과정은 아닙니다.",
-    "parent": "/learn",
+    "parent": "/",
     "article": false
   },
   {
     "path": "/learn/jira",
     "title": "Jira 작업 관리 연습",
     "description": "가상 작업 데이터로 요구·흐름·검색·변경·보고를 연습합니다. 회사 Jira와 연결되지 않는 연습용 자료입니다.",
-    "parent": "/learn",
+    "parent": "/",
     "article": false
   },
   {
@@ -317,7 +324,7 @@
   {
     "path": "/learn/pmp/n40",
     "title": "작업성과 데이터·정보·보고서",
-    "description": "관측 데이터에서 맥락을 해석하고 의사결정을 위한 보고로 연결하는 단계가 다르다.",
+    "description": "관측 데이터에서 맥락을 해석하는 단계와 의사결정을 위한 보고로 연결하는 단계는 다르다.",
     "parent": "/learn/pmp",
     "article": true
   },
