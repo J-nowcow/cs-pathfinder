@@ -1,3 +1,4 @@
+import { pmpQuestions } from '@/lib/pmp/questions'
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import { notFound } from 'next/navigation'
@@ -29,7 +30,7 @@ export default async function PmpCase({
       <LearningSeo path={'/learn/pmp/case/' + c.id} />
       <div className="pmp-lesson">
         {c.questions.map((q) => (
-          <PmpPractice key={q.id} id={q.id} />
+          <PmpPractice key={q.id} question={pmpQuestions.get(q.id)!} />
         ))}
         <details className="pmp-original">
           <summary>사례 해설 펼치기</summary>

@@ -3,6 +3,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { PmpPractice } from '@/components/pmp/PmpPractice'
 import { PMP_KEY } from '@/lib/pmp/storage'
+import { pmpQuestions } from '@/lib/pmp/questions'
 
 beforeEach(() => localStorage.clear())
 afterEach(() => {
@@ -10,7 +11,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 it('only shows a success check after durable local storage, preserving reload and legacy keys', () => {
-  const view = render(<PmpPractice id="n01" visit />)
+  const view = render(<PmpPractice question={pmpQuestions.get('n01')!} visit />)
   const note = screen.getByLabelText('내 메모')
   fireEvent.change(note, { target: { value: 'Synthetic note' } })
   expect(screen.getByRole('status').getAttribute('data-state')).toBe('saved')
@@ -18,14 +19,14 @@ it('only shows a success check after durable local storage, preserving reload an
   const saved = JSON.parse(localStorage.getItem(PMP_KEY)!)
   expect(saved.notes.n01).toBe('Synthetic note')
   view.unmount()
-  render(<PmpPractice id="n01" visit />)
+  render(<PmpPractice question={pmpQuestions.get('n01')!} visit />)
   expect((screen.getByLabelText('내 메모') as HTMLTextAreaElement).value).toBe(
     'Synthetic note',
   )
   expect(screen.getByRole('status').querySelector('svg')).toBeNull()
 })
 it('removes the success check on quota failure and retains the current input and previous stored note', () => {
-  render(<PmpPractice id="n01" visit />)
+  render(<PmpPractice question={pmpQuestions.get('n01')!} visit />)
   fireEvent.change(screen.getByLabelText('내 메모'), {
     target: { value: 'Stored' },
   })

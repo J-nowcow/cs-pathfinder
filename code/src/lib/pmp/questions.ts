@@ -9,4 +9,4 @@ export type PmpQuestion = {
 export const pmpQuestions = new Map<string, PmpQuestion>(
   questions.map((q) => [q.id, q]),
 )
-export const isPmpLesson = (id: string) => pmpQuestions.get(id)?.node === id
+export { isPmpLesson } from './grading'

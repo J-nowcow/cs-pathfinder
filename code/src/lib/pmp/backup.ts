@@ -1,4 +1,4 @@
-import { isPmpLesson, pmpQuestions } from './questions'
+import { isPmpLesson, pmpGrading } from './grading'
 import { PMP_KEY, type PmpData } from './storage'
 type Bag = Record<string, unknown>
 const bag = (v: unknown): v is Bag =>
@@ -77,7 +77,7 @@ export function parsePmpBackup(raw: string | null): PmpData {
         return fail()
       }
       if (field === 'answers') {
-        const q = pmpQuestions.get(id)
+        const q = pmpGrading.get(id)
         if (!q || !bag(x)) return fail()
         keys(x, ['index', 'correct', 'at'])
         if (
@@ -118,7 +118,7 @@ export function parsePmpBackup(raw: string | null): PmpData {
     own(v, 'bookmarks') &&
     (!Array.isArray(v.bookmarks) ||
       v.bookmarks.length >
-        [...pmpQuestions.keys()].filter(isPmpLesson).length ||
+        [...pmpGrading.keys()].filter(isPmpLesson).length ||
       !v.bookmarks.every((x) => typeof x === 'string' && isPmpLesson(x)))
   )
     return fail()

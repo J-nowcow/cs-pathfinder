@@ -1,3 +1,4 @@
+import { pmpQuestions } from '@/lib/pmp/questions'
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
@@ -127,7 +128,7 @@ export default async function PmpLesson({
         ) : null}
         {n.id === 'n35' ? <PmpEvmLab /> : null}
         {n.id === 'n27' ? <PmpRiskLab /> : null}
-        <PmpPractice key={n.id} id={n.id} visit />
+        <PmpPractice key={n.id} question={pmpQuestions.get(n.id)!} visit />
         <section>
           <h2>이 수업의 용어</h2>
           <dl className="pmp-terms-inline">

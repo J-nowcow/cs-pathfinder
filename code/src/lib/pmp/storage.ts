@@ -1,4 +1,4 @@
-import { isPmpLesson, pmpQuestions } from './questions'
+import { isPmpLesson, pmpGrading } from './grading'
 export const PMP_KEY = 'pmp-pathfinder-v1'
 export const PMP_EVENT = 'pathfinder-pmp-updated'
 type Bag = Record<string, unknown>
@@ -36,7 +36,7 @@ export function changePmp(
   change: PmpChange,
   now = new Date(),
 ): PmpData {
-  const question = pmpQuestions.get(change.id)
+  const question = pmpGrading.get(change.id)
   if (!question) throw Error('알 수 없는 PMP 항목이에요.')
   const next = { ...data },
     at = now.toISOString()
