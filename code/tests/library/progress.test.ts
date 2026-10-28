@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { readLibraryProgress } from '@/lib/library/progress'
+import currentTitles from '../../data/library-titles.json'
 import { emptyLibrary, updateStudy, LIBRARY_KEY } from '@/lib/library/storage'
 const now = new Date('2026-10-27T02:00:00Z')
 describe('기존 학습 기록을 덮어쓰지 않는 통합 보기', () => {
@@ -58,6 +59,25 @@ describe('기존 학습 기록을 덮어쓰지 않는 통합 보기', () => {
     expect(v.due[0].href).toBe('/learn/jira#scope')
     expect(v.missionCount).toBe(1)
     expect(v.cards.find((x) => x.id === 'jira')?.href).toBe('/learn/jira#scope')
+  })
+  it('uses current catalogue titles for legacy records without rewriting backups or exam labels', () => {
+    const stamp = '2026-10-25T01:00:00Z'
+    const make = (title: string, track: 'engineer' | 'jira', href: string) => ({
+      title, track, href, visitedAt: stamp, updatedAt: stamp, draft: 'Synthetic retained answer', checks: [], status: 'review', due: '2026-10-26',
+    })
+    const raw = JSON.stringify({ version: 1, entries: {
+      'topic:observability': make('Legacy topic label', 'engineer', '/learn/engineer/observability'),
+      'mission:scope': make('Legacy mission label', 'jira', '/learn/jira#scope'),
+      'exam:custom': make('Retained exam label', 'engineer', '/learn/engineer#custom'),
+    } })
+    const storage = { getItem: (key: string) => key === LIBRARY_KEY ? raw : null }
+    const result = readLibraryProgress(storage, now)
+    expect(result.recent.find(x => x.id === 'topic:observability')?.title).toBe(currentTitles['topic:observability'])
+    expect(result.due.find(x => x.id === 'mission:scope')?.title).toBe(currentTitles['mission:scope'])
+    expect(result.recent.find(x => x.id === 'exam:custom')?.title).toBe('Retained exam label')
+    expect(result.recent.every(x => x.excerpt === 'Synthetic retained answer')).toBe(true)
+    expect(storage.getItem(LIBRARY_KEY)).toBe(raw)
+    expect(JSON.parse(raw).entries['mission:scope'].title).toBe('Legacy mission label')
   })
   it('저장소 차단과 손상 JSON에서도 화면용 기본값을 돌려준다', () => {
     expect(

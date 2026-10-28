@@ -10,6 +10,7 @@ import { readLibraryStrict } from './local-edit'
 import { kstToday } from '@/lib/daily/date'
 import pmp from '../../../data/pmp-library.json'
 import jira from '../../../data/jira-library.json'
+import titlesByLibraryId from '../../../data/library-titles.json'
 import { CERTIFICATE_KEY, readCertificate } from '@/lib/certificate/storage'
 import { certificateCatalog as certificateLessons } from '@/lib/certificate/catalog'
 import { certificateHref } from '@/lib/certificate/routes'
@@ -147,7 +148,8 @@ export function readLibraryProgress(
     const item = {
       id,
       track: e.track === 'jira' ? 'Jira 과제' : '기술사',
-      title: e.title,
+      // Presentation only: never rewrite the title stored in a study backup.
+      title: (titlesByLibraryId as Record<string, string>)[id] ?? e.title,
       href: e.href,
       at: e.visitedAt > e.updatedAt ? e.visitedAt : e.updatedAt,
       ...(e.draft.trim() ? { excerpt: e.draft.trim().slice(0, 180) } : {}),
