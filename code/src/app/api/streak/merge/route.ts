@@ -29,8 +29,6 @@ export async function POST(request: Request): Promise<Response> {
   const userId = await readUserId(request.headers)
   if (!userId) return json({ error: 'unauthorized' }, 401)
 
-  await ensureSeeded()
-
   let raw: unknown
   try {
     raw = await request.json()
@@ -45,6 +43,8 @@ export async function POST(request: Request): Promise<Response> {
   if (Object.keys(parsed.data.days).length > MAX_DAYS) {
     return json({ error: 'invalid_input', detail: '날짜가 너무 많다' }, 400)
   }
+
+  await ensureSeeded()
 
   const merged = await mergeStreakForUser(userId, parsed.data.days)
   return json({ days: merged.days }, 200)

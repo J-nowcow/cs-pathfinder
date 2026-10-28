@@ -54,8 +54,6 @@ const REASON_TEXT: Record<SnapshotReason, string> = {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  await ensureSeeded()
-
   let raw: unknown
   try {
     raw = await request.json()
@@ -67,6 +65,8 @@ export async function POST(request: Request): Promise<Response> {
   if (!parsed.success) {
     return json({ error: 'invalid_input', detail: parsed.error.issues[0]?.message ?? '' }, 400)
   }
+
+  await ensureSeeded()
 
   const body = parsed.data
 
