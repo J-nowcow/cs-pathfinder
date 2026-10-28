@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import release from '../../data/pmp-release.json'
 import { BookArt } from './library/BookArt'
 
 export function LearningAreas() {
@@ -35,18 +34,6 @@ export function LearningAreas() {
                 </Link>
               </li>
             </ul>
-            <details className="desk-purpose-downloads">
-              <summary>PMP 오프라인 자료·안내</summary>
-              <a href={release.links.offline} download>
-                오프라인 ZIP 받기 ↓
-              </a>
-              <a href={release.links.reader}>이전 전체 읽기 HTML →</a>
-              <p>
-                {release.asof} 확인본입니다. PMI 공식 교재나 공인 교육시간
-                과정은 아닙니다. PMP 진도·메모는 CS 계정 기록과 별도로 이
-                브라우저에 저장됩니다. 내려받은 파일은 자동 갱신되지 않습니다.
-              </p>
-            </details>
           </div>
         </section>
         <section

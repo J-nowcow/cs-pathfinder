@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import release from '../../data/pmp-release.json'
 
@@ -20,14 +20,13 @@ describe('PMP reviewed content package', () => {
     expect(course.nodes.length + course.cases.reduce((n: number, item: { questions: unknown[] }) => n + item.questions.length, 0)).toBe(release.stats.questions)
   })
 
-  it('links the app to real same-origin learning and offline files', () => {
+  it('retains the reviewed archive outside public serving assets', () => {
     for (const url of Object.values(release.links)) {
       expect(url.startsWith('/pmp/')).toBe(true)
-      expect(readFileSync(resolve('public', decodeURIComponent(url.split('#')[0].slice(1)))).length).toBeGreaterThan(0)
+      expect(readFileSync(resolve('pm-content/pmp/downloads', decodeURIComponent(url.split('#')[0].split('/').pop()!))).length).toBeGreaterThan(0)
     }
-    const live = JSON.parse(readFileSync(resolve('public/pmp/release.json'), 'utf8'))
-    expect(live).toEqual(release)
-    const reader = readFileSync(resolve('public', decodeURIComponent(release.links.reader.split('#')[0].slice(1))), 'utf8')
+    expect(existsSync(resolve('public/pmp'))).toBe(false)
+    const reader = readFileSync(resolve('pm-content/pmp/downloads', decodeURIComponent(release.links.reader.split('#')[0].split('/').pop()!)), 'utf8')
     expect(release.links.reader).toBe(`${release.links.study}#reader-top`)
     expect(reader).toContain('id="pmp-reader"')
     expect(reader).toContain('id="pmp-interactive" hidden')

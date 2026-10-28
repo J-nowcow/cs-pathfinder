@@ -3,7 +3,6 @@ import { PmpBackup } from '@/components/pmp/PmpBackup'
 import { PmpSearchForm } from '@/components/pmp/PmpSearchForm'
 import { StudyDesk } from '@/components/library/StudyDesk'
 import { pmpCourse as c, lessonById, pmpLessonHref } from '@/lib/pmp/course'
-import release from '../../../../data/pmp-release.json'
 export const metadata = { title: '프로젝트·제품 관리' }
 export default function PmpHome() {
   return (
@@ -75,19 +74,15 @@ export default function PmpHome() {
       </section>
       <PmpBackup />
       <details className="pmp-original">
-        <summary>자료 범위와 오프라인 원본</summary>
+        <summary>자료 범위와 실습 안내</summary>
         <p>
           {c.asof} 확인본 · {c.nodes.length}수업. PMI 공식 교재나 합격·공인
           교육시간을 보장하는 과정은 아닙니다. 본문·비교표·심화 사례·상황
           문제·메모·복습·전체 기록 백업은 서재 안에서 이용합니다. 여유시간
           실습은 44번, 성과가치 실습은 35번, 기대손실 실습은 27번 수업에서
-          이용할 수 있습니다. 4작업 임계 경로 실습은 이전 통합 HTML에서
-          제공합니다.
+          이용할 수 있습니다. 4작업 임계 경로 실습은 현재 서재에서 지원하지
+          않습니다.
         </p>
-        <a href={release.links.study}>이전 통합 HTML 열기 →</a>
-        <a href={release.links.offline} download>
-          오프라인 ZIP 받기 ↓
-        </a>
       </details>
     </StudyDesk>
   )

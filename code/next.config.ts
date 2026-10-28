@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
    * 원인이 잘 보이지 않는다.
    */
   serverExternalPackages: ['@electric-sql/pglite'],
+  async redirects() {
+    return [{ source: '/pmp/:path*', destination: '/learn/pmp', permanent: false }]
+  },
 }
 
 export default nextConfig
