@@ -2,10 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const expandMock = vi.fn()
 const afterMock = vi.fn()
+const seedMock = vi.fn()
+const callerMock = vi.fn()
 vi.mock('@/lib/expand', () => ({ expand: (...a: unknown[]) => expandMock(...a) }))
 // Route-contract tests use a mocked expansion result. Keep real bootstrap and
 // background embedding out of the shared test DB; both have dedicated suites.
-vi.mock('@/lib/db/bootstrap', () => ({ ensureSeeded: async () => {} }))
+vi.mock('@/lib/db/bootstrap', () => ({ ensureSeeded: () => seedMock() }))
+vi.mock('@/lib/llm/resolve', () => ({ resolveCaller: () => callerMock() }))
+vi.mock('@/lib/embed/backfill', () => ({ backfillEmbedding: vi.fn() }))
 vi.mock('@/lib/next/safe-after', () => ({ safeAfter: (...a: unknown[]) => afterMock(...a) }))
 
 const { POST } = await import('@/app/api/expand/route')
@@ -47,6 +51,8 @@ describe('POST /api/expand', () => {
   beforeEach(() => {
     expandMock.mockReset()
     afterMock.mockReset()
+    seedMock.mockReset().mockResolvedValue(undefined)
+    callerMock.mockReset().mockReturnValue(undefined)
   })
 
   it('returns 200 with node payload on success', async () => {
@@ -169,5 +175,105 @@ describe('POST /api/expand', () => {
     expandMock.mockResolvedValue(okOutcome)
     await POST(req(validBody))
     expect(expandMock.mock.calls[0][0].quotaKey).toBe('anon:unknown')
+  })
+
+  it.each([
+    ['malformed JSON', 'not json'],
+    ['empty body', ''],
+    ['null JSON', 'null'],
+    ['array JSON', '[]'],
+    ['missing fields', JSON.stringify({ mode: 'free' })],
+    ['invalid parent UUID', JSON.stringify({ ...validBody, parent_node_id: 'invalid' })],
+    ['invalid ancestor UUID', JSON.stringify({ ...validBody, ancestor_node_ids: ['invalid'] })],
+    ['invalid mode', JSON.stringify({ ...validBody, mode: 'invalid' })],
+    ['empty idempotency key', JSON.stringify({ ...validBody, idempotency_key: '' })],
+  ])('rejects %s before seed or expansion work', async (_label, body) => {
+    const res = await POST(new Request('http://localhost/api/expand', { method: 'POST', body }))
+    expect(res.status).toBe(400)
+    expect((await res.json()).error).toBe('invalid_input')
+    expect(res.headers.get('cache-control')).toBe('private, no-store')
+    expect(res.headers.get('content-type')).toBe('application/json')
+    expect(seedMock).not.toHaveBeenCalled()
+    expect(expandMock).not.toHaveBeenCalled()
+    expect(callerMock).not.toHaveBeenCalled()
+    expect(afterMock).not.toHaveBeenCalled()
+  })
+
+  it.each(['rejected', 'pending'] as const)('returns existing invalid responses without awaiting a %s seed', async (state) => {
+    if (state === 'rejected') seedMock.mockImplementation(() => { throw Error('synthetic seed outage') })
+    else seedMock.mockReturnValue(new Promise<void>(() => {}))
+    const malformed = await POST(new Request('http://localhost/api/expand', { method: 'POST', body: 'not json' }))
+    expect(malformed.status).toBe(400)
+    expect(await malformed.text()).toBe(JSON.stringify({ error: 'invalid_input', detail: 'JSON 본문을 읽을 수 없습니다.' }))
+    expect((await POST(req({ mode: 'free' }))).status).toBe(400)
+    expect(seedMock).not.toHaveBeenCalled()
+    expect(expandMock).not.toHaveBeenCalled()
+    expect(callerMock).not.toHaveBeenCalled()
+    expect(afterMock).not.toHaveBeenCalled()
+  })
+
+  it('preserves accepted free defaults, non-UUID nonempty keys and unknown-field stripping', async () => {
+    expandMock.mockResolvedValue(okOutcome)
+    const { ancestor_node_ids, raw_input, ...body } = validBody
+    expect((await POST(req({ ...body, idempotency_key: 'non-uuid-key', unknown_field: 'ignored' }))).status).toBe(200)
+    expect(seedMock).toHaveBeenCalledTimes(1)
+    expect(expandMock).toHaveBeenCalledTimes(1)
+    expect(expandMock.mock.calls[0][0]).toMatchObject({ ancestorNodeIds: [], mode: 'free' })
+    expect(expandMock.mock.calls[0][0].rawInput).toBeUndefined()
+    expect(expandMock.mock.calls[0][0].suggestionId).toBeUndefined()
+    expect(expandMock.mock.calls[0][0]).not.toHaveProperty('unknown_field')
+  })
+
+  it('keeps optional suggestion id and raw input in the domain path', async () => {
+    expandMock.mockResolvedValue({ kind: 'not_found', what: 'suggestion' })
+    const res = await POST(req({ idempotency_key: 'key', parent_node_id: validBody.parent_node_id, mode: 'suggestion' }))
+    expect(res.status).toBe(404)
+    expect(await res.json()).toEqual({ error: 'not_found', what: 'suggestion' })
+    expect(seedMock).toHaveBeenCalledTimes(1)
+    expect(expandMock.mock.calls[0][0]).toMatchObject({ ancestorNodeIds: [], mode: 'suggestion' })
+    expect(expandMock.mock.calls[0][0].rawInput).toBeUndefined()
+    expect(expandMock.mock.calls[0][0].suggestionId).toBeUndefined()
+  })
+
+  it('keeps schema-valid blank free input in the existing parent/domain outcome path', async () => {
+    expandMock.mockResolvedValue({ kind: 'not_found', what: 'parent' })
+    const res = await POST(req({ ...validBody, raw_input: '' }))
+    expect(res.status).toBe(404)
+    expect(await res.json()).toEqual({ error: 'not_found', what: 'parent' })
+    expect(seedMock).toHaveBeenCalledTimes(1)
+    expect(expandMock.mock.calls[0][0].rawInput).toBe('')
+  })
+
+  it('propagates the original valid-request seed error and permits a later valid attempt', async () => {
+    const error = new Error('synthetic seed outage')
+    seedMock.mockRejectedValueOnce(error)
+    await expect(POST(req(validBody))).rejects.toBe(error)
+    expect(expandMock).not.toHaveBeenCalled()
+    expect(callerMock).not.toHaveBeenCalled()
+    expect(afterMock).not.toHaveBeenCalled()
+    expandMock.mockResolvedValue({ kind: 'busy' })
+    const retry = await POST(req(validBody))
+    expect(retry.status).toBe(429)
+    expect(await retry.json()).toEqual({ error: 'rate_limited', retry_after: 3 })
+    expect(seedMock).toHaveBeenCalledTimes(2)
+    expect(expandMock).toHaveBeenCalledTimes(1)
+    expect(callerMock).toHaveBeenCalledTimes(1)
+    expect(afterMock).not.toHaveBeenCalled()
+  })
+
+  it('awaits pending seed before expansion on a valid request', async () => {
+    let release!: () => void
+    seedMock.mockReturnValue(new Promise<void>((resolve) => { release = resolve }))
+    expandMock.mockResolvedValue({ kind: 'busy' })
+    const request = req(validBody)
+    vi.spyOn(request, 'json').mockResolvedValue(validBody)
+    const response = POST(request)
+    await Promise.resolve()
+    expect(seedMock).toHaveBeenCalledTimes(1)
+    expect(expandMock).not.toHaveBeenCalled()
+    expect(callerMock).not.toHaveBeenCalled()
+    release()
+    expect((await response).status).toBe(429)
+    expect(expandMock).toHaveBeenCalledTimes(1)
   })
 })

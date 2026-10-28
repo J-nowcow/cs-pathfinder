@@ -25,9 +25,6 @@ function json(payload: unknown, status: number) {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  // PGlite가 인메모리라 프로세스가 뜰 때마다 DB가 비어 있다.
-  await ensureSeeded()
-
   let raw: unknown
   try {
     raw = await request.json()
@@ -39,6 +36,9 @@ export async function POST(request: Request): Promise<Response> {
   if (!parsed.success) {
     return json({ error: 'invalid_input', detail: parsed.error.issues[0]?.message ?? '' }, 400)
   }
+
+  // PGlite가 인메모리라 프로세스가 뜰 때마다 DB가 비어 있다.
+  await ensureSeeded()
 
   const body = parsed.data
 
