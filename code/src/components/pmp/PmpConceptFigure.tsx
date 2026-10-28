@@ -108,7 +108,7 @@ function EvmFigure() {
     >
       <figcaption id="evm-figure-caption">
         <span className="lesson-eyebrow">그림으로 이해하기</span>
-        <strong>같은 EV를 무엇과 비교하느냐가 다릅니다</strong>
+        <strong>EVM 비용·일정 성과지표: CPI·SPI</strong>
       </figcaption>
       <div className="lesson-figure-canvas">
         <svg
@@ -186,7 +186,7 @@ function RiskFigure() {
     >
       <figcaption id="risk-figure-caption">
         <span className="lesson-eyebrow">그림으로 이해하기</span>
-        <strong>사건의 가능성과 목표에 미치는 영향을 나누어 봅니다</strong>
+        <strong>리스크의 원인·사건·영향과 대응</strong>
       </figcaption>
       <div className="lesson-figure-canvas">
         <svg

@@ -53,7 +53,7 @@ export function CertificatePractice({ id, recallAnswer }: { id: string; recallAn
   const unsavedId = 'certificate-unsaved-' + id
   return (
     <section className="pmp-practice" aria-label="정처기 회상 메모">
-      <h2>내 말로 설명해 보기</h2>
+      <h2>개념 확인</h2>
       <p>{lesson.recall}</p>
       <label htmlFor={'certificate-' + id}>내 설명·메모</label>
       <textarea

@@ -1,0 +1,183 @@
+[
+  {
+    "id": "relation",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-relation-terms"
+    ]
+  },
+  {
+    "id": "keys",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-keys"
+    ]
+  },
+  {
+    "id": "constraints",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-foreign-key",
+      "th-domain-check"
+    ]
+  },
+  {
+    "id": "normalization",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-normal-forms",
+      "th-denormalization"
+    ]
+  },
+  {
+    "id": "design",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-db-design"
+    ]
+  },
+  {
+    "id": "indexes",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-index"
+    ]
+  },
+  {
+    "id": "algebra",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-relational-algebra"
+    ]
+  },
+  {
+    "id": "sql-basics",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-sql-basics"
+    ]
+  },
+  {
+    "id": "count-null",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-sql-count-distinct"
+    ]
+  },
+  {
+    "id": "joins",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-sql-joins"
+    ]
+  },
+  {
+    "id": "subqueries",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-sql-subquery"
+    ]
+  },
+  {
+    "id": "patterns",
+    "domain": "db-sql",
+    "checklist": [
+      "개념의 기준을 설명했다",
+      "예시와 예외를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-sql-like"
+    ]
+  },
+  {
+    "id": "test-boundaries",
+    "domain": "testing",
+    "checklist": [
+      "정상·무효 영역과 경계 선정 이유를 설명했다",
+      "입력 형식과 업무 범위를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-partitions",
+      "th-test-expected"
+    ]
+  },
+  {
+    "id": "test-coverage",
+    "domain": "testing",
+    "checklist": [
+      "문장 3개와 간선 6개의 분모를 구분했다",
+      "미실행 경로와 잘못된 결과를 나누어 설명했다"
+    ],
+    "originConceptIds": [
+      "th-coverage",
+      "th-test-expected"
+    ]
+  },
+  {
+    "id": "test-oracle-regression",
+    "domain": "testing",
+    "checklist": [
+      "예상값의 독립적인 근거를 밝혔다",
+      "수정 확인·회귀 목적과 미검증 범위를 구분했다"
+    ],
+    "originConceptIds": [
+      "th-regression",
+      "th-test-expected"
+    ]
+  },
+  {
+    "id": "ipv4-subnet",
+    "domain": "network",
+    "checklist": [
+      "/26의 첫주소·끝주소·전체 개수를 계산했다",
+      "일반 LAN과 점대점 /31의 조건을 구분했다"
+    ],
+    "originConceptIds": [
+      "th-cidr"
+    ]
+  }
+]

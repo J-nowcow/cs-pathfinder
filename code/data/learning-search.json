@@ -8,7 +8,7 @@
   },
   {
     "path": "/learn/pmp",
-    "title": "프로젝트·제품 관리",
+    "title": "프로젝트 관리·PMP 학습 목차",
     "description": "PMP 개념·사례·계산 실습을 14장·74수업으로 읽습니다. 독립 자습 자료이며 PMI 공식 교재나 공인 교육시간 과정은 아닙니다.",
     "parent": "/learn",
     "article": false
@@ -22,15 +22,15 @@
   },
   {
     "path": "/learn/engineer",
-    "title": "정보관리기술사 · 주제로 연결하는 기출",
+    "title": "정보관리기술사 개념·기출 목차",
     "description": "24개 핵심 주제의 개념·비교·답안 연습과 60회차 기출 위치 색인.",
     "parent": "/learn",
     "article": false
   },
   {
     "path": "/learn/certificate",
-    "title": "정보처리기사 이론 · DB·SQL·테스트·주소 범위",
-    "description": "독립적인 도서관 예제로 배우는 관계 모델·SQL·테스트 설계·IPv4 주소 범위. 기출과 복원 코드는 포함하지 않습니다.",
+    "title": "정보처리기사 이론·출제기준 목차",
+    "description": "2027–2029 큐넷 출제기준의 필기 4과목·실기 목차와 현재 제공하는 16개 기초 이론 수업. DB·SQL·테스트·IPv4의 일부 개념을 다루며 전체 시험 대비 과정은 아닙니다.",
     "parent": "/learn",
     "article": false
   },
@@ -50,7 +50,7 @@
   },
   {
     "path": "/learn/pmp/n02",
-    "title": "역할과 권한",
+    "title": "프로젝트 관리자의 역할·책임·권한",
     "description": "책임을 지는 것과 승인 권한을 갖는 것은 다르다. 결정별 권한과 보고 경로를 확인해야 한다.",
     "parent": "/learn/pmp",
     "article": true
@@ -64,28 +64,28 @@
   },
   {
     "path": "/learn/pmp/n04",
-    "title": "문제 읽는 순서",
+    "title": "상황형 문제의 의사결정 절차",
     "description": "현재 상태·요구 행동·권한·긴급성을 구분한 뒤 다음 한 단계를 고른다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n05",
-    "title": "공유된 비전",
+    "title": "프로젝트 비전과 성공 지표",
     "description": "목표와 성공 지표를 함께 정의하고 충돌하는 해석을 드러내야 한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n06",
-    "title": "갈등 다루기",
+    "title": "팀 갈등 관리",
     "description": "사람의 성격을 단정하기보다 갈등의 원인과 이해를 확인해 해결 방식을 합의한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n07",
-    "title": "팀 리더십",
+    "title": "프로젝트 팀 리더십",
     "description": "팀의 역량과 자율성을 키우되 목표·권한·장애물은 분명하게 다룬다.",
     "parent": "/learn/pmp",
     "article": true
@@ -99,14 +99,14 @@
   },
   {
     "path": "/learn/pmp/n09",
-    "title": "기대의 정렬",
+    "title": "요구사항과 수용 기준 합의",
     "description": "추상적인 기대를 검증 가능한 요구·수용 조건으로 바꾸고 같은 의미인지 확인한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n10",
-    "title": "기대의 유지",
+    "title": "이해관계자 기대 변화와 만족도 관리",
     "description": "요구와 주변 상황이 변할 수 있다. 만족을 추적하고 차이의 원인을 확인해야 한다.",
     "parent": "/learn/pmp",
     "article": true
@@ -120,14 +120,14 @@
   },
   {
     "path": "/learn/pmp/n12",
-    "title": "소통 설계",
+    "title": "프로젝트 의사소통 계획",
     "description": "발송 사실보다 상대가 필요한 정보를 이해하고 행동할 수 있었는지가 중요하다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n13",
-    "title": "통합 계획",
+    "title": "프로젝트 통합 계획",
     "description": "일정표는 일부다. 범위·비용·품질·자원·위험·변경 관리가 서로 맞물려야 한다.",
     "parent": "/learn/pmp",
     "article": true
@@ -141,14 +141,14 @@
   },
   {
     "path": "/learn/pmp/n15",
-    "title": "가치 기반 전달",
+    "title": "가치 기반 우선순위와 전달",
     "description": "기능 수가 아니라 기대 효과·위험·학습·시급성 등을 함께 보고 가치를 판단한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n16",
-    "title": "자원과 역량",
+    "title": "자원 가용성과 팀 역량",
     "description": "업무 분할 가능성·학습 시간·협업 비용·병목에 따라 다르다.",
     "parent": "/learn/pmp",
     "article": true
@@ -162,7 +162,7 @@
   },
   {
     "path": "/learn/pmp/n18",
-    "title": "품질과 수용",
+    "title": "품질 기준과 산출물 수용",
     "description": "기술적 적합성을 확인하는 일과 고객이 약속한 결과물을 받아들이는 일은 구분된다.",
     "parent": "/learn/pmp",
     "article": true
@@ -183,21 +183,21 @@
   },
   {
     "path": "/learn/pmp/n21",
-    "title": "상태와 증거",
+    "title": "프로젝트 상태 보고와 판단 근거",
     "description": "지표의 정의·자료 품질·갱신 시점과 실제 전달 상태를 확인해야 한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n22",
-    "title": "종료와 인수",
+    "title": "프로젝트 종료와 인수인계",
     "description": "수용·운영 준비·계약·재무·자원·지식 이전까지 종료 조건을 확인한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n23",
-    "title": "거버넌스",
+    "title": "프로젝트 거버넌스와 의사결정 권한",
     "description": "위임된 범위는 책임 있게 해결하고 한도 밖 사안은 정해진 경로로 올린다.",
     "parent": "/learn/pmp",
     "article": true
@@ -232,7 +232,7 @@
   },
   {
     "path": "/learn/pmp/n28",
-    "title": "지속적 개선",
+    "title": "프로세스 지속적 개선",
     "description": "학습은 일이 진행되는 동안 기록하고 다음 작업에 적용할 때 효과가 난다.",
     "parent": "/learn/pmp",
     "article": true
@@ -246,49 +246,49 @@
   },
   {
     "path": "/learn/pmp/n30",
-    "title": "환경·AI·지속가능성",
+    "title": "외부 환경 변화·AI·지속가능성",
     "description": "계획 준수보다 유효한 목적을 유지하는 판단이 필요하다. 바뀐 조건과 영향을 검증한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n31",
-    "title": "애자일의 이유",
+    "title": "애자일 가치와 원칙",
     "description": "불확실한 일을 짧은 검증으로 배워 가는 방식이다. 필요한 계획과 품질 기준은 계속 존재한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n32",
-    "title": "백로그와 목표",
+    "title": "제품 목표와 백로그 관리",
     "description": "요청의 가치와 긴급성을 확인하되 Sprint Goal을 해치지 않도록 협의한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n33",
-    "title": "흐름과 팀",
+    "title": "진행 중 작업(WIP)과 팀의 작업 흐름",
     "description": "진행 중 작업이 많으면 전환 비용과 대기가 늘 수 있다. 시작보다 완료의 흐름을 본다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n34",
-    "title": "완료와 피드백",
+    "title": "완료 정의·스프린트 리뷰·회고",
     "description": "Review는 결과와 향후 방향을, 회고는 팀의 일하는 방식을 주로 살핀다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n35",
-    "title": "EVM 읽기",
+    "title": "성과가치관리(EVM): PV·EV·AC·CPI·SPI",
     "description": "둘 다 1보다 작아도 비교 대상이 다르다. CPI는 비용 효율, SPI는 계획 대비 획득가치의 비율이다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n36",
-    "title": "예측과 불확실성",
+    "title": "일정 예측과 불확실성",
     "description": "기대값은 평균적 금전 결과를 비교하는 도구다. 극단적 손실·법규·수용 한도까지 대신 결정하지 않는다.",
     "parent": "/learn/pmp",
     "article": true
@@ -316,21 +316,21 @@
   },
   {
     "path": "/learn/pmp/n40",
-    "title": "업무 데이터와 통합 판단",
+    "title": "작업성과 데이터·정보·보고서",
     "description": "관측 데이터에서 맥락을 해석하고 의사결정을 위한 보고로 연결하는 단계가 다르다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n41",
-    "title": "요구 수집과 추적",
+    "title": "요구사항 수집과 추적성",
     "description": "누구에게 어떤 방법으로 확인했고 합의한 요구가 결과물과 검증에 연결됐는지를 본다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n42",
-    "title": "WBS·사전·패키지",
+    "title": "WBS·WBS 사전·작업 패키지",
     "description": "추정·담당·수용·통제가 가능한 단위가 목적이다. 지나친 세분화도 관리 비용과 혼란을 만든다.",
     "parent": "/learn/pmp",
     "article": true
@@ -344,7 +344,7 @@
   },
   {
     "path": "/learn/pmp/n44",
-    "title": "전진·후진 계산과 여유",
+    "title": "임계경로법(CPM): 전진·후진 계산과 여유시간",
     "description": "그렇다. 프로젝트 종료를 늦추지 않는 것과 바로 다음 작업을 늦추지 않는 것은 다르다.",
     "parent": "/learn/pmp",
     "article": true
@@ -379,7 +379,7 @@
   },
   {
     "path": "/learn/pmp/n49",
-    "title": "EAC·ETC·VAC·TCPI",
+    "title": "완료 비용 예측: EAC·ETC·VAC·TCPI",
     "description": "미래 가정에 따라 공식을 고른다. 과거 성과와 앞으로 필요한 효율도 구분한다.",
     "parent": "/learn/pmp",
     "article": true
@@ -393,21 +393,21 @@
   },
   {
     "path": "/learn/pmp/n51",
-    "title": "품질 도구를 고르는 법",
+    "title": "품질관리 도구와 적용 조건",
     "description": "확인하려는 질문에 맞춰 도구를 고른다. 관계를 관찰했다고 원인을 증명한 것은 아니다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n52",
-    "title": "관리 한계·규격·표본",
+    "title": "관리한계·규격한계·표본 추출",
     "description": "아니다. 일관되게 잘못된 결과를 내는 공정도 안정적일 수 있다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n53",
-    "title": "책임 표·자원 달력",
+    "title": "책임배정행렬(RACI)과 자원 달력",
     "description": "책임의 명확화와 실제 가용성·역량 확보는 다른 일이다.",
     "parent": "/learn/pmp",
     "article": true
@@ -442,14 +442,14 @@
   },
   {
     "path": "/learn/pmp/n58",
-    "title": "정성·정량 리스크 분석",
+    "title": "정성적·정량적 리스크 분석",
     "description": "점수는 우선순위의 한 관점이다. 시급성·근접성·노출·상호 의존성과 의무를 함께 본다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/n59",
-    "title": "위협·기회 대응과 실행 신호",
+    "title": "위협·기회 대응과 실행 조건",
     "description": "수용에도 감시·한도·비상 계획·예비비를 정할 수 있다. 대응 선택과 실행을 연결한다.",
     "parent": "/learn/pmp",
     "article": true
@@ -554,28 +554,28 @@
   },
   {
     "path": "/learn/pmp/n74",
-    "title": "종료 체크·전환·교훈 활용",
+    "title": "프로젝트 종료·운영 전환·교훈 관리",
     "description": "작업 상태 외에 수용·운영 수행 가능성·계약 의무·재무·기록·편익 책임을 확인한다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/case/c1",
-    "title": "출시 전 2주, 세 가지 충돌",
+    "title": "프로젝트 출시 사례: 범위 변경·접근성 검증·운영 인계",
     "description": "가상 사례 · 시민 서비스의 신청 기능을 출시한다. 예측형 계약의 범위·납기 기준선이 승인돼 있다. 출시까지 2주 남았고 고객은 새로운 통계 화면을 요청했다. 인수 조건에 있던 접근성 검증은 미완료다. 운영팀은 장애 대응 권한을 아직 받지 못했다. 현재 진행률 보고는 95%다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/case/c2",
-    "title": "숫자는 낮은 지출을 말한다",
+    "title": "EVM 사례: 비용·일정 편차와 완료 비용 예측",
     "description": "가상 사례 · 단위는 모두 백만 원이다. BAC=200, 현재 PV=100, EV=80, AC=90이다. 재무팀은 지출이 PV보다 작다고 칭찬한다. PM은 팀 인터뷰에서 반복 재작업을 발견했다. 아직 미래 비용 효율이 개선된다는 증거는 없다.",
     "parent": "/learn/pmp",
     "article": true
   },
   {
     "path": "/learn/pmp/case/c3",
-    "title": "짧은 주기, 느린 채택",
+    "title": "애자일 전달 사례: 제품 채택·준수 증빙·백로그 조정",
     "description": "가상 사례 · 고객 문의 도구를 하이브리드로 바꾼다. 규제 기록 보관은 고정 요건이며 사용자 화면은 Sprint로 만든다. 기존 업무와 새 도구의 입력이 중복돼 현장 사용률이 낮다. AI가 규제 기록을 요약하지만 일부 문장이 원문과 다르다. 급하지 않은 색상 변경 요청도 들어왔다.",
     "parent": "/learn/pmp",
     "article": true
@@ -680,7 +680,7 @@
   },
   {
     "path": "/learn/engineer/observability",
-    "title": "관찰·모니터링과 장애 대응",
+    "title": "관측성·모니터링과 장애 대응",
     "description": "모니터링은 정해 둔 지표를 수집하고 이상을 알린다. 관측 가능성은 로그·지표·추적 등의 출력으로 내부 상태를 추론할 수 있는 정도를 뜻하며 사용자에게 나타난 증상과 내부 원인을 구분해 살핀다.",
     "parent": "/learn/engineer",
     "article": true
@@ -750,113 +750,113 @@
   },
   {
     "path": "/learn/certificate/relation",
-    "title": "표를 읽는 네 가지 기준",
-    "description": "행은 한 건의 기록이고 열은 기록할 속성이다. 구조와 현재 값을 나누어 보면 표를 훨씬 쉽게 읽을 수 있다.",
+    "title": "관계형 데이터 모델: 속성·튜플·차수·카디널리티",
+    "description": "릴레이션은 관계형 데이터 모델에서 데이터를 표현하는 단위다. 속성은 열, 튜플은 행이며 차수는 속성 수, 카디널리티는 튜플 수다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/keys",
-    "title": "행을 구별하는 키",
-    "description": "키는 모든 허용 데이터에서 행을 유일하게 구별하는 속성 집합이다. 지금 우연히 값이 다르다는 사실만으로 키가 되지는 않는다.",
+    "title": "키의 종류: 슈퍼키·후보키·기본키·대체키",
+    "description": "슈퍼키는 튜플을 유일하게 식별하는 속성 집합이다. 후보키는 유일성과 최소성을 모두 만족하는 슈퍼키다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/constraints",
-    "title": "연결과 값에 규칙 걸기",
-    "description": "참조 무결성은 연결의 유효성을 지킨다. CHECK와 NOT NULL은 저장할 값의 조건을 각각 맡는다.",
+    "title": "무결성 제약조건: 기본키·외래키·CHECK·NOT NULL",
+    "description": "외래키는 다른 테이블과의 참조 무결성을 표현한다. CHECK는 값의 조건을 검사하고 NOT NULL은 NULL 저장을 금지한다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/normalization",
-    "title": "중복된 사실을 나누는 정규화",
-    "description": "서로 다른 사실을 한 표에 반복 저장하면 일부만 고쳐지거나 함께 사라질 수 있다. 함수 종속을 확인하고 사실의 단위로 나눈다.",
+    "title": "데이터베이스 정규화: 함수 종속·이상현상·3NF·BCNF",
+    "description": "정규화는 함수 종속에 따라 릴레이션을 분해해 삽입·수정·삭제 이상을 줄이는 설계 과정이다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/design",
-    "title": "업무에서 저장 구조까지",
-    "description": "개념 설계는 업무의 대상과 관계를 잡고 논리 설계는 이를 스키마로 옮긴다. 물리 설계에서 저장과 접근 경로를 구체화한다.",
+    "title": "데이터베이스 설계: 개념적·논리적·물리적 설계",
+    "description": "개념적 설계는 업무의 개체와 관계를 표현하고, 논리적 설계는 데이터 모델에 맞는 구조를 정한다. 물리적 설계는 저장 방식과 접근 경로를 결정한다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/indexes",
-    "title": "인덱스가 이득인 조건",
-    "description": "인덱스는 필요한 행을 찾는 접근 경로다. 읽기를 줄일 수 있지만 저장 공간과 갱신 비용이 든다.",
+    "title": "데이터베이스 인덱스: 조회·갱신 비용과 실행 계획",
+    "description": "인덱스는 검색할 행에 접근하는 경로를 제공하는 자료구조다. 조회에 필요한 읽기를 줄일 수 있지만 저장 공간과 변경 시 유지 비용이 든다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/algebra",
-    "title": "행·열·모두를 구분하기",
-    "description": "선택은 조건에 맞는 행을 남기고 투영은 지정한 속성을 남긴다. 순수 관계대수는 집합을 다룬다.",
+    "title": "관계대수: 선택·투영·디비전과 관계해석",
+    "description": "선택(σ)은 조건에 맞는 튜플을, 투영(π)은 지정한 속성을 남긴다. 디비전(÷)은 나누는 관계의 모든 조건을 만족하는 대상을 구한다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/sql-basics",
-    "title": "SQL을 읽는 순서",
-    "description": "FROM으로 입력을 보고 WHERE로 남길 행을 정한 뒤 SELECT가 출력할 값을 읽으면 질의가 잘 보인다.",
+    "title": "SQL 기본: SELECT·DML과 논리적 처리 순서",
+    "description": "SELECT는 조회, INSERT는 삽입, UPDATE는 수정, DELETE는 삭제에 사용한다. 질의를 해석할 때는 FROM의 입력, WHERE의 조건, SELECT의 출력을 구분한다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/count-null",
-    "title": "NULL과 중복을 세는 방법",
-    "description": "COUNT(*)는 행을 세고 COUNT(열)은 그 열이 NULL이 아닌 행을 센다. DISTINCT가 붙으면 중복값도 한 번만 센다.",
+    "title": "SQL 집계 함수: COUNT·DISTINCT·NULL·GROUP BY",
+    "description": "COUNT(*)는 행 수를, COUNT(열)은 해당 열이 NULL이 아닌 행 수를 센다. COUNT(DISTINCT 열)은 NULL을 제외한 서로 다른 값의 수를 센다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/joins",
-    "title": "연결하며 늘어나는 행",
-    "description": "조인은 두 입력의 행을 조건에 따라 짝짓는다. 한 행에 여러 짝이 있으면 결과도 그만큼 늘어난다.",
+    "title": "SQL 조인: INNER JOIN·LEFT JOIN·교차 조인",
+    "description": "조인은 두 입력의 행을 조건에 따라 결합한다. INNER JOIN은 조건에 맞는 쌍을 남기고 LEFT JOIN은 왼쪽의 미일치 행도 남긴다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/subqueries",
-    "title": "존재·하나 이상·모두",
-    "description": "EXISTS는 행의 존재, ANY는 비교가 하나 이상 참인지, ALL은 모든 비교가 참인지 묻는다. NULL과 빈 집합도 따로 살핀다.",
+    "title": "SQL 서브쿼리: EXISTS·ANY·ALL·NOT IN",
+    "description": "EXISTS는 결과 행의 존재를 검사한다. ANY는 비교가 하나 이상 참인지, ALL은 모든 비교가 참인지 검사한다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/patterns",
-    "title": "패턴과 정렬을 명시하기",
-    "description": "LIKE는 문자 패턴을 검사하고 ORDER BY는 결과 순서를 정한다. 검색 조건이 결과 순서를 대신하지 않는다.",
+    "title": "SQL 문자열 검색과 정렬: LIKE·ORDER BY·NULLS LAST",
+    "description": "LIKE는 문자열 패턴을 검사하고 ORDER BY는 결과 순서를 지정한다. 검색 조건만으로 출력 순서가 보장되지는 않는다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/test-boundaries",
-    "title": "같은 처리 영역과 경계에서 입력 고르기",
-    "description": "같은 처리가 예상되는 영역을 나누고 처리가 바뀌는 경계 근처를 따로 확인한다. 정상 값만 여러 개 고르는 것과는 다르다.",
+    "title": "블랙박스 테스트: 동등 분할·경계값 분석",
+    "description": "동등 분할은 동일한 처리를 예상하는 입력 영역에서 대표값을 고르는 기법이다. 경계값 분석은 처리가 바뀌는 경계와 그 주변을 검사한다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/test-coverage",
-    "title": "문장을 다 실행해도 놓칠 수 있는 경로",
-    "description": "커버리지는 정한 항목을 실행한 비율이다. 어떤 문장과 제어흐름 간선을 분모로 삼았는지부터 확인해야 숫자를 비교할 수 있다.",
+    "title": "테스트 커버리지: 문장·분기·제어흐름 간선",
+    "description": "커버리지는 정의한 실행 항목 중 테스트가 거친 항목의 비율이다. 문장, 분기 결과, 제어흐름 간선은 서로 다른 집계 단위다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/test-oracle-regression",
-    "title": "예상값의 근거와 수정 뒤 다시 볼 범위",
-    "description": "수정한 결함의 확인과 기존 동작의 부작용 검사는 목적이 다르다. 둘 다 실제 결과를 판단할 독립적인 근거가 필요하다.",
+    "title": "테스트 오라클·재테스트·회귀 테스트",
+    "description": "테스트 오라클은 결과의 옳고 그름을 판단하는 근거다. 재테스트는 결함의 수정을, 회귀 테스트는 변경이 기존 동작에 미친 영향을 확인한다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/ipv4-subnet",
-    "title": "IPv4 주소에서 같은 범위와 끝점 찾기",
-    "description": "/26은 앞의 26비트를 접두사로 묶는다는 표시다. 남은 6비트가 만드는 64개 주소를 먼저 찾고 그중 호스트에 쓸 범위는 링크 조건에 맞춰 구분한다.",
+    "title": "IPv4 서브넷: CIDR·서브넷 마스크·호스트 수 계산",
+    "description": "IPv4는 32비트 주소다. /n은 앞의 n비트를 고정하는 CIDR 접두사 길이이며 블록의 전체 주소 수는 2^(32−n)이다.",
     "parent": "/learn/certificate",
     "article": true
   }

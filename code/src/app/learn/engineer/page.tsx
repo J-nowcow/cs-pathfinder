@@ -19,7 +19,7 @@ export default function EngineerPage() {
   return (
     <LibraryShell
       eyebrow="정보관리기술사"
-      title="개념 공부와 기출 연습"
+      title="정보관리기술사 개념·기출 목차"
       description="24개 주제의 개념과 참고 답안을 읽고, 회차별 기출을 찾아 답안을 연습합니다."
     >
       <LearningSeo path="/learn/engineer" />

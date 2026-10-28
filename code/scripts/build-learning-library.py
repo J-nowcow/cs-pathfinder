@@ -39,8 +39,17 @@ editorial=json.loads((C/'learning-content/pmp-editorial.json').read_text())
 (C/'data/engineer-guides.json').write_text(json.dumps(guide,ensure_ascii=False,indent=2)+'\n')
 (C/'data/engineer-index.json').write_text(json.dumps({**source,'classificationMethod':review_source['method'],'classificationReviewedAt':review_source['reviewedAt'],'questions':questions},ensure_ascii=False,separators=(',',':'))+'\n')
 shutil.copytree(J,P,dirs_exist_ok=True)
+title_edits=json.loads((C/'learning-content/jira/title-editorial.json').read_text())
+catalog=json.loads((C/'data/jira-library.json').read_text())
+for lesson in catalog['lessons']: lesson['title']=title_edits['lessons'][str(lesson['id'])]
+(C/'data/jira-library.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n')
 app=(P/'app.js').read_text();old='function save(){try{localStorage.setItem(KEY,JSON.stringify(state));'
-assert old in app;app=app.replace(old,"function save(){try{state._updatedAt=new Date().toISOString();state._lastRoute=location.hash;localStorage.setItem(KEY,JSON.stringify(state));",1);(P/'app.js').write_text(app)
+assert old in app;app=app.replace(old,"function save(){try{state._updatedAt=new Date().toISOString();state._lastRoute=location.hash;localStorage.setItem(KEY,JSON.stringify(state));",1)
+for before,after in title_edits['headings'].items():
+ assert before in app, 'Stale Jira heading override: '+before
+ app=app.replace(before,after)
+app='const lessonTitles='+json.dumps(title_edits['lessons'],ensure_ascii=False)+';window.STUDY_DATA.lessons.forEach(lesson=>{lesson.title=lessonTitles[lesson.id]??lesson.title});\n'+app
+(P/'app.js').write_text(app)
 h=(P/'index.html').read_text();h=h.replace('<div class="side-label">','<div style="padding:0 24px 16px;display:flex;gap:14px;flex-wrap:wrap;font-size:13px"><a href="/learn/jira">실무 미션 ↗</a><a href="/learn/progress">통합 기록 ↗</a></div><div class="side-label">',1);(P/'index.html').write_text(h)
 # Standalone Jira file retains original six OFL fonts, never the locally installed KT font.
 css=(P/'style.css').read_text()

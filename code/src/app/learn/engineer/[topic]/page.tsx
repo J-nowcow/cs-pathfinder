@@ -67,7 +67,7 @@ export default async function TopicPage({
         <>
           <ConceptFlow items={g.flow} />
           <section>
-            <h2 className="text-2xl font-semibold">비슷해도 다른 개념</h2>
+            <h2 className="text-2xl font-semibold">핵심 개념 비교</h2>
             <div className="mt-5 overflow-x-auto rounded-xl border border-line">
               <table className="w-full text-left text-sm leading-7">
                 <thead className="bg-raised">

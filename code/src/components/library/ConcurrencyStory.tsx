@@ -218,10 +218,9 @@ export function ConcurrencyStory() {
       aria-label="교착상태를 그림으로 이해하기"
     >
       <section className="story-opening">
-        <p className="story-kicker">01 / 멈춘 이유부터 보기</p>
+        <p className="story-kicker">01 / 교착상태의 원인</p>
         <h2>
-          둘 다 일을 시작했는데,
-          <br />왜 아무도 끝내지 못할까?
+          교착상태와 순환 대기
         </h2>
         <p>
           두 작업이 데이터 A와 B를 모두 바꿔야 합니다.{' '}
@@ -247,11 +246,9 @@ export function ConcurrencyStory() {
         </details>
       </section>
       <section className="story-chapter">
-        <p className="story-kicker">02 / 조건 하나 바꾸기</p>
+        <p className="story-kicker">02 / 잠금 순서 통일</p>
         <h2>
-          시작하는 순서를 맞추면,
-          <br />
-          기다림에 출구가 생긴다.
+          잠금 순서 통일과 순환 대기 예방
         </h2>
         <p>
           둘 다 <strong>A → B 순서</strong>로 잡게 해보겠습니다. T1이 A를 먼저
@@ -297,11 +294,9 @@ export function ConcurrencyStory() {
         <ConcurrencyCheck />
       </section>
       <section className="story-chapter">
-        <p className="story-kicker">03 / 이미 멈췄다면</p>
+        <p className="story-kicker">03 / 교착 탐지와 회복</p>
         <h2>
-          순서를 고치는 것과
-          <br />
-          지금의 교착을 푸는 것은 다르다.
+          교착상태 탐지·트랜잭션 중단·재시도
         </h2>
         <p>
           이미 만들어진 순환은 한쪽 작업의 취소 등으로 끊어야 합니다. 예를 들어

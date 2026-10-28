@@ -54,7 +54,7 @@ export default async function PmpLesson({
         </aside>
         <PmpConceptFigure lesson={n.id} />
         <section className="lesson-explanation">
-          <h2>개념 이해하기</h2>
+          <h2>핵심 개념</h2>
           <div className="pmp-body">
             {n.body.map((p, i) => (
               <p key={i}>{p}</p>
@@ -63,13 +63,13 @@ export default async function PmpLesson({
         </section>
         {!!n.steps.length && (
           <section>
-            <h2>생각을 정리하는 순서</h2>
+            <h2>적용 절차</h2>
             <ConceptSteps steps={n.steps} />
           </section>
         )}
         {'table' in n && n.table?.length ? (
           <section>
-            <h2>비교해서 이해하기</h2>
+            <h2>핵심 개념 비교</h2>
             <div className="pmp-table-scroll">
               <table>
                 <thead>
@@ -102,7 +102,7 @@ export default async function PmpLesson({
         ) : null}
         {'worked' in n && n.worked?.length ? (
           <section>
-            <h2>예제로 따라가기</h2>
+            <h2>계산 예제</h2>
             {n.worked.map((s, i) => (
               <p key={i}>{s}</p>
             ))}
@@ -130,7 +130,7 @@ export default async function PmpLesson({
         {n.id === 'n27' ? <PmpRiskLab /> : null}
         <PmpPractice key={n.id} question={pmpQuestions.get(n.id)!} visit />
         <section>
-          <h2>이 수업의 용어</h2>
+          <h2>관련 용어</h2>
           <dl className="pmp-terms-inline">
             {n.terms.map((term) => {
               const found = c.glossary.find(

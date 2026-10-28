@@ -2521,3 +2521,30 @@ body {
 .desk-nav-panel a { display: grid; gap: 3px; padding: 12px; border-radius: 7px; line-height: 1.6; }
 .desk-nav-panel a:hover, .desk-nav-panel a:focus-visible { background: var(--raised); }
 .desk-nav-panel small { font-size: 12px; color: var(--muted); }
+
+/* Public course orientation: semantic links remain usable without scripting. */
+.pmp-course-map { margin: 36px 0; padding: 28px; border: 1px solid var(--line); border-radius: 18px; background: var(--raised); box-shadow: 0 4px 0 var(--line), 0 14px 30px rgb(0 0 0 / .035); }
+.pmp-course-map h2, .certificate-syllabus h2 { margin: 8px 0 16px; font-size: 28px; font-weight: 650; }
+.pmp-course-map > p, .certificate-syllabus > p { line-height: 1.9; }
+.pmp-course-map svg { display: block; width: 100%; height: auto; margin: 24px 0 4px; color: var(--d0); }
+.course-map-lines { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.map-card rect { fill: var(--surface); stroke: var(--line); }
+.map-foundation rect { fill: var(--surface); stroke: var(--line); stroke-dasharray: 5 4; }
+.map-title { fill: var(--ink); font-size: 17px; font-weight: 600; }
+.map-detail, .map-feedback { fill: var(--muted); font-size: 13px; }
+.pmp-map-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 24px; margin-top: 28px; }
+.pmp-map-links h3 { font-size: 18px; font-weight: 650; }
+.pmp-map-links p { color: var(--muted); font-size: 14px; margin: 6px 0; }
+.pmp-map-links ul { padding-left: 0; list-style: none; }
+.pmp-map-links a, .syllabus-subject-links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--d0); text-decoration: underline; text-underline-offset: 5px; }
+.pmp-map-links a:focus-visible, .certificate-syllabus a:focus-visible { outline: 2px solid var(--d0); outline-offset: 4px; }
+.syllabus-subject-links { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0; }
+.syllabus-subject { scroll-margin-top: 32px; margin: 40px 0; border-top: 2px solid var(--line); padding-top: 24px; }
+.syllabus-subject h3 { font-size: 24px; font-weight: 650; margin: 8px 0 20px; }
+.syllabus-subject > ol, .syllabus-practical { list-style: decimal; padding-left: 24px; }
+.syllabus-subject > ol > li, .syllabus-practical > li { padding: 14px 0 24px 8px; scroll-margin-top: 32px; }
+.syllabus-subject h4, .syllabus-practical h3 { font-size: 18px; font-weight: 650; margin: 0 0 8px; }
+.syllabus-subject li > p, .syllabus-practical li > p { margin: 6px 0; line-height: 1.8; color: var(--muted); }
+.syllabus-subject li > ul, .syllabus-practical li > ul { margin-top: 12px; display: grid; gap: 10px; }
+.syllabus-subject a, .syllabus-practical a { color: var(--d0); text-decoration: underline; text-underline-offset: 5px; line-height: 1.8; }
+.syllabus-pending { font-size: 13px; }

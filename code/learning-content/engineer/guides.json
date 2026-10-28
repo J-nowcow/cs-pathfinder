@@ -926,7 +926,7 @@
   },
   {
     "id": "observability",
-    "title": "관찰·모니터링과 장애 대응",
+    "title": "관측성·모니터링과 장애 대응",
     "domain": "운영",
     "aliases": [
       "모니터링",
