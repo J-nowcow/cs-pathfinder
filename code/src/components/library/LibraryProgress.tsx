@@ -248,7 +248,7 @@ export function LibraryProgress({
           <section className="desk-shelf-empty" aria-labelledby="shelf-empty-heading">
             <OpenBookArt />
             <h2 id="shelf-empty-heading">아직 읽은 자료가 없어요.</h2>
-            <p>자료를 읽거나 답안을 쓰면 이곳에서 이어볼 수 있습니다.</p>
+            <p>자료를 읽거나 답안을 쓰면 이곳에서 이어 볼 수 있습니다.</p>
             <a href="/learn" className="desk-primary">공부 자료 둘러보기 →</a>
           </section>
         )}

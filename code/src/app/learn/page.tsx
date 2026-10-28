@@ -18,7 +18,7 @@ export default function LearningPage() {
           <p className="desk-kicker">PM 이론 · CS 이론 · 자격증 대비</p>
           <h1 id="home-heading">PM·CS 학습 길라잡이</h1>
           <p className="desk-home-lead">
-            개념을 읽고, 사례로 이해하고, 직접 설명해 보세요.
+            개념을 읽고 사례로 이해하고 직접 설명해 보세요.
             공부할 분야를 고르면 수업과 연습으로 이어집니다.
           </p>
           <div className="desk-home-actions">
@@ -32,7 +32,7 @@ export default function LearningPage() {
       <section className="desk-home-return" aria-labelledby="home-return-heading">
         <div>
           <h2 id="home-return-heading">읽던 자료는 내 서재에서</h2>
-          <p>최근에 읽은 자료와 작성 중인 답안을 이어 보고, 복습·백업을 열 수 있습니다.</p>
+          <p>최근에 읽은 자료와 작성 중인 답안을 이어 보고 복습·백업을 열 수 있습니다.</p>
         </div>
         <Link href="/learn/library" prefetch={false}>내 서재로 가기 →</Link>
       </section>

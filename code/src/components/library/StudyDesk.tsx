@@ -122,7 +122,7 @@ export function StudyDesk({
           </div>
           <div className="study-content desk-content">{children}</div>
           <footer className="desk-footer">
-            <p>{section === 'home' ? '읽던 자료와 학습 기록은 내 서재에서 이어볼 수 있습니다.' : '현재 브라우저에 저장된 학습 기록입니다.'}</p>
+            <p>{section === 'home' ? '읽던 자료와 학습 기록은 내 서재에서 이어 볼 수 있습니다.' : '현재 브라우저에 저장된 학습 기록입니다.'}</p>
             <div className="flex gap-5">
               <Link href="/privacy">개인정보처리방침</Link>
               <Link href="/terms">이용약관</Link>
