@@ -26,10 +26,10 @@ function json(payload: unknown, status: number): Response {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  await ensureSeeded()
-
   const userId = await readUserId(request.headers)
   if (!userId) return json({ error: 'unauthorized' }, 401)
+
+  await ensureSeeded()
 
   let raw: unknown
   try {
