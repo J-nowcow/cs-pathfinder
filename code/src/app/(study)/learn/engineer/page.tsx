@@ -6,6 +6,7 @@ import guides from '../../../../../data/engineer-guides.json'
 import index from '../../../../../data/engineer-index.json'
 import { LibraryShell, libraryButton } from '@/components/library/LibraryShell'
 import { ExamBrowser } from '@/components/library/ExamBrowser'
+import { examBrowserQuestions } from '@/lib/library/exam-browser-data'
 export const metadata = learningMetadata('/learn/engineer')
 export default function EngineerPage() {
   const linked = index.questions.filter((q) => q.topics.length).length
@@ -85,7 +86,7 @@ export default function EngineerPage() {
         </div>
       </section>
       <ExamBrowser
-        questions={index.questions}
+        questions={examBrowserQuestions(index.questions)}
         topicTitles={Object.fromEntries(guides.map((g) => [g.id, g.title]))}
       />
       <details className="rounded-xl border border-line p-5">
