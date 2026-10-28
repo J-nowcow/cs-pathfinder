@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { ConceptSteps } from '@/components/library/ConceptSteps'
 import { LibraryShell } from '@/components/library/LibraryShell'
 import { PmpPractice } from '@/components/pmp/PmpPractice'
 import { PmpFloatLab } from '@/components/pmp/PmpFloatLab'
@@ -51,14 +52,7 @@ export default async function PmpLesson({
         {!!n.steps.length && (
           <section>
             <h2>생각을 정리하는 순서</h2>
-            <ol className="pmp-steps">
-              {n.steps.map((s, i) => (
-                <li key={i}>
-                  <span>{i + 1}</span>
-                  {s}
-                </li>
-              ))}
-            </ol>
+            <ConceptSteps steps={n.steps} />
           </section>
         )}
         {'table' in n && n.table?.length ? (
