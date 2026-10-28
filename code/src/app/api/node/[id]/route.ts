@@ -1,4 +1,4 @@
-import { loadNode } from '@/lib/expand/cache'
+import { loadNode, isNodeKey } from '@/lib/expand/cache'
 import { ensureSeeded } from '@/lib/db/bootstrap'
 
 /**
@@ -17,9 +17,9 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ): Promise<Response> {
-  await ensureSeeded()
-
   const { id } = await params
+  if (!isNodeKey(id)) return Response.json({ error: 'not_found' }, { status: 404 })
+  await ensureSeeded()
   const node = await loadNode(id, { withRelated: true })
 
   if (!node) {
