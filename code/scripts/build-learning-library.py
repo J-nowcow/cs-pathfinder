@@ -45,8 +45,9 @@ for lesson in catalog['lessons']: lesson['title']=title_edits['lessons'][str(les
 (C/'data/jira-library.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n')
 app=(P/'app.js').read_text();old='function save(){try{localStorage.setItem(KEY,JSON.stringify(state));'
 assert old in app;app=app.replace(old,"function save(){try{state._updatedAt=new Date().toISOString();state._lastRoute=location.hash;localStorage.setItem(KEY,JSON.stringify(state));",1)
-for before,after in title_edits['headings'].items():
- assert before in app, 'Stale Jira heading override: '+before
+copy_edits=json.loads((C/'learning-content/jira/copy-editorial.json').read_text())
+for before,after in {**title_edits['headings'],**copy_edits}.items():
+ assert before in app, 'Stale Jira reading override: '+before
  app=app.replace(before,after)
 assert app.startswith("'use strict';\n")
 app=app.replace("'use strict';\n", "'use strict';\nconst lessonTitles="+json.dumps(title_edits['lessons'],ensure_ascii=False)+';window.STUDY_DATA.lessons.forEach(lesson=>{lesson.title=lessonTitles[lesson.id]??lesson.title});\n',1)
