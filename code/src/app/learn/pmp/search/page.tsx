@@ -17,8 +17,8 @@ export default async function PmpSearch({
   return (
     <StudyDesk section="pmp" document>
       <header className="desk-document-heading">
-        <p className="study-meta">PMP · 다시 찾아 읽기</p>
-        <h1>어느 수업에서 읽었더라?</h1>
+        <p className="study-meta">PMP · 수업 검색</p>
+        <h1>PMP 수업 검색</h1>
         <p>기억나는 개념으로 수업을 찾고 앞뒤 설명을 함께 읽어보세요.</p>
       </header>
       <PmpSearchForm query={query} error={error} />

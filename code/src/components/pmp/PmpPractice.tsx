@@ -160,7 +160,7 @@ export function PmpPractice({
       </section>
       {visit && (
         <section className="pmp-writing">
-          <h2>내 말로 정리하기</h2>
+          <h2>개념 확인</h2>
           <p>{q.recall ?? ''}</p>
           <label htmlFor={formName + '-thought'}>회상 답변</label>
           <textarea

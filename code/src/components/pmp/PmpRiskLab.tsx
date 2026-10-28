@@ -51,7 +51,7 @@ export function PmpRiskLab() {
       aria-labelledby="risk-title"
     >
       <p className="study-meta">직접 비교하는 기대손실과 한도</p>
-      <h2 id="risk-title">평균 손실이 작으면 감당할 수 있을까요?</h2>
+      <h2 id="risk-title">리스크 실습: 기대손실과 손실 한도</h2>
       <p>
         A는 확정 비용을 지출합니다. B는 사건 발생 시 입력한 손실, 미발생 시 손실
         0이라는 두 경우만 둡니다. 비용과 손실은 같은 가상 금액 단위로 표시하며
@@ -162,7 +162,7 @@ export function PmpRiskLab() {
             </p>
           </figure>
           <section className="pmp-risk-limit">
-            <h3>평균과 한도를 따로 읽기</h3>
+            <h3>기대손실과 최대손실의 구분</h3>
             <p>
               {values.probability === 0 ? (
                 '이 입력은 사건 발생 확률을 0으로 가정합니다. 따라서 모형 안의 기대손실과 한도 초과 확률도 0입니다. 현실에서 사건이 불가능하다는 증명은 아닙니다.'
@@ -195,7 +195,7 @@ export function PmpRiskLab() {
         </>
       )}
       <section>
-        <h3>기대손실은 20인데 어떤 점이 다를까요?</h3>
+        <h3>기대손실 20인 두 위험의 비교</h3>
         <p>
           아래는 한도를 50으로 고정한 비교 예제입니다. 입력값에 따라 바뀌는 표가
           아닙니다. 위의 같은 기대손실 버튼으로 각각 실험해 보세요.

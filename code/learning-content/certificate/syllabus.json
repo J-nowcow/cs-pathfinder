@@ -1,0 +1,322 @@
+{
+  "exam": "정보처리기사",
+  "source": {
+    "title": "정보처리기사 출제기준(2027.1.1~2029.12.31)",
+    "url": "https://www.q-net.or.kr/pageLink.do?link=cst/cstReport&jmCd=1320&mcrtrNo=1453",
+    "listUrl": "https://www.q-net.or.kr/cst006.do?code=1202&gId=&gSite=Q&id=cst00601s01",
+    "published": "2026-10-01",
+    "checked": "2026-10-28",
+    "validFrom": "2027-01-01",
+    "validThrough": "2029-12-31",
+    "pages": 23,
+    "sha256": "681a0be2bc7a3050ce8fbf4e36bfb253825ad4dbfa9c0c49f64cc51554efeaaf"
+  },
+  "written": {
+    "questions": 80,
+    "minutes": 120,
+    "subjects": [
+      {
+        "id": "software",
+        "title": "소프트웨어 개발",
+        "questions": 20,
+        "units": [
+          {
+            "id": "requirements",
+            "title": "요구사항 확인",
+            "topics": "요구분석·UML·애자일·모델링",
+            "page": 1,
+            "lessons": []
+          },
+          {
+            "id": "ui",
+            "title": "화면 설계",
+            "topics": "UI 표준·지침·스토리보드·설계 도구",
+            "page": 1,
+            "lessons": []
+          },
+          {
+            "id": "application",
+            "title": "애플리케이션 설계",
+            "topics": "공통 모듈·아키텍처·결합도·응집도·객체지향·디자인 패턴",
+            "page": 1,
+            "lessons": []
+          },
+          {
+            "id": "interface-design",
+            "title": "인터페이스 설계",
+            "topics": "연계 대상·데이터 명세·오류 처리·미들웨어",
+            "page": 2,
+            "lessons": []
+          },
+          {
+            "id": "methodology",
+            "title": "소프트웨어개발 방법론 활용",
+            "topics": "생명주기·요구공학·비용 산정·테일러링",
+            "page": 2,
+            "lessons": []
+          },
+          {
+            "id": "integration",
+            "title": "통합 구현",
+            "topics": "단위 모듈·단위 테스트·개발 환경·형상관리",
+            "page": 2,
+            "lessons": []
+          },
+          {
+            "id": "packaging",
+            "title": "제품소프트웨어 패키징",
+            "topics": "배포·매뉴얼·제품 품질·버전관리·빌드 자동화",
+            "page": 3,
+            "lessons": []
+          },
+          {
+            "id": "testing",
+            "title": "애플리케이션 테스트 관리",
+            "topics": "테스트 설계·수행·결함 관리·성능 개선",
+            "page": 3,
+            "lessons": [
+              "test-boundaries",
+              "test-coverage",
+              "test-oracle-regression"
+            ]
+          },
+          {
+            "id": "interface",
+            "title": "인터페이스 구현",
+            "topics": "설계 확인·기능 구현·보안·연계 테스트",
+            "page": 4,
+            "lessons": []
+          }
+        ]
+      },
+      {
+        "id": "database",
+        "title": "데이터베이스 구축",
+        "questions": 20,
+        "units": [
+          {
+            "id": "sql-application",
+            "title": "SQL 응용",
+            "topics": "절차형 SQL·DML·DCL·윈도우 함수·그룹 함수",
+            "page": 4,
+            "lessons": [
+              "count-null"
+            ]
+          },
+          {
+            "id": "sql",
+            "title": "SQL 활용",
+            "topics": "DDL·트랜잭션·뷰·인덱스·집합 연산·조인·서브쿼리",
+            "page": 4,
+            "lessons": [
+              "sql-basics",
+              "indexes",
+              "joins",
+              "subqueries",
+              "patterns"
+            ]
+          },
+          {
+            "id": "logical",
+            "title": "논리 데이터베이스 설계",
+            "topics": "관계 모델·관계대수·관계해석·ER 모델·정규화",
+            "page": 5,
+            "lessons": [
+              "relation",
+              "algebra",
+              "normalization",
+              "design"
+            ]
+          },
+          {
+            "id": "physical",
+            "title": "물리 데이터베이스 설계",
+            "topics": "스토리지·무결성·키·반정규화·분산·백업·튜닝",
+            "page": 5,
+            "lessons": [
+              "keys",
+              "constraints"
+            ]
+          },
+          {
+            "id": "conversion",
+            "title": "데이터 전환",
+            "topics": "전환 계획·ETL·데이터 정제·품질 검증",
+            "page": 6,
+            "lessons": []
+          }
+        ]
+      },
+      {
+        "id": "programming",
+        "title": "프로그래밍 언어 활용",
+        "questions": 20,
+        "units": [
+          {
+            "id": "server",
+            "title": "서버프로그램 구현",
+            "topics": "개발 환경·프레임워크·API·취약성·배치",
+            "page": 6,
+            "lessons": []
+          },
+          {
+            "id": "languages",
+            "title": "프로그래밍 언어 활용",
+            "topics": "자료형·자료구조·연산자·언어 특성·라이브러리·예외",
+            "page": 7,
+            "lessons": []
+          },
+          {
+            "id": "basics",
+            "title": "응용 SW 기초 기술 활용",
+            "topics": "운영체제·메모리·스케줄링·OSI·IP·TCP/UDP·서버",
+            "page": 7,
+            "lessons": [
+              "ipv4-subnet"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "systems",
+        "title": "정보시스템 구축관리",
+        "questions": 20,
+        "units": [
+          {
+            "id": "it-project",
+            "title": "IT프로젝트 정보시스템 구축관리",
+            "topics": "네트워크·SW·HW·DB 구축관리·신기술·가용성",
+            "page": 8,
+            "lessons": []
+          },
+          {
+            "id": "secure-development",
+            "title": "소프트웨어 개발 보안 구축",
+            "topics": "Secure SDLC·입력 검증·인증·권한·세션·암호·API",
+            "page": 8,
+            "lessons": []
+          },
+          {
+            "id": "system-security",
+            "title": "시스템 보안 구축",
+            "topics": "공격 유형·서버 접근통제·보안 구조·로그·취약점 분석",
+            "page": 9,
+            "lessons": []
+          }
+        ]
+      }
+    ]
+  },
+  "practical": {
+    "title": "정보처리실무",
+    "format": "필답형",
+    "minutes": 150,
+    "units": [
+      {
+        "id": "practice-1",
+        "title": "요구사항 확인",
+        "topics": "현행 시스템 분석·요구사항 확인",
+        "page": 10,
+        "lessons": []
+      },
+      {
+        "id": "practice-2",
+        "title": "데이터 입출력 구현",
+        "topics": "논리·물리 저장소·프로시저·최적화",
+        "page": 12,
+        "lessons": [
+          "relation",
+          "keys",
+          "constraints",
+          "normalization",
+          "design",
+          "indexes"
+        ]
+      },
+      {
+        "id": "practice-3",
+        "title": "통합 구현",
+        "topics": "연계 데이터·연계 메커니즘·내외부 모듈",
+        "page": 13,
+        "lessons": []
+      },
+      {
+        "id": "practice-4",
+        "title": "서버프로그램 구현",
+        "topics": "개발 환경·공통 모듈·서버 프로그램·배치",
+        "page": 14,
+        "lessons": []
+      },
+      {
+        "id": "practice-5",
+        "title": "인터페이스 구현",
+        "topics": "설계서 확인·기능 구현·검증",
+        "page": 16,
+        "lessons": []
+      },
+      {
+        "id": "practice-6",
+        "title": "화면 설계",
+        "topics": "UI 요구사항·UI 설계",
+        "page": 17,
+        "lessons": []
+      },
+      {
+        "id": "practice-7",
+        "title": "애플리케이션 테스트 관리",
+        "topics": "테스트 케이스·통합 테스트·성능 개선",
+        "page": 18,
+        "lessons": [
+          "test-boundaries",
+          "test-coverage",
+          "test-oracle-regression"
+        ]
+      },
+      {
+        "id": "practice-8",
+        "title": "SQL 응용",
+        "topics": "절차형 SQL·응용 SQL",
+        "page": 19,
+        "lessons": [
+          "sql-basics",
+          "count-null",
+          "joins",
+          "subqueries",
+          "patterns"
+        ]
+      },
+      {
+        "id": "practice-9",
+        "title": "소프트웨어 개발 보안 구축",
+        "topics": "보안 설계·구현·취약점 조치",
+        "page": 20,
+        "lessons": []
+      },
+      {
+        "id": "practice-10",
+        "title": "프로그래밍 언어 활용",
+        "topics": "기본 문법·언어 특성·라이브러리",
+        "page": 20,
+        "lessons": []
+      },
+      {
+        "id": "practice-11",
+        "title": "응용 SW 기초 기술 활용",
+        "topics": "운영체제·데이터베이스·네트워크·개발 환경",
+        "page": 21,
+        "lessons": [
+          "ipv4-subnet"
+        ]
+      },
+      {
+        "id": "practice-12",
+        "title": "제품소프트웨어 패키징",
+        "topics": "패키징·매뉴얼·버전관리",
+        "page": 22,
+        "lessons": []
+      }
+    ]
+  },
+  "coverageNotice": "출제기준의 전체 목차와 현재 읽을 수 있는 수업을 구분했습니다. 16개 수업은 DB·SQL, 테스트, IPv4의 일부 개념을 다룹니다. 링크가 있는 단원도 해당 출제 범위 전체를 다룬 것은 아닙니다.",
+  "mappingNotice": "과목·주요항목 명칭은 큐넷 출제기준을 따릅니다. 개념 요약과 수업 연결은 편집한 학습 안내이며 공식 문항별 배점이나 출제 빈도를 뜻하지 않습니다. 실기 연결은 기초 이론이며 전체 실기 대비 과정이 아닙니다."
+}

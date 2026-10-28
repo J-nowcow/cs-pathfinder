@@ -1,6 +1,7 @@
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
+import { PmpCourseMap } from '@/components/pmp/PmpCourseMap'
 import { PmpBackup } from '@/components/pmp/PmpBackup'
 import { PmpSearchForm } from '@/components/pmp/PmpSearchForm'
 import { StudyDesk } from '@/components/library/StudyDesk'
@@ -12,16 +13,13 @@ export default function PmpHome() {
       <LearningSeo path="/learn/pmp" />
       <header className="desk-document-heading">
         <p className="study-meta">PMP · 개념과 실무</p>
-        <h1>
-          프로젝트를 끝내고,
-          <br />
-          가치를 남기는 일.
-        </h1>
+        <h1>프로젝트 관리·PMP 학습 목차</h1>
         <p>
           목적을 정하고 계획을 세우는 순간부터, 팀과 함께 실행하고 결과를
           확인하는 과정까지 읽습니다.
         </p>
       </header>
+      <PmpCourseMap />
       <div className="pmp-home-links">
         <Link href="/learn/pmp/n01">첫 수업 읽기 →</Link>
         <Link href="/learn/pmp/terms">용어 찾아보기 →</Link>
@@ -67,7 +65,7 @@ export default function PmpHome() {
         ))}
       </div>
       <section className="pmp-cases">
-        <h2>연결해서 생각하기</h2>
+        <h2>프로젝트 관리 종합 사례</h2>
         <p>여러 개념을 하나의 가상 프로젝트에 적용해 보세요.</p>
         {c.cases.map((x) => (
           <Link key={x.id} href={'/learn/pmp/case/' + x.id}>

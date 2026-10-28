@@ -21,7 +21,7 @@ export const studyNavigationGroups = [
   { label: '자격증 대비', sections: ['engineer', 'certificate'], links: [
     { href: '/learn/engineer', label: '정보관리기술사', detail: '연결 개념·답안 연습' },
     { href: '/learn/engineer#questions', label: '기술사 기출 찾아보기' },
-    { href: '/learn/certificate', label: '정보처리기사 이론', detail: 'DB·SQL·테스트·주소 범위' },
+    { href: '/learn/certificate', label: '정보처리기사 이론', detail: '2027–2029 출제기준·기초 이론' },
   ] },
 ]
 

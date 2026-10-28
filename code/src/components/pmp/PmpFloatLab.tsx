@@ -50,7 +50,7 @@ export function PmpFloatLab({
       aria-labelledby="float-title"
     >
       <p className="study-meta">직접 바꿔 보는 일정 · 5작업 예제</p>
-      <h2 id="float-title">다음 일은 밀렸는데 끝나는 날은 같다고요?</h2>
+      <h2 id="float-title">임계경로와 여유시간 실습</h2>
       <p>{config.assumptions}</p>
       <div className="pmp-float-inputs">
         {config.order.map((id) => (
@@ -201,7 +201,7 @@ export function PmpFloatLab({
             ))}
           </ul>
           <div className="pmp-float-explanation">
-            <h3>C의 두 가지 여유</h3>
+            <h3>작업 C의 총여유·자유여유</h3>
             <p>
               총 여유 = LS {result.rows.C.ls} − ES {result.rows.C.es} ={' '}
               <strong>{result.rows.C.tf}일</strong>
@@ -259,7 +259,7 @@ export function PmpFloatLab({
           </details>
         </>
       )}
-      <h3>관찰하고 다음 결과 예측하기</h3>
+      <h3>작업 기간 변경과 여유시간 예측</h3>
       <ol>
         {config.guide.map((line) => (
           <li key={line}>{line}</li>

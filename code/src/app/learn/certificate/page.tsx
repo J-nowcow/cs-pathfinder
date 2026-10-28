@@ -1,46 +1,22 @@
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
-import Link from 'next/link'
+import { CertificateSyllabus } from '@/components/certificate/CertificateSyllabus'
 import { LibraryShell } from '@/components/library/LibraryShell'
 import { CertificateBackup } from '@/components/certificate/CertificateBackup'
 import { CertificateTable } from '@/components/certificate/CertificateTable'
-import {
-  certificate as c,
-  certificateHref,
-  certificateDomain,
-} from '@/lib/certificate/course'
+import { certificate as c } from '@/lib/certificate/course'
 export const metadata = learningMetadata('/learn/certificate')
 export default function CertificatePage() {
   return (
     <LibraryShell
       eyebrow="정보처리기사 · 이론"
-      title="데이터·검증·주소 범위를 예제로."
+      title="정보처리기사 이론·출제기준 목차"
       description={c.intro}
     >
       <LearningSeo path="/learn/certificate" />
-      <section className="pmp-catalog-intro">
-        <p className="study-meta">
-          {c.scope} · {c.lessons.length}수업
-        </p>
-        <Link className="desk-primary" href={certificateHref(c.lessons[0].id)}>
-          첫 수업 읽기 →
-        </Link>
-      </section>
-      <section className="pmp-chapter-list" aria-label="정처기 이론 목차">
-        {c.lessons.map((n, i) => (
-          <section key={n.id}>
-            <p className="study-meta">
-              {String(i + 1).padStart(2, '0')} · {certificateDomain(n)}
-            </p>
-            <h2>
-              <Link href={certificateHref(n.id)}>{n.title} →</Link>
-            </h2>
-            <p>{n.question}</p>
-          </section>
-        ))}
-      </section>
+      <CertificateSyllabus />
       <section className="pmp-lesson">
-        <h2>수업을 잇는 작은 도서관</h2>
+        <h2>DB·SQL 공통 예제 데이터</h2>
         <p>
           모든 값은 학습을 위해 만든 예시예요. 실제 회원이나 대출 데이터가
           아니에요. DB·SQL 수업은 아래 초기 상태에서 시작해요. 테스트 수업의

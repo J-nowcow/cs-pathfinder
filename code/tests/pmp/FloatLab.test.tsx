@@ -62,5 +62,5 @@ it('server-renders a complete worked default with disabled controls for no-JS re
   expect(html).toContain('data-float-row="C"')
   expect(html).toContain('disabled=""')
   expect(html).toContain('<noscript>')
-  expect(html).toContain('C의 두 가지 여유')
+  expect(html).toContain('작업 C의 총여유·자유여유')
 })

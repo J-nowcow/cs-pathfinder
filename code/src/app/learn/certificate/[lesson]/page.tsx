@@ -1,6 +1,7 @@
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
+import { certificateLocation } from '@/lib/certificate/syllabus'
 import { notFound } from 'next/navigation'
 import { LibraryShell, ConceptFlow } from '@/components/library/LibraryShell'
 import { CertificateTable } from '@/components/certificate/CertificateTable'
@@ -11,7 +12,6 @@ import {
   certificate as c,
   certificateLessons,
   certificateHref,
-  certificateDomain,
 } from '@/lib/certificate/course'
 export function generateStaticParams() {
   return c.lessons.map((n) => ({ lesson: n.id }))
@@ -33,12 +33,13 @@ export default async function CertificateLesson({
     n = certificateLessons.get(lesson)
   if (!n) notFound()
   const at = c.lessons.findIndex((x) => x.id === n.id)
+  const location = certificateLocation(n.id)!
   return (
     <LibraryShell
       reading
       eyebrow={
         '정보처리기사 · ' +
-        certificateDomain(n) +
+        location.subject.title +
         ' · ' +
         String(at + 1).padStart(2, '0') +
         '/' +
@@ -47,6 +48,11 @@ export default async function CertificateLesson({
       title={n.title}
       description={n.question}
     >
+      <p className="study-meta">
+        <Link href={'/learn/certificate#certificate-unit-' + location.unit.id}>
+          {location.subject.title} / {location.unit.title} 목차 →
+        </Link>
+      </p>
       <LearningSeo path={'/learn/certificate/' + n.id} />
       <article className="pmp-lesson certificate-lesson">
         <aside className="lesson-takeaway" aria-label="이번 수업의 핵심">
@@ -62,7 +68,7 @@ export default async function CertificateLesson({
         {n.id === 'test-coverage' ? <CertificateCoverageGraph /> : null}
         {n.id === 'ipv4-subnet' ? <CertificateCidrFigure /> : null}
         <section>
-          <h2>같은 상황에서 비교하기</h2>
+          <h2>핵심 개념 비교</h2>
           <CertificateTable
             caption="개념의 기준과 확인할 점"
             headers={['개념', '기준', '확인할 점']}
@@ -70,7 +76,7 @@ export default async function CertificateLesson({
           />
         </section>
         <section>
-          <h2>도서관 예제로 따라가기</h2>
+          <h2>예제와 해설</h2>
           {n.example.code && (
             <pre className="certificate-code">
               <code>{n.example.code}</code>
@@ -96,10 +102,14 @@ export default async function CertificateLesson({
           ) : null}
         </section>
         <aside className="certificate-caution">
-          <h2>함께 기억할 조건</h2>
+          <h2>주의할 점</h2>
           <p>{n.trap}</p>
         </aside>
-        <CertificatePractice key={n.id} id={n.id} recallAnswer={n.recallAnswer} />
+        <CertificatePractice
+          key={n.id}
+          id={n.id}
+          recallAnswer={n.recallAnswer}
+        />
         <section>
           <h2>참고한 자료</h2>
           {c.sources

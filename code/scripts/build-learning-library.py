@@ -37,10 +37,24 @@ pmp=json.loads((C/'pm-content/pmp/source/course.json').read_text())
 editorial=json.loads((C/'learning-content/pmp-editorial.json').read_text())
 (C/'data/pmp-library.json').write_text(json.dumps({'nodes':[{'id':n['id'],'title':editorial.get(n['id'],{}).get('title',n['title'])} for n in pmp['nodes']]},ensure_ascii=False,indent=2)+'\n')
 (C/'data/engineer-guides.json').write_text(json.dumps(guide,ensure_ascii=False,indent=2)+'\n')
+missions=json.loads((C/'learning-content/jira/missions.json').read_text())
+library_titles={**{'topic:'+g['id']:g['title'] for g in guide},**{'mission:'+m['id']:m['title'] for m in missions}}
+(C/'data/library-titles.json').write_text(json.dumps(library_titles,ensure_ascii=False,indent=2)+'\n')
 (C/'data/engineer-index.json').write_text(json.dumps({**source,'classificationMethod':review_source['method'],'classificationReviewedAt':review_source['reviewedAt'],'questions':questions},ensure_ascii=False,separators=(',',':'))+'\n')
 shutil.copytree(J,P,dirs_exist_ok=True)
+title_edits=json.loads((C/'learning-content/jira/title-editorial.json').read_text())
+catalog=json.loads((C/'data/jira-library.json').read_text())
+for lesson in catalog['lessons']: lesson['title']=title_edits['lessons'][str(lesson['id'])]
+(C/'data/jira-library.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n')
 app=(P/'app.js').read_text();old='function save(){try{localStorage.setItem(KEY,JSON.stringify(state));'
-assert old in app;app=app.replace(old,"function save(){try{state._updatedAt=new Date().toISOString();state._lastRoute=location.hash;localStorage.setItem(KEY,JSON.stringify(state));",1);(P/'app.js').write_text(app)
+assert old in app;app=app.replace(old,"function save(){try{state._updatedAt=new Date().toISOString();state._lastRoute=location.hash;localStorage.setItem(KEY,JSON.stringify(state));",1)
+copy_edits=json.loads((C/'learning-content/jira/copy-editorial.json').read_text())
+for before,after in {**title_edits['headings'],**copy_edits}.items():
+ assert before in app, 'Stale Jira reading override: '+before
+ app=app.replace(before,after)
+assert app.startswith("'use strict';\n")
+app=app.replace("'use strict';\n", "'use strict';\nconst lessonTitles="+json.dumps(title_edits['lessons'],ensure_ascii=False)+';window.STUDY_DATA.lessons.forEach(lesson=>{lesson.title=lessonTitles[lesson.id]??lesson.title});\n',1)
+(P/'app.js').write_text(app)
 h=(P/'index.html').read_text();h=h.replace('<div class="side-label">','<div style="padding:0 24px 16px;display:flex;gap:14px;flex-wrap:wrap;font-size:13px"><a href="/learn/jira">실무 미션 ↗</a><a href="/learn/progress">통합 기록 ↗</a></div><div class="side-label">',1);(P/'index.html').write_text(h)
 # Standalone Jira file retains original six OFL fonts, never the locally installed KT font.
 css=(P/'style.css').read_text()

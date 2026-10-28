@@ -90,7 +90,7 @@ export function PmpEvmLab() {
   return (
     <section id="evm-lab" className="pmp-evm-lab" aria-labelledby="evm-title">
       <p className="study-meta">직접 비교하는 비용과 진척</p>
-      <h2 id="evm-title">실적은 같은데 예상 총원가는 왜 다를까요?</h2>
+      <h2 id="evm-title">EVM 실습: 성과지표와 완료 비용 예측</h2>
       <p>
         같은 기준일과 가상 예산 단위를 사용합니다. EV는 완료한 일의 예산
         가치이며 매출이나 지출액이 아닙니다.
@@ -211,10 +211,10 @@ export function PmpEvmLab() {
             <a href="/learn/pmp/n44#float-lab">일정과 임계 경로</a>를 함께
             확인합니다.
           </p>
-          <h3>남은 일의 비용을 어떻게 볼까요?</h3>
+          <h3>완료 비용 예측(EAC·ETC)</h3>
           <div className="pmp-evm-forecasts">
             <section>
-              <h4>지금의 비용 효율이 유지된다면</h4>
+              <h4>현재 비용 효율 유지 가정</h4>
               <p className="pmp-evm-value">EAC {formatEvm(result.eacCpi)}</p>
               <p>
                 <code>BAC / CPI</code>
@@ -232,7 +232,7 @@ export function PmpEvmLab() {
               </p>
             </section>
             <section>
-              <h4>남은 일을 원래 계획한 효율로 한다면</h4>
+              <h4>잔여 작업의 계획 효율 가정</h4>
               <p className="pmp-evm-value">EAC {formatEvm(result.eacPlan)}</p>
               <p>
                 <code>AC + (BAC − EV)</code>
@@ -243,7 +243,7 @@ export function PmpEvmLab() {
               </p>
             </section>
             <section>
-              <h4>잔여 원가를 새로 추정했다면</h4>
+              <h4>잔여 원가 재추정 가정</h4>
               <p className="pmp-evm-value">
                 EAC {formatEvm(result.eacBottomUp)}
               </p>
@@ -258,7 +258,7 @@ export function PmpEvmLab() {
             </section>
           </div>
           <section className="pmp-evm-target">
-            <h3>원래 예산 BAC 안에서 끝내려면</h3>
+            <h3>원래 예산(BAC) 목표의 TCPI</h3>
             <p className="pmp-evm-value">
               TCPI → BAC {formatEvm(result.tcpiBac)}
             </p>
