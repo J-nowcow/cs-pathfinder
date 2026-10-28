@@ -20,7 +20,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
  * 이미 있다.
  */
 const LINKS = [
-  { href: '/', label: '오늘의 질문' },
+  { href: '/cs', label: '오늘의 질문' },
   { href: '/questions', label: '질문 목록' },
   { href: '/map', label: '지도' },
   /*

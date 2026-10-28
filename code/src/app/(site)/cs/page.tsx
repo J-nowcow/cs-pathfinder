@@ -1,7 +1,7 @@
 import { ensureSeeded } from '@/lib/db/bootstrap'
-import { webSiteJsonLd, serializeJsonLd } from '@/lib/seo/jsonld'
-import { siteUrl } from '@/lib/site'
-export const metadata = { alternates: { canonical: new URL('/', siteUrl()).href, types: { 'application/rss+xml': '/rss.xml' } } }
+import { serializeJsonLd } from '@/lib/seo/jsonld'
+import { learningMetadata, learningJsonLd } from '@/lib/seo/learning'
+export const metadata = learningMetadata('/cs')
 import { listRoots, countRoots, listRootsByQuestions } from '@/lib/db/roots'
 import { listTrees, BOARD_PAGE_SIZE } from '@/lib/db/trees'
 import { getTodayTree } from '@/lib/daily/today'
@@ -12,7 +12,7 @@ import Link from 'next/link'
 import { Board } from '@/components/Board'
 import { ResumeLine } from '@/components/ResumeLine'
 import { DailyLearningCard } from '@/components/DailyLearningCard'
-import { BACKEND_INTERVIEW_30 } from '../../../data/learning-tracks'
+import { BACKEND_INTERVIEW_30 } from '../../../../data/learning-tracks'
 import { resolveTrackQuestions, type ResolvedTrackQuestion } from '@/lib/learning/tracks'
 
 // PGlite가 인메모리라 매 요청 실제 DB를 읽는다. 정적 생성 대상이 아니다.
@@ -111,11 +111,7 @@ export default async function HomePage() {
   // 목록이 아니라 중복으로 읽힌다
   const rest = roots.filter((r) => r.id !== feature?.nodeId)
 
-  const jsonLd = webSiteJsonLd({
-    name: 'CS 길라잡이',
-    url: siteUrl().origin,
-    description: '하루에 질문 하나. 꼬리에 꼬리를 무는 CS 면접 공부.',
-  })
+  const jsonLd = learningJsonLd('/cs')!
 
   return (
     <main className="mx-auto max-w-3xl px-5 pb-4 pt-10 sm:px-8 sm:pt-16">
@@ -148,7 +144,7 @@ export default async function HomePage() {
             레쥬메에서 질문 만들기 →
           </Link>
           <Link
-            href="/learn"
+            href="/"
             className="-my-2 inline-flex min-h-11 items-center rounded-sm font-medium text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             CS·PM 학습 분야 →

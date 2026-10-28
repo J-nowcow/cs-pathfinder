@@ -130,7 +130,7 @@ export default async function SharedTreePage({ params }: { params: Promise<{ slu
             <span aria-hidden>→</span>
           </Link>
           <Link
-            href="/"
+            href="/cs"
             className="inline-flex items-center rounded-lg border border-line bg-raised px-5 py-3 text-[15px] font-medium text-ink transition-colors hover:border-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             다른 질문 보기

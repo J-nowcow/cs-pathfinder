@@ -35,12 +35,12 @@ export function SiteFooter() {
             <h2 className="text-[12px] font-medium text-faint">둘러보기</h2>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link href="/" className={FOOTER_LINK}>
+                <Link href="/cs" className={FOOTER_LINK}>
                   오늘의 질문
                 </Link>
               </li>
               <li>
-                <Link href="/learn" className={FOOTER_LINK}>
+                <Link href="/" className={FOOTER_LINK}>
                   CS·PM 학습 분야
                 </Link>
               </li>

@@ -67,6 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!isMissingTable(e)) throw e
   }
 
-  const learning = learningPages.map((page) => ({ url: new URL(page.path, base).href }))
+  const fixedPaths = new Set(fixed.map((entry) => new URL(entry.url).pathname))
+  const learning = learningPages.filter((page) => !fixedPaths.has(page.path)).map((page) => ({ url: new URL(page.path, base).href }))
   return [...fixed, ...concepts, ...entries, ...learning]
 }

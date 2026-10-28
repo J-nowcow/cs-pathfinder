@@ -10,7 +10,7 @@ afterEach(cleanup)
 it('exposes every existing subject entry and personal destination with prefetch disabled', () => {
   const { container } = render(<StudyNavigation section="pmp" />)
   expect(container.querySelectorAll('summary')).toHaveLength(3)
-  const expected = [...studyNavigationGroups.flatMap(g => g.links.map(l => l.href)), '/learn', '/learn/library', '/learn/progress']
+  const expected = [...studyNavigationGroups.flatMap(g => g.links.map(l => l.href)), '/', '/learn/library', '/learn/progress']
   const anchors = [...container.querySelectorAll('a')]
   expect(new Set(anchors.map(a => a.getAttribute('href')))).toEqual(new Set(expected))
   expect(anchors.every(a => a.dataset.prefetch === 'false')).toBe(true)

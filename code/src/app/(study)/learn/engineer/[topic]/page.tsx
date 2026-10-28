@@ -2,8 +2,8 @@ import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import guides from '../../../../../data/engineer-guides.json'
-import index from '../../../../../data/engineer-index.json'
+import guides from '../../../../../../data/engineer-guides.json'
+import index from '../../../../../../data/engineer-index.json'
 import {
   LibraryShell,
   ConceptFlow,

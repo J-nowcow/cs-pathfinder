@@ -30,7 +30,7 @@ export function StudyDesk({
       data-typography="presentation"
     >
       <header className="desk-header">
-        <Link href="/learn" className="desk-brand">
+        <Link href="/" className="desk-brand">
           <span className="desk-brand-mark" aria-hidden="true">
             <svg
               viewBox="0 0 24 24"
@@ -49,7 +49,7 @@ export function StudyDesk({
       <div className="desk-layout">
         {section !== 'home' && <aside className="desk-sidebar">
           <nav aria-label="내 공부 메뉴">
-            <Link href="/learn">메인</Link>
+            <Link href="/">메인</Link>
             <Link
               href="/learn/library"
               aria-current={section === 'library' ? 'page' : undefined}

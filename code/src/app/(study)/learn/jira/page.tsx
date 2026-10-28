@@ -2,7 +2,7 @@ import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import missions from '../../../../learning-content/jira/missions.json'
+import missions from '../../../../../learning-content/jira/missions.json'
 import { pmpLessonHref } from '@/lib/pmp/routes'
 import {
   LibraryShell,

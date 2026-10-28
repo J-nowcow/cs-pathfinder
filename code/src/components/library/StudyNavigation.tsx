@@ -15,7 +15,7 @@ export const studyNavigationGroups = [
     { href: '/questions', label: 'CS 질문·해설' },
     { href: '/map', label: '개념 지도' },
     { href: '/glossary', label: 'CS 용어 사전' },
-    { href: '/', label: '오늘의 CS 질문' },
+    { href: '/cs', label: '오늘의 CS 질문' },
     { href: '/me', label: 'CS 학습 기록' },
   ] },
   { label: '자격증 대비', sections: ['engineer', 'certificate'], links: [
@@ -49,7 +49,7 @@ export function StudyNavigation({ section }: { section: string }) {
         event.preventDefault()
       }
     }}>
-      <Link href="/learn" prefetch={false} aria-current={pathname === '/learn' ? 'page' : undefined}>메인</Link>
+      <Link href="/" prefetch={false} aria-current={pathname === '/' ? 'page' : undefined}>메인</Link>
       {studyNavigationGroups.map(group => (
         <details key={group.label} name="desk-study-navigation" className="desk-nav-group" data-active={group.sections.includes(section)}>
           <summary>{group.label}<svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="m3 4.5 3 3 3-3" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></summary>

@@ -6,12 +6,12 @@ import { StudyDesk } from '@/components/library/StudyDesk'
 import { LearningAreas } from '@/components/LearningAreas'
 import { OpenBookArt } from '@/components/library/BookArt'
 
-export const metadata = learningMetadata('/learn')
+export const metadata = learningMetadata('/')
 
 export default function LearningPage() {
   return (
     <StudyDesk section="home" document>
-      <LearningSeo path="/learn" />
+      <LearningSeo path="/" />
       <section className="desk-home-intro" aria-labelledby="home-heading">
         <div>
           <p className="desk-kicker">PM 이론 · CS 이론 · 자격증 대비</p>

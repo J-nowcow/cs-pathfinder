@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
    */
   serverExternalPackages: ['@electric-sql/pglite'],
   async redirects() {
-    return [{ source: '/pmp/:path*', destination: '/learn/pmp', permanent: false }]
+    return [
+      { source: '/learn', destination: '/', permanent: true },
+      { source: '/pmp/:path*', destination: '/learn/pmp', permanent: false },
+    ]
   },
 }
 

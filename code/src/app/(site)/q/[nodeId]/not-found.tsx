@@ -33,7 +33,7 @@ export default function QuestionNotFound() {
 
       <div className="mt-7">
         <Link
-          href="/"
+          href="/cs"
           className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-[15px] font-medium text-on-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           오늘의 질문 보기
