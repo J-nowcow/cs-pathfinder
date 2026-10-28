@@ -26,6 +26,7 @@ export function PmpPractice({
   const [choice, setChoice] = useState<number | null>(null)
   const [message, setMessage] = useState(''),
     [ready, setReady] = useState(false)
+  const [notice, setNotice] = useState<'idle' | 'saved' | 'error' | 'input'>('idle')
   const formName = useId(),
     q = pmpQuestions.get(id)
   useEffect(() => {
@@ -41,6 +42,7 @@ export function PmpPractice({
       setThought(thoughts)
       window.dispatchEvent(new Event(PMP_EVENT))
     } catch (e) {
+      setNotice('error')
       setMessage(
         e instanceof Error
           ? e.message
@@ -54,10 +56,12 @@ export function PmpPractice({
       const next = savePmp(localStorage, action)
       setData(next)
       if (action.kind === 'text') baseline.current[action.field] = action.text
+      setNotice('saved')
       setMessage('이 브라우저에 저장했어요.')
       window.dispatchEvent(new Event(PMP_EVENT))
       return true
     } catch (e) {
+      setNotice('error')
       if (action.kind === 'answer' || action.kind === 'retry') {
         try {
           setData(changePmp(data, action))
@@ -90,6 +94,7 @@ export function PmpPractice({
           onSubmit={(e) => {
             e.preventDefault()
             if (choice === null) {
+              setNotice('input')
               setMessage('답 하나를 선택해 주세요.')
               return
             }
@@ -128,7 +133,11 @@ export function PmpPractice({
           )}
         </form>
         {answered && (
-          <div className="pmp-answer-feedback" aria-live="polite">
+          <div
+            className="pmp-answer-feedback"
+            data-revealed={notice === 'saved' || notice === 'error'}
+            aria-live="polite"
+          >
             <h3>
               {q.options[index!].correct
                 ? '판단 근거를 확인해요.'
@@ -211,7 +220,20 @@ export function PmpPractice({
         현재 브라우저에 저장됩니다. 기존 PMP 기록과 같은 형식이며 계정 동기화는
         아직 연결 전입니다.
       </p>
-      <p role="status" className="pmp-save-status">
+      <p role="status" className="pmp-save-status" data-state={notice}>
+        {notice === 'saved' && (
+          <svg
+            className="pmp-save-check"
+            viewBox="0 0 20 20"
+            width="20"
+            height="20"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="10" cy="10" r="9" />
+            <path d="m5.5 10 3 3 6-6" pathLength="1" />
+          </svg>
+        )}
         {message}
       </p>
       <noscript>

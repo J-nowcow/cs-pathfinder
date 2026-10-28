@@ -30,11 +30,27 @@ export default function PmpHome() {
       <PmpSearchForm />
       <div className="pmp-chapter-list">
         {c.tracks.map((t, i) => (
-          <section key={t.id} id={t.id}>
-            <p className="study-meta">
-              {String(i + 1).padStart(2, '0')} / {t.sub}
-            </p>
-            <h2>{t.title}</h2>
+          <details key={t.id} id={t.id} className="pmp-chapter" open>
+            <summary>
+              <p className="study-meta">
+                {String(i + 1).padStart(2, '0')} / {t.sub}
+              </p>
+              <h2>{t.title}</h2>
+              <span className="chapter-toggle" aria-hidden="true">
+                <span className="chapter-collapse">접기</span>
+                <span className="chapter-expand">펼치기</span>
+                <svg
+                  viewBox="0 0 16 16"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="m4 6 4 4 4-4" />
+                </svg>
+              </span>
+            </summary>
             <ol>
               {t.order.map((id) => (
                 <li key={id}>
@@ -45,7 +61,7 @@ export default function PmpHome() {
                 </li>
               ))}
             </ol>
-          </section>
+          </details>
         ))}
       </div>
       <section className="pmp-cases">
