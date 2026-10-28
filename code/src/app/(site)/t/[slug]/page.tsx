@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation'
 import { after } from 'next/server'
 import { cookies } from 'next/headers'
 import type { Metadata } from 'next'
-import { ensureSeeded } from '@/lib/db/bootstrap'
-import { loadTreeBySlug, bumpTreeViews } from '@/lib/db/trees'
+import { loadPublicTreeForRender } from '@/lib/server/public-render-reads'
+import { bumpTreeViews } from '@/lib/db/trees'
 import { isValidSlug } from '@/lib/tree/slug'
 import { socialMeta } from '@/lib/site'
 import { SharedTree } from '@/components/SharedTree'
@@ -26,8 +26,7 @@ export const dynamic = 'force-dynamic'
 async function load(slugParam: string) {
   // 형식이 틀린 건 존재할 수 없는 slug다. 봇이 주소를 훑을 때 DB까지 가지 않게 막는다
   if (!isValidSlug(slugParam)) return null
-  await ensureSeeded()
-  return loadTreeBySlug(slugParam)
+  return loadPublicTreeForRender(slugParam)
 }
 
 /**
