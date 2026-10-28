@@ -13,6 +13,7 @@ export function CertificatePractice({ id, recallAnswer }: { id: string; recallAn
     [draft, setDraft] = useState(''),
     [ready, setReady] = useState(false),
     [message, setMessage] = useState('')
+  const input = useRef<HTMLTextAreaElement>(null)
   const baseline = useRef(''),
     lesson = certificateLessons.get(id)!
   useEffect(() => {
@@ -34,7 +35,11 @@ export function CertificatePractice({ id, recallAnswer }: { id: string; recallAn
       const next = saveCertificate(localStorage, id, action)
       setEntry(next.entries[id])
       if (action.kind === 'draft') baseline.current = action.text
-      setMessage('이 브라우저에 저장했어요.')
+      setMessage(action.kind === 'check'
+        ? '점검 항목을 이 브라우저에 저장했어요.'
+        : action.kind === 'review'
+          ? '복습 예약을 이 브라우저에 저장했어요.'
+          : '메모를 이 브라우저에 저장했어요.')
       window.dispatchEvent(new Event(CERTIFICATE_EVENT))
     } catch (e) {
       setMessage(
@@ -43,15 +48,20 @@ export function CertificatePractice({ id, recallAnswer }: { id: string; recallAn
       )
     }
   }
+  const hasUnsavedDraft = ready && draft !== baseline.current
+  const metaId = 'certificate-meta-' + id
+  const unsavedId = 'certificate-unsaved-' + id
   return (
     <section className="pmp-practice" aria-label="정처기 회상 메모">
       <h2>내 말로 설명해 보기</h2>
       <p>{lesson.recall}</p>
       <label htmlFor={'certificate-' + id}>내 설명·메모</label>
       <textarea
+        ref={input}
         id={'certificate-' + id}
         rows={6}
         maxLength={6000}
+        aria-describedby={hasUnsavedDraft ? metaId + ' ' + unsavedId : metaId}
         disabled={!ready}
         value={draft}
         onChange={(e) => {
@@ -63,9 +73,20 @@ export function CertificatePractice({ id, recallAnswer }: { id: string; recallAn
           })
         }}
       />
-      <p className="study-meta">
+      <p id={metaId} className="study-meta">
         {draft.length}/6,000자 · 브라우저 저장 · 계정 동기화 없음
       </p>
+      {hasUnsavedDraft && (
+        <div className="my-3 grid justify-items-start gap-2">
+          <p id={unsavedId}>메모가 아직 저장되지 않았어요. 다시 저장하거나 입력한 글을 복사해 보관해 주세요.</p>
+          <button className={libraryButton} onClick={() => {
+            persist({ kind: 'draft', text: draft, expected: baseline.current })
+            input.current?.focus()
+          }}>
+            메모 저장 다시 시도
+          </button>
+        </div>
+      )}
       <fieldset>
         <legend>설명한 뒤 점검하기</legend>
         {lesson.checklist.map((value) => (
