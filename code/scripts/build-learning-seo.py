@@ -28,8 +28,9 @@ assert all(n['description'] and not any(c in n['description'] for c in '<>') for
 # Approved copy changes can be made without changing preserved lesson sources.
 overrides=root/'learning-content/seo-editorial.json'
 if overrides.exists():
+    editorial=read('learning-content/seo-editorial.json')
     for n in pages:
-        edit=read('learning-content/seo-editorial.json').get(n['path'],{})
+        edit=editorial.get(n['path'],{})
         assert not (set(edit)-{'title','description'}), 'SEO overrides cannot alter public identities'
         n.update(edit)
 (root/'data/learning-search.json').write_text(json.dumps(pages,ensure_ascii=False,indent=2)+'\n')
