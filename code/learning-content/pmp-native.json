@@ -158,5 +158,10 @@
     "originalSnapshotsUnchanged": true,
     "accountRolloutEnabled": false,
     "nativeSearch": "All74 titles, body-only/rich terms, literal AND, NFC/case, rank/order/unique IDs, query limits, plain text escaping; desktop GET/history/no-JS/22px/record preservation"
+  },
+  "nativeEditorial": {
+    "source": "learning-content/pmp-editorial.json",
+    "scope": "n01 title, guiding question, summary and explanation; original lesson ID, quiz, source attribution and offline snapshot retained",
+    "titlePolicy": "Name the core concepts in lesson titles; use questions and examples in the guiding question and body"
   }
 }

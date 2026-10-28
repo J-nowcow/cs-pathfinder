@@ -16,7 +16,7 @@ function SuccessFigure() {
     >
       <figcaption id="success-figure-caption">
         <span className="lesson-eyebrow">그림으로 이해하기</span>
-        <strong>만든 것과 달라진 것, 얻은 가치를 나누어 봅니다</strong>
+        <strong>산출물·성과·편익의 차이</strong>
       </figcaption>
       <div className="lesson-figure-canvas">
         <svg
