@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { kstToday, kstDateKey } from '@/lib/daily/date'
 
 describe('kstToday', () => {
@@ -44,4 +44,36 @@ describe('kstDateKey', () => {
   it('rejects a malformed date', () => {
     expect(() => kstDateKey('2026-8-6')).toThrow()
   })
+})
+
+
+it('keeps the implicit current date fresh across KST midnight and clock changes', () => {
+  vi.useFakeTimers()
+  try {
+    for (const [instant, day] of [
+      ['2026-10-28T14:59:59.999Z', '2026-10-28'],
+      ['2026-10-28T15:00:00.000Z', '2026-10-29'],
+      ['2026-12-31T15:00:00.000Z', '2027-01-01'],
+      ['2024-02-28T15:00:00.000Z', '2024-02-29'],
+      ['2026-10-28T14:59:59.999Z', '2026-10-28'],
+    ]) {
+      vi.setSystemTime(new Date(instant))
+      expect(kstToday()).toBe(day)
+    }
+  } finally {
+    vi.useRealTimers()
+  }
+})
+
+it('matches fresh fixed-zone formatting across inputs and retains invalid-date errors', () => {
+  const options: Intl.DateTimeFormatOptions = { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }
+  for (const year of [2000, 2024, 2026, 2099]) {
+    for (const month of [0, 1, 6, 11]) {
+      for (const hour of [0, 14, 15, 23]) {
+        const date = new Date(Date.UTC(year, month, 28, hour, 59, 59))
+        expect(kstToday(date)).toBe(new Intl.DateTimeFormat('en-CA', options).format(date))
+      }
+    }
+  }
+  expect(() => kstToday(new Date(Number.NaN))).toThrow(RangeError)
 })
