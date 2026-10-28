@@ -122,7 +122,7 @@ describe('official syllabus and public course orientation', () => {
     runInNewContext(original, context)
     const before = JSON.parse(JSON.stringify(context.window.STUDY_DATA))
     const script = readFileSync('public/jira/app.js', 'utf8')
-    runInNewContext(script.split('\n')[0], context)
+    runInNewContext(script.split('\n').find(line => line.startsWith('const lessonTitles='))!, context)
     const after = context.window.STUDY_DATA as typeof before
     expect(after.lessons).toHaveLength(10)
     for (const lesson of after.lessons) {

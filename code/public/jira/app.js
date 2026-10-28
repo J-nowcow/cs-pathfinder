@@ -1,5 +1,5 @@
-const lessonTitles={"1": "Jira 기본 구조: 공간·작업·보드", "2": "작업 명세: 산출물·담당자·인수 기준", "3": "작업 계층과 의존관계", "4": "워크플로와 완료 기준", "5": "보드와 작업 흐름 관리", "6": "JQL 검색과 필터 저장", "7": "보고 화면과 지표", "8": "Jira 자동화 규칙과 검증", "9": "권한·필드 오류 진단", "10": "BSS PI 운영 보고와 인계"};window.STUDY_DATA.lessons.forEach(lesson=>{lesson.title=lessonTitles[lesson.id]??lesson.title});
 'use strict';
+const lessonTitles={"1": "Jira 기본 구조: 공간·작업·보드", "2": "작업 명세: 산출물·담당자·인수 기준", "3": "작업 계층과 의존관계", "4": "워크플로와 완료 기준", "5": "보드와 작업 흐름 관리", "6": "JQL 검색과 필터 저장", "7": "보고 화면과 지표", "8": "Jira 자동화 규칙과 검증", "9": "권한·필드 오류 진단", "10": "BSS PI 운영 보고와 인계"};window.STUDY_DATA.lessons.forEach(lesson=>{lesson.title=lessonTitles[lesson.id]??lesson.title});
 const D=window.STUDY_DATA, $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const KEY='jira-garden-v1', defaults={done:[],solved:[],last:1,notes:{},lastQuery:1,queryDrafts:{},body:'SUIT',heading:'SUITE',size:17};
