@@ -10,7 +10,7 @@ import {
   type PmpBackupChoices,
   type PmpBackupConflict,
 } from '@/lib/pmp/backup'
-import { pmpQuestions } from '@/lib/pmp/questions'
+import type { PmpQuestion } from '@/lib/pmp/questions'
 import { libraryButton } from '@/components/library/LibraryShell'
 const labels: Record<string, string> = {
   notes: '내 메모',
@@ -50,13 +50,13 @@ function display(field: string, value: unknown): string {
     )
   return String(value)
 }
-function answer(c: PmpBackupConflict, value: unknown) {
+function answer(c: PmpBackupConflict, value: unknown, questions: Map<string, PmpQuestion>) {
   if (c.field !== 'answers') return display(c.field, value)
   const a = value as { index: number; at: string },
-    option = pmpQuestions.get(c.id)!.options[a.index]
+    option = questions.get(c.id)!.options[a.index]
   return `${option.text}\n${option.correct ? '적절한 선택' : '다른 선택이 더 적절함'} · ${new Date(a.at).toLocaleString('ko-KR')}`
 }
-type Pending = { raw: string; name: string; baseline: string | null }
+type Pending = { raw: string; name: string; baseline: string | null; questions: Map<string, PmpQuestion> }
 export function PmpBackup() {
   const [ready, setReady] = useState(false),
     [message, setMessage] = useState(''),
@@ -140,7 +140,10 @@ export function PmpBackup() {
       parsePmpBackup(raw)
       const baseline = localStorage.getItem(PMP_KEY)
       planPmpBackup(baseline, raw)
-      setPending({ raw, name: file.name, baseline })
+      // Full prose is only needed to compare a user-selected backup file.
+      const { pmpQuestions } = await import('@/lib/pmp/questions')
+      if (token !== serial.current) return
+      setPending({ raw, name: file.name, baseline, questions: pmpQuestions })
     } catch (e) {
       if (token === serial.current)
         setMessage(
@@ -240,7 +243,7 @@ export function PmpBackup() {
                         : `${c.id.startsWith('n') ? c.id.slice(1) + '번 수업' : '상황 문제'} · ${labels[c.field]}`}
                   </legend>
                   {c.field === 'answers' && !c.id.startsWith('n') && (
-                    <p>{pmpQuestions.get(c.id)?.scene}</p>
+                    <p>{pending.questions.get(c.id)?.scene}</p>
                   )}
                   {c.field === 'prefs' && (
                     <p>
@@ -277,7 +280,7 @@ export function PmpBackup() {
                             ? '현재 브라우저 기록 유지'
                             : '백업 파일의 기록 사용'}
                         </span>
-                        <pre tabIndex={0}>{answer(c, c[side])}</pre>
+                        <pre tabIndex={0}>{answer(c, c[side], pending.questions)}</pre>
                       </label>
                     ))}
                   </div>

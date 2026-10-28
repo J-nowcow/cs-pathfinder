@@ -1,4 +1,4 @@
-"""Extract only quiz/recall data for native clients; the reviewed source is unchanged."""
+"""Extract quiz/recall data and compact grading identities; the reviewed source is unchanged."""
 import json
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
@@ -8,4 +8,6 @@ questions += [{**q,'scene':q.get('scene') or q['q']} for case in c['cases'] for 
 assert len({q['id'] for q in questions})==len(questions)
 assert all(sum(bool(o['correct']) for o in q['options'])==1 for q in questions)
 (root/'data/pmp-native-questions.json').write_text(json.dumps(questions,ensure_ascii=False,indent=2)+'\n')
+grading=[{'id':q['id'],'node':q['node'],'options':[{'correct':o['correct']} for o in q['options']]} for q in questions]
+(root/'data/pmp-grading.json').write_text(json.dumps(grading,ensure_ascii=False,indent=2)+'\n')
 print('Native PMP questions:',len(questions))

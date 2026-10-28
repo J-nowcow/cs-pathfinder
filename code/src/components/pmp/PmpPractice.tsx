@@ -11,12 +11,12 @@ import {
   type PmpData,
   type PmpChange,
 } from '@/lib/pmp/storage'
-import { pmpQuestions } from '@/lib/pmp/questions'
+import type { PmpQuestion } from '@/lib/pmp/questions'
 export function PmpPractice({
-  id,
+  question: q,
   visit = false,
 }: {
-  id: string
+  question: PmpQuestion
   visit?: boolean
 }) {
   const [data, setData] = useState<PmpData>({ version: 1 })
@@ -28,7 +28,7 @@ export function PmpPractice({
     [ready, setReady] = useState(false)
   const [notice, setNotice] = useState<'idle' | 'saved' | 'error' | 'input'>('idle')
   const formName = useId(),
-    q = pmpQuestions.get(id)
+    id = q.id
   useEffect(() => {
     try {
       const state = visit
@@ -76,7 +76,6 @@ export function PmpPractice({
       return false
     }
   }
-  if (!q) return null
   const raw = pmpField(data, 'answers')[id] as
     | { index?: number; at?: string }
     | undefined
