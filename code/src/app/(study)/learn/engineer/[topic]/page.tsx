@@ -11,6 +11,7 @@ import {
 } from '@/components/library/LibraryShell'
 import { StudyPractice } from '@/components/library/StudyPractice'
 import { ExamBrowser } from '@/components/library/ExamBrowser'
+import { examBrowserQuestions } from '@/lib/library/exam-browser-data'
 import { ConcurrencyStory } from '@/components/library/ConcurrencyStory'
 export function generateStaticParams() {
   return guides.map((g) => ({ topic: g.id }))
@@ -174,10 +175,12 @@ export default async function TopicPage({
         </Link>
       </div>
       <ExamBrowser
-        questions={index.questions.filter(
-          (q) =>
-            q.topics.includes(g.id) ||
-            q.backgroundTopics.some((id) => id === g.id),
+        questions={examBrowserQuestions(
+          index.questions.filter(
+            (q) =>
+              q.topics.includes(g.id) ||
+              q.backgroundTopics.some((id) => id === g.id),
+          ),
         )}
         topicTitles={Object.fromEntries(guides.map((x) => [x.id, x.title]))}
       />
