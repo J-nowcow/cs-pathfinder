@@ -1,7 +1,9 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
 import { LibraryShell } from '@/components/library/LibraryShell'
 import { pmpCourse, pmpLessonHref } from '@/lib/pmp/course'
-export const metadata = { title: 'PMP 용어집' }
+export const metadata = learningMetadata('/learn/pmp/terms')
 export default function Terms() {
   return (
     <LibraryShell
@@ -9,6 +11,7 @@ export default function Terms() {
       title="개념을 다시 찾아볼 때"
       description="한 줄 뜻을 확인하고, 연결된 수업에서 맥락을 함께 읽습니다."
     >
+      <LearningSeo path="/learn/pmp/terms" />
       <dl className="pmp-glossary">
         {pmpCourse.glossary.map((g) => (
           <div key={g.en}>

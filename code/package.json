@@ -52,6 +52,7 @@
     "measure:candidates": "tsx scripts/measure-candidates.ts",
     "embed": "tsx scripts/embed.ts",
     "mark:duplicates": "tsx scripts/mark-duplicates.ts",
+    "build:seo": "python3 scripts/build-learning-seo.py",
     "build:pmp": "python3 scripts/build-pmp-content.py",
     "build:library": "python3 scripts/build-learning-library.py",
     "db:library": "tsx scripts/library-migration.ts",

@@ -1,3 +1,5 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import guides from '../../../../../data/engineer-guides.json'
@@ -19,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ topic: string }>
 }) {
   const { topic } = await params
-  return { title: guides.find((g) => g.id === topic)?.title ?? '학습 주제' }
+  return learningMetadata('/learn/engineer/' + topic)
 }
 export default async function TopicPage({
   params,
@@ -40,6 +42,7 @@ export default async function TopicPage({
           : g.definition
       }
     >
+      <LearningSeo path={'/learn/engineer/' + g.id} />
       {g.id === 'concurrency' ? (
         <>
           <ConcurrencyStory />

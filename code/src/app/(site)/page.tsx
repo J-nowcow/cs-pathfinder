@@ -1,6 +1,7 @@
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { webSiteJsonLd, serializeJsonLd } from '@/lib/seo/jsonld'
 import { siteUrl } from '@/lib/site'
+export const metadata = { alternates: { canonical: new URL('/', siteUrl()).href, types: { 'application/rss+xml': '/rss.xml' } } }
 import { listRoots, countRoots, listRootsByQuestions } from '@/lib/db/roots'
 import { listTrees, BOARD_PAGE_SIZE } from '@/lib/db/trees'
 import { getTodayTree } from '@/lib/daily/today'

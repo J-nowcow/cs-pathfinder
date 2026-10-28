@@ -21,6 +21,15 @@ const catalog: Catalog = {
 }
 
 describe('llms.txt', () => {
+  it('links native learning sources without disclosing private study state or claiming a full native transcript', () => {
+    for (const out of [renderLlms(catalog, 'https://example.com'), renderLlmsFull(catalog, 'https://example.com')]) {
+      expect(out).toContain('https://example.com/learn/pmp/n01')
+      expect(out).toContain('https://example.com/learn/certificate/keys')
+      expect(out).toContain('https://example.com/learn/jira')
+      expect(out).not.toContain('https://example.com/learn/library')
+      expect(out).not.toContain('https://example.com/learn/progress')
+    }
+  })
   it('H1과 요약 인용구로 시작한다', () => {
     const out = renderLlms(catalog, 'https://example.com')
     expect(out.startsWith('# CS 길라잡이\n\n> ')).toBe(true)

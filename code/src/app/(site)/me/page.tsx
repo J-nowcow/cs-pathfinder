@@ -25,6 +25,7 @@ import { BACKEND_INTERVIEW_30 } from '../../../../data/learning-tracks'
  * 하고, 그건 계정 없이 하고 싶지 않은 일이다.
  */
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: '마이페이지',
   description: '내 경험에서 맞춤 질문을 만들고 학습 기록을 확인합니다.',
 }

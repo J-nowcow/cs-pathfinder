@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { plainText, serializeJsonLd, qaPageJsonLd } from '@/lib/seo/jsonld'
+import { plainText, serializeJsonLd, questionArticleJsonLd } from '@/lib/seo/jsonld'
 
 /**
  * 구조화 데이터.
@@ -37,15 +37,16 @@ describe('직렬화', () => {
   })
 })
 
-describe('QAPage', () => {
+describe('editorial Article', () => {
   it('질문과 평문 답을 담는다', () => {
-    const ld = qaPageJsonLd({
+    const ld = questionArticleJsonLd({
       question: 'CORS는 무엇을 막는가?',
       body: '응답 읽기를 막는다.\n\n:::flow\nA -> B: x\n:::',
       url: 'https://example.com/q/16',
-    }) as { '@type': string; mainEntity: { name: string; acceptedAnswer: { text: string } } }
-    expect(ld['@type']).toBe('QAPage')
-    expect(ld.mainEntity.name).toBe('CORS는 무엇을 막는가?')
-    expect(ld.mainEntity.acceptedAnswer.text).toBe('응답 읽기를 막는다.')
+    }) as { '@type': string; headline: string; articleBody: string }
+    expect(ld['@type']).toBe('Article')
+    expect(ld.headline).toBe('CORS는 무엇을 막는가?')
+    expect(ld.articleBody).toBe('응답 읽기를 막는다.')
+    expect(ld).not.toHaveProperty('acceptedAnswer')
   })
 })

@@ -1,3 +1,5 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LibraryShell, ConceptFlow } from '@/components/library/LibraryShell'
@@ -20,7 +22,7 @@ export async function generateMetadata({
   params: Promise<{ lesson: string }>
 }) {
   const { lesson } = await params
-  return { title: certificateLessons.get(lesson)?.title ?? '정보처리기사 이론' }
+  return learningMetadata('/learn/certificate/' + lesson)
 }
 export default async function CertificateLesson({
   params,
@@ -45,6 +47,7 @@ export default async function CertificateLesson({
       title={n.title}
       description={n.question}
     >
+      <LearningSeo path={'/learn/certificate/' + n.id} />
       <article className="pmp-lesson certificate-lesson">
         <aside className="lesson-takeaway" aria-label="이번 수업의 핵심">
           <span className="lesson-eyebrow">이번 수업의 핵심</span>

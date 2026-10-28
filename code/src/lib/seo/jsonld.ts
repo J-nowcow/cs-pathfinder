@@ -1,14 +1,4 @@
-/**
- * 구조화 데이터(JSON-LD).
- *
- * 크롤러는 이미 온다 — robots와 sitemap이 그 길을 냈다. 이 층은 온 크롤러에게
- * "이 페이지가 질문과 답"이라는 **형식**을 알려준다. 질문 페이지가 QAPage로
- * 읽히면 검색 결과에서 질문·답 리치 표시 대상이 된다.
- *
- * 답 텍스트는 화면 마크다운을 평문으로 벗겨 담는다. 도식 펜스와 표는
- * 글이 아니라 그림이므로 뺀다 — 카톡 봇(`firstParagraph`)이 같은 판단을
- * 한 자리 넓힌 것이다.
- */
+// Editorial explanations are Articles, not user-submitted QAPage answers.
 
 /** 도식·콜아웃 펜스와 표를 걷어내고 문단 평문만 남긴다 */
 export function plainText(body: string): string {
@@ -47,28 +37,21 @@ export function serializeJsonLd(data: object): string {
   return JSON.stringify(data).replace(/</g, '\\u003c')
 }
 
-export function qaPageJsonLd(args: {
+export function questionArticleJsonLd(args: {
   question: string
   body: string
   url: string
   dateCreated?: string
 }): object {
-  const answer = plainText(args.body)
   return {
     '@context': 'https://schema.org',
-    '@type': 'QAPage',
-    mainEntity: {
-      '@type': 'Question',
-      name: args.question,
-      text: args.question,
-      answerCount: 1,
-      ...(args.dateCreated ? { dateCreated: args.dateCreated } : {}),
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: answer,
-        url: args.url,
-      },
-    },
+    '@type': 'Article',
+    headline: args.question,
+    articleBody: plainText(args.body),
+    url: args.url,
+    mainEntityOfPage: args.url,
+    inLanguage: 'ko',
+    ...(args.dateCreated ? { dateCreated: args.dateCreated } : {}),
   }
 }
 
@@ -76,6 +59,7 @@ export function webSiteJsonLd(args: { name: string; url: string; description: st
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': new URL('/#website', args.url).href,
     name: args.name,
     url: args.url,
     description: args.description,

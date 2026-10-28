@@ -1,18 +1,17 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { StudyDesk } from '@/components/library/StudyDesk'
 import { LearningAreas } from '@/components/LearningAreas'
 import { OpenBookArt } from '@/components/library/BookArt'
 
-export const metadata: Metadata = {
-  title: 'PM·CS 학습 길라잡이',
-  description:
-    'PM 이론·CS 이론·자격증 대비 자료를 둘러보고 개념과 사례, 연습으로 공부합니다.',
-}
+export const metadata = learningMetadata('/learn')
 
 export default function LearningPage() {
   return (
     <StudyDesk section="home" document>
+      <LearningSeo path="/learn" />
       <section className="desk-home-intro" aria-labelledby="home-heading">
         <div>
           <p className="desk-kicker">PM 이론 · CS 이론 · 자격증 대비</p>

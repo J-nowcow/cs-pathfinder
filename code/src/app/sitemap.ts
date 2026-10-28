@@ -4,6 +4,7 @@ import { ensureSeeded } from '@/lib/db/bootstrap'
 import { loadCatalog } from '@/lib/db/catalog'
 import { isMissingTable } from '@/lib/db/missing-table'
 import { GLOSSARY } from '../../data/glossary'
+import { learningPages } from '@/lib/seo/learning'
 
 /**
  * 어떤 주소가 있는지 알린다.
@@ -66,5 +67,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!isMissingTable(e)) throw e
   }
 
-  return [...fixed, ...concepts, ...entries]
+  const learning = learningPages.map((page) => ({ url: new URL(page.path, base).href }))
+  return [...fixed, ...concepts, ...entries, ...learning]
 }

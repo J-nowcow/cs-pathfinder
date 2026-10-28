@@ -1,3 +1,5 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ConceptSteps } from '@/components/library/ConceptSteps'
@@ -23,7 +25,7 @@ export async function generateMetadata({
   params: Promise<{ lesson: string }>
 }) {
   const { lesson } = await params
-  return { title: lessonById.get(lesson)?.title ?? 'PMP 수업' }
+  return learningMetadata('/learn/pmp/' + lesson)
 }
 export default async function PmpLesson({
   params,
@@ -43,6 +45,7 @@ export default async function PmpLesson({
       title={n.title}
       description={n.q}
     >
+      <LearningSeo path={'/learn/pmp/' + n.id} />
       <article className="pmp-lesson">
         <aside className="lesson-takeaway" aria-label="이번 수업의 핵심">
           <span className="lesson-eyebrow">이번 수업의 핵심</span>

@@ -18,6 +18,7 @@ import {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = socialMeta({
+  path: '/questions',
   title: '질문 목록',
   description: '지금까지 올라온 CS 질문을 검색하고 분야·태그·난이도로 골라 봅니다.',
 })

@@ -50,7 +50,6 @@ export async function generateMetadata({
 
   return {
     // title은 socialMeta가 준다. 여기서 또 적으면 두 곳이 갈릴 자리가 생긴다
-    description,
     ...socialMeta({ title: tree.title, description, type: 'article' }),
   }
 }

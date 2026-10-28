@@ -1,3 +1,5 @@
+import { learningMetadata } from '@/lib/seo/learning'
+import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
 import { LibraryShell } from '@/components/library/LibraryShell'
 import { CertificateBackup } from '@/components/certificate/CertificateBackup'
@@ -7,11 +9,7 @@ import {
   certificateHref,
   certificateDomain,
 } from '@/lib/certificate/course'
-export const metadata = {
-  title: '정보처리기사 이론 · DB·SQL·테스트·주소 범위',
-  description:
-    '독립적인 도서관 예제로 배우는 관계 모델·SQL·테스트 설계·IPv4 주소 범위. 기출과 복원 코드는 포함하지 않습니다.',
-}
+export const metadata = learningMetadata('/learn/certificate')
 export default function CertificatePage() {
   return (
     <LibraryShell
@@ -19,6 +17,7 @@ export default function CertificatePage() {
       title="데이터·검증·주소 범위를 예제로."
       description={c.intro}
     >
+      <LearningSeo path="/learn/certificate" />
       <section className="pmp-catalog-intro">
         <p className="study-meta">
           {c.scope} · {c.lessons.length}수업

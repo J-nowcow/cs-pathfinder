@@ -76,6 +76,7 @@ export function socialMeta(args: {
   description: string
   /** 질문·트리처럼 내용이 있는 문서면 article. 기본은 website */
   type?: 'article' | 'website'
+  path?: string
 }) {
   const images = [OG_IMAGE_PATH]
 
@@ -87,6 +88,7 @@ export function socialMeta(args: {
    * 링크인지가 안 보이면 안 누른다.
    */
   const full = `${args.title} · ${SITE_NAME}`
+  const canonical = args.path ? new URL(args.path, siteUrl()).href : undefined
 
   return {
     /*
@@ -97,12 +99,15 @@ export function socialMeta(args: {
      * 똑같이 `CS 길라잡이`였다. 탭을 여러 개 띄우면 어느 것이 무엇인지 모른다.
      */
     title: args.title,
+    description: args.description,
+    ...(canonical ? { alternates: { canonical, types: { 'application/rss+xml': '/rss.xml' } } } : {}),
     openGraph: {
       title: full,
       description: args.description,
       type: args.type ?? 'website',
       locale: 'ko_KR',
       images,
+      ...(canonical ? { url: canonical } : {}),
     },
     twitter: {
       card: 'summary_large_image' as const,
