@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ConceptSteps } from '@/components/library/ConceptSteps'
 import { LibraryShell } from '@/components/library/LibraryShell'
+import { PmpConceptFigure } from '@/components/pmp/PmpConceptFigure'
 import { PmpPractice } from '@/components/pmp/PmpPractice'
 import { PmpFloatLab } from '@/components/pmp/PmpFloatLab'
 import { PmpEvmLab } from '@/components/pmp/PmpEvmLab'
@@ -43,12 +44,19 @@ export default async function PmpLesson({
       description={n.q}
     >
       <article className="pmp-lesson">
-        <p className="pmp-answer-lead">{n.answer}</p>
-        <div className="pmp-body">
-          {n.body.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </div>
+        <aside className="lesson-takeaway" aria-label="이번 수업의 핵심">
+          <span className="lesson-eyebrow">이번 수업의 핵심</span>
+          <p className="pmp-answer-lead">{n.answer}</p>
+        </aside>
+        <PmpConceptFigure lesson={n.id} />
+        <section className="lesson-explanation">
+          <h2>개념 이해하기</h2>
+          <div className="pmp-body">
+            {n.body.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
+          </div>
+        </section>
         {!!n.steps.length && (
           <section>
             <h2>생각을 정리하는 순서</h2>
