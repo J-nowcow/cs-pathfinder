@@ -34,7 +34,8 @@ for g in guide:
  g['candidateCount']=len(qs)-g['reviewedCount']
  g['backgroundCount']=sum(g['id'] in q['backgroundTopics'] for q in questions)
 pmp=json.loads((C/'pm-content/pmp/source/course.json').read_text())
-(C/'data/pmp-library.json').write_text(json.dumps({'nodes':[{k:n[k] for k in ['id','title']} for n in pmp['nodes']]},ensure_ascii=False,indent=2)+'\n')
+editorial=json.loads((C/'learning-content/pmp-editorial.json').read_text())
+(C/'data/pmp-library.json').write_text(json.dumps({'nodes':[{'id':n['id'],'title':editorial.get(n['id'],{}).get('title',n['title'])} for n in pmp['nodes']]},ensure_ascii=False,indent=2)+'\n')
 (C/'data/engineer-guides.json').write_text(json.dumps(guide,ensure_ascii=False,indent=2)+'\n')
 (C/'data/engineer-index.json').write_text(json.dumps({**source,'classificationMethod':review_source['method'],'classificationReviewedAt':review_source['reviewedAt'],'questions':questions},ensure_ascii=False,separators=(',',':'))+'\n')
 shutil.copytree(J,P,dirs_exist_ok=True)
