@@ -32,9 +32,9 @@ export default function PmpHome() {
         {c.tracks.map((t, i) => (
           <details key={t.id} id={t.id} className="pmp-chapter" open>
             <summary>
-              <p className="study-meta">
+              <span className="study-meta block">
                 {String(i + 1).padStart(2, '0')} / {t.sub}
-              </p>
+              </span>
               <h2>{t.title}</h2>
               <span className="chapter-toggle" aria-hidden="true">
                 <span className="chapter-collapse">접기</span>
