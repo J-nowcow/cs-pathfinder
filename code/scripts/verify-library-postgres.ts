@@ -32,6 +32,7 @@ import {
 } from './lib/library-migration'
 import { verifyRolloutSchema } from './lib/library-rollout'
 import { schemaBackup } from './lib/library-schema-backup'
+import { checkRelationWriteCost } from './lib/relation-write-check'
 
 // Never read DATABASE_URL, PG* connection environment or private app env files.
 const args = process.argv.slice(2)
@@ -400,6 +401,18 @@ try {
       ),
     )
   })
+  await check(
+    'relation UPSERT avoids unchanged row versions and preserves concurrent votes/provenance',
+    async () => {
+      await admin.query(
+        'create database cs_pathfinder_relation_check owner library_check_app',
+      )
+      result.relationWriteCost = await checkRelationWriteCost(
+        pool('library_check_app', 'cs_pathfinder_relation_check'),
+        join(source, 'supabase/migrations/0009_semantic_relation.sql'),
+      )
+    },
+  )
   await check('untrusted CA and wrong hostname are rejected', async () => {
     const untrusted = pool('library_check_app', 'cs_pathfinder_library_check', {
       ssl: { rejectUnauthorized: true, servername: 'localhost' },

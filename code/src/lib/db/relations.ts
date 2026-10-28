@@ -1,4 +1,4 @@
-import { getDb } from '@/lib/db/client'
+import { getDb, type Tx } from '@/lib/db/client'
 
 /**
  * 질문 사이의 의미 관계를 읽고 쓴다.
@@ -49,7 +49,7 @@ export type Relation = NewRelation & { id: string }
  * 흔들리는 결과를 그대로 받아쓰게 된다. 여러 번 돌리는 이유가 그 흔들림을
  * 걸러내는 것인데 마지막 회차만 남기면 돌린 의미가 없다.
  */
-export async function saveRelations(rels: NewRelation[]): Promise<void> {
+export async function saveRelations(rels: NewRelation[], connection?: Tx): Promise<void> {
   /*
    * 한 묶음 안의 중복을 먼저 걷어낸다.
    *
@@ -74,7 +74,7 @@ export async function saveRelations(rels: NewRelation[]): Promise<void> {
   const rows = [...best.values()]
   if (rows.length === 0) return
 
-  const db = await getDb()
+  const db = connection ?? await getDb()
   await db.query(
     /*
      * enum 배열을 그대로 넘기지 않는다. 드라이버가 모르는 타입이라 배열을
@@ -89,7 +89,9 @@ export async function saveRelations(rels: NewRelation[]): Promise<void> {
         set votes  = greatest(semantic_relation.votes, excluded.votes),
             reason = case when excluded.votes > semantic_relation.votes
                           then excluded.reason else semantic_relation.reason end,
-            source = case when excluded.source = 'human' then 'human' else semantic_relation.source end`,
+            source = case when excluded.source = 'human' then 'human' else semantic_relation.source end
+      where excluded.votes > semantic_relation.votes
+         or (excluded.source = 'human' and semantic_relation.source <> 'human')`,
     [
       rows.map((r) => r.fromId),
       rows.map((r) => r.toId),
