@@ -1,6 +1,7 @@
 import { ensureSeeded } from '@/lib/db/bootstrap'
 import { readUserId } from '@/lib/auth/session'
 import { loadJourneyForUser } from '@/lib/db/journeys'
+import { journeyToWire, journeyResponse as json } from '@/lib/journey/wire'
 
 /**
  * 내 여정 전체 (C4).
@@ -13,13 +14,6 @@ import { loadJourneyForUser } from '@/lib/db/journeys'
  */
 export const dynamic = 'force-dynamic'
 
-function json(payload: unknown, status: number): Response {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' },
-  })
-}
-
 export async function GET(request: Request): Promise<Response> {
   await ensureSeeded()
 
@@ -27,17 +21,5 @@ export async function GET(request: Request): Promise<Response> {
   if (!userId) return json({ error: 'unauthorized' }, 401)
 
   const snap = await loadJourneyForUser(userId)
-  return json(
-    {
-      occurrences: snap.occurrences.map((o) => ({
-        id: o.id,
-        node_id: o.nodeId,
-        parent_id: o.parentId,
-        question: o.question,
-        category: o.category,
-      })),
-      current_id: snap.currentId,
-    },
-    200,
-  )
+  return json(journeyToWire(snap), 200)
 }
