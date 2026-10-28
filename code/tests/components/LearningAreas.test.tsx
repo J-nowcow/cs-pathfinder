@@ -2,7 +2,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { cleanup, render, within } from '@testing-library/react'
 import { LearningAreas } from '@/components/LearningAreas'
-import release from '../../data/pmp-release.json'
 
 afterEach(cleanup)
 
@@ -28,21 +27,14 @@ describe('learning areas', () => {
       cert.getByRole('link', { name: /정보관리기술사/ }).getAttribute('href'),
     ).toBe('/learn/engineer#questions')
   })
-  it('opens PMP within the library and preserves the old offline resources and record boundary', () => {
-    const { getByRole, getByText } = render(<LearningAreas />)
+  it('opens native PMP without offering retired offline editions', () => {
+    const { getByRole, container } = render(<LearningAreas />)
     expect(
       getByRole('link', {
         name: '프로젝트·제품 관리 → PMP 개념·사례·계산 실습',
       }).getAttribute('href'),
     ).toBe('/learn/pmp')
-    expect(
-      getByRole('link', { name: '이전 전체 읽기 HTML →' }).getAttribute('href'),
-    ).toBe(release.links.reader)
-    expect(
-      getByRole('link', { name: '오프라인 ZIP 받기 ↓' }).hasAttribute(
-        'download',
-      ),
-    ).toBe(true)
-    expect(getByText(/CS 계정 기록과 별도로/)).toBeTruthy()
+    expect(container.querySelector('a[download]')).toBeNull()
+    expect(container.querySelector('a[href^="/pmp/"]')).toBeNull()
   })
 })
