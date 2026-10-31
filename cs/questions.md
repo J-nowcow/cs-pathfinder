@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 390개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 391개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -238,6 +238,7 @@
 - [크루스칼과 프림 알고리즘은 언제 구분하여 사용하는가?](https://cs-pathfinder.vercel.app/q/eac127ad-1537-4fea-b929-b21f74eee844) — 2026-09-29
 - [LRU 캐시를 O(1)로 구현하려면 어떤 자료구조들을 조합하는가?](https://cs-pathfinder.vercel.app/q/80b8b67b-e91d-415c-8f4f-b1c1ef80fd2c) — 2026-10-10
 - [체이닝과 개방 주소법은 어떤 상황에서 갈리는가?](https://cs-pathfinder.vercel.app/q/632a9668-cae5-44ed-aff0-6c381f08c579) — 2026-10-21
+- [파라메트릭 서치는 최적화 문제를 어떻게 바꾸어 푸는가?](https://cs-pathfinder.vercel.app/q/9224e7b6-0a89-4345-9b05-26286305abff) — 2026-10-31
 
 ## 프레임워크
 
