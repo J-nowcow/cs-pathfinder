@@ -1,0 +1,255 @@
+{
+  "agent_role": "D3-lite advocate B: practice-review-transfer strategy",
+  "accessed": "2026-10-31",
+  "public_research_only": true,
+  "no_interview_dependency": true,
+  "scope": "공식 공개 원문으로 학습 구조·피드백·판정의 경계를 비교. 사용자 모집·인터뷰·제품 유료 내부 체험·독립 학습효과 실험은 수행하지 않음.",
+  "products": [
+    {
+      "name": "CodeCrafters",
+      "audience": "실제 시스템 내부를 구현하며 배우려는 개발자",
+      "learning_unit": "실제 도구를 축소 재구현하는 단계별 코드 과제",
+      "judgment_reliability": "테스트가 포괄하는 동작의 통과 여부는 관찰 가능. 설계·스타일·설명 능력의 종합 판정으로 확대하면 안 됨.",
+      "feedback": "제출 후 테스트·힌트. 공식 소개가 설명하는 기능이며 이번에 유료 과정을 실행하지 않았음.",
+      "human_dependency": "단계 실행 피드백의 실시간 사람 의존은 낮아 보이나, 테스트·스펙·힌트 작성과 수정에 사람이 필요하다는 설계상 추론.",
+      "transfer": "주제와 도구가 현실적이라는 사실과 다른 시스템에서 독립 수행할 수 있다는 증거는 구분.",
+      "contribution_and_scaling": "언어별 실행기·테스터·과제 사양·버전 호환을 관리해야 한다는 추론. 정확한 비용은 미확인.",
+      "sources": [
+        "B01",
+        "B02"
+      ],
+      "counterpoint": "성공 조건이 실행 테스트로 좁혀지면 넓은 설계 판단의 연습은 별도 필요."
+    },
+    {
+      "name": "Exercism",
+      "audience": "언어별 코드 유창성과 읽기·개선에 관심 있는 학습자",
+      "learning_unit": "작은 코드 해답의 반복 제출과 코드 대화",
+      "judgment_reliability": "실행/자동분석과 사람의 개선 의견을 분리. 사람이 있다고 피드백 일관성·정확성이 자동 보장되지는 않음.",
+      "feedback": "자동분석·멘토·개인 지인 피드백을 구분. 멘토는 맞춤 대화 가능하며 대기 발생.",
+      "human_dependency": "멘토 자원봉사자의 시간·전문성이 공급 제약. 어려운 문제에서 부담이 커질 수 있음.",
+      "transfer": "언어 관용성과 대안 설명의 연습 근거는 있으나 이번 자료는 업무 전이 실험이 아님.",
+      "contribution_and_scaling": "트랙별 테스트와 canonical specification 동기화, 별도 멘토 노트·analyzer 관리가 문서화됨.",
+      "sources": [
+        "B03",
+        "B04",
+        "BC1"
+      ],
+      "counterpoint": "피드백을 모든 진도의 필수 게이트로 두면 대기가 학습 경로의 병목이 될 위험."
+    },
+    {
+      "name": "Full Stack Open",
+      "audience": "프로그래밍 기초를 갖춘 웹개발 학습자",
+      "learning_unit": "설명과 예시를 읽고 앱을 누적 확장·리팩터링·테스트하는 과제",
+      "judgment_reliability": "과제 제출량 기반 등급과 대학학점용 별도시험을 구분. 수료증 자체는 독립 구현·전이 보증이 아님.",
+      "feedback": "예시 코드, 연습, 커뮤니티 도움. 개별 제출물에 대한 모든 사람 리뷰는 공개 자료에서 확인하지 못함.",
+      "human_dependency": "Discord 도움과 자료 유지관리 의존. 질문을 명확히 구성하도록 안내해 도움 요청도 학습 활동으로 다룸.",
+      "transfer": "실제 도구와 누적 변경이 실무와 닮았다는 수강자 회고가 있으나 자기보고·생존편향 존재.",
+      "contribution_and_scaling": "GitHub 자료 수정 경로, 기술 스택 버전 갱신, 연습 간 의존관계 관리가 필요.",
+      "sources": [
+        "B05",
+        "BC2"
+      ],
+      "counterpoint": "기초가 있는 개발자도 새 영역에서 부담이 급증할 수 있어 직함보다 주제별 선수지식 분리가 중요."
+    },
+    {
+      "name": "GoPractice Data-Driven PM Simulator",
+      "audience": "제품관리·분석·성장 판단을 연습하려는 독자",
+      "learning_unit": "가상 제품의 연속 서사에서 자료·데이터를 분석하고 결정을 내리는 장별 과제",
+      "judgment_reliability": "다수 객관식은 자동채점, 일부 서술형은 참고답안과 자가채점. 복잡한 판단 전체를 검증한다고 보기는 어려움.",
+      "feedback": "답변별 피드백·이론, 커뮤니티·지원, 선택적 멘토·그룹 경로.",
+      "human_dependency": "개별 실시간 강의 없이 자율 진행 가능하지만 서사·데이터·문항·지원과 멘토 검토의 제작비 존재.",
+      "transfer": "제공자는 직장 적용을 주장. 공개 원자료에서 독립적 인과효과·장기 업무성과 연구는 확인하지 못함.",
+      "contribution_and_scaling": "상황·데이터·문항·정답과 피드백의 정합성, 변화하는 제품환경의 갱신 부담. 공개 기여 절차는 이번 자료에서 미확인.",
+      "sources": [
+        "B06",
+        "BC3"
+      ],
+      "counterpoint": "과제와 실무 서사만으로 세계최초 차별성을 만들 수 없음. Product PM 사례를 Project PM 일반 교육으로 쓰면 범위 오류."
+    },
+    {
+      "name": "Google SRE Classroom",
+      "audience": "시스템 설계·신뢰성·운영 대화를 연습하려는 기술 실무자",
+      "learning_unit": "요구사항에서 설계를 만들고 자원·장애·SLO를 구체화하는 워크숍",
+      "judgment_reliability": "예시 해법과 계산·가정의 논리 검토가 중심. 단일 최종 숫자보다 추정과 추론을 다루는 방식.",
+      "feedback": "공개 튜토리얼·예시 해법·워크숍 토론 구조. 자동 개인채점 제공은 이 페이지에서 미확인.",
+      "human_dependency": "진행자의 질문·토론을 제품으로 옮길 때 유지할 지원이 무엇인지 별도 설계 필요.",
+      "transfer": "실제 설계·운영과 가까운 과제라는 구조적 관련성. 본인 업무 전이의 실증은 공개 설명만으로 알 수 없음.",
+      "contribution_and_scaling": "CC BY 4.0 공개와 issue 개선 경로. 재사용 가능성과 내용·수치 검토 책임은 별개.",
+      "sources": [
+        "B07"
+      ],
+      "counterpoint": "기술 설계 워크숍의 가치를 모든 초보자·모든 PM에게 일반화하지 않음."
+    },
+    {
+      "name": "HBS Case Method",
+      "audience": "불완전 정보에서 조직 의사결정을 연습하는 MBA·경영 학습자",
+      "learning_unit": "사례 읽기·개인 결정·소그룹 토론·교수 진행 토론·성찰",
+      "judgment_reliability": "사례 해석과 근거·다른 관점의 검토가 핵심. 정답 한 개와 자동점수로 환원하기 어려움.",
+      "feedback": "실제 동료의 경험과 교수의 진행이 교육 경험 일부.",
+      "human_dependency": "참여자 구성·준비·안전한 토론·퍼실리테이션에 의존. 단독 AI 역할극이 같은 효과를 낸다는 근거는 없음.",
+      "transfer": "시간 제약과 불완전 정보의 결정을 연습한다는 목표. 현재 자료는 학교의 방법 소개이며 효과 비교 연구가 아님.",
+      "contribution_and_scaling": "사례 조사·서술·교수자료·토론 진행의 비용. 원사례의 재사용 권리는 별도 확인 대상이며 여기서 라이선스 판정하지 않음.",
+      "sources": [
+        "B08"
+      ],
+      "counterpoint": "우수한 코호트·교수·사례가 결합된 모델을 소프트웨어 한 기능에 귀속하면 안 됨."
+    },
+    {
+      "name": "PMI KICKOFF",
+      "audience": "Project Manager 직함 유무와 무관한 프로젝트 관리 입문자",
+      "learning_unit": "애자일/예측형 접근의 상호작용 기초 과정과 개인 플레이북",
+      "judgment_reliability": "완료 배지를 제공한다고 설명. 공개 페이지에서 독립 수행 판정 기준·심층 채점은 미확인.",
+      "feedback": "짧은 자기주도 상호작용 과정으로 안내. 자세한 내부 피드백 방식은 미확인.",
+      "human_dependency": "공개 소개상 실시간 멘토 필수는 확인되지 않음. 이것이 무비용 운영 또는 학습효과를 뜻하지 않음.",
+      "transfer": "실제 프로젝트에 쓸 기초·플레이북을 제공한다는 공급자 설명. 프로젝트 성과와의 직접 인과 증거 미확인.",
+      "contribution_and_scaling": "일반 공개 기여 경로·운영 비용은 미확인. 방법별 템플릿·다국어 갱신은 필요한 관리 항목이라는 추론.",
+      "sources": [
+        "B09"
+      ],
+      "counterpoint": "프로젝트 입문용 체크리스트·템플릿은 깊은 협상·범위변경 판단·기술설계 훈련과 다른 목표."
+    }
+  ],
+  "sources": [
+    {
+      "id": "B01",
+      "title": "CodeCrafters — How Challenges Work",
+      "url": "https://app.codecrafters.io/concepts/overview",
+      "accessed": "2026-10-31",
+      "type": "official_product_documentation",
+      "evidence": "익숙한 도구를 재구현하는 과제를 단계로 나누고 진행 위치를 유지한다. 실행 가능한 구현을 제출하는 학습 단위를 설명한다.",
+      "limit": "제공 방식의 설명이며 독립 학습효과·전이 평가가 아니다."
+    },
+    {
+      "id": "B02",
+      "title": "CodeCrafters homepage",
+      "url": "https://codecrafters.io/",
+      "accessed": "2026-10-31",
+      "type": "official_product_description",
+      "evidence": "자기 IDE에서 코드를 작성하고 Git push로 테스트·힌트 피드백을 받는 흐름을 제공한다.",
+      "limit": "테스트 통과가 설계 품질·유지보수성·독립 이해를 보장하지 않는다. 현재 가격과 홍보 수치로 성공을 추정하지 않는다."
+    },
+    {
+      "id": "B03",
+      "title": "Exercism — Getting Feedback",
+      "url": "https://exercism.org/docs/using/feedback",
+      "accessed": "2026-10-31",
+      "type": "official_product_documentation",
+      "evidence": "제출한 해답에 즉시 자동분석, 자원봉사 멘토, 지정한 지인의 비공개 피드백을 구분한다. 멘토는 토론 가능한 피드백을 제공하며 대기시간이 생길 수 있다고 명시한다.",
+      "limit": "개별 멘토의 품질과 실제 전이 성과는 이 문서에서 검증하지 않는다."
+    },
+    {
+      "id": "B04",
+      "title": "Exercism TypeScript — Contributing",
+      "url": "https://github.com/exercism/typescript/blob/main/CONTRIBUTING.md",
+      "accessed": "2026-10-31",
+      "type": "official_repository_guide",
+      "evidence": "문제 정본 테스트와 언어별 테스트를 동기화하고 README를 재생성한다. 멘토 노트·자동분석기는 별도 저장소에서 관리한다고 설명한다.",
+      "limit": "이 구조의 유지 시간·검토 비용은 미측정이다. TypeScript 트랙 사례를 모든 트랙의 현재 상태로 일반화하지 않는다."
+    },
+    {
+      "id": "B05",
+      "title": "Full Stack Open — General info",
+      "url": "https://fullstackopen.com/en/part0/general_info/",
+      "accessed": "2026-10-31",
+      "type": "official_course_documentation",
+      "evidence": "기존 프로그래밍·웹·DB·Git 기초와 독립 문제해결을 전제한다. 앱을 여러 연습에서 누적 확장하며 예시 코드와 Discord 도움을 제공한다. 과제 제출량 기반 등급과 대학 학점용 별도 시험을 구분한다. 자료의 GitHub 수정 경로도 제공한다.",
+      "limit": "과제 수·수료증을 실무 전이로 해석하지 않는다. 제출물 모두의 코드 품질이 사람에게 개별 검토된다고 확인된 것은 아니다."
+    },
+    {
+      "id": "B06",
+      "title": "GoPractice — Data-Driven Product Management Simulator",
+      "url": "https://gopractice.io/course/pm/",
+      "accessed": "2026-10-31",
+      "type": "official_product_description_and_FAQ",
+      "evidence": "가상 제품의 서사에서 자료·데이터를 분석하고 결정하며 필요한 이론을 읽는다. FAQ는 다수의 객관식 자동채점과 일부 서술형의 참고답안 후 자가채점을 명시한다. 자율 학습 또는 멘토·그룹 지원 경로가 있다.",
+      "limit": "실제 업무에 곧 적용 가능하다는 문구와 성공 후기는 제공자의 주장이다. AI/ML 과정의 과거 사용자 후기를 이 2026년 PM 과정의 직접 평가로 쓰지 않는다."
+    },
+    {
+      "id": "B07",
+      "title": "Google SRE Classroom",
+      "url": "https://sre.google/classroom/",
+      "accessed": "2026-10-31",
+      "type": "official_workshop_materials",
+      "evidence": "PubSub·ImageServer 설계와 SLO 작성 워크숍을 제공한다. 요구사항에서 설계·평가로 진행하고 예시 해법을 설명한다. 자료는 CC BY 4.0으로 공개하며 이슈 제안을 받는다.",
+      "limit": "예시 해법이 모든 현실 조건에서 유일한 정답은 아니다. 워크숍 성과·퍼실리테이터 비용 자료는 이 페이지에서 확인하지 못했다."
+    },
+    {
+      "id": "B08",
+      "title": "Harvard Business School — The Case Method",
+      "url": "https://www.hbs.edu/mba/academic-experience/the-case-method",
+      "accessed": "2026-10-31",
+      "type": "official_education_method_description",
+      "evidence": "실제 조직의 인물 관점과 당시의 불완전한 정보에서 결정을 작성하고 소그룹·교수 진행 토론·성찰로 이어진다. 다양한 동료 경험이 수업의 구성 요소다.",
+      "limit": "제공자가 설명하는 교육 모델이다. 자동채점 제품의 효능 또는 CS/PM 전체 학습 성과의 실증 자료가 아니다."
+    },
+    {
+      "id": "B09",
+      "title": "PMI — KICKOFF",
+      "url": "https://www.pmi.org/kickoff?modal=registration",
+      "accessed": "2026-10-31",
+      "type": "official_project_management_course_description",
+      "evidence": "프로젝트 관리자 직함이 없어도 사용할 수 있는 프로젝트 관리 기초 과정이다. 애자일 또는 예측형 플레이북을 만드는 무료 상호작용 과정을 설명한다.",
+      "limit": "완료 배지나 자료 제공이 실제 프로젝트 수행을 독립 검증한다는 근거는 없다. 상세 내부 채점과 피드백 루프는 공개 페이지에서 미확인이다."
+    },
+    {
+      "id": "BC1",
+      "title": "Is the C++ track dead or am I just unlucky?",
+      "url": "https://forum.exercism.org/t/is-the-c-track-dead-or-am-i-just-unlucky/60886",
+      "accessed": "2026-10-31",
+      "published": "2026-06-24",
+      "type": "first_person_forum_thread_with_community_responses",
+      "evidence": "작성자는 C++ 고난도 문제에서 표시된 평균보다 오래 멘토를 기다렸다고 보고한다. 답변자는 자원봉사자의 시간·지식과 어려운 문제의 검토 부담을 설명한다.",
+      "limit": "특정 날짜·트랙·과제의 자발적 불만 사례다. 전체 대기시간 분포나 현재 모든 트랙의 품질을 추정하지 않는다. 게시자 신원·대기 로그를 독립 검증하지 않았다."
+    },
+    {
+      "id": "BC2",
+      "title": "A Look Into Full Stack Open",
+      "url": "https://alinatech.hashnode.dev/a-look-into-full-stack-open",
+      "accessed": "2026-10-31",
+      "published": "2025-12-08",
+      "type": "first_person_learner_blog",
+      "evidence": "프런트 경험이 있는 수강자는 백엔드·테스트에서 난도가 급격히 높아져 중단을 고려했다고 적는다. 실제 앱 연결과 단계적 구성을 긍정 평가하면서 후반 범위를 한꺼번에 공부하는 부담도 지적한다.",
+      "limit": "수료한 자발적 작성자의 회고이며 중도탈락자나 무작위 학습자를 대표하지 않는다. 실제 학습과 업무 성과는 독립 확인하지 않았다."
+    },
+    {
+      "id": "BC3",
+      "title": "Candid Review of GoPractice AI/ML Simulator for PMs",
+      "url": "https://www.reddit.com/r/ProductManagement/comments/1dilbfk/candid_review_of_gopractice_aiml_simulator_for_pms/",
+      "accessed": "2026-10-31",
+      "published": "2024-06-18",
+      "type": "first_person_learner_review",
+      "evidence": "개발자에서 PM으로 전환한 작성자는 당시 AI/ML 과정을 절반가량 진행한 시점에 구조화된 과제와 반복 학습을 긍정 평가했다. 비용·일부 문항 표현·시간 부담과 이미 경험이 있는 독자에게의 낮은 적합성을 지적했다.",
+      "limit": "본인 비용 지불·비제휴는 작성자의 자기보고다. 과거 AI/ML 과정의 중간 후기이며 현재 PM 과정과 구분한다. 가격은 당시 의견으로만 취급하며 현재 가격을 인용하지 않는다."
+    }
+  ],
+  "best_case_argument": [
+    "실제 산출물·코드·결정의 단위로 연습하면 수행과 평가를 연결할 수 있고, 실행 테스트·기록·가정 등 확인할 증거를 남기기 쉽다. 이는 설계상의 장점이며 교육효과 크기의 주장과 다르다.",
+    "하나의 실무 과제를 단계로 쪼개는 CodeCrafters/Full Stack Open과 판단의 맥락을 다루는 GoPractice/HBS/SRE는 B가 단일 형식이 아니라는 근거다.",
+    "검증 가능한 동작은 자동 피드백, 관용성·대안·판단조건은 리뷰·토론으로 나누는 구조가 가장 설득력 있는 설계 패턴이다. 자동화와 사람이 확인하는 범위를 표기해야 한다.",
+    "CS Pathfinder의 질문·설명·연습을 실제 과제의 필요한 지점에 연결하는 것은 가능한 제품 가설이다. 기존 콘텐츠를 모두 대체할 근거는 없다."
+  ],
+  "counterevidence_and_limits": [
+    "Exercism 공식 문서와 최근 포럼의 대기는 사람 피드백이 확장의 병목이 될 수 있음을 보여 준다. 특정 사례에서 전체 분포는 추정하지 않는다.",
+    "Full Stack Open은 명시적 선수지식이 있는 과정이며, 수료자의 회고도 새 영역의 난도·시간 부담을 보고한다. 성인이라는 이유로 기초 지원을 줄이면 안 된다.",
+    "GoPractice의 다수 MCQ와 서술형 자가채점은 실제 업무 서사가 깊은 판단의 독립 평가를 자동 해결하지 못한다는 구조상의 반례다.",
+    "HBS는 실제 동료·교수·사례 준비를 결합한다. 전문가 캐릭터를 AI로 복제하면 동일한 교육적 가치를 얻는다고 볼 근거는 없다.",
+    "테스트·과제 통과·작업물 개선·수료증은 독립 지연 수행과 실제 업무 전이를 각각 대신하지 못한다."
+  ],
+  "review_selection_bias": "3개 사용자 원문은 검색으로 발견된 자발적 후기/불만이다. 만족/불만을 표현하지 않은 사용자, 중도탈락자, 특정 언어·직무·국가의 분포를 대표하지 않는다. GoPractice 후기는 2024 AI/ML 과정의 중간 평가이며 2026 PM 과정과 분리한다. 제공자가 고른 추천사는 독립 사용자 검증으로 취급하지 않았다.",
+  "conditional_recommendation": {
+    "proceed_without_interviews": "인터뷰를 중단조건으로 두지 않고 공개자료 기반 우선 설계 후보를 고를 수 있다. 다만 수요·유지율·학습효과는 미확인으로 남긴다.",
+    "priority": "거대한 단일 시뮬레이터나 무제한 전문가리뷰보다, 작은 실제 과제에서 실행 가능한 기준과 판단 근거의 리뷰를 분리한 공개 학습 단위를 구체화한다.",
+    "first_question": "이 과제에서 어떤 결과는 테스트로 확인하고 어떤 판단은 사람/근거와 비교해야 하는가?",
+    "project_pm_vs_product_pm": "Project PM에는 수용기준·변경 영향·의존성·검증 계획, Product PM에는 고객문제·증거·우선순위·지표가 과제의 다른 축이다. 둘을 같은 PM 점수로 합치지 않는다.",
+    "candidate_wow": "내 판단·구현이 어떤 조건에서 성립하며, 무엇을 바꾸면 깨지는지를 근거와 재현 가능한 결과로 확인하는 경험. 시장의 유일성·사용자 매력은 검증되지 않은 가설이다.",
+    "extension_costs_to_record": [
+      "과제 스펙·범위",
+      "테스트·문항 타당도",
+      "설명·힌트",
+      "전문가/동료 리뷰",
+      "번역",
+      "기술버전·근거 갱신",
+      "지원 큐 운영"
+    ]
+  }
+}

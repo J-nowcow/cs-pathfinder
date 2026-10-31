@@ -1,0 +1,334 @@
+{
+  "role": "D3-lite Advocate A",
+  "round": 1,
+  "asOf": "2026-10-31",
+  "scope": "공개 지식·개념·기초~응용 학습경로 중심의 글로벌 오픈소스 전략. 인터뷰는 이번 분석의 선행조건으로 두지 않는다.",
+  "method": {
+    "corePrimarySources": 10,
+    "supplementaryPrimarySources": 6,
+    "productsReviewed": 6,
+    "publicIssueThreadsRead": 3,
+    "evidencePolicy": "공식기능문서는 제공방식 확인, 공개댓글은 위험/가설 발견, 연구는 조건부교육기제의 근거로 분리. 빈도·효능·성공률·자원비용 추정점수 생성금지.",
+    "publicCritiqueBias": "영어권·GitHub에접근가능하고문제를보고하는적극사용자에편향. 공개댓글은 같은원인에독립적이지않을수있고 시점·진도·전제경험이달라 우열비교불가. 긍정후기도 자기선택·생존편향이있다."
+  },
+  "preliminaryConclusion": "A의 강점은 대규모자료량이 아닌, 개념·선수관계·연습·성공기준을 검토가능한 정본단위로 축적하고 여러수준·역할·언어에서 재사용하는 구조다. 이미있는 지도/퀴즈/설명을 반복하는전략만으로 강한차별성을설명할수는없다.",
+  "products": [
+    {
+      "name": "CS50x",
+      "sourceIds": [
+        "A01"
+      ],
+      "learningUnit": "주별개념 강의와 walkthrough, 문제세트, 자유 최종프로젝트",
+      "task": "실제 코드를 작성·제출하고 관심있는문제를 소프트웨어로 구현",
+      "feedback": "check50 정확성·style50 스타일의 자동평가 및 커뮤니티 Q&A",
+      "ossContribution": "해당 syllabus는 일반 학습자의 커리큘럼 PR 운영 절차까지 설명하지 않음; 공개수업과 커뮤니티학습의 모델로만 참조",
+      "internationalization": "공식 페이지는 포르투갈어·스페인어 강의 더빙을 안내. 전체문항·채점·다른언어의 동등성은 미검증",
+      "claimBoundary": "제공목표·성적기준과 독립적 장기수행효과를 구분"
+    },
+    {
+      "name": "OSSU",
+      "sourceIds": [
+        "A02",
+        "A09",
+        "A10",
+        "A14"
+      ],
+      "learningUnit": "강좌·책과 선수지식이 명시된 전체 CS 경로",
+      "task": "기초에서 고급선택과목·프로젝트로 진행; 실제평가는 연결강좌가 담당",
+      "feedback": "강좌별평가 및 Discord/토론; 통합된 개인숙련추정체계로 단정불가",
+      "ossContribution": "가벼운수정PR/실질범위변경issue·기준/개인fork 분리",
+      "internationalization": "글로벌동료커뮤니티를 표방하지만 본조사README에서 공식 다국어동등성정책은 확인하지못함",
+      "claimBoundary": "외부강좌의 접근·채점기·범위변경이 경로 전체에 파급될 수 있음"
+    },
+    {
+      "name": "The Odin Project",
+      "sourceIds": [
+        "A03",
+        "A07",
+        "A08"
+      ],
+      "learningUnit": "기초맥락→선별외부자료→연습→프로젝트",
+      "task": "개발환경·Git부터 실제웹앱까지 점진적구축",
+      "feedback": "커뮤니티 도움과 실제제작·검증; 모든과제에 자동채점이 있다는 주장은 하지않음",
+      "ossContribution": "교육과정repo와 메인사이트repo의 기여경로 분리",
+      "internationalization": "조사한공식문서는 영어이며 전과정다국어정본/동기화정책은 미확인",
+      "claimBoundary": "외부자료수집과 실전프로젝트가 있어도 지시문 한문장이 잘못된정신모형을 만들 수 있음(개별issue위험발견)"
+    },
+    {
+      "name": "Full Stack Open",
+      "sourceIds": [
+        "A04",
+        "A11"
+      ],
+      "learningUnit": "기초프로그래밍경험 전제; 작은 앱을 여러part에걸쳐 확장",
+      "task": "예제코드따라가기와 독립수정·누적앱연습",
+      "feedback": "GitHub예제·연습제출·과정지원 경로; 본조사에서 모든제출의 개별전문가피드백 보장은 확인하지않음",
+      "ossContribution": "PR/issue/번역/PR검토 경로 및 자료정본repo",
+      "internationalization": "part단위번역진도파일과 미번역영어fallback; 단순언어메뉴보다 구체적인운영사례",
+      "claimBoundary": "사전지식·주당시간이 명시된 과정이므로 모든 성인/초보입문자에게 전용하지않음"
+    },
+    {
+      "name": "Exercism",
+      "sourceIds": [
+        "A05",
+        "A12"
+      ],
+      "learningUnit": "언어별 작은 코딩exercise와 solution iteration",
+      "task": "문제풀이제출·반복수정",
+      "feedback": "즉시자동피드백/대기하는자원봉사멘토/지인privatefeedback 구분",
+      "ossContribution": "GitHub기여·task목록·maintainer·exercise story선택 가이드",
+      "internationalization": "자연어선택메뉴는 있으나 문항·트랙·멘토피드백 전체번역률은 본조사미확인. 프로그래밍언어개수와 구분",
+      "claimBoundary": "즉시분석·멘토존재가 피드백의교육적정확성·대기시간항상충족을 보증하지않음"
+    },
+    {
+      "name": "roadmap.sh",
+      "sourceIds": [
+        "A06",
+        "A13"
+      ],
+      "learningUnit": "직무·기술 roadmap node와 topic설명·자료",
+      "task": "학습할주제를고르고 설명·자료로이동; repo설명만으로 실제독립수행평가여부를 일반화하지않음",
+      "feedback": "본조사repo핵심은 경로와콘텐츠편집; 사이트전체의 최신시험/AI기능효과는 별도미평가",
+      "ossContribution": "고정topic-id Markdown→PR→웹사이트동기화, 콘텐츠repo와 app분리",
+      "internationalization": "공개기여가이드에서 Non-English content를 부적합기여로 명시; 글로벌영어접근과다국어공동편집의차이",
+      "claimBoundary": "큰지도·많은자료·별수가 교육효과나진로성과를 입증하지않음"
+    }
+  ],
+  "sources": [
+    {
+      "id": "A01",
+      "title": "CS50x 2026 Syllabus",
+      "url": "https://cs50.harvard.edu/x/syllabus/",
+      "accessed": "2026-10-31",
+      "type": "official_course_description",
+      "evidence": "주별 강의·walkthrough·프로그래밍 문제세트와 최종 프로젝트를 연결한다. check50의 정확성과 style50의 스타일 평가를 설명한다. 페이지는 포르투갈어·스페인어 강의 더빙도 안내한다.",
+      "limits": "과제 통과나 제공자 목표는 장기 독립 수행·취업·성인 전체 효과의 증거가 아니다. 공개강의와 커리큘럼의 외부기여 거버넌스는 별도다."
+    },
+    {
+      "id": "A02",
+      "title": "OSSU Computer Science curriculum",
+      "url": "https://github.com/ossu/computer-science",
+      "accessed": "2026-10-31",
+      "type": "official_repository_readme",
+      "evidence": "독학 CS 기초를 목표로 Intro/Core/Advanced와 최종 프로젝트를 구성하고, 강좌별 선수지식·기간·노력·토론 링크를 명시한다. 외부강좌·책·대체강좌를 사용한다.",
+      "limits": "학위 동등성 등의 표현은 제공자의 커리큘럼 설명이며 공인학위/성과 검증이 아니다. 학습과 피드백의 품질은 외부제공자에도 의존한다."
+    },
+    {
+      "id": "A03",
+      "title": "The Odin Project — How This Course Will Work",
+      "url": "https://www.theodinproject.com/lessons/foundations-how-this-course-will-work",
+      "accessed": "2026-10-31",
+      "type": "official_course_description",
+      "evidence": "기초 맥락을 설명한 뒤 외부자료로 안내하고 연습·프로젝트를 제공한다. 인터넷·개발환경·Git에서 프론트엔드·백엔드로 나아간다.",
+      "limits": "학습 방식 설명은 사용자 성과 실험이 아니다. 자기주도적 외부자료 탐색이 실제로 누구에게 어떤 부담인지 이 문서만으로 평가할 수 없다."
+    },
+    {
+      "id": "A04",
+      "title": "Full Stack Open — General info",
+      "url": "https://fullstackopen.com/en/part0/general_info/",
+      "accessed": "2026-10-31",
+      "type": "official_course_instructions",
+      "evidence": "프로그래밍·웹·DB·Git 사전지식을 명시한다. 예제 앱을 점진적으로 확장하고 작은 수정과 연습을 하도록 한다. 일부 연습 앱은 여러 part에 걸친다.",
+      "limits": "초보자 무경험 입문과 동일하지 않다. 제공자 학습시간·학점은 해당과정 정책이지 CS Pathfinder 자원추정에 전용할 수 없다."
+    },
+    {
+      "id": "A05",
+      "title": "Exercism — Getting Feedback",
+      "url": "https://exercism.org/docs/using/feedback",
+      "accessed": "2026-10-31",
+      "type": "official_feedback_documentation",
+      "evidence": "제출 iteration에 즉시 생성되는 자동분석 피드백과 자원봉사 멘토의 대화형 피드백, 지인에게 요청하는 private feedback을 구분한다. 멘토 대기는 queue에 따라 수시간~수일이라고 설명한다.",
+      "limits": "즉시성은 자동피드백의 정확성·학습효과 보장이 아니다. 언어 트랙 수는 자연어 번역 완성도와 다르다."
+    },
+    {
+      "id": "A06",
+      "title": "roadmap.sh / developer-roadmap repository",
+      "url": "https://github.com/nilbuild/developer-roadmap",
+      "accessed": "2026-10-31",
+      "type": "official_repository_readme",
+      "evidence": "직무·기술별 상호작용 로드맵을 제공하며 노드를 눌러 주제 설명을 읽는 구조를 명시한다. 기존 kamranahmedse 주소는 현재 nilbuild 저장소로 리다이렉트된다.",
+      "limits": "지도·별수·방문규모는 개념 이해·전이·커리큘럼 완전성의 증거가 아니다. 공개 콘텐츠repo를 전체 서비스 구현 공개와 동일시하지 않는다."
+    },
+    {
+      "id": "A07",
+      "title": "The Odin Project — How to Contribute",
+      "url": "https://www.theodinproject.com/contributing",
+      "accessed": "2026-10-31",
+      "type": "official_contribution_guide",
+      "evidence": "교육과정(lesson/project) 기여와 메인 사이트 코드 기여를 나눠 각각 GitHub로 연결한다.",
+      "limits": "기여 경로 존재가 초보·비개발자의 실제 완수율 또는 관리비용을 입증하지 않는다."
+    },
+    {
+      "id": "A08",
+      "title": "TOP #29290 — HashMap Assignment: LinkedList usage instructions unclear",
+      "url": "https://github.com/TheOdinProject/curriculum/issues/29290",
+      "accessed": "2026-10-31",
+      "published": "2025-01-07",
+      "lastUpdatedObserved": "2026-04-23",
+      "type": "public_first_person_issue",
+      "evidence": "작성자는 key가 hash 함수 안에서만 중요하다는 문장 때문에 원래 문자열 key를 저장하면 안 된다고 해석했고, 충돌처리 과제에서 Discord 도움을 받아 막힘을 넘었다고 설명한다. 처음 기여라 PR보다 논의를 선호했다는 경험도 남긴다.",
+      "limits": "개별 자기보고다. 공개 신고자 선택편향이 있으며 동일문제의 빈도·전체교육 품질·현재수정여부를 입증하지 않는다."
+    },
+    {
+      "id": "A09",
+      "title": "OSSU #1427 — Replace Software Architecture with Freely Available Alternative",
+      "url": "https://github.com/ossu/computer-science/issues/1427",
+      "accessed": "2026-10-31",
+      "published": "2026-04-27",
+      "type": "public_curriculum_change_proposal",
+      "evidence": "제안자는 기존 Coursera 강좌의 무료접근 문제를 이유로 대체를 요청한다. 대체후보가 더 높은 선수지식을 요구하거나 범위가 맞지 않는다는 논의가 이어진다.",
+      "limits": "제안자의 당시 접근 경험·주장이다. Coursera 전체의 현행 무료정책이나 모든지역 접근조건을 이 issue만으로 단정하지 않는다."
+    },
+    {
+      "id": "A10",
+      "title": "OSSU #1266 — Replace introductory Python courses with MIT 6.100L",
+      "url": "https://github.com/ossu/computer-science/issues/1266",
+      "accessed": "2026-10-31",
+      "published": "2024-08-22",
+      "lastUpdatedObserved": "2026-10-12",
+      "type": "public_curriculum_discussion_and_learner_comments",
+      "evidence": "제안에는 기존 강좌의 연습·autograder 문제와 강좌중복이 제시된다. 후속 학습자 댓글에는 강의별 풀 문제 연결이 불명확하다는 불만과 초반설명의 비교평가가 있다. 같은 thread에 무경험 Python 학습자에게 매우 도움이 됐다는 긍정경험 및 여러형태의 작은 연습이 개념형성에 유용하다는 의견도 있다.",
+      "limits": "서로다른 배경·진도·시점의 자기보고이며 통제비교가 아니다. 적극댓글자의 선택편향과 남아있는 학습자의 생존편향이 있다. 긍정경험은 구체적 효과크기를 말하지 않는다."
+    }
+  ],
+  "supplementarySources": [
+    {
+      "id": "A11",
+      "title": "Full Stack Open CONTRIBUTING",
+      "url": "https://github.com/fullstack-hy2020/fullstack-hy2020.github.io/blob/source/CONTRIBUTING.md",
+      "accessed": "2026-10-31",
+      "evidence": "PR·issue·번역·PR검토를 기여방식으로 안내. part별 translationProgress.json을 갱신하고 미번역 part는 영어로 fallback하는 구조를 설명한다.",
+      "limits": "문서에 남은 Node 10 로컬실행 안내 등은 현행 실행환경과 정합성을 별도 확인해야 한다. 번역상태기록은 번역의 정확성/동등한학습성과 보장이 아니다."
+    },
+    {
+      "id": "A12",
+      "title": "Exercism contributing documentation",
+      "url": "https://exercism.org/docs/building",
+      "accessed": "2026-10-31",
+      "evidence": "maintainer·exercise story 선택 등을 포함한 기여 가이드와 GitHub task 경로를 안내한다. 문서 UI에는 자연어 선택이 있다.",
+      "limits": "선택메뉴가 해당 자연어의 모든 트랙·문제·피드백 번역을 뜻하지 않는다."
+    },
+    {
+      "id": "A13",
+      "title": "roadmap.sh contributing.md",
+      "url": "https://github.com/nilbuild/developer-roadmap/blob/master/contributing.md",
+      "accessed": "2026-10-31",
+      "evidence": "수정 대상은 topic-id가 붙은 Markdown 콘텐츠이며 PR 병합 후 사이트로 동기화된다고 설명한다. 모든자료추가를목표로하지않고 직접평가한자료를 권하며 Non-English content를 부적합 기여 예로 명시한다.",
+      "limits": "현재 공개 기여정책의 관찰이다. 전세계사용자를 영어로 지원하는 것과 다국어공동편집전략은 구분해야 한다."
+    },
+    {
+      "id": "A14",
+      "title": "OSSU CONTRIBUTING",
+      "url": "https://github.com/ossu/computer-science/blob/master/CONTRIBUTING.md",
+      "accessed": "2026-10-31",
+      "evidence": "작은 URL/철자 수정은 PR, 진행·범위 등 실질 커리큘럼 변경은 기준과 개선계획을 동반한 issue로 분리한다. 개인 맞춤 fork도 권장한다.",
+      "limits": "절차존재가 합의속도·외부기여활성도·학습성과를 입증하지 않는다."
+    },
+    {
+      "id": "A15",
+      "title": "OSSU #1266 learner positive report",
+      "url": "https://github.com/ossu/computer-science/issues/1266#issuecomment-3577312524",
+      "accessed": "2026-10-31",
+      "published": "2025-11-25",
+      "evidence": "작성자는 Python 경험이 거의 없는 자신에게 해당강좌가 매우 유용했다고 보고한다.",
+      "limits": "구체적으로어떤요소가도움을줬는지는 이댓글에서 설명하지 않는다. 1인자기보고이며 부정후기를 상쇄하는 통계가 아니다."
+    },
+    {
+      "id": "A16",
+      "title": "OSSU #1266 exercise format positive counterpoint",
+      "url": "https://github.com/ossu/computer-science/issues/1266#issuecomment-2321160249",
+      "accessed": "2026-10-31",
+      "published": "2024-08-30",
+      "evidence": "두강좌를 함께 경험했다는 댓글작성자는 기존 MITx의 짧은프로그램·개념질문·객관식 조합이 개념을 만드는 데 유용하므로 보조로 남기자고 제안한다.",
+      "limits": "작성자판단이며 해당연습조합의 인과효과를 실증한 비교가 아니다."
+    }
+  ],
+  "strongestArguments": [
+    {
+      "claim": "개념 경로와 실무과제는 함께 구성할수있으며, A는 문서읽기만의전략일필요가없다.",
+      "basis": [
+        "A01",
+        "A03",
+        "A04"
+      ],
+      "reasoning": "CS50·Odin·FSO는 개념설명과 누적과제·자유프로젝트를 연결한다. A의 독립수행 과제를 제품핵심에 둘수있는 구조적선례다.",
+      "boundary": "이선례가A의우월성이나CSPathfinder에서의수요를입증하지않는다."
+    },
+    {
+      "claim": "공유 가능한 정본 단위가 오픈소스의 기여·검토·번역 경계를 분명히 할수있다.",
+      "basis": [
+        "A07",
+        "A11",
+        "A13",
+        "A14"
+      ],
+      "reasoning": "정본개념별로주장/조건/근거버전/풀이예/연습과평가기준/선수연결을묶고 변경영향을표시하는구조를 제안한다. 플랫폼코드와교육콘텐츠기여는분리한다.",
+      "boundary": "전체데이터모델의효과나관리비용이검증된것은아니다."
+    },
+    {
+      "claim": "A는 역할별일의차이를가진학습자에게공통기초를공유할수있다.",
+      "basis": [
+        "A01",
+        "A02",
+        "A04"
+      ],
+      "reasoning": "같은CS원리의핵심정본은공유하고, 개발자는구현·검증, 프로젝트PM은수용·의존성·변경, 제품PM은사용자문제·정책판단의적용과제를별도로연결하는설계가가능하다.",
+      "boundary": "세역할이동일한학습깊이/경로/과제를필요로한다는뜻이아니며PM범위는사용자의최종정의와분리한다."
+    },
+    {
+      "claim": "명시적인 선수관계와 과제연결은 외부원문조사에서 드러난 위험에 직접 대응한다.",
+      "basis": [
+        "A08",
+        "A10"
+      ],
+      "reasoning": "문장해석이오개념을만들거나 강의와풀과제의연결이모호했던신고는 설명의근거와연습/선수연결을한단위로관리할이유를제공한다.",
+      "boundary": "사례빈도/미충족시장규모/현재제품결함률은추정하지않는다."
+    }
+  ],
+  "failureModes": [
+    {
+      "risk": "기존경로/기초강의/코딩연습과 구별되지않음",
+      "basis": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06"
+      ],
+      "response": "자료량확대보다 특정개념에서 독립수행까지 이어지는 경로의정확성·설명깊이선택·과제연결을검토. 차별성은후보로표시."
+    },
+    {
+      "risk": "선별외부자료와 서비스정책변경에학습경로가의존",
+      "basis": [
+        "A09",
+        "A10"
+      ],
+      "response": "원리설명과최소연습의핵심은자체정본, 확장자료는버전/대체/접근조건과함께연결. 제공자변경을자동수용하지않음."
+    },
+    {
+      "risk": "설명은읽었으나스스로과제를수행하지못함",
+      "basis": [
+        "A08",
+        "A10"
+      ],
+      "response": "풀이시범·구조화연습·새문제수행·지원감소를검토단위에포함. 단순완료율과독립수행구분."
+    },
+    {
+      "risk": "검토·번역·의견합의가병목",
+      "basis": [
+        "A05",
+        "A11",
+        "A14"
+      ],
+      "response": "자동검사는구조/동작,내용전문검토는사실·조건·평가에역할분리. 언어별번역진도/정본버전/불일치를표시. 실제비용은미측정."
+    }
+  ],
+  "proposedAConcreteDesign": {
+    "unit": "개념 하나의 정본: 핵심주장·적용조건·근거버전·시범·반례·새과제·평가기준·선수관계",
+    "learnerExperience": "현재목표와주제별사전수행에따라 필요한기초/핵심/적용과제로진입, 이미할수있는부분생략가능. 한문항으로전체숙련도를판정하지않음.",
+    "contributionUnit": "개념설명/반례/연습/근거갱신/번역을개별기여하되 정본ID와변경영향으로연결. 코드기여와내용검토책임분리.",
+    "wowHypothesis": "설명을읽고끝나는진도대신 내가틀렸던조건·바뀐설명·독립수행에성공한과제가근거로남는경험. 현재시장반응이나효과는미검증."
+  },
+  "conditionalRecommendation": "공개자료만으로도 A를 공통지식·검증과제·기여정본의 기반전략으로 구성할수있다. 새로운전문가실무기록을모든주제에선행확보해야하는구조보다 기존콘텐츠재사용에유리할가능성이있다. 단 실제비용우위는미측정이며 B형실무경험도위기반위에구성할수있다. 다음판정에서는 A를완결된성인최고방식으로주장하지말고, 무엇을공통정본으로쌓고어떤수행을보장할지의전략으로평가한다."
+}

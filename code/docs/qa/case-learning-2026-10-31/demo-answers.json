@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "contentVersion": 1,
+  "role": "developer",
+  "records": {
+    "developer": {
+      "stage": 0,
+      "draft": "",
+      "viewedExample": false,
+      "externalHelp": "unspecified",
+      "revision": "",
+      "transfer": "",
+      "transferHelp": "unspecified",
+      "checks": [],
+      "recall": "",
+      "recallHelp": "unspecified"
+    },
+    "project": {
+      "stage": 3,
+      "draft": "F2의 변경과 F3의 의존성을 확인하고 담당자와 중단·재개 조건을 합의하겠습니다.",
+      "viewedExample": false,
+      "externalHelp": "unspecified",
+      "first": {
+        "text": "F2의 변경과 F3의 의존성을 확인하고 담당자와 중단·재개 조건을 합의하겠습니다.",
+        "assistance": "unspecified",
+        "exampleViewed": false,
+        "at": "2026-10-31T07:51:11.307Z"
+      },
+      "revision": "회복 확인과 다시 멈출 조건을 추가하겠습니다. 필요한 승인 주체도 확인하겠습니다.",
+      "transfer": "오류가 없어도 연결 사용률과 지연 추이를 확인하고 기술 담당자와 내부 작업 속도 조절 및 재개 기준을 협의하겠습니다.",
+      "transferHelp": "unspecified",
+      "applied": {
+        "text": "오류가 없어도 연결 사용률과 지연 추이를 확인하고 기술 담당자와 내부 작업 속도 조절 및 재개 기준을 협의하겠습니다.",
+        "assistance": "unspecified",
+        "at": "2026-10-31T07:51:30.296Z"
+      },
+      "checks": [
+        0
+      ],
+      "recall": "영향 범위를 확인하고 승인 주체와 중단 조건을 합의합니다. 변경 완료와 사용자 서비스 회복을 별도로 확인한 뒤 재개를 제안합니다.",
+      "recallHelp": "unspecified",
+      "reviewAt": "2026-11-03T07:51:35.830Z",
+      "recalled": {
+        "text": "영향 범위를 확인하고 승인 주체와 중단 조건을 합의합니다. 변경 완료와 사용자 서비스 회복을 별도로 확인한 뒤 재개를 제안합니다.",
+        "assistance": "unspecified",
+        "at": "2026-10-31T07:52:31.898Z"
+      }
+    },
+    "product": {
+      "stage": 0,
+      "draft": "",
+      "viewedExample": false,
+      "externalHelp": "unspecified",
+      "revision": "",
+      "transfer": "",
+      "transferHelp": "unspecified",
+      "checks": [],
+      "recall": "",
+      "recallHelp": "unspecified"
+    }
+  }
+}
