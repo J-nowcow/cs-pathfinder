@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 397개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 398개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -99,6 +99,7 @@
 - [HTTP/2는 단일 연결에서 여러 요청을 어떻게 동시에 처리하는가?](https://cs-pathfinder.vercel.app/q/893990fe-e32a-4452-bbbd-4a052bda5991) — 2026-10-07
 - [클라이언트 요청 결과에 따른 HTTP 상태 코드는 어떻게 고르는가?](https://cs-pathfinder.vercel.app/q/e3834ced-48aa-48e5-a386-a95b11155b26) — 2026-10-18
 - [IPv6 전면 전환 대신 NAT 기술을 먼저 도입한 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/d1a99773-e4f7-450a-abd9-c123b7aae0fd) — 2026-10-28
+- [단방향 실시간 알림에 웹소켓 대신 SSE를 쓰는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/0079dc90-e66e-44d2-98bd-369ad3a06135) — 2026-11-07
 
 ## 언어 · 런타임
 
