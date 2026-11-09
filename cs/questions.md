@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 399개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 400개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -204,6 +204,7 @@
 - [OOM 킬러는 어떤 기준으로 프로세스를 종료하는가?](https://cs-pathfinder.vercel.app/q/75e66d05-8ac2-4aa1-b50d-1bf5c8dbd772) — 2026-10-09
 - [페이지 교체 시 LRU와 LFU는 무엇으로 선택하는가?](https://cs-pathfinder.vercel.app/q/861a01e8-7287-45d5-aed8-daff98e2293d) — 2026-10-20
 - [유닉스 파이프는 프로세스 간 데이터를 어떻게 전달하는가?](https://cs-pathfinder.vercel.app/q/c59a0306-9e49-4f4d-9f22-3f257d7f6f9f) — 2026-10-30
+- [프로세스와 스레드는 자원 공유 방식에서 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/cf64fd31-5100-4090-919c-9a72e1c380e7) — 2026-11-09
 
 ## 자료구조 · 알고리즘
 
