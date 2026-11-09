@@ -27,7 +27,7 @@ afterEach(() => {
 
 async function loadSitemap(catalog: () => Promise<unknown>) {
   vi.doMock('@/lib/db/bootstrap', () => ({ ensureSeeded: async () => {} }))
-  vi.doMock('@/lib/db/catalog', () => ({ loadCatalog: catalog }))
+  vi.doMock('@/lib/db/catalog', () => ({ loadCatalog: vi.fn(catalog) }))
   return (await import('@/app/sitemap')).default()
 }
 
@@ -37,6 +37,8 @@ describe('sitemap', () => {
     const urls = map.map((m) => m.url)
     expect(urls).toContain('https://example.test/q/aaa')
     expect(urls).toContain('https://example.test/q/bbb')
+    const { loadCatalog } = await import('@/lib/db/catalog')
+    expect(loadCatalog).toHaveBeenCalledExactlyOnceWith(undefined, { canonicalOnly: true })
   })
 
   it('주요 화면도 함께 넣는다', async () => {

@@ -1,3 +1,4 @@
+import { LessonSectionHeading } from '@/components/library/LessonSectionHeading'
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
@@ -68,7 +69,7 @@ export default async function CertificateLesson({
         {n.id === 'test-coverage' ? <CertificateCoverageGraph /> : null}
         {n.id === 'ipv4-subnet' ? <CertificateCidrFigure /> : null}
         <section>
-          <h2>핵심 개념 비교</h2>
+          <LessonSectionHeading id="lesson-comparison">핵심 개념 비교</LessonSectionHeading>
           <CertificateTable
             caption="개념의 기준과 확인할 점"
             headers={['개념', '기준', '확인할 점']}
@@ -76,7 +77,7 @@ export default async function CertificateLesson({
           />
         </section>
         <section>
-          <h2>예제와 해설</h2>
+          <LessonSectionHeading id="lesson-examples">예제와 해설</LessonSectionHeading>
           {n.example.code && (
             <pre className="certificate-code">
               <code>{n.example.code}</code>
@@ -102,7 +103,7 @@ export default async function CertificateLesson({
           ) : null}
         </section>
         <aside className="certificate-caution">
-          <h2>주의할 점</h2>
+          <LessonSectionHeading id="lesson-cautions">주의할 점</LessonSectionHeading>
           <p>{n.trap}</p>
         </aside>
         <CertificatePractice
@@ -111,7 +112,7 @@ export default async function CertificateLesson({
           recallAnswer={n.recallAnswer}
         />
         <section>
-          <h2>참고한 자료</h2>
+          <LessonSectionHeading id="lesson-sources">참고한 자료</LessonSectionHeading>
           {c.sources
             .filter((s) => n.sources.includes(s.id))
             .map((s) => (

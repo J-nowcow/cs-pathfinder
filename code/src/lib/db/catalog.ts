@@ -1,6 +1,7 @@
 import { getDb } from '@/lib/db/client'
 import { CATEGORIES } from '@/lib/tree/categories'
 import { kstToday } from '@/lib/daily/date'
+import { NOT_FOLDED_SQL } from '@/lib/db/equivalence'
 
 /**
  * 레포에 올릴 질문 목록.
@@ -47,7 +48,9 @@ type Row = {
  */
 export async function loadCatalog(
   today: string = kstToday(),
-  opts: { withBody?: boolean } = {},
+  // Crawl discovery may omit a folded copy only when its representative can be published.
+  // Keep the default complete catalog for existing source/history exports.
+  opts: { withBody?: boolean; canonicalOnly?: boolean } = {},
 ): Promise<Catalog> {
   const db = await getDb()
   const rows = await db.query<Row>(
@@ -63,6 +66,23 @@ export async function loadCatalog(
       where n.status = 'ready'
         and n.origin = 'batch'
         and (t.publish_date is null or t.publish_date <= $1::date)
+        ${opts.canonicalOnly ? `and not exists (
+          select 1 from tree future
+           where future.root_node_id = n.id and future.publish_date > $1::date
+        )
+        and not exists (
+          select 1 from qnode_equivalence e
+          join qnode c on c.id = e.canonical_id
+           where e.active
+             and (e.node_a = n.id or e.node_b = n.id)
+             and e.canonical_id <> n.id
+             and c.origin = 'batch' and c.status = 'ready'
+             and ${NOT_FOLDED_SQL('c')}
+             and not exists (
+               select 1 from tree future
+                where future.root_node_id = c.id and future.publish_date > $1::date
+             )
+        )` : ''}
       order by n.created_at asc, n.normalized_question asc`,
     [today],
   )

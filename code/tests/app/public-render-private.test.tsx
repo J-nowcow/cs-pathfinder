@@ -86,7 +86,7 @@ beforeEach(() => {
 
 describe('private page state stays outside public snapshots', () => {
   it('reads anonymous quota from each request and still loads related questions for the body', async () => {
-    const params = Promise.resolve({ nodeId: '1' })
+    const params = Promise.resolve({ nodeId: 'fixture' })
     await nodeMetadata({ params })
     expect(getQuota).not.toHaveBeenCalled()
     expect(relatedForDisplay).not.toHaveBeenCalled()
