@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 391개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 402개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -49,6 +49,7 @@
 - [느린 쿼리를 튜닝할 때 실행 계획에서 무엇을 먼저 보는가?](https://cs-pathfinder.vercel.app/q/1e916f3d-7071-456a-ae76-e5d625db83e1) — 2026-10-05
 - [ORM이 생성하는 SQL을 직접 확인해야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/3d0f7bca-42b6-4d15-9dae-779bfd0814ad) — 2026-10-16
 - [느린 쿼리를 발견하면 실행 계획에서 무엇을 먼저 보는가?](https://cs-pathfinder.vercel.app/q/24226c19-c5e2-436b-b661-35c9d046637d) — 2026-10-26
+- [외래키 제약은 데이터 쓰기 성능에 어떤 부담을 주는가?](https://cs-pathfinder.vercel.app/q/2ebbb39a-8e17-4638-9aba-1f4b3ac04639) — 2026-11-05
 
 ## 네트워크
 
@@ -98,6 +99,7 @@
 - [HTTP/2는 단일 연결에서 여러 요청을 어떻게 동시에 처리하는가?](https://cs-pathfinder.vercel.app/q/893990fe-e32a-4452-bbbd-4a052bda5991) — 2026-10-07
 - [클라이언트 요청 결과에 따른 HTTP 상태 코드는 어떻게 고르는가?](https://cs-pathfinder.vercel.app/q/e3834ced-48aa-48e5-a386-a95b11155b26) — 2026-10-18
 - [IPv6 전면 전환 대신 NAT 기술을 먼저 도입한 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/d1a99773-e4f7-450a-abd9-c123b7aae0fd) — 2026-10-28
+- [단방향 실시간 알림에 웹소켓 대신 SSE를 쓰는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/0079dc90-e66e-44d2-98bd-369ad3a06135) — 2026-11-07
 
 ## 언어 · 런타임
 
@@ -154,6 +156,7 @@
 - [이벤트 루프는 두 태스크 큐를 어떤 기준으로 처리하는가?](https://cs-pathfinder.vercel.app/q/96f61ea5-6b05-4671-b63a-757052d68a87) — 2026-10-06
 - [제네릭에 extends 키워드는 왜 사용하는가?](https://cs-pathfinder.vercel.app/q/a4659d2f-3399-44e5-b662-2860a3f54b36) — 2026-10-17
 - [final 키워드만으로 불변 객체가 완성되지 않는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/80036636-1385-4d0e-984d-84bd1e54c794) — 2026-10-27
+- [가상 스레드는 왜 플랫폼 스레드보다 스루풋이 높은가?](https://cs-pathfinder.vercel.app/q/3cb9326b-b5c1-464f-926c-594f9411eb8a) — 2026-11-06
 
 ## 운영체제
 
@@ -201,6 +204,7 @@
 - [OOM 킬러는 어떤 기준으로 프로세스를 종료하는가?](https://cs-pathfinder.vercel.app/q/75e66d05-8ac2-4aa1-b50d-1bf5c8dbd772) — 2026-10-09
 - [페이지 교체 시 LRU와 LFU는 무엇으로 선택하는가?](https://cs-pathfinder.vercel.app/q/861a01e8-7287-45d5-aed8-daff98e2293d) — 2026-10-20
 - [유닉스 파이프는 프로세스 간 데이터를 어떻게 전달하는가?](https://cs-pathfinder.vercel.app/q/c59a0306-9e49-4f4d-9f22-3f257d7f6f9f) — 2026-10-30
+- [프로세스와 스레드는 자원 공유 방식에서 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/cf64fd31-5100-4090-919c-9a72e1c380e7) — 2026-11-09
 
 ## 자료구조 · 알고리즘
 
@@ -239,6 +243,7 @@
 - [LRU 캐시를 O(1)로 구현하려면 어떤 자료구조들을 조합하는가?](https://cs-pathfinder.vercel.app/q/80b8b67b-e91d-415c-8f4f-b1c1ef80fd2c) — 2026-10-10
 - [체이닝과 개방 주소법은 어떤 상황에서 갈리는가?](https://cs-pathfinder.vercel.app/q/632a9668-cae5-44ed-aff0-6c381f08c579) — 2026-10-21
 - [파라메트릭 서치는 최적화 문제를 어떻게 바꾸어 푸는가?](https://cs-pathfinder.vercel.app/q/9224e7b6-0a89-4345-9b05-26286305abff) — 2026-10-31
+- [조회와 삽입이 잦은 상황에서 배열과 연결 리스트 중 무엇을 고르는가?](https://cs-pathfinder.vercel.app/q/4d2d4f54-8b61-4477-86dd-b757ddad10fa) — 2026-11-10
 
 ## 프레임워크
 
@@ -274,6 +279,7 @@
 - [Bean Validation은 직접 구현한 검증 로직과 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/c3eeea9a-dec5-4bfe-9d2f-9a72077e0e10) — 2026-10-02
 - [@ControllerAdvice로 예외를 전역 처리하는 이유는?](https://cs-pathfinder.vercel.app/q/68729ecc-4f82-47c5-9aeb-3b56b741ef5a) — 2026-10-12
 - [같은 클래스 내부에서 메서드를 호출하면 왜 AOP가 동작하지 않는가?](https://cs-pathfinder.vercel.app/q/ca0c9c24-9a19-4747-b262-0ef2d558e991) — 2026-10-23
+- [부모 트랜잭션과 무관하게 독립 커밋을 하려면 어떤 전파 속성을 쓰는가?](https://cs-pathfinder.vercel.app/q/3cfeea9e-64f7-4485-aa83-289c21847ed8) — 2026-11-02
 
 ## 아키텍처 · 분산시스템
 
@@ -313,6 +319,7 @@
 - [로그, 메트릭, 트레이스는 각각 언제 쓰는가?](https://cs-pathfinder.vercel.app/q/2337bd83-9b4d-418a-8d11-9b67beb70504) — 2026-10-08
 - [재시도 간격을 지수로 늘려야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/6b2d4546-3b21-46f7-848c-721a2278460a) — 2026-10-19
 - [포트와 어댑터 아키텍처에서 인터페이스는 어느 쪽에 속하는가?](https://cs-pathfinder.vercel.app/q/2c36b975-233b-422d-b1b9-b8790304277c) — 2026-10-29
+- [도메인 이벤트는 트랜잭션의 어느 시점에 발행해야 안전한가?](https://cs-pathfinder.vercel.app/q/7c8402a6-0e59-4729-aadd-c158685d4be9) — 2026-11-08
 
 ## 프론트엔드
 
@@ -351,6 +358,7 @@
 - [CSR, SSR, SSG는 어떤 기준으로 고르는가?](https://cs-pathfinder.vercel.app/q/a0412141-d7da-46b4-8ea5-395864a4edca) — 2026-10-03
 - [Flexbox와 Grid는 어떤 기준으로 구분해서 쓰는가?](https://cs-pathfinder.vercel.app/q/8ba39b6c-f735-4261-9cc6-8381125d09e1) — 2026-10-13
 - [React에서 값과 함수의 메모이제이션은 어떻게 구분해서 적용하는가?](https://cs-pathfinder.vercel.app/q/6c2292a2-bf60-4918-9df4-caf33dde2db6) — 2026-10-24
+- [웹폰트 렌더링 시 FOUT과 FOIT는 무엇으로 결정하는가?](https://cs-pathfinder.vercel.app/q/7bfcb0c5-86a5-44a6-b76a-257246bec99a) — 2026-11-03
 
 ## 인프라 · 보안
 
@@ -390,6 +398,8 @@
 - [오토스케일링 지표는 서비스 병목에 따라 어떻게 선택하는가?](https://cs-pathfinder.vercel.app/q/d638c07e-e751-4321-9039-f33232a436ff) — 2026-10-01
 - [XSS 공격은 사용자 입력을 어떻게 처리하여 방어하는가?](https://cs-pathfinder.vercel.app/q/7ba6d348-602e-4d41-af93-c4de7139daa8) — 2026-10-11
 - [IaC 도구는 왜 인프라 상태를 별도 파일로 관리하는가?](https://cs-pathfinder.vercel.app/q/6249eb3e-08bf-409d-bd18-32db4beca533) — 2026-10-22
+- [멀티 스테이지 빌드로 이미지 용량을 줄이는 원리는 무엇인가?](https://cs-pathfinder.vercel.app/q/db7e48a1-4acd-4194-bc22-dc851d87c870) — 2026-11-01
+- [컨테이너와 가상 머신은 무엇을 기준으로 고르는가?](https://cs-pathfinder.vercel.app/q/45494e2d-4726-4ae8-a948-00f35a5bd421) — 2026-11-11
 
 ## 모바일
 
@@ -426,3 +436,4 @@
 - [네비게이션 컴포넌트는 왜 단일 액티비티 구조를 권장하는가?](https://cs-pathfinder.vercel.app/q/0b36b330-f006-4bec-bfb6-bba430487329) — 2026-10-04
 - [R8이 ProGuard보다 유리한 점은 무엇인가?](https://cs-pathfinder.vercel.app/q/a2f4422d-a725-4f2f-b668-5148824bebcf) — 2026-10-15
 - [안드로이드 액티비티를 별도 태스크로 분리하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/b31a383c-9cce-4b8a-866b-9d5ea864dcd5) — 2026-10-25
+- [컴포저블의 상태를 상위로 올려야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/11390e4e-bd04-49ed-ae98-3979a855a8fa) — 2026-11-04
