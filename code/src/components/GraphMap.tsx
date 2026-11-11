@@ -13,6 +13,11 @@ import { MAP_OVERLAY_Z } from '@/lib/graph/stacking'
 import { nearestGaps, hitSizeFor } from '@/lib/graph/hit'
 import { wantsBrowserDefault } from '@/lib/graph/open-intent'
 import { Prose } from '@/components/Prose'
+import { KnowledgeConnections } from '@/components/knowledge/KnowledgeConnections'
+import { buildGraphNeighborIndex, type GraphNeighbor } from '@/lib/graph/relations'
+import { saveStreak, todayKst } from '@/lib/streak/client'
+import { deserializeStreak, recordRead, serializeStreak, STREAK_STORAGE_KEY } from '@/lib/streak/storage'
+import { STREAK_SYNCED_EVENT } from '@/lib/journey/sync'
 import type { MapData, MapNode } from '@/lib/db/graph'
 
 /**
@@ -54,6 +59,9 @@ type Props = { data: MapData }
 
 export function GraphMap({ data }: Props) {
   const [openId, setOpenId] = useState<string | null>(null)
+  const [view, setView] = useState<'map' | 'connections'>('map')
+  const connectionsButtonRef = useRef<HTMLButtonElement>(null)
+  const restoreConnectionsFocus = useCallback(() => connectionsButtonRef.current?.focus(), [])
 
   /*
    * 시트 안에서 이어진 질문을 눌러 옮겨왔을 때, **방금까지 보던 질문**이
@@ -66,6 +74,27 @@ export function GraphMap({ data }: Props) {
    * 지도의 점을 눌러 새로 연 것은 옮겨온 것이 아니므로 지운다.
    */
   const [cameFrom, setCameFrom] = useState<string | null>(null)
+
+  useEffect(() => {
+    const restoreView = () => {
+      setView(new URL(window.location.href).searchParams.get('view') === 'connections' ? 'connections' : 'map')
+      setOpenId(null)
+      setCameFrom(null)
+    }
+    restoreView()
+    window.addEventListener('popstate', restoreView)
+    return () => window.removeEventListener('popstate', restoreView)
+  }, [])
+
+  const selectView = (value: 'map' | 'connections') => {
+    const url = new URL(window.location.href)
+    if (value === 'connections') url.searchParams.set('view', 'connections')
+    else url.searchParams.delete('view')
+    if (url.href !== window.location.href) window.history.pushState(window.history.state, '', url)
+    setOpenId(null)
+    setCameFrom(null)
+    setView(value)
+  }
 
   const openFromMap = useCallback((id: string) => {
     setCameFrom(null)
@@ -85,37 +114,14 @@ export function GraphMap({ data }: Props) {
   const summary = useMemo(() => categorySummary(data.nodes), [data.nodes])
   const byId = useMemo(() => new Map(data.nodes.map((n) => [n.id, n])), [data.nodes])
 
-  /*
-   * 노드마다 이웃을 미리 모은다.
-   *
-   * 선에는 방향이 있지만 시트에서는 방향을 안 따진다. "TCP를 알아야 handshake가
-   * 읽힌다"의 반대편에 서 있어도 사용자가 보고 싶은 것은 이어진 질문 그 자체다.
-   *
-   * 시트를 열 때마다 훑으면 249개 × 선 수를 매번 돈다. 지도는 열어놓고 여러
-   * 노드를 눌러보는 화면이라 그 비용이 반복된다.
-   */
-  const neighbors = useMemo(() => {
-    const m = new Map<string, Array<{ id: string; question: string; reason?: string }>>()
-    const add = (from: string, to: string, reason?: string) => {
-      const node = byId.get(to)
-      if (!node) return
-      const list = m.get(from) ?? []
-      if (list.some((l) => l.id === to)) return
-      list.push({ id: to, question: node.question, reason })
-      m.set(from, list)
-    }
-    for (const e of data.edges) {
-      add(e.parentId, e.childId, e.reason)
-      add(e.childId, e.parentId, e.reason)
-    }
-    return m
-  }, [data.edges, byId])
+  // 관계를 일반적인 이웃으로 뭉개지 않는다. 선행 방향과 예시의 방향을 보존한다.
+  const neighbors = useMemo(() => buildGraphNeighborIndex(data), [data])
 
   return (
     <div className="fixed inset-0 flex flex-col bg-surface">
-      <header className="flex items-center justify-between gap-3 border-b border-line px-5 py-3">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
         <div>
-          <p className="text-[15px] font-bold">질문 지도</p>
+          <p className="text-[15px] font-bold">질문을 지식으로 잇기</p>
           <p className="text-[12px] text-faint">
             질문 {data.nodes.length}개 · 이어진 선 {data.edges.length}개
           </p>
@@ -127,6 +133,23 @@ export function GraphMap({ data }: Props) {
             저절로 사라진다.
           */}
           {status && <p className="mt-0.5 text-[12px] text-accent">{status}</p>}
+        </div>
+        <div role="group" className="flex rounded-xl border border-line bg-raised p-1" aria-label="지도 보기 선택">
+          {([
+            ['map', '전체 지도'],
+            ['connections', '읽은 지식 정리'],
+          ] as const).map(([value, label]) => (
+            <button
+              key={value}
+              ref={value === 'connections' ? connectionsButtonRef : undefined}
+              type="button"
+              aria-pressed={view === value}
+              onClick={() => selectView(value)}
+              className={`min-h-11 rounded-lg px-3 text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${view === value ? 'bg-accent text-on-accent shadow-sm' : 'text-muted hover:text-ink'}`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
         {/*
           지도의 유일한 출구다.
@@ -144,10 +167,27 @@ export function GraphMap({ data }: Props) {
         >
           홈으로
         </Link>
+        <noscript>
+          <p className="w-full text-[13px] leading-relaxed text-muted">
+            지도와 읽기 기록 정리에는 자바스크립트가 필요합니다.{' '}
+            <a href="/questions" className="text-accent underline underline-offset-4">공개 질문 목록에서 읽기</a>
+          </p>
+        </noscript>
       </header>
 
-      <div className="relative flex-1">
-        <Canvas placed={placed} summary={summary} edges={data.edges} onOpen={openFromMap} />
+      <div className="relative min-h-0 flex-1">
+        {view === 'map' ? (
+          <>
+            <div className="pointer-events-none absolute left-4 top-4 z-10 max-w-72 rounded-xl border border-line bg-raised/95 px-3 py-2 text-[12px] leading-relaxed text-muted shadow-sm">
+              질문을 열면 연결 이유를 볼 수 있습니다. 방향을 검토한 관계만 먼저 볼 개념과 예시로 안내합니다.
+            </div>
+            <Canvas placed={placed} summary={summary} edges={data.edges} onOpen={openFromMap} />
+          </>
+        ) : (
+          <div className="h-full overflow-y-auto bg-surface">
+            <KnowledgeConnections data={data} onOpen={openFromMap} />
+          </div>
+        )}
       </div>
 
       {openId && (
@@ -156,6 +196,7 @@ export function GraphMap({ data }: Props) {
           links={neighbors.get(openId) ?? []}
           cameFrom={cameFrom}
           onOpen={openFromSheet}
+          onRestoreFocusFallback={restoreConnectionsFocus}
           onClose={() => {
             setCameFrom(null)
             setOpenId(null)
@@ -653,20 +694,93 @@ function Viewport({ children }: { children: React.ReactNode }) {
  *
  * 제목은 즉시 띄우고 본문만 받아온다. 누른 것이 맞는지부터 보여야 기다릴 수 있다.
  */
+type SheetLink = Pick<GraphNeighbor, 'id' | 'question'> &
+  Partial<Omit<GraphNeighbor, 'id' | 'question'>>
+
+type ConnectionGroup = {
+  key: string
+  title: string
+  hint: string
+  links: SheetLink[]
+}
+
+function connectionGroup(link: SheetLink): Omit<ConnectionGroup, 'links'> {
+  const directional = link.relationKind === 'prerequisite' || link.relationKind === 'instance_of'
+  const reviewed = link.relationDirection === 'forward' || link.relationDirection === 'reverse'
+  if (directional && !reviewed) {
+    return { key: 'unreviewed', title: '방향 미검증 관계', hint: '연결 이유는 남아 있지만, 무엇을 먼저 볼지와 개념·예시의 방향은 아직 확인하지 않았습니다.' }
+  }
+  if (link.relationKind === 'prerequisite' && link.direction === 'incoming') {
+    return { key: 'prior', title: '먼저 살펴볼 개념', hint: '현재 질문을 이해하는 데 앞서 연결된 개념입니다.' }
+  }
+  if (link.relationKind === 'prerequisite' && link.direction === 'outgoing') {
+    return { key: 'next', title: '다음으로 이어 볼 질문', hint: '현재 개념을 바탕으로 더 살펴볼 연결입니다.' }
+  }
+  if (link.relationKind === 'alternative') {
+    return { key: 'alternative', title: '비교해서 볼 질문', hint: '어떤 조건에서 선택이 달라지는지 비교해 보세요.' }
+  }
+  if (link.relationKind === 'instance_of' && link.direction === 'outgoing') {
+    return { key: 'example', title: '예시로 살펴볼 질문', hint: '현재 개념이 구체적으로 쓰이는 경우입니다.' }
+  }
+  if (link.relationKind === 'instance_of' && link.direction === 'incoming') {
+    return { key: 'general', title: '이 예시의 바탕 개념', hint: '구체적인 예시를 더 넓은 개념과 연결합니다.' }
+  }
+  if (link.relationKind === 'shares_concept') {
+    return { key: 'shared', title: '함께 이해할 질문', hint: '공통 개념이 어디에서 쓰이는지 이어 읽어 보세요.' }
+  }
+  if (link.kind === 'walked') {
+    return { key: 'walked', title: '탐색으로 이어진 질문', hint: '누군가 이어 읽은 경로이며 선행 관계를 뜻하지는 않습니다.' }
+  }
+  return { key: 'related', title: '관련된 질문', hint: '연결 이유를 확인하며 함께 살펴보세요.' }
+}
+
+/** 기존 읽기 기록을 이용하되, 손상되거나 다른 버전의 기록은 덮어쓰지 않는다. */
+function recordOpenedQuestion(nodeId: string): void {
+  try {
+    const raw = window.localStorage.getItem(STREAK_STORAGE_KEY)
+    let preservedFields: Record<string, unknown> = {}
+    if (raw !== null) {
+      const value: unknown = JSON.parse(raw)
+      if (typeof value !== 'object' || value === null || Array.isArray(value)) return
+      const saved = value as Record<string, unknown>
+      if (saved.version !== 1 || typeof saved.days !== 'object' || saved.days === null || Array.isArray(saved.days)) return
+      const valid = Object.entries(saved.days).every(([day, ids]) =>
+        /^\d{4}-\d{2}-\d{2}$/.test(day) && Array.isArray(ids) && ids.every((id) => typeof id === 'string'),
+      )
+      if (!valid) return
+      const { version: _version, days: _days, ...extra } = saved
+      preservedFields = extra
+    }
+    const before = deserializeStreak(raw)
+    const after = recordRead(before, todayKst(), nodeId)
+    if (after === before || window.localStorage.getItem(STREAK_STORAGE_KEY) !== raw) return
+    const updated = { ...preservedFields, ...after }
+    saveStreak(updated)
+    if (window.localStorage.getItem(STREAK_STORAGE_KEY) === serializeStreak(updated)) {
+      window.dispatchEvent(new CustomEvent(STREAK_SYNCED_EVENT))
+    }
+  } catch {
+    // 읽기 화면을 유지한다. 저장소 제한이나 잘못된 기록을 자동으로 초기화하지 않는다.
+  }
+}
+
 export function Sheet({
   node,
   links,
   cameFrom,
   onClose,
   onOpen,
+  onRestoreFocusFallback,
 }: {
-  node: { id: string; question: string } | null
-  /** 이 질문과 이어진 것들. 어느 방향이든 한 목록으로 본다 */
-  links: Array<{ id: string; question: string; reason?: string }>
+  node: { id: string; question: string; category?: string } | null
+  /** 관계 종류와 선택한 질문 기준 방향을 보존한다. 과거 호출도 계속 받는다. */
+  links: SheetLink[]
   /** 방금까지 보던 질문. 이어진 질문 목록에 섞여 있으면 표시한다 */
   cameFrom: string | null
   onClose: () => void
   onOpen: (id: string) => void
+  /** 읽기 반영으로 원래 버튼이 사라졌을 때 돌아갈 안정적인 조작 대상. */
+  onRestoreFocusFallback?: () => void
 }) {
   /*
    * 해설은 눌렀을 때 받아온다.
@@ -680,6 +794,30 @@ export function Sheet({
   const [body, setBody] = useState<string | null>(null)
   const [failed, setFailed] = useState(false)
   const [attempt, setAttempt] = useState(0)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const groups = useMemo(() => {
+    const result = new Map<string, ConnectionGroup>()
+    for (const link of links) {
+      const group = connectionGroup(link)
+      const existing = result.get(group.key)
+      if (existing) existing.links.push(link)
+      else result.set(group.key, { ...group, links: [link] })
+    }
+    const order = ['prior', 'general', 'shared', 'alternative', 'example', 'next', 'unreviewed', 'walked', 'related']
+    return [...result.values()].sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key))
+  }, [links])
+
+  useEffect(() => {
+    const opener = document.activeElement
+    return () => {
+      if (opener instanceof HTMLElement && opener.isConnected) opener.focus()
+      else onRestoreFocusFallback?.()
+    }
+  }, [onRestoreFocusFallback])
+
+  useEffect(() => {
+    titleRef.current?.focus()
+  }, [node?.id])
 
   useEffect(() => {
     if (!node) return
@@ -690,9 +828,14 @@ export function Sheet({
     const ac = new AbortController()
     fetch(`/api/node/${node.id}`, { signal: ac.signal })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((d: { body?: string }) => setBody(d.body ?? ''))
+      .then((d: { body?: string }) => {
+        if (ac.signal.aborted) return
+        const loadedBody = typeof d.body === 'string' ? d.body : ''
+        setBody(loadedBody)
+        if (loadedBody.trim()) recordOpenedQuestion(node.id)
+      })
       .catch((e: unknown) => {
-        if ((e as Error)?.name === 'AbortError') return
+        if (ac.signal.aborted || (e as Error)?.name === 'AbortError') return
         setFailed(true)
       })
     return () => ac.abort()
@@ -702,11 +845,23 @@ export function Sheet({
 
   return (
     <div
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby={`map-question-${node.id}`}
       aria-busy={body === null && !failed ? 'true' : undefined}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') {
+          event.stopPropagation()
+          onClose()
+        }
+      }}
       className="absolute inset-x-0 bottom-0 z-10 max-h-[72dvh] overflow-y-auto rounded-t-2xl border-t border-line bg-raised shadow-2xl"
     >
       <div className="sticky top-0 flex items-start gap-3 border-b border-line bg-raised px-5 py-4">
-        <h2 className="flex-1 text-[16px] font-bold leading-[1.45]">{node.question}</h2>
+        <div className="min-w-0 flex-1">
+          {node.category && <p className="mb-1 text-[11px] font-medium text-accent">{node.category}</p>}
+          <h2 id={`map-question-${node.id}`} ref={titleRef} tabIndex={-1} className="text-[17px] font-bold leading-[1.45] outline-none">{node.question}</h2>
+        </div>
         <button
           type="button"
           onClick={onClose}
@@ -716,7 +871,8 @@ export function Sheet({
         </button>
       </div>
 
-      <div className="px-5 py-4">
+      <div className="mx-auto grid max-w-6xl gap-6 px-5 py-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,.85fr)]">
+        <div className="min-w-0">
         {/*
           해설을 여기서 읽게 한다.
 
@@ -728,7 +884,7 @@ export function Sheet({
           <p role="status" className="flex items-center gap-2 text-[14px] leading-[1.75] text-faint">
             <span
               aria-hidden
-              className="size-3.5 animate-spin rounded-full border-2 border-faint/30 border-t-faint"
+              className="size-3.5 animate-spin rounded-full border-2 border-faint/30 border-t-faint motion-reduce:animate-none"
             />
             해설을 불러오는 중…
           </p>
@@ -757,6 +913,8 @@ export function Sheet({
         >
           질문 읽기 →
         </Link>
+        <p className="mt-2 text-[11px] leading-relaxed text-faint">읽기 기록은 이 브라우저에 보관합니다. 기록이 있어도 이해 여부를 판정하지는 않습니다.</p>
+        </div>
 
         {/*
           이어진 질문을 근거와 함께 보여준다.
@@ -766,10 +924,17 @@ export function Sheet({
           근거를 반드시 적게 한 이유가 여기서 쓰인다.
         */}
         {links.length > 0 && (
-          <section className="mt-6">
-            <h3 className="text-[12px] font-medium text-faint">이어진 질문 {links.length}개</h3>
-            <ul className="mt-2 space-y-1">
-              {links.map((l) => (
+          <section className="min-w-0 rounded-xl border border-line bg-surface p-4">
+            <p className="text-[11px] font-semibold tracking-wide text-accent">개념 사이의 연결</p>
+            <h3 className="mt-1 text-[15px] font-bold">이어진 질문 {links.length}개</h3>
+            <p className="mt-1 text-[12px] leading-relaxed text-faint">관계는 학습을 돕는 연결 제안입니다. 이유를 확인하며 이어 읽어 보세요.</p>
+            <div className="mt-4 space-y-5">
+            {groups.map((group) => (
+              <section key={group.key} aria-label={group.title}>
+                <h4 className="text-[12px] font-semibold text-ink">{group.title}</h4>
+                <p className="mb-2 mt-0.5 text-[11px] leading-relaxed text-faint">{group.hint}</p>
+                <ul className="space-y-2">
+              {group.links.map((l) => (
                 <li key={l.id}>
                   <button
                     type="button"
@@ -796,7 +961,10 @@ export function Sheet({
                   </button>
                 </li>
               ))}
-            </ul>
+                </ul>
+              </section>
+            ))}
+            </div>
           </section>
         )}
       </div>

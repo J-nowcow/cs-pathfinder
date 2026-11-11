@@ -78,7 +78,7 @@ export function LearningAreas() {
               <li>
                 <Link href="/learn/certificate" prefetch={false}>
                   <strong>정보처리기사 이론 →</strong>
-                  <span>DB·SQL·테스트·주소 범위 · 기출·복원 코드 제외</span>
+                  <span>요구사항·DB·SQL·전환·테스트·주소·입력 검증·예외 처리 기초 · 기출·복원 코드 제외</span>
                 </Link>
               </li>
               <li>

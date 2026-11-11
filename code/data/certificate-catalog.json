@@ -142,5 +142,41 @@
       "/26의 첫주소·끝주소·전체 개수를 계산했다",
       "일반 LAN과 점대점 /31의 조건을 구분했다"
     ]
+  },
+  {
+    "id": "requirements-traceability",
+    "title": "요구사항: 검증 가능한 조건과 양방향 추적",
+    "recall": "새로운 상황이다. 보고서 내려받기 기능에서 보관 기간을 30일에서 7일로 줄이자는 요청이 왔다. “화면의 숫자만 바꾸면 된다”는 판단을 검토하기 위해 어떤 근거와 연결을 확인하겠는가? 아직 실행하지 않은 시험은 어떻게 기록할까?",
+    "checklist": [
+      "필요·요구·설계·검증을 구분해 설명했다",
+      "다른 상황의 변경 영향과 미확인 결과를 설명했다"
+    ]
+  },
+  {
+    "id": "input-validation-trust-boundary",
+    "title": "입력 검증: 신뢰 경계와 허용 목록·자료형·범위",
+    "recall": "다른 상황이다. 행사 신청에서 tickets는 JSON 숫자인 정수 1~4, contactMethod는 email·sms만 허용하기로 했다. 값은 {tickets: \"2\", contactMethod: \"email\"}이다. 어떻게 판정해야 할까? tickets를 숫자 2로 보냈다면 다른 사람의 신청 ID를 수정해도 될까?",
+    "checklist": [
+      "자료형·범위·허용 목록으로 거부 이유를 설명했다",
+      "입력 검증과 출력·SQL·권한 보호를 구분했다"
+    ]
+  },
+  {
+    "id": "data-conversion-reconciliation",
+    "title": "데이터 전환: 원본 보존·매핑·보류·대사",
+    "recall": "다른 자료다. 대여 기간을 정수 일(day)로 받기로 했는데 원천에는 \"2주\", 빈 값, \"7\"이 섞였다. 변환 후 행 수가 같으니 끝났다는 판단을 어떻게 검토할까? 단위와 빈 값의 뜻을 아직 합의하지 않았다면 무엇을 보존하고 보류해야 할까?",
+    "checklist": [
+      "NULL·0·오류와 보류 사유를 구분했다",
+      "행 수·식별자·값의 대사와 한계를 설명했다"
+    ]
+  },
+  {
+    "id": "synchronous-exception-flow",
+    "title": "JavaScript 예외 처리: try·catch·finally와 재전파",
+    "recall": "catch의 instanceof RangeError를 instanceof TypeError로 바꾸고 나머지는 그대로 두면, full과 broken의 trace 순서와 호출 결과는 각각 어떻게 달라질까?",
+    "checklist": [
+      "동기 예외의 처리·재전파 경로를 설명했다",
+      "finally 실행과 작업 성공을 구분했다"
+    ]
   }
 ]

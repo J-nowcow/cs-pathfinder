@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "release": "2026-10-28.certificate2027",
+  "release": "2026-11-10.exception1",
   "title": "정보처리기사 이론 · 2027~2029 출제기준",
-  "scope": "2027~2029년 필기 4과목·실기 정보처리실무의 목차와 현재 제공하는 이론 16수업",
-  "intro": "출제기준의 과목과 단원에서 필요한 개념을 찾습니다. 현재 DB·SQL, 테스트, IPv4 수업을 읽을 수 있으며 나머지 항목은 목차를 먼저 정리했습니다.",
+  "scope": "2027~2029년 필기 4과목·실기 정보처리실무의 목차와 현재 제공하는 이론 20수업",
+  "intro": "출제기준의 과목과 단원에서 필요한 개념을 찾습니다. 현재 요구사항, DB·SQL·데이터 전환, 테스트, IPv4, 입력 검증, 동기 예외 처리의 기초 수업을 읽을 수 있으며 나머지 항목은 목차를 먼저 정리했습니다.",
   "lessons": [
     {
       "id": "relation",
@@ -1127,6 +1127,426 @@
         "/26의 첫주소·끝주소·전체 개수를 계산했다",
         "일반 LAN과 점대점 /31의 조건을 구분했다"
       ]
+    },
+    {
+      "id": "requirements-traceability",
+      "domain": "requirements",
+      "title": "요구사항: 검증 가능한 조건과 양방향 추적",
+      "question": "사용자의 필요를 확인할 수 있는 요구사항으로 바꾸고, 변경이 설계와 검증에 미치는 영향을 찾는다.",
+      "lead": "요구사항은 시스템이 충족해야 할 기능·품질·제약을 확인할 수 있게 적은 조건이다. 양방향 추적은 그 조건의 근거와 설계·검증 사이를 양쪽 방향으로 따라갈 수 있게 연결하는 것이다.",
+      "body": [
+        "사용자가 바라는 결과와 구현 방법을 먼저 구분한다. “예약 취소 여부를 확실히 알고 싶다”는 필요를 들었다면 누가 어떤 예약을 언제 취소할 수 있고, 거절된 경우에는 무엇을 알려야 하는지 확인한다. 버튼 색을 정하는 것만으로 이 필요를 충족했다고 볼 수는 없다.",
+        "기능 요구사항은 수행할 동작을, 품질 요구사항은 그 동작의 품질 조건을 다룬다. “빠르게 응답한다”만으로는 판정하기 어렵다. 대상 작업·부하·측정 구간과 허용 기준을 합의해야 한다. 수치가 들어갔다는 이유만으로 올바른 요구사항이 되는 것도 아니다. 필요에 맞고 실행 가능하며 서로 모순되지 않는지 함께 검토한다.",
+        "요구사항마다 식별자와 출처·합의 근거를 두고 관련 설계와 검증 방법을 연결한다. 요구에서 설계·시험으로 내려가면 누락된 작업을 찾고, 설계·시험에서 요구로 올라가면 그 작업이 왜 필요한지 확인할 수 있다. 관계는 여러 개일 수 있으며 도구가 특정한 표 모양을 강제하는 것은 아니다.",
+        "요구가 바뀌면 연결된 설계·시험·안내를 찾아 영향과 변경 범위를 검토한다. 연결이 있다는 사실은 검증을 통과했다는 뜻이 아니다. 시험의 조건·기대 결과와 실제 수행 결과를 구분하고, 미실행·실패·미확인 상태를 남긴다. 출처가 없는 요구도 곧바로 삭제하지 말고 설계에서 도출한 이유와 합의가 필요한지 확인한다.",
+        "이 수업은 요구사항 확인 단원의 일부를 다룬다. UML·모델링·애자일의 전체 내용이나 요구공학 전 과정을 대신하지 않는다. NASA 자료는 요구의 품질과 추적 원리를 설명하는 근거이며 정보처리기사의 출제 빈도·배점이나 공식 답안을 제시하는 자료가 아니다."
+      ],
+      "example": {
+        "code": "교육용 가정 · 도서관 좌석 예약\nN-01: 이용자는 본인 예약을 취소하고 결과를 확인하고 싶다.\nR-01: 서버가 확인한 요청 도착 시각이 취소 마감 시각(예약 시작 10분 전)보다 이르거나 같으면 본인 예약 취소를 허용하고, 늦으면 거부한다. 마감 시각도 포함한다.\nR-02: 다른 이용자의 예약 취소 요청은 거부하고 기존 예약을 유지한다.",
+        "headers": [
+          "필요 → 요구",
+          "설계 연결",
+          "검증 계획",
+          "실행 근거"
+        ],
+        "rows": [
+          [
+            "N-01 → R-01",
+            "D-01 마감 시각 판정",
+            "TC-01 · 15:00 예약, 14:50:00(KST) 본인 요청 → 허용",
+            "미실행"
+          ],
+          [
+            "N-01 → R-01",
+            "D-01 마감 시각 판정",
+            "TC-02 · 15:00 예약, 14:50:01(KST) 본인 요청 → 거부",
+            "미실행"
+          ],
+          [
+            "N-01 → R-02",
+            "D-02 예약 소유자 확인",
+            "TC-03 · 마감 전 타인 요청 → 거부, 기존 예약 유지",
+            "미실행"
+          ]
+        ],
+        "verification": "창작 추적표 · 검증 계획이며 실행 결과 없음",
+        "text": "운영자가 취소 마감을 시작 30분 전에서 10분 전으로 바꾸려 한다고 가정한다. 먼저 필요와 정책 변경을 확인·합의한 뒤 R-01, D-01, TC-01·TC-02와 이용자 안내의 시간을 맞춘다. R-02의 소유자 제한을 없애야 한다는 근거는 없다. 표는 변경 후 확인할 계획이며 실제 예약 시스템을 구현하거나 시험한 결과가 아니다. 시간·정책·식별자는 이 수업을 위해 만든 가정이다."
+      },
+      "comparison": [
+        [
+          "사용자의 필요",
+          "해결하려는 문제·원하는 결과",
+          "취소 여부를 확인하고 싶다는 목적을 확인한다"
+        ],
+        [
+          "기능 요구사항",
+          "어떤 조건에서 무엇을 해야 하는가",
+          "취소 허용·거부와 예약 상태를 관찰한다"
+        ],
+        [
+          "품질 요구사항",
+          "수행 품질을 어떤 조건과 기준으로 확인하는가",
+          "응답 시간은 부하·측정 구간·허용 기준을 함께 정한다"
+        ],
+        [
+          "추적 연결",
+          "근거·요구·설계·검증을 서로 따라갈 수 있는가",
+          "문서 링크와 실제 검증 결과를 구분한다"
+        ]
+      ],
+      "trap": "요구사항 ID와 시험 ID를 연결했어도 시험이 미실행이면 충족을 확인한 것이 아니다. 변경된 요구와 직접 연결되지 않은 권한·보존 조건도 영향이 있는지 검토하며, 단순히 연결 수가 많다는 이유로 품질을 판정하지 않는다.",
+      "recall": "새로운 상황이다. 보고서 내려받기 기능에서 보관 기간을 30일에서 7일로 줄이자는 요청이 왔다. “화면의 숫자만 바꾸면 된다”는 판단을 검토하기 위해 어떤 근거와 연결을 확인하겠는가? 아직 실행하지 않은 시험은 어떻게 기록할까?",
+      "recallAnswer": "기간을 줄이려는 사용자·운영 필요와 보존 의무, 기존 이용자의 기대를 먼저 확인한다. 합의한 요구에서 저장·삭제 처리, 내려받기 가능 여부와 안내, 기간 경계·기존 자료에 대한 시험으로 연결해 영향 범위를 찾는다. 거꾸로 설계·시험이 어떤 요구를 뒷받침하는지도 확인한다. 7일을 지난 자료의 처리처럼 새로 정할 조건을 남기고, 미실행 시험은 계획·기대 결과만 적어 둔다. 실제 결과가 없으므로 변경 완료나 요구 충족을 선언할 수 없다.",
+      "originConceptIds": [],
+      "sources": [
+        "requirements-definition",
+        "requirements-management"
+      ],
+      "flow": [
+        "필요와 근거 확인",
+        "검증 가능한 조건 합의",
+        "설계·검증 연결",
+        "변경 영향과 결과 확인"
+      ],
+      "checklist": [
+        "필요·요구·설계·검증을 구분해 설명했다",
+        "다른 상황의 변경 영향과 미확인 결과를 설명했다"
+      ]
+    },
+    {
+      "id": "input-validation-trust-boundary",
+      "domain": "secure-development",
+      "title": "입력 검증: 신뢰 경계와 허용 목록·자료형·범위",
+      "question": "서버가 받아들일 입력 조건을 정하고, 입력 검증과 출력 처리·권한 검사의 역할을 구분한다.",
+      "lead": "입력 검증은 외부에서 받은 값이 정한 자료형·형식·범위와 업무 조건에 맞는지 확인하는 일이다. 브라우저의 검사만 믿지 않고 서버의 처리 경계에서도 확인하며, 출력 처리와 권한 검사는 따로 수행한다.",
+      "body": [
+        "신뢰 경계는 받은 데이터를 그대로 믿어도 되는 범위가 달라지는 지점이다. 브라우저·다른 서비스·저장된 자료에서 값을 받았다는 사실만으로 현재 처리에 적합하다고 볼 수 없다. 브라우저의 검사는 빠른 안내에 도움이 되지만 서버의 검사를 대신하지 못한다.",
+        "허용 목록은 받아들일 값과 구조를 먼저 정하는 방식이다. 고정 선택지는 정한 값 중 하나인지, 수량은 자료형과 최소·최대 범위가 맞는지 확인한다. 객체는 필요한 필드의 존재와 추가 필드 허용 여부도 정한다. 파싱에 성공해도 업무 조건까지 맞는 것은 아니다.",
+        "이 예제의 대출 옵션은 JSON 숫자인 정수 1~21과 수령 방식 desk·locker만 받는다고 가정한다. 문자열 \"7\"을 숫자 7로 조용히 바꾸지 않으며, 정수여도 0이나 22는 거부한다. 이 숫자와 선택지는 창작한 업무 규칙이지 보안 표준이나 실제 도서관 정책이 아니다.",
+        "입력 검증을 통과해도 그 값을 어디에 쓰는지에 따른 보호가 필요하다. HTML에 글을 표시할 때는 해당 출력 문맥에 맞는 처리나 안전한 API를 사용하고, SQL의 데이터 값은 쿼리 구조와 분리해 파라미터로 바인딩한다. 하나의 문자열 치환으로 모든 문맥을 안전하게 만들 수는 없다.",
+        "형식이 맞는 예약 ID도 현재 이용자의 예약이라는 뜻은 아니다. 서버는 요청한 작업을 그 이용자가 수행할 권한이 있는지 별도로 확인해야 한다. 검증에 성공했다는 이유로 다른 이용자의 기록을 조회·수정하도록 허용하지 않는다.",
+        "실제 요청 처리에는 파싱 전 크기 제한과 파싱 오류 처리도 필요하다. 아래 함수는 이미 파싱한 작은 옵션 객체의 규칙만 확인한다. 인증·권한·세션·파일 업로드·전체 Secure SDLC를 구현하거나 검증한 보안 패치가 아니다."
+      ],
+      "example": {
+        "code": "// 교육용 가정: JSON 파싱이 끝난 대출 옵션만 검사한다.\n// 실제 서버 요청 처리·파싱·권한 검사는 구현하지 않는다.\nfunction acceptsLoanOptions(value) {\n  if (\n    value === null\n    || typeof value !== \"object\"\n    || Array.isArray(value)\n  ) {\n    return false;\n  }\n  const keys = Object.keys(value);\n  if (\n    keys.length !== 2\n    || !keys.every(key => key === \"loanDays\" || key === \"pickup\")\n  ) {\n    return false;\n  }\n  return typeof value.loanDays === \"number\"\n    && Number.isInteger(value.loanDays)\n    && value.loanDays >= 1 && value.loanDays <= 21\n    && [\"desk\", \"locker\"].includes(value.pickup);\n}",
+        "headers": [
+          "입력 요약",
+          "판정",
+          "확인할 규칙"
+        ],
+        "rows": [
+          [
+            "{loanDays: 1, pickup: \"desk\"}",
+            "허용",
+            "최소 정수와 허용된 선택지"
+          ],
+          [
+            "{loanDays: 21, pickup: \"locker\"}",
+            "허용",
+            "최대 정수와 허용된 선택지"
+          ],
+          [
+            "{loanDays: 0, pickup: \"desk\"}",
+            "거부",
+            "허용 범위보다 작음"
+          ],
+          [
+            "{loanDays: 22, pickup: \"desk\"}",
+            "거부",
+            "허용 범위보다 큼"
+          ],
+          [
+            "{loanDays: \"7\", pickup: \"desk\"}",
+            "거부",
+            "숫자 문자열은 정한 자료형과 다름"
+          ],
+          [
+            "{loanDays: 7.5, pickup: \"desk\"}",
+            "거부",
+            "정수가 아님"
+          ],
+          [
+            "{loanDays: 7, pickup: \"courier\"}",
+            "거부",
+            "허용 목록 밖의 선택지"
+          ],
+          [
+            "{loanDays: 7, pickup: \"desk\", note: \"추가\"}",
+            "거부",
+            "허용하지 않은 필드"
+          ],
+          [
+            "{pickup: \"desk\"}",
+            "거부",
+            "필수 필드 loanDays 누락"
+          ],
+          [
+            "null",
+            "거부",
+            "옵션 객체가 아님"
+          ]
+        ],
+        "verification": "창작 옵션 규칙 · 격리된 순수 JavaScript 실행으로 표의 판정 확인",
+        "text": "표는 파싱 후의 JavaScript 값을 요약한 것이며 실제 JSON 문서 표기는 아니다. 허용되는 두 필드·정수 범위·선택지를 모두 만족해야 참이다. 실제 JSON에는 없는 NaN·Infinity도 별도 함수 검사에서 거부되는지 확인한다. 이 함수의 참은 대출 허가나 사용자 권한 승인을 뜻하지 않는다."
+      },
+      "comparison": [
+        [
+          "입력 검증",
+          "받아들일 구조·값인가",
+          "자료형·범위·필수 필드·선택지를 확인한다"
+        ],
+        [
+          "출력 문맥 보호",
+          "값이 브라우저에서 코드로 해석되지 않게 하는가",
+          "HTML·속성·URL 등 사용 위치에 맞게 처리한다"
+        ],
+        [
+          "SQL 파라미터 바인딩",
+          "데이터 값이 쿼리 구조를 바꾸지 못하게 하는가",
+          "값과 구문을 분리하며 테이블명·정렬 키워드는 별도 통제한다"
+        ],
+        [
+          "권한·소유 확인",
+          "이 이용자가 이 기록에 이 작업을 할 수 있는가",
+          "형식이 맞는 ID만으로 허가하지 않는다"
+        ]
+      ],
+      "trap": "허용 목록은 모든 자유 입력을 영문자·숫자로 제한하라는 뜻이 아니다. 이름·메모의 필요한 문자와 길이는 따로 정한다. 입력 검증, 출력 문맥 보호, SQL 바인딩, 권한 검사는 서로를 대신하지 않는다.",
+      "recall": "다른 상황이다. 행사 신청에서 tickets는 JSON 숫자인 정수 1~4, contactMethod는 email·sms만 허용하기로 했다. 값은 {tickets: \"2\", contactMethod: \"email\"}이다. 어떻게 판정해야 할까? tickets를 숫자 2로 보냈다면 다른 사람의 신청 ID를 수정해도 될까?",
+      "recallAnswer": "정한 계약은 JSON 숫자이므로 문자열 \"2\"는 거부하고 올바른 형식으로 다시 보내도록 알린다. 숫자 2는 범위와 선택지 조건을 통과할 수 있지만, 그것이 다른 사람의 신청을 수정할 권한을 주지는 않는다. 서버에서 현재 이용자와 수정 대상·행위의 권한을 따로 확인해야 한다. 표시나 저장에 쓰는 값도 출력 문맥 보호와 파라미터 바인딩의 적용 대상인지 별도로 검토한다.",
+      "originConceptIds": [],
+      "sources": [
+        "owasp-input-validation",
+        "owasp-xss-prevention",
+        "owasp-sql-parameterization"
+      ],
+      "flow": [
+        "입력 경계 확인",
+        "구조·자료형·허용 값 검사",
+        "권한·사용 문맥별 보호",
+        "거부·경계 사례 확인"
+      ],
+      "checklist": [
+        "자료형·범위·허용 목록으로 거부 이유를 설명했다",
+        "입력 검증과 출력·SQL·권한 보호를 구분했다"
+      ]
+    },
+    {
+      "id": "data-conversion-reconciliation",
+      "domain": "data-conversion",
+      "title": "데이터 전환: 원본 보존·매핑·보류·대사",
+      "question": "변환 규칙에 맞는 자료와 보류할 자료를 나누고, 원본 식별자로 누락과 값의 의미를 확인한다.",
+      "lead": "데이터 전환은 원천 필드를 합의한 대상 형식과 의미에 맞게 바꾸는 작업이다. 원본과 식별자를 남기고 규칙에 맞지 않는 행은 보류하며, 건수·식별자·값을 대사해 누락과 잘못된 변환을 확인한다.",
+      "body": [
+        "전환 전에 원천 필드와 대상 필드의 대응, 자료형·단위·필수 여부, 공백과 NULL의 뜻, 중복 식별자 처리 기준을 정한다. 숫자로 바꿀 수 있다는 이유만으로 단위나 업무 의미까지 맞는 것은 아니다. 원천의 원본과 source_id를 보존하면 오류를 되짚고 수정한 규칙으로 다시 확인할 수 있다.",
+        "아래 창작 재고 자료의 수량은 필수다. 앞뒤 ASCII 공백(U+0020)만 제거한 뒤 1~6자리 ASCII 숫자를 허용하고, 선행 0은 허용한다. 허용 수량은 0~999999이며 빈 값이나 NULL을 수량 0으로 바꾸지 않는다. 구역은 A~F 한 글자만 대소문자 없이 받고 대문자로 맞춘다. 구역의 빈 값·NULL은 이 계약에서만 미지정 NULL로 허용한다.",
+        "SQL은 원본 필드를 남긴 채 검사에 맞는 행을 ready, 나머지를 held로 분류한다. 수량과 구역이 모두 유효한 분기에서만 정수 변환을 수행한다. 보류 행의 변환값 NULL은 정상 결측을 승인했다는 뜻이 아니며 state와 원본을 함께 확인해야 한다. 이 예제의 source_id는 중복이 없는 고정된 여덟 개다.",
+        "입력 8행은 ready 3행과 held 5행으로 나뉜다. 입력·ready·held의 건수만 맞추지 말고 원본 식별자가 빠지거나 두 번 쓰이지 않았는지도 대조한다. 같은 행 수라도 잘못된 필드로 연결하거나 값의 단위를 바꾸면 틀릴 수 있다. 대표값·경계·합계·참조 관계처럼 합의한 규칙에 맞는 검사를 더해야 한다.",
+        "보류 사유를 확인하고 규칙이나 원천을 수정한 뒤에는 같은 식별자로 다시 검사한다. 불명확한 값을 임의의 기본값으로 채우거나 보류 행을 결과에서 감추지 않는다. 이 읽기 전용 예제는 실제 대상 테이블에 저장하지 않으며 중복 제거·대용량 처리·전환 시점·복구 절차 전체를 구현하지 않는다.",
+        "이 수업은 데이터 전환 단원의 일부다. 기존 books 예제에서 pages에 NULL을 허용한 규칙은 그대로이며 여기의 필수 수량 계약과 다르다. DB 단원마다 수업 링크가 있어도 데이터베이스 구축 전범위나 운영 이관의 정확성을 검증한 것은 아니다."
+      ],
+      "example": {
+        "code": "WITH raw(source_id, raw_qty, raw_zone) AS (\n  VALUES\n    ('S01', ' 12 ', ' a '),\n    ('S02', '0', ' '),\n    ('S03', '', 'b'),\n    ('S04', '8.5', 'c'),\n    ('S05', '1000000', 'd'),\n    ('S06', '0007', ' e '),\n    ('S07', NULL, 'f'),\n    ('S08', '5', '?')\n), normalized AS (\n  SELECT *, btrim(raw_qty) AS qty_text,\n    NULLIF(btrim(raw_zone), '') AS zone_text\n  FROM raw\n), checked AS (\n  SELECT *, qty_text ~ '^[0-9]{1,6}$' AS qty_valid,\n    (zone_text IS NULL OR zone_text ~ '^[A-Fa-f]$') AS zone_valid\n  FROM normalized\n)\nSELECT source_id, raw_qty, raw_zone,\n  CASE WHEN qty_valid AND zone_valid\n    THEN qty_text::integer END AS quantity,\n  CASE WHEN qty_valid AND zone_valid\n    THEN upper(zone_text) END AS zone,\n  CASE\n    WHEN qty_valid AND zone_valid THEN 'ready'\n    WHEN qty_text IS NULL OR qty_text = '' THEN 'held:required'\n    WHEN NOT qty_valid THEN 'held:qty'\n    ELSE 'held:zone'\n  END AS state\nFROM checked\nORDER BY source_id;",
+        "headers": [
+          "source_id",
+          "raw_qty",
+          "raw_zone",
+          "quantity",
+          "zone",
+          "state"
+        ],
+        "rows": [
+          [
+            "S01",
+            " 12 ",
+            " a ",
+            12,
+            "A",
+            "ready"
+          ],
+          [
+            "S02",
+            "0",
+            " ",
+            0,
+            null,
+            "ready"
+          ],
+          [
+            "S03",
+            "",
+            "b",
+            null,
+            null,
+            "held:required"
+          ],
+          [
+            "S04",
+            "8.5",
+            "c",
+            null,
+            null,
+            "held:qty"
+          ],
+          [
+            "S05",
+            "1000000",
+            "d",
+            null,
+            null,
+            "held:qty"
+          ],
+          [
+            "S06",
+            "0007",
+            " e ",
+            7,
+            "E",
+            "ready"
+          ],
+          [
+            "S07",
+            null,
+            "f",
+            null,
+            null,
+            "held:required"
+          ],
+          [
+            "S08",
+            "5",
+            "?",
+            null,
+            null,
+            "held:zone"
+          ]
+        ],
+        "verification": "창작 원천 8행 · 격리 PGlite의 읽기 전용 SELECT로 변환 결과 확인. raw 열은 표시용 표기: ␠는 ASCII 공백(U+0020) 한 글자, \"\"는 빈 문자열, 따옴표 없는 NULL은 SQL NULL이다. 실제 원본값과 쿼리는 바꾸지 않는다.",
+        "text": "raw_qty와 raw_zone은 입력값을 유지하고 quantity·zone이 변환 후보값이다. S02의 0은 실제 값이며 비어 있는 구역만 NULL이다. S03·S07의 필수 수량 누락, S04·S05의 수량 형식·범위 오류, S08의 구역 오류는 보류한다. 원본 ID 8개가 결과에 각각 한 번 남았고 수량 후보 합계는 ready 행의 12+0+7=19다. 건수와 이 합계는 이 작은 창작 자료의 대사 근거이며 모든 값의 정확성을 자동 보장하지 않는다."
+      },
+      "comparison": [
+        [
+          "매핑·정규화",
+          "어느 필드를 어떤 의미·표현으로 옮기는가",
+          "규칙을 먼저 정하고 원본·단위를 보존한다"
+        ],
+        [
+          "유효성 검사·보류",
+          "필수·자료형·범위·코드 규칙에 맞는가",
+          "잘못된 값을 정상 NULL·0으로 숨기지 않는다"
+        ],
+        [
+          "건수·식별자 대사",
+          "누락·중복 처리 없이 행을 추적할 수 있는가",
+          "입력=처리 가능+보류와 ID 대응을 확인한다"
+        ],
+        [
+          "값의 정확성 확인",
+          "실제 의미와 원천 근거가 맞는가",
+          "행 수가 같아도 단위·매핑이 틀릴 수 있다"
+        ]
+      ],
+      "trap": "형식에 맞는 값, 빈 값, 오류 값은 다르다. COALESCE로 모두 0을 채우거나 오류 행을 빼고 성공 건수만 보고하면 문제를 숨길 수 있다. 여기의 ready는 예제 계약 통과 상태이며 실제 저장이나 전체 검증 완료를 뜻하지 않는다.",
+      "recall": "다른 자료다. 대여 기간을 정수 일(day)로 받기로 했는데 원천에는 \"2주\", 빈 값, \"7\"이 섞였다. 변환 후 행 수가 같으니 끝났다는 판단을 어떻게 검토할까? 단위와 빈 값의 뜻을 아직 합의하지 않았다면 무엇을 보존하고 보류해야 할까?",
+      "recallAnswer": "원천 값·단위·식별자를 남기고 주를 일로 바꿔도 되는지, 빈 값이 미지정인지 누락 오류인지부터 합의한다. \"2주\"를 문자만 지워 2일로 옮겨서는 안 된다. \"7\"도 원천 단위와 대상 계약이 확인돼야 7일 후보로 볼 수 있다. 불명확한 행은 사유와 함께 보류하고, 입력과 처리 가능·보류의 건수 및 식별자 대응을 확인한다. 이후 단위 변환·경계·값의 근거를 검사해야 하므로 행 수가 같다는 사실만으로 완료를 선언할 수 없다.",
+      "originConceptIds": [],
+      "sources": [
+        "conversion-conditions",
+        "conversion-strings",
+        "conversion-patterns",
+        "government-data-quality"
+      ],
+      "flow": [
+        "원본·계약 보존",
+        "필드 매핑·정규화",
+        "검사·보류 분리",
+        "건수·ID·값 대사"
+      ],
+      "checklist": [
+        "NULL·0·오류와 보류 사유를 구분했다",
+        "행 수·식별자·값의 대사와 한계를 설명했다"
+      ]
+    },
+    {
+      "id": "synchronous-exception-flow",
+      "domain": "programming-language",
+      "title": "JavaScript 예외 처리: try·catch·finally와 재전파",
+      "question": "오류가 생긴 위치와 처리 여부에 따라 어떤 문장이 실행되는지 추적한다.",
+      "lead": "동기 JavaScript의 try·catch·finally에서 try 실행 중 던진 예외는 catch로 전달된다. catch가 해결하지 않고 다시 던지면 finally를 거쳐 호출자로 전파된다. finally 실행은 작업 성공을 뜻하지 않는다.",
+      "body": [
+        "이 수업은 ECMAScript 2024의 동기 try·catch·finally를 다룬다. 예외는 평소 실행 순서를 벗어나 처리 코드를 찾도록 만드는 흐름이다. 예제는 예약 처리의 흐름을 흉내 낸 창작 함수이며, 실제 예약·입력 검증·자원 해제 기능은 없다. 표에서는 open·full·broken 세 모드의 흐름을 비교한다. 다른 입력을 거부하는 검증 함수는 아니다.",
+        "try는 평소 수행할 문장을 감싼다. throw가 실행되면 그 try 블록의 남은 문장은 건너뛴다. 예제에서 full은 RangeError를, broken은 TypeError를 직접 던지도록 정했다. 이 이름과 모드의 연결은 학습용 약속이며 실제 예약 라이브러리의 오류 정책이 아니다.",
+        "JavaScript의 catch(error)는 이 try에서 던진 두 오류를 모두 받는다. 이 함수는 catch 안에서 오류 타입을 판별해 RangeError만 처리하고, 다른 오류는 throw error로 다시 던진다. catch에 들어왔다는 사실과 오류가 해결됐다는 사실은 다르다.",
+        "finally는 이 유한한 동기 실행에서 try와 catch의 처리가 끝날 때 실행된다. 다시 던질 예외가 있어도 finally 기록을 남긴 다음 호출자로 전파한다. 따라서 broken에서는 finally가 남지만, try 문 뒤의 after와 마지막 return에는 도달하지 않는다.",
+        "매번 새로운 trace 배열을 만들어 함수에 넘긴다. trace.push는 흐름을 보기 위한 고정 문자열 기록일 뿐이며, 사용자 입력이나 실제 오류 메시지를 저장하지 않는다. 표의 실행 기록은 함수 내부에서 추가한 문자열만 보여 주고, 호출 결과는 반환과 예외 전파를 구분한다.",
+        "동기 예외의 기초 일부만 확인한다. 비동기 Promise 거절, async·await, 다른 언어의 문법이나 전체 라이브러리 활용 범위는 다루지 않는다. 프로세스 강제 종료 때의 실행·정리를 보장하는 예제도 아니다."
+      ],
+      "example": {
+        "code": "function traceReservation(mode, trace) {\n  try {\n    trace.push(\"try\");\n    if (mode === \"full\") {\n      throw new RangeError(\"full\");\n    }\n    if (mode === \"broken\") {\n      throw new TypeError(\"broken\");\n    }\n    trace.push(\"accepted\");\n  } catch (error) {\n    trace.push(\"catch\");\n    if (!(error instanceof RangeError)) {\n      throw error;\n    }\n    trace.push(\"handled\");\n  } finally {\n    trace.push(\"finally\");\n  }\n  trace.push(\"after\");\n  return \"completed\";\n}",
+        "headers": [
+          "mode",
+          "함수 내부 trace 순서",
+          "호출 결과"
+        ],
+        "rows": [
+          [
+            "open",
+            "try → accepted → finally → after",
+            "completed 반환"
+          ],
+          [
+            "full",
+            "try → catch → handled → finally → after",
+            "completed 반환"
+          ],
+          [
+            "broken",
+            "try → catch → finally",
+            "TypeError를 호출자로 전파"
+          ]
+        ],
+        "verification": "창작 동기 흐름 3경로 · 격리 Node.js 22.23.2로 함수의 기록·반환·예외 전파를 확인",
+        "text": "open은 catch를 건너뛴다. full은 catch에서 처리한 뒤 after까지 이어진다. broken은 catch에 들어가지만 타입이 달라 다시 던지므로 handled·after 기록과 completed 반환이 없다. finally는 세 경로 모두에서 기록된다."
+      },
+      "comparison": [
+        [
+          "try",
+          "평소 실행할 코드와 예외가 생길 수 있는 구간",
+          "throw 이후 같은 try의 나머지 문장은 실행하지 않는다"
+        ],
+        [
+          "catch",
+          "try에서 던진 값을 받아 처리하는 구간",
+          "예제는 진입 후 타입을 확인하며 처리하지 못할 오류는 다시 던진다"
+        ],
+        [
+          "finally",
+          "try·catch 이후 완료를 결정하기 전에 실행하는 구간",
+          "정상 완료와 오류 전파 어느 쪽에도 나타나므로 성공 표시가 아니다"
+        ],
+        [
+          "throw error",
+          "받은 오류를 이 함수 밖으로 다시 전달",
+          "이 예제에서는 finally 이후 호출자로 전파하며 after를 건너뛴다"
+        ]
+      ],
+      "trap": "finally에서 새로 return하거나 throw하면 원래의 반환·예외 흐름을 덮을 수 있다. 이 예제는 finally에 기록만 남기며, 오류를 숨기는 반환이나 성공 처리를 넣지 않는다. finally가 실행됐다는 이유로 오류가 해결됐다고 판단하지 않는다.",
+      "recall": "catch의 instanceof RangeError를 instanceof TypeError로 바꾸고 나머지는 그대로 두면, full과 broken의 trace 순서와 호출 결과는 각각 어떻게 달라질까?",
+      "recallAnswer": "full은 RangeError여서 catch에 들어간 뒤 다시 던진다. trace는 try → catch → finally이고 RangeError가 호출자로 전파된다. broken은 TypeError를 처리하므로 try → catch → handled → finally → after를 기록하고 completed를 반환한다. 두 경로 모두 finally는 실행되지만, after는 catch에서 해결한 broken에서만 실행된다.",
+      "originConceptIds": [],
+      "sources": [
+        "ecmascript-try-throw"
+      ],
+      "flow": [
+        "try 실행",
+        "throw 여부",
+        "catch 처리·재전파",
+        "finally와 이후 흐름"
+      ],
+      "checklist": [
+        "동기 예외의 처리·재전파 경로를 설명했다",
+        "finally 실행과 작업 성공을 구분했다"
+      ]
     }
   ],
   "books": {
@@ -1281,6 +1701,76 @@
       "url": "https://www.rfc-editor.org/rfc/rfc5737.html",
       "edition": "RFC 5737 · Informational · 2010-01 · © IETF Trust 및 저자 · 예제 주소 용도 참고",
       "checked": "2026-10-28"
+    },
+    {
+      "id": "requirements-definition",
+      "title": "요구사항 정의와 품질 확인",
+      "url": "https://www.nasa.gov/reference/4-0-system-design-processes/",
+      "edition": "NASA Systems Engineering Handbook · 4.2 Technical Requirements Definition · 원리 참고, 예제는 독립 창작",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "requirements-management",
+      "title": "요구사항 관리와 양방향 추적",
+      "url": "https://www.nasa.gov/reference/6-0-crosscutting-technical-management/",
+      "edition": "NASA Systems Engineering Handbook · 6.2 Requirements Management · 원리 참고, 시험 배점·공식 해설 아님",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "owasp-input-validation",
+      "title": "입력 검증과 신뢰 경계",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+      "edition": "OWASP Cheat Sheet Series · 개념 참고, 예제·업무 규칙은 독립 창작",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "owasp-xss-prevention",
+      "title": "문맥에 맞는 출력 처리",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+      "edition": "OWASP Cheat Sheet Series · 출력 문맥·안전한 API의 구분 참고",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "owasp-sql-parameterization",
+      "title": "SQL 데이터 값의 파라미터 바인딩",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+      "edition": "OWASP Cheat Sheet Series · 데이터 값과 쿼리 구조의 분리 참고, 원문 공격 예제 복제 없음",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "conversion-conditions",
+      "title": "조건에 따른 변환과 NULL",
+      "url": "https://www.postgresql.org/docs/18/functions-conditional.html",
+      "edition": "PostgreSQL 18 · CASE·NULLIF 원리 참고, 예제는 독립 창작",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "conversion-strings",
+      "title": "문자열의 공백 처리와 대소문자 변환",
+      "url": "https://www.postgresql.org/docs/18/functions-string.html",
+      "edition": "PostgreSQL 18 · btrim·upper · 예제는 ASCII 공백·구역 문자로 제한",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "government-data-quality",
+      "title": "데이터 완전성·유효성·정확성의 구분",
+      "url": "https://www.gov.uk/government/publications/the-government-data-quality-framework/the-government-data-quality-framework",
+      "edition": "UK Government Data Quality Framework · 2020-12-03 · Open Government Licence v3.0 · 개념 참고, 원문 사례 복제 없음",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "conversion-patterns",
+      "title": "POSIX 정규식과 전체 값 검사",
+      "url": "https://www.postgresql.org/docs/18/functions-matching.html",
+      "edition": "PostgreSQL 18 · 고정된 길이 제한 패턴과 ~ 연산자 · 원리 참고",
+      "checked": "2026-11-10"
+    },
+    {
+      "id": "ecmascript-try-throw",
+      "title": "JavaScript 동기 try·catch·finally와 throw",
+      "url": "https://tc39.es/ecma262/2024/multipage/ecmascript-language-statements-and-declarations.html#sec-try-statement",
+      "edition": "ECMAScript 2024 · 제15판 §14.14·§14.15 · 규칙 참고, 예제는 독립 창작",
+      "checked": "2026-11-10"
     }
   ],
   "origin": {
@@ -1512,6 +2002,22 @@
     {
       "id": "network",
       "title": "네트워크 주소 기초"
+    },
+    {
+      "id": "requirements",
+      "title": "요구사항 확인 기초"
+    },
+    {
+      "id": "secure-development",
+      "title": "개발 보안 기초"
+    },
+    {
+      "id": "data-conversion",
+      "title": "데이터 전환 기초"
+    },
+    {
+      "id": "programming-language",
+      "title": "프로그래밍 언어 기초"
     }
   ],
   "cidrExample": {

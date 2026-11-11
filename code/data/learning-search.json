@@ -37,7 +37,7 @@
   {
     "path": "/learn/certificate",
     "title": "정보처리기사 이론·출제기준 목차",
-    "description": "2027–2029 큐넷 출제기준의 필기 4과목·실기 목차와 현재 제공하는 16개 기초 이론 수업. DB·SQL·테스트·IPv4의 일부 개념을 다루며 전체 시험 대비 과정은 아닙니다.",
+    "description": "2027–2029 큐넷 출제기준의 필기 4과목·실기 목차와 현재 제공하는 20개 기초 이론 수업. 요구사항·DB·SQL·데이터 전환·테스트·IPv4·입력 검증·동기 예외 처리의 일부 개념을 다루며 전체 시험 대비 과정은 아닙니다.",
     "parent": "/",
     "article": false
   },
@@ -864,6 +864,34 @@
     "path": "/learn/certificate/ipv4-subnet",
     "title": "IPv4 서브넷: CIDR·서브넷 마스크·호스트 수 계산",
     "description": "IPv4는 32비트 주소다. /n은 앞의 n비트를 고정하는 CIDR 접두사 길이이며 블록의 전체 주소 수는 2^(32−n)이다.",
+    "parent": "/learn/certificate",
+    "article": true
+  },
+  {
+    "path": "/learn/certificate/requirements-traceability",
+    "title": "요구사항: 검증 가능한 조건과 양방향 추적",
+    "description": "요구사항은 시스템이 충족해야 할 기능·품질·제약을 확인할 수 있게 적은 조건이다. 양방향 추적은 그 조건의 근거와 설계·검증 사이를 양쪽 방향으로 따라갈 수 있게 연결하는 것이다.",
+    "parent": "/learn/certificate",
+    "article": true
+  },
+  {
+    "path": "/learn/certificate/input-validation-trust-boundary",
+    "title": "입력 검증: 신뢰 경계와 허용 목록·자료형·범위",
+    "description": "입력 검증은 외부에서 받은 값이 정한 자료형·형식·범위와 업무 조건에 맞는지 확인하는 일이다. 브라우저의 검사만 믿지 않고 서버의 처리 경계에서도 확인하며, 출력 처리와 권한 검사는 따로 수행한다.",
+    "parent": "/learn/certificate",
+    "article": true
+  },
+  {
+    "path": "/learn/certificate/data-conversion-reconciliation",
+    "title": "데이터 전환: 원본 보존·매핑·보류·대사",
+    "description": "데이터 전환은 원천 필드를 합의한 대상 형식과 의미에 맞게 바꾸는 작업이다. 원본과 식별자를 남기고 규칙에 맞지 않는 행은 보류하며, 건수·식별자·값을 대사해 누락과 잘못된 변환을 확인한다.",
+    "parent": "/learn/certificate",
+    "article": true
+  },
+  {
+    "path": "/learn/certificate/synchronous-exception-flow",
+    "title": "JavaScript 예외 처리: try·catch·finally와 재전파",
+    "description": "동기 JavaScript의 try·catch·finally에서 try 실행 중 던진 예외는 catch로 전달된다. catch가 해결하지 않고 다시 던지면 finally를 거쳐 호출자로 전파된다. finally 실행은 작업 성공을 뜻하지 않는다.",
     "parent": "/learn/certificate",
     "article": true
   }
