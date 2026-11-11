@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 401개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 402개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -399,6 +399,7 @@
 - [XSS 공격은 사용자 입력을 어떻게 처리하여 방어하는가?](https://cs-pathfinder.vercel.app/q/7ba6d348-602e-4d41-af93-c4de7139daa8) — 2026-10-11
 - [IaC 도구는 왜 인프라 상태를 별도 파일로 관리하는가?](https://cs-pathfinder.vercel.app/q/6249eb3e-08bf-409d-bd18-32db4beca533) — 2026-10-22
 - [멀티 스테이지 빌드로 이미지 용량을 줄이는 원리는 무엇인가?](https://cs-pathfinder.vercel.app/q/db7e48a1-4acd-4194-bc22-dc851d87c870) — 2026-11-01
+- [컨테이너와 가상 머신은 무엇을 기준으로 고르는가?](https://cs-pathfinder.vercel.app/q/45494e2d-4726-4ae8-a948-00f35a5bd421) — 2026-11-11
 
 ## 모바일
 
