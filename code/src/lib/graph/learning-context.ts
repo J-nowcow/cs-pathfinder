@@ -240,7 +240,7 @@ export function formatKnowledgeMarkdown(
     for (const anchor of candidate.anchors) {
       const relation = anchor.relation
       const direction = relation.direction === 'incoming' ? '후보 → 기록 질문' : relation.direction === 'outgoing' ? '기록 질문 → 후보' : '방향 미지정'
-      lines.push(`  - ${link(anchor.node)}와 연결 · ${relationLabel(relation)} · ${direction}`)
+      lines.push(`  - 기록한 질문: ${link(anchor.node)} · ${relationLabel(relation)} · ${direction}`)
       if (relation.reason) lines.push(`    - 연결 이유: ${markdownText(relation.reason)}`)
     }
   }

@@ -159,6 +159,8 @@ describe('local Markdown connection export', () => {
     expect(markdown).toContain('2026-11-11T14:00:00.000Z')
     expect(markdown).toContain('읽음·답변 표시는 이해도 평가가 아닙니다')
     expect(markdown).toContain('## 기록한 질문과 연결된 질문')
+    expect(markdown).toContain('기록한 질문: [트랜잭션이란?](https://example.test/q/transaction) ·')
+    expect(markdown).not.toContain(')와 연결')
     expect(markdown).not.toContain('private-id')
   })
 

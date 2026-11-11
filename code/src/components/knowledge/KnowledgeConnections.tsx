@@ -183,7 +183,7 @@ export function KnowledgeConnections({ data, onOpen }: { data: MapData; onOpen: 
                     <li key={node.id} className="rounded-2xl border border-line bg-surface p-4">
                       <p className="text-[11px] font-medium text-accent">{nextRelationLabel(anchor.relation)} · {node.category}</p>
                       <button type="button" onClick={() => onOpen(node.id)} className={`${QUESTION_BUTTON} mt-2 min-h-11 text-[15px] leading-6`}>{node.question}</button>
-                      <p className="mt-2 text-[12px] leading-6 text-muted">{anchor.node.question}와 연결돼 있습니다.</p>
+                      <p className="mt-2 text-[12px] leading-6 text-muted">기록한 질문: {anchor.node.question}</p>
                       {anchor.relation.reason && <p className="mt-1 text-[12px] leading-6 text-faint">{anchor.relation.reason}</p>}
                       {anchors.length > 1 && <p className="mt-2 text-[11px] text-faint">기록한 질문 {anchors.length}개와 연결</p>}
                     </li>
@@ -233,7 +233,7 @@ export function KnowledgeConnections({ data, onOpen }: { data: MapData; onOpen: 
               <p id="recorded-question-search-help" className="mt-2 text-[12px] leading-6 text-faint">선택한 분야 안에서 제목·분야를 찾습니다. 답변 본문은 검색하지 않습니다.</p>
               <p role="status" className="mt-1 text-[12px] text-muted">{visibleQuestions.length}개 질문 표시</p>
             </div>
-            {visibleQuestions.length === 0 && <p className="mb-3 rounded-xl border border-line p-4 text-sm leading-7 text-muted">조건에 맞는 기록한 질문이 없습니다. 검색어를 지우거나 다른 분야를 선택해 보세요.</p>}
+            {visibleQuestions.length === 0 && <p className="mb-3 rounded-xl border border-line p-4 text-sm leading-7 text-muted">기록한 질문 중 조건에 맞는 질문이 없습니다. 검색어를 지우거나 다른 분야를 선택해 보세요.</p>}
             <ul className="grid list-none gap-2 p-0 sm:grid-cols-2">
               {visibleQuestions.map((node) => (
                 <li key={node.id} className="rounded-xl border border-line p-3">
