@@ -58,7 +58,7 @@ it('keeps the fixed nineteen historical identities and records while adding only
   expect(unit.lessons).toEqual([lesson.id])
   expect(certificateCatalog.get(lesson.id)).toEqual({ id: lesson.id, title: lesson.title, recall: lesson.recall, checklist: lesson.checklist })
   expect(certificate.lessons).toHaveLength(20)
-  expect(certificate.scope).toContain(`${certificate.lessons.length}수업`)
+  expect(certificate.scope).toContain(`${certificate.lessons.length}개 수업`)
   expect(certificateSyllabus.coverageNotice).toContain(`${certificate.lessons.length}개 수업`)
   expect(lesson.originConceptIds).toEqual([])
   const at = new Date('2026-11-09T21:05:00.000Z')
