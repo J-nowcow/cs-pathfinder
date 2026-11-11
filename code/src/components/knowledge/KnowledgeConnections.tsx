@@ -128,10 +128,10 @@ export function KnowledgeConnections({ data, onOpen }: { data: MapData; onOpen: 
         </h1>
         <p className="mt-3 max-w-2xl text-[14px] leading-7 text-muted">
           이 브라우저의 읽기·답변 기록을 공개 지도와 함께 봅니다.
-          전에 본 질문끼리 어떤 관계가 있는지 확인하고, 그 옆의 질문으로 이어가세요.
+          전에 본 질문끼리 어떤 관계가 있는지 확인하고 그 옆의 질문으로 이어가세요.
         </p>
         <p className="mt-2 text-[12px] leading-6 text-faint">
-          읽음·답변 기록은 이해도 평가가 아닙니다. 지도에 있는 질문만 모으며, 원래 기록은 바꾸지 않습니다.
+          읽음·답변 기록은 이해도 평가가 아닙니다. 지도에 있는 질문만 모으며 원래 기록은 바꾸지 않습니다.
         </p>
       </section>
 
@@ -145,7 +145,7 @@ export function KnowledgeConnections({ data, onOpen }: { data: MapData; onOpen: 
       )}
       {records?.status === 'partial' && (
         <p role="status" className="rounded-xl border border-line bg-raised px-4 py-3 text-sm leading-7 text-muted">
-          일부 기록을 읽지 못했습니다. 확인할 수 있는 기록만 표시하며, 저장된 내용은 수정하지 않았습니다.
+          일부 기록을 읽지 못했습니다. 확인할 수 있는 기록만 표시하며 저장된 내용은 수정하지 않았습니다.
         </p>
       )}
 
@@ -172,7 +172,7 @@ export function KnowledgeConnections({ data, onOpen }: { data: MapData; onOpen: 
 
           <section aria-labelledby="next-knowledge-heading">
             <h2 id="next-knowledge-heading" className="text-lg font-semibold">기록한 질문과 연결된 질문</h2>
-            <p className="mb-4 mt-1 text-[13px] leading-6 text-muted">기록이 있는 질문과 이어져 있지만, 이 브라우저의 읽기·답변 기록에는 아직 없는 질문입니다. 추정된 관계는 틀릴 수 있습니다. 방향 미확인 표시는 학습 순서를 뜻하지 않으니 이유를 함께 살펴보세요.</p>
+            <p className="mb-4 mt-1 text-[13px] leading-6 text-muted">기록이 있는 질문과 이어져 있지만 이 브라우저의 읽기·답변 기록에는 아직 없는 질문입니다. 추정된 관계는 틀릴 수 있습니다. 방향 미확인 표시는 학습 순서를 뜻하지 않으니 이유를 함께 살펴보세요.</p>
             {context.next.length === 0 ? (
               <p className="rounded-xl border border-line p-4 text-sm leading-7 text-muted">공개 지도에서 새로 이어갈 질문을 찾지 못했어요. 연결이 없다는 것이 학습이 끝났거나 부족하다는 뜻은 아닙니다.</p>
             ) : (

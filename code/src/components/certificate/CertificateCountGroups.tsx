@@ -29,7 +29,7 @@ export function CertificateCountGroups() {
         <p>
           DB의 pages는 120·120이므로 known_pages는 2지만
           distinct_pages는 1이다. SW는 입력 행이 하나 있으므로
-          all_rows는 1이고, pages가 NULL이어서 두 pages 집계값은 0이다.
+          all_rows는 1이고 pages가 NULL이어서 두 pages 집계값은 0이다.
         </p>
         <p>
           NULL 그룹은 두 행이므로 all_rows는 2다. pages에는 80이 하나

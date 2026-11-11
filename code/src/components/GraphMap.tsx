@@ -708,7 +708,7 @@ function connectionGroup(link: SheetLink): Omit<ConnectionGroup, 'links'> {
   const directional = link.relationKind === 'prerequisite' || link.relationKind === 'instance_of'
   const reviewed = link.relationDirection === 'forward' || link.relationDirection === 'reverse'
   if (directional && !reviewed) {
-    return { key: 'unreviewed', title: '방향 미검증 관계', hint: '연결 이유는 남아 있지만, 무엇을 먼저 볼지와 개념·예시의 방향은 아직 확인하지 않았습니다.' }
+    return { key: 'unreviewed', title: '방향 미검증 관계', hint: '연결 이유는 남아 있지만 무엇을 먼저 볼지와 개념·예시의 방향은 아직 확인하지 않았습니다.' }
   }
   if (link.relationKind === 'prerequisite' && link.direction === 'incoming') {
     return { key: 'prior', title: '먼저 살펴볼 개념', hint: '현재 질문을 이해하는 데 앞서 연결된 개념입니다.' }
@@ -734,7 +734,7 @@ function connectionGroup(link: SheetLink): Omit<ConnectionGroup, 'links'> {
   return { key: 'related', title: '관련된 질문', hint: '연결 이유를 확인하며 함께 살펴보세요.' }
 }
 
-/** 기존 읽기 기록을 이용하되, 손상되거나 다른 버전의 기록은 덮어쓰지 않는다. */
+/** 기존 읽기 기록을 이용하되 손상되거나 다른 버전의 기록은 덮어쓰지 않는다. */
 function recordOpenedQuestion(nodeId: string): void {
   try {
     const raw = window.localStorage.getItem(STREAK_STORAGE_KEY)

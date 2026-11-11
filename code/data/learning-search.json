@@ -877,14 +877,14 @@
   {
     "path": "/learn/certificate/input-validation-trust-boundary",
     "title": "입력 검증: 신뢰 경계와 허용 목록·자료형·범위",
-    "description": "입력 검증은 외부에서 받은 값이 정한 자료형·형식·범위와 업무 조건에 맞는지 확인하는 일이다. 브라우저의 검사만 믿지 않고 서버의 처리 경계에서도 확인하며, 출력 처리와 권한 검사는 따로 수행한다.",
+    "description": "입력 검증은 외부에서 받은 값이 정한 자료형·형식·범위와 업무 조건에 맞는지 확인하는 일이다. 브라우저의 검사만 믿지 않고 서버의 처리 경계에서도 확인하며 출력 처리와 권한 검사는 따로 수행한다.",
     "parent": "/learn/certificate",
     "article": true
   },
   {
     "path": "/learn/certificate/data-conversion-reconciliation",
     "title": "데이터 전환: 원본 보존·매핑·보류·대사",
-    "description": "데이터 전환은 원천 필드를 합의한 대상 형식과 의미에 맞게 바꾸는 작업이다. 원본과 식별자를 남기고 규칙에 맞지 않는 행은 보류하며, 건수·식별자·값을 대사해 누락과 잘못된 변환을 확인한다.",
+    "description": "데이터 전환은 원천 필드를 합의한 대상 형식과 의미에 맞게 바꾸는 작업이다. 원본과 식별자를 남기고 규칙에 맞지 않는 행은 보류하며 건수·식별자·값을 대사해 누락과 잘못된 변환을 확인한다.",
     "parent": "/learn/certificate",
     "article": true
   },
