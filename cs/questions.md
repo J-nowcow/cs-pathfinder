@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 403개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 404개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -360,6 +360,7 @@
 - [Flexbox와 Grid는 어떤 기준으로 구분해서 쓰는가?](https://cs-pathfinder.vercel.app/q/8ba39b6c-f735-4261-9cc6-8381125d09e1) — 2026-10-13
 - [React에서 값과 함수의 메모이제이션은 어떻게 구분해서 적용하는가?](https://cs-pathfinder.vercel.app/q/6c2292a2-bf60-4918-9df4-caf33dde2db6) — 2026-10-24
 - [웹폰트 렌더링 시 FOUT과 FOIT는 무엇으로 결정하는가?](https://cs-pathfinder.vercel.app/q/7bfcb0c5-86a5-44a6-b76a-257246bec99a) — 2026-11-03
+- [새 JS API를 도입할 때 브라우저 호환성은 어떻게 판단하는가?](https://cs-pathfinder.vercel.app/q/fe664463-cbaf-4003-abe9-9be3ca08f67d) — 2026-11-13
 
 ## 인프라 · 보안
 
