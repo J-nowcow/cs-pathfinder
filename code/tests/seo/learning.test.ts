@@ -11,7 +11,7 @@ describe('public learning discovery coverage', () => {
     for (const n of pmpCourse.cases) expect(paths.get('/learn/pmp/case/' + n.id)?.title).toBe(n.title)
     for (const n of certificate.lessons) expect(paths.get('/learn/certificate/' + n.id)?.title).toBe(n.title)
     for (const n of guides) expect(paths.get('/learn/engineer/' + n.id)?.title).toBe(n.title)
-    expect(paths.size).toBe(74 + 3 + 16 + 24 + 7)
+    expect(paths.size).toBe(74 + 3 + certificate.lessons.length + 24 + 7)
   })
   it('publishes only canonical content paths, never records, query parameters, fragments or retired editions', () => {
     for (const p of learningPages) {
@@ -53,7 +53,7 @@ describe('public learning discovery coverage', () => {
     expect(dynamic).toBe('force-static')
     const response = GET(), xml = await response.text()
     expect(response.headers.get('content-type')).toContain('application/xml')
-    expect(xml.match(/<loc>/g)).toHaveLength(124)
+    expect(xml.match(/<loc>/g)).toHaveLength(learningPages.length)
     expect(xml).not.toContain('<lastmod>')
     vi.doUnmock('@/lib/db/client')
   })

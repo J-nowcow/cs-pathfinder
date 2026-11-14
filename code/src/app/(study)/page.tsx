@@ -28,6 +28,13 @@ export default function LearningPage() {
         <div className="desk-home-art"><OpenBookArt /></div>
       </section>
       <LearningAreas />
+      <section className="desk-home-return" aria-labelledby="home-cases-heading">
+        <div>
+          <h2 id="home-cases-heading">같은 장애, 역할마다 다른 판단</h2>
+          <p>GitHub 공개 사례를 읽고 개발자·프로젝트 PM·제품 PM의 관점으로 판단을 연습해 보세요.</p>
+        </div>
+        <Link href="/learn/cases" prefetch={false}>사례 연습 시작하기 →</Link>
+      </section>
       <section className="desk-home-return" aria-labelledby="home-return-heading">
         <div>
           <h2 id="home-return-heading">읽던 자료는 내 서재에서</h2>

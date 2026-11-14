@@ -45,7 +45,7 @@ export function RelatedList({
           return (
             <li key={item.id}>
               <Link
-                href={`/q/${item.number}`}
+                href={`/q/${item.id}`}
                 className="block rounded-lg border border-line bg-raised px-4 py-3.5 transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 <span className="flex items-start gap-2">

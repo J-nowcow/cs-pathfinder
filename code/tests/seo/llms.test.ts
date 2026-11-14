@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { renderLlms, renderLlmsFull } from '@/lib/seo/llms'
+import { CASE_ID, source, translations } from '@/lib/cases/content'
 import type { Catalog } from '@/lib/db/catalog'
 
 /**
@@ -21,6 +22,21 @@ const catalog: Catalog = {
 }
 
 describe('llms.txt', () => {
+  it('describes the public catalog date and links the public case and its source', () => {
+    for (const out of [renderLlms(catalog, 'https://example.com'), renderLlmsFull(catalog, 'https://example.com')]) {
+      expect(out).toContain(`https://example.com/learn/cases/${CASE_ID}`)
+      expect(out).toContain(translations.ko.scope)
+      expect(out).toContain(source.url)
+      expect(out).toContain(source.checked)
+      expect(out).not.toContain('/api/')
+    }
+    const index = renderLlms(catalog, 'https://example.com')
+    expect(index).toContain('2 (')
+    expect(index).toContain(catalog.date)
+    expect(index).toContain('Asia/Seoul')
+    expect(index).not.toContain('6시')
+  })
+
   it('links native learning sources without disclosing private study state or claiming a full native transcript', () => {
     for (const out of [renderLlms(catalog, 'https://example.com'), renderLlmsFull(catalog, 'https://example.com')]) {
       expect(out).toContain('https://example.com/learn/pmp/n01')

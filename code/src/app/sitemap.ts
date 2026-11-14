@@ -53,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let entries: MetadataRoute.Sitemap = []
   try {
     await ensureSeeded()
-    const catalog = await loadCatalog()
+    const catalog = await loadCatalog(undefined, { canonicalOnly: true })
     entries = catalog.entries.map((e) => ({
       url: `${base}/q/${e.id}`,
       /*

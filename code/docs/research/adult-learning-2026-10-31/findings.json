@@ -1,0 +1,80 @@
+{
+  "asOf": "2026-10-31",
+  "scope": "인터뷰 없이 공개자료 분석",
+  "recommendation": "기존 개념 정본을 유지하고 공개 사례의 짧은 근거 판단 과제·지원 선택·독립 변형 과제를 첫 대표 경험으로 구성",
+  "recommendation_type": "공개근거 기반 설계 우선순위; 시장·학습효과 입증 아님",
+  "debate": {
+    "pattern": "D3-lite",
+    "rounds": 2,
+    "advocate_a": "조건부 동의",
+    "advocate_b": "조건부 권고",
+    "judge": "한 모듈의 최소 구조부터 제작하는 권고"
+  },
+  "evidence_inventory": {
+    "products": 11,
+    "public_experience_threads": 8,
+    "unique_document_urls_ignoring_fragments": 51,
+    "reference_records": 55
+  },
+  "decisions": [
+    {
+      "decision": "작게 시작하고 누적되는 학습 경로",
+      "sources": [
+        "R01",
+        "R26",
+        "R27"
+      ]
+    },
+    {
+      "decision": "초기 판단을 이후 설명과 연결하되 시범 진입 지원",
+      "sources": [
+        "R02",
+        "R03",
+        "R04"
+      ]
+    },
+    {
+      "decision": "외부 도움의 산출물과 독립 수행을 분리",
+      "sources": [
+        "R06",
+        "R07",
+        "R08",
+        "R09"
+      ]
+    },
+    {
+      "decision": "역할별 질문을 같은 공개 사실과 연결",
+      "sources": [
+        "R10",
+        "R12",
+        "R13",
+        "R24"
+      ]
+    },
+    {
+      "decision": "사실·창작조건·사후해석과 실제 검토상태를 구분",
+      "sources": [
+        "R23",
+        "R24",
+        "R22"
+      ]
+    },
+    {
+      "decision": "기여·번역·문항의 변경 영향 관리",
+      "sources": [
+        "A11",
+        "A14",
+        "B04",
+        "R21"
+      ]
+    }
+  ],
+  "not_claimed": [
+    "인터넷 전수조사",
+    "세계 최초",
+    "전세계 개발자·PM의 수요 검증",
+    "CS Pathfinder 학습효과 검증",
+    "AI 또는 음성의 보편적 유효/무효",
+    "모든 성인에게 시도 우선이 최적"
+  ]
+}

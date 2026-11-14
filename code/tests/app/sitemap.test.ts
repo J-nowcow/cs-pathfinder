@@ -27,7 +27,7 @@ afterEach(() => {
 
 async function loadSitemap(catalog: () => Promise<unknown>) {
   vi.doMock('@/lib/db/bootstrap', () => ({ ensureSeeded: async () => {} }))
-  vi.doMock('@/lib/db/catalog', () => ({ loadCatalog: catalog }))
+  vi.doMock('@/lib/db/catalog', () => ({ loadCatalog: vi.fn(catalog) }))
   return (await import('@/app/sitemap')).default()
 }
 
@@ -37,6 +37,8 @@ describe('sitemap', () => {
     const urls = map.map((m) => m.url)
     expect(urls).toContain('https://example.test/q/aaa')
     expect(urls).toContain('https://example.test/q/bbb')
+    const { loadCatalog } = await import('@/lib/db/catalog')
+    expect(loadCatalog).toHaveBeenCalledExactlyOnceWith(undefined, { canonicalOnly: true })
   })
 
   it('주요 화면도 함께 넣는다', async () => {
@@ -66,14 +68,20 @@ describe('sitemap', () => {
   it('includes all public native learning routes while excluding personal record and search pages', async () => {
     const map = await loadSitemap(async () => ({ date: '', entries: ENTRIES, byCategory: [] }))
     const urls = map.map((m) => m.url)
-    expect(urls.filter((url) => new URL(url).pathname.startsWith('/learn'))).toHaveLength(122)
+    expect(urls.filter((url) => new URL(url).pathname.startsWith('/learn'))).toHaveLength(126)
+    expect(new Set(urls).size).toBe(urls.length)
     expect(urls).toContain('https://example.test/cs')
     expect(urls.filter(url => new URL(url).pathname === '/')).toHaveLength(1)
     expect(urls).not.toContain('https://example.test/learn')
     expect(urls).toContain('https://example.test/learn/pmp/n74')
     expect(urls).toContain('https://example.test/learn/certificate/keys')
+    expect(urls).toContain('https://example.test/learn/certificate/requirements-traceability')
+    expect(urls).toContain('https://example.test/learn/certificate/input-validation-trust-boundary')
+    expect(urls).toContain('https://example.test/learn/certificate/data-conversion-reconciliation')
+    expect(urls).toContain('https://example.test/learn/certificate/synchronous-exception-flow')
     expect(urls).not.toContain('https://example.test/learn/library')
     expect(urls).not.toContain('https://example.test/learn/progress')
+    expect(urls).not.toContain('https://example.test/search')
   })
 
   /*

@@ -10,12 +10,13 @@ export function StudyDesk({
   reading = false,
 }: {
   children: React.ReactNode
-  section?: 'home' | 'library' | 'progress' | 'engineer' | 'jira' | 'pmp' | 'certificate'
+  section?: 'home' | 'library' | 'progress' | 'engineer' | 'jira' | 'pmp' | 'certificate' | 'cases'
   document?: boolean
   reading?: boolean
 }) {
   const name = {
     home: '메인',
+    cases: '사례로 판단 연습',
     library: '내 서재',
     progress: '복습·기록',
     engineer: '정보관리기술사',
@@ -63,6 +64,9 @@ export function StudyDesk({
               className={section === 'progress' ? 'desk-current' : ''}
             >
               복습·기록
+            </Link>
+            <Link href="/learn/cases" aria-current={section === 'cases' ? 'page' : undefined}>
+              사례로 판단 연습
             </Link>
             <span className="desk-nav-label">PM 이론</span>
             <Link

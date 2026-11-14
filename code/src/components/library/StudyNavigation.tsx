@@ -5,6 +5,9 @@ import { usePathname } from 'next/navigation'
 import { DeskAppearance } from './DeskAppearance'
 
 export const studyNavigationGroups = [
+  { label: '사례 연습', sections: ['cases'], links: [
+    { href: '/learn/cases', label: '사례로 판단 연습', detail: '개발자·프로젝트 PM·제품 PM의 근거 비교' },
+  ] },
   { label: 'PM 이론', sections: ['pmp', 'jira'], links: [
     { href: '/learn/pmp', label: '프로젝트·제품 관리', detail: 'PMP 개념·사례·계산 실습' },
     { href: '/learn/jira', label: 'Jira 연습', detail: '작업 흐름·JQL·변경 기록' },
