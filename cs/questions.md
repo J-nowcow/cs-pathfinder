@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 404개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 405개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -439,3 +439,4 @@
 - [R8이 ProGuard보다 유리한 점은 무엇인가?](https://cs-pathfinder.vercel.app/q/a2f4422d-a725-4f2f-b668-5148824bebcf) — 2026-10-15
 - [안드로이드 액티비티를 별도 태스크로 분리하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/b31a383c-9cce-4b8a-866b-9d5ea864dcd5) — 2026-10-25
 - [컴포저블의 상태를 상위로 올려야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/11390e4e-bd04-49ed-ae98-3979a855a8fa) — 2026-11-04
+- [안드로이드 Context는 어떤 기준으로 구분해 사용하는가?](https://cs-pathfinder.vercel.app/q/89ff4efb-d24f-4950-99ff-5db8b19dee1b) — 2026-11-14
