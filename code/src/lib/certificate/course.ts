@@ -2,7 +2,7 @@ import course from '../../../learning-content/certificate/course.json'
 export type Cell = string | number | null
 export type CertificateLesson = {
   id: string
-  domain: 'db-sql' | 'testing' | 'network'
+  domain: 'db-sql' | 'testing' | 'network' | 'requirements' | 'secure-development' | 'data-conversion' | 'programming-language'
   title: string
   question: string
   lead: string

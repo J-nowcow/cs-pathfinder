@@ -154,8 +154,8 @@ describe('독립 정처기 이론의 실제 SQL과 경계', () => {
     ).toEqual(['하린'])
   })
   it('기출 파일 없이 정제한 범위와 원천 출처를 보존한다', () => {
-    expect(c.lessons).toHaveLength(16)
-    expect(new Set(c.lessons.map((x) => x.id)).size).toBe(16)
+    expect(c.lessons).toHaveLength(20)
+    expect(new Set(c.lessons.map((x) => x.id)).size).toBe(20)
     expect(c.lessons.filter((x) => x.domain === 'db-sql')).toHaveLength(12)
     expect(c.origin.concepts).toHaveLength(19)
     expect(c.origin.file).toBe('concepts-theory.json')
@@ -169,7 +169,7 @@ describe('독립 정처기 이론의 실제 SQL과 경계', () => {
     }
     for (const s of c.sources) {
       expect(s.url.startsWith('https://')).toBe(true)
-      expect(s.checked).toBe('2026-10-28')
+      expect(s.checked).toBe(s.id.startsWith('requirements-') || s.id.startsWith('owasp-') || s.id.startsWith('conversion-') || s.id.startsWith('ecmascript-') || s.id === 'government-data-quality' ? '2026-11-10' : '2026-10-28')
     }
     expect(JSON.stringify(c)).not.toMatch(
       /authentic-20|solutions-.*json|practice-.*json|sources\/authentic|<iframe|<img|<script/,

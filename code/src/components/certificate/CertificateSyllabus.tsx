@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { certificateLessons, certificateHref } from '@/lib/certificate/course'
-import { certificateSyllabus as s } from '@/lib/certificate/syllabus'
+import {
+  certificateSyllabus as s,
+  certificateCriteriaPeriod,
+} from '@/lib/certificate/syllabus'
 
 export function CertificateSyllabus() {
   return (
@@ -8,10 +11,21 @@ export function CertificateSyllabus() {
       className="certificate-syllabus"
       aria-labelledby="certificate-syllabus-title"
     >
-      <h2 id="certificate-syllabus-title">2027–2029 출제기준 목차</h2>
+      <h2 id="certificate-syllabus-title">
+        {certificateCriteriaPeriod.years} 출제기준 목차
+      </h2>
+      <p>
+        시험 적용기간: {certificateCriteriaPeriod.dates}. 응시 예정일에 맞는
+        출제기준인지{' '}
+        <a href={s.source.url} target="_blank" rel="noopener noreferrer">
+          큐넷 원문에서 확인하세요 ↗
+        </a>
+      </p>
       <p>{s.coverageNotice}</p>
       <p className="study-meta">
-        필기 4과목 · 80문항 · 120분 / 실기 정보처리실무 · 필답형 · 150분
+        필기 {s.written.subjects.length}과목 · {s.written.questions}문항 ·{' '}
+        {s.written.minutes}분 / 실기 {s.practical.title} · {s.practical.format} ·{' '}
+        {s.practical.minutes}분
       </p>
       <nav
         aria-label="정보처리기사 필기 과목"
@@ -62,7 +76,9 @@ export function CertificateSyllabus() {
         </section>
       ))}
       <details className="desk-utility">
-        <summary>실기 정보처리실무 · 12개 주요항목</summary>
+        <summary>
+          실기 {s.practical.title} · {s.practical.units.length}개 주요항목
+        </summary>
         <ol className="syllabus-practical">
           {s.practical.units.map((unit) => (
             <li key={unit.id}>
@@ -90,7 +106,7 @@ export function CertificateSyllabus() {
         <a href={s.source.url} target="_blank" rel="noopener noreferrer">
           큐넷 공식 출제기준 ↗
         </a>{' '}
-        · 적용 2027.1.1–2029.12.31 · 확인 {s.source.checked}
+        · 적용 {certificateCriteriaPeriod.dates} · 확인 {s.source.checked}
       </p>
     </section>
   )

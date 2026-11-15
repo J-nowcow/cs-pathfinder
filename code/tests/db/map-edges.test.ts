@@ -44,6 +44,7 @@ describe('loadMapData 선', () => {
     expect(edges).toHaveLength(2)
     expect(edges.find((e) => e.childId === b)?.kind).toBe('walked')
     expect(edges.find((e) => e.childId === c)?.kind).toBe('related')
+    expect(edges.find((e) => e.childId === c)?.relationKind).toBe('alternative')
   })
 
   /*
@@ -68,6 +69,7 @@ describe('loadMapData 선', () => {
     const { edges } = await loadMapData(TODAY)
     expect(edges).toHaveLength(1)
     expect(edges[0].kind).toBe('walked')
+    expect(edges[0].relationKind).toBeUndefined()
   })
 
   /* 내린 선은 안 그린다 */
@@ -98,5 +100,37 @@ describe('loadMapData 선', () => {
     await saveRelations([{ fromId: a, toId: hidden, kind: 'shares_concept', source: 'llm', reason: '', votes: 3 }])
 
     expect((await loadMapData(TODAY)).edges).toHaveLength(0)
+  })
+
+  it('round-trips directed prerequisite and example kinds from the existing table', async () => {
+    const basis = await node('공통 개념')
+    const next = await node('선행 지식이 필요한 질문')
+    const example = await node('구체적인 사례')
+    await saveRelations([
+      { fromId: basis, toId: next, kind: 'prerequisite', source: 'llm', reason: '앞선 개념으로 읽는다', votes: 3 },
+      { fromId: basis, toId: example, kind: 'instance_of', source: 'llm', reason: '개념의 구체적인 예다', votes: 3 },
+    ])
+
+    const data = await loadMapData(TODAY)
+    expect(data.edges).toEqual(expect.arrayContaining([
+      { parentId: basis, childId: next, kind: 'related', relationKind: 'prerequisite', relationDirection: 'unreviewed', reason: '앞선 개념으로 읽는다' },
+      { parentId: basis, childId: example, kind: 'related', relationKind: 'instance_of', relationDirection: 'unreviewed', reason: '개념의 구체적인 예다' },
+    ]))
+  })
+
+  it('does not reveal a future daily question through a typed relation', async () => {
+    const visible = await node('이미 공개한 질문')
+    const future = await node('앞으로 공개할 질문')
+    const db = await getDb()
+    await db.query(
+      `insert into tree (slug, title, category, root_node_id, kind, publish_date)
+       values ('future-map-test', 'Future map test', '네트워크', $1, 'daily', '2026-08-07')`,
+      [future],
+    )
+    await saveRelations([{ fromId: visible, toId: future, kind: 'prerequisite', source: 'llm', reason: '예약 관계', votes: 3 }])
+
+    const data = await loadMapData(TODAY)
+    expect(data.nodes.some((n) => n.id === future)).toBe(false)
+    expect(data.edges).toEqual([])
   })
 })

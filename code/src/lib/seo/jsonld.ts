@@ -46,10 +46,14 @@ export function questionArticleJsonLd(args: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${args.url}#article`,
     headline: args.question,
+    description: plainText(args.body.split(/\n\s*\n/)[0] ?? ''),
     articleBody: plainText(args.body),
     url: args.url,
-    mainEntityOfPage: args.url,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': args.url },
+    isPartOf: { '@type': 'WebSite', '@id': new URL('/#website', args.url).href },
+    isAccessibleForFree: true,
     inLanguage: 'ko',
     ...(args.dateCreated ? { dateCreated: args.dateCreated } : {}),
   }

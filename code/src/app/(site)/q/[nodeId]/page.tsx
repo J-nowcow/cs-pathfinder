@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { loadPublicNodeForRender } from '@/lib/server/public-render-reads'
 import { relatedForDisplay } from '@/lib/expand/nodes'
@@ -36,9 +36,8 @@ export async function generateMetadata({
   const lead = node.body.split('\n\n')[0]?.slice(0, 140) ?? ''
 
   return {
-    alternates: { canonical: new URL('/q/' + node.id, siteUrl()).href, types: { 'application/rss+xml': '/rss.xml' } },
     // title은 socialMeta가 준다. 여기서 또 적으면 두 곳이 갈릴 자리가 생긴다
-    ...socialMeta({ title: node.question, description: lead, type: 'article' }),
+    ...socialMeta({ path: '/q/' + node.id, title: node.question, description: lead, type: 'article' }),
   }
 }
 
@@ -50,6 +49,9 @@ export default async function ReadPage({ params }: { params: Promise<{ nodeId: s
    */
   const node = await loadPublicNodeForRender(nodeId)
   if (!node) notFound()
+  // Numeric and differently cased UUID aliases keep working through one permanent URL.
+  // Redirect before loading request-specific quota or related-question data.
+  if (nodeId !== node.id) permanentRedirect('/q/' + node.id)
   const related = await relatedForDisplay(node.id)
 
   // 남은 횟수를 첫 화면부터 보여준다. 클라이언트가 따로 물으면 한 번 더 왕복하고

@@ -1,3 +1,7 @@
+import { CertificateCountGroups } from '@/components/certificate/CertificateCountGroups'
+import { CertificateCriteriaNotice } from '@/components/certificate/CertificateCriteriaNotice'
+import { conversionDisplayRows } from '@/lib/certificate/conversion-display'
+import { LessonSectionHeading } from '@/components/library/LessonSectionHeading'
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import Link from 'next/link'
@@ -34,6 +38,9 @@ export default async function CertificateLesson({
   if (!n) notFound()
   const at = c.lessons.findIndex((x) => x.id === n.id)
   const location = certificateLocation(n.id)!
+  const originConcepts = c.origin.concepts.filter((x) =>
+    n.originConceptIds.includes(x.id),
+  )
   return (
     <LibraryShell
       reading
@@ -53,6 +60,7 @@ export default async function CertificateLesson({
           {location.subject.title} / {location.unit.title} 목차 →
         </Link>
       </p>
+      <CertificateCriteriaNotice />
       <LearningSeo path={'/learn/certificate/' + n.id} />
       <article className="pmp-lesson certificate-lesson">
         <aside className="lesson-takeaway" aria-label="이번 수업의 핵심">
@@ -68,7 +76,7 @@ export default async function CertificateLesson({
         {n.id === 'test-coverage' ? <CertificateCoverageGraph /> : null}
         {n.id === 'ipv4-subnet' ? <CertificateCidrFigure /> : null}
         <section>
-          <h2>핵심 개념 비교</h2>
+          <LessonSectionHeading id="lesson-comparison">핵심 개념 비교</LessonSectionHeading>
           <CertificateTable
             caption="개념의 기준과 확인할 점"
             headers={['개념', '기준', '확인할 점']}
@@ -76,7 +84,7 @@ export default async function CertificateLesson({
           />
         </section>
         <section>
-          <h2>예제와 해설</h2>
+          <LessonSectionHeading id="lesson-examples">예제와 해설</LessonSectionHeading>
           {n.example.code && (
             <pre className="certificate-code">
               <code>{n.example.code}</code>
@@ -89,7 +97,9 @@ export default async function CertificateLesson({
                 '예상 결과 · 격리된 PGlite 실행으로 확인'
               }
               headers={n.example.headers}
-              rows={n.example.rows}
+              rows={n.id === 'data-conversion-reconciliation'
+                ? conversionDisplayRows(n.example.headers, n.example.rows)
+                : n.example.rows}
             />
           )}
           <p>{n.example.text}</p>
@@ -101,8 +111,9 @@ export default async function CertificateLesson({
             </details>
           ) : null}
         </section>
+        {n.id === 'count-null' ? <CertificateCountGroups /> : null}
         <aside className="certificate-caution">
-          <h2>주의할 점</h2>
+          <LessonSectionHeading id="lesson-cautions">주의할 점</LessonSectionHeading>
           <p>{n.trap}</p>
         </aside>
         <CertificatePractice
@@ -111,7 +122,7 @@ export default async function CertificateLesson({
           recallAnswer={n.recallAnswer}
         />
         <section>
-          <h2>참고한 자료</h2>
+          <LessonSectionHeading id="lesson-sources">참고한 자료</LessonSectionHeading>
           {c.sources
             .filter((s) => n.sources.includes(s.id))
             .map((s) => (
@@ -124,13 +135,11 @@ export default async function CertificateLesson({
                 </p>
               </div>
             ))}
-          <details>
+          {originConcepts.length > 0 && <details>
             <summary>이전 개념 자료와의 연결</summary>
             <p>이전 자료에서 다룬 주제를 이어받아 설명과 예시를 다시 썼어요.</p>
             <ul>
-              {c.origin.concepts
-                .filter((x) => n.originConceptIds.includes(x.id))
-                .map((x) => (
+              {originConcepts.map((x) => (
                   <li key={x.id}>
                     {x.title}
                     <ul>
@@ -149,7 +158,7 @@ export default async function CertificateLesson({
                   </li>
                 ))}
             </ul>
-          </details>
+          </details>}
         </section>
         <nav className="pmp-lesson-nav" aria-label="이론 수업 이동">
           {at > 0 ? (

@@ -2,7 +2,9 @@ import { getDb } from '@/lib/db/client'
 import { kstToday } from '@/lib/daily/date'
 import { isMissingTable } from '@/lib/db/missing-table'
 import { MIN_RELATION_VOTES } from '@/lib/db/relations'
+import type { RelationKind } from '@/lib/db/relations'
 import { NOT_FOLDED_SQL } from '@/lib/db/equivalence'
+import { projectReviewedRelation, type RelationDirection } from '@/lib/graph/reviewed-relations'
 
 /**
  * 전역 질문 지도에 실을 것.
@@ -28,6 +30,10 @@ export type MapEdge = {
    * 판정 결과라 틀릴 수 있다. 같은 굵기로 그리면 그 차이가 사라진다.
    */
   kind: 'walked' | 'related'
+  /** Stored semantic direction and kind; absent on walked paths and older map snapshots. */
+  relationKind?: RelationKind
+  /** Display-only audit of directional metadata. Missing is not verified. */
+  relationDirection?: RelationDirection
   /** 왜 이었는지. `related`에만 있다 */
   reason?: string
 }
@@ -105,7 +111,8 @@ export async function loadMapData(today: string = kstToday()): Promise<MapData> 
      */
     db
       .query<MapEdge>(
-        `select from_id as "parentId", to_id as "childId", 'related' as kind, reason
+        `select from_id as "parentId", to_id as "childId", 'related' as kind,
+                kind as "relationKind", reason
            from semantic_relation
           where active
             and votes >= $2
@@ -125,7 +132,10 @@ export async function loadMapData(today: string = kstToday()): Promise<MapData> 
    * 판정보다 확실하다.
    */
   const seen = new Set(walked.map((e) => `${e.parentId}::${e.childId}`))
-  const edges = [...walked, ...related.filter((e) => !seen.has(`${e.parentId}::${e.childId}`))]
+  const byId = new Map(nodes.map((node) => [node.id, node]))
+  const edges = [...walked, ...related
+    .filter((e) => !seen.has(`${e.parentId}::${e.childId}`))
+    .map((edge) => projectReviewedRelation(edge, byId))]
 
   return { nodes, edges }
 }

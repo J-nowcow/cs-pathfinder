@@ -37,11 +37,11 @@ describe('관련 질문 목록', () => {
     expect(screen.queryByText('이거 봤으면 이것도')).toBeNull()
   })
 
-  it('질문과 분류를 그리고 번호로 링크한다', () => {
+  it('links to the immutable question ID while retaining its text and category', () => {
     render(<RelatedList items={ITEMS} readIds={new Set()} hydrated />)
 
     const first = screen.getByRole('link', { name: /STW는 왜 필요한가\?/ })
-    expect(first.getAttribute('href')).toBe('/q/12')
+    expect(first.getAttribute('href')).toBe('/q/n1')
     expect(screen.getByText('운영체제')).toBeTruthy()
   })
 

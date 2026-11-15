@@ -1,3 +1,4 @@
+import { LessonSectionHeading } from '@/components/library/LessonSectionHeading'
 import { pmpQuestions } from '@/lib/pmp/questions'
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
@@ -54,7 +55,7 @@ export default async function PmpLesson({
         </aside>
         <PmpConceptFigure lesson={n.id} />
         <section className="lesson-explanation">
-          <h2>핵심 개념</h2>
+          <LessonSectionHeading id="lesson-concepts">핵심 개념</LessonSectionHeading>
           <div className="pmp-body">
             {n.body.map((p, i) => (
               <p key={i}>{p}</p>
@@ -63,13 +64,13 @@ export default async function PmpLesson({
         </section>
         {!!n.steps.length && (
           <section>
-            <h2>적용 절차</h2>
+            <LessonSectionHeading id="lesson-steps">적용 절차</LessonSectionHeading>
             <ConceptSteps steps={n.steps} />
           </section>
         )}
         {'table' in n && n.table?.length ? (
           <section>
-            <h2>핵심 개념 비교</h2>
+            <LessonSectionHeading id="lesson-comparison">핵심 개념 비교</LessonSectionHeading>
             <div className="pmp-table-scroll">
               <table>
                 <thead>
@@ -102,7 +103,7 @@ export default async function PmpLesson({
         ) : null}
         {'worked' in n && n.worked?.length ? (
           <section>
-            <h2>적용 예제</h2>
+            <LessonSectionHeading id="lesson-examples">적용 예제</LessonSectionHeading>
             {n.worked.map((s, i) => (
               <p key={i}>{s}</p>
             ))}
@@ -130,7 +131,7 @@ export default async function PmpLesson({
         {n.id === 'n27' ? <PmpRiskLab /> : null}
         <PmpPractice key={n.id} question={pmpQuestions.get(n.id)!} visit />
         <section>
-          <h2>관련 용어</h2>
+          <LessonSectionHeading id="lesson-terms">관련 용어</LessonSectionHeading>
           <dl className="pmp-terms-inline">
             {n.terms.map((term) => {
               const found = c.glossary.find(
@@ -149,7 +150,7 @@ export default async function PmpLesson({
           <Link href="/learn/pmp/terms">전체 용어집 →</Link>
         </section>
         <section>
-          <h2>참고한 자료</h2>
+          <LessonSectionHeading id="lesson-sources">참고한 자료</LessonSectionHeading>
           {sources.map((s) => (
             <div key={s.id} className="pmp-source">
               <a href={s.url} target="_blank" rel="noopener noreferrer">
@@ -160,7 +161,7 @@ export default async function PmpLesson({
           ))}
         </section>
         <section>
-          <h2>함께 읽을 수업</h2>
+          <LessonSectionHeading id="lesson-related">함께 읽을 수업</LessonSectionHeading>
           <div className="pmp-related">
             {n.links
               .filter((id) => lessonById.has(id))

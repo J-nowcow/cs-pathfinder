@@ -8,10 +8,12 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   await ensureSeeded()
-  const catalog = await loadCatalog(undefined, { withBody: true })
+  const catalog = await loadCatalog(undefined, { canonicalOnly: true, withBody: true })
   return new Response(renderLlmsFull(catalog, siteUrl().origin), {
     headers: {
       'content-type': 'text/plain; charset=utf-8',
+      // Keep search results on canonical HTML while retrieval clients can read this file.
+      'x-robots-tag': 'noindex, follow',
       'cache-control': 'public, max-age=0, s-maxage=3600',
     },
   })

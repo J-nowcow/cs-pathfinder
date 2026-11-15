@@ -17,6 +17,7 @@ describe('learning areas', () => {
     expect(
       cs.getByRole('link', { name: /CS 질문·해설/ }).getAttribute('href'),
     ).toBe('/questions')
+    expect(cs.getByRole('link', { name: /DB 연결·잠금·대기/ }).getAttribute('href')).toBe('/learn/db-connections')
     expect(cs.getByRole('link', { name: /동시성/ }).getAttribute('href')).toBe(
       '/learn/engineer/concurrency',
     )

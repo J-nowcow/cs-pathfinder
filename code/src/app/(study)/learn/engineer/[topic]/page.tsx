@@ -1,3 +1,4 @@
+import { LessonSectionHeading } from '@/components/library/LessonSectionHeading'
 import { learningMetadata } from '@/lib/seo/learning'
 import { LearningSeo } from '@/components/library/LearningSeo'
 import { notFound } from 'next/navigation'
@@ -68,7 +69,7 @@ export default async function TopicPage({
         <>
           <ConceptFlow items={g.flow} />
           <section>
-            <h2 className="text-2xl font-semibold">핵심 개념 비교</h2>
+            <LessonSectionHeading id="lesson-comparison" className="text-2xl font-semibold">핵심 개념 비교</LessonSectionHeading>
             <div className="mt-5 overflow-x-auto rounded-xl border border-line">
               <table className="w-full text-left text-sm leading-7">
                 <thead className="bg-raised">
@@ -104,7 +105,7 @@ export default async function TopicPage({
       )}
       <section className="rounded-xl border border-line bg-raised p-6">
         <p className="text-xs text-faint">직접 만든 연습 문제</p>
-        <h2 className="mt-3 text-xl font-semibold leading-8">{g.prompt}</h2>
+        <LessonSectionHeading id="lesson-practice" className="mt-3 text-xl font-semibold leading-8">{g.prompt}</LessonSectionHeading>
         <h3 className="mt-6 font-semibold">답안 구성</h3>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-7">
           {g.outline.map((x) => (
@@ -135,7 +136,7 @@ export default async function TopicPage({
         </p>
       </details>
       <aside className="rounded-xl border border-line p-6">
-        <h2 className="text-xl font-semibold">자주 틀리는 부분</h2>
+        <LessonSectionHeading id="lesson-cautions" className="text-xl font-semibold">자주 틀리는 부분</LessonSectionHeading>
         <ul className="mt-4 list-disc space-y-3 pl-5 text-sm leading-7">
           {g.pitfalls.map((x) => (
             <li key={x}>{x}</li>
@@ -143,7 +144,7 @@ export default async function TopicPage({
         </ul>
       </aside>
       <section>
-        <h2 className="text-xl font-semibold">참고 자료</h2>
+        <LessonSectionHeading id="lesson-sources" className="text-xl font-semibold">참고 자료</LessonSectionHeading>
         {g.sources.map((s) => (
           <div key={s.url} className="mt-4 text-sm leading-7">
             <a

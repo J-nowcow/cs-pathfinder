@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { certificate as c } from '@/lib/certificate/course'
+import legacy from './fixtures/legacy-identities.json'
 import {
   changeCertificate,
   mergeCertificate,
@@ -58,8 +59,8 @@ describe('independent authored IPv4 example', () => {
   it('preserves all fifteen existing records while adding a new-domain note and supports unchanged version1 backup/conflict rules', () => {
     const at = '2026-10-27T22:00:00.000Z'
     const entries = Object.fromEntries(
-      c.lessons
-        .filter((x) => x.domain !== 'network')
+      legacy
+        .filter((x) => x.id !== 'ipv4-subnet')
         .map((x) => [
           x.id,
           {

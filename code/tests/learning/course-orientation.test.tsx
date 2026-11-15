@@ -34,10 +34,11 @@ describe('official syllabus and public course orientation', () => {
     expect(units).toHaveLength(20)
     expect(s.practical.units).toHaveLength(12)
     const ids = units.flatMap((x) => x.lessons)
-    expect(ids).toHaveLength(16)
+    expect(ids).toHaveLength(c.lessons.length)
+    expect(legacy).toHaveLength(16)
     expect(new Set(ids)).toEqual(new Set(c.lessons.map((n) => n.id)))
     expect(
-      c.lessons.map(({ id, domain, checklist, originConceptIds }) => ({
+      c.lessons.filter(n => legacy.some(old => old.id === n.id)).map(({ id, domain, checklist, originConceptIds }) => ({
         id,
         domain,
         checklist,

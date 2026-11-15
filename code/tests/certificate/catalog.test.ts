@@ -16,14 +16,14 @@ const now = new Date('2026-10-28T14:59:59.000Z')
 
 describe('certificate client catalog boundary', () => {
   it('keeps every exact authored title, recall prompt and persisted checklist key without full explanations', () => {
-    expect(certificateCatalog.size).toBe(16)
+    expect(certificateCatalog.size).toBe(source.lessons.length)
     expect([...certificateCatalog.values()]).toEqual(source.lessons.map(n => ({
       id: n.id, title: n.title, recall: n.recall, checklist: n.checklist,
     })))
     expect(certificateHref('space / value')).toBe('/learn/certificate/space%20%2F%20value')
   })
 
-  it('restores and edits all16 legacy records/checklists while retaining other lessons and KST review boundaries', () => {
+  it('restores and edits every current record/checklist while retaining other lessons and KST review boundaries', () => {
     const entries = Object.fromEntries(source.lessons.map(n => [n.id, {
       draft: 'Synthetic ' + n.id, checks: [...n.checklist], visitedAt: now.toISOString(), updatedAt: now.toISOString(), due: '2026-10-29',
     }]))
@@ -44,7 +44,7 @@ describe('certificate client catalog boundary', () => {
       const afterMidnight = changeCertificate(original, n.id, { kind: 'review', interval: 1 }, new Date('2026-10-28T15:00:00.000Z'))
       expect(beforeMidnight.entries[n.id].due).toBe('2026-10-29')
       expect(afterMidnight.entries[n.id].due).toBe('2026-10-30')
-      expect(Object.keys(afterMidnight.entries)).toHaveLength(16)
+      expect(Object.keys(afterMidnight.entries)).toHaveLength(source.lessons.length)
     }
   })
 
@@ -54,7 +54,7 @@ describe('certificate client catalog boundary', () => {
     }]))
     const progress = readLibraryProgress({ getItem: key => key === CERTIFICATE_KEY ? JSON.stringify({ version: 1, entries }) : null }, now)
     const items = progress.recent.filter(n => n.id.startsWith('certificate:'))
-    expect(items).toHaveLength(16)
+    expect(items).toHaveLength(source.lessons.length)
     for (const n of source.lessons) expect(items.find(x => x.id === 'certificate:' + n.id)).toMatchObject({ title: n.title, href: certificateHref(n.id) })
     expect(() => readCertificate(JSON.stringify({ version: 1, entries: { unknown: entries[source.lessons[0].id] } }))).toThrow()
     const forged = structuredClone(entries)

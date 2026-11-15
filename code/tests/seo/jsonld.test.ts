@@ -38,6 +38,22 @@ describe('직렬화', () => {
 })
 
 describe('editorial Article', () => {
+  it('links its canonical document and site without inventing authors or publication dates', () => {
+    const ld = questionArticleJsonLd({
+      question: 'Public question', body: '**Visible lead**.\n\nDetails.', url: 'https://example.com/q/stable-id',
+    })
+    expect(ld).toMatchObject({
+      '@id': 'https://example.com/q/stable-id#article',
+      description: 'Visible lead.', articleBody: 'Visible lead. Details.',
+      mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://example.com/q/stable-id' },
+      isPartOf: { '@type': 'WebSite', '@id': 'https://example.com/#website' },
+      isAccessibleForFree: true,
+    })
+    expect(ld).not.toHaveProperty('author')
+    expect(ld).not.toHaveProperty('datePublished')
+    expect(ld).not.toHaveProperty('dateModified')
+  })
+
   it('질문과 평문 답을 담는다', () => {
     const ld = questionArticleJsonLd({
       question: 'CORS는 무엇을 막는가?',
