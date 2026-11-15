@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 402개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 406개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -50,6 +50,7 @@
 - [ORM이 생성하는 SQL을 직접 확인해야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/3d0f7bca-42b6-4d15-9dae-779bfd0814ad) — 2026-10-16
 - [느린 쿼리를 발견하면 실행 계획에서 무엇을 먼저 보는가?](https://cs-pathfinder.vercel.app/q/24226c19-c5e2-436b-b661-35c9d046637d) — 2026-10-26
 - [외래키 제약은 데이터 쓰기 성능에 어떤 부담을 주는가?](https://cs-pathfinder.vercel.app/q/2ebbb39a-8e17-4638-9aba-1f4b3ac04639) — 2026-11-05
+- [보조 인덱스로 조회하면 왜 두 번 검색하게 되는가?](https://cs-pathfinder.vercel.app/q/4dd2be8b-b022-4d89-814d-557107feca12) — 2026-11-15
 
 ## 네트워크
 
@@ -280,6 +281,7 @@
 - [@ControllerAdvice로 예외를 전역 처리하는 이유는?](https://cs-pathfinder.vercel.app/q/68729ecc-4f82-47c5-9aeb-3b56b741ef5a) — 2026-10-12
 - [같은 클래스 내부에서 메서드를 호출하면 왜 AOP가 동작하지 않는가?](https://cs-pathfinder.vercel.app/q/ca0c9c24-9a19-4747-b262-0ef2d558e991) — 2026-10-23
 - [부모 트랜잭션과 무관하게 독립 커밋을 하려면 어떤 전파 속성을 쓰는가?](https://cs-pathfinder.vercel.app/q/3cfeea9e-64f7-4485-aa83-289c21847ed8) — 2026-11-02
+- [MockMvc 기반 테스트와 실제 서버 테스트는 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/635d607e-3412-418c-a403-ee6b0822c218) — 2026-11-12
 
 ## 아키텍처 · 분산시스템
 
@@ -359,6 +361,7 @@
 - [Flexbox와 Grid는 어떤 기준으로 구분해서 쓰는가?](https://cs-pathfinder.vercel.app/q/8ba39b6c-f735-4261-9cc6-8381125d09e1) — 2026-10-13
 - [React에서 값과 함수의 메모이제이션은 어떻게 구분해서 적용하는가?](https://cs-pathfinder.vercel.app/q/6c2292a2-bf60-4918-9df4-caf33dde2db6) — 2026-10-24
 - [웹폰트 렌더링 시 FOUT과 FOIT는 무엇으로 결정하는가?](https://cs-pathfinder.vercel.app/q/7bfcb0c5-86a5-44a6-b76a-257246bec99a) — 2026-11-03
+- [새 JS API를 도입할 때 브라우저 호환성은 어떻게 판단하는가?](https://cs-pathfinder.vercel.app/q/fe664463-cbaf-4003-abe9-9be3ca08f67d) — 2026-11-13
 
 ## 인프라 · 보안
 
@@ -437,3 +440,4 @@
 - [R8이 ProGuard보다 유리한 점은 무엇인가?](https://cs-pathfinder.vercel.app/q/a2f4422d-a725-4f2f-b668-5148824bebcf) — 2026-10-15
 - [안드로이드 액티비티를 별도 태스크로 분리하는 기준은 무엇인가?](https://cs-pathfinder.vercel.app/q/b31a383c-9cce-4b8a-866b-9d5ea864dcd5) — 2026-10-25
 - [컴포저블의 상태를 상위로 올려야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/11390e4e-bd04-49ed-ae98-3979a855a8fa) — 2026-11-04
+- [안드로이드 Context는 어떤 기준으로 구분해 사용하는가?](https://cs-pathfinder.vercel.app/q/89ff4efb-d24f-4950-99ff-5db8b19dee1b) — 2026-11-14
