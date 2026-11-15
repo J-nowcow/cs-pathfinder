@@ -14,6 +14,13 @@
     "article": false
   },
   {
+    "path": "/learn/web-request",
+    "title": "웹 요청에서 DB 조회까지",
+    "description": "조회 요청이 앱 코드와 DB를 거쳐 응답으로 돌아오는 흐름을 살펴봅니다. 서버 코드를 바꾸며 두 연결의 사용 상태를 비교합니다.",
+    "parent": "/",
+    "article": true
+  },
+  {
     "path": "/learn/db-connections",
     "title": "DB 연결·잠금·대기",
     "description": "연결 재사용부터 트랜잭션과 행 잠금까지 살펴보고 풀 크기와 수정할 행을 바꾸며 대기 위치를 비교합니다.",

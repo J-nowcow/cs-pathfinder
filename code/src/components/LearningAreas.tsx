@@ -55,6 +55,12 @@ export function LearningAreas() {
                 </Link>
               </li>
               <li>
+                <Link href="/learn/web-request" prefetch={false}>
+                  <strong>웹 요청에서 DB 조회까지 →</strong>
+                  <span>브라우저·앱 서버·DB의 요청과 응답 직접 보기</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/learn/db-connections" prefetch={false}>
                   <strong>DB 연결·잠금·대기 →</strong>
                   <span>연결 재사용부터 트랜잭션·대기까지 직접 보기</span>

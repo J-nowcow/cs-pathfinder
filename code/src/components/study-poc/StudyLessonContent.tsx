@@ -16,7 +16,7 @@ export function StudyLessonContent({ publicLesson = false }: { publicLesson?: bo
         <h2>원문 근거</h2>
         <ul><li><a href="https://www.postgresql.org/docs/current/tutorial-transactions.html">PostgreSQL: 트랜잭션</a></li><li><a href="https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-ROWS">PostgreSQL: 행 잠금</a></li><li><a href="https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing">HikariCP: 풀 크기의 조건과 한계</a></li><li><a href="https://www.postgresql.org/docs/current/runtime-config-connection.html">PostgreSQL: 연결 한도와 자원</a></li></ul>
         <p>슬라이더를 조작하고 학습 기록을 저장하려면 JavaScript를 켜 주세요.</p>
-        <a href="/questions">기존 CS 질문 목록으로</a>
+        <a href="/learn/web-request">웹 요청에서 DB 조회까지 이어 보기</a> · <a href="/questions">기존 CS 질문 목록으로</a>
       </article>
     </noscript>
   </>

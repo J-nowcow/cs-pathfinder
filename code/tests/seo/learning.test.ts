@@ -11,8 +11,9 @@ describe('public learning discovery coverage', () => {
     for (const n of pmpCourse.cases) expect(paths.get('/learn/pmp/case/' + n.id)?.title).toBe(n.title)
     for (const n of certificate.lessons) expect(paths.get('/learn/certificate/' + n.id)?.title).toBe(n.title)
     for (const n of guides) expect(paths.get('/learn/engineer/' + n.id)?.title).toBe(n.title)
+    expect(paths.get('/learn/web-request')?.title).toBe('웹 요청에서 DB 조회까지')
     expect(paths.get('/learn/db-connections')?.title).toBe('DB 연결·잠금·대기')
-    expect(paths.size).toBe(74 + 3 + certificate.lessons.length + 24 + 8)
+    expect(paths.size).toBe(74 + 3 + certificate.lessons.length + 24 + 9)
   })
   it('publishes only canonical content paths, never records, query parameters, fragments or retired editions', () => {
     for (const p of learningPages) {

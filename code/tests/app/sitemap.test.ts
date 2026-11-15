@@ -68,10 +68,11 @@ describe('sitemap', () => {
   it('includes all public native learning routes while excluding personal record and search pages', async () => {
     const map = await loadSitemap(async () => ({ date: '', entries: ENTRIES, byCategory: [] }))
     const urls = map.map((m) => m.url)
-    expect(urls.filter((url) => new URL(url).pathname.startsWith('/learn'))).toHaveLength(127)
+    expect(urls.filter((url) => new URL(url).pathname.startsWith('/learn'))).toHaveLength(128)
     expect(new Set(urls).size).toBe(urls.length)
     expect(urls).toContain('https://example.test/cs')
     expect(urls).toContain('https://example.test/learn/db-connections')
+    expect(urls).toContain('https://example.test/learn/web-request')
     expect(urls.filter(url => new URL(url).pathname === '/')).toHaveLength(1)
     expect(urls).not.toContain('https://example.test/learn')
     expect(urls).toContain('https://example.test/learn/pmp/n74')
