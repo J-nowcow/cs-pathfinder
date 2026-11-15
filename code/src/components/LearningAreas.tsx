@@ -55,6 +55,12 @@ export function LearningAreas() {
                 </Link>
               </li>
               <li>
+                <Link href="/learn/db-connections" prefetch={false}>
+                  <strong>DB 연결·잠금·대기 →</strong>
+                  <span>연결 재사용부터 트랜잭션·대기까지 직접 보기</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/learn/engineer/concurrency" prefetch={false}>
                   <strong>동시성 개념 그림 →</strong>
                   <span>대기·잠금·교착을 비교하는 수업</span>

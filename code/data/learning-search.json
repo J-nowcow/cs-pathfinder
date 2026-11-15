@@ -14,6 +14,13 @@
     "article": false
   },
   {
+    "path": "/learn/db-connections",
+    "title": "DB 연결·잠금·대기",
+    "description": "연결 재사용부터 트랜잭션과 행 잠금까지 살펴보고, 풀 크기와 수정할 행을 바꾸며 대기 위치를 비교합니다.",
+    "parent": "/",
+    "article": true
+  },
+  {
     "path": "/learn/pmp",
     "title": "프로젝트 관리·PMP 학습 목차",
     "description": "PMP 개념·사례·계산 실습을 14장·74수업으로 읽습니다. 독립 자습 자료이며 PMI 공식 교재나 공인 교육시간 과정은 아닙니다.",

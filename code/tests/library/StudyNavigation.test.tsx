@@ -10,6 +10,7 @@ afterEach(cleanup)
 it('exposes every existing subject entry and personal destination with prefetch disabled', () => {
   const { container } = render(<StudyNavigation section="pmp" />)
   expect(container.querySelectorAll('summary')).toHaveLength(4)
+  expect(screen.getByRole('link', { name: /DB 연결·잠금·대기/ }).getAttribute('href')).toBe('/learn/db-connections')
   const expected = [...studyNavigationGroups.flatMap(g => g.links.map(l => l.href)), '/', '/learn/library', '/learn/progress']
   const anchors = [...container.querySelectorAll('a')]
   expect(new Set(anchors.map(a => a.getAttribute('href')))).toEqual(new Set(expected))
