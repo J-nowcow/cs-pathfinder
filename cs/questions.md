@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 405개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 406개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -50,6 +50,7 @@
 - [ORM이 생성하는 SQL을 직접 확인해야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/3d0f7bca-42b6-4d15-9dae-779bfd0814ad) — 2026-10-16
 - [느린 쿼리를 발견하면 실행 계획에서 무엇을 먼저 보는가?](https://cs-pathfinder.vercel.app/q/24226c19-c5e2-436b-b661-35c9d046637d) — 2026-10-26
 - [외래키 제약은 데이터 쓰기 성능에 어떤 부담을 주는가?](https://cs-pathfinder.vercel.app/q/2ebbb39a-8e17-4638-9aba-1f4b3ac04639) — 2026-11-05
+- [보조 인덱스로 조회하면 왜 두 번 검색하게 되는가?](https://cs-pathfinder.vercel.app/q/4dd2be8b-b022-4d89-814d-557107feca12) — 2026-11-15
 
 ## 네트워크
 
