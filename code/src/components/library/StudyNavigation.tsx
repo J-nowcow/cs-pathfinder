@@ -15,6 +15,7 @@ export const studyNavigationGroups = [
     { href: '/learn/pmp/search', label: 'PMP 수업 검색' },
   ] },
   { label: 'CS 이론', sections: [], links: [
+    { href: '/learn/web-request', label: '웹 요청에서 DB 조회까지', detail: 'HTTP 요청·앱 코드·두 연결의 재사용' },
     { href: '/learn/db-connections', label: 'DB 연결·잠금·대기', detail: '연결 재사용·트랜잭션·대기 직접 보기' },
     { href: '/questions', label: 'CS 질문·해설' },
     { href: '/map', label: '개념 지도' },
