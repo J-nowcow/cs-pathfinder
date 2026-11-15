@@ -64,7 +64,7 @@ export function transactionFrames(options: FlowOptions): FlowFrame[] {
   begin('R1')
   snapshot('BEGIN · 작업 묶음 시작', 'R1이 C1을 빌려 트랜잭션을 시작합니다.', { request: 'R1', kind: 'sql' })
   update('R1'); r1Change = 'pending'
-  snapshot('UPDATE 완료 · 잠금 보유', 'R1이 7번 행의 값을 1 늘렸고, 트랜잭션이 끝날 때까지 잠금을 보유합니다.', { request: 'R1', kind: 'sql' })
+  snapshot('UPDATE 완료 · 잠금 보유', 'R1이 7번 행의 값을 1 늘렸고 트랜잭션이 끝날 때까지 잠금을 보유합니다.', { request: 'R1', kind: 'sql' })
   begin('R2')
   snapshot('두 번째 트랜잭션', 'R2가 C2를 빌려 별도의 트랜잭션을 시작합니다.', { request: 'R2', kind: 'sql' })
   update('R2')

@@ -11,7 +11,7 @@ def add(path,title,description,parent=None,article=False):
     pages.append(dict(path=path,title=title,description=plain(description),parent=parent,article=article))
 add('/','PM·CS 학습 길라잡이','PM 이론·CS 이론·자격증 대비 자료를 둘러보고 개념과 사례, 연습으로 공부합니다.')
 add('/cs','CS 면접 공부','하루에 질문 하나. 꼬리에 꼬리를 무는 CS 면접 공부.','/')
-add('/learn/db-connections','DB 연결·잠금·대기','연결 재사용부터 트랜잭션과 행 잠금까지 살펴보고, 풀 크기와 수정할 행을 바꾸며 대기 위치를 비교합니다.','/',True)
+add('/learn/db-connections','DB 연결·잠금·대기','연결 재사용부터 트랜잭션과 행 잠금까지 살펴보고 풀 크기와 수정할 행을 바꾸며 대기 위치를 비교합니다.','/',True)
 add('/learn/pmp','프로젝트 관리·PMP 학습 목차','PMP 개념·사례·계산 실습을 14장·74수업으로 읽습니다. 독립 자습 자료이며 PMI 공식 교재나 공인 교육시간 과정은 아닙니다.','/')
 add('/learn/pmp/terms','PMP 용어집','PMP 용어의 뜻을 확인하고 연결된 수업에서 개념과 사례를 함께 읽습니다.','/learn/pmp')
 add('/learn/engineer','정보관리기술사 개념·기출 목차','24개 핵심 주제의 개념·비교·답안 연습과 60회차 기출 위치 색인.','/')
