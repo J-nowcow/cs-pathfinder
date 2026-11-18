@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 408개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 409개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -324,6 +324,7 @@
 - [재시도 간격을 지수로 늘려야 하는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/6b2d4546-3b21-46f7-848c-721a2278460a) — 2026-10-19
 - [포트와 어댑터 아키텍처에서 인터페이스는 어느 쪽에 속하는가?](https://cs-pathfinder.vercel.app/q/2c36b975-233b-422d-b1b9-b8790304277c) — 2026-10-29
 - [도메인 이벤트는 트랜잭션의 어느 시점에 발행해야 안전한가?](https://cs-pathfinder.vercel.app/q/7c8402a6-0e59-4729-aadd-c158685d4be9) — 2026-11-08
+- [동적으로 변하는 서비스 주소는 어떻게 찾아 연결하는가?](https://cs-pathfinder.vercel.app/q/23eba714-5289-4930-bee7-48dd56c1f081) — 2026-11-18
 
 ## 프론트엔드
 
