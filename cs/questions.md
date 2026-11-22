@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 412개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 413개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -286,6 +286,7 @@
 - [같은 클래스 내부에서 메서드를 호출하면 왜 AOP가 동작하지 않는가?](https://cs-pathfinder.vercel.app/q/ca0c9c24-9a19-4747-b262-0ef2d558e991) — 2026-10-23
 - [부모 트랜잭션과 무관하게 독립 커밋을 하려면 어떤 전파 속성을 쓰는가?](https://cs-pathfinder.vercel.app/q/3cfeea9e-64f7-4485-aa83-289c21847ed8) — 2026-11-02
 - [MockMvc 기반 테스트와 실제 서버 테스트는 무엇이 다른가?](https://cs-pathfinder.vercel.app/q/635d607e-3412-418c-a403-ee6b0822c218) — 2026-11-12
+- [스프링 통합 테스트 대신 슬라이스 테스트는 언제 선택하는가?](https://cs-pathfinder.vercel.app/q/ab0f13d5-ae67-4aa3-87bd-2a55d050fd3b) — 2026-11-22
 
 ## 아키텍처 · 분산시스템
 
