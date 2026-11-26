@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 416개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 417개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -161,6 +161,7 @@
 - [final 키워드만으로 불변 객체가 완성되지 않는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/80036636-1385-4d0e-984d-84bd1e54c794) — 2026-10-27
 - [가상 스레드는 왜 플랫폼 스레드보다 스루풋이 높은가?](https://cs-pathfinder.vercel.app/q/3cb9326b-b5c1-464f-926c-594f9411eb8a) — 2026-11-06
 - [async await는 Promise보다 왜 가독성이 높은가?](https://cs-pathfinder.vercel.app/q/b0eba5b9-b409-4e3f-be09-397221fd7f88) — 2026-11-16
+- [객체를 복사할 때 얕은 복사와 깊은 복사는 언제 구분하는가?](https://cs-pathfinder.vercel.app/q/2e53781a-0a7c-43d5-8ac4-fcb31eec78df) — 2026-11-26
 
 ## 운영체제
 
