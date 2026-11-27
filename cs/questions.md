@@ -1,6 +1,6 @@
 # 질문 목록
 
-지금까지 올라온 질문 417개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
+지금까지 올라온 질문 418개. 서비스에서는 [카테고리별 질문](https://cs-pathfinder.vercel.app/questions)으로 볼 수 있다.
 
 이 파일은 발행 워크플로가 자동으로 다시 쓴다. 손으로 고치면 다음 발행에 덮인다.
 
@@ -103,6 +103,7 @@
 - [IPv6 전면 전환 대신 NAT 기술을 먼저 도입한 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/d1a99773-e4f7-450a-abd9-c123b7aae0fd) — 2026-10-28
 - [단방향 실시간 알림에 웹소켓 대신 SSE를 쓰는 이유는 무엇인가?](https://cs-pathfinder.vercel.app/q/0079dc90-e66e-44d2-98bd-369ad3a06135) — 2026-11-07
 - [엣지와 오리진 서버를 분리하면 무엇을 얻는가?](https://cs-pathfinder.vercel.app/q/371811ec-eba9-4df8-8082-e554743b15c5) — 2026-11-17
+- [HTTPS 접속 시 클라이언트는 서버 인증서를 어떻게 검증하는가?](https://cs-pathfinder.vercel.app/q/3453518c-3a3b-4ea5-8928-54b971edd262) — 2026-11-27
 
 ## 언어 · 런타임
 
